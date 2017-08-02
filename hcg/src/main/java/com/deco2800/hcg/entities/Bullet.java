@@ -31,6 +31,12 @@ public class Bullet extends AbstractEntity implements Tickable {
 //		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
 		this.setTexture("seed");
 
+		float projX = 0 , projY = 0;
+
+		projX = xd/64f;
+		projY = -(xy - 32f / 2f) / 32f + projX;
+		projX -= projY - projX;
+
 		this.goalX = xd;
 		this.goalY = xy;
 	}

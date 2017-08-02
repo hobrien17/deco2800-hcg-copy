@@ -59,9 +59,9 @@ public class Squirrel extends AbstractEntity implements Tickable {
 		boolean collided = false;
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
-//				if(entity instanceof Player) {
-//					soundManager.playSound("ree1.wav");
-//				}
+				if(entity instanceof Player) {
+					soundManager.playSound("ree1.wav");
+				}
 				collided = true;
 			}
 		}
