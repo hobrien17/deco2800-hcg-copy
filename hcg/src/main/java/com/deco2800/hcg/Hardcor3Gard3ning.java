@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.handlers.MouseHandler;
+import com.deco2800.hcg.worlds.DemoWorld;
 import com.deco2800.moos.entities.Tickable;
 import com.deco2800.moos.managers.GameManager;
 import com.deco2800.moos.managers.SoundManager;
@@ -67,15 +68,16 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	public void create () {
 		
 		textureManager = ((TextureManager)GameManager.get().getManager(TextureManager.class));
-
-		textureManager.saveTexture("tree_selected", "resources/placeholderassets/tree_selected.png");
 		textureManager.saveTexture("ground_1", "resources/placeholderassets/ground-1.png");
+		textureManager.saveTexture("squirrel", "resources/placeholderassets/squirrel.png");
+		textureManager.saveTexture("tower", "resources/placeholderassets/tower.png");
+		textureManager.saveTexture("seed", "resources/seed.png");
 
 		/**
 		 *	Set up new stuff for this game
 		 */
 		/* Create an example world for the engine */
-		GameManager.get().setWorld(new InitialWorld());
+		GameManager.get().setWorld(new DemoWorld());
 		
 		/* Create a sound manager for the whole game */
 		soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);

@@ -16,14 +16,11 @@ import com.deco2800.moos.entities.Tickable;
  */
 public class Tower extends AbstractEntity implements Clickable, Tickable, Selectable {
 
-
 	boolean selected = false;
 
 	/**
 	 * Constructor for the base
-	 * 
-	 * @param world
-	 *            The world of the tower.
+	 *
 	 * @param posX
 	 *            The x-coordinate.
 	 * @param posY
@@ -32,8 +29,8 @@ public class Tower extends AbstractEntity implements Clickable, Tickable, Select
 	 *            The z-coordinate.
 	 */
 	public Tower(float posX, float posY, float posZ) {
-		super(posX, posY, posZ, 1, 1, 1);
-		this.setTexture("selected");
+		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
+		this.setTexture("tower");
 	}
 
 	/**
@@ -58,7 +55,7 @@ public class Tower extends AbstractEntity implements Clickable, Tickable, Select
 		if (selected) {
 			this.setTexture("tree_selected");
 		} else {
-			this.setTexture("selected");
+			this.setTexture("tower");
 		}
 	}
 

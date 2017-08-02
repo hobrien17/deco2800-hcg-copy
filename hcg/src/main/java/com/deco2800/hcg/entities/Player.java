@@ -1,16 +1,15 @@
 package com.deco2800.hcg.entities;
 
-import java.util.List;
-
 import com.badlogic.gdx.Input;
-import com.deco2800.moos.managers.InputManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.deco2800.moos.entities.AbstractEntity;
 import com.deco2800.moos.entities.Tickable;
 import com.deco2800.moos.managers.GameManager;
+import com.deco2800.moos.managers.InputManager;
 import com.deco2800.moos.util.Box3D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Entity for the playable character.
@@ -37,22 +36,33 @@ public class Player extends AbstractEntity implements Tickable {
 	 *            The z-coordinate.
 	 */
 	public Player(float posX, float posY, float posZ) {
-		super(posX, posY, posZ, 1, 1, 1);
-		movementSpeed = 0.05f;
+		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
+		movementSpeed = 0.1f;
 		this.speedx = 0.0f;
 		this.speedy = 0.0f;
+
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
 
 		input.addKeyDownListener(this::handleKeyDown);
 		input.addKeyUpListener(this::handleKeyUp);
+		input.addTouchDownListener(this::handleTouchDown);
 
-		this.setTexture("selected_black");
+		this.setTexture("spacman_blue");
+	}
+
+	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
+		Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), screenX, screenY);
+		GameManager.get().getWorld().addEntity(bullet);
 	}
 
 	@Override
 	public void onTick(int arg0) {
 		float newPosX = this.getPosX();
 		float newPosY = this.getPosY();
+
+		if (speedx == 0.0f && speedy == 0.0f) {
+			return;
+		}
 
 		newPosX += speedx;
 		newPosY += speedy;
@@ -64,7 +74,7 @@ public class Player extends AbstractEntity implements Tickable {
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		boolean collided = false;
 		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
+			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps(entity.getBox3D())) {
 				LOGGER.info(this + " colliding with " + entity);
 				System.out.println(this + " colliding with " + entity);
 				collided = true;
@@ -73,8 +83,7 @@ public class Player extends AbstractEntity implements Tickable {
 		}
 
 		if (!collided) {
-			this.setPosX(newPosX);
-			this.setPosY(newPosY);
+			this.setPosition(newPosX, newPosY, 1);
 		}
 	}
 
