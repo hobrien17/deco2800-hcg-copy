@@ -1,6 +1,8 @@
 package com.deco2800.hcg.entities;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.moos.entities.AbstractEntity;
 import com.deco2800.moos.entities.Tickable;
 import com.deco2800.moos.managers.GameManager;
@@ -51,7 +53,8 @@ public class Player extends AbstractEntity implements Tickable {
 	}
 
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
-		Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), screenX, screenY);
+		Vector3 worldCoords = GameManager.get().getCamera().unproject(new Vector3(screenX, screenY, 0));
+		Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y);
 		GameManager.get().getWorld().addEntity(bullet);
 	}
 
