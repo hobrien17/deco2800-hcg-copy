@@ -1,6 +1,5 @@
 package com.deco2800.hcg.managers;
 
-import com.deco2800.moos.managers.Manager;
 import com.deco2800.hcg.entities.Player;
 
 /**

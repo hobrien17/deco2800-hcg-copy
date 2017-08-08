@@ -1,12 +1,11 @@
 package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.deco2800.moos.renderers.Renderable;
-import com.deco2800.moos.worlds.AbstractWorld;
 import com.deco2800.hcg.entities.Peon;
 import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.entities.Squirrel;
 import com.deco2800.hcg.entities.Tower;
+import com.deco2800.hcg.renderers.Renderable;
 
 import java.util.Random;
 

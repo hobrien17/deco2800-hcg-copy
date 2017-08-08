@@ -16,18 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.entities.Selectable;
+import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.handlers.MouseHandler;
+import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.renderers.Render3D;
+import com.deco2800.hcg.renderers.Renderable;
+import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.worlds.DemoWorld;
-import com.deco2800.moos.entities.Tickable;
-import com.deco2800.moos.managers.GameManager;
-import com.deco2800.moos.managers.SoundManager;
-import com.deco2800.moos.managers.TextureManager;
-import com.deco2800.moos.renderers.Render3D;
-import com.deco2800.moos.renderers.Renderable;
-import com.deco2800.moos.renderers.Renderer;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.moos.managers.InputManager;
-import com.deco2800.hcg.managers.PlayerManager;
 
 /**
  * Handles the creation of the world and rendering.
@@ -67,7 +63,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	@Override
 	public void create () {
 		
-		textureManager = ((TextureManager)GameManager.get().getManager(TextureManager.class));
+		textureManager = ((TextureManager) GameManager.get().getManager(TextureManager.class));
 		textureManager.saveTexture("ground_1", "resources/placeholderassets/ground-1.png");
 		textureManager.saveTexture("squirrel", "resources/placeholderassets/squirrel.png");
 		textureManager.saveTexture("tower", "resources/placeholderassets/tower.png");
@@ -104,7 +100,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		 * Setup GUI
 		 */
 		stage = new Stage(new ScreenViewport());
-		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+		Skin skin = new Skin(Gdx.files.internal("resources/uiskin.json"));
 		window = new Window("Menu", skin);
 
 		/* Add a quit button to the menu */
@@ -240,7 +236,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 
 			}
 			if (!somethingSelected) {
-				peonButton = new TextButton("Select a Unit", new Skin(Gdx.files.internal("uiskin.json")));
+				peonButton = new TextButton("Select a Unit", new Skin(Gdx.files.internal("resources/uiskin.json")));
 			}
 			window.add(peonButton);
 		}

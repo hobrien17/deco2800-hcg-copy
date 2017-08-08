@@ -2,12 +2,8 @@ package com.deco2800.hcg.entities;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.moos.entities.AbstractEntity;
-import com.deco2800.moos.entities.Tickable;
-import com.deco2800.moos.managers.GameManager;
-import com.deco2800.moos.managers.SoundManager;
-import com.deco2800.moos.util.Box3D;
 
 import java.util.List;
 import java.util.Random;

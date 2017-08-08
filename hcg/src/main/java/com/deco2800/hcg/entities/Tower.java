@@ -6,8 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.deco2800.moos.entities.AbstractEntity;
-import com.deco2800.moos.entities.Tickable;
 
 /**
  * Tower that can do things.
@@ -71,7 +69,7 @@ public class Tower extends AbstractEntity implements Clickable, Tickable, Select
 
 	@Override
 	public Button getButton() {
-		Button button = new TextButton("Make Peon", new Skin(Gdx.files.internal("uiskin.json")));
+		Button button = new TextButton("Make Peon", new Skin(Gdx.files.internal("resources/uiskin.json")));
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {

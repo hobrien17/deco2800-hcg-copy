@@ -1,8 +1,8 @@
 package com.deco2800.hcg.util;
 
-import com.deco2800.moos.entities.AbstractEntity;
-import com.deco2800.moos.managers.GameManager;
-import com.deco2800.moos.renderers.Renderable;
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.renderers.Renderable;
 
 import java.util.Optional;
 
@@ -14,7 +14,6 @@ public class WorldUtil {
 
 	/**
 	 * Finds the closest entity to a position within a delta
-	 * @param world
 	 * @param x
 	 * @param y
 	 * @param delta

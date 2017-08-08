@@ -3,11 +3,9 @@ package com.deco2800.hcg.entities;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
-import com.deco2800.moos.entities.AbstractEntity;
-import com.deco2800.moos.entities.Tickable;
-import com.deco2800.moos.managers.GameManager;
-import com.deco2800.moos.managers.InputManager;
-import com.deco2800.moos.util.Box3D;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.util.Box3D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

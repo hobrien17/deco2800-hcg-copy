@@ -1,7 +1,5 @@
 package com.deco2800.hcg.entities;
 
-import com.deco2800.moos.entities.AbstractEntity;
-import com.deco2800.moos.entities.Tickable;
 
 /**
  * A generic player instance for the game
@@ -10,7 +8,6 @@ public class Peon extends AbstractEntity implements Tickable {
 
 	/**
 	 * Constructor for the Peon
-	 * @param world
 	 * @param posX
 	 * @param posY
 	 * @param posZ
