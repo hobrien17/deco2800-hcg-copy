@@ -1,10 +1,10 @@
 package com.deco2800.potatoes;
 
-import com.deco2800.moos.entities.Tree;
-import com.deco2800.moos.managers.GameManager;
-import com.deco2800.moos.worlds.AbstractWorld;
+import com.deco2800.hcg.entities.Tree;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.WorldUtil;
 
+import com.deco2800.hcg.worlds.AbstractWorld;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
