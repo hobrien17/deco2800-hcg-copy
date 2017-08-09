@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.managers.GameManager;
@@ -24,6 +23,7 @@ public class Player extends AbstractEntity implements Tickable {
 	private float movementSpeed;
 	private float speedx;
 	private float speedy;
+	boolean collided;
 
 	/**
 	 * Creates a new Player instance.
@@ -47,6 +47,7 @@ public class Player extends AbstractEntity implements Tickable {
 		input.addKeyUpListener(this::handleKeyUp);
 		input.addTouchDownListener(this::handleTouchDown);
 
+		collided = false;
 		this.setTexture("spacman_blue");
 	}
 
@@ -73,11 +74,11 @@ public class Player extends AbstractEntity implements Tickable {
 		newPos.setY(newPosY);
 
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
-		boolean collided = false;
+		collided = false;
 		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps(entity.getBox3D())) {
+			if (!this.equals(entity) && !(entity instanceof Squirrel)
+					&& newPos.overlaps(entity.getBox3D()) && !(entity instanceof Bullet)) {
 				LOGGER.info(this + " colliding with " + entity);
-				System.out.println(this + " colliding with " + entity);
 				collided = true;
 
 			}
@@ -110,6 +111,7 @@ public class Player extends AbstractEntity implements Tickable {
 		case Input.Keys.D:
 			speedx += movementSpeed;
 			speedy += movementSpeed;
+			break;
 		default:
 			break;
 		}

@@ -1,10 +1,7 @@
 package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.deco2800.hcg.entities.Peon;
-import com.deco2800.hcg.entities.Selectable;
-import com.deco2800.hcg.entities.Squirrel;
-import com.deco2800.hcg.entities.Tower;
+import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.renderers.Renderable;
 
 import java.util.Random;
@@ -30,12 +27,8 @@ public class DemoWorld extends AbstractWorld {
 		this.setWidth(this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(this.getMap().getProperties().get("height", Integer.class));
 
-		this.addEntity(new Peon(7, 7, 0));
 		this.addEntity(new Tower(8, 8, 0));
-		
-//		this.addEntity(new Squirrel(5, 5, 0));
-//		this.addEntity(new Squirrel(10, 2, 0));
-//		this.addEntity(new Squirrel(4, 7, 0));
+
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {

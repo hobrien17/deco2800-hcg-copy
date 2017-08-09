@@ -62,7 +62,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	 */
 	@Override
 	public void create () {
-		
+
 		textureManager = ((TextureManager) GameManager.get().getManager(TextureManager.class));
 		textureManager.saveTexture("ground_1", "resources/placeholderassets/ground-1.png");
 		textureManager.saveTexture("squirrel", "resources/placeholderassets/squirrel.png");
@@ -79,8 +79,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Create a sound manager for the whole game */
 		soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 
-		/* Create a mouse handler for the game */
-		mouseHandler = new MouseHandler();
 		
 		/* Create a player manager. */
 		playerManager = (PlayerManager)GameManager.get().getManager(PlayerManager.class);
@@ -109,8 +107,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Add another button to the menu */
 		Button anotherButton = new TextButton("Play Duck Sound", skin);
 
-		/* Add another button to the menu */
-		peonButton = new TextButton("Select a Unit", skin);
+
 
 		/* Add a programatic listener to the quit button */
 		button.addListener(new ChangeListener() {
@@ -128,19 +125,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 			}
 		});
 
-		/* Add listener for peon button */
-		peonButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				for (Renderable r : GameManager.get().getWorld().getEntities()) {
-					if (r instanceof Selectable) {
-						if (((Selectable) r).isSelected()) {
 
-						}
-					}
-				}
-			}
-		});
 
 		/* Add all buttons to the menu */
 		window.add(button);
@@ -226,19 +211,8 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 
 				}
 				lastGameTick = TimeUtils.millis();
-
-				if (e instanceof Selectable) {
-					if (((Selectable) e).isSelected()) {
-						peonButton = ((Selectable) e).getButton();
-						somethingSelected = true;
-					}
-				}
-
 			}
-			if (!somethingSelected) {
-				peonButton = new TextButton("Select a Unit", new Skin(Gdx.files.internal("resources/uiskin.json")));
-			}
-			window.add(peonButton);
+
 		}
 
         /*
@@ -247,10 +221,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
          */
 		SpriteBatch batch = new SpriteBatch();
 
-        /*
-         * Update the input handlers
-         */
-		//handleInput();
+
 
         /*
          * Update the camera

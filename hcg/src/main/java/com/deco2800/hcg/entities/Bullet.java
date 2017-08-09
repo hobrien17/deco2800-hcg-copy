@@ -1,12 +1,8 @@
 package com.deco2800.hcg.entities;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector3;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
 
-import java.util.List;
-import java.util.Random;
+import com.deco2800.hcg.managers.GameManager;
+
 
 /**
  * A generic player instance for the game
@@ -18,6 +14,10 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 	private float goalX;
 	private float goalY;
+
+	private float angle;
+	private float changeX;
+	private float changeY;
 
 
 	public Bullet(float posX, float posY, float posZ, float xd, float yd) {
@@ -34,6 +34,14 @@ public class Bullet extends AbstractEntity implements Tickable {
 		this.goalX = projX;
 		this.goalY = projY;
 
+		float deltaX = getPosX() - goalX;
+		float deltaY = getPosY() - goalY;
+
+		this.angle = (float)(Math.atan2(deltaY, deltaX)) + (float)(Math.PI);
+
+		this.changeX = (float)(speed * Math.cos(angle));
+		this.changeY = (float)(speed * Math.sin(angle));
+
 	}
 
 	@Override
@@ -42,17 +50,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			GameManager.get().getWorld().removeEntity(this);
 			GameManager.get().getWorld().addEntity(new Plant(this.goalX, this.goalY, 0));
 		}
-
-		float deltaX = getPosX() - goalX;
-		float deltaY = getPosY() - goalY;
-
-		float angle = (float)(Math.atan2(deltaY, deltaX)) + (float)(Math.PI);
-
-		float changeX = (float)(speed * Math.cos(angle));
-		float changeY = (float)(speed * Math.sin(angle));
-
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
-
 	}
 }
