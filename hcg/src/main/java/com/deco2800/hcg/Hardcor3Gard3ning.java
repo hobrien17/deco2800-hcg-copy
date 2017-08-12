@@ -121,7 +121,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		anotherButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				soundManager.playSound("quack.wav");
+				soundManager.playSound("quack");
 			}
 		});
 
