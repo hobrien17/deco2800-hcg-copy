@@ -1,4 +1,4 @@
-package com.deco2800.hcg.entities;
+package com.deco2800.hcg.entities.garden_entities.seeds;
 
 /**
  * Represents a seed that can be planted
