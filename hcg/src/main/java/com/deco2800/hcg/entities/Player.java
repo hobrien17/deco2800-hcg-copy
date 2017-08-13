@@ -57,8 +57,12 @@ public class Player extends AbstractEntity implements Tickable {
 		GameManager.get().getWorld().addEntity(bullet);
 	}
 
+	/**
+	 * On Tick handler
+	 * @param gameTickCount Current game tick
+	 */
 	@Override
-	public void onTick(int arg0) {
+	public void onTick(long gameTickCount) {
 		float newPosX = this.getPosX();
 		float newPosY = this.getPosY();
 

@@ -52,9 +52,9 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 
 	private Stage stage;
 	private Window window;
-	private Button peonButton;
 
 	private long lastGameTick = 0;
+	private long GameTickCount = 0;
 
 	/**
 	 * Creates the required objects for the game to start.
@@ -130,7 +130,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Add all buttons to the menu */
 		window.add(button);
 		window.add(anotherButton);
-		window.add(peonButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
@@ -200,19 +199,23 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	public void render () {
 
 		/*
-		 * Tickrate = 10Hz
+		 * Tickrate = 50Hz
 		 */
-		if(TimeUtils.millis() - lastGameTick > 30) {
-			window.removeActor(peonButton);
-			boolean somethingSelected = false;
+		if(TimeUtils.millis() - lastGameTick > 20) {
+
+			// Tick managers
+			GameManager.get().onTick(GameTickCount);
+
+			// Tick entities
 			for (Renderable e : GameManager.get().getWorld().getEntities()) {
 				if (e instanceof Tickable) {
-					((Tickable) e).onTick(0);
-
+					((Tickable) e).onTick(GameTickCount);
 				}
-				lastGameTick = TimeUtils.millis();
 			}
 
+			// Update tick count and time
+			lastGameTick = TimeUtils.millis();
+			GameTickCount += 1;
 		}
 
         /*
@@ -245,13 +248,14 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
          */
 		renderer.render(batch);
 
-		/* Dispose of the spritebatch to not have memory leaks */
-		Gdx.graphics.setTitle("DECO2800 " + this.getClass().getCanonicalName() +  " - FPS: "+ Gdx.graphics.getFramesPerSecond());
-
 		stage.act();
 		stage.draw();
 
+		/* Dispose of the spritebatch to not have memory leaks */
 		batch.dispose();
+
+		/* Display FPS in window title */
+		Gdx.graphics.setTitle("DECO2800 " + this.getClass().getCanonicalName() +  " - FPS: "+ Gdx.graphics.getFramesPerSecond());
 	}
 
 

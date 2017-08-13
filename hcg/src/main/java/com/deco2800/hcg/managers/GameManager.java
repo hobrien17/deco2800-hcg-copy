@@ -117,13 +117,13 @@ public class GameManager implements TickableManager {
 
 	/**
 	 * On tick method for ticking managers with the TickableManager interface
-	 * @param i
+	 * @param gameTickCount Current game tick
 	 */
 	@Override
-	public void onTick(long i) {
+	public void onTick(long gameTickCount) {
 		for (Manager m : managers) {
 			if (m instanceof TickableManager) {
-				((TickableManager) m).onTick(0);
+				((TickableManager) m).onTick(gameTickCount);
 			}
 		}
 	}
