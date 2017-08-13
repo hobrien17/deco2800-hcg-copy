@@ -53,8 +53,10 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	private Stage stage;
 	private Window window;
 
-	private long lastGameTick = 0;
-	private long GameTickCount = 0;
+	private boolean ticking = true;
+	private long gameTickCount = 0;
+	private long gameTickPeriod = 20;  // Tickrate = 50Hz
+	private long nextGameTick = TimeUtils.millis() + gameTickPeriod;
 
 	/**
 	 * Creates the required objects for the game to start.
@@ -198,24 +200,26 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	@Override
 	public void render () {
 
-		/*
-		 * Tickrate = 50Hz
-		 */
-		if(TimeUtils.millis() - lastGameTick > 20) {
+		// Fire waiting game ticks
+		while (TimeUtils.millis() >= nextGameTick) {
+			if (ticking) {
 
-			// Tick managers
-			GameManager.get().onTick(GameTickCount);
+				// Tick managers
+				GameManager.get().onTick(gameTickCount);
 
-			// Tick entities
-			for (Renderable e : GameManager.get().getWorld().getEntities()) {
-				if (e instanceof Tickable) {
-					((Tickable) e).onTick(GameTickCount);
+				// Tick entities
+				for (Renderable e : GameManager.get().getWorld().getEntities()) {
+					if (e instanceof Tickable) {
+						((Tickable) e).onTick(gameTickCount);
+					}
 				}
+
+				// Increment tick count
+				gameTickCount += 1;
 			}
 
-			// Update tick count and time
-			lastGameTick = TimeUtils.millis();
-			GameTickCount += 1;
+			// Schedule next tick
+			nextGameTick += gameTickPeriod;
 		}
 
         /*
