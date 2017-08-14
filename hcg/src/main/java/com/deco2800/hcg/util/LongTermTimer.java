@@ -8,7 +8,7 @@ import java.util.Optional;
  * i.e. Mechanisms to store an accumulation of time in units 
  * such as days/months/years.
  * 
- * Created by Group 2 (guys what's our name) on 14/817.
+ * Created by Group 7 (guys what's our name) on 14/08/17.
  */
 public class LongTermTimer {
 	
