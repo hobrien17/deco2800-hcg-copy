@@ -8,13 +8,25 @@ package com.deco2800.hcg.entities.garden_entities.plants;
  */
 public class BasicPlant extends AbstractGardenPlant {
 
-	public BasicPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength) {
-		super(posX, posY, posZ, xLength, yLength, zLength);
+	public BasicPlant(float posX, float posY, float posZ) {
+		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false, Stage.SPROUT);
+		this.advanceStage();
+		this.advanceStage();
 	}
 
 	@Override
 	public void setThisTexture() {
-		// Need to implement
+		switch (this.getStage()) {
+		case SPROUT:
+			this.setTexture("plant_0");
+			break;
+		case SMALL:
+			this.setTexture("plant_1");
+			break;
+		case LARGE:
+			this.setTexture("plant_2");
+			break;
+		}
 
 	}
 

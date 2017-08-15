@@ -20,7 +20,7 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	 * 
 	 * More stages can be added if needed (remember to update relevant methods)
 	 */
-	public enum Stage {
+	enum Stage {
 		SPROUT, 
 		SMALL, 
 		LARGE
@@ -32,12 +32,14 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 			Stage stage) {
 		super(position, xRenderLength, yRenderLength, centered);
 		this.stage = stage;
+		setThisTexture();
 	}
 	
 	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
 			  float xRenderLength, float yRenderLength, boolean centered, Stage stage) {
 		super(posX, posY, posZ, xLength, yLength, zLength, xRenderLength, yRenderLength, centered);
 		this.stage = stage;
+		setThisTexture();
 	}
 	
 	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
