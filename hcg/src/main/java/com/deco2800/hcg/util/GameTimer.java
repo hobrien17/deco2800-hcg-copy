@@ -13,8 +13,7 @@ public class GameTimer implements Tickable {
 	}
 	
 	@Override
-	public void onTick(long gameTickCount); {
-		// pass
+	public void onTick(); {
 		
 	}
 }
