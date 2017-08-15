@@ -10,6 +10,6 @@ import java.util.Optional;
  * 
  * Created by Group 7 (guys what's our name) on 14/08/17.
  */
-public class LongTermTimer {
+public class CalendarManager {
 	
 }
