@@ -21,8 +21,25 @@ public class Player extends AbstractEntity implements Tickable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
 	private float movementSpeed;
-	private float speedx;
-	private float speedy;
+	private float speedX;
+	private float speedY;
+
+	private int level;
+	private int xp;
+	private int health;
+	private int stamina;
+
+	//Attributes
+	private int strength;
+	private int vitality;
+	private int agility;
+	private int charisma;
+	private int intellect;
+
+	//TODO: Message weapons team to find out what categories of weapons they will implement
+	private int meleeSkill;
+
+
 	boolean collided;
 
 	/**
@@ -35,11 +52,23 @@ public class Player extends AbstractEntity implements Tickable {
 	 * @param posZ
 	 *            The z-coordinate.
 	 */
-	public Player(float posX, float posY, float posZ) {
+	public Player(float posX, float posY, float posZ, int level, int xp, int health, int stamina,
+				  int strength, int vitality, int agility, int charisma, int intellect,
+				  int meleeSkill) {
+
 		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
 		movementSpeed = 0.1f;
-		this.speedx = 0.0f;
-		this.speedy = 0.0f;
+		this.speedX = 0.0f;
+		this.speedY = 0.0f;
+
+		this.level = level;
+		this.xp = xp;
+		this.strength = strength;
+		this.vitality = vitality;
+		this.agility = agility;
+		this.charisma = charisma;
+		this.intellect = intellect;
+		this.meleeSkill = meleeSkill;
 
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
 
@@ -66,12 +95,12 @@ public class Player extends AbstractEntity implements Tickable {
 		float newPosX = this.getPosX();
 		float newPosY = this.getPosY();
 
-		if (speedx == 0.0f && speedy == 0.0f) {
+		if (speedX == 0.0f && speedY == 0.0f) {
 			return;
 		}
 
-		newPosX += speedx;
-		newPosY += speedy;
+		newPosX += speedX;
+		newPosY += speedY;
 
 		Box3D newPos = getBox3D();
 		newPos.setX(newPosX);
@@ -101,20 +130,20 @@ public class Player extends AbstractEntity implements Tickable {
 	private void handleKeyDown(int keycode) {
 		switch (keycode) {
 		case Input.Keys.W:
-			speedy -= movementSpeed;
-			speedx += movementSpeed;
+			speedY -= movementSpeed;
+			speedX += movementSpeed;
 			break;
 		case Input.Keys.S:
-			speedy += movementSpeed;
-			speedx -= movementSpeed;
+			speedY += movementSpeed;
+			speedX -= movementSpeed;
 			break;
 		case Input.Keys.A:
-			speedx -= movementSpeed;
-			speedy -= movementSpeed;
+			speedX -= movementSpeed;
+			speedY -= movementSpeed;
 			break;
 		case Input.Keys.D:
-			speedx += movementSpeed;
-			speedy += movementSpeed;
+			speedX += movementSpeed;
+			speedY += movementSpeed;
 			break;
 		default:
 			break;
@@ -129,24 +158,112 @@ public class Player extends AbstractEntity implements Tickable {
 	private void handleKeyUp(int keycode) {
 		switch (keycode) {
 		case Input.Keys.W:
-			speedy += movementSpeed;
-			speedx -= movementSpeed;
+			speedY += movementSpeed;
+			speedX -= movementSpeed;
 			break;
 		case Input.Keys.S:
-			speedy -= movementSpeed;
-			speedx += movementSpeed;
+			speedY -= movementSpeed;
+			speedX += movementSpeed;
 			break;
 		case Input.Keys.A:
-			speedx += movementSpeed;
-			speedy += movementSpeed;
+			speedX += movementSpeed;
+			speedY += movementSpeed;
 			break;
 		case Input.Keys.D:
-			speedx -= movementSpeed;
-			speedy -= movementSpeed;
+			speedX -= movementSpeed;
+			speedY -= movementSpeed;
 			break;
 		default:
 			break;
 		}
+	}
+
+	public float getMovementSpeed() {
+		return movementSpeed;
+	}
+
+	public float getSpeedX() {
+		return speedX;
+	}
+
+	public float getSpeedY() {
+		return speedY;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public int getXp() {
+		return xp;
+	}
+
+	public int getStrength() {
+		return strength;
+	}
+
+	public int getVitality() {
+		return vitality;
+	}
+
+	public int getAgility() {
+		return agility;
+	}
+
+	public int getCharisma() {
+		return charisma;
+	}
+
+	public int getIntellect() {
+		return intellect;
+	}
+
+	public int getMeleeSkill() {
+		return meleeSkill;
+	}
+
+	public void setMovementSpeed(float movementSpeed) {
+		this.movementSpeed = movementSpeed;
+	}
+
+	public void setSpeedX(float speedX) {
+		this.speedX = speedX;
+	}
+
+	public void setSpeedY(float speedY) {
+		this.speedY = speedY;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public void setXp(int xp) {
+		this.xp = xp;
+	}
+
+	public void setStrength(int strength) {
+		this.strength = strength;
+	}
+
+	public void setVitality(int vitality) {
+		this.vitality = vitality;
+	}
+
+	public void setAgility(int agility) {
+		this.agility = agility;
+	}
+
+	public void setCharisma(int charisma) {
+		this.charisma = charisma;
+	}
+
+	public void setIntellect(int intellect) {
+		this.intellect = intellect;
+	}
+
+	public void setMeleeSkill(int meleeSkill) {
+		this.meleeSkill = meleeSkill;
 	}
 
 	@Override
