@@ -48,7 +48,7 @@ public class Player extends AbstractEntity implements Tickable {
 		input.addTouchDownListener(this::handleTouchDown);
 
 		collided = false;
-		this.setTexture("spacman_blue");
+		this.setTexture("spacman");
 	}
 
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
