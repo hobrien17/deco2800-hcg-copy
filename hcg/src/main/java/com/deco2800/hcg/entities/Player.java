@@ -16,59 +16,19 @@ import java.util.List;
  * @author leggy
  *
  */
-public class Player extends AbstractEntity implements Tickable {
+public class Player extends Character implements Tickable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
-	private float movementSpeed;
-	private float speedX;
-	private float speedY;
-
-	private int level;
-	private int xp;
-	private int health;
-	private int stamina;
-
-	//Attributes
-	private int strength;
-	private int vitality;
-	private int agility;
-	private int charisma;
-	private int intellect;
-
-	//TODO: Message weapons team to find out what categories of weapons they will implement
-	private int meleeSkill;
-
-
 	boolean collided;
 
-	/**
-	 * Creates a new Player instance.
-	 *
-	 * @param posX
-	 *            The x-coordinate.
-	 * @param posY
-	 *            The y-coordinate.
-	 * @param posZ
-	 *            The z-coordinate.
-	 */
-	public Player(float posX, float posY, float posZ, int level, int xp, int health, int stamina,
-				  int strength, int vitality, int agility, int charisma, int intellect,
-				  int meleeSkill) {
+	public Player(float posX, float posY, float posZ, float movementSpeed, int level, int xp, int health,
+				  int stamina, int strength, int vitality, int agility, int charisma, int intellect, int meleeSkill) {
 
-		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
-		movementSpeed = 0.1f;
-		this.speedX = 0.0f;
-		this.speedY = 0.0f;
+		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, 1, 1,
+				true, movementSpeed, 0.0f, 0.0f, level, xp, health, stamina, strength,
+				vitality, agility, charisma, intellect, meleeSkill);
 
-		this.level = level;
-		this.xp = xp;
-		this.strength = strength;
-		this.vitality = vitality;
-		this.agility = agility;
-		this.charisma = charisma;
-		this.intellect = intellect;
-		this.meleeSkill = meleeSkill;
 
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
 
