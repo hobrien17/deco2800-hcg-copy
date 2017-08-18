@@ -22,8 +22,7 @@ public class Player extends Character implements Tickable {
 
 	boolean collided;
 
-	public Player(float posX, float posY, float posZ, float movementSpeed, int level, int xp, int health,
-				  int stamina, int strength, int vitality, int agility, int charisma, int intellect, int meleeSkill) {
+	public Player(float posX, float posY, float posZ) {
 
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
