@@ -25,9 +25,7 @@ public class Player extends Character implements Tickable {
 	public Player(float posX, float posY, float posZ, float movementSpeed, int level, int xp, int health,
 				  int stamina, int strength, int vitality, int agility, int charisma, int intellect, int meleeSkill) {
 
-		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, 1, 1,
-				true, movementSpeed, 0.0f, 0.0f, level, xp, health, stamina, strength,
-				vitality, agility, charisma, intellect, meleeSkill);
+		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
 
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);

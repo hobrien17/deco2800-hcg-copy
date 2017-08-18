@@ -77,30 +77,149 @@ public abstract class Character extends AbstractEntity {
      *            and also determines the character's movement speed
      * @param charisma
      *            The character's charisma. Determines how well the character's interactions with other
-     *            characters go
+     *            characters go.
      * @param intellect
-     *            The character's intellect. Effect TBD
+     *            The character's intellect. Determines how many skill points the player has to distribute to their
+     *            skills each level.
      * @param meleeSkill
-     *            The character's meleeSkill, determines how much damage is done with melee weapons
+     *            The character's meleeSkill, determines how much damage is done with melee weapons.
      */
     public Character(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
-                     float xRenderLength, float yRenderLength, boolean centered, float movementSpeed,
-                     float speedX, float speedY, int level, int xp, int health, int stamina, int strength,
-                     int vitality, int agility, int charisma, int intellect, int meleeSkill) {
-        super(posX, posY, posZ, xLength, yLength, zLength, xRenderLength, yRenderLength, centered);
-        this.movementSpeed = movementSpeed;
-        this.speedX = speedX;
-        this.speedY = speedY;
-        this.level = level;
-        this.xp = xp;
-        this.health = health;
-        this.stamina = stamina;
+                     boolean centered) {
+        super(posX, posY, posZ, xLength, yLength, zLength, 1, 1, centered);
+        // Set to 'reasonable' default characters.  Will need to be set using the setter methods when instantiating
+        // a character
+        this.movementSpeed = 0.1f;
+        this.speedX = 0.0f;
+        this.speedY = 0.0f;
+        this.level = 1;
+        this.xp = 1;
+        this.health = 1;
+        this.stamina = 1;
+        this.strength = 1;
+        this.vitality = 1;
+        this.agility = 1;
+        this.charisma = 1;
+        this.intellect = 1;
+        this.meleeSkill = 1;
+    }
+
+    //Set all the attributes in one go
+    public void setAttributes(int strength, int vitality, int agility, int charisma, int intellect) {
         this.strength = strength;
         this.vitality = vitality;
         this.agility = agility;
         this.charisma = charisma;
         this.intellect = intellect;
+    }
+
+    //Set all the skills in one go
+    public void setSkills(int meleeSkill) {
+
+
+    }
+
+    public void setMovementSpeed(float movementSpeed) {
+        this.movementSpeed = movementSpeed;
+    }
+
+    public void setSpeedX(float speedX) {
+        this.speedX = speedX;
+    }
+
+    public void setSpeedY(float speedY) {
+        this.speedY = speedY;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setStamina(int stamina) {
+        this.stamina = stamina;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public void setVitality(int vitality) {
+        this.vitality = vitality;
+    }
+
+    public void setAgility(int agility) {
+        this.agility = agility;
+    }
+
+    public void setCharisma(int charisma) {
+        this.charisma = charisma;
+    }
+
+    public void setIntellect(int intellect) {
+        this.intellect = intellect;
+    }
+
+    public void setMeleeSkill(int meleeSkill) {
         this.meleeSkill = meleeSkill;
     }
 
+    public float getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public float getSpeedX() {
+        return speedX;
+    }
+
+    public float getSpeedY() {
+        return speedY;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getStamina() {
+        return stamina;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public int getVitality() {
+        return vitality;
+    }
+
+    public int getAgility() {
+        return agility;
+    }
+
+    public int getCharisma() {
+        return charisma;
+    }
+
+    public int getIntellect() {
+        return intellect;
+    }
+
+    public int getMeleeSkill() {
+        return meleeSkill;
+    }
 }
