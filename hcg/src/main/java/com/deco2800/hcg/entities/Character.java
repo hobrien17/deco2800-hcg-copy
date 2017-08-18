@@ -3,6 +3,44 @@ package com.deco2800.hcg.entities;
 import com.deco2800.hcg.util.Box3D;
 
 /**
+ * The Character abstract class is to be extended by all Characters, both playable and non playable.
+ * Character extends AbstractEntity so that the characters may be rendered to the game world.
+ *
+ * Characters have attributes and skills as listed below, skills and attributes are used to calculate numerous stats
+ * in the background such as movement speed, health, stamina, and damages with various weapons.
+ *
+ * NPCs do not have to gain xp or level up but they should have a level (possibly displayed in game) that represents
+ * its difficulty.
+ *
+ * level
+ * 			  The character's level. Will increment by 1 once the player's xp reaches the level up
+ * 			  threshold.
+ * xp
+ * 			  The character's current experience. Will tick over to 0 once the level up threshold
+ * 			  is reached (level up thresholds TBD).
+ * health
+ * 		      The characters's health. The player's health is determined by the player's level and
+ * 		      vitality attribute.
+ * stamina
+ * 			  The character's stamina. The player's stamina is determined by the player's level and
+ * 			  agility attribute.
+ * strength
+ * 			  The character's strength.  Will increase the character's damage with melee with melee weapons,
+ * 			  determines how much the player can have in their inventory.
+ * vitality
+ *            The character's vitality. Determines how much health is gained per level.
+ * agility
+ *            The character's agility. Determines how much the character's stamina is increased by each level,
+ *            and also determines the character's movement speed
+ * charisma
+ *            The character's charisma. Determines how well the character's interactions with other
+ *            characters go.
+ * intellect
+ *            The character's intellect. Determines how many skill points the player has to distribute to their
+ *            skills each level.
+ * meleeSkill
+ *            The character's meleeSkill, determines how much damage is done with melee weapons.
+ *
  * @author avryn
  */
 public abstract class Character extends AbstractEntity {
@@ -25,65 +63,8 @@ public abstract class Character extends AbstractEntity {
 
     // Skills
     // TODO: Message weapons team to find out what categories of weapons they will implement
-
     protected int meleeSkill;
 
-    /**
-     * Creates a new Player instance.
-     *
-     * @param posX
-     *            The x-coordinate.
-     * @param posY
-     *            The y-coordinate.
-     * @param posZ
-     *            The z-coordinate.
-     * @param xLength
-     *            ???
-     * @param yLength
-     *             ???
-     * @param zLength
-     *             ???
-     * @param xRenderLength
-     *              ???
-     * @param yRenderLength
-     *              ???
-     * @param centered
-     *              ???
-     * @param movementSpeed
-     *              ???
-     * @param speedX
-     *              ???
-     * @param speedY
-     *              ???
-     * @param level
-     * 			  The character's level. Will increment by 1 once the player's xp reaches the level up
-     * 			  threshold.
-     * @param xp
-     * 			  The character's current experience. Will tick over to 0 once the level up threshold
-     * 			  is reached (level up thresholds TBD).
-     * @param health
-     * 		      The characters's health. The player's health is determined by the player's level and
-     * 		      vitality attribute.
-     * @param stamina
-     * 			  The character's stamina. The player's stamina is determined by the player's level and
-     * 			  agility attribute.
-     * @param strength
-     * 			  The character's strength.  Will increase the character's damage with melee with melee weapons,
-     * 			  determines how much the player can have in their inventory.
-     * @param vitality
-     *            The character's vitality. Determines how much health is gained per level.
-     * @param agility
-     *            The character's agility. Determines how much the character's stamina is increased by each level,
-     *            and also determines the character's movement speed
-     * @param charisma
-     *            The character's charisma. Determines how well the character's interactions with other
-     *            characters go.
-     * @param intellect
-     *            The character's intellect. Determines how many skill points the player has to distribute to their
-     *            skills each level.
-     * @param meleeSkill
-     *            The character's meleeSkill, determines how much damage is done with melee weapons.
-     */
     public Character(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
                      boolean centered) {
         super(posX, posY, posZ, xLength, yLength, zLength, 1, 1, centered);
@@ -102,6 +83,15 @@ public abstract class Character extends AbstractEntity {
         this.charisma = 1;
         this.intellect = 1;
         this.meleeSkill = 1;
+    }
+
+    public void levelUp() {
+        level++;
+        //TODO: enter level up screen
+    }
+
+    public void gainXp(int xp){
+        this.xp += xp;
     }
 
     //Set all the attributes in one go
