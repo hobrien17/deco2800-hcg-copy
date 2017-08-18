@@ -28,7 +28,7 @@ public abstract class Enemy extends AbstractEntity implements Harmable {
         return this.health;
     }
     
-    public void setHealth(int newHealth) {
+    private void setHealth(int newHealth) {
         if (newHealth > 0) {
             this.health = newHealth;
         }
