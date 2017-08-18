@@ -54,7 +54,6 @@ public class CalendarManager implements Tickable {
 		}
 		
 		incrementYear();
-		
 			
 	}
 
@@ -147,20 +146,36 @@ public class CalendarManager implements Tickable {
 	}
 
 	/**
-	 * getter method for 'proper' months past start month FLESH THIS OUT LIKE A
-	 * SAUSAGE
+	 * getter method to get what calendar month it is
 	 * 
-	 * @return months from start (int)
+	 * @return calendar month 0-11 (int), if an error has 
+	 * 	occurred, 999 will be returned.
 	 */
-	public int getProperMonthsSinceStart() {
-		int buffer = this.getDay();
+	public int getCurrentCalendarMonth() {
 		
+		// setting up buffer variables so I don't 
+		// accidentally f-up the proper ones
+		int dayBuffer = yearDay;
+		int dayCounter = -1; // to account for 
 		
+		if (!this.isLeapYear()) {
+			for (int i=0;i<dayCountLeapYear.length;i++) {
+				dayCounter = dayCounter + dayCountLeapYear[i];
+				if (dayCounter >= dayBuffer) {
+					return i;
+				} 
+			}
+		} else {
+			for (int i=0;i<dayCount.length;i++) {
+				dayCounter = dayCounter + dayCount[i];
+				if (dayCounter >= dayBuffer) {
+					return i;
+				} 
+			}
+		}
 		
-		//I'm working on this dw.
+		return 999;
 		
-		int currentWeek = this.getWeeksSinceStart();
-		return currentWeek / 4;
 	}
 
 }
