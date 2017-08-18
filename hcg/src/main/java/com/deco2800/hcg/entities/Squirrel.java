@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * A generic player instance for the game
  */
-public class Squirrel extends AbstractEntity implements Tickable {
+public class Squirrel extends Enemy implements Tickable {
 	
 	private float speed = 0.1f;
 	
@@ -30,8 +30,12 @@ public class Squirrel extends AbstractEntity implements Tickable {
 		this.random = new Random();
 	}
 
+	/**
+	 * On Tick handler
+	 * @param gameTickCount Current game tick
+	 */
 	@Override
-	public void onTick(int i) {
+	public void onTick(long gameTickCount) {
 		float goalX = playerManager.getPlayer().getPosX() + random.nextFloat() * 6 - 3;
 		float goalY = playerManager.getPlayer().getPosY() + random.nextFloat() * 6 - 3;
 
@@ -56,7 +60,7 @@ public class Squirrel extends AbstractEntity implements Tickable {
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		boolean collided = false;
 		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
+			if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
 				if(entity instanceof Player) {
 					soundManager.playSound("ree");
 				}

@@ -45,10 +45,10 @@ public class Tower extends AbstractEntity implements Clickable, Tickable, Select
 
 	/**
 	 * On Tick handler
-	 * @param i time since last tick
+	 * @param gameTickCount Current game tick
 	 */
 	@Override
-	public void onTick(int i) {
+	public void onTick(long gameTickCount) {
 
 		if (selected) {
 			this.setTexture("tree_selected");

@@ -20,7 +20,7 @@ public class DemoWorld extends AbstractWorld {
 	 */
 	public DemoWorld() {
 		/* Load up the map for this world */
-		this.map = new TmxMapLoader().load("resources/placeholderassets/placeholder.tmx");
+		this.map = new TmxMapLoader().load("resources/maps/dirt.tmx");
 
 		/*
 		 * Grab the width and length values from the map file to use as the world size

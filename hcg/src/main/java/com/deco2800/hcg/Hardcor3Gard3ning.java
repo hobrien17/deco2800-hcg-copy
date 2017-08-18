@@ -53,9 +53,11 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 
 	private Stage stage;
 	private Window window;
-	private Button peonButton;
 
-	private long lastGameTick = 0;
+	private boolean ticking = true;
+	private long gameTickCount = 0;
+	private long gameTickPeriod = 20;  // Tickrate = 50Hz
+	private long nextGameTick = TimeUtils.millis() + gameTickPeriod;
 
 	/**
 	 * Creates the required objects for the game to start.
@@ -65,11 +67,11 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	public void create () {
 
 		textureManager = ((TextureManager) GameManager.get().getManager(TextureManager.class));
-		textureManager.saveTexture("ground_1", "resources/placeholderassets/ground-1.png");
-		textureManager.saveTexture("squirrel", "resources/placeholderassets/squirrel.png");
-		textureManager.saveTexture("tower", "resources/placeholderassets/tower.png");
-		textureManager.saveTexture("seed", "resources/seed.png");
-		textureManager.saveTexture("plant", "resources/plant.png");
+		textureManager.saveTexture("ground", "resources/maps/environment/ground.png");
+		textureManager.saveTexture("squirrel", "resources/sprites/enemies/squirrel.png");
+		textureManager.saveTexture("tower", "resources/sprites/misc/tower.png");
+		textureManager.saveTexture("seed", "resources/sprites/misc/seed.png");
+		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
 
 		/**
 		 *	Set up new stuff for this game
@@ -99,7 +101,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		 * Setup GUI
 		 */
 		stage = new Stage(new ScreenViewport());
-		Skin skin = new Skin(Gdx.files.internal("resources/uiskin.json"));
+		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
 
 		/* Add a quit button to the menu */
@@ -131,7 +133,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Add all buttons to the menu */
 		window.add(button);
 		window.add(anotherButton);
-		window.add(peonButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
@@ -200,20 +201,26 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	@Override
 	public void render () {
 
-		/*
-		 * Tickrate = 10Hz
-		 */
-		if(TimeUtils.millis() - lastGameTick > 30) {
-			window.removeActor(peonButton);
-			boolean somethingSelected = false;
-			for (Renderable e : GameManager.get().getWorld().getEntities()) {
-				if (e instanceof Tickable) {
-					((Tickable) e).onTick(0);
+		// Fire waiting game ticks
+		while (TimeUtils.millis() >= nextGameTick) {
+			if (ticking) {
 
+				// Tick managers
+				GameManager.get().onTick(gameTickCount);
+
+				// Tick entities
+				for (Renderable e : GameManager.get().getWorld().getEntities()) {
+					if (e instanceof Tickable) {
+						((Tickable) e).onTick(gameTickCount);
+					}
 				}
-				lastGameTick = TimeUtils.millis();
+
+				// Increment tick count
+				gameTickCount += 1;
 			}
 
+			// Schedule next tick
+			nextGameTick += gameTickPeriod;
 		}
 
         /*
@@ -246,13 +253,14 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
          */
 		renderer.render(batch);
 
-		/* Dispose of the spritebatch to not have memory leaks */
-		Gdx.graphics.setTitle("DECO2800 " + this.getClass().getCanonicalName() +  " - FPS: "+ Gdx.graphics.getFramesPerSecond());
-
 		stage.act();
 		stage.draw();
 
+		/* Dispose of the spritebatch to not have memory leaks */
 		batch.dispose();
+
+		/* Display FPS in window title */
+		Gdx.graphics.setTitle("DECO2800 " + this.getClass().getCanonicalName() +  " - FPS: "+ Gdx.graphics.getFramesPerSecond());
 	}
 
 

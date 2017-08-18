@@ -5,5 +5,5 @@ package com.deco2800.hcg.managers;
  * Receives an onTick every game tick
  */
 public interface TickableManager {
-	void onTick(long i);
+	void onTick(long gameTickCount);
 }
