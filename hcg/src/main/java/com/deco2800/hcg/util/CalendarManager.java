@@ -98,7 +98,7 @@ public class CalendarManager implements Tickable {
 			}
 		}
 	}
-	
+
 	/*
 	 * helper method to increment months
 	 */
@@ -106,8 +106,8 @@ public class CalendarManager implements Tickable {
 		int bufferDay = yearDay;
 		int currentMonth = this.getCurrentCalendarMonth();
 		int dayCounter = 0;
-		
-		if(this.isLeapYear()) {
+
+		if (this.isLeapYear()) {
 			for (int i = 0; i < currentMonth; i++) {
 				dayCounter = dayCounter + dayCountLeapYear[i];
 			}
@@ -116,12 +116,11 @@ public class CalendarManager implements Tickable {
 				dayCounter = dayCounter + dayCount[i];
 			}
 		}
-		
+
 		if (bufferDay >= dayCounter) {
 			currentMonth++;
-		}	
+		}
 	}
-	
 
 	/**
 	 * getter method for current day
@@ -205,7 +204,5 @@ public class CalendarManager implements Tickable {
 		return 999;
 
 	}
-	
-
 
 }
