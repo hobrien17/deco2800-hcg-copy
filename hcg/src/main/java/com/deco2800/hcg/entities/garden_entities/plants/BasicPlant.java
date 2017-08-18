@@ -18,13 +18,13 @@ public class BasicPlant extends AbstractGardenPlant {
 	public void setThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			this.setTexture("plant_0");
+			this.setTexture("plant");
 			break;
 		case SMALL:
-			this.setTexture("plant_1");
+			this.setTexture("plant2");
 			break;
 		case LARGE:
-			this.setTexture("plant_2");
+			this.setTexture("tree");
 			break;
 		}
 
@@ -40,6 +40,12 @@ public class BasicPlant extends AbstractGardenPlant {
 	public Object[] harvest() {
 		// Need to implement
 		return null;
+	}
+
+	@Override
+	public void onTick(long gameTickCount) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

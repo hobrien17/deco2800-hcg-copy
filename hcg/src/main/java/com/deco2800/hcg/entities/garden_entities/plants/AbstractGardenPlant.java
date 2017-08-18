@@ -57,12 +57,6 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	}
 
 	@Override
-	public void onTick(int tick) {
-		// Need to implement
-
-	}
-
-	@Override
 	public boolean isSelected() {
 		// Need to implement
 		return false;
