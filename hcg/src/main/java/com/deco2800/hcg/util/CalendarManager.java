@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.deco2800.hcg.entities.Tickable;
 
 /**
- * A utility class for the calender.
+ * A utility class for the calendar.
  * 
  * i.e. Mechanisms to store an accumulation of time in units such as
  * days/months/years.
@@ -19,6 +19,9 @@ public class CalendarManager implements Tickable {
 
 	// current day
 	private int day;
+	
+	// current day in year
+	private int yearDay;
 
 	// current hour
 	private int hour;
@@ -33,8 +36,9 @@ public class CalendarManager implements Tickable {
 	// initial month - same deal as initial year.
 	// In this case months will be 0-11 corresponding with Jan-Dec.
 	private int initialMonth = 0;
+	// days in months
 	private int[] dayCount = {31,28,31,30,31,30,31,31,30,31,30,31};
-	private int[] dayCountLeapYear = {31,28,31,30,31,30,31,31,30,31,30,31};
+	private int[] dayCountLeapYear = {31,29,31,30,31,30,31,31,30,31,30,31};
 
 	public CalendarManager() {
 		day = 0;
@@ -45,8 +49,13 @@ public class CalendarManager implements Tickable {
 	public void onTick(long gameTickCount) {
 		if (++hour >= 24) {
 			day++;
+			yearDay++;
 			hour = 0;
 		}
+		
+		incrementYear();
+		
+			
 	}
 
 	/*
@@ -65,6 +74,26 @@ public class CalendarManager implements Tickable {
 			}
 		}
 		return false;
+	}
+	
+	/*
+	 * Helper method, increments year with conditions
+	 * 
+	 * my code is quite spaghetti, sorry
+	 * 
+	 */
+	private void incrementYear() {
+		if (yearDay >= 365) {
+			if(!this.isLeapYear()) {
+				currentYear++;
+				yearDay = 0;
+			} else {
+				if (yearDay > 365) {
+					currentYear++;
+					yearDay = 0;
+				}
+			}
+		}
 	}
 
 	/**
@@ -125,6 +154,8 @@ public class CalendarManager implements Tickable {
 	 */
 	public int getProperMonthsSinceStart() {
 		int buffer = this.getDay();
+		
+		
 		
 		//I'm working on this dw.
 		
