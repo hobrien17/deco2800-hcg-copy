@@ -18,7 +18,7 @@ public class CalendarManager implements Tickable {
 	// Initialising variables
 
 	// current day
-	private int day;
+	private int dayCounter;
 
 	// current day in year
 	private int yearDay;
@@ -44,7 +44,7 @@ public class CalendarManager implements Tickable {
 	private int[] dayCountLeapYear = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 	public CalendarManager() {
-		day = 0;
+		dayCounter = 0;
 		hour = 0;
 	}
 
@@ -54,7 +54,7 @@ public class CalendarManager implements Tickable {
 	// lol
 	public void onTick(long gameTickCount) {
 		if (++hour >= 24) {
-			day++;
+			dayCounter++;
 			yearDay++;
 			hour = 0;
 		}
@@ -68,17 +68,14 @@ public class CalendarManager implements Tickable {
 	 * Helper method, checks if current year is a leap year
 	 */
 	private boolean isLeapYear() {
-		if (currentYear % 4 == 0) {
-			if (currentYear % 100 == 0) {
-				if (currentYear % 400 == 0) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return true;
-			}
+		if (currentYear % 400 == 0){
+			return true;
+		} else if (currentYear % 100 == 0){
+			return false;
+		} else if (currentYear % 4 == 0){
+			return true;
 		}
+		
 		return false;
 	}
 
@@ -131,8 +128,8 @@ public class CalendarManager implements Tickable {
 	 * 
 	 * @return current Day (int)
 	 */
-	public int getDay() {
-		return day;
+	public int getDayCounter() {
+		return dayCounter;
 	}
 
 	/**
