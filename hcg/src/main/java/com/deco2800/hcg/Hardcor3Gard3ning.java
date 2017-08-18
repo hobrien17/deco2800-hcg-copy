@@ -66,11 +66,11 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	public void create () {
 
 		textureManager = ((TextureManager) GameManager.get().getManager(TextureManager.class));
-		textureManager.saveTexture("ground_1", "resources/placeholderassets/ground-1.png");
-		textureManager.saveTexture("squirrel", "resources/placeholderassets/squirrel.png");
-		textureManager.saveTexture("tower", "resources/placeholderassets/tower.png");
-		textureManager.saveTexture("seed", "resources/seed.png");
-		textureManager.saveTexture("plant", "resources/plant.png");
+		textureManager.saveTexture("ground", "resources/maps/environment/ground.png");
+		textureManager.saveTexture("squirrel", "resources/sprites/enemies/squirrel.png");
+		textureManager.saveTexture("tower", "resources/sprites/misc/tower.png");
+		textureManager.saveTexture("seed", "resources/sprites/misc/seed.png");
+		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
 
 		/**
 		 *	Set up new stuff for this game
@@ -100,7 +100,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		 * Setup GUI
 		 */
 		stage = new Stage(new ScreenViewport());
-		Skin skin = new Skin(Gdx.files.internal("resources/uiskin.json"));
+		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
 
 		/* Add a quit button to the menu */
