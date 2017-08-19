@@ -79,6 +79,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/**
 		 *	Set up new stuff for this game
 		 */
+
 		/* Create an example world for the engine */
 //		GameManager.get().setWorld(new DemoWorld());
 

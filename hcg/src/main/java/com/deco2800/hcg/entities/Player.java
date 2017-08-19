@@ -1,11 +1,13 @@
 package com.deco2800.hcg.entities;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.worlds.WorldMapWorld;
+import com.deco2800.hcg.worlds.AbstractWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,15 +73,38 @@ public class Player extends AbstractEntity implements Tickable {
 			return;
 		}
 
-		newPosX += speedx;
-		newPosY += speedy;
+		// set speed is the multiplier due to the ground
+		float speed = 1.0f;
+		collided = false;
+
+		// current world and layer
+		AbstractWorld world = GameManager.get().getWorld();
+
+		// get speed of current tile. this is done before checking if a tile 
+		// exists so a slow down tile next to the edge wouldn't cause
+		// problems. also note that layer should never be null here,
+		// provided the player starts somewhere valid.
+		TiledMapTileLayer layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
+		speed = layer.getProperties().get("speed", float.class);
+		String name = layer.getProperties().get("name", String.class);
+
+		// log
+		LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
+
+		// set new postition based on this speed
+		newPosX += speedx * speed;
+		newPosY += speedy * speed;
+
+		// now check if a tile exists at this new position
+		if (world.getTiledMapTileLayerAtPos((int)(newPosY), (int)(newPosX)) == null){
+			collided = true;
+		}
 
 		Box3D newPos = getBox3D();
 		newPos.setX(newPosX);
 		newPos.setY(newPosY);
 
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
-		collided = false;
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) && !(entity instanceof Squirrel)
 					&& newPos.overlaps(entity.getBox3D()) && !(entity instanceof Bullet)) {
@@ -89,7 +114,7 @@ public class Player extends AbstractEntity implements Tickable {
 			}
 		}
 		/* if in WorldMap, you can't collide with anything */
-		if (GameManager.get().getWorld() instanceof WorldMapWorld) {
+		if (world instanceof WorldMapWorld) {
 			collided = false;
 		}
 		if (!collided) {
