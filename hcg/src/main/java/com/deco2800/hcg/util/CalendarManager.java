@@ -1,6 +1,5 @@
 package com.deco2800.hcg.util;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import com.deco2800.hcg.entities.Tickable;
 
@@ -68,14 +67,14 @@ public class CalendarManager implements Tickable {
 	 * Helper method, checks if current year is a leap year
 	 */
 	private boolean isLeapYear() {
-		if (currentYear % 400 == 0){
+		if (currentYear % 400 == 0) {
 			return true;
-		} else if (currentYear % 100 == 0){
+		} else if (currentYear % 100 == 0) {
 			return false;
-		} else if (currentYear % 4 == 0){
+		} else if (currentYear % 4 == 0) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -127,7 +126,7 @@ public class CalendarManager implements Tickable {
 	 * 
 	 * @return current Day (int)
 	 */
-	public int getDayCounter() {
+	public int getDay() {
 		return dayCounter;
 	}
 
@@ -155,7 +154,7 @@ public class CalendarManager implements Tickable {
 	 * @return weeks from start (int)
 	 */
 	public int getWeeksSinceStart() {
-		int currentDay = this.getDayCounter();
+		int currentDay = this.getDay();
 		// integer div is wizardry I tell you
 		return currentDay / 7;
 	}
@@ -183,7 +182,7 @@ public class CalendarManager implements Tickable {
 		// setting up buffer variables so I don't
 		// accidentally f-up the proper ones
 		int dayBuffer = yearDay;
-		int dayCounter = -1; // to account for
+		int dayCounter = -1; // to account for how arrays start at 0
 
 		if (!this.isLeapYear()) {
 			for (int i = 0; i < dayCountLeapYear.length; i++) {
