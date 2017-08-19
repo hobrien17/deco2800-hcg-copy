@@ -1,9 +1,13 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.managers.GameManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,6 +31,34 @@ public abstract class AbstractWorld {
         return new ArrayList<AbstractEntity>(this.entities);
     }
 
+    /**
+     * Returns the TiledMapTileLayer that contains the cell at the 
+     * given X and Y position. See documentation on TiledMapTileLayer.
+     * 
+     * @param PosX X position
+     * @param PosY Y position
+     * @return A TiledMapTileLayer that contains the players current cell. 
+     * Null if no such TiledMapTileLayer exists.
+     */
+    public TiledMapTileLayer getTiledMapTileLayerAtPos(int PosX, int PosY) {
+    	// loop through all layers
+		Iterator<MapLayer> itr = GameManager.get().getWorld().
+				getMap().getLayers().iterator();
+		
+		while(itr.hasNext()) {
+			
+			TiledMapTileLayer layer = (TiledMapTileLayer)itr.next();
+			
+			if (layer.getCell(PosX, PosY) != null) {
+				return (TiledMapTileLayer)layer;
+			}
+		
+		}
+			
+		return null;
+    	
+    }
+    
     /**
      * Returns the current map for this world
      * @return Map object for this world
