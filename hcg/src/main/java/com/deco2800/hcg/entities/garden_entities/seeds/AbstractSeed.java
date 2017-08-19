@@ -33,6 +33,12 @@ public abstract class AbstractSeed implements Item {
 		// TODO Auto-generated method stub
 		return 5;
 	}
+
+	@Override
+	public boolean addToStack(int number) {
+    	//TODO: Added to fix implementation change. Alter this to whatever you want.
+    	return false;
+	}
     
     /**
      * Creates a new plant at the given x and y co-ordinates
