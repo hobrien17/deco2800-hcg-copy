@@ -26,7 +26,6 @@ public class Player extends Character implements Tickable {
 
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
-
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
 
 		input.addKeyDownListener(this::handleKeyDown);
@@ -78,6 +77,8 @@ public class Player extends Character implements Tickable {
 			this.setPosition(newPosX, newPosY, 1);
 		}
 	}
+
+
 
 	/**
 	 * Handle movement when wasd keys are pressed down
@@ -135,92 +136,13 @@ public class Player extends Character implements Tickable {
 		}
 	}
 
-	public float getMovementSpeed() {
-		return movementSpeed;
+	public void levelUp() {
+		level++;
+		//TODO: enter level up screen
 	}
 
-	public float getSpeedX() {
-		return speedX;
-	}
-
-	public float getSpeedY() {
-		return speedY;
-	}
-
-	public int getLevel() {
-		return level;
-	}
-
-	public int getXp() {
-		return xp;
-	}
-
-	public int getStrength() {
-		return strength;
-	}
-
-	public int getVitality() {
-		return vitality;
-	}
-
-	public int getAgility() {
-		return agility;
-	}
-
-	public int getCharisma() {
-		return charisma;
-	}
-
-	public int getIntellect() {
-		return intellect;
-	}
-
-	public int getMeleeSkill() {
-		return meleeSkill;
-	}
-
-	public void setMovementSpeed(float movementSpeed) {
-		this.movementSpeed = movementSpeed;
-	}
-
-	public void setSpeedX(float speedX) {
-		this.speedX = speedX;
-	}
-
-	public void setSpeedY(float speedY) {
-		this.speedY = speedY;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
-	}
-
-	public void setXp(int xp) {
-		this.xp = xp;
-	}
-
-	public void setStrength(int strength) {
-		this.strength = strength;
-	}
-
-	public void setVitality(int vitality) {
-		this.vitality = vitality;
-	}
-
-	public void setAgility(int agility) {
-		this.agility = agility;
-	}
-
-	public void setCharisma(int charisma) {
-		this.charisma = charisma;
-	}
-
-	public void setIntellect(int intellect) {
-		this.intellect = intellect;
-	}
-
-	public void setMeleeSkill(int meleeSkill) {
-		this.meleeSkill = meleeSkill;
+	public void gainXp(int xp){
+		this.xp += xp;
 	}
 
 	@Override

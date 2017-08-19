@@ -53,6 +53,7 @@ public abstract class Character extends AbstractEntity {
     protected int xp;
     protected int health;
     protected int stamina;
+    protected int carryWeight;
 
     // Attributes
     protected int strength;
@@ -77,21 +78,13 @@ public abstract class Character extends AbstractEntity {
         this.xp = 1;
         this.health = 1;
         this.stamina = 1;
+        this.carryWeight = 1;
         this.strength = 1;
         this.vitality = 1;
         this.agility = 1;
         this.charisma = 1;
         this.intellect = 1;
         this.meleeSkill = 1;
-    }
-
-    public void levelUp() {
-        level++;
-        //TODO: enter level up screen
-    }
-
-    public void gainXp(int xp){
-        this.xp += xp;
     }
 
     //Set all the attributes in one go
