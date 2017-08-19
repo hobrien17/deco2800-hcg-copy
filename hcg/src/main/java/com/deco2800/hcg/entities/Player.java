@@ -110,20 +110,33 @@ public class Player extends Character implements Tickable {
 		checkXp();
 	}
 
+	/**
+	 * Initialise a new player. Will be used after the user has created their character in the character creation screen
+	 * @param strength
+	 * @param vitality
+	 * @param agility
+	 * @param charisma
+	 * @param intellect
+	 * @param meleeSkill
+	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
 									int meleeSkill) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
 		setSkills(meleeSkill);
 	}
 
-	//Checks if the player's xp has reached the amount of xp required for levelling up
+	/**
+	 * Checks if the player's xp has reached the amount of xp required for levelling up
+	 */
 	private void checkXp() {
 		if (xp >= xpThreshold) {
 			levelUp();
 		}
 	}
 
-	//Increases the player's level by one, increases the xpThreshold.
+	/**
+	 * Increases the player's level by one, increases the xpThreshold.
+	 */
 	private void levelUp() {
 		xpThreshold *= 1.2;
 		level++;
