@@ -23,6 +23,7 @@ import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.WorldMapWorld;
 import com.deco2800.hcg.entities.Player;
 
 /**
@@ -76,7 +77,10 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		 *	Set up new stuff for this game
 		 */
 		/* Create an example world for the engine */
-		GameManager.get().setWorld(new DemoWorld());
+//		GameManager.get().setWorld(new DemoWorld());
+
+        /* testing world map, commend this line below, uncommend line above to get back to the games */
+		GameManager.get().setWorld(new WorldMapWorld());
 		
 		/* Create a sound manager for the whole game */
 		soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
