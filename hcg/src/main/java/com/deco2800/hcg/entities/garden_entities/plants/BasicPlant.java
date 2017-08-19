@@ -10,8 +10,6 @@ public class BasicPlant extends AbstractGardenPlant {
 
 	public BasicPlant(float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false, Stage.SPROUT);
-		this.advanceStage();
-		this.advanceStage();
 	}
 
 	@Override

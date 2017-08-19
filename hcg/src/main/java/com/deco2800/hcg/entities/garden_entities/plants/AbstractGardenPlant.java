@@ -53,7 +53,7 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	
 	@Override
 	public void onClick() {
-		// Need to implement
+		advanceStage();
 	}
 
 	@Override
