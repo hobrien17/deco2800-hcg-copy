@@ -35,9 +35,9 @@ public abstract class AbstractSeed implements Item {
 	}
     
     /**
-     * Gets the type of plant that grows when planted
+     * Creates a new plant at the given x and y co-ordinates
      * 
-     * @return the type of plant that grows out of this seed
+     * @return a new plant
      */
-    public abstract AbstractGardenPlant plant();
+    public abstract AbstractGardenPlant plant(int xPos, int yPos);
 }

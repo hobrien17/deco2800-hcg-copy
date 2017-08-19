@@ -17,7 +17,7 @@ public class SunflowerSeed extends AbstractSeed {
 	}
 
 	@Override
-	public AbstractGardenPlant plant() {
+	public AbstractGardenPlant plant(int xPos, int yPos) {
 		// TODO Auto-generated method stub
 		return null;
 	}
