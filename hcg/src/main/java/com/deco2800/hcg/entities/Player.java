@@ -24,6 +24,7 @@ public class Player extends Character implements Tickable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
 	boolean collided;
+	private int xpThreshold;
 
 	public Player(float posX, float posY, float posZ) {
 
@@ -105,6 +106,32 @@ public class Player extends Character implements Tickable {
 		if (!collided) {
 			this.setPosition(newPosX, newPosY, 1);
 		}
+
+		checkXp();
+	}
+
+	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
+									int meleeSkill) {
+		setAttributes(strength, vitality, agility, charisma, intellect);
+		setSkills(meleeSkill);
+	}
+
+	//Checks if the player's xp has reached the amount of xp required for levelling up
+	private void checkXp() {
+		if (xp >= xpThreshold) {
+			levelUp();
+		}
+	}
+
+	//Increases the player's level by one, increases the xpThreshold.
+	private void levelUp() {
+		xpThreshold *= 1.2;
+		level++;
+		//TODO: enter level up screen
+	}
+
+	public void gainXp(int xp){
+		this.xp += xp;
 	}
 
 	/**
@@ -161,15 +188,6 @@ public class Player extends Character implements Tickable {
 		default:
 			break;
 		}
-	}
-
-	public void levelUp() {
-		level++;
-		//TODO: enter level up screen
-	}
-
-	public void gainXp(int xp){
-		this.xp += xp;
 	}
 
 	@Override

@@ -88,8 +88,8 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		playerManager = (PlayerManager)GameManager.get().getManager(PlayerManager.class);
 
 		Player player = new Player(5, 10, 0);
+		player.initialiseNewPlayer(5,5,5,5,5,20);
 		playerManager.setPlayer(player);
-		// TODO: Set player attributes
 		GameManager.get().getWorld().addEntity(playerManager.getPlayer());
 
 		
