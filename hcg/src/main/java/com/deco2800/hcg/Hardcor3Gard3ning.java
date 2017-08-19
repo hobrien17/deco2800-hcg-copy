@@ -73,6 +73,9 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		textureManager.saveTexture("seed", "resources/sprites/misc/seed.png");
 		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
 
+		/* currently, level portal dont have any texture. Using "tower" as temporary */
+		textureManager.saveTexture("levelPortal", "resources/sprites/misc/tower.png");
+
 		/**
 		 *	Set up new stuff for this game
 		 */

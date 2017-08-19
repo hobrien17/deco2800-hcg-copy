@@ -25,6 +25,8 @@ public class SoundManager extends Manager {
 	public SoundManager() {
 		soundMap.put("ree", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree1.wav")));
 		soundMap.put("quack", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/quack.wav")));
+		soundMap.put("teleport", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/teleport.wav")));
+
 	}
 
 	/**

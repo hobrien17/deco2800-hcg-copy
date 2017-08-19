@@ -27,7 +27,12 @@ public class WorldMapWorld extends AbstractWorld {
         this.setWidth(this.getMap().getProperties().get("width", Integer.class));
         this.setLength(this.getMap().getProperties().get("height", Integer.class));
 
-//        this.addEntity(new Tower(3, 3, 0));
+        this.addEntity(new LevelPortal(3, 3, 0));
+        this.addEntity(new LevelPortal(6, 6, 0));
+        this.addEntity(new LevelPortal(9, 9, 0));
+        this.addEntity(new LevelPortal(12, 12, 0));
+        this.addEntity(new LevelPortal(15, 15, 0));
+        this.addEntity(new LevelPortal(15, 18, 0));
 
 //
 //        Random random = new Random();

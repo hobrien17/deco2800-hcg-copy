@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.worlds.WorldMapWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +88,10 @@ public class Player extends AbstractEntity implements Tickable {
 
 			}
 		}
-
+		/* if in WorldMap, you can't collide with anything */
+		if (GameManager.get().getWorld() instanceof WorldMapWorld) {
+			collided = false;
+		}
 		if (!collided) {
 			this.setPosition(newPosX, newPosY, 1);
 		}
