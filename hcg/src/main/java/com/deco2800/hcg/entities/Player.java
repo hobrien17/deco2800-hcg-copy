@@ -67,19 +67,25 @@ public class Player extends Character implements Tickable {
 		collided = false;
 
 		// current world and layer
+		TiledMapTileLayer layer;
 		AbstractWorld world = GameManager.get().getWorld();
 
 		// get speed of current tile. this is done before checking if a tile 
-		// exists so a slow down tile next to the edge wouldn't cause
-		// problems. also note that layer should never be null here,
-		// provided the player starts somewhere valid.
-		TiledMapTileLayer layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
-		speed = layer.getProperties().get("speed", float.class);
-		String name = layer.getProperties().get("name", String.class);
+		// exists so a slow down tile next to the edge wouldn't cause problems.
+		if (world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX) == null) {
+			collided = true;
+		}
+		else {
+			// set the layer, and get the speed of the tile on the layer. Also name for logging.
+			layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
+			speed = layer.getProperties().get("speed", float.class);
+			String name = layer.getProperties().get("name", String.class);
+			
+			// log
+			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
 
-		// log
-		LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
-
+		}
+		
 		// set new postition based on this speed
 		newPosX += speedX * speed;
 		newPosY += speedY * speed;
