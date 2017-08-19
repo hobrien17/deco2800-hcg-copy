@@ -78,7 +78,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		 *	Set up new stuff for this game
 		 */
 		/* Create an example world for the engine */
-		GameManager.get().setWorld(new GardenDemo());
+		GameManager.get().setWorld(new DemoWorld());
 		
 		/* Create a sound manager for the whole game */
 		soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
