@@ -1,6 +1,6 @@
 package com.deco2800.hcg.items;
 
-/** Basic class for a simple non stackable item**/
+/** Basic class for a simple non stackable item, non wearable item**/
 public class BasicItem implements Item {
 
     String itemName;
@@ -13,13 +13,17 @@ public class BasicItem implements Item {
     }
     /** Function for returning the name of an item **/
     public String getName() {
-        //Deep copy to avoid accidental changes of item name
-        String name = ""+itemName;
-        return name;
+        return itemName;
     }
 
-    /** Function for returning whether an item is stackable or not **/
-    public boolean isStackable() {
+    /** Function for returning the max stack size of this item */
+    public int maxStackSize() {
+        return 1;
+    }
+
+    /** Function for returning whether an item is wearable/equipable by a user
+     * eg armour, character customization items */
+    public boolean isWearable() {
         return false;
     }
 
