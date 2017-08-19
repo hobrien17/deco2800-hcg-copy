@@ -1,5 +1,9 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
+import java.util.Map;
+
+import com.deco2800.hcg.items.Item;
+
 /**
  * Represents a basic plant which drops basic loot
  * 
@@ -29,21 +33,27 @@ public class BasicPlant extends AbstractGardenPlant {
 	}
 
 	@Override
-	public Object[] getLoot() {
-		// Need to implement
-		return null;
-	}
-
-	@Override
-	public Object[] harvest() {
-		// Need to implement
-		return null;
-	}
-
-	@Override
 	public void onTick(long gameTickCount) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Item[] getLoot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<Item, Double> getRarity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Item[] loot() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

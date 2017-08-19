@@ -11,7 +11,7 @@ import com.deco2800.hcg.util.Box3D;
  * 
  * @author Henry O'Brien
  */
-public abstract class AbstractGardenPlant extends AbstractEntity implements Clickable, Tickable, Selectable {
+public abstract class AbstractGardenPlant extends AbstractEntity implements Clickable, Tickable, Selectable, Lootable {
 	
 	/**
 	 * Represents a stage of growth
@@ -112,23 +112,6 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	 * Sets the texture based on the plant's stage of growth
 	 */
 	public abstract void setThisTexture();
-	
-	/**
-	 * Gets a list of all possible loot dropped by this tree
-	 * Replace return type with loot when implemented
-	 * 
-	 * @return An array of all possible loot dropped by this plant
-	 */
-	public abstract Object[] getLoot();
-	
-	/**
-	 * Returns a list of loot items where 0 <= length(\result) <= length(this.getLoot())
-	 * Loot may vary based on rarity and stage of plant growth
-	 * Possible to return an empty array (if plant is in initial stage of growth)
-	 * 
-	 * @return An array (possibly empty) of loot items
-	 */
-	public abstract Object[] harvest();
 	
 	//Rest to be implemented later
 
