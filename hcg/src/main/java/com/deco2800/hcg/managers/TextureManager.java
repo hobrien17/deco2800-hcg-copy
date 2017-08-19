@@ -33,19 +33,11 @@ public class TextureManager extends Manager {
      * need to.
      */
     public TextureManager() {
-        textureMap.put("grass", new Texture("resources/grass.png"));
-        textureMap.put("grass2", new Texture("resources/grass2.png"));
-        textureMap.put("tree", new Texture("resources/spacman.png"));
-        textureMap.put("real_tree", new Texture("resources/tree.png"));
-        textureMap.put("ground_1", new Texture("resources/ground-1.png"));
-        textureMap.put("spacman", new Texture("resources/spacman.png"));
-        textureMap.put("spacman_red", new Texture("resources/spacman_red.png"));
-        textureMap.put("spacman_blue", new Texture("resources/spacman_blue.png"));
-        textureMap.put("spacman_green", new Texture("resources/spacman_green.png"));
-        textureMap.put("spacman_ded", new Texture("resources/spacman_ded.png"));
-        textureMap.put("selected", new Texture("resources/selected.png"));
-        textureMap.put("selected_black", new Texture("resources/selected_black.png"));
-
+        textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
+        textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
+        textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
+        textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
+        textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
     }
 
     /**

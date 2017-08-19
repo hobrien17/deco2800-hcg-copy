@@ -88,7 +88,7 @@ public abstract class Character extends AbstractEntity {
     }
 
     //Set all the attributes in one go
-    public void setAttributes(int strength, int vitality, int agility, int charisma, int intellect) {
+    private void setAttributes(int strength, int vitality, int agility, int charisma, int intellect) {
         this.strength = strength;
         this.vitality = vitality;
         this.agility = agility;
@@ -97,62 +97,60 @@ public abstract class Character extends AbstractEntity {
     }
 
     //Set all the skills in one go
-    public void setSkills(int meleeSkill) {
+    private void setSkills(int meleeSkill) {
 
 
     }
 
-    public void setMovementSpeed(float movementSpeed) {
+    private void setMovementSpeed(float movementSpeed) {
         this.movementSpeed = movementSpeed;
     }
 
-    public void setSpeedX(float speedX) {
+    private void setSpeedX(float speedX) {
         this.speedX = speedX;
     }
 
-    public void setSpeedY(float speedY) {
+    private void setSpeedY(float speedY) {
         this.speedY = speedY;
     }
 
-    public void setLevel(int level) {
+    private void setLevel(int level) {
         this.level = level;
     }
 
-    public void setXp(int xp) {
+    private void setXp(int xp) {
         this.xp = xp;
     }
 
-    public void setHealth(int health) {
+    private void setHealth(int health) {
         this.health = health;
     }
 
-    public void setStamina(int stamina) {
+    private void setStamina(int stamina) {
         this.stamina = stamina;
     }
 
-    public void setStrength(int strength) {
+    private void setStrength(int strength) {
         this.strength = strength;
     }
 
-    public void setVitality(int vitality) {
+    private void setVitality(int vitality) {
         this.vitality = vitality;
     }
 
-    public void setAgility(int agility) {
+    private void setAgility(int agility) {
         this.agility = agility;
     }
 
-    public void setCharisma(int charisma) {
+    private void setCharisma(int charisma) {
         this.charisma = charisma;
     }
 
-    public void setIntellect(int intellect) {
+    private void setIntellect(int intellect) {
         this.intellect = intellect;
     }
 
-    public void setMeleeSkill(int meleeSkill) {
-        this.meleeSkill = meleeSkill;
-    }
+    private void setMeleeSkill(int meleeSkill) { this.meleeSkill = meleeSkill; }
 
     public float getMovementSpeed() {
         return movementSpeed;

@@ -8,19 +8,20 @@ import com.deco2800.hcg.renderers.Renderable;
 import java.util.Random;
 
 /**
- * Initial world using preset world file.
+ * World to test Garden
+ * Copied from DemoWorld
  * 
- * @author leggy
+ * @author Henry O'Brien
  *
  */
-public class DemoWorld extends AbstractWorld {
+public class GardenDemo extends AbstractWorld {
 
 	/**
 	 * Constructor for DemoWorld
 	 */
-	public DemoWorld() {
+	public GardenDemo() {
 		/* Load up the map for this world */
-		this.map = new TmxMapLoader().load("resources/maps/placeholder.tmx");
+		this.map = new TmxMapLoader().load("resources/maps/grass.tmx");
 
 		/*
 		 * Grab the width and length values from the map file to use as the world size
@@ -28,13 +29,7 @@ public class DemoWorld extends AbstractWorld {
 		this.setWidth(this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(this.getMap().getProperties().get("height", Integer.class));
 
-		this.addEntity(new Tower(8, 8, 0));
-
-		
-		Random random = new Random();
-		for(int i = 0; i < 20; i++) {
-			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0));
-		}
+		this.addEntity(new BasicPlant(8, 8, 0));
 		
 	}
 
