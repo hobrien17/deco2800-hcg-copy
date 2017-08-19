@@ -155,7 +155,7 @@ public class CalendarManager implements Tickable {
 	 * @return weeks from start (int)
 	 */
 	public int getWeeksSinceStart() {
-		int currentDay = this.getDay();
+		int currentDay = this.getDayCounter();
 		// integer div is wizardry I tell you
 		return currentDay / 7;
 	}
