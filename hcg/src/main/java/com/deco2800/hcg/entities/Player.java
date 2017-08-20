@@ -59,9 +59,6 @@ public class Player extends Character implements Tickable {
 			return;
 		}
 
-		newPosX += speedX;
-		newPosY += speedY;
-
 		// set speed is the multiplier due to the ground
 		float speed = 1.0f;
 		collided = false;
@@ -89,7 +86,7 @@ public class Player extends Character implements Tickable {
 		// set new postition based on this speed
 		newPosX += speedX * speed;
 		newPosY += speedY * speed;
-
+		
 		// now check if a tile exists at this new position
 		if (world.getTiledMapTileLayerAtPos((int)(newPosY), (int)(newPosX)) == null){
 			collided = true;
