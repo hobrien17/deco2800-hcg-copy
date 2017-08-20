@@ -249,6 +249,11 @@ public class TimeManager extends Manager {
 		}
 	}
 
+	/**
+	 * Returns a formatted date time string for the current date and time.
+	 *
+	 * @return Returns a string denoting the current date and time in the game.
+	 */
 	public String getDateTime() {
 		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d", 
 			this.day, this.month, this.year, this.hours, this.minutes, 
