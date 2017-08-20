@@ -1,4 +1,5 @@
 package com.deco2800.hcg.managers;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class TimeManager extends Manager {
 
@@ -11,6 +12,7 @@ public class TimeManager extends Manager {
 	private int minutes;
 	private int hours;
 
+	private Label label;
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	/**
 	 * Constructor
@@ -25,6 +27,7 @@ public class TimeManager extends Manager {
 		this.month = 1;
 		this.year = 2047;
 		this.timeElapsed = 0;
+		this.label = null;
 	}
 
 	/**
@@ -153,6 +156,10 @@ public class TimeManager extends Manager {
 		return this.timeElapsed;
 	}
 
+	public void setLabel(Label label) {
+		this.label = label;
+	}
+
 	/**
 	 * Returns true iff the current year is a leap year, else false.
 	 * 
@@ -237,7 +244,16 @@ public class TimeManager extends Manager {
 	public void onTick(long gameTickCount) {
 		this.timeElapsed++;
 		this.nextSecond();
-		this.print_date();
+		if (this.label != null) {
+			label.setText(this.getDateTime());
+		}
+	}
+
+	public String getDateTime() {
+		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d", 
+			this.day, this.month, this.year, this.hours, this.minutes, 
+			this.seconds);
+		return dateTime;		
 	}
 
 }

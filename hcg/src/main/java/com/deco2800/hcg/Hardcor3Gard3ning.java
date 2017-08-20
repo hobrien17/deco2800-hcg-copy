@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -60,6 +61,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	private long gameTickPeriod = 20;  // Tickrate = 50Hz
 	private long nextGameTick = TimeUtils.millis() + gameTickPeriod;
 
+	private Label clockLabel;
 	/**
 	 * Creates the required objects for the game to start.
 	 * Called when the game first starts
@@ -116,8 +118,10 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Add another button to the menu */
 		Button anotherButton = new TextButton("Play Duck Sound", skin);
 
-
-
+		/* Add a label for the clock; change to be prettier later. */
+		clockLabel = new Label(timeManager.getDateTime(), skin);
+		timeManager.setLabel(clockLabel);
+		
 		/* Add a programatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
@@ -139,6 +143,13 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Add all buttons to the menu */
 		window.add(button);
 		window.add(anotherButton);
+
+
+
+		window.add(clockLabel);
+
+
+
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
