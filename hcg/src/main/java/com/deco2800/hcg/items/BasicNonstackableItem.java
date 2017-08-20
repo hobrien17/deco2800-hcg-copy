@@ -1,13 +1,13 @@
 package com.deco2800.hcg.items;
 
 /** Basic class for a simple non stackable item, non wearable item**/
-public class BasicItem implements Item {
+public class BasicNonstackableItem implements Item {
 
     String itemName;
     int itemWeight;
     String itemTexture;
 
-    BasicItem(String name, int weight) {
+    BasicNonstackableItem(String name, int weight) {
         itemName = name;
         itemWeight = weight;
     }
@@ -27,7 +27,7 @@ public class BasicItem implements Item {
         return false;
     }
 
-    /** Function for returning the weight of a single instance of this item i.e weight of one potion, one coin, etc **/
+    /** Function for returning the total weight of this item. For stackable items this is equal to itemWeight * stackSize **/
     public int getWeight() {
         return itemWeight;
     }
@@ -36,5 +36,9 @@ public class BasicItem implements Item {
      * follows a similar method to how entities does textures**/
     public void setTexture(String icon) {
         itemTexture = icon;
+    }
+
+    public boolean addToStack(int number) {
+        return false;
     }
 }
