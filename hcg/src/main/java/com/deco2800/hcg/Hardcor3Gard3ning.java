@@ -50,6 +50,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	private MouseHandler mouseHandler;
 	private PlayerManager playerManager;
 	private TextureManager textureManager;
+	private TimeManager timeManager;
 
 	private Stage stage;
 	private Window window;
@@ -92,7 +93,8 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		playerManager.setPlayer(player);
 		GameManager.get().getWorld().addEntity(playerManager.getPlayer());
 
-		
+		/* Create a time manager. */
+		timeManager = (TimeManager) GameManager.get().getManager(TimeManager.class);
 
 		/**
 		 * Setup the game itself
@@ -218,6 +220,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 						((Tickable) e).onTick(gameTickCount);
 					}
 				}
+				timeManager.onTick(gameTickCount);
 
 				// Increment tick count
 				gameTickCount += 1;
