@@ -23,6 +23,7 @@ import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.GardenDemo;
 import com.deco2800.hcg.entities.Player;
 
 /**
@@ -71,6 +72,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		textureManager.saveTexture("tower", "resources/sprites/misc/tower.png");
 		textureManager.saveTexture("seed", "resources/sprites/misc/seed.png");
 		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
+		textureManager.saveTexture("plant2", "resources/sprites/plants/plant2.png");
 
 		/**
 		 *	Set up new stuff for this game
@@ -84,9 +86,12 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		
 		/* Create a player manager. */
 		playerManager = (PlayerManager)GameManager.get().getManager(PlayerManager.class);
-		
-		playerManager.setPlayer(new Player(5, 10, 0));
+
+		Player player = new Player(5, 10, 0);
+		player.initialiseNewPlayer(5,5,5,5,5,20);
+		playerManager.setPlayer(player);
 		GameManager.get().getWorld().addEntity(playerManager.getPlayer());
+
 		
 
 		/**
