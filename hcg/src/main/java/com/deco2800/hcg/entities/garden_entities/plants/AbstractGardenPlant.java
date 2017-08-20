@@ -132,8 +132,16 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	 */
 	public abstract void setThisTexture();
 	
+	/**
+	 * Sets up the loot rarity map for a plant
+	 */
 	abstract void setupLoot();
 	
+	/**
+	 * Generates a random item based on the loot rarity
+	 * 
+	 * @return A random item string in the plant's loot map
+	 */
 	abstract String randItem();
 	
 	//Rest to be implemented later
