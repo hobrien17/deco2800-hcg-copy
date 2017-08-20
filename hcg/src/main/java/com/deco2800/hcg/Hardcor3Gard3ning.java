@@ -73,7 +73,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		textureManager.saveTexture("seed", "resources/sprites/misc/seed.png");
 		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
 		textureManager.saveTexture("plant2", "resources/sprites/plants/plant2.png");
-
+		
 		/**
 		 *	Set up new stuff for this game
 		 */

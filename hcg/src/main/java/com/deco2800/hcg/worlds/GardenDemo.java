@@ -2,10 +2,8 @@ package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
-import com.deco2800.hcg.entities.garden_entities.plants.BasicPlant;
+import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.renderers.Renderable;
-
-import java.util.Random;
 
 /**
  * World to test Garden
@@ -29,7 +27,7 @@ public class GardenDemo extends AbstractWorld {
 		this.setWidth(this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(this.getMap().getProperties().get("height", Integer.class));
 
-		this.addEntity(new BasicPlant(8, 8, 0));
+		this.addEntity(new Sunflower(8, 8, 0));
 		
 	}
 

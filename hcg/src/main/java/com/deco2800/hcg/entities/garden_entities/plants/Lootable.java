@@ -14,21 +14,23 @@ public interface Lootable {
 	/**
 	 * Returns all possible loot dropped by this object
 	 * 
-	 * @return an array of items
+	 * @return an array of Strings representing items
 	 */
-	Item[] getLoot();
+	String[] getLoot();
 	
 	/**
 	 * Returns the rarity of all possible loot dropped by this object
 	 * 
 	 * @return A mapping of items to rarity (between 0 and 1)
 	 */
-	Map<Item, Double> getRarity();
+	Map<String, Double> getRarity();
 	
 	/**
-	 * Returns a list of loot items where 0 <= length(\result) <= length(this.getLoot())
+	 * Returns a list of new loot items where 0 <= length(\result) <= length(this.getLoot())
 	 * Loot may vary based on rarity and other factors
 	 * Possible to return an empty array
+	 * 
+	 * Currently only supports lists of 1 item
 	 * 
 	 * @return A list of items
 	 */

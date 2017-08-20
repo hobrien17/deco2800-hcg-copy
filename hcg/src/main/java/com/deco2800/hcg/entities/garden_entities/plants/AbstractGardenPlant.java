@@ -1,6 +1,13 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.managers.GameManager;
+
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.util.Box3D;
@@ -12,6 +19,8 @@ import com.deco2800.hcg.util.Box3D;
  * @author Henry O'Brien
  */
 public abstract class AbstractGardenPlant extends AbstractEntity implements Clickable, Tickable, Selectable, Lootable {
+	
+	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 	
 	/**
 	 * Represents a stage of growth
@@ -27,12 +36,15 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	}
 	
 	private Stage stage;
+	
+	Map<String, Double> lootRarity;
 
 	public AbstractGardenPlant(Box3D position, float xRenderLength, float yRenderLength, boolean centered, 
 			Stage stage) {
 		super(position, xRenderLength, yRenderLength, centered);
 		this.stage = stage;
 		setThisTexture();
+		setupLoot();
 	}
 	
 	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
@@ -40,6 +52,7 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 		super(posX, posY, posZ, xLength, yLength, zLength, xRenderLength, yRenderLength, centered);
 		this.stage = stage;
 		setThisTexture();
+		setupLoot();
 	}
 	
 	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
@@ -80,6 +93,12 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 
 	}
 	
+	@Override
+	public Map<String, Double> getRarity() {
+		// TODO Auto-generated method stub
+		return lootRarity;
+	}
+	
 	/**
 	 * Gets the plant's stage of growth
 	 * 
@@ -112,6 +131,10 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	 * Sets the texture based on the plant's stage of growth
 	 */
 	public abstract void setThisTexture();
+	
+	abstract void setupLoot();
+	
+	abstract String randItem();
 	
 	//Rest to be implemented later
 

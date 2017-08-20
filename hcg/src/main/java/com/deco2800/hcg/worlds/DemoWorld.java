@@ -2,7 +2,6 @@ package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
-import com.deco2800.hcg.entities.garden_entities.plants.BasicPlant;
 import com.deco2800.hcg.renderers.Renderable;
 
 import java.util.Random;
