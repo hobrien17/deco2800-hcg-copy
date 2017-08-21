@@ -82,15 +82,21 @@ public class Player extends Character implements Tickable {
 		}
 		else {
 			// set the layer, and get the speed of the tile on the layer. Also name for logging.
-			layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
+				layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
 			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
 			String name = layer.getProperties().get("name", String.class);
-			
+						
 			// see if current tile is slippery. Save the slippery value if it is
 			if (layer.getProperties().get("slippery", float.class) != null) {
 				slippery = layer.getProperties().get("slippery", float.class);
 			}
 			
+			// damage player
+			if (layer.getProperties().get("damage", float.class) != null) {
+				//TODO: remove player health, make player health float?				
+				
+			}
+				
 			// log
 			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
 
@@ -259,24 +265,25 @@ public class Player extends Character implements Tickable {
 	 */
 	private float slipperySpeedHelper(float speed, float lastSpeed, float tileSpeed, float slipperyFactor, float slipperyFactor2) {
 		// speed up user in X dirn
+		float lastSpeedNew;
 		if (speed > 0) {
-			lastSpeed = Math.min(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * tileSpeed);
+			lastSpeedNew = Math.min(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * tileSpeed);
 		}
 		else if (speed < 0) {
-			lastSpeed = Math.max(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * tileSpeed);
+			lastSpeedNew = Math.max(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * tileSpeed);
 		}
 		else {
 			// slow down user
 			if (Math.abs(lastSpeed) > slipperyFactor) {
-				lastSpeed = lastSpeed - Math.signum(lastSpeed) * slipperyFactor;
+				lastSpeedNew = lastSpeed - Math.signum(lastSpeed) * slipperyFactor;
 			}
 			else {
 				// ensure that speed eventually goes to zero
-				lastSpeed = 0;
+				lastSpeedNew = 0;
 			}
 		}
 		
-		return lastSpeed;
+		return lastSpeedNew;
 
 	}
 	
