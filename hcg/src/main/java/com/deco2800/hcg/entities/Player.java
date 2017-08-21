@@ -25,6 +25,8 @@ public class Player extends Character implements Tickable {
 
 	boolean collided;
 	private int xpThreshold;
+	float lastSpeedX;
+	float lastSpeedY;
 
 	public Player(float posX, float posY, float posZ) {
 
@@ -38,6 +40,11 @@ public class Player extends Character implements Tickable {
 
 		collided = false;
 		this.setTexture("spacman");
+		
+		// for slippery
+		lastSpeedX = 0;
+		lastSpeedY = 0;
+
 	}
 
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
@@ -55,35 +62,105 @@ public class Player extends Character implements Tickable {
 		float newPosX = this.getPosX();
 		float newPosY = this.getPosY();
 
-		if (speedX == 0.0f && speedY == 0.0f) {
-			return;
-		}
+		//if (speedX == 0.0f && speedY == 0.0f) {
+		//	return;
 
-		newPosX += speedX;
-		newPosY += speedY;
+		// Center the camera on the player
+		updateCamera();
 
 		// set speed is the multiplier due to the ground
 		float speed = 1.0f;
 		collided = false;
-
+		float slippery = 0;
+		
+		
 		// current world and layer
+		TiledMapTileLayer layer;
 		AbstractWorld world = GameManager.get().getWorld();
 
 		// get speed of current tile. this is done before checking if a tile 
-		// exists so a slow down tile next to the edge wouldn't cause
-		// problems. also note that layer should never be null here,
-		// provided the player starts somewhere valid.
-		TiledMapTileLayer layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
-		speed = layer.getProperties().get("speed", float.class);
-		String name = layer.getProperties().get("name", String.class);
+		// exists so a slow down tile next to the edge wouldn't cause problems.
+		if (world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX) == null) {
+			collided = true;
+		}
+		else {
+			// set the layer, and get the speed of the tile on the layer. Also name for logging.
+			layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
+			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
+			String name = layer.getProperties().get("name", String.class);
+			
+			// see if current tile is slippery. Save the slippery value if it is
+			if (layer.getProperties().get("slippery", float.class) != null) {
+				slippery = layer.getProperties().get("slippery", float.class);
+			}
+			
+			// log
+			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
 
-		// log
-		LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
+		}
+		
+		// handle slippery movement
+		if (slippery != 0) {
+			
+			// first factor is for slowing down, second is for speeding up
+			float slipperyFactor = slippery * 0.005f;
+			float slipperyFactor2 = slippery * 0.06f;
 
-		// set new postition based on this speed
-		newPosX += speedX * speed;
-		newPosY += speedY * speed;
+			// speed up user in X dirn
+			if (speedX > 0) {
+				lastSpeedX = Math.min(lastSpeedX + speedX * speed* slipperyFactor2, speedX * speed);
+			}
+			else if (speedX < 0) {
+				lastSpeedX = Math.max(lastSpeedX + speedX * speed * slipperyFactor2, speedX * speed);
+			}
+			else {
+				// slow down user
+				if (Math.abs(lastSpeedX) > slipperyFactor) {
+					lastSpeedX = lastSpeedX - Math.signum(lastSpeedX) * slipperyFactor;
+				}
+				else {
+					// ensure that speed eventually goes to zero
+					lastSpeedX = 0;
+				}
+			}
+			
+			// speed up user in Y dirn
+			if (speedY > 0) {
+				lastSpeedY = Math.min(lastSpeedY + speedY * speed * slipperyFactor2, speedY * speed);
+			}
+			else if (speedY < 0) {
+				lastSpeedY = Math.max(lastSpeedY + speedY * speed * slipperyFactor2, speedY * speed);
+			}
+			else {
+				// slow down user
+				if (Math.abs(lastSpeedY) > slipperyFactor) {
+					lastSpeedY = lastSpeedY - Math.signum(lastSpeedY) * slipperyFactor;
+				}
+				else {
+					lastSpeedY = 0;
+				}
+			}
+			
+		}
+		else {
+			// non slippery movement
+			lastSpeedX = 0;
+			lastSpeedY = 0;
+			
+			// store our last speed 
+			if (speedX != 0) {
+				lastSpeedX = speedX * speed;
+			}
+			if (speedY != 0) {
+				lastSpeedY = speedY * speed;
+			}
 
+		}
+		
+		// add this speed to our current position
+		newPosX += lastSpeedX;
+		newPosY += lastSpeedY;
+		
 		// now check if a tile exists at this new position
 		if (world.getTiledMapTileLayerAtPos((int)(newPosY), (int)(newPosX)) == null){
 			collided = true;
@@ -201,6 +278,30 @@ public class Player extends Character implements Tickable {
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * Updates the game camera so that it is centered on the player
+	 */
+	private void updateCamera() {
+
+		int worldLength = GameManager.get().getWorld().getLength();
+		int worldWidth = GameManager.get().getWorld().getWidth();
+		int tileWidth = (int) GameManager.get().getWorld().getMap().getProperties().get("tilewidth");
+		int tileHeight = (int) GameManager.get().getWorld().getMap().getProperties().get("tileheight");
+
+		float baseX = tileWidth * (worldWidth / 2.0f - 0.5f);
+		float baseY = -tileHeight / 2 * worldLength + tileHeight / 2f;
+
+		float cartX = this.getPosX();
+		float cartY = (worldWidth-1) - this.getPosY();
+
+		float isoX = baseX + ((cartX - cartY) / 2.0f * tileWidth);
+		float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
+
+		GameManager.get().getCamera().position.x = isoX;
+		GameManager.get().getCamera().position.y = isoY;
+		GameManager.get().getCamera().update();
 	}
 
 	@Override
