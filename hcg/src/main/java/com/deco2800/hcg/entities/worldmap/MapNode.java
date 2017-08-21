@@ -25,6 +25,7 @@ public class MapNode {
 	 */
 	private int nodeType;
 	//private Level linkedLevel; <- add once level class is available.
+	private boolean selected;
 	
 	public MapNode(int column, int row, String texture, int type ) {
 		nodeTexture = texture;
@@ -35,6 +36,7 @@ public class MapNode {
 		nodePositionY = nodeRow * ROW_OFFSET;
 		previousNodes = new ArrayList<>();
 		proceedingNodes = new ArrayList<>();
+		selected = false;
 	}
 	
 	// ACCESSOR METHODS
@@ -74,6 +76,10 @@ public class MapNode {
 	 *     return linkedLevel;
 	 * }
 	 */
+	
+	public boolean isSelected() {
+		return selected;
+	}
 	
 	// MANIPULATING METHODS
 	public void addPreviousNode(MapNode node) {
@@ -117,5 +123,13 @@ public class MapNode {
 	/* public void changeLinkedLevel(Level newLevel) {
 	 *     linkedLevel = newLevel;
 	 * }
-	 */	
+	 */
+	
+	public void selectNode() {
+		selected = true;
+	}
+	
+	public void unselectNode() {
+		selected = false;
+	}
 }
