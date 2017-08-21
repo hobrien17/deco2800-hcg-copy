@@ -231,7 +231,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 						((Tickable) e).onTick(gameTickCount);
 					}
 				}
-				timeManager.onTick(gameTickCount);
 
 				// Increment tick count
 				gameTickCount += 1;

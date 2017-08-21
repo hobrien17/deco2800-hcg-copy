@@ -1,7 +1,7 @@
 package com.deco2800.hcg.managers;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
-public class TimeManager extends Manager {
+public class TimeManager extends Manager implements TickableManager {
 
 	private int day;
 	private int month;
