@@ -62,9 +62,6 @@ public class Player extends Character implements Tickable {
 		float newPosX = this.getPosX();
 		float newPosY = this.getPosY();
 
-		//if (speedX == 0.0f && speedY == 0.0f) {
-		//	return;
-
 		// Center the camera on the player
 		updateCamera();
 
@@ -99,47 +96,16 @@ public class Player extends Character implements Tickable {
 
 		}
 		
-		// handle slippery movement
-		if (slippery != 0) {
+		// handle slippery movement (fixed for floating point)
+		if (Math.abs(slippery) > 0.05f) {
 			
 			// first factor is for slowing down, second is for speeding up
 			float slipperyFactor = slippery * 0.005f;
 			float slipperyFactor2 = slippery * 0.06f;
-
-			// speed up user in X dirn
-			if (speedX > 0) {
-				lastSpeedX = Math.min(lastSpeedX + speedX * speed* slipperyFactor2, speedX * speed);
-			}
-			else if (speedX < 0) {
-				lastSpeedX = Math.max(lastSpeedX + speedX * speed * slipperyFactor2, speedX * speed);
-			}
-			else {
-				// slow down user
-				if (Math.abs(lastSpeedX) > slipperyFactor) {
-					lastSpeedX = lastSpeedX - Math.signum(lastSpeedX) * slipperyFactor;
-				}
-				else {
-					// ensure that speed eventually goes to zero
-					lastSpeedX = 0;
-				}
-			}
 			
-			// speed up user in Y dirn
-			if (speedY > 0) {
-				lastSpeedY = Math.min(lastSpeedY + speedY * speed * slipperyFactor2, speedY * speed);
-			}
-			else if (speedY < 0) {
-				lastSpeedY = Math.max(lastSpeedY + speedY * speed * slipperyFactor2, speedY * speed);
-			}
-			else {
-				// slow down user
-				if (Math.abs(lastSpeedY) > slipperyFactor) {
-					lastSpeedY = lastSpeedY - Math.signum(lastSpeedY) * slipperyFactor;
-				}
-				else {
-					lastSpeedY = 0;
-				}
-			}
+			// created helper function to avoid duplicate code
+			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed, slipperyFactor, slipperyFactor2);
+			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed, slipperyFactor, slipperyFactor2);
 			
 		}
 		else {
@@ -280,6 +246,40 @@ public class Player extends Character implements Tickable {
 		}
 	}
 
+	/**
+	 * Does logic for slowly increasing players speed and also slowly decreasing players speed.
+	 * Used to avoid repetitive code.
+	 * 
+	 * @param speed Input speed of player
+	 * @param lastSpeed 
+	 * @param tileSpeed Speed multiplier from tile
+	 * @param slipperyFactor Scalar for slowing down player
+	 * @param slipperyFactor2 Scalar for speeding up player
+	 * @return New lastSpeed
+	 */
+	private float slipperySpeedHelper(float speed, float lastSpeed, float tileSpeed, float slipperyFactor, float slipperyFactor2) {
+		// speed up user in X dirn
+		if (speed > 0) {
+			lastSpeed = Math.min(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * tileSpeed);
+		}
+		else if (speed < 0) {
+			lastSpeed = Math.max(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * tileSpeed);
+		}
+		else {
+			// slow down user
+			if (Math.abs(lastSpeed) > slipperyFactor) {
+				lastSpeed = lastSpeed - Math.signum(lastSpeed) * slipperyFactor;
+			}
+			else {
+				// ensure that speed eventually goes to zero
+				lastSpeed = 0;
+			}
+		}
+		
+		return lastSpeed;
+
+	}
+	
 	/**
 	 * Updates the game camera so that it is centered on the player
 	 */
