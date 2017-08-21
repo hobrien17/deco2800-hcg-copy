@@ -64,7 +64,9 @@ public class Player extends Character implements Tickable {
 
 		//if (speedX == 0.0f && speedY == 0.0f) {
 		//	return;
-		//}
+
+		// Center the camera on the player
+		updateCamera();
 
 		// set speed is the multiplier due to the ground
 		float speed = 1.0f;
@@ -84,7 +86,7 @@ public class Player extends Character implements Tickable {
 		else {
 			// set the layer, and get the speed of the tile on the layer. Also name for logging.
 			layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
-			speed = layer.getProperties().get("speed", float.class);
+			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
 			String name = layer.getProperties().get("name", String.class);
 			
 			// see if current tile is slippery. Save the slippery value if it is
@@ -276,6 +278,30 @@ public class Player extends Character implements Tickable {
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * Updates the game camera so that it is centered on the player
+	 */
+	private void updateCamera() {
+
+		int worldLength = GameManager.get().getWorld().getLength();
+		int worldWidth = GameManager.get().getWorld().getWidth();
+		int tileWidth = (int) GameManager.get().getWorld().getMap().getProperties().get("tilewidth");
+		int tileHeight = (int) GameManager.get().getWorld().getMap().getProperties().get("tileheight");
+
+		float baseX = tileWidth * (worldWidth / 2.0f - 0.5f);
+		float baseY = -tileHeight / 2 * worldLength + tileHeight / 2f;
+
+		float cartX = this.getPosX();
+		float cartY = (worldWidth-1) - this.getPosY();
+
+		float isoX = baseX + ((cartX - cartY) / 2.0f * tileWidth);
+		float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
+
+		GameManager.get().getCamera().position.x = isoX;
+		GameManager.get().getCamera().position.y = isoY;
+		GameManager.get().getCamera().update();
 	}
 
 	@Override
