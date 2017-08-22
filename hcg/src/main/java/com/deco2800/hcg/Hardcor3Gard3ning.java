@@ -24,7 +24,6 @@ import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.worlds.DemoWorld;
-import com.deco2800.hcg.worlds.GardenDemo;
 import com.deco2800.hcg.entities.Player;
 
 /**
