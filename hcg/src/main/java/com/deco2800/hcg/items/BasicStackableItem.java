@@ -1,11 +1,11 @@
 package com.deco2800.hcg.items;
 
 public class BasicStackableItem implements Item {
-    String itemName;
-    int itemWeight;
-    String itemTexture;
-    int itemMaxStackSize;
-    int itemCurrentStackSize;
+    private String itemName;
+    private int itemWeight;
+    private String itemTexture;
+    private int itemMaxStackSize;
+    private int itemCurrentStackSize;
 
     BasicStackableItem(String name, int weight, int maxStackSize) {
         itemName = name;

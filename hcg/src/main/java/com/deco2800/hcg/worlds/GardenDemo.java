@@ -5,8 +5,6 @@ import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.entities.garden_entities.plants.BasicPlant;
 import com.deco2800.hcg.renderers.Renderable;
 
-import java.util.Random;
-
 /**
  * World to test Garden
  * Copied from DemoWorld

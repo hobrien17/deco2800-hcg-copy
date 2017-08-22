@@ -73,7 +73,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		textureManager.saveTexture("ground", "resources/maps/environment/ground.png");
 		textureManager.saveTexture("squirrel", "resources/sprites/enemies/squirrel.png");
 		textureManager.saveTexture("tower", "resources/sprites/misc/tower.png");
-		textureManager.saveTexture("seed", "resources/sprites/misc/seed.png");
+		textureManager.saveTexture("seed", "resources/sprites/seeds/Battle seed.png");
 		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
 		textureManager.saveTexture("plant2", "resources/sprites/plants/plant2.png");
 
@@ -231,7 +231,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 						((Tickable) e).onTick(gameTickCount);
 					}
 				}
-				timeManager.onTick(gameTickCount);
 
 				// Increment tick count
 				gameTickCount += 1;
