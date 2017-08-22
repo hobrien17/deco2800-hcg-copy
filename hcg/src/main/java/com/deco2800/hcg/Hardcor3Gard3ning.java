@@ -1,32 +1,16 @@
 package com.deco2800.hcg;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.contexts.PlayContext;
-import com.deco2800.hcg.entities.Selectable;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderable;
-import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.worlds.DemoWorld;
-import com.deco2800.hcg.worlds.GardenDemo;
-import com.deco2800.hcg.entities.Player;
 
 /**
  * Handles the creation of the world and rendering.
@@ -52,7 +36,7 @@ public class Hardcor3Gard3ning extends Game {
 	 * Called when the game first starts
 	 */
 	@Override
-	public void create () {
+	public void create() {
 
 		// Create game manager
 		gameManager = GameManager.get();
@@ -100,9 +84,10 @@ public class Hardcor3Gard3ning extends Game {
 	 * Must update all displayed elements using a Renderer
 	 */
 	@Override
-	public void render () {
+	public void render() {
 		fireTicks();
-        super.render();
+		clearScreen();
+		super.render(); // Will render current context
 		updateTitle();
 	}
 
@@ -110,9 +95,15 @@ public class Hardcor3Gard3ning extends Game {
 	 * Disposes of assets etc when the rendering system is stopped.
 	 */
 	@Override
-	public void dispose () {
+	public void dispose() {
 		// Don't need this at the moment
-		super.dispose();
+		contextManager.dispose();
+	}
+
+	// Clear the entire display as we are using lazy rendering
+	public void clearScreen() {
+		Gdx.gl.glClearColor(0,0,0,1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
 	// Fire waiting game ticks

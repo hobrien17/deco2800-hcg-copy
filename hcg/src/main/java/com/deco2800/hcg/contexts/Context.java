@@ -2,6 +2,8 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Screen;
 
+// WARNING: Do not subclass this unless you are very sure about what you are doing!
+//TODO documentation
 public abstract class Context implements Screen {
 
 	@Override

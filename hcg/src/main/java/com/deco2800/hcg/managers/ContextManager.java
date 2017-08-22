@@ -1,13 +1,10 @@
 package com.deco2800.hcg.managers;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.deco2800.hcg.contexts.Context;
 
-import java.util.Deque;
 import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class ContextManager extends Manager implements Screen, TickableManager {
 
@@ -23,11 +20,25 @@ public class ContextManager extends Manager implements Screen, TickableManager {
 
 	public void pushContext(Context newContext) {
 		// Hide the old Context and show the new one
+		if (!contextStack.isEmpty()) {
+			contextStack.peek().hide();
+		}
 		contextStack.push(newContext);
+		newContext.show();
 	}
 
 	public void popContext() {
-		contextStack.pop().dispose();
+		// Destroy the current context
+		if (!contextStack.isEmpty()) {
+			Context old = contextStack.pop();
+			old.hide();
+			old.dispose();
+		}
+
+		// Show the context underneath
+		if (!contextStack.isEmpty()) {
+			contextStack.peek().show();
+		}
 	}
 
 	@Override

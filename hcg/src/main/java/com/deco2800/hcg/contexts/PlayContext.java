@@ -3,7 +3,6 @@ package com.deco2800.hcg.contexts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
@@ -12,16 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
-import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.renderers.Renderer;
-import com.deco2800.hcg.worlds.DemoWorld;
 
 public class PlayContext extends Context {
 
@@ -33,6 +27,11 @@ public class PlayContext extends Context {
 
 	private MouseHandler mouseHandler;
 
+	// Multiplexer to take input and distrubute it
+	InputMultiplexer inputMultiplexer;
+
+	// Is the game paused?
+	boolean unpaused = true;
 
 	/**
 	 * Set the renderer.
@@ -133,7 +132,7 @@ public class PlayContext extends Context {
 		 * Setup inputs for the buttons and the game itself
 		 */
 		/* Setup an Input Multiplexer so that input can be handled by both the UI and the game */
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage); // Add the UI as a processor
 
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
@@ -178,8 +177,6 @@ public class PlayContext extends Context {
 				return true;
 			}
 		});
-
-		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	/**
@@ -201,12 +198,6 @@ public class PlayContext extends Context {
 		GameManager.get().getCamera().update();
 		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
 
-		/*
-		 * Clear the entire display as we are using lazy rendering
-		 */
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		/* Render the tiles first */
 		BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
 		tileRenderer.setView(GameManager.get().getCamera());
@@ -222,9 +213,6 @@ public class PlayContext extends Context {
 
 		/* Dispose of the spritebatch to not have memory leaks */
 		batch.dispose();
-
-		/* Display FPS in window title */
-		Gdx.graphics.setTitle("DECO2800 " + this.getClass().getCanonicalName() +  " - FPS: "+ Gdx.graphics.getFramesPerSecond());
 	}
 
 
@@ -253,16 +241,26 @@ public class PlayContext extends Context {
 	}
 
 	@Override
-	public void hide() {} //TODO
+	public void show() {
+		// Capture user input
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
 
 	@Override
-	public void pause() {} //TODO
+	public void hide() {
+		// Release user input
+		Gdx.input.setInputProcessor(null);
+	}
 
 	@Override
-	public void resume() {} //TODO
+	public void pause() {
+		unpaused = false;
+	}
 
 	@Override
-	public void show() {} //TODO
+	public void resume() {
+		unpaused = true;
+	}
 
 	@Override
 	public void onTick(long gameTickCount) {
@@ -271,6 +269,6 @@ public class PlayContext extends Context {
 
 	@Override
 	public boolean ticksRunning() {
-		return true;
+		return unpaused;
 	}
 }
