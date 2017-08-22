@@ -5,9 +5,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
-import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.worlds.AbstractWorld;
 
@@ -25,13 +24,16 @@ import java.util.List;
 public class Player extends Character implements Tickable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
-	
+
 	private SoundManager soundManager;
+	private TimeManager timeManager;
 
 	boolean collided;
 	private int xpThreshold;
 	float lastSpeedX;
 	float lastSpeedY;
+	int oldTime = -1;
+	int newTime = -1;
 
 	public Player(float posX, float posY, float posZ) {
 
@@ -46,6 +48,7 @@ public class Player extends Character implements Tickable {
 		collided = false;
 		this.setTexture("spacman");
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
+		this.timeManager = (TimeManager) GameManager.get().getManager(TimeManager.class);
 
 		// for slippery
 		lastSpeedX = 0;
@@ -326,7 +329,7 @@ public class Player extends Character implements Tickable {
 	}
 
 	/**
-	 * Update texture object of player when player is in deep water
+	 * Update texture object of player, play sound effect when player is in deep water
 	 * 
 	 * @param name
 	 *            name of current tile
@@ -334,8 +337,33 @@ public class Player extends Character implements Tickable {
 	private void ifSwim(String name) {
 		if (name.equals("water-deep")) {
 			this.setTexture("spacman-swim");
+			playSound("swimming");
+			
 		} else {
 			this.setTexture("spacman");
+			soundManager.stopSound("swimming");
+		}
+	}
+	
+	/**
+	 * Plays the sound. 
+	 * If the sound is already playing, it will wait until it finish
+	 * 
+	 * @param sound
+	 * 			name of the sound ID
+	 */
+	
+	private void playSound(String sound){
+		if (oldTime==-1) {
+			oldTime = timeManager.getMinutes(); //wait for TimeManager to fix
+			soundManager.playSound(sound);
+		}else{
+			newTime=timeManager.getMinutes();//wait for TimeManager to fix
+			int timePass = newTime - oldTime;
+			if((timePass>0 && timePass>=2)||(timePass<0 && timePass>-58)){
+				oldTime = timeManager.getMinutes();//wait for TimeManager to fix
+				soundManager.playSound(sound);
+			}
 		}
 	}
 
