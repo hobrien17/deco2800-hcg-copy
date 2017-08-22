@@ -22,7 +22,6 @@ public class TimeManager extends Manager implements TickableManager {
 		this.hours = 0;
 		this.minutes = 0;
 		this.seconds = 0;
-		this.hours = 0;
 		this.day = 1;
 		this.month = 1;
 		this.year = 2047;
@@ -90,7 +89,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @param seconds
 	 */
 	public void setSeconds(int seconds) {
-		this.day = day;
+		this.seconds = seconds;
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @param minutes
 	 */
 	public void setMinutes(int minutes) {
-		this.month = month;
+		this.minutes = minutes;
 	}
 
 	/**
