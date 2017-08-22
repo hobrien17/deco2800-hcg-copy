@@ -18,7 +18,8 @@ public class Sunflower extends AbstractGardenPlant {
 
 	public Sunflower(float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false, Stage.SPROUT);
-		
+		this.advanceStage();
+		this.advanceStage();
 	}
 
 	@Override
@@ -28,10 +29,10 @@ public class Sunflower extends AbstractGardenPlant {
 			this.setTexture("sunflower_01");
 			break;
 		case SMALL:
-			this.setTexture("plant2");
+			this.setTexture("sunflower_02");
 			break;
 		case LARGE:
-			this.setTexture("tree");
+			this.setTexture("sunflower_03");
 			break;
 		}
 

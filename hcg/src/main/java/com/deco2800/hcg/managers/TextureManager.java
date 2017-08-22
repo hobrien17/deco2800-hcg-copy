@@ -36,10 +36,9 @@ public class TextureManager extends Manager {
         textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
         textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
         textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
+		textureMap.put("spacman-swim", new Texture("resources/sprites/player/spacman-swim.png"));
         textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
         textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
-        textureMap.put("sunflower_01", new Texture("resources/sprites/plants/sunflower_pot_01.png"));
-        textureMap.put("pot", new Texture("resources/sprites/plants/pot_empty.png"));
     }
 
 	/**
