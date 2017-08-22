@@ -32,15 +32,15 @@ public class ContextManager extends Manager implements Screen, TickableManager {
 
 	@Override
 	public void onTick(long gameTickCount) {
-        for (Context context: contextStack) {
-            context.onTick(gameTickCount);
-        }
+		for (Context context: contextStack) {
+			context.onTick(gameTickCount);
+		}
 	}
 
 	public boolean ticksRunning() {
 		if (!contextStack.isEmpty()) {
-            return contextStack.peek().ticksRunning();
-        } else {
+			return contextStack.peek().ticksRunning();
+		} else {
 			return false;
 		}
 	}
@@ -52,42 +52,42 @@ public class ContextManager extends Manager implements Screen, TickableManager {
 
 	@Override
 	public void render(float delta) {
-        if (!contextStack.isEmpty()) {
-            contextStack.peek().render(delta);
-        }
+		if (!contextStack.isEmpty()) {
+			contextStack.peek().render(delta);
+		}
 	}
 
-    @Override
+	@Override
 	public void resize(int width, int height) {
-        for (Context context: contextStack) {
-            context.resize(width, height);
-        }
+		for (Context context: contextStack) {
+			context.resize(width, height);
+		}
 	}
 
-    @Override
+	@Override
 	public void pause() {
-        for (Context context: contextStack) {
-            context.pause();
-        }
+		for (Context context: contextStack) {
+			context.pause();
+		}
 	}
 
-    @Override
+	@Override
 	public void resume() {
-        for (Context context: contextStack) {
-            context.resume();
-        }
+		for (Context context: contextStack) {
+			context.resume();
+		}
 	}
 
-    @Override
+	@Override
 	public void hide() {
-        // Do nothing
+		// Do nothing
 	}
 
-    @Override
+	@Override
 	public void dispose() {
-        for (Screen screen: contextStack) {
-            screen.dispose();
-        }
+		for (Screen screen: contextStack) {
+			screen.dispose();
+		}
 	}
 
 }
