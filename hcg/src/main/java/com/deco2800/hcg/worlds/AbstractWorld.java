@@ -35,12 +35,12 @@ public abstract class AbstractWorld {
      * Returns the TiledMapTileLayer that contains the cell at the 
      * given X and Y position. See documentation on TiledMapTileLayer.
      * 
-     * @param PosX X position
-     * @param PosY Y position
+     * @param posX X position
+     * @param posY Y position
      * @return A TiledMapTileLayer that contains the players current cell. 
      * Null if no such TiledMapTileLayer exists.
      */
-    public TiledMapTileLayer getTiledMapTileLayerAtPos(int PosX, int PosY) {
+    public TiledMapTileLayer getTiledMapTileLayerAtPos(int posX, int posY) {
     	// loop through all layers
 		Iterator<MapLayer> itr = GameManager.get().getWorld().
 				getMap().getLayers().iterator();
@@ -49,7 +49,7 @@ public abstract class AbstractWorld {
 			
 			TiledMapTileLayer layer = (TiledMapTileLayer)itr.next();
 			
-			if (layer.getCell(PosX, PosY) != null) {
+			if (layer.getCell(posX, posY) != null) {
 				return (TiledMapTileLayer)layer;
 			}
 		
