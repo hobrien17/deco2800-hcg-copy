@@ -3,9 +3,9 @@ package com.deco2800.hcg.items;
 /** Basic class for a simple non stackable item, non wearable item**/
 public class BasicNonstackableItem implements Item {
 
-    String itemName;
-    int itemWeight;
-    String itemTexture;
+    private String itemName;
+    private int itemWeight;
+    private String itemTexture;
 
     BasicNonstackableItem(String name, int weight) {
         itemName = name;
