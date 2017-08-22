@@ -8,15 +8,20 @@ import java.util.List;
 public class WorldMap {
 	private int mapType; // <- possibility of map biomes?
 	private List<MapNode> containedNodes;
-	private String mapTexture;
+	private String mapBackgroundTexture;
 	private int mapPosition; // <- map position in the collection of worlds
 	private String mapSeed;
+	private int mapRowNumber;
+	private int mapColumnNumber;
 	
-	public WorldMap(int type, String texture, int position, String seed) {
+	public WorldMap(int type, String texture, int position, int rows, int columns) {
 		mapType = type;
-		mapTexture = texture;
+		mapBackgroundTexture = texture;
 		mapPosition = position;
-		mapSeed = seed;
+		// blank initial seed
+		mapSeed = "";
+		mapRowNumber = rows;
+		mapColumnNumber = columns;
 		containedNodes = new ArrayList<>();
 	}
 	
@@ -30,7 +35,7 @@ public class WorldMap {
 	}
 	
 	public String getMapTexture() {
-		return mapTexture;
+		return mapBackgroundTexture;
 	}
 	
 	public int getMapPosition() {
@@ -39,6 +44,14 @@ public class WorldMap {
 	
 	public String getMapSeed() {
 		return mapSeed;
+	}
+	
+	public int getMapRows() {
+		return mapRowNumber;
+	}
+	
+	public int getMapColumns() {
+		return mapColumnNumber;
 	}
 	
 	// MANIPULATING METHODS
@@ -57,6 +70,10 @@ public class WorldMap {
 	}
 	
 	public void changeMapTexture(String newTexture) {
-		mapTexture = newTexture;
+		mapBackgroundTexture = newTexture;
+	}
+	
+	public void addSeed(String seed) {
+		mapSeed = seed;
 	}
 }

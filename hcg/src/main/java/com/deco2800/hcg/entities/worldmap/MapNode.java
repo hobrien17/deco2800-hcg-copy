@@ -3,17 +3,19 @@ package com.deco2800.hcg.entities.worldmap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapNode {
+import com.deco2800.hcg.entities.AbstractEntity;
+
+public class MapNode extends AbstractEntity {
 	// used to calculate nodePositionX based on nodeColumn
-	private int COLUMN_OFFSET = 0; // <- placeholder value
+	private static final float COLUMN_OFFSET = 0; // <- placeholder value
 	// used to calculate nodePositionY based on nodeRow
-	private int ROW_OFFSET = 0; // <- placeholder value
+	private static final float ROW_OFFSET = 0; // <- placeholder value
 	
 	private List<MapNode> previousNodes;
 	private List<MapNode> proceedingNodes;
 	private String nodeTexture;
-	private int nodePositionX;
-	private int nodePositionY;
+	private float nodePositionX;
+	private float nodePositionY;
 	private int nodeColumn;
 	private int nodeRow;
 	/* Type of node to display
@@ -24,16 +26,18 @@ public class MapNode {
 	 * 4 for boss node.
 	 */
 	private int nodeType;
-	//private Level linkedLevel; <- add once level class is available.
+	private Level linkedLevel;
 	private boolean selected;
 	
-	public MapNode(int column, int row, String texture, int type ) {
+	public MapNode(int column, int row, String texture, int type, Level level) {
+		super(column * COLUMN_OFFSET, row * ROW_OFFSET, 0.0f, 1, 1, 1);
 		nodeTexture = texture;
 		nodeColumn = column;
 		nodeRow = row;
 		nodeType = type;
 		nodePositionX = nodeColumn * COLUMN_OFFSET;
 		nodePositionY = nodeRow * ROW_OFFSET;
+		linkedLevel = level;
 		previousNodes = new ArrayList<>();
 		proceedingNodes = new ArrayList<>();
 		selected = false;
@@ -52,11 +56,11 @@ public class MapNode {
 		return nodeTexture;
 	}
 	
-	public int getNodeX() {
+	public float getNodeX() {
 		return nodePositionX;
 	}
 	
-	public int getNodeY() {
+	public float getNodeY() {
 		return nodePositionY;		
 	}
 	
@@ -72,10 +76,9 @@ public class MapNode {
 		return nodeType;
 	}
 	
-	/* public Level getNodeLinkedLevel() {
-	 *     return linkedLevel;
-	 * }
-	 */
+	public Level getNodeLinkedLevel() {
+		return linkedLevel;
+	}
 	
 	public boolean isSelected() {
 		return selected;
@@ -120,10 +123,9 @@ public class MapNode {
 		nodeType = newType;		
 	}
 	
-	/* public void changeLinkedLevel(Level newLevel) {
-	 *     linkedLevel = newLevel;
-	 * }
-	 */
+	public void changeLinkedLevel(Level newLevel) {
+		linkedLevel = newLevel;
+	}
 	
 	public void selectNode() {
 		selected = true;
