@@ -5,6 +5,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.worlds.AbstractWorld;
@@ -23,6 +25,8 @@ import java.util.List;
 public class Player extends Character implements Tickable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
+	
+	private SoundManager soundManager;
 
 	boolean collided;
 	private int xpThreshold;
@@ -41,6 +45,7 @@ public class Player extends Character implements Tickable {
 
 		collided = false;
 		this.setTexture("spacman");
+		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 
 		// for slippery
 		lastSpeedX = 0;
@@ -328,13 +333,9 @@ public class Player extends Character implements Tickable {
 	 */
 	private void ifSwim(String name) {
 		if (name.equals("water-deep")) {
-
-			TextureManager reg = (TextureManager) GameManager.get().getManager(TextureManager.class);
-			reg.changeTexture("spacman", "resources/sprites/player/spacman-swim.png");
+			this.setTexture("spacman-swim");
 		} else {
-
-			TextureManager reg = (TextureManager) GameManager.get().getManager(TextureManager.class);
-			reg.changeTexture("spacman", "resources/sprites/player/spacman.png");
+			this.setTexture("spacman");
 		}
 	}
 

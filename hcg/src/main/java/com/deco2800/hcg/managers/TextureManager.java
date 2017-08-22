@@ -35,6 +35,7 @@ public class TextureManager extends Manager {
 		textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
+		textureMap.put("spacman-swim", new Texture("resources/sprites/player/spacman-swim.png"));
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 	}
@@ -70,18 +71,4 @@ public class TextureManager extends Manager {
 		}
 	}
 
-	/**
-	 * Change the texture of a exist id
-	 * 
-	 * @param id
-	 *            Texture id
-	 * @param filename
-	 *            Filename within the assets folder
-	 */
-	public void changeTexture(String id, String filename) {
-		LOGGER.info("Change texture" + id + " with Filename " + filename);
-		if (textureMap.containsKey(id)) {
-			textureMap.put(id, new Texture(filename));
-		}
-	}
 }
