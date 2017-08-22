@@ -23,10 +23,10 @@ public class Player extends Character implements Tickable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
-	boolean collided;
+	private boolean collided;
 	private int xpThreshold;
-	float lastSpeedX;
-	float lastSpeedY;
+	private float lastSpeedX;
+	private float lastSpeedY;
 
 	public Player(float posX, float posY, float posZ) {
 
