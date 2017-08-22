@@ -43,7 +43,6 @@ public class Hardcor3Gard3ning extends Game {
 
 	private MouseHandler mouseHandler;
 
-	private boolean ticking = true;
 	private long gameTickCount = 0;
 	private long gameTickPeriod = 20;  // Tickrate = 50Hz
 	private long nextGameTick = TimeUtils.millis() + gameTickPeriod;
@@ -119,7 +118,7 @@ public class Hardcor3Gard3ning extends Game {
 	// Fire waiting game ticks
 	private void fireTicks() {
 		while (TimeUtils.millis() >= nextGameTick) {
-			if (ticking) {
+			if (contextManager.ticksRunning()) {
 
 				// Tick managers
 				GameManager.get().onTick(gameTickCount);
