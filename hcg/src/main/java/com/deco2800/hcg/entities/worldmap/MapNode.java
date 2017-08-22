@@ -7,9 +7,9 @@ import com.deco2800.hcg.entities.AbstractEntity;
 
 public class MapNode extends AbstractEntity {
 	// used to calculate nodePositionX based on nodeColumn
-	private static final float COLUMN_OFFSET = 0; // <- placeholder value
+	private static final float COLUMN_OFFSET = 1; // <- placeholder value
 	// used to calculate nodePositionY based on nodeRow
-	private static final float ROW_OFFSET = 0; // <- placeholder value
+	private static final float ROW_OFFSET = 1; // <- placeholder value
 	
 	private List<MapNode> previousNodes;
 	private List<MapNode> proceedingNodes;
@@ -32,6 +32,7 @@ public class MapNode extends AbstractEntity {
 	public MapNode(int column, int row, String texture, int type, Level level) {
 		super(column * COLUMN_OFFSET, row * ROW_OFFSET, 0.0f, 1, 1, 1);
 		nodeTexture = texture;
+		this.setTexture(nodeTexture); // to render the node on the world
 		nodeColumn = column;
 		nodeRow = row;
 		nodeType = type;

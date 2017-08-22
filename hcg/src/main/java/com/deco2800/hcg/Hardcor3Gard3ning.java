@@ -84,7 +84,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 //		GameManager.get().setWorld(new DemoWorld());
 
         /* testing world map, commend this line below, uncommend line above to get back to the games */
-		GameManager.get().setWorld(new WorldMapWorld());
+		GameManager.get().setWorld(new DemoWorld());
 		
 		/* Create a sound manager for the whole game */
 		soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);

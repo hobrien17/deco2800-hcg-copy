@@ -5,9 +5,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.worlds.WorldMapWorld;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +27,12 @@ public class Player extends AbstractEntity implements Tickable {
 	private float speedx;
 	private float speedy;
 	boolean collided;
+
+    /**
+     * A boolean to check if this player is in the WorldMap or not
+     * if it is true, then should restrict the movement
+     */
+    boolean isInWorldMap = false;
 
 	/**
 	 * Creates a new Player instance.
@@ -56,6 +62,18 @@ public class Player extends AbstractEntity implements Tickable {
 
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
 		Vector3 worldCoords = GameManager.get().getCamera().unproject(new Vector3(screenX, screenY, 0));
+        // if the player is in WorldMap, restrict the movement. In the future, will change this
+        if (this.isInWorldMap){
+        	// move the player to the position of the mouse click
+        	// transfer the (screenX,screenY) to (posX, posY) to fit the game
+			// based on the shooting seed code. Not perfect at the moment
+			float projX, projY;
+			projX = worldCoords.x/55f;
+			projY = -(worldCoords.y - 32f / 2f) / 32f + projX;
+			projX -= projY - projX;
+            this.setPosition(projX, projY, 1);
+            return;
+        }
 		Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y);
 		GameManager.get().getWorld().addEntity(bullet);
 	}
@@ -128,6 +146,28 @@ public class Player extends AbstractEntity implements Tickable {
 	 * @param keycode
 	 */
 	private void handleKeyDown(int keycode) {
+	    // if user press M, trigger the WorldMap
+	    if (keycode == Input.Keys.M){
+	    	if (!(GameManager.get().getWorld() instanceof  WorldMapWorld)){   // <-- If we are not in the worldmap
+				GameManager.get().setWorld(new WorldMapWorld());  // <-- Should not be new WorldMapWorld, need to find a way to store this info
+				PlayerManager playerManager = (PlayerManager)GameManager.get().getManager(PlayerManager.class);
+				playerManager.getPlayer().isInWorldMap = true;
+				GameManager.get().getWorld().addEntity(playerManager.getPlayer());
+			} else {
+				GameManager.get().setWorld(new DemoWorld());  // <-- Should not be new DemoWorld, need to find a way to store this info
+				PlayerManager playerManager = (PlayerManager)GameManager.get().getManager(PlayerManager.class);
+				playerManager.getPlayer().isInWorldMap = false;
+				GameManager.get().getWorld().addEntity(playerManager.getPlayer());
+			}
+
+            return;
+        }
+
+        // if the player is in WorldMap, restrict the movement. In the future, will change this
+        if (isInWorldMap){
+	        return;
+        }
+
 		switch (keycode) {
 		case Input.Keys.W:
 			speedy -= movementSpeed;
@@ -156,6 +196,11 @@ public class Player extends AbstractEntity implements Tickable {
 	 * @param keycode
 	 */
 	private void handleKeyUp(int keycode) {
+        // if the player is in WorldMap, restrict the movement. In the future, will change this
+        if (isInWorldMap){
+            return;
+        }
+
 		switch (keycode) {
 		case Input.Keys.W:
 			speedy += movementSpeed;

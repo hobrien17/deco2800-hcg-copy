@@ -2,6 +2,7 @@ package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
+import com.deco2800.hcg.entities.worldmap.*;
 import com.deco2800.hcg.renderers.Renderable;
 
 import java.util.Random;
@@ -26,13 +27,12 @@ public class WorldMapWorld extends AbstractWorld {
 		 */
         this.setWidth(this.getMap().getProperties().get("width", Integer.class));
         this.setLength(this.getMap().getProperties().get("height", Integer.class));
+        Level level = new Level(this, 1, 1,1);  // <- Not sure the purpose of this level
+        this.addEntity(new MapNode(5, 5, "levelPortal", 0, level));
+        this.addEntity(new MapNode(10, 15, "levelPortal", 0, level));
+        this.addEntity(new MapNode(35, 25, "levelPortal", 0, level));
+        this.addEntity(new MapNode(45, 55, "levelPortal", 0, level));
 
-        this.addEntity(new LevelPortal(3, 3, 0));
-        this.addEntity(new LevelPortal(6, 6, 0));
-        this.addEntity(new LevelPortal(9, 9, 0));
-        this.addEntity(new LevelPortal(12, 12, 0));
-        this.addEntity(new LevelPortal(15, 15, 0));
-        this.addEntity(new LevelPortal(15, 18, 0));
 
 //
 //        Random random = new Random();

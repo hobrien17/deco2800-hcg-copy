@@ -24,7 +24,13 @@ public class WorldMap {
 		mapColumnNumber = columns;
 		containedNodes = new ArrayList<>();
 	}
-	
+
+	// temp constuctor only. Add so that worldmapui/MapGenerator class cancompile
+	public WorldMap(){
+
+	}
+
+
 	// ACCESSOR METHODS
 	public int getMapType() {
 		return mapType;
