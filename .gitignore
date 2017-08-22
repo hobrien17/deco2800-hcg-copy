@@ -1,4 +1,7 @@
+# Rubbish
+Thumbs.db
 .DS_Store
+.directory
 
 *.swp
 *~
@@ -16,6 +19,7 @@ build
 .classpath
 .settings
 .metadata
+.recommenders
 
 # IntelliJ IDEA
 *.iml
@@ -28,7 +32,7 @@ build
 #UML Diagram
 *.ucls
 
-Thumbs.db
+
 
 
 # Merge conflicts
