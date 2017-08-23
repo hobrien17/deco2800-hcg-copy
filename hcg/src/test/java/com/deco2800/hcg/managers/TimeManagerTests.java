@@ -2,7 +2,7 @@ package com.deco2800.hcg.managers;
 
 import org.junit.*;
 
-public class timeManagerTests {
+public class TimeManagerTests {
 	private TimeManager timeManager;
 
 	@Before
