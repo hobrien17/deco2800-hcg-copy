@@ -2,17 +2,17 @@ package com.deco2800.hcg.entities.garden_entities.seeds;
 
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 
-public class SunflowerSeed extends AbstractSeed {
+public class WaterSeed extends AbstractSeed {
 
 	@Override
 	public String getName() {
-		return "Sunflower Seed";
+		return "Water Seed";
 	}
 
 	@Override
 	public void setTexture(String texture) {
-		this.setTexture("Gardening Seed");
-		return null;
+		this.setTexture("Water Seed");
+
 	}
 
 	@Override

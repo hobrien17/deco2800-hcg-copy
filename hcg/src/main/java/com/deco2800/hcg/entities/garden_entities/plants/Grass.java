@@ -4,35 +4,39 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.SunflowerSeed;
+import com.deco2800.hcg.entities.garden_entities.seeds.GrassSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ItemManager;
 
 /**
- * Represents a basic plant which drops basic loot
+ * Represents the Grass plant which drops random loot
  * 
- * @author Henry O'Brien
+ * @author Reilly Lundin
  *
  */
-public class Sunflower extends AbstractGardenPlant {
+public class Grass extends AbstractGardenPlant {
 
-	public Sunflower(Pot master) {
-		super(master);
+	public Grass(float posX, float posY, float posZ) {
+		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false, Stage.SPROUT);
 		this.advanceStage();
 		this.advanceStage();
 	}
 
 	@Override
-	public String getThisTexture() {
+	public void setThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			return "sunflower_01";
+			//Put in proper sprite
+			//this.setTexture("");
+			break;
 		case SMALL:
-			return "sunflower_02";
+			//Put in proper sprite
+			//this.setTexture("");
+			break;
 		case LARGE:
-			return "sunflower_03";
-		default:
-			return null;
+			//Put in proper sprite
+			//this.setTexture("");
+			break;
 		}
 
 	}
@@ -47,7 +51,7 @@ public class Sunflower extends AbstractGardenPlant {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 		
-		lootRarity.put("sunflower_seed", 1.0);
+		lootRarity.put("grass_seed", 1.0);
 		
 		double sum = 0.0;
 		for(Double rarity : lootRarity.values()) {

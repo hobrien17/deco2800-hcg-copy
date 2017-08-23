@@ -91,12 +91,28 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
 	 */
 	abstract void setupLoot();
 	
+
+	public String[] getLoot() {
+		return lootRarity.keySet().toArray(new String[lootRarity.size()]);
+	}
+
 	/**
 	 * Generates a random item based on the loot rarity
-	 * 
+	 *
 	 * @return A random item string in the plant's loot map
 	 */
-	abstract String randItem();
+	String randItem() {
+		Double prob = Math.random();
+		Double total = 0.0;
+		for(Map.Entry<String, Double> entry : lootRarity.entrySet()) {
+			total += entry.getValue();
+			if(total > prob) {
+				return entry.getKey();
+			}
+		}
+		LOGGER.warn("No item has been selected, returning null");
+		return null;
+	}
 	
 	//Rest to be implemented later
 
