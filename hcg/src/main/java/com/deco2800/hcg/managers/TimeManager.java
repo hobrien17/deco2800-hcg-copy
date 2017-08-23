@@ -168,7 +168,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @return Returns a boolean to indicate whether the current year is a leap
 	 *         year.
 	 */
-	public boolean is_leap_year() {
+	public boolean isLeapYear() {
 		if (this.year % 400 == 0) {
 			return true;
 		} else if (this.year % 100 == 0) {
@@ -183,7 +183,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * Increments the number of days by 1.
 	 */
 	public void nextDay() {
-		if (this.month == 2 && this.day == 28 && this.is_leap_year()) {
+		if (this.month == 2 && this.day == 28 && this.isLeapYear()) {
 			this.day = 1;
 			this.month = 3;
 			return;
@@ -231,7 +231,7 @@ public class TimeManager extends Manager implements TickableManager {
 	/**
 	 * Debugging method for printing date to stdout
 	 */
-	public void print_date() {
+	public void printDate() {
 		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d",
 				this.day, this.month, this.year, this.hours, this.minutes,
 				this.seconds);
