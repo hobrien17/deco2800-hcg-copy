@@ -1,11 +1,11 @@
 package com.deco2800.hcg.items;
 
 public class BasicStackableItem implements Item {
-    String itemName;
-    int itemWeight;
-    String itemTexture;
-    int itemMaxStackSize;
-    int itemCurrentStackSize;
+    private String itemName;
+    private int itemWeight;
+    private String itemTexture;
+    private int itemMaxStackSize;
+    private int itemCurrentStackSize;
 
     BasicStackableItem(String name, int weight, int maxStackSize) {
         itemName = name;
@@ -29,7 +29,7 @@ public class BasicStackableItem implements Item {
         return false;
     }
 
-    /** Function for returning the weight of a single instance of this item i.e weight of one potion, one coin, etc **/
+    /** Function for returning the total weight of this item. For stackable items this is equal to itemWeight * stackSize **/
     public int getWeight() {
         int totalWeight = itemWeight * itemCurrentStackSize;
         return totalWeight;
@@ -47,7 +47,7 @@ public class BasicStackableItem implements Item {
         itemCurrentStackSize += number;
         return true;
     }
-    
+
     /** Function for setting the icon of an item
      * follows a similar method to how entities does textures**/
     public void setTexture(String icon) {
