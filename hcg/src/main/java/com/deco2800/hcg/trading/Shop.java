@@ -51,5 +51,10 @@ public interface Shop {
      */
     public Map<Stock,Integer> getStock();
 
+    public Stock buyStock(Stock stock);
+
+    public Stock[] buyStock(Stock stock, int number);
+
+    public void sellStock(Stock stock);
 
 }
