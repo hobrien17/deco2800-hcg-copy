@@ -22,7 +22,7 @@ public class Tree extends AbstractEntity implements HasProgress {
         super(posX, posY, posZ, 1f, 1f, 1f);
 
         /* Sets the texture of the tree to tree */
-        this.setTexture("real_tree");
+        this.setTexture("tree");
         LOGGER.info("Making a tree @ [" + posX + ", " + posY + "]");
     }
 
