@@ -7,7 +7,7 @@ public class BasicNonstackableItem implements Item {
     private int itemWeight;
     private String itemTexture;
 
-    BasicNonstackableItem(String name, int weight) {
+    public BasicNonstackableItem(String name, int weight) {
         itemName = name;
         itemWeight = weight;
     }

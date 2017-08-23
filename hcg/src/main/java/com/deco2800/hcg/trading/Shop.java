@@ -2,6 +2,7 @@ package com.deco2800.hcg.trading;
 
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /** Generic shop interfece that has basic shop commands necessary for any shop such as the ability to buy, sell
  * and hold stock.
@@ -49,12 +50,31 @@ public interface Shop {
      *
      * @return the items the shop currently has in stock and the number of that item present
      */
-    public Map<Stock,Integer> getStock();
+    public Map<Stock, Integer> getStock();
 
+
+    /**Method to buy one of the specified stock item.
+     *
+     * @param stock
+     *          The stock to buy
+     * @return The stock that has been purchased, for easier adding to inventory
+     */
     public Stock buyStock(Stock stock);
 
+    /**Method to buy a number of the specified stock item
+     *
+     * @param stock
+     *          The item to buy
+     * @param number
+     *          The number to buy
+     * @return An array of the items that have been purchased for easier adding to inventory
+     */
     public Stock[] buyStock(Stock stock, int number);
 
+    /**Method to sell an item of stock to the shop
+     *
+     * @param stock
+     *          Stock that is to be sold
+     */
     public void sellStock(Stock stock);
-
 }
