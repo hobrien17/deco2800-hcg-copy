@@ -61,7 +61,7 @@ public class Pot extends AbstractEntity implements Clickable, Selectable  {
 	 * @return true if the plant was added, false if it could not be added
 	 */
 	public boolean addPlant(AbstractGardenPlant plant) {
-		if(plant == null) {
+		if(this.plant == null) {
 			this.plant = plant;
 			setThisTexture();
 			return true;
