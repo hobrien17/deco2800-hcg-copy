@@ -16,6 +16,8 @@ public class TimeManager extends Manager implements TickableManager {
 	private Label label;
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
+	private boolean timePaused = false;
+
 	/**
 	 * Constructor: Initializes day to 01/01/2047 and elapsed time to 0 on
 	 * startup.
@@ -239,17 +241,34 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
+	 *  Pause the time.
+	 */
+	public void pauseTime() {
+		timePaused = true;
+	}
+
+	/**
+	 *  Unpause the time.
+	 */
+	public void unpauseTime() {
+		timePaused = false;
+	}
+
+	/**
 	 * Handles incrementing time on tick event.
 	 *
-	 * @param count
+	 * @param gameTickCount
 	 *            of all game ticks so far.
 	 */
 	public void onTick(long gameTickCount) {
-		this.timeElapsed++;
-		this.nextSecond();
-		if (this.label != null) {
-			label.setText(this.getDateTime());
+		if (!timePaused) {
+			this.timeElapsed++;
+			this.nextSecond();
+			if (this.label != null) {
+				label.setText(this.getDateTime());
+			}
 		}
+
 	}
 
 	/**
