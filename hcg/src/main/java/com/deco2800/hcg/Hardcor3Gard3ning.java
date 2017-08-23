@@ -70,16 +70,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	public void create () {
 
 		textureManager = ((TextureManager) GameManager.get().getManager(TextureManager.class));
-		textureManager.saveTexture("ground", "resources/maps/environment/ground.png");
-		textureManager.saveTexture("squirrel", "resources/sprites/enemies/squirrel.png");
-		textureManager.saveTexture("tower", "resources/sprites/misc/tower.png");
-		textureManager.saveTexture("seed", "resources/sprites/seeds/Battle seed.png");
-		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
-		textureManager.saveTexture("plant2", "resources/sprites/plants/plant2.png");
-		textureManager.saveTexture("sunflower_01", "resources/sprites/plants/sunflower_01.png");
-		textureManager.saveTexture("sunflower_02", "resources/sprites/plants/sunflower_02.png");
-		textureManager.saveTexture("sunflower_03", "resources/sprites/plants/sunflower_03.png");
-		textureManager.saveTexture("pot", "resources/sprites/plants/pot_empty.png");
 		
 		/**
 		 *	Set up new stuff for this game
