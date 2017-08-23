@@ -135,4 +135,8 @@ public class MapNode extends AbstractEntity {
 	public void unselectNode() {
 		selected = false;
 	}
+	
+	public boolean isConnected() {
+		return (!(previousNodes.isEmpty() && proceedingNodes.isEmpty()));
+	}
 }
