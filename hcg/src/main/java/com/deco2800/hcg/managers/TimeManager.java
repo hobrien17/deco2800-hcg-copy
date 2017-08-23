@@ -1,4 +1,5 @@
 package com.deco2800.hcg.managers;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class TimeManager extends Manager implements TickableManager {
@@ -14,9 +15,10 @@ public class TimeManager extends Manager implements TickableManager {
 
 	private Label label;
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
 	/**
-	 * Constructor: 
-	 * Initializes day to 01/01/2047 and elapsed time to 0 on startup.
+	 * Constructor: Initializes day to 01/01/2047 and elapsed time to 0 on
+	 * startup.
 	 */
 	public TimeManager() {
 		this.hours = 0;
@@ -50,7 +52,8 @@ public class TimeManager extends Manager implements TickableManager {
 	/**
 	 * Sets the month.
 	 * 
-	 * @param month as integer using calander month counting system (1 - 12)
+	 * @param month
+	 *            as integer using calander month counting system (1 - 12)
 	 */
 	public void setMonth(int month) {
 		this.month = month;
@@ -162,8 +165,8 @@ public class TimeManager extends Manager implements TickableManager {
 	/**
 	 * Returns true iff the current year is a leap year, else false.
 	 * 
-	 * @return Returns a boolean to indicate whether the current year is a 
-	 * leap year.
+	 * @return Returns a boolean to indicate whether the current year is a leap
+	 *         year.
 	 */
 	public boolean is_leap_year() {
 		if (this.year % 400 == 0) {
@@ -176,7 +179,7 @@ public class TimeManager extends Manager implements TickableManager {
 		return false;
 	}
 
-	/** 
+	/**
 	 * Increments the number of days by 1.
 	 */
 	public void nextDay() {
@@ -198,11 +201,10 @@ public class TimeManager extends Manager implements TickableManager {
 		this.day += 1;
 	}
 
-	/** 
-	 * Increments the number of seconds by 1.
-	 * If seconds are 60, resets seconds to 0, and increments minutes.
-	 * If minutes are 60, resets minutes to 0, and increments hour.
-	 * If hours are 24, resets hours to 0 and increments day.
+	/**
+	 * Increments the number of seconds by 1. If seconds are 60, resets seconds
+	 * to 0, and increments minutes. If minutes are 60, resets minutes to 0, and
+	 * increments hour. If hours are 24, resets hours to 0 and increments day.
 	 */
 	public void nextSecond() {
 		if (this.seconds != 59) {
@@ -224,22 +226,23 @@ public class TimeManager extends Manager implements TickableManager {
 
 		this.hours = 0;
 		this.nextDay();
-	}	
+	}
 
 	/**
 	 * Debugging method for printing date to stdout
 	 */
 	public void print_date() {
-		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d", 
-			this.day, this.month, this.year, this.hours, this.minutes, 
-			this.seconds);
+		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d",
+				this.day, this.month, this.year, this.hours, this.minutes,
+				this.seconds);
 		System.out.println(dateTime);
 	}
 
 	/**
 	 * Handles incrementing time on tick event.
 	 *
-	 * @param count of all game ticks so far.
+	 * @param count
+	 *            of all game ticks so far.
 	 */
 	public void onTick(long gameTickCount) {
 		this.timeElapsed++;
@@ -255,10 +258,10 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @return Returns a string denoting the current date and time in the game.
 	 */
 	public String getDateTime() {
-		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d", 
-			this.day, this.month, this.year, this.hours, this.minutes, 
-			this.seconds);
-		return dateTime;		
+		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d",
+				this.day, this.month, this.year, this.hours, this.minutes,
+				this.seconds);
+		return dateTime;
 	}
 
 }
