@@ -55,9 +55,11 @@ public class ContextManager extends Manager implements Screen, TickableManager {
 			old.dispose();
 		}
 
-		// Show the context underneath
+		// Show the context underneath, or exit the game
 		if (!contextStack.isEmpty()) {
 			contextStack.peek().show();
+		} else {
+			System.exit(0);
 		}
 	}
 

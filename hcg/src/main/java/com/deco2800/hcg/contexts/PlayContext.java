@@ -29,6 +29,7 @@ public class PlayContext extends Context {
 	private SoundManager soundManager;
 	private PlayerManager playerManager;
 	private TimeManager timeManager;
+	private ContextManager contextManager;
 
 	//FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -58,17 +59,16 @@ public class PlayContext extends Context {
 	 */
 	public PlayContext() {
 
-		// Set up managers this game
+		// Set up managers for this game
 		gameManager = GameManager.get();
 		soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
 		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
 		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
-
+		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth()*32, 0);
-
 
 		// Setup GUI
 		stage = new Stage(new ScreenViewport());
@@ -89,7 +89,7 @@ public class PlayContext extends Context {
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				System.exit(0);
+				contextManager.popContext();
 			}
 		});
 
