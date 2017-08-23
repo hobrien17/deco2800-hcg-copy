@@ -61,13 +61,15 @@ public class Render3D implements Renderer {
         Collections.sort(entities);
 
         batch.begin();
-
+        
+        // Get a refernce to the texture manager 
+        TextureManager reg = (TextureManager) GameManager.get().getManager(TextureManager.class);
+        
         /* Render each entity (backwards) in order to retain objects at the front */
         for (int index = 0; index < entities.size(); index++) {
             Renderable entity = entities.get(index);
 
             String textureString = entity.getTexture();
-            TextureManager reg = (TextureManager) GameManager.get().getManager(TextureManager.class);
             Texture tex = reg.getTexture(textureString);
 
             float cartX = entity.getPosX();

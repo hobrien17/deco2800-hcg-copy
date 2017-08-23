@@ -42,14 +42,7 @@ public class Hardcor3Gard3ning extends Game {
 		gameManager = GameManager.get();
 
 		// Create a texture manager
-		//TODO move loading textures into texture manager
 		textureManager = ((TextureManager) gameManager.getManager(TextureManager.class));
-		textureManager.saveTexture("ground", "resources/maps/environment/ground.png");
-		textureManager.saveTexture("squirrel", "resources/sprites/enemies/squirrel.png");
-		textureManager.saveTexture("tower", "resources/sprites/misc/tower.png");
-		textureManager.saveTexture("seed", "resources/sprites/seeds/Battle seed.png");
-		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
-		textureManager.saveTexture("plant2", "resources/sprites/plants/plant2.png");
 
 		/* Create a sound manager for the whole game */
 		soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
