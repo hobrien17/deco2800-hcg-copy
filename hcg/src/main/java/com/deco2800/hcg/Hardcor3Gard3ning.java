@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
@@ -52,6 +53,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	private PlayerManager playerManager;
 	private TextureManager textureManager;
 	private TimeManager timeManager;
+	private InputManager inputManager;
 
 	private Stage stage;
 	private Window window;
@@ -91,7 +93,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 
 		/* Create a time manager. */
 		timeManager = (TimeManager) GameManager.get().getManager(TimeManager.class);
-
+		
 		/**
 		 * Setup the game itself
 		 */
@@ -159,8 +161,8 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage); // Add the UI as a processor
 
-		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
-		inputMultiplexer.addProcessor(input);
+		inputManager = (InputManager) GameManager.get().getManager(InputManager.class);
+		inputMultiplexer.addProcessor(inputManager);
         /*
          * Set up some input handlers for panning with dragging.
          */
@@ -171,6 +173,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				
 				originX = screenX;
 				originY = screenY;
 
@@ -203,6 +206,9 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		});
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		
+		/* Create a planter */
+		inputManager.addKeyUpListener(new Planter());
 	}
 
 	/**
