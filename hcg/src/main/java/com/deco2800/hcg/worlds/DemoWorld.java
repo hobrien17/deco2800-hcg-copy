@@ -2,7 +2,7 @@ package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
-import com.deco2800.hcg.entities.garden_entities.plants.BasicPlant;
+import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.renderers.Renderable;
 
 import java.util.Random;
@@ -20,7 +20,7 @@ public class DemoWorld extends AbstractWorld {
 	 */
 	public DemoWorld() {
 		/* Load up the map for this world */
-		this.map = new TmxMapLoader().load("resources/maps/placeholder.tmx");
+		this.map = new TmxMapLoader().load("resources/maps/initial-map-test.tmx");
 
 		/*
 		 * Grab the width and length values from the map file to use as the world size
@@ -29,7 +29,7 @@ public class DemoWorld extends AbstractWorld {
 		this.setLength(this.getMap().getProperties().get("height", Integer.class));
 
 		this.addEntity(new Tower(8, 8, 0));
-
+		this.addEntity(new Sunflower(20, 10, 0));
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {
