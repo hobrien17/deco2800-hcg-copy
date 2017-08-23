@@ -38,7 +38,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * 
 	 * @param day
 	 */
-	public void setDay(int day) {
+	private void setDay(int day) {
 		this.day = day;
 	}
 
@@ -57,7 +57,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @param month
 	 *            as integer using calander month counting system (1 - 12)
 	 */
-	public void setMonth(int month) {
+	private void setMonth(int month) {
 		this.month = month;
 	}
 
@@ -75,7 +75,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * 
 	 * @param year
 	 */
-	public void setYear(int year) {
+	private void setYear(int year) {
 		this.year = year;
 	}
 
@@ -111,7 +111,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * 
 	 * @param minutes
 	 */
-	public void setMinutes(int minutes) {
+	private void setMinutes(int minutes) {
 		this.minutes = minutes;
 	}
 
@@ -129,7 +129,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * 
 	 * @param hours
 	 */
-	public void setHours(int hours) {
+	private void setHours(int hours) {
 		this.hours = hours;
 	}
 
@@ -147,7 +147,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * 
 	 * @param timeElapsed
 	 */
-	public void setTimeElapsed(int timeElapsed) {
+	private void setTimeElapsed(int timeElapsed) {
 		this.timeElapsed = timeElapsed;
 	}
 
@@ -170,12 +170,12 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @return Returns a boolean to indicate whether the current year is a leap
 	 *         year.
 	 */
-	public boolean isLeapYear() {
-		if (this.year % 400 == 0) {
+	public boolean isLeapYear(int year) {
+		if (year % 400 == 0) {
 			return true;
-		} else if (this.year % 100 == 0) {
+		} else if (year % 100 == 0) {
 			return false;
-		} else if (this.year % 4 == 0) {
+		} else if (year % 4 == 0) {
 			return true;
 		}
 		return false;
@@ -185,7 +185,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * Increments the number of days by 1.
 	 */
 	public void nextDay() {
-		if (this.month == 2 && this.day == 28 && this.isLeapYear()) {
+		if (this.month == 2 && this.day == 28 && this.isLeapYear(this.year)) {
 			this.day = 1;
 			this.month = 3;
 			return;
@@ -209,6 +209,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * increments hour. If hours are 24, resets hours to 0 and increments day.
 	 */
 	public void nextSecond() {
+		setChanged();
 		if (this.seconds != 59) {
 			this.seconds++;
 			return;
@@ -241,14 +242,14 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 *  Pause the time.
+	 * Pause the time.
 	 */
 	public void pauseTime() {
 		timePaused = true;
 	}
 
 	/**
-	 *  Unpause the time.
+	 * Unpause the time.
 	 */
 	public void unpauseTime() {
 		timePaused = false;
@@ -261,14 +262,20 @@ public class TimeManager extends Manager implements TickableManager {
 	 *            of all game ticks so far.
 	 */
 	public void onTick(long gameTickCount) {
-		if (!timePaused) {
-			this.timeElapsed++;
-			this.nextSecond();
-			if (this.label != null) {
-				label.setText(this.getDateTime());
-			}
+		if (timePaused) {
+			return;
 		}
-
+		
+		this.timeElapsed++;
+		this.nextSecond();
+		if (this.label != null) {
+			label.setText(this.getDateTime());
+		}
+		
+		if (hasChanged()){
+			notifyObservers();
+		}
+		clearChanged();
 	}
 
 	/**
