@@ -4,7 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-//TODO documentation
+/**
+ * Convenience subclass of Context.
+ * Can be used for building basic menus and game screens.
+ * All provided methods should be sufficient as-is, and only ac constructor needs to be provided.
+ * @author Richy McGregor
+ */
 public abstract class UIContext extends Context {
 
 	// A stage for the UI elements

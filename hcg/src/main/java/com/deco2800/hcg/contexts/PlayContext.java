@@ -17,14 +17,20 @@ import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 
+/**
+ * Context representing the playable game itself.
+ * Most of the code here was lifted directly out of Hardcor3Gard3ning.java
+ * PlayContext should only be instantiated once.
+ */
 public class PlayContext extends Context {
 
-
+	// Managers used by the game
 	private GameManager gameManager;
 	private SoundManager soundManager;
 	private PlayerManager playerManager;
 	private TimeManager timeManager;
 
+	//FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
 
 	// Multiplexer to take input and distrubute it
@@ -41,29 +47,18 @@ public class PlayContext extends Context {
 	 */
 	private Renderer renderer = new Render3D();
 
-	/**
-	 * Create a camera for panning and zooming.
-	 * Camera must be updated every render cycle.
-	 */
-
-
-
+	// Stage and actors for game UI
+	//TODO Game UI should probably be moved to a separate file
 	private Stage stage;
 	private Window window;
 	private Label clockLabel;
+
 	/**
-	 * Creates the required objects for the game to start.
-	 * Called when the game first starts
+	 * Create the PlayContext
 	 */
-
-
 	public PlayContext() {
 
-		/**
-		 *	Set up new stuff for this game
-		 */
-
-
+		// Set up managers this game
 		gameManager = GameManager.get();
 		soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
 		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
@@ -75,9 +70,7 @@ public class PlayContext extends Context {
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth()*32, 0);
 
 
-		/**
-		 * Setup GUI
-		 */
+		// Setup GUI
 		stage = new Stage(new ScreenViewport());
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
@@ -92,7 +85,7 @@ public class PlayContext extends Context {
 		clockLabel = new Label(timeManager.getDateTime(), skin);
 		timeManager.setLabel(clockLabel);
 
-		/* Add a programatic listener to the quit button */
+		/* Add a programmatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -108,18 +101,10 @@ public class PlayContext extends Context {
 			}
 		});
 
-
-
 		/* Add all buttons to the menu */
 		window.add(button);
 		window.add(anotherButton);
-
-
-
 		window.add(clockLabel);
-
-
-
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
@@ -127,16 +112,15 @@ public class PlayContext extends Context {
 		/* Add the window to the stage */
 		stage.addActor(window);
 
-
-		/**
+		/*
 		 * Setup inputs for the buttons and the game itself
 		 */
 		/* Setup an Input Multiplexer so that input can be handled by both the UI and the game */
 		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage); // Add the UI as a processor
-
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
 		inputMultiplexer.addProcessor(input);
+
 		/*
 		 * Set up some input handlers for panning with dragging.
 		 */
@@ -149,7 +133,6 @@ public class PlayContext extends Context {
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 				originX = screenX;
 				originY = screenY;
-
 
 				Vector3 worldCoords = GameManager.get().getCamera().unproject(new Vector3(screenX, screenY, 0));
 				mouseHandler.handleMouseClick(worldCoords.x, worldCoords.y);
@@ -208,6 +191,7 @@ public class PlayContext extends Context {
 		 */
 		renderer.render(batch);
 
+		// Update and draw the stage
 		stage.act();
 		stage.draw();
 
@@ -215,11 +199,10 @@ public class PlayContext extends Context {
 		batch.dispose();
 	}
 
-
 	/**
 	 * Resizes the viewport
-	 * @param width
-	 * @param height
+	 * @param width The new window width.
+	 * @param height The new window height.
 	 */
 	@Override
 	public void resize(int width, int height) {
@@ -230,7 +213,6 @@ public class PlayContext extends Context {
 		stage.getViewport().update(width, height, true);
 		window.setPosition(0, stage.getHeight());
 	}
-
 
 	/**
 	 * Disposes of assets etc when the rendering system is stopped.
