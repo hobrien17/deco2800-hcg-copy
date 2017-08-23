@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.RockSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ItemManager;
 
@@ -16,28 +15,23 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Cactus extends AbstractGardenPlant {
 
-	public Cactus(float posX, float posY, float posZ) {
-		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false, Stage.SPROUT);
+	public Cactus(Pot master) {
+		super(master);
 		this.advanceStage();
 		this.advanceStage();
 	}
 
 	@Override
-	public void setThisTexture() {
+	public String getThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			//Put in proper sprite
-			//this.setTexture("");
-			break;
+			return null;
 		case SMALL:
-			//Put in proper sprite
-			//this.setTexture("");
-			break;
+			return null;
 		case LARGE:
-			//Put in proper sprite
-			//this.setTexture("");
-			break;
+			return null;
 		}
+		return null;
 
 	}
 

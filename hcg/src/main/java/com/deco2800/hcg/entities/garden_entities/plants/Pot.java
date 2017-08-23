@@ -15,6 +15,7 @@ public class Pot extends AbstractEntity implements Clickable, Selectable  {
 	public Pot(float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
 		plant = null;
+		setThisTexture();
 	}
 
 	@Override
@@ -49,10 +50,13 @@ public class Pot extends AbstractEntity implements Clickable, Selectable  {
 	
 	public void addPlant(AbstractGardenPlant plant) {
 		this.plant = plant;
+		setThisTexture();
 	}
 	
 	public void setThisTexture() {
+		System.out.println(plant);
 		if(plant == null) {
+			System.out.println("hello");
 			this.setTexture("pot");
 		} else {
 			this.setTexture(plant.getThisTexture());

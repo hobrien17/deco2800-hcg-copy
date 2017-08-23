@@ -43,7 +43,6 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
 	public AbstractGardenPlant(Pot master) {
 		this.stage = Stage.SMALL;
 		this.master = master;
-		master.setThisTexture();
 		setupLoot();
 	}
 	

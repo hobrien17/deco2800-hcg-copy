@@ -12,7 +12,6 @@ public class SunflowerSeed extends AbstractSeed {
 	@Override
 	public void setTexture(String texture) {
 		this.setTexture("Gardening Seed");
-		return null;
 	}
 
 	@Override

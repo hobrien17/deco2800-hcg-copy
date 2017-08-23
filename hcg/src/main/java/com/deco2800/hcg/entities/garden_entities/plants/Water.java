@@ -16,29 +16,23 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Water extends AbstractGardenPlant {
 
-	public Water(float posX, float posY, float posZ) {
-		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false, Stage.SPROUT);
+	public Water(Pot master) {
+		super(master);
 		this.advanceStage();
 		this.advanceStage();
 	}
 
 	@Override
-	public void setThisTexture() {
+	public String getThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			//Put in proper sprite
-			//this.setTexture("");
-			break;
+			return null;
 		case SMALL:
-			//Put in proper sprite
-			//this.setTexture("");
-			break;
+			return null;
 		case LARGE:
-			//Put in proper sprite
-			//this.setTexture("");
-			break;
+			return null;
 		}
-
+		return null;
 	}
 
 	@Override
@@ -53,6 +47,12 @@ public class Water extends AbstractGardenPlant {
 		arr[0] = ItemManager.getNew(randItem());
 		
 		return arr;
+	}
+
+	@Override
+	void setupLoot() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

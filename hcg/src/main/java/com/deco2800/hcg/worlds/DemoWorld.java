@@ -30,7 +30,9 @@ public class DemoWorld extends AbstractWorld {
 		this.setLength(this.getMap().getProperties().get("height", Integer.class));
 
 		this.addEntity(new Tower(8, 8, 0));
-		this.addEntity(new Pot(20, 10, 0));
+		Pot pot = new Pot(20, 10, 0);
+		this.addEntity(pot);
+		pot.addPlant(new Sunflower(pot));
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {

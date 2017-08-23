@@ -69,7 +69,6 @@ public class Render3D implements Renderer {
             String textureString = entity.getTexture();
             TextureManager reg = (TextureManager) GameManager.get().getManager(TextureManager.class);
             Texture tex = reg.getTexture(textureString);
-            System.out.println(textureString);
 
             float cartX = entity.getPosX();
             float cartY = (worldWidth-1) - entity.getPosY();
