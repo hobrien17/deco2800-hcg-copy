@@ -6,6 +6,7 @@ public class TimeManagerTests {
 	private TimeManager timeManager;
 	private TimeManager timeManagerPauseTest;
 	private TimeManager timeManagerNextDayTest;
+	private TimeManager timeManagerNextSecondTest;
 
 	@Before
 	public void setUp() {
@@ -16,6 +17,9 @@ public class TimeManagerTests {
 
 		// for nextDayTest
 		timeManagerNextDayTest = new TimeManager();
+
+		// for nextSecondTest
+		timeManagerNextSecondTest = new TimeManager();
 	}
 
 	@Test
@@ -38,8 +42,10 @@ public class TimeManagerTests {
 		// time is paused, nothing should increment during onTick method call
 		timeManagerPauseTest.pauseTime();
 		timeManagerPauseTest.onTick(0);
-		Assert.assertEquals("Time is running whilst paused.", 0, timeManagerPauseTest.getSeconds());
-		Assert.assertEquals("Time is running whilst paused.", 0, timeManagerPauseTest.getTimeElapsed());
+		Assert.assertEquals("Time is running whilst paused.",
+				0, timeManagerPauseTest.getSeconds());
+		Assert.assertEquals("Time is running whilst paused.",
+				0, timeManagerPauseTest.getTimeElapsed());
 	}
 
 	@Test
@@ -55,21 +61,18 @@ public class TimeManagerTests {
 
 	@Test
 	public void nextDayTest() {
-		// ~(loop 1) and ~(loop 2)
-		// normal day in middle of any month
+		// timeManagerNextDayTest.days should increment from 1 to 2
 		timeManagerNextDayTest.nextDay();
-		Assert.assertEquals("nextDay not incrementing properly, no loops covered.",
+		Assert.assertEquals("nextDay not incrementing properly",
 				2, timeManagerNextDayTest.getDay());
+	}
 
-		// (loop 1) and ~(loop 2)
-		// 28/2 in a leap year
-
-		// ~(loop 1) and (loop 2 (if))
-		// 31/12 in any year
-
-		// ~(loop 1) and (loop 2 (else))
-		// last day of any month except december
-
+	@Test
+	public void nextSecondTest() {
+		// timeManagerNextSecondTest.seconds should increment from 0 to 1
+		timeManagerNextSecondTest.nextSecond();
+		Assert.assertEquals("nextSecond not incrementing properly.",
+				1, timeManagerNextSecondTest.getSeconds());
 	}
 
 
