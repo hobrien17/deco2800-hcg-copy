@@ -15,7 +15,7 @@ public class TimeManager extends Manager implements TickableManager {
 	private Label label;
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	/**
-	 * Constructor
+	 * Constructor: 
 	 * Initializes day to 01/01/2047 and elapsed time to 0 on startup.
 	 */
 	public TimeManager() {
@@ -50,7 +50,7 @@ public class TimeManager extends Manager implements TickableManager {
 	/**
 	 * Sets the month.
 	 * 
-	 * @param month
+	 * @param month as integer using calander month counting system (1 - 12)
 	 */
 	public void setMonth(int month) {
 		this.month = month;
@@ -168,11 +168,9 @@ public class TimeManager extends Manager implements TickableManager {
 	public boolean is_leap_year() {
 		if (this.year % 400 == 0) {
 			return true;
-		}
-		if (this.year % 100 == 0) {
+		} else if (this.year % 100 == 0) {
 			return false;
-		}
-		if (this.year % 4 == 0) {
+		} else if (this.year % 4 == 0) {
 			return true;
 		}
 		return false;
@@ -202,22 +200,25 @@ public class TimeManager extends Manager implements TickableManager {
 
 	/** 
 	 * Increments the number of seconds by 1.
+	 * If seconds are 60, resets seconds to 0, and increments minutes.
+	 * If minutes are 60, resets minutes to 0, and increments hour.
+	 * If hours are 24, resets hours to 0 and increments day.
 	 */
 	public void nextSecond() {
 		if (this.seconds != 59) {
-			this.seconds += 1;
+			this.seconds++;
 			return;
 		}
 
 		this.seconds = 0;
 		if (this.minutes != 59) {
-			this.minutes += 1;
+			this.minutes++;
 			return;
 		}
 
 		this.minutes = 0;
 		if (this.hours != 24) {
-			this.hours += 1;
+			this.hours++;
 			return;
 		}
 
