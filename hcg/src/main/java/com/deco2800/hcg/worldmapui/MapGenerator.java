@@ -15,13 +15,11 @@ public class MapGenerator {
 	private List<Level> levelsMaster;
 	private List<Level> levelsOfType;
 	private List<Level> levelsNotOfType;
-	private List<Level> levelsUsed;
 	
 	public MapGenerator(List<Level> levelSet) {
 		levelsMaster = levelSet;
 		levelsOfType = new ArrayList<>();
 		levelsNotOfType = new ArrayList<>();
-		levelsUsed = new ArrayList<>();
 	}
 	
 	// generates a random world based on the provided set of game levels
@@ -30,6 +28,7 @@ public class MapGenerator {
 		int columnCount = 10; // <- default number of columns (can be changed later)
 		Random rand = new Random();
 		int worldType = rand.nextInt(0); // <- currently only generates a 0. Change later for biomes
+		resetLevelSets(worldType);
 		List<MapNode> worldNodes = generateNodes(rowCount, columnCount, worldType);
 		return new WorldMap();
 	}
@@ -68,16 +67,17 @@ public class MapGenerator {
 	private List<MapNode> generateNodes(int rowNumber, int columnNumber, int worldType) {
 		Random rand = new Random();
 		
-		MapNode initialNode = new MapNode(0, rowNumber/2, "", 2, levelSet[rand.nextInt()]); //ENTER NODE TEXTURE!!!
-		MapNode finalNode = new MapNode(columnNumber - 1, ); //ENTER NODE TEXTURE!!!
+		MapNode initialNode = new MapNode(0, rowNumber/2, "", 2, getLevel()); //ENTER NODE TEXTURE!!!
+		MapNode finalNode = new MapNode(columnNumber - 1, rowNumber/2, "", 4, getLevel()); //ENTER NODE TEXTURE!!!
 		
+		return new ArrayList<>();
 	}
 	
-	private void createLevelSets(int worldType) {
+	private void resetLevelSets(int worldType) {
+		levelsOfType.clear();
+		levelsNotOfType.clear();
 		for(Level i : levelsMaster) {
-			if(levelsUsed.contains(i)) {
-				;
-			} else if(i.getWorldType() == worldType) {
+			if(i.getWorldType() == worldType) {
 				levelsOfType.add(i);
 			} else {
 				levelsNotOfType.add(i);
@@ -94,7 +94,10 @@ public class MapGenerator {
 			levelsNotOfType.remove(index);
 			return levelReturned;
 		} else {
-			
+			int index = rand.nextInt(levelsOfType.size());
+			Level levelReturned = levelsOfType.get(index);
+			levelsOfType.remove(index);
+			return levelReturned;
 		}
 	}
 }
