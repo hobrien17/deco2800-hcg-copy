@@ -27,19 +27,41 @@ public class TextureManager extends Manager {
 	 */
 	private Map<String, Texture> textureMap = new HashMap<String, Texture>();
 
-    /**
-     * Constructor
-     * Currently loads up all the textures but probably shouldn't/doesn't
-     * need to.
-     */
-    public TextureManager() {
-        textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
-        textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
-        textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
-		textureMap.put("spacman-swim", new Texture("resources/sprites/player/spacman-swim.png"));
-        textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
-        textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
-    }
+	/**
+	 * Constructor
+	 * Currently loads up all the textures but probably shouldn't/doesn't
+	 * need to.
+	 */
+	public TextureManager() {
+		
+		textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
+		textureMap.put("ground", new Texture("resources/maps/environment/ground.png"));
+		
+		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
+		textureMap.put("spacman_swim", new Texture("resources/sprites/player/spacman_swim.png"));
+		
+		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
+		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
+		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
+		
+		textureMap.put("squirrel", new Texture("resources/sprites/enemies/squirrel.png"));
+		
+		textureMap.put("battle_seed", new Texture("resources/sprites/seeds/battle_seed.png"));
+		textureMap.put("explosive_seed", new Texture("resources/sprites/seeds/explosive_seed.png"));
+		textureMap.put("fire_seed", new Texture("resources/sprites/seeds/fire_seed.png"));
+		textureMap.put("gardening_seed", new Texture("resources/sprites/seeds/gardening_seed.png"));
+		textureMap.put("grass_seed", new Texture("resources/sprites/seeds/grass_seed.png"));
+		textureMap.put("ice_seed", new Texture("resources/sprites/seeds/ice_seed.png"));
+		textureMap.put("water_seed", new Texture("resources/sprites/seeds/water_seed.png"));
+
+		textureMap.put("plant_01", new Texture("resources/sprites/plants/plant_01.png"));
+		textureMap.put("plant_02", new Texture("resources/sprites/plants/plant_02.png"));
+		textureMap.put("sunflower_01", new Texture("resources/sprites/plants/sunflower_01.png"));
+		textureMap.put("sunflower_02", new Texture("resources/sprites/plants/sunflower_02.png"));
+		textureMap.put("sunflower_03", new Texture("resources/sprites/plants/sunflower_03.png"));
+		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
+
+	}
 
 	/**
 	 * Gets a texture object for a given string id
@@ -53,7 +75,9 @@ public class TextureManager extends Manager {
 		if (textureMap.containsKey(id)) {
 			return textureMap.get(id);
 		} else {
-			return textureMap.get("spacman_ded");
+			LOGGER.error("No texture exists: " + id);
+			System.err.println("No texture exists: " + id); //FIXME logger is currently broken
+			return null;
 		}
 
 	}

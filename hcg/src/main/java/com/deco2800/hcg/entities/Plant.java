@@ -28,7 +28,7 @@ public class Plant extends AbstractEntity implements Tickable {
 	 */
 	public Plant(float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
-		this.setTexture("plant");
+		this.setTexture("plant_01");
 	}
 
 

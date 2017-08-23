@@ -23,7 +23,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	public Bullet(float posX, float posY, float posZ, float xd, float yd) {
 		super(posX, posY, posZ, 0.6f, 0.6f, 1);
 //		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
-		this.setTexture("seed");
+		this.setTexture("battle_seed");
 
 		float projX, projY;
 
