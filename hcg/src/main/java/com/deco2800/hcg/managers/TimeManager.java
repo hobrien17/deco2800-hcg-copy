@@ -93,7 +93,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * 
 	 * @param seconds
 	 */
-	private void setSeconds(int seconds) {
+	public void setSeconds(int seconds) {
 		this.seconds = seconds;
 	}
 
@@ -160,7 +160,7 @@ public class TimeManager extends Manager implements TickableManager {
 		return this.timeElapsed;
 	}
 
-	private void setLabel(Label label) {
+	public void setLabel(Label label) {
 		this.label = label;
 	}
 
@@ -170,12 +170,12 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @return Returns a boolean to indicate whether the current year is a leap
 	 *         year.
 	 */
-	public boolean isLeapYear() {
-		if (this.year % 400 == 0) {
+	public boolean isLeapYear(int year) {
+		if (year % 400 == 0) {
 			return true;
-		} else if (this.year % 100 == 0) {
+		} else if (year % 100 == 0) {
 			return false;
-		} else if (this.year % 4 == 0) {
+		} else if (year % 4 == 0) {
 			return true;
 		}
 		return false;
@@ -185,7 +185,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * Increments the number of days by 1.
 	 */
 	public void nextDay() {
-		if (this.month == 2 && this.day == 28 && this.isLeapYear()) {
+		if (this.month == 2 && this.day == 28 && this.isLeapYear(this.year)) {
 			this.day = 1;
 			this.month = 3;
 			return;
