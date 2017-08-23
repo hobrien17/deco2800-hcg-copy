@@ -44,6 +44,8 @@ public abstract class AbstractSeed implements Item {
      * Creates a new plant at the given x and y co-ordinates
      * 
      * @return a new plant
+     * 
+     * @deprecated This method should be replaced due to the addition of pots
      */
     public abstract AbstractGardenPlant plant(int xPos, int yPos);
 }

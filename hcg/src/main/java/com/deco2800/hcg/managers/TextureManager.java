@@ -59,6 +59,7 @@ public class TextureManager extends Manager {
 		textureMap.put("sunflower_01", new Texture("resources/sprites/plants/sunflower_01.png"));
 		textureMap.put("sunflower_02", new Texture("resources/sprites/plants/sunflower_02.png"));
 		textureMap.put("sunflower_03", new Texture("resources/sprites/plants/sunflower_03.png"));
+		textureMap.put("pot", new Texture("resources/sprites/plants/pot_empty.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 
 	}
@@ -71,6 +72,7 @@ public class TextureManager extends Manager {
 	 * @return Texture for given id
 	 */
 	public Texture getTexture(String id) {
+		
 		if (textureMap.containsKey(id)) {
 			return textureMap.get(id);
 		} else {
