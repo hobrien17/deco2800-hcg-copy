@@ -1,6 +1,13 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.managers.GameManager;
+
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.util.Box3D;
@@ -11,7 +18,9 @@ import com.deco2800.hcg.util.Box3D;
  * 
  * @author Henry O'Brien
  */
-public abstract class AbstractGardenPlant extends AbstractEntity implements Clickable, Tickable, Selectable {
+public abstract class AbstractGardenPlant extends AbstractEntity implements Clickable, Tickable, Selectable, Lootable {
+	
+	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 	
 	/**
 	 * Represents a stage of growth
@@ -27,12 +36,15 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	}
 	
 	private Stage stage;
+	
+	Map<String, Double> lootRarity;
 
 	public AbstractGardenPlant(Box3D position, float xRenderLength, float yRenderLength, boolean centered, 
 			Stage stage) {
 		super(position, xRenderLength, yRenderLength, centered);
 		this.stage = stage;
 		setThisTexture();
+		setupLoot();
 	}
 	
 	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
@@ -40,6 +52,7 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 		super(posX, posY, posZ, xLength, yLength, zLength, xRenderLength, yRenderLength, centered);
 		this.stage = stage;
 		setThisTexture();
+		setupLoot();
 	}
 	
 	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
@@ -80,6 +93,12 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 
 	}
 	
+	@Override
+	public Map<String, Double> getRarity() {
+		// TODO Auto-generated method stub
+		return lootRarity;
+	}
+	
 	/**
 	 * Gets the plant's stage of growth
 	 * 
@@ -114,21 +133,16 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	public abstract void setThisTexture();
 	
 	/**
-	 * Gets a list of all possible loot dropped by this tree
-	 * Replace return type with loot when implemented
-	 * 
-	 * @return An array of all possible loot dropped by this plant
+	 * Sets up the loot rarity map for a plant
 	 */
-	public abstract Object[] getLoot();
+	abstract void setupLoot();
 	
 	/**
-	 * Returns a list of loot items where 0 <= length(\result) <= length(this.getLoot())
-	 * Loot may vary based on rarity and stage of plant growth
-	 * Possible to return an empty array (if plant is in initial stage of growth)
+	 * Generates a random item based on the loot rarity
 	 * 
-	 * @return An array (possibly empty) of loot items
+	 * @return A random item string in the plant's loot map
 	 */
-	public abstract Object[] harvest();
+	abstract String randItem();
 	
 	//Rest to be implemented later
 
