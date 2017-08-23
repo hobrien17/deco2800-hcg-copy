@@ -49,6 +49,8 @@ public class TextureManager extends Manager {
 	 * @return Texture for given id
 	 */
 	public Texture getTexture(String id) {
+		System.out.println(textureMap);
+		
 		if (textureMap.containsKey(id)) {
 			return textureMap.get(id);
 		} else {

@@ -79,6 +79,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		textureManager.saveTexture("sunflower_01", "resources/sprites/plants/sunflower_01.png");
 		textureManager.saveTexture("sunflower_02", "resources/sprites/plants/sunflower_02.png");
 		textureManager.saveTexture("sunflower_03", "resources/sprites/plants/sunflower_03.png");
+		textureManager.saveTexture("pot", "resources/sprites/plants/pot_empty.png");
 		
 		/**
 		 *	Set up new stuff for this game

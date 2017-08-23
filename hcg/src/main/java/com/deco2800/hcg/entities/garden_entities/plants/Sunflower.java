@@ -16,24 +16,23 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Sunflower extends AbstractGardenPlant {
 
-	public Sunflower(float posX, float posY, float posZ) {
-		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false, Stage.SPROUT);
+	public Sunflower(Pot master) {
+		super(master);
 		this.advanceStage();
 		this.advanceStage();
 	}
 
 	@Override
-	public void setThisTexture() {
+	public String getThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			this.setTexture("sunflower_01");
-			break;
+			return "sunflower_01";
 		case SMALL:
-			this.setTexture("sunflower_02");
-			break;
+			return "sunflower_02";
 		case LARGE:
-			this.setTexture("sunflower_03");
-			break;
+			return "sunflower_03";
+		default:
+			return null;
 		}
 
 	}

@@ -18,7 +18,7 @@ import com.deco2800.hcg.util.Box3D;
  * 
  * @author Henry O'Brien
  */
-public abstract class AbstractGardenPlant extends AbstractEntity implements Clickable, Tickable, Selectable, Lootable {
+public abstract class AbstractGardenPlant implements Tickable, Lootable {
 	
 	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 	
@@ -36,61 +36,15 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 	}
 	
 	private Stage stage;
+	private Pot master;
 	
 	Map<String, Double> lootRarity;
-
-	public AbstractGardenPlant(Box3D position, float xRenderLength, float yRenderLength, boolean centered, 
-			Stage stage) {
-		super(position, xRenderLength, yRenderLength, centered);
-		this.stage = stage;
-		setThisTexture();
+	
+	public AbstractGardenPlant(Pot master) {
+		this.stage = Stage.SMALL;
+		this.master = master;
+		master.setThisTexture();
 		setupLoot();
-	}
-	
-	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
-			  float xRenderLength, float yRenderLength, boolean centered, Stage stage) {
-		super(posX, posY, posZ, xLength, yLength, zLength, xRenderLength, yRenderLength, centered);
-		this.stage = stage;
-		setThisTexture();
-		setupLoot();
-	}
-	
-	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
-			  float xRenderLength, float yRenderLength, boolean centered) {
-		this(posX, posY, posZ, xLength, yLength, zLength, xRenderLength, yRenderLength, centered, Stage.SMALL);
-	}
-	
-	public AbstractGardenPlant(float posX, float posY, float posZ, float xLength, float yLength, float zLength) {
-		this(posX, posY, posZ, xLength, yLength, zLength, xLength, yLength, false, Stage.SMALL);
-	}
-	
-	@Override
-	public void onClick() {
-		advanceStage();
-	}
-
-	@Override
-	public boolean isSelected() {
-		// Need to implement
-		return false;
-	}
-
-	@Override
-	public void deselect() {
-		// Need to implement
-
-	}
-
-	@Override
-	public Button getButton() {
-		// Need to implement
-		return null;
-	}
-
-	@Override
-	public void buttonWasPressed() {
-		// Need to implement
-
 	}
 	
 	@Override
@@ -124,13 +78,13 @@ public abstract class AbstractGardenPlant extends AbstractEntity implements Clic
 			break;
 		}
 		
-		setThisTexture();
+		master.setThisTexture();
 	}
 	
 	/**
 	 * Sets the texture based on the plant's stage of growth
 	 */
-	public abstract void setThisTexture();
+	public abstract String getThisTexture();
 	
 	/**
 	 * Sets up the loot rarity map for a plant
