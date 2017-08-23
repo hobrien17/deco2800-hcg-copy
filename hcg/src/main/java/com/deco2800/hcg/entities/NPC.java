@@ -22,8 +22,9 @@ public abstract class NPC extends Character implements Clickable {
     public String sName;
     public NPC.Type NPCType;
 
+
     public NPC(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
-               boolean centered,String fName,String sName,NPC.Type NPCType) {
+               boolean centered,String fName,String sName,NPC.Type NPCType,String texture) {
 
         //Set up the parent constructor
         super(posX,posY,posZ,xLength,yLength,zLength,centered);
@@ -43,16 +44,20 @@ public abstract class NPC extends Character implements Clickable {
             this.movementSpeed = 0.02f;
         }
 
+        System.out.println("foo");
+        setTexture(texture);
+
     }
 
     private void interact() {
         //What do we do with this NPC on click?
         if (NPCType == Type.Shop) {
             //Open Shop Menu
+            System.out.print("NPC SHOP CLICKED");
         } else if (NPCType == Type.Quest) {
-            //Open Quest Menu
+            System.out.print("NPC QUEST CLICKED");
         } else {
-            //Do we even do anything?
+            System.out.print("NPC OTHER CLICKED");
         }
     }
 

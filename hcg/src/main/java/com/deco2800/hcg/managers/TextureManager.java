@@ -39,7 +39,8 @@ public class TextureManager extends Manager {
 		textureMap.put("spacman-swim", new Texture("resources/sprites/player/spacman-swim.png"));
         textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
         textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
-    }
+		textureMap.put("npc", new Texture("resources/sprites/misc/npc.png"));
+	}
 
 	/**
 	 * Gets a texture object for a given string id

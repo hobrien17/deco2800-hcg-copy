@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.renderers.Renderable;
+import com.deco2800.hcg.entities.NPC;
 
 import java.util.Random;
 
@@ -35,7 +36,12 @@ public class DemoWorld extends AbstractWorld {
 		for(int i = 0; i < 20; i++) {
 			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0));
 		}
-		
+
+		//Add an example entity
+		this.addEntity(new NPC(10,10,10,10,10,10, true,"Jane","Jensen", NPC.Type.Shop, "tower") {});
+
+
+
 	}
 
 	/**
