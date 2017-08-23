@@ -4,19 +4,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.SunflowerSeed;
+import com.deco2800.hcg.entities.garden_entities.seeds.IceSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ItemManager;
 
 /**
- * Represents a basic plant which drops basic loot
+ * Represents the Ice plant which drops random loot
  * 
- * @author Henry O'Brien
+ * @author Reilly Lundin
  *
  */
-public class Sunflower extends AbstractGardenPlant {
+public class Ice extends AbstractGardenPlant {
 
-	public Sunflower(float posX, float posY, float posZ) {
+	public Ice(float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false, Stage.SPROUT);
 		this.advanceStage();
 		this.advanceStage();
@@ -26,13 +26,16 @@ public class Sunflower extends AbstractGardenPlant {
 	public void setThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			this.setTexture("sunflower_01");
+			//Put in proper sprite
+			//this.setTexture("");
 			break;
 		case SMALL:
-			this.setTexture("sunflower_02");
+			//Put in proper sprite
+			//this.setTexture("");
 			break;
 		case LARGE:
-			this.setTexture("sunflower_03");
+			//Put in proper sprite
+			//this.setTexture("");
 			break;
 		}
 
@@ -48,7 +51,7 @@ public class Sunflower extends AbstractGardenPlant {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 		
-		lootRarity.put("sunflower_seed", 1.0);
+		lootRarity.put("ice_seed", 1.0);
 		
 		double sum = 0.0;
 		for(Double rarity : lootRarity.values()) {
