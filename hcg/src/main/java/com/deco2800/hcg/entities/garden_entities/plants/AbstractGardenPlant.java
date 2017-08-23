@@ -91,6 +91,11 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
 	abstract void setupLoot();
 	
 
+	/**
+	 * Gets a list of all possible loot dropped by this plant
+	 * 
+	 * @return An array of all possible loot
+	 */
 	public String[] getLoot() {
 		return lootRarity.keySet().toArray(new String[lootRarity.size()]);
 	}

@@ -8,6 +8,12 @@ import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant.Stage;
 import com.deco2800.hcg.util.Box3D;
 
+/**
+ * An entity that contains a plant
+ * 
+ * @author Henry O'Brien
+ *
+ */
 public class Pot extends AbstractEntity implements Clickable, Selectable  {
 	
 	AbstractGardenPlant plant;
@@ -48,15 +54,27 @@ public class Pot extends AbstractEntity implements Clickable, Selectable  {
 		
 	}
 	
-	public void addPlant(AbstractGardenPlant plant) {
-		this.plant = plant;
-		setThisTexture();
+	/**
+	 * Adds a plant to the pot, if empty
+	 * 
+	 * @param the plant to be added
+	 * @return true if the plant was added, false if it could not be added
+	 */
+	public boolean addPlant(AbstractGardenPlant plant) {
+		if(plant == null) {
+			this.plant = plant;
+			setThisTexture();
+			return true;
+		}
+		return false;
+		
 	}
 	
+	/**
+	 * Sets the texture of the pot based on the plant inside
+	 */
 	public void setThisTexture() {
-		System.out.println(plant);
 		if(plant == null) {
-			System.out.println("hello");
 			this.setTexture("pot");
 		} else {
 			this.setTexture(plant.getThisTexture());
