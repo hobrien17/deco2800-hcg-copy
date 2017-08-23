@@ -2,6 +2,7 @@ package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.renderers.Renderable;
 
@@ -28,8 +29,12 @@ public class DemoWorld extends AbstractWorld {
 		this.setWidth(this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(this.getMap().getProperties().get("height", Integer.class));
 
-		this.addEntity(new Tower(8, 8, 0));
-		this.addEntity(new Sunflower(20, 10, 0));
+		Pot[] pots = new Pot[4];
+		for(int i = 0; i < 4; i++) {
+			pots[i] = new Pot(20, 10 + 2*i, 0);
+			this.addEntity(pots[i]);
+		}
+		pots[0].addPlant(new Sunflower(pots[0]));
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {

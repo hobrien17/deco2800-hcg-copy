@@ -336,7 +336,7 @@ public class Player extends Character implements Tickable {
 	 */
 	private void ifSwim(String name) {
 		if (name.equals("water-deep")) {
-			this.setTexture("spacman-swim");
+			this.setTexture("spacman_swim");
 			playSound("swimming");
 			
 		} else {
