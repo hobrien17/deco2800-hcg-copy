@@ -27,18 +27,19 @@ public class TextureManager extends Manager {
 	 */
 	private Map<String, Texture> textureMap = new HashMap<String, Texture>();
 
-	/**
-	 * Constructor Currently loads up all the textures but probably
-	 * shouldn't/doesn't need to.
-	 */
-	public TextureManager() {
-		textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
-		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
-		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
+    /**
+     * Constructor
+     * Currently loads up all the textures but probably shouldn't/doesn't
+     * need to.
+     */
+    public TextureManager() {
+        textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
+        textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
+        textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
 		textureMap.put("spacman-swim", new Texture("resources/sprites/player/spacman-swim.png"));
-		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
-		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
-	}
+        textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
+        textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
+    }
 
 	/**
 	 * Gets a texture object for a given string id

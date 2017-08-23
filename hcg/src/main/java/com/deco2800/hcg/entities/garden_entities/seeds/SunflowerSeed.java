@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.garden_entities.seeds;
 
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
-import com.deco2800.hcg.entities.garden_entities.plants.BasicPlant;
 
 public class SunflowerSeed extends AbstractSeed {
 

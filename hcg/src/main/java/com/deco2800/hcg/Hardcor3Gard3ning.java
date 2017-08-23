@@ -3,6 +3,7 @@ package com.deco2800.hcg;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -24,7 +25,6 @@ import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.worlds.DemoWorld;
-import com.deco2800.hcg.worlds.GardenDemo;
 import com.deco2800.hcg.entities.Player;
 
 /**
@@ -76,7 +76,10 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		textureManager.saveTexture("seed", "resources/sprites/seeds/Battle seed.png");
 		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
 		textureManager.saveTexture("plant2", "resources/sprites/plants/plant2.png");
-
+		textureManager.saveTexture("sunflower_01", "resources/sprites/plants/sunflower_01.png");
+		textureManager.saveTexture("sunflower_02", "resources/sprites/plants/sunflower_02.png");
+		textureManager.saveTexture("sunflower_03", "resources/sprites/plants/sunflower_03.png");
+		
 		/**
 		 *	Set up new stuff for this game
 		 */
