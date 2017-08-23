@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -24,6 +25,7 @@ import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.worlds.DemoWorld;
 import com.deco2800.hcg.worlds.WorldMapWorld;
+import com.deco2800.hcg.worlds.GardenDemo;
 import com.deco2800.hcg.entities.Player;
 
 /**
@@ -50,6 +52,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	private MouseHandler mouseHandler;
 	private PlayerManager playerManager;
 	private TextureManager textureManager;
+	private TimeManager timeManager;
 
 	private Stage stage;
 	private Window window;
@@ -59,6 +62,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 	private long gameTickPeriod = 20;  // Tickrate = 50Hz
 	private long nextGameTick = TimeUtils.millis() + gameTickPeriod;
 
+	private Label clockLabel;
 	/**
 	 * Creates the required objects for the game to start.
 	 * Called when the game first starts
@@ -72,6 +76,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		textureManager.saveTexture("tower", "resources/sprites/misc/tower.png");
 		textureManager.saveTexture("seed", "resources/sprites/misc/seed.png");
 		textureManager.saveTexture("plant", "resources/sprites/plants/plant.png");
+		textureManager.saveTexture("plant2", "resources/sprites/plants/plant2.png");
 
 		/* currently, level portal dont have any texture. Using "tower" as temporary */
 		textureManager.saveTexture("levelPortal", "resources/sprites/misc/tower.png");
@@ -92,10 +97,14 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		
 		/* Create a player manager. */
 		playerManager = (PlayerManager)GameManager.get().getManager(PlayerManager.class);
-		
-		playerManager.setPlayer(new Player(5, 10, 0));
+
+		Player player = new Player(5, 10, 0);
+		player.initialiseNewPlayer(5,5,5,5,5,20);
+		playerManager.setPlayer(player);
 		GameManager.get().getWorld().addEntity(playerManager.getPlayer());
-		
+
+		/* Create a time manager. */
+		timeManager = (TimeManager) GameManager.get().getManager(TimeManager.class);
 
 		/**
 		 * Setup the game itself
@@ -117,8 +126,10 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Add another button to the menu */
 		Button anotherButton = new TextButton("Play Duck Sound", skin);
 
-
-
+		/* Add a label for the clock; change to be prettier later. */
+		clockLabel = new Label(timeManager.getDateTime(), skin);
+		timeManager.setLabel(clockLabel);
+		
 		/* Add a programatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
@@ -140,6 +151,13 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Add all buttons to the menu */
 		window.add(button);
 		window.add(anotherButton);
+
+
+
+		window.add(clockLabel);
+
+
+
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
@@ -221,6 +239,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 						((Tickable) e).onTick(gameTickCount);
 					}
 				}
+				timeManager.onTick(gameTickCount);
 
 				// Increment tick count
 				gameTickCount += 1;

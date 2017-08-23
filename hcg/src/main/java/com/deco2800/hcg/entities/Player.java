@@ -19,14 +19,14 @@ import java.util.List;
  * @author leggy
  *
  */
-public class Player extends AbstractEntity implements Tickable {
+public class Player extends Character implements Tickable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
-	private float movementSpeed;
-	private float speedx;
-	private float speedy;
 	boolean collided;
+	private int xpThreshold;
+	float lastSpeedX;
+	float lastSpeedY;
 
     /**
      * A boolean to check if this player is in the WorldMap or not
@@ -45,10 +45,8 @@ public class Player extends AbstractEntity implements Tickable {
 	 *            The z-coordinate.
 	 */
 	public Player(float posX, float posY, float posZ) {
-		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
-		movementSpeed = 0.1f;
-		this.speedx = 0.0f;
-		this.speedy = 0.0f;
+
+		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
 
@@ -58,6 +56,11 @@ public class Player extends AbstractEntity implements Tickable {
 
 		collided = false;
 		this.setTexture("spacman");
+		
+		// for slippery
+		lastSpeedX = 0;
+		lastSpeedY = 0;
+
 	}
 
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
@@ -87,32 +90,105 @@ public class Player extends AbstractEntity implements Tickable {
 		float newPosX = this.getPosX();
 		float newPosY = this.getPosY();
 
-		if (speedx == 0.0f && speedy == 0.0f) {
-			return;
-		}
+		//if (speedX == 0.0f && speedY == 0.0f) {
+		//	return;
+
+		// Center the camera on the player
+		updateCamera();
 
 		// set speed is the multiplier due to the ground
 		float speed = 1.0f;
 		collided = false;
-
+		float slippery = 0;
+		
+		
 		// current world and layer
+		TiledMapTileLayer layer;
 		AbstractWorld world = GameManager.get().getWorld();
 
 		// get speed of current tile. this is done before checking if a tile 
-		// exists so a slow down tile next to the edge wouldn't cause
-		// problems. also note that layer should never be null here,
-		// provided the player starts somewhere valid.
-		TiledMapTileLayer layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
-		speed = layer.getProperties().get("speed", float.class);
-		String name = layer.getProperties().get("name", String.class);
+		// exists so a slow down tile next to the edge wouldn't cause problems.
+		if (world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX) == null) {
+			collided = true;
+		}
+		else {
+			// set the layer, and get the speed of the tile on the layer. Also name for logging.
+			layer = world.getTiledMapTileLayerAtPos((int)newPosY, (int)newPosX);
+			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
+			String name = layer.getProperties().get("name", String.class);
+			
+			// see if current tile is slippery. Save the slippery value if it is
+			if (layer.getProperties().get("slippery", float.class) != null) {
+				slippery = layer.getProperties().get("slippery", float.class);
+			}
+			
+			// log
+			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
 
-		// log
-		LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
+		}
+		
+		// handle slippery movement
+		if (slippery != 0) {
+			
+			// first factor is for slowing down, second is for speeding up
+			float slipperyFactor = slippery * 0.005f;
+			float slipperyFactor2 = slippery * 0.06f;
 
-		// set new postition based on this speed
-		newPosX += speedx * speed;
-		newPosY += speedy * speed;
+			// speed up user in X dirn
+			if (speedX > 0) {
+				lastSpeedX = Math.min(lastSpeedX + speedX * speed* slipperyFactor2, speedX * speed);
+			}
+			else if (speedX < 0) {
+				lastSpeedX = Math.max(lastSpeedX + speedX * speed * slipperyFactor2, speedX * speed);
+			}
+			else {
+				// slow down user
+				if (Math.abs(lastSpeedX) > slipperyFactor) {
+					lastSpeedX = lastSpeedX - Math.signum(lastSpeedX) * slipperyFactor;
+				}
+				else {
+					// ensure that speed eventually goes to zero
+					lastSpeedX = 0;
+				}
+			}
+			
+			// speed up user in Y dirn
+			if (speedY > 0) {
+				lastSpeedY = Math.min(lastSpeedY + speedY * speed * slipperyFactor2, speedY * speed);
+			}
+			else if (speedY < 0) {
+				lastSpeedY = Math.max(lastSpeedY + speedY * speed * slipperyFactor2, speedY * speed);
+			}
+			else {
+				// slow down user
+				if (Math.abs(lastSpeedY) > slipperyFactor) {
+					lastSpeedY = lastSpeedY - Math.signum(lastSpeedY) * slipperyFactor;
+				}
+				else {
+					lastSpeedY = 0;
+				}
+			}
+			
+		}
+		else {
+			// non slippery movement
+			lastSpeedX = 0;
+			lastSpeedY = 0;
+			
+			// store our last speed 
+			if (speedX != 0) {
+				lastSpeedX = speedX * speed;
+			}
+			if (speedY != 0) {
+				lastSpeedY = speedY * speed;
+			}
 
+		}
+		
+		// add this speed to our current position
+		newPosX += lastSpeedX;
+		newPosY += lastSpeedY;
+		
 		// now check if a tile exists at this new position
 		if (world.getTiledMapTileLayerAtPos((int)(newPosY), (int)(newPosX)) == null){
 			collided = true;
@@ -138,6 +214,45 @@ public class Player extends AbstractEntity implements Tickable {
 		if (!collided) {
 			this.setPosition(newPosX, newPosY, 1);
 		}
+
+		checkXp();
+	}
+
+	/**
+	 * Initialise a new player. Will be used after the user has created their character in the character creation screen
+	 * @param strength
+	 * @param vitality
+	 * @param agility
+	 * @param charisma
+	 * @param intellect
+	 * @param meleeSkill
+	 */
+	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
+									int meleeSkill) {
+		setAttributes(strength, vitality, agility, charisma, intellect);
+		setSkills(meleeSkill);
+	}
+
+	/**
+	 * Checks if the player's xp has reached the amount of xp required for levelling up
+	 */
+	private void checkXp() {
+		if (xp >= xpThreshold) {
+			levelUp();
+		}
+	}
+
+	/**
+	 * Increases the player's level by one, increases the xpThreshold.
+	 */
+	private void levelUp() {
+		xpThreshold *= 1.2;
+		level++;
+		//TODO: enter level up screen
+	}
+
+	public void gainXp(int xp){
+		this.xp += xp;
 	}
 
 	/**
@@ -170,20 +285,20 @@ public class Player extends AbstractEntity implements Tickable {
 
 		switch (keycode) {
 		case Input.Keys.W:
-			speedy -= movementSpeed;
-			speedx += movementSpeed;
+			speedY -= movementSpeed;
+			speedX += movementSpeed;
 			break;
 		case Input.Keys.S:
-			speedy += movementSpeed;
-			speedx -= movementSpeed;
+			speedY += movementSpeed;
+			speedX -= movementSpeed;
 			break;
 		case Input.Keys.A:
-			speedx -= movementSpeed;
-			speedy -= movementSpeed;
+			speedX -= movementSpeed;
+			speedY -= movementSpeed;
 			break;
 		case Input.Keys.D:
-			speedx += movementSpeed;
-			speedy += movementSpeed;
+			speedX += movementSpeed;
+			speedY += movementSpeed;
 			break;
 		default:
 			break;
@@ -203,24 +318,48 @@ public class Player extends AbstractEntity implements Tickable {
 
 		switch (keycode) {
 		case Input.Keys.W:
-			speedy += movementSpeed;
-			speedx -= movementSpeed;
+			speedY += movementSpeed;
+			speedX -= movementSpeed;
 			break;
 		case Input.Keys.S:
-			speedy -= movementSpeed;
-			speedx += movementSpeed;
+			speedY -= movementSpeed;
+			speedX += movementSpeed;
 			break;
 		case Input.Keys.A:
-			speedx += movementSpeed;
-			speedy += movementSpeed;
+			speedX += movementSpeed;
+			speedY += movementSpeed;
 			break;
 		case Input.Keys.D:
-			speedx -= movementSpeed;
-			speedy -= movementSpeed;
+			speedX -= movementSpeed;
+			speedY -= movementSpeed;
 			break;
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * Updates the game camera so that it is centered on the player
+	 */
+	private void updateCamera() {
+
+		int worldLength = GameManager.get().getWorld().getLength();
+		int worldWidth = GameManager.get().getWorld().getWidth();
+		int tileWidth = (int) GameManager.get().getWorld().getMap().getProperties().get("tilewidth");
+		int tileHeight = (int) GameManager.get().getWorld().getMap().getProperties().get("tileheight");
+
+		float baseX = tileWidth * (worldWidth / 2.0f - 0.5f);
+		float baseY = -tileHeight / 2 * worldLength + tileHeight / 2f;
+
+		float cartX = this.getPosX();
+		float cartY = (worldWidth-1) - this.getPosY();
+
+		float isoX = baseX + ((cartX - cartY) / 2.0f * tileWidth);
+		float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
+
+		GameManager.get().getCamera().position.x = isoX;
+		GameManager.get().getCamera().position.y = isoY;
+		GameManager.get().getCamera().update();
 	}
 
 	@Override
