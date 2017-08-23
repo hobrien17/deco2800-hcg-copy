@@ -1,52 +1,54 @@
 package com.deco2800.hcg.trading;
 
+import com.deco2800.hcg.items.Item;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class GeneralShop implements Shop{
-    int charisma = 0;
-    Map<Stock, Integer> shopStock = new HashMap<>();
+    int modifier = 0;
+    Map<Item, Integer> shopStock = new HashMap<>();
 
     @Override
-    public void open(int charisma) {
-        this.charisma = charisma;
+    public void open(int modifier) {
+        this.modifier = modifier;
     }
 
     @Override
-    public int inStock(Stock stock){
-        return shopStock.get(stock).intValue();
+    public int inStock(Item item){
+        return shopStock.get(item).intValue();
     }
 
     @Override
-    public void addStock(Stock stock, int available) {
-        shopStock.put(stock, new Integer(available));
+    public void addStock(Item item, int available) {
+        shopStock.put(item, new Integer(available));
     }
 
     @Override
-    public void addStock(Stock[] stock, int[] available) {
-        for (int i = 0; i < stock.length; i++) {
-            shopStock.put(stock[i], new Integer(available[i]));
+    public void addStock(Item[] items, int[] available) {
+        for (int i = 0; i < items.length; i++) {
+            shopStock.put(items[i], new Integer(available[i]));
         }
     }
 
     @Override
-    public Map<Stock, Integer> getStock() {
+    public Map<Item, Integer> getStock() {
         return shopStock;
     }
 
     @Override
-    public Stock buyStock(Stock stock) {
-        shopStock.put(stock, new Integer(shopStock.get(stock) - 1));
-        return stock;
+    public Item buyStock(Item item) {
+        shopStock.put(item, new Integer(shopStock.get(item) - 1));
+        return item;
     }
 
     @Override
-    public Stock[] buyStock(Stock stock, int number) {
-        return new Stock[0];
+    public Item[] buyStock(Item item, int number) {
+        return new Item[0];
     }
 
     @Override
-    public void sellStock(Stock stock) {
-        shopStock.put(stock, new Integer(shopStock.get(stock) + 1));
+    public void sellStock(Item item) {
+        shopStock.put(item, new Integer(shopStock.get(item) + 1));
     }
 }
