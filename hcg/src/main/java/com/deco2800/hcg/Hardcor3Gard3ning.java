@@ -7,10 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -20,6 +23,7 @@ import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.renderers.Renderer;
@@ -106,6 +110,12 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth()*32, 0);
 
 		/**
+		 * Setup multiplayer
+		 */
+		NetworkState networkState = new NetworkState();
+		networkState.startThreads();
+		
+		/**
 		 * Setup GUI
 		 */
 		stage = new Stage(new ScreenViewport());
@@ -122,6 +132,11 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		clockLabel = new Label(timeManager.getDateTime(), skin);
 		timeManager.setLabel(clockLabel);
 		
+		/* Add a textfield and two buttons for multiplayer */
+		Button hostButton = new TextButton("host", skin);
+		TextField hostField = new TextField("", skin);
+		Button joinButton = new TextButton("Join", skin);
+		
 		/* Add a programatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
@@ -137,25 +152,47 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 				soundManager.playSound("quack");
 			}
 		});
+		
+		/* Add a handler to host a game */
+		hostButton.addListener(new ChangeListener( ) {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				networkState.host();
+			}
+		});
+		
+		/* Add a handler to join a player */
+		joinButton.addListener(new ChangeListener( ) {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				networkState.join(hostField.getText());
+			}
+		});
 
-
-
-		/* Add all buttons to the menu */
+		/* Add all elements to the menu */
 		window.add(button);
 		window.add(anotherButton);
-
-
-
 		window.add(clockLabel);
-
-
-
+		window.add(hostButton);
+		window.add(hostField);
+		window.add(joinButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
 
 		/* Add the window to the stage */
 		stage.addActor(window);
+		
+		// textfield focus hack
+		// from https://github.com/libgdx/libgdx/issues/2173
+		stage.getRoot().addListener(new InputListener() {
+		    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+		        if (!(event.getTarget() instanceof TextField)) {
+		        		stage.setKeyboardFocus(null);
+		        }
+		        return false;
+		    }
+		});
 
 
 		/**
