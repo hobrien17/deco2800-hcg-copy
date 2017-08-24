@@ -10,16 +10,16 @@ import java.util.ArrayList;
  */
 public class InputManager extends Manager implements InputProcessor {
 
-	private ArrayList<KeyDownObserver> keyDownListeners = new ArrayList<>();
+    private ArrayList<KeyDownObserver> keyDownListeners = new ArrayList<>();
 
-	private ArrayList<KeyUpObserver> keyUpListeners = new ArrayList<>();
+    private ArrayList<KeyUpObserver> keyUpListeners = new ArrayList<>();
 
-	private ArrayList<TouchDownObserver> touchDownListeners = new ArrayList<>();
+    private ArrayList<TouchDownObserver> touchDownListeners = new ArrayList<>();
 
-	private ArrayList<TouchUpObserver> touchUpListeners = new ArrayList<>();
+    private ArrayList<TouchUpObserver> touchUpListeners = new ArrayList<>();
 
-	private ArrayList<TouchDraggedObserver> touchDragegdListeners = new ArrayList<>();
-
+    private ArrayList<TouchDraggedObserver> touchDragegdListeners = new ArrayList<>();
+    
 	private ArrayList<MouseMovedObserver> mouseMovedListeners = new ArrayList<>();
 
 	private ArrayList<ScrollObserver> scrollListeners = new ArrayList<>();

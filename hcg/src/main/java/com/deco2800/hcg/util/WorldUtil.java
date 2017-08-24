@@ -39,6 +39,14 @@ public class WorldUtil {
 		}
 	}
 
+	/**
+	 * Finds the closest entity of given type to a position within a delta
+	 * 
+	 * @param x
+	 * @param y
+	 * @param delta
+	 * @return Optional of WorldEntity
+	 */
 	public static Optional<AbstractEntity> closestEntityToPosition(float x, float y, float delta, Class<?> type) {
 		AbstractEntity result = null;
 		double distance = Double.MAX_VALUE;

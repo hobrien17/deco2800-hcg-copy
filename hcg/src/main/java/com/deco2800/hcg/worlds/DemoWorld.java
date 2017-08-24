@@ -12,18 +12,18 @@ import java.util.Random;
 
 /**
  * Initial world using preset world file.
- * 
- * @author leggy
  *
+ * @author leggy
  */
 public class DemoWorld extends AbstractWorld {
 
-	/**
-	 * Constructor for DemoWorld
-	 */
-	public DemoWorld() {
-		/* Load up the map for this world */
-		this.map = new TmxMapLoader().load("resources/maps/initial-map-test.tmx");
+    /**
+     * Constructor for DemoWorld
+     */
+    public DemoWorld() {
+        /* Load up the map for this world */
+        this.map = new TmxMapLoader()
+                .load("resources/maps/initial-map-test.tmx");
 
 		/*
 		 * Grab the width and length values from the map file to use as the world size

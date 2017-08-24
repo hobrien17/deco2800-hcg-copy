@@ -10,9 +10,8 @@ import com.deco2800.hcg.managers.ItemManager;
 
 /**
  * Represents the Water plant which drops random loot
- * 
- * @author Reilly Lundin
  *
+ * @author Reilly Lundin
  */
 public class Water extends AbstractGardenPlant {
 
@@ -54,5 +53,4 @@ public class Water extends AbstractGardenPlant {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

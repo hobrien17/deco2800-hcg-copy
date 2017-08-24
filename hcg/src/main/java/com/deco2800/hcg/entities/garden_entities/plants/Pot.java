@@ -10,9 +10,8 @@ import com.deco2800.hcg.util.Box3D;
 
 /**
  * An entity that contains a plant
- * 
- * @author Henry O'Brien
  *
+ * @author Henry O'Brien
  */
 public class Pot extends AbstractEntity implements Clickable, Selectable  {
 	
@@ -80,5 +79,4 @@ public class Pot extends AbstractEntity implements Clickable, Selectable  {
 			this.setTexture(plant.getThisTexture());
 		}
 	}
-	
 }

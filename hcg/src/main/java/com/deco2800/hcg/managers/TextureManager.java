@@ -15,7 +15,7 @@ import java.util.Map;
  * With this in mind don't load textures you're not going to use. Textures that
  * are not used should probably (at some point) be removed from the list and
  * then read from disk when needed again using some type of reference counting
- * 
+ *
  * @Author Tim Hadwen
  */
 public class TextureManager extends Manager {
@@ -103,5 +103,4 @@ public class TextureManager extends Manager {
 			textureMap.put(id, new Texture(filename));
 		}
 	}
-
 }
