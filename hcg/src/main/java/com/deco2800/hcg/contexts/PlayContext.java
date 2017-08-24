@@ -53,6 +53,8 @@ public class PlayContext extends Context {
     private Window window;
     private Label clockLabel;
 
+    private Window contextTestingWindow;
+
     /**
      * Create the PlayContext
      */
@@ -113,8 +115,38 @@ public class PlayContext extends Context {
         window.setPosition(0,
                 stage.getHeight()); // Place it in the top left of the screen
 
-		/* Add the window to the stage */
+
+        contextTestingWindow = new Window("Context Testing", skin);
+
+        /* Add a WorldMap button to the menu */
+        Button worldMapButton = new TextButton("WorldMap", skin);
+        Button popButton = new TextButton("Pop Context", skin);
+
+        contextTestingWindow.add(worldMapButton);
+        contextTestingWindow.add(popButton);
+        contextTestingWindow.pack();
+        contextTestingWindow.setMovable(false);
+        contextTestingWindow.setPosition(0, 0);
+        /* Add a programmatic listener to the quit button */
+        worldMapButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                contextManager.pushContext(new WorldMapContext());
+            }
+        });
+
+
+        /* Add a programmatic listener to the quit button */
+        popButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                contextManager.popContext();
+            }
+        });
+
+        /* Add the window to the stage */
         stage.addActor(window);
+        stage.addActor(contextTestingWindow);
 
 		/*
          * Setup inputs for the buttons and the game itself

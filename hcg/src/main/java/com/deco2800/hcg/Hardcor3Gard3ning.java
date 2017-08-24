@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.deco2800.hcg.contexts.PlayContext;
+import com.deco2800.hcg.contexts.WorldMapContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.handlers.MouseHandler;
@@ -18,11 +18,11 @@ import com.deco2800.hcg.worlds.DemoWorld;
 public class Hardcor3Gard3ning extends Game {
 
     private GameManager gameManager;
+    private ContextManager contextManager;
     private SoundManager soundManager;
     private PlayerManager playerManager;
     private TextureManager textureManager;
     private TimeManager timeManager;
-    private ContextManager contextManager;
 
     private MouseHandler mouseHandler;
 
@@ -39,6 +39,9 @@ public class Hardcor3Gard3ning extends Game {
         // Create game manager
         gameManager = GameManager.get();
 
+		/* Create a context manager, and set is as the screen target */
+        contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+        this.setScreen(contextManager);
         // Create a texture manager
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
@@ -48,25 +51,12 @@ public class Hardcor3Gard3ning extends Game {
 		/* Create a time manager. */
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
 
-		/* Create a context manager, and set is as the screen target */
-        contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
-        this.setScreen(contextManager);
-
-		/* Create a player manager. */
+        /* Create a player manager. */
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
-        //TODO everything below this line doesn't belong here
+        // Eventually will have a base context to call as init context.
+        contextManager.pushContext(new WorldMapContext());
 
-		/* Create an example world for the engine */
-        gameManager.setWorld(new DemoWorld());
-
-        contextManager.pushContext(new PlayContext());
-
-        // Set up a player
-        Player player = new Player(5, 10, 0);
-        player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
-        playerManager.setPlayer(player);
-        gameManager.getWorld().addEntity(playerManager.getPlayer());
     }
 
     /**
