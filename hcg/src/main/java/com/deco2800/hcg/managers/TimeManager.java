@@ -2,6 +2,15 @@ package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
+/**
+ * An 'Observer' class to manage the game's internal system of time. Time is initialised to
+ * 01/01/2047 00:00:00 when the game is run and increments at the rate of 1 second per game tick
+ * (approximately 1 minute real time is equal to 1 hour in the game). Time can be accessed
+ * publicly but not changed, only paused and unpaused.
+ *
+ * @author Team 7 (Organic Java)
+ */
+
 public class TimeManager extends Manager implements TickableManager {
 
 	private int day;
@@ -16,7 +25,8 @@ public class TimeManager extends Manager implements TickableManager {
 	private Label label;
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-	private boolean timePaused = false;
+	private boolean timePaused;
+	private boolean isNight;
 
 	/**
 	 * Constructor: Initializes day to 01/01/2047 and elapsed time to 0 on
@@ -31,6 +41,7 @@ public class TimeManager extends Manager implements TickableManager {
 		this.year = 2047;
 		this.timeElapsed = 0;
 		this.label = null;
+		this.timePaused = false; // this will need to be set to true when we have some sort of 'start screen' happening
 	}
 
 	/**
@@ -186,11 +197,10 @@ public class TimeManager extends Manager implements TickableManager {
 	 */
 	public void nextDay() {
 		if (this.month == 2 && this.day == 28 && this.isLeapYear(this.year)) {
-			this.day = 1;
-			this.month = 3;
+			this.day++;
 			return;
 		}
-		if (this.day == dayCount[this.month - 1]) {
+		if (this.day >= dayCount[this.month - 1]) {
 			this.day = 1;
 			if (this.month == 12) {
 				this.month = 1;
@@ -224,6 +234,8 @@ public class TimeManager extends Manager implements TickableManager {
 		this.minutes = 0;
 		if (this.hours != 24) {
 			this.hours++;
+			// check if nighttime every hour
+			checkNight();
 			return;
 		}
 
@@ -253,6 +265,25 @@ public class TimeManager extends Manager implements TickableManager {
 	 */
 	public void unpauseTime() {
 		timePaused = false;
+	}
+
+	/**
+	 * Return true iff nighttime.
+	 */
+	public boolean isNight() {
+		return isNight;
+	}
+
+	/**
+	 * Updates internal boolean tracking day/night cycle.
+	 * Nighttime between 7:00pm and 5:00am
+	 */
+	public void checkNight() {
+		if (this.hours > 18 || this.hours < 5) {
+			isNight = true;
+			return;
+		}
+		isNight = false;
 	}
 
 	/**
