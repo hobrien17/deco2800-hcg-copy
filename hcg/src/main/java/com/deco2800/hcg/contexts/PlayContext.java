@@ -1,6 +1,7 @@
 package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -69,6 +70,9 @@ public class PlayContext extends Context {
                 .getManager(PlayerManager.class);
         contextManager = (ContextManager) gameManager
                 .getManager(ContextManager.class);
+
+        InputManager input = (InputManager) GameManager.get()
+                .getManager(InputManager.class);
 
 		/* Setup the camera and move it to the center of the world */
         GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -154,9 +158,9 @@ public class PlayContext extends Context {
         /* Setup an Input Multiplexer so that input can be handled by both the UI and the game */
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(stage); // Add the UI as a processor
-        InputManager input = (InputManager) GameManager.get()
-                .getManager(InputManager.class);
         inputMultiplexer.addProcessor(input);
+
+        input.addKeyDownListener(this::handleKeyDown);
 
 		/*
 		 * Set up some input handlers for panning with dragging.
@@ -295,5 +299,12 @@ public class PlayContext extends Context {
     @Override
     public boolean ticksRunning() {
         return unpaused;
+    }
+
+    // Handle switching to World Map by pressing "m"
+    private void handleKeyDown(int keycode) {
+        if (keycode == Input.Keys.M) {
+            contextManager.pushContext(new WorldMapContext());
+        }
     }
 }

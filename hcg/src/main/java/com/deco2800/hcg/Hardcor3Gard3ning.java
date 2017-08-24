@@ -54,7 +54,7 @@ public class Hardcor3Gard3ning extends Game {
         /* Create a player manager. */
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
-        // Eventually will have a base context to call as init context.
+        // Eventually this first context should be the main menu.
         contextManager.pushContext(new WorldMapContext());
 
     }
