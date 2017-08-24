@@ -2,8 +2,10 @@ package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
+import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
+import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.renderers.Renderable;
 
 import java.util.Random;
@@ -35,6 +37,8 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(pots[i]);
 		}
 		pots[0].addPlant(new Sunflower(pots[0]));
+		pots[1].addPlant(new Water(pots[1]));
+		pots[2].addPlant(new Cactus(pots[2]));
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {

@@ -25,11 +25,11 @@ public class Cactus extends AbstractGardenPlant {
 	public String getThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			return null;
+			return "cactus_01";
 		case SMALL:
-			return null;
+			return "cactus_01";
 		case LARGE:
-			return null;
+			return "cactus_03";
 		}
 		return null;
 
