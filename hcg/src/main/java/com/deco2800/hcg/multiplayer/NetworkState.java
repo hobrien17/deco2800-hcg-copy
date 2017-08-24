@@ -4,6 +4,7 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Asynchronous UDP networking
@@ -14,7 +15,7 @@ import java.util.List;
 public final class NetworkState {
 	DatagramSocket socket;
 	List<Peer> peers;
-	List<byte[]> sendBuffer;
+	ConcurrentHashMap<Integer, Message> sendBuffer;
 	private NetworkSend networkSend;
 	private NetworkReceive networkReceive;
 	private Thread sendThread;
@@ -22,7 +23,7 @@ public final class NetworkState {
 	
 	public NetworkState() {
 		peers = new ArrayList<>();
-		sendBuffer = new ArrayList<>();
+		sendBuffer = new ConcurrentHashMap<>();
 		
 		networkSend = new NetworkSend(this);
 		networkReceive = new NetworkReceive(this);
@@ -42,9 +43,8 @@ public final class NetworkState {
 		receiveThread.start();
 	}
 	
-	public void send(byte[] message) {
-		System.out.println(new String(message));
-		sendBuffer.add(message);
+	public void send(Message message) {
+		sendBuffer.put(message.getId(), message);
 	}
 	
 	public void host() {
@@ -60,6 +60,6 @@ public final class NetworkState {
 	public void join(String hostname) {
 		Peer peer = new Peer(hostname);
 		peers.add(peer);
-		this.send(("JOINING " + hostname).getBytes());
+		this.send(new Message(MessageType.JOIN, "test".getBytes()));
 	}
 }

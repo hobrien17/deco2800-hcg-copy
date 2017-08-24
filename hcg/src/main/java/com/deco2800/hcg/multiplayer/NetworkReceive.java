@@ -21,7 +21,15 @@ public class NetworkReceive implements Runnable {
 			try {
 				DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
 				networkState.socket.receive(packet);
-				System.out.println(new String(packet.getData()));
+				Message message = new Message(packet.getData());
+				System.out.println("RECEIVED: " + message.getPayloadString());
+				/*
+				if (message.getType() == MessageType.CONFIRMATION) {
+					networkState.sendBuffer.remove(message.getPayloadInt());
+				} else {
+					networkState.send(new Message(MessageType.CONFIRMATION, message.getIdInBytes()));
+				}
+				*/
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

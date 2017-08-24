@@ -13,18 +13,22 @@ public class NetworkSend implements Runnable {
 	public void run() {
 		while (!Thread.interrupted()) {
 			if (!networkState.peers.isEmpty()) {
-				for (byte[] message : networkState.sendBuffer) {
+				for (Message message : networkState.sendBuffer.values()) {
 					try {
+						byte[] byteArray = message.toByteArray();
 						DatagramPacket packet = new DatagramPacket(
-						        message,
-						        message.length,
+								byteArray,
+								byteArray.length,
 						        InetAddress.getByName(networkState.peers.get(0).getHostname()),
 						        1337);
 						networkState.socket.send(packet);
+						System.out.println("SENT: " + message.getPayloadString());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
+				// temporary fix
+				networkState.sendBuffer.clear();
 			}
 		}
 	}
