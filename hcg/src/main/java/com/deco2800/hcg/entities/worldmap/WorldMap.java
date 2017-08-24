@@ -6,58 +6,57 @@ import java.util.List;
 // Somewhat incomplete class for now.
 // Will add more as game concept becomes more clear.
 public class WorldMap {
-	private int mapType; // <- possibility of map biomes?
+	private int worldType; // <- possibility of map biomes?
 	private List<MapNode> containedNodes;
-	private String mapBackgroundTexture;
-	private int mapPosition; // <- map position in the collection of worlds
-	private String mapSeed;
-	private int mapRowNumber;
-	private int mapColumnNumber;
+	private String worldBackgroundTexture;
+	private int worldPosition; // <- world position in the collection of worlds
+	private String worldSeed;
+	private int worldRowNumber;
+	private int worldColumnNumber;
 	
-	public WorldMap(int type, String texture, int position, int rows, int columns) {
-		mapType = type;
-		mapBackgroundTexture = texture;
-		mapPosition = position;
+	public WorldMap(int type, String texture, int position, int rows, int columns, List<MapNode> nodeList) {
+		worldType = type;
+		worldBackgroundTexture = texture;
+		worldPosition = position;
 		// blank initial seed
-		mapSeed = "";
-		mapRowNumber = rows;
-		mapColumnNumber = columns;
-		containedNodes = new ArrayList<>();
+		worldSeed = "";
+		worldRowNumber = rows;
+		worldColumnNumber = columns;
+		containedNodes = nodeList;
 	}
-
-	// temp constuctor only. Add so that worldmapui/MapGenerator class cancompile
-	public WorldMap(){
-
+	
+	//TEMPORARY CONSTRUCTOR! REMOVE ONCE IMPLEMENTATION IS FINISHED!
+	public WorldMap() {
+		
 	}
-
 
 	// ACCESSOR METHODS
-	public int getMapType() {
-		return mapType;
+	public int getWorldType() {
+		return worldType;
 	}
 	
 	public List<MapNode> getContainedNodes() {
 		return new ArrayList<>(containedNodes);
 	}
 	
-	public String getMapTexture() {
-		return mapBackgroundTexture;
+	public String getWorldTexture() {
+		return worldBackgroundTexture;
 	}
 	
-	public int getMapPosition() {
-		return mapPosition;
+	public int getWorldPosition() {
+		return worldPosition;
 	}
 	
-	public String getMapSeed() {
-		return mapSeed;
+	public String getWorldSeed() {
+		return worldSeed;
 	}
 	
-	public int getMapRows() {
-		return mapRowNumber;
+	public int getWorldRows() {
+		return worldRowNumber;
 	}
 	
-	public int getMapColumns() {
-		return mapColumnNumber;
+	public int getWorldColumns() {
+		return worldColumnNumber;
 	}
 	
 	// MANIPULATING METHODS
@@ -75,11 +74,11 @@ public class WorldMap {
 		}
 	}
 	
-	public void changeMapTexture(String newTexture) {
-		mapBackgroundTexture = newTexture;
+	public void changeWorldTexture(String newTexture) {
+		worldBackgroundTexture = newTexture;
 	}
 	
 	public void addSeed(String seed) {
-		mapSeed = seed;
+		worldSeed = seed;
 	}
 }

@@ -28,10 +28,10 @@ public class WorldMapWorld extends AbstractWorld {
         this.setWidth(this.getMap().getProperties().get("width", Integer.class));
         this.setLength(this.getMap().getProperties().get("height", Integer.class));
         Level level = new Level(this, 1, 1,1);  // <- Not sure the purpose of this level
-        this.addEntity(new MapNode(5, 5, "levelPortal", 0, level));
-        this.addEntity(new MapNode(10, 15, "levelPortal", 0, level));
-        this.addEntity(new MapNode(35, 25, "levelPortal", 0, level));
-        this.addEntity(new MapNode(45, 55, "levelPortal", 0, level));
+        this.addEntity(new MapNode(5, 5, "levelPortal", 0, level, true));
+        this.addEntity(new MapNode(10, 15, "levelPortal", 0, level, true));
+        this.addEntity(new MapNode(35, 25, "levelPortal", 0, level, true));
+        this.addEntity(new MapNode(45, 55, "levelPortal", 0, level, true));
 
 
 //

@@ -37,7 +37,7 @@ public class Level {
 		return difficulty;
 	}
 	
-	public int levelType() {
+	public int getLevelType() {
 		return levelType;
 	}
 	

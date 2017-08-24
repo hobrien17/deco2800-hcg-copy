@@ -35,7 +35,6 @@ public class DemoWorld extends AbstractWorld {
 		for(int i = 0; i < 20; i++) {
 			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0));
 		}
-		
 	}
 
 	/**

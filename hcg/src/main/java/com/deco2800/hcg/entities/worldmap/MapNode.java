@@ -20,16 +20,16 @@ public class MapNode extends AbstractEntity {
 	private int nodeRow;
 	/* Type of node to display
 	 * 0 for safe node.
-	 * 1 for hidden node (not yet discovered).
-	 * 2 for discovered node.
-	 * 3 for cleared node.
-	 * 4 for boss node.
+	 * 1 for standard node.
+	 * 2 for cleared node.
+	 * 3 for boss node.
 	 */
 	private int nodeType;
 	private Level linkedLevel;
 	private boolean selected;
+	private boolean isDiscovered;
 	
-	public MapNode(int column, int row, String texture, int type, Level level) {
+	public MapNode(int column, int row, String texture, int type, Level level, boolean discovered) {
 		super(column * COLUMN_OFFSET, row * ROW_OFFSET, 0.0f, 1, 1, 1);
 		nodeTexture = texture;
 		this.setTexture(nodeTexture); // to render the node on the world
@@ -42,6 +42,7 @@ public class MapNode extends AbstractEntity {
 		previousNodes = new ArrayList<>();
 		proceedingNodes = new ArrayList<>();
 		selected = false;
+		isDiscovered = discovered;
 	}
 	
 	// ACCESSOR METHODS
@@ -83,6 +84,10 @@ public class MapNode extends AbstractEntity {
 	
 	public boolean isSelected() {
 		return selected;
+	}
+	
+	public boolean isDiscovered() {
+		return isDiscovered;
 	}
 	
 	// MANIPULATING METHODS
@@ -136,7 +141,44 @@ public class MapNode extends AbstractEntity {
 		selected = false;
 	}
 	
-	public boolean isConnected() {
-		return (!(previousNodes.isEmpty() && proceedingNodes.isEmpty()));
+	public void discoverNode() {
+		isDiscovered = true;
+	}
+	
+	public void hideNode() {
+		isDiscovered = false;
+	}
+	
+	@Override
+	public String toString() {
+		String nodeTypeString = "";
+		String newline = System.getProperty("line.separator");
+		switch (nodeType) {
+			case 0:
+				nodeTypeString = "Safe Node";
+				break;
+			case 1:
+				nodeTypeString = "Standard Node";
+				break;
+			case 2:
+				nodeTypeString = "Cleared Node";
+				break;
+			case 3:
+				nodeTypeString = "Boss Node";
+				break;			
+		}
+		String nodeString = "nodeType: " + nodeTypeString + " | nodeRow: " + nodeRow + " | nodeColumn: " + 
+				nodeColumn + " | nodeTexture: " + nodeTexture + " | nodeLevel: " + linkedLevel + newline +
+				"Previous Nodes:" + newline;
+		for(MapNode node : previousNodes) {
+			nodeString += "nodeType: " + node.getNodeType() + " | nodeRow: " + node.getNodeRow() + " | nodeColumn: " +
+					node.getNodeColumn() + newline;
+		}
+		nodeString += "Proceeding Nodes:" + newline;
+		for(MapNode node : proceedingNodes) {
+			nodeString += "nodeType: " + node.getNodeType() + " | nodeRow: " + node.getNodeRow() + " | nodeColumn: " +
+					node.getNodeColumn() + newline;
+		}
+		return nodeString;
 	}
 }
