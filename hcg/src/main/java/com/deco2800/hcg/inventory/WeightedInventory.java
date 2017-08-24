@@ -62,7 +62,7 @@ public class WeightedInventory implements Inventory {
     }
     
     @Override
-    public boolean appendItem(Item item) {
+    public boolean addItem(Item item) {
         if(this.canInsert(item)) {
             this.items.add(item);
             return true;
@@ -101,5 +101,17 @@ public class WeightedInventory implements Inventory {
         }
         
         return weight;
+    }
+
+    @Override
+    public boolean removeItem(Item item) {
+        // TODO implement me
+        return false;
+    }
+
+    @Override
+    public boolean containsItem(Item item) {
+        // TODO implement me
+        return false;
     }
 }

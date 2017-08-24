@@ -5,20 +5,20 @@ package com.deco2800.hcg.observers;
  */
 public interface InputObserver {
 
-	void notifyKeyDown(int keycode);
+    void notifyKeyDown(int keycode);
 
-	void notifyKeyUp(int keycode);
+    void notifyKeyUp(int keycode);
 
-	void notifyKeyTyped(char character);
+    void notifyKeyTyped(char character);
 
-	void notifyTouchDown(int screenX, int screenY, int pointer, int button);
+    void notifyTouchDown(int screenX, int screenY, int pointer, int button);
 
-	void notifyTouchUp(int screenX, int screenY, int pointer, int button);
+    void notifyTouchUp(int screenX, int screenY, int pointer, int button);
 
-	void notifyTouchDragged(int screenX, int screenY, int pointer);
+    void notifyTouchDragged(int screenX, int screenY, int pointer);
 
-	void notifyMouseMoved(int screenX, int screenY);
+    void notifyMouseMoved(int screenX, int screenY);
 
-	void notifyScrolled(int amount);
+    void notifyScrolled(int amount);
 
 }

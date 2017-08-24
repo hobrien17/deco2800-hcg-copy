@@ -5,6 +5,6 @@ package com.deco2800.hcg.observers;
  */
 public interface KeyTypedObserver {
 
-	void notifyKeyTyped(char character);
+    void notifyKeyTyped(char character);
 
 }
