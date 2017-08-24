@@ -70,27 +70,50 @@ public abstract class AbstractWorld {
         return this.map;
     }
 
-
+    /**
+     * Adds entitiy to the world.
+     * @param entity Entity to be added
+     */
     public void addEntity(AbstractEntity entity) {
         entities.add(entity);
     }
 
+    /**
+     * Adds entitiy from the world.
+     * @param entity Entity to be removed
+     */
     public void removeEntity(AbstractEntity entity) {
         entities.remove(entity);
     }
 
+    /**
+     * Changed world width to a specified new width
+     * @param width New width
+     */
     public void setWidth(int width) {
         this.width = width;
     }
-
+    
+    /**
+     * Changed world length to a specified new width
+     * @param width New length
+     */
     public void setLength(int length) {
         this.length = length;
     }
 
+    /**
+     * Returns world width.
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
-
+    
+    /**
+     * Returns world length.
+     * @return length
+     */
     public int getLength() {
         return length;
     }

@@ -34,6 +34,13 @@ public class Player extends Character implements Tickable {
     private int oldTime = -1;
     private int newTime = -1;
 
+    /**
+     * Creates a new player at specified position.
+     * 
+     * @param posX beginning player X position
+     * @param posY beginning player Y position
+     * @param posZ beginning player Z position
+     */
     public Player(float posX, float posY, float posZ) {
 
         super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
