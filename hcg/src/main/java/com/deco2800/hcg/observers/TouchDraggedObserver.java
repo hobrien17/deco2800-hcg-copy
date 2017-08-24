@@ -5,6 +5,6 @@ package com.deco2800.hcg.observers;
  */
 public interface TouchDraggedObserver {
 
-	void notifyTouchDragged(int screenX, int screenY, int pointer);
+    void notifyTouchDragged(int screenX, int screenY, int pointer);
 
 }

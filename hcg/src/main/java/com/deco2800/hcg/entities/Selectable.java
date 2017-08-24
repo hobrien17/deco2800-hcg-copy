@@ -7,27 +7,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
  */
 public interface Selectable {
 
-	/**
-	 * Returns true if the Entity is selected.
-	 * 
-	 * @return Returns true if the Entity is selected.
-	 */
-	boolean isSelected();
+    /**
+     * Returns true if the Entity is selected.
+     *
+     * @return Returns true if the Entity is selected.
+     */
+    boolean isSelected();
 
-	/**
-	 * Deselects the entity.
-	 */
-	void deselect();
+    /**
+     * Deselects the entity.
+     */
+    void deselect();
 
-	/**
-	 * Returns the button.
-	 * 
-	 * @return Returns the button.
-	 */
-	Button getButton();
+    /**
+     * Returns the button.
+     *
+     * @return Returns the button.
+     */
+    Button getButton();
 
-	/**
-	 * Callback on button press.
-	 */
-	void buttonWasPressed();
+    /**
+     * Callback on button press.
+     */
+    void buttonWasPressed();
 }

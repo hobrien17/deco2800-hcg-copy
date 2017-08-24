@@ -5,7 +5,7 @@ package com.deco2800.hcg.observers;
  */
 public interface TouchDownObserver {
 
-	void notifyTouchDown(int screenX, int screenY, int pointer, int button);
+    void notifyTouchDown(int screenX, int screenY, int pointer, int button);
 
 
 }
