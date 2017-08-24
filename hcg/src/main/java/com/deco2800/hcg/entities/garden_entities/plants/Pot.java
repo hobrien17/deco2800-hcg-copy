@@ -1,12 +1,7 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Clickable;
-import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant.Stage;
-import com.deco2800.hcg.util.Box3D;
 
 /**
  * An entity that contains a plant

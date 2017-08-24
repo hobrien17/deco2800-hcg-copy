@@ -1,8 +1,6 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ItemManager;
@@ -44,7 +42,7 @@ public class Cactus extends AbstractGardenPlant {
             }
             sum += rarity;
         }
-        if (sum != 1.0) {
+        if (Double.compare(sum, 1.0) != 0) {
             LOGGER.warn("Total rarity should be 1");
         }
     }

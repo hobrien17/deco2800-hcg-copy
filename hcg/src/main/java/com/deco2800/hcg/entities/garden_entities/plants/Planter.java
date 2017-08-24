@@ -3,14 +3,11 @@ package com.deco2800.hcg.entities.garden_entities.plants;
 import java.util.Optional;
 
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Clickable;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.observers.KeyUpObserver;
 import com.deco2800.hcg.util.WorldUtil;
-import com.deco2800.hcg.worlds.AbstractWorld;
-import com.deco2800.hcg.worlds.DemoWorld;
 
 public class Planter implements KeyUpObserver {
 

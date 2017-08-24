@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TimeManager;
 
@@ -8,10 +7,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.deco2800.hcg.entities.*;
-import com.deco2800.hcg.util.Box3D;
 
 /**
  * Represents a plant in the garden Used as a shell for more specific types of
