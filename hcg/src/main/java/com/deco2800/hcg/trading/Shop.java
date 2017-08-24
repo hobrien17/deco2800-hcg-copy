@@ -1,7 +1,7 @@
 package com.deco2800.hcg.trading;
 
 
-import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
 
 import java.util.Map;
@@ -15,11 +15,11 @@ public interface Shop {
      *
      * @param modifier
      *          modifier to apply to the prices of the items in the shop, percentage
-     * @param player
-     *          Reference to the player so that the shop can modify their inventory
+     * @param inventory
+     *          Reference to the player's inventory so that the shop can modify it directly
      *
      * @return nothing*/
-    public void open(int modifier, Player player);
+    public void open(int modifier, Inventory inventory);
 
     /**Retrieve the number of a certain item this shop currently has in stock
      *

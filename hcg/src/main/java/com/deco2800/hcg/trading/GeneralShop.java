@@ -1,6 +1,7 @@
 package com.deco2800.hcg.trading;
 
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
 
 import java.util.HashMap;
@@ -8,13 +9,13 @@ import java.util.Map;
 
 public class GeneralShop implements Shop{
     int modifier = 0;
-    Player player;
+    Inventory inventory;
     Map<Item, Integer> shopStock = new HashMap<>();
 
     @Override
-    public void open(int modifier, Player player) {
+    public void open(int modifier, Inventory inventory) {
         this.modifier = modifier;
-        this.player = player;
+        this.inventory = inventory;
     }
 
     @Override
