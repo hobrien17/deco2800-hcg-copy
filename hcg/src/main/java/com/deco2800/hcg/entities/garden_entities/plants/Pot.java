@@ -17,8 +17,6 @@ public class Pot extends AbstractEntity implements Tickable  {
 		plant = null;
 		setThisTexture();
 	}
-
-	
 	
 	/**
 	 * Adds a plant to the pot, if empty
@@ -34,6 +32,15 @@ public class Pot extends AbstractEntity implements Tickable  {
 		}
 		return false;
 		
+	}
+	
+	/**
+	 * Returns the plant currently in the pot
+	 * 
+	 * @return the plant in the pot, null if empty
+	 */
+	public AbstractGardenPlant getPlant() {
+		return plant;
 	}
 	
 	/**

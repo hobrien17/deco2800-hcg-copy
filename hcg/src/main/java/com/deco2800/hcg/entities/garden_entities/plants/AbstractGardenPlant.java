@@ -24,7 +24,7 @@ public abstract class AbstractGardenPlant implements Lootable {
      *
      * More stages can be added if needed (remember to update relevant methods)
      */
-    enum Stage {
+    public enum Stage {
         SPROUT,
         SMALL,
         LARGE
@@ -88,6 +88,15 @@ public abstract class AbstractGardenPlant implements Lootable {
         }
 
         master.setThisTexture();
+    }
+    
+    /**
+     * Returns the amount of time it takes for the plant to advance a stage
+     * 
+     * @return the growth delay of the plant
+     */
+    public int getGrowDelay() {
+    	return growDelay;
     }
 
     /**
