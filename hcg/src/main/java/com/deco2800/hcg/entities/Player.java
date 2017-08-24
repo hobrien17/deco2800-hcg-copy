@@ -105,17 +105,27 @@ public class Player extends Character implements Tickable {
             String name = layer.getProperties().get("name", String.class);
 
             // see if current tile is slippery. Save the slippery value if it is
-            if (layer.getProperties().get("slippery", float.class) != null) {
-                slippery = layer.getProperties().get("slippery", float.class);
-            }
+            if (layer.getProperties().get("slippery") != null) {
+              // this works but .get("slippery", Float.class) doesn't?
+              slippery = Float.parseFloat
+                  ((String) layer.getProperties().get("slippery"));
+          }
 
             // see if current tile is deep water, if so, set player to swim
             ifSwim(name);
+            
+            // -1 for none, 0 for enemy, 1 for both, 2 for player
+            int damagetype = -1;
+            
+            if (layer.getProperties().get("damagetype") != null) {
+                damagetype = Integer.parseInt
+                    ((String) layer.getProperties().get("damagetype"));
+            }
 
             // damage player
-            if (layer.getProperties().get("damage", float.class) != null) {
-                // TODO: remove player health, make player health float?
-
+            if (layer.getProperties().get("damage") != null && damagetype > 0 ) {
+                this.setHealth(this.getHealth() - Integer.parseInt
+                    ((String) layer.getProperties().get("damage")));      
             }
 
             // log
@@ -336,9 +346,11 @@ public class Player extends Character implements Tickable {
         float isoX = baseX + ((cartX - cartY) / 2.0f * tileWidth);
         float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
 
-        GameManager.get().getCamera().position.x = isoX;
-        GameManager.get().getCamera().position.y = isoY;
-        GameManager.get().getCamera().update();
+        if (GameManager.get().getCamera() != null) {
+          GameManager.get().getCamera().position.x = isoX;
+          GameManager.get().getCamera().position.y = isoY;
+          GameManager.get().getCamera().update();
+        }
     }
 
     /**
@@ -348,14 +360,16 @@ public class Player extends Character implements Tickable {
      * @param name name of current tile
      */
     private void ifSwim(String name) {
+      if (name != null) {
         if (name.equals("water-deep")) {
             this.setTexture("spacman_swim");
             playSound("swimming");
-
+            
         } else {
             this.setTexture("spacman");
             soundManager.stopSound("swimming");
         }
+      }
     }
 
     /**
