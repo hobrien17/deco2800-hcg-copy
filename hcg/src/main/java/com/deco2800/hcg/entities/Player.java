@@ -50,7 +50,6 @@ public class Player extends Character implements Tickable {
 	 * @param posZ
 	 *            The z-coordinate.
 	 */
-	public Player(float posX, float posY, float posZ) {
     public Player(float posX, float posY, float posZ) {
 
         super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
