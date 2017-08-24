@@ -29,7 +29,7 @@ public abstract class AbstractSeed implements Item {
 	}
     
     @Override
-	public int maxStackSize() {
+	public int getMaxStackSize() {
 		// TODO Auto-generated method stub
 		return 5;
 	}
@@ -39,13 +39,24 @@ public abstract class AbstractSeed implements Item {
     	//TODO: Added to fix implementation change. Alter this to whatever you want.
     	return false;
 	}
+
+    @Override
+    public int getBaseValue() {
+        // TODO Added to fix implementation change. Alter this to whatever you want.
+        return 0;
+    }
+
+    @Override
+    public boolean isTradable() {
+        // TODO Added to fix implementation change. Alter this to whatever you want.
+        return false;
+    }
+
     
     /**
      * Creates a new plant at the given x and y co-ordinates
      * 
      * @return a new plant
-     * 
-     * @deprecated This method should be replaced due to the addition of pots
      */
     public abstract AbstractGardenPlant plant(int xPos, int yPos);
 }

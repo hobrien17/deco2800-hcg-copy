@@ -2,26 +2,28 @@ package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
+import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
+import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.renderers.Renderable;
 
 import java.util.Random;
 
 /**
  * Initial world using preset world file.
- * 
- * @author leggy
  *
+ * @author leggy
  */
 public class DemoWorld extends AbstractWorld {
 
-	/**
-	 * Constructor for DemoWorld
-	 */
-	public DemoWorld() {
-		/* Load up the map for this world */
-		this.map = new TmxMapLoader().load("resources/maps/initial-map-test.tmx");
+    /**
+     * Constructor for DemoWorld
+     */
+    public DemoWorld() {
+        /* Load up the map for this world */
+        this.map = new TmxMapLoader()
+                .load("resources/maps/initial-map-test.tmx");
 
 		/*
 		 * Grab the width and length values from the map file to use as the world size
@@ -34,7 +36,6 @@ public class DemoWorld extends AbstractWorld {
 			pots[i] = new Pot(20, 10 + 2*i, 0);
 			this.addEntity(pots[i]);
 		}
-		pots[0].addPlant(new Sunflower(pots[0]));
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {

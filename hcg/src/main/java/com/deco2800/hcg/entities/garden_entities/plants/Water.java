@@ -10,9 +10,8 @@ import com.deco2800.hcg.managers.ItemManager;
 
 /**
  * Represents the Water plant which drops random loot
- * 
- * @author Reilly Lundin
  *
+ * @author Reilly Lundin
  */
 public class Water extends AbstractGardenPlant {
 
@@ -26,11 +25,11 @@ public class Water extends AbstractGardenPlant {
 	public String getThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			return null;
+			return "lily_01";
 		case SMALL:
-			return null;
+			return "lily_02";
 		case LARGE:
-			return null;
+			return "lily_03";
 		}
 		return null;
 	}
@@ -54,5 +53,4 @@ public class Water extends AbstractGardenPlant {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

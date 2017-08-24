@@ -15,7 +15,7 @@ import java.util.Map;
  * With this in mind don't load textures you're not going to use. Textures that
  * are not used should probably (at some point) be removed from the list and
  * then read from disk when needed again using some type of reference counting
- * 
+ *
  * @Author Tim Hadwen
  */
 public class TextureManager extends Manager {
@@ -56,9 +56,15 @@ public class TextureManager extends Manager {
 
 		textureMap.put("plant_01", new Texture("resources/sprites/plants/plant_01.png"));
 		textureMap.put("plant_02", new Texture("resources/sprites/plants/plant_02.png"));
-		textureMap.put("sunflower_01", new Texture("resources/sprites/plants/sunflower_01.png"));
-		textureMap.put("sunflower_02", new Texture("resources/sprites/plants/sunflower_02.png"));
-		textureMap.put("sunflower_03", new Texture("resources/sprites/plants/sunflower_03.png"));
+		textureMap.put("sunflower_01", new Texture("resources/sprites/plants/Sunflower_Pot_01.png"));
+		textureMap.put("sunflower_02", new Texture("resources/sprites/plants/Sunflower_Pot_02.png"));
+		textureMap.put("sunflower_03", new Texture("resources/sprites/plants/Sunflower_Pot_03.png"));
+		textureMap.put("cactus_01", new Texture("resources/sprites/plants/Cactus_Pot_01.png"));
+		textureMap.put("cactus_02", new Texture("resources/sprites/plants/Cactus_Pot_02.png"));
+		textureMap.put("cactus_03", new Texture("resources/sprites/plants/Cactus_Pot_03.png"));
+		textureMap.put("lily_01", new Texture("resources/sprites/plants/Waterlily_01.png"));
+		textureMap.put("lily_02", new Texture("resources/sprites/plants/Waterlily_02.png"));
+		textureMap.put("lily_03", new Texture("resources/sprites/plants/Waterlily_03.png"));
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot_empty.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 
@@ -97,5 +103,4 @@ public class TextureManager extends Manager {
 			textureMap.put(id, new Texture(filename));
 		}
 	}
-
 }

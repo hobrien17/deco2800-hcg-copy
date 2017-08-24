@@ -15,7 +15,7 @@ public class StackableItemTest {
         BasicStackableItem cobblestone = new BasicStackableItem(itemName, itemWeight, maxStackSize);
 
         /** Test Initialisation values **/
-        assertTrue("Item Stack Limit not set to initialised value", cobblestone.maxStackSize()==maxStackSize);
+        assertTrue("Item Stack Limit not set to initialised value", cobblestone.getMaxStackSize()==maxStackSize);
         assertTrue("Weight not Initialised to 0", cobblestone.getWeight()==0);
         assertTrue("itemName not set properly", cobblestone.getName().equals(itemName));
         assertFalse("Stackabe items should not be wearable", cobblestone.isWearable());
@@ -26,7 +26,7 @@ public class StackableItemTest {
         // assertFalse("Name should be a deep copy", cobblestone.getName()==itemName);
 
         maxStackSize = 32;
-        assertFalse("max stack size should be a deep copy", cobblestone.maxStackSize()==maxStackSize);
+        assertFalse("max stack size should be a deep copy", cobblestone.getMaxStackSize()==maxStackSize);
 
         itemWeight = 47;
         cobblestone.addToStack(1);
