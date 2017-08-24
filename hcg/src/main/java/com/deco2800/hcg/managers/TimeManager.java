@@ -227,7 +227,7 @@ public class TimeManager extends Manager implements TickableManager {
     /**
      * Handles incrementing time on tick event.
      *
-     * @param count of all game ticks so far.
+     * @param gameTickCount the count of all game ticks so far.
      */
     public void onTick(long gameTickCount) {
         this.timeElapsed++;

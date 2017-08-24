@@ -56,7 +56,7 @@ public class Pot extends AbstractEntity implements Clickable, Selectable {
     /**
      * Adds a plant to the pot, if empty
      *
-     * @param the plant to be added
+     * @param  plant to be added
      * @return true if the plant was added, false if it could not be added
      */
     public boolean addPlant(AbstractGardenPlant plant) {
