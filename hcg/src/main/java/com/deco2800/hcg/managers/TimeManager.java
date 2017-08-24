@@ -26,6 +26,7 @@ public class TimeManager extends Manager implements TickableManager {
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 	private boolean timePaused;
+	private boolean isNight;
 
 	/**
 	 * Constructor: Initializes day to 01/01/2047 and elapsed time to 0 on
@@ -233,6 +234,8 @@ public class TimeManager extends Manager implements TickableManager {
 		this.minutes = 0;
 		if (this.hours != 24) {
 			this.hours++;
+			// check if nighttime every hour
+			checkNight();
 			return;
 		}
 
@@ -262,6 +265,25 @@ public class TimeManager extends Manager implements TickableManager {
 	 */
 	public void unpauseTime() {
 		timePaused = false;
+	}
+
+	/**
+	 * Return true iff nighttime.
+	 */
+	public boolean isNight() {
+		return isNight;
+	}
+
+	/**
+	 * Updates internal boolean tracking day/night cycle.
+	 * Nighttime between 7:00pm and 5:00am
+	 */
+	public void checkNight() {
+		if (this.hours > 18 || this.hours < 5) {
+			isNight = true;
+			return;
+		}
+		isNight = false;
 	}
 
 	/**
