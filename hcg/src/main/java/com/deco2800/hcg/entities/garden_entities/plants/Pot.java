@@ -19,7 +19,7 @@ public class Pot extends AbstractEntity implements Clickable, Selectable  {
 	AbstractGardenPlant plant;
 
 	public Pot(float posX, float posY, float posZ) {
-		super(posX, posY, posZ, 0.5f, 0.5f, 1, 1, 1, false);
+		super(posX, posY, posZ, 1.2f, 1.2f, 1, 1.5f, 1.5f, false);
 		plant = null;
 		setThisTexture();
 	}

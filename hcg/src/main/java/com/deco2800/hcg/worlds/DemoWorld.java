@@ -36,9 +36,6 @@ public class DemoWorld extends AbstractWorld {
 			pots[i] = new Pot(20, 10 + 2*i, 0);
 			this.addEntity(pots[i]);
 		}
-		pots[0].addPlant(new Sunflower(pots[0]));
-		pots[1].addPlant(new Water(pots[1]));
-		pots[2].addPlant(new Cactus(pots[2]));
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {
