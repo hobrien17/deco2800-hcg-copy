@@ -5,6 +5,6 @@ package com.deco2800.hcg.observers;
  */
 public interface ScrollObserver {
 
-	void notifyScrolled(int amount);
+    void notifyScrolled(int amount);
 
 }
