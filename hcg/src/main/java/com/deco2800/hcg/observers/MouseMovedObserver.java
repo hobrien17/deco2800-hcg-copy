@@ -5,6 +5,6 @@ package com.deco2800.hcg.observers;
  */
 public interface MouseMovedObserver {
 
-	void notifyMouseMoved(int screenX, int screenY);
+    void notifyMouseMoved(int screenX, int screenY);
 
 }

@@ -13,7 +13,8 @@ import java.util.List;
 /**
  * AbstractWorld is the Game AbstractWorld
  *
- * It provides storage for the WorldEntities and other universal world level items.
+ * It provides storage for the WorldEntities and other universal world level
+ * items.
  */
 public abstract class AbstractWorld {
 
@@ -25,6 +26,7 @@ public abstract class AbstractWorld {
 
     /**
      * Returns a list of entities in this world
+     *
      * @return All Entities in the world
      */
     public List<AbstractEntity> getEntities() {
@@ -32,35 +34,36 @@ public abstract class AbstractWorld {
     }
 
     /**
-     * Returns the TiledMapTileLayer that contains the cell at the 
-     * given X and Y position. See documentation on TiledMapTileLayer.
-     * 
+     * Returns the TiledMapTileLayer that contains the cell at the given X and Y
+     * position. See documentation on TiledMapTileLayer.
+     *
      * @param posX X position
      * @param posY Y position
-     * @return A TiledMapTileLayer that contains the players current cell. 
-     * Null if no such TiledMapTileLayer exists.
+     * @return A TiledMapTileLayer that contains the players current cell. Null
+     * if no such TiledMapTileLayer exists.
      */
     public TiledMapTileLayer getTiledMapTileLayerAtPos(int posX, int posY) {
-    	// loop through all layers
-		Iterator<MapLayer> itr = GameManager.get().getWorld().
-				getMap().getLayers().iterator();
-		
-		while(itr.hasNext()) {
-			
-			TiledMapTileLayer layer = (TiledMapTileLayer)itr.next();
-			
-			if (layer.getCell(posX, posY) != null) {
-				return (TiledMapTileLayer)layer;
-			}
-		
-		}
-			
-		return null;
-    	
+        // loop through all layers
+        Iterator<MapLayer> itr = GameManager.get().getWorld().
+                getMap().getLayers().iterator();
+
+        while (itr.hasNext()) {
+
+            TiledMapTileLayer layer = (TiledMapTileLayer) itr.next();
+
+            if (layer.getCell(posX, posY) != null) {
+                return (TiledMapTileLayer) layer;
+            }
+
+        }
+
+        return null;
+
     }
-    
+
     /**
      * Returns the current map for this world
+     *
      * @return Map object for this world
      */
     public TiledMap getMap() {
