@@ -16,9 +16,7 @@ import com.deco2800.hcg.managers.ItemManager;
 public class Water extends AbstractGardenPlant {
 
 	public Water(Pot master) {
-		super(master);
-		this.advanceStage();
-		this.advanceStage();
+		super(master, 1000);
 	}
 
 	@Override
@@ -32,12 +30,6 @@ public class Water extends AbstractGardenPlant {
 			return "lily_03";
 		}
 		return null;
-	}
-
-	@Override
-	public void onTick(long gameTickCount) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

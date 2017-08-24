@@ -16,28 +16,20 @@ import com.deco2800.hcg.managers.ItemManager;
 public class Inferno extends AbstractGardenPlant {
 
     public Inferno(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
+        super(master, 1200);
     }
 
     @Override
     public String getThisTexture() {
         switch (this.getStage()) {
             case SPROUT:
-                return null;
+                return "inferno_01";
             case SMALL:
-                return null;
+                return "inferno_02";
             case LARGE:
-                return null;
+                return "inferno_03";
         }
         return null;
-
-    }
-
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
 
     }
 

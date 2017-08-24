@@ -38,6 +38,7 @@ public class Squirrel extends Enemy implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
+    	
         float goalX =
                 playerManager.getPlayer().getPosX() + random.nextFloat() * 6
                         - 3;

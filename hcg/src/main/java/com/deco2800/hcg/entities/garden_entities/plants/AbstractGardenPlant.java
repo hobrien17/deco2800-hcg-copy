@@ -2,6 +2,7 @@ package com.deco2800.hcg.entities.garden_entities.plants;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.TimeManager;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import com.deco2800.hcg.util.Box3D;
  *
  * @author Henry O'Brien
  */
-public abstract class AbstractGardenPlant implements Tickable, Lootable {
+public abstract class AbstractGardenPlant implements Lootable {
 
     static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
@@ -36,18 +37,33 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
 
     private Stage stage;
     private Pot master;
+    private int lastGrow;
+    private int growDelay;
 
     Map<String, Double> lootRarity;
 
-    public AbstractGardenPlant(Pot master) {
-        this.stage = Stage.SMALL;
+    public AbstractGardenPlant(Pot master, int delay) {
+        this.stage = Stage.SPROUT;
+        growDelay = delay;
+        this.lastGrow = ((TimeManager)GameManager.get().getManager(TimeManager.class)).getTimeElapsed();
         this.master = master;
         setupLoot();
+    }
+    
+    /**
+     * Checks if the plant is ready for growing, and advances a stage if it is
+     */
+    public void checkGrow() {
+        TimeManager tm = (TimeManager)GameManager.get().getManager(TimeManager.class);
+        int time = tm.getTimeElapsed();
+        if (time - lastGrow >= growDelay) {
+        	lastGrow = time;
+        	this.advanceStage();
+        }
     }
 
     @Override
     public Map<String, Double> getRarity() {
-        // TODO Auto-generated method stub
         return lootRarity;
     }
 

@@ -16,9 +16,7 @@ import com.deco2800.hcg.managers.ItemManager;
 public class Sunflower extends AbstractGardenPlant {
 
     public Sunflower(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
+        super(master, 500);
     }
 
     @Override
@@ -33,12 +31,6 @@ public class Sunflower extends AbstractGardenPlant {
             default:
                 return null;
         }
-
-    }
-
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
 
     }
 

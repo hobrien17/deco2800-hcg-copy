@@ -16,28 +16,20 @@ import com.deco2800.hcg.managers.ItemManager;
 public class Grass extends AbstractGardenPlant {
 
     public Grass(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
+        super(master, 600);
     }
 
     @Override
     public String getThisTexture() {
         switch (this.getStage()) {
             case SPROUT:
-                return null;
+                return "grass_01";
             case SMALL:
-                return null;
+                return "grass_02";
             case LARGE:
-                return null;
+                return "grass_03";
         }
         return null;
-
-    }
-
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
 
     }
 

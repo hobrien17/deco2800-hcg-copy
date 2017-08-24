@@ -16,9 +16,7 @@ import com.deco2800.hcg.managers.ItemManager;
 public class Explosive extends AbstractGardenPlant {
 
     public Explosive(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
+        super(master, 100);
     }
 
     @Override
@@ -32,12 +30,6 @@ public class Explosive extends AbstractGardenPlant {
                 return null;
         }
         return null;
-
-    }
-
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
 
     }
 

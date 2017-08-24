@@ -15,15 +15,7 @@ import com.deco2800.hcg.managers.ItemManager;
 public class Cactus extends AbstractGardenPlant {
 
     public Cactus(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
-    }
-
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
-
+        super(master, 750);
     }
     
     @Override
@@ -32,7 +24,7 @@ public class Cactus extends AbstractGardenPlant {
 		case SPROUT:
 			return "cactus_01";
 		case SMALL:
-			return "cactus_01";
+			return "cactus_02";
 		case LARGE:
 			return "cactus_03";
 		}

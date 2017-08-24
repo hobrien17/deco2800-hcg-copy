@@ -13,45 +13,17 @@ import com.deco2800.hcg.util.Box3D;
  *
  * @author Henry O'Brien
  */
-public class Pot extends AbstractEntity implements Clickable, Selectable  {
+public class Pot extends AbstractEntity implements Tickable  {
 	
 	AbstractGardenPlant plant;
 
 	public Pot(float posX, float posY, float posZ) {
-		super(posX, posY, posZ, 1.2f, 1.2f, 1, 1.5f, 1.5f, false);
+		super(posX, posY, posZ, 0.7f, 0.7f, 1, 1f, 1f, false);
 		plant = null;
 		setThisTexture();
 	}
 
-	@Override
-	public boolean isSelected() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void deselect() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Button getButton() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void buttonWasPressed() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onClick() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 	/**
 	 * Adds a plant to the pot, if empty
@@ -78,5 +50,13 @@ public class Pot extends AbstractEntity implements Clickable, Selectable  {
 		} else {
 			this.setTexture(plant.getThisTexture());
 		}
+	}
+
+	@Override
+	public void onTick(long gameTickCount) {
+		if(plant != null) {
+			plant.checkGrow();
+		}
+		
 	}
 }

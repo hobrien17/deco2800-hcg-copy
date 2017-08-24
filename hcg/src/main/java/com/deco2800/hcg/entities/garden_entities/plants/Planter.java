@@ -16,13 +16,11 @@ public class Planter implements KeyUpObserver {
 
 	@Override
 	public void notifyKeyUp(int keycode) {
-		if(keycode >= 8 && keycode <= 10) {
-			System.out.println("You pressed the 1 key!");
+		if(keycode >= 8 && keycode <= 12) {
 			PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 			Player player = pm.getPlayer();
 			float px = player.getPosX();
 			float py = player.getPosY();
-			System.out.println("x " + px + " y " + py);
 
 			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(px, py, 1.5f, Pot.class);
 			if (closest.isPresent() &&  closest.get() instanceof Pot) {
@@ -33,6 +31,10 @@ public class Planter implements KeyUpObserver {
 					pot.addPlant(new Cactus(pot));
 				} else if(keycode == 10) {
 					pot.addPlant(new Water(pot));
+				} else if(keycode == 11) {
+					pot.addPlant(new Grass(pot));
+				} else if(keycode == 12) {
+					pot.addPlant(new Inferno(pot));
 				}
 				
 			} 
