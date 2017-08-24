@@ -5,6 +5,6 @@ package com.deco2800.hcg.observers;
  */
 public interface TouchUpObserver {
 
-	void notifyTouchUp(int screenX, int screenY, int pointer, int button);
+    void notifyTouchUp(int screenX, int screenY, int pointer, int button);
 
 }

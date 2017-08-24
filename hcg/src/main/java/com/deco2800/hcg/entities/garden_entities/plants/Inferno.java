@@ -4,18 +4,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.SunflowerSeed;
+import com.deco2800.hcg.entities.garden_entities.seeds.FireSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ItemManager;
 
 /**
- * Represents a basic plant which drops basic loot
+ * Represents the Inferno plant which drops random loot
  *
- * @author Henry O'Brien
+ * @author Reilly Lundin
  */
-public class Sunflower extends AbstractGardenPlant {
+public class Inferno extends AbstractGardenPlant {
 
-    public Sunflower(Pot master) {
+    public Inferno(Pot master) {
         super(master);
         this.advanceStage();
         this.advanceStage();
@@ -25,14 +25,13 @@ public class Sunflower extends AbstractGardenPlant {
     public String getThisTexture() {
         switch (this.getStage()) {
             case SPROUT:
-                return "sunflower_01";
+                return null;
             case SMALL:
-                return "sunflower_02";
+                return null;
             case LARGE:
-                return "sunflower_03";
-            default:
                 return null;
         }
+        return null;
 
     }
 
@@ -46,7 +45,7 @@ public class Sunflower extends AbstractGardenPlant {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put("sunflower_seed", 1.0);
+        lootRarity.put("fire_seed", 1.0);
 
         double sum = 0.0;
         for (Double rarity : lootRarity.values()) {

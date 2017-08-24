@@ -5,6 +5,6 @@ package com.deco2800.hcg.observers;
  */
 public interface KeyUpObserver {
 
-	void notifyKeyUp(int keycode);
+    void notifyKeyUp(int keycode);
 
 }

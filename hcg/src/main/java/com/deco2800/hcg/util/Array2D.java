@@ -6,10 +6,10 @@ import java.util.List;
 /**
  * 2D array implementation.
  *
- * @param <T>
  * @author Anonymousthing
  */
 public class Array2D<T> {
+
     private int width;
     private int length;
 
@@ -18,7 +18,7 @@ public class Array2D<T> {
     /**
      * Constructs a 2D array of the given dimensions
      *
-     * @param width  the width of the array
+     * @param width the width of the array
      * @param height the height of the array
      */
     public Array2D(int width, int height) {
@@ -46,8 +46,8 @@ public class Array2D<T> {
     /**
      * Sets the object at the given coordinate in the array
      *
-     * @param x   the x coordinate
-     * @param y   the y coordinate
+     * @param x the x coordinate
+     * @param y the y coordinate
      * @param val the object
      */
     public void set(int x, int y, T val) {
@@ -81,7 +81,7 @@ public class Array2D<T> {
      * @return list form of array
      */
     @SuppressWarnings("unchecked")
-	public List<T> getList() {
+    public List<T> getList() {
         ArrayList<T> list = new ArrayList<>();
         for (int i = 0; i < width * length; i++) {
             if (arr[i] != null) {
