@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.SunflowerSeed;
+import com.deco2800.hcg.entities.garden_entities.seeds.*;
 import com.deco2800.hcg.items.Item;
 
 /**
@@ -29,6 +29,16 @@ public class ItemManager extends Manager {
     public static Item getNew(String name) {
         if (name == "sunflower_seed") {
             return new SunflowerSeed();
+        } else if (name == "explosive_seed") {
+        	return new ExplosiveSeed();
+        } else if (name == "fire_seed") {
+        	return new FireSeed();
+        } else if (name == "grass_seed") {
+        	return new GrassSeed();
+        } else if (name == "ice_seed") {
+        	return new IceSeed();
+        } else if (name == "water_seed") {
+        	return new WaterSeed();
         }
 
         LOGGER.warn("Unable to find given class, returning null");

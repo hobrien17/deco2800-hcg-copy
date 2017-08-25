@@ -136,6 +136,27 @@ public abstract class AbstractGardenPlant implements Lootable {
         LOGGER.warn("No item has been selected, returning null");
         return null;
     }
+    
+    /**
+     * Checks that the loot rarity is valid
+     * 
+     * @return true if the loot rarity is valid, otherwise false
+     */
+    public boolean checkLootRarity() {
+    	double sum = 0.0;
+        for (Double rarity : lootRarity.values()) {
+            if (rarity < 0.0 || rarity > 1.0) {
+                LOGGER.error("Rarity should be between 0 and 1");
+                return false;
+            }
+            sum += rarity;
+        }
+        if (Double.compare(sum, 1.0) != 0) {
+            LOGGER.warn("Total rarity should be 1");
+            return false;
+        }
+        return true;
+    }
 
     //Rest to be implemented later
 

@@ -44,6 +44,15 @@ public class Pot extends AbstractEntity implements Tickable  {
 	}
 	
 	/**
+	 * Removes the current plant from the pot
+	 * 
+	 */
+	public void removePlant() {
+		plant = null;
+		setThisTexture();
+	}
+	
+	/**
 	 * Sets the texture of the pot based on the plant inside
 	 */
 	public void setThisTexture() {

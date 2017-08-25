@@ -36,16 +36,7 @@ public class Explosive extends AbstractGardenPlant {
 
         lootRarity.put("explosive_seed", 1.0);
 
-        double sum = 0.0;
-        for (Double rarity : lootRarity.values()) {
-            if (rarity < 0.0 || rarity > 1.0) {
-                LOGGER.error("Rarity should be between 0 and 1");
-            }
-            sum += rarity;
-        }
-        if (Double.compare(sum, 1.0) != 0) {
-            LOGGER.warn("Total rarity should be 1");
-        }
+        checkLootRarity();
     }
 
     @Override

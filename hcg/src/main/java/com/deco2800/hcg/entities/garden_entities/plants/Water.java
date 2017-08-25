@@ -1,5 +1,7 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
+import java.util.HashMap;
+
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ItemManager;
 
@@ -37,7 +39,10 @@ public class Water extends AbstractGardenPlant {
 
 	@Override
 	void setupLoot() {
-		// TODO Auto-generated method stub
-		
+		lootRarity = new HashMap<>();
+
+        lootRarity.put("water_seed", 1.0);
+
+        checkLootRarity();
 	}
 }
