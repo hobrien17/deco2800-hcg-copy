@@ -45,31 +45,12 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Sets the day.
-	 * 
-	 * @param day
-	 */
-	private void setDay(int day) {
-		this.day = day;
-	}
-
-	/**
 	 * Gets the day.
 	 * 
 	 * @return Returns the day.
 	 */
 	public int getDay() {
 		return this.day;
-	}
-
-	/**
-	 * Sets the month.
-	 * 
-	 * @param month
-	 *            as integer using calander month counting system (1 - 12)
-	 */
-	private void setMonth(int month) {
-		this.month = month;
 	}
 
 	/**
@@ -81,14 +62,6 @@ public class TimeManager extends Manager implements TickableManager {
 		return this.month;
 	}
 
-	/**
-	 * Sets the year.
-	 * 
-	 * @param year
-	 */
-	private void setYear(int year) {
-		this.year = year;
-	}
 
 	/**
 	 * Gets the year.
@@ -118,30 +91,12 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Sets the minutes.
-	 * 
-	 * @param minutes
-	 */
-	private void setMinutes(int minutes) {
-		this.minutes = minutes;
-	}
-
-	/**
 	 * Gets the minutes.
 	 * 
 	 * @return Returns the minutes.
 	 */
 	public int getMinutes() {
 		return this.minutes;
-	}
-
-	/**
-	 * Sets the hours.
-	 * 
-	 * @param hours
-	 */
-	private void setHours(int hours) {
-		this.hours = hours;
 	}
 
 	/**
@@ -315,10 +270,9 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @return Returns a string denoting the current date and time in the game.
 	 */
 	public String getDateTime() {
-		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d",
+		return String.format("%02d/%02d/%02d %02d:%02d:%02d",
 				this.day, this.month, this.year, this.hours, this.minutes,
 				this.seconds);
-		return dateTime;
 	}
 
 }
