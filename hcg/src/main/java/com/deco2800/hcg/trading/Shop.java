@@ -1,6 +1,7 @@
 package com.deco2800.hcg.trading;
 
 
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 
 import java.util.Map;
@@ -14,9 +15,11 @@ public interface Shop {
      *
      * @param modifier
      *          modifier to apply to the prices of the items in the shop, percentage
+     * @param player
+     *          Reference to the player so that the shop can modify their inventory
      *
      * @return nothing*/
-    public void open(int modifier);
+    public void open(int modifier, Player player);
 
     /**Retrieve the number of a certain item this shop currently has in stock
      *
@@ -58,9 +61,9 @@ public interface Shop {
      *
      * @param item
      *          The stock to buy
-     * @return The stock that has been purchased, for easier adding to inventory
+     * @return void, function should modify player's inventory directly
      */
-    public Item buyStock(Item item);
+    public void buyStock(Item item);
 
     /**Method to buy a number of the specified stock item
      *
@@ -68,9 +71,9 @@ public interface Shop {
      *          The item to buy
      * @param number
      *          The number to buy
-     * @return An array of the items that have been purchased for easier adding to inventory
+     * @return void, function should modify player's inventory directly
      */
-    public Item[] buyStock(Item item, int number);
+    public void buyStock(Item item, int number);
 
     /**Method to sell an item of stock to the shop
      *
