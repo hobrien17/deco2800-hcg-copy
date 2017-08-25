@@ -65,6 +65,13 @@ public class Player extends Character implements Tickable {
 
     }
 
+    /**
+     * Handles the processes involved when a touch input is made.
+     * @param screenX the x position being clicked on the screen
+     * @param screenY the y position being clicked on the screen
+     * @param pointer <unknown>
+     * @param button <unknown>
+     */
     private void handleTouchDown(int screenX, int screenY, int pointer,
             int button) {
         Vector3 worldCoords = GameManager.get().getCamera()

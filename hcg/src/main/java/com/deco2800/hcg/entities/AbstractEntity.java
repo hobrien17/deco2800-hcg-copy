@@ -26,6 +26,17 @@ public abstract class AbstractEntity implements Renderable,
 
     private String texture = "error_box";
 
+    /**
+     * Creates a new AbstractEntity at the given position with the given size
+     * parameters.
+     *
+     * @param posX the x position
+     * @param posY the y position
+     * @param posZ the z position
+     * @param xLength the length of the entity in terms of the x-axis
+     * @param yLength the length of the entity in terms of the y-axis
+     * @param zLength the height of the entity
+     */
     public AbstractEntity(float posX, float posY, float posZ, float xLength,
             float yLength,
             float zLength) {
@@ -33,7 +44,21 @@ public abstract class AbstractEntity implements Renderable,
                 false);
     }
 
-
+    /**
+     * Creates a new AbstractEntity at the given position with the given size
+     * and rendering parameters.
+     *
+     * @param posX the x position
+     * @param posY the y position
+     * @param posZ the z position
+     * @param xLength the length of the entity in terms of the x-axis
+     * @param yLength the length of the entity in terms of the y-axis
+     * @param zLength the height of the entity
+     * @param xRenderLength the render length of the entity in the x-axis
+     * @param yRenderLength the render length of the entity in the y-azis
+     * @param centered specifies if the entity is centered at the position or
+     * not
+     */
     public AbstractEntity(float posX, float posY, float posZ, float xLength,
             float yLength,
             float zLength,
@@ -49,6 +74,15 @@ public abstract class AbstractEntity implements Renderable,
         this.position = new Box3D(posX, posY, posZ, xLength, yLength, zLength);
     }
 
+    /**
+     * Creates a new AbstractEntity at the given position with the given
+     * rendering parameters.
+     * @param position the 3D position of the entity
+     * @param xRenderLength the render length of the entity in the x-axis
+     * @param yRenderLength the render length of the entity in the y-axis
+     * @param centered specifies if the entity if centered at the position or
+     * not
+     */
     public AbstractEntity(Box3D position, float xRenderLength,
             float yRenderLength,
             boolean centered) {
@@ -93,7 +127,12 @@ public abstract class AbstractEntity implements Renderable,
         return position.getZ();
     }
 
-
+    /**
+     * Sets the position of the entity
+     * @param x the x position
+     * @param y the y position
+     * @param z the z position
+     */
     public void setPosition(float x, float y, float z) {
         if (this.centered) {
             y += (1 - this.position.getYLength() / 2);
@@ -104,6 +143,10 @@ public abstract class AbstractEntity implements Renderable,
         this.position.setZ(z);
     }
 
+    /**
+     * Sets the x position of the entity.
+     * @param x the position to set the current x position to
+     */
     public void setPosX(float x) {
         if (this.centered) {
             x += (1 - this.position.getXLength() / 2);
@@ -111,6 +154,10 @@ public abstract class AbstractEntity implements Renderable,
         this.position.setX(x);
     }
 
+    /**
+     * Sets the y position of the entity.
+     * @param y the position to set the current y position to
+     */
     public void setPosY(float y) {
         if (this.centered) {
             y += (1 - this.position.getYLength() / 2);
@@ -118,6 +165,10 @@ public abstract class AbstractEntity implements Renderable,
         this.position.setY(y);
     }
 
+    /**
+     * Sets the z position of the entity.
+     * @param z the position to set the current z position to
+     */
     public void setPosZ(float z) {
         this.position.setZ(z);
     }
@@ -132,14 +183,30 @@ public abstract class AbstractEntity implements Renderable,
         return position.getZLength();
     }
 
+    /**
+     * Returns the XLength of the entity
+     *
+     * @return the XLength of the entity
+     */
     public float getXLength() {
         return position.getXLength();
     }
 
+    /**
+     * Returns the YLength of the entity
+     *
+     * @return the YLength of the entity
+     */
     public float getYLength() {
         return position.getYLength();
     }
 
+    /**
+     * Checks if this entity is colliding with the given entity.
+     *
+     * @param entity the entity to check collisions with
+     * @return true if this entity is colliding with the given entity
+     */
     public boolean collidesWith(AbstractEntity entity) {
         return this.position.overlaps(entity.position);
     }
@@ -241,6 +308,11 @@ public abstract class AbstractEntity implements Renderable,
         return result;
     }
 
+    /**
+     * Returns the parent of this world
+     *
+     * @return the AbstractWorld related to this world.
+     */
     @Deprecated
     public AbstractWorld getParent() {
         return GameManager.get().getWorld();

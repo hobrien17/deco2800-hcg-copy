@@ -4,11 +4,17 @@ import com.deco2800.hcg.util.Box3D;
 
 public abstract class Enemy extends AbstractEntity implements Harmable {
 
+    /**
+     * Creates a new Enemy at the given position.
+     */
     public Enemy(float posX, float posY, float posZ, float xLength,
             float yLength, float zLength) {
         super(posX, posY, posZ, xLength, yLength, zLength);
     }
 
+    /**
+     * Creates a new enemy at the given position
+     */
     public Enemy(float posX, float posY, float posZ, float xLength,
             float yLength, float zLength,
             float xRenderLength, float yRenderLength, boolean centered) {
@@ -16,6 +22,9 @@ public abstract class Enemy extends AbstractEntity implements Harmable {
                 yRenderLength, centered);
     }
 
+    /**
+     * Creates a new enemy at the given position.
+     */
     public Enemy(Box3D position, float xRenderLength, float yRenderLength,
             boolean centered) {
         super(position, xRenderLength, yRenderLength, centered);
