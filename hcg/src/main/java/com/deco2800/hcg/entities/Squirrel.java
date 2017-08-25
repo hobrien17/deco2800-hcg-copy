@@ -1,10 +1,13 @@
 package com.deco2800.hcg.entities;
 
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -28,6 +31,23 @@ public class Squirrel extends Enemy implements Tickable {
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 
 		this.random = new Random();
+	}
+
+	@Override
+	public void setupLoot() {
+		lootRarity = new HashMap<>();
+
+		lootRarity.put("sunflower_seed", 1.0);
+
+		checkLootRarity();
+	}
+
+	@Override
+	public Item[] loot() {
+		Item[] arr = new Item[1];
+		arr[0] = ItemManager.getNew(randItem());
+
+		return arr;
 	}
 
 	/**
