@@ -22,6 +22,8 @@ public abstract class AbstractEntity implements Renderable,
 
     private boolean centered;
 
+    private static float floatEpsilon = 0.0001f;
+
     private String texture = "error_box";
 
     public AbstractEntity(float posX, float posY, float posZ, float xLength,
@@ -198,7 +200,7 @@ public abstract class AbstractEntity implements Renderable,
         float isoXo = (cartXo - cartYo) / 2.0f;
         float isoYo = (cartXo + cartYo) / 2.0f;
 
-        if (isoY == isoYo) {
+        if ((isoY - isoYo) <= floatEpsilon) {
             if (isoX < isoXo) {
                 return 1;
             } else if (isoX > isoXo) {

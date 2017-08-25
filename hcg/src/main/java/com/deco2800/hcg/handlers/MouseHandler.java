@@ -14,6 +14,7 @@ import java.util.Optional;
  */
 public class MouseHandler {
 
+    private static String LINE_SEPARATOR = System.getProperty("line.separator");
     /**
      * Constructor for the mouse handler
      */
@@ -24,7 +25,7 @@ public class MouseHandler {
      * Currently only handles objects on height 0
      */
     public void handleMouseClick(float x, float y) {
-        System.out.printf("Clicked at %f %f\n\r", x, y);
+        System.out.printf("Clicked at %f %f" + LINE_SEPARATOR, x, y);
 
         float projX = 0, projY = 0;
 
