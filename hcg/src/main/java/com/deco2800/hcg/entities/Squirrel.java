@@ -23,9 +23,9 @@ public class Squirrel extends Enemy implements Tickable {
 	
 	private Random random;
 
-	public Squirrel(float posX, float posY, float posZ) {
+	public Squirrel(float posX, float posY, float posZ, int ID) {
 //		super(posX, posY, posZ, 1, 1, 1);
-		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5);
+		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
 		this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);

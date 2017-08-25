@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities;
 
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,15 +17,22 @@ public abstract class Enemy extends Character implements Lootable {
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
     private PlayerManager playerManager;
     int status;
+    int ID;
     Map<String, Double> lootRarity;
     // Attack Damage - vulnerability 
     
 
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
-                   int health, int strength) {
+                   int health, int strength, int ID) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
         // Current status of enemy. 1:New Born 2:Injured 3:Annoyed
+        this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         int status = 1;
+        if (ID > 0) {
+            this.ID = ID;
+        } else {
+            throw new IllegalArgumentException();
+        }
         if (health > 0) {
             this.health = health;
         } else {
@@ -45,6 +53,12 @@ public abstract class Enemy extends Character implements Lootable {
     //    super(position, xRenderLength, yRenderLength, centered);
     //}
 
+    /**
+     * Gets the enemy ID
+     *
+     * @return the integer ID of the enemy
+     */
+    public int getID() { return ID; }
 
     /**
      * Take the damage inflicted by the other entities
