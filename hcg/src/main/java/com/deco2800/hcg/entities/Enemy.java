@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities;
 
+import com.deco2800.hcg.items.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,8 @@ public abstract class Enemy extends Character implements Harmable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
-    
+    Item drops;
+    // Attack Damage - vulnerability 
     
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength) {
@@ -29,18 +31,7 @@ public abstract class Enemy extends Character implements Harmable {
     //public Enemy(Box3D position, float xRenderLength, float yRenderLength, boolean centered) {
     //    super(position, xRenderLength, yRenderLength, centered);
     //}
-    
-    /*
-    private void setAttack(int attackDamage) {
-        if (attackDamage < 0) {
-            throw new IllegalArgumentException();
-        } else {
-            attack = attackDamage;
-        }
-    }
 
-    public int getAttack() {return attack;}
-    */
 
     /**
      * Take the damage inflicted by the other entities
@@ -73,4 +64,6 @@ public abstract class Enemy extends Character implements Harmable {
     public void causeDamage(Player player){
         
     }
+    // set drops
+    private void setDrops(Item drops){ this.drops = drops; }
 }
