@@ -1,6 +1,7 @@
 package com.deco2800.hcg.multiplayer;
 
 /**
+ * Represents a networked peer
  * 
  * @author Max Crofts
  *
