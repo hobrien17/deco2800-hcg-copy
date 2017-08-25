@@ -25,7 +25,7 @@ public class MouseHandler {
      * Currently only handles objects on height 0
      */
     public void handleMouseClick(float x, float y) {
-        System.out.printf("Clicked at %f %f" + LINE_SEPARATOR, x, y);
+        System.out.printf("Clicked at %f %f%s", x, y, LINE_SEPARATOR);
 
         float projX = 0, projY = 0;
 
