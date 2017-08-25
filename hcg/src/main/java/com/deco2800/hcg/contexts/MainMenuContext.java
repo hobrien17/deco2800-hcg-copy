@@ -6,9 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.TextureManager;
 
 /**
  * Main Menu
@@ -17,9 +20,9 @@ import com.deco2800.hcg.managers.GameManager;
  */
 public class MainMenuContext extends UIContext {
 
-	private Label title;
-	private TextButton newGame;
-	private TextButton quit;
+	private Image title;
+	private ImageButton newGame;
+	private ImageButton quit;
 	private Table table;
 
 	public MainMenuContext() {
@@ -28,15 +31,18 @@ public class MainMenuContext extends UIContext {
         GameManager gameManager = GameManager.get();
 		ContextManager contextManager = (ContextManager)
                 gameManager.getManager(ContextManager.class);
+		TextureManager textureManager = (TextureManager) 
+				gameManager.getManager(TextureManager.class);
 
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
 		table = new Table();
 		table.setFillParent(true);
+		table.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 
-		title = new Label("Hardcore Gardening", skin);
-		newGame = new TextButton("New Game", skin);
-		quit = new TextButton("Quit", skin);
+		title = new Image(textureManager.getTexture("menu_title"));
+		newGame = new ImageButton(new Image(textureManager.getTexture("menu_play_button")).getDrawable());
+		quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
 
 		table.add(title);
         table.row();
