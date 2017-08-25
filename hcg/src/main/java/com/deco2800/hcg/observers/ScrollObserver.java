@@ -5,6 +5,11 @@ package com.deco2800.hcg.observers;
  */
 public interface ScrollObserver {
 
+    /**
+     * Runs when scrolling is detected
+     *
+     * @param amount the scroll amount
+     */
     void notifyScrolled(int amount);
 
 }

@@ -12,6 +12,10 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Ice extends AbstractGardenPlant {
 
+    /**
+     * Creates a new Ice plant in the given pot
+     * @param master the pot to associate the plant with
+     */
     public Ice(Pot master) {
         super(master, 100);
     }

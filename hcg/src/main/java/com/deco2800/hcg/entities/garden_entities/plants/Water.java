@@ -12,7 +12,12 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Water extends AbstractGardenPlant {
 
+	/**
+	 * Creates a new Water plant in the given pot
+	 * @param master the pot to associate the plant to
+	 */
 	public Water(Pot master) {
+
 		super(master, 1000);
 	}
 

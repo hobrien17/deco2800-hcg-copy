@@ -93,13 +93,17 @@ public class Hardcor3Gard3ning extends Game {
         contextManager.dispose();
     }
 
-    // Clear the entire display as we are using lazy rendering
+    /**
+     * Clears the entire display as we are using lazy rendering
+     */
     public void clearScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
-    // Fire waiting game ticks
+    /**
+     * Fires waiting game ticks
+     */
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
             if (contextManager.ticksRunning()) {

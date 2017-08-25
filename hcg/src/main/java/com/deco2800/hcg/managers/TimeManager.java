@@ -144,6 +144,10 @@ public class TimeManager extends Manager implements TickableManager {
         return this.timeElapsed;
     }
 
+    /**
+     * Sets the text label for the time
+     * @param label the label to set the text of
+     */
     public void setLabel(Label label) {
         this.label = label;
     }

@@ -12,6 +12,10 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Inferno extends AbstractGardenPlant {
 
+    /**
+     * Creates a new inferno plant in the given pot
+     * @param master the pot to associate the plant with
+     */
     public Inferno(Pot master) {
         super(master, 1200);
     }

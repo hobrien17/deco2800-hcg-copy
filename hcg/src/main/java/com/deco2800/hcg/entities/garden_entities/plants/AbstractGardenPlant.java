@@ -37,6 +37,11 @@ public abstract class AbstractGardenPlant implements Lootable {
 
     Map<String, Double> lootRarity;
 
+    /**
+     * Creates a new plant in the given pot with the given growth delay.
+     * @param master the pot the plant is related to
+     * @param delay the growth delay of the plant.
+     */
     public AbstractGardenPlant(Pot master, int delay) {
         this.stage = Stage.SPROUT;
         growDelay = delay;

@@ -12,6 +12,10 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Grass extends AbstractGardenPlant {
 
+    /**
+     * Creates a new Grass plant in the given pot
+     * @param master the pot to associate the plant with
+     */
     public Grass(Pot master) {
         super(master, 600);
     }

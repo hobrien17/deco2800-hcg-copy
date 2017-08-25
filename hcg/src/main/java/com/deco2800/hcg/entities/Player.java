@@ -244,8 +244,12 @@ public class Player extends Character implements Tickable {
         // TODO: enter level up screen
     }
 
-    public void gainXp(int xp) {
-        this.xp += xp;
+    /**
+     * Increases the xp of the player by the given amount
+     * @param amount the amount of xp to gain
+     */
+    public void gainXp(int amount) {
+        this.xp += amount;
     }
 
     /**

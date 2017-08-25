@@ -319,6 +319,11 @@ public abstract class AbstractEntity implements Renderable,
         return GameManager.get().getWorld();
     }
 
+    /**
+     * Returns the distance from the given entity
+     * @param e the entity to find the distance of
+     * @return the distanct from the given entity
+     */
     public float distance(AbstractEntity e) {
         return this.getBox3D().distance(e.getBox3D());
     }
