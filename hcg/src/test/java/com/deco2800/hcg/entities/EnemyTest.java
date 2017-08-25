@@ -1,4 +1,4 @@
-package com.deco2800.enemies;
+package com.deco2800.hcg.entities;
 
 import static org.junit.Assert.assertEquals;
 

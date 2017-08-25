@@ -1,11 +1,11 @@
 package com.deco2800.hcg.items;
 
 public class BasicStackableItem implements Item {
-    String itemName;
-    int itemWeight;
-    String itemTexture;
-    int itemMaxStackSize;
-    int itemCurrentStackSize;
+    private String itemName;
+    private int itemWeight;
+    private String itemTexture;
+    private int itemMaxStackSize;
+    private int itemCurrentStackSize;
 
     BasicStackableItem(String name, int weight, int maxStackSize) {
         itemName = name;
@@ -19,10 +19,18 @@ public class BasicStackableItem implements Item {
     }
 
     /** Function for returning the max stack size of this item */
-    public int maxStackSize() {
+    public int getMaxStackSize() {
         return itemMaxStackSize;
     }
 
+    /**
+     * Retrieves the current size of this stack of items.
+     * @return The stack size of this item.
+     */
+    public int getStackSize() {
+        return this.itemCurrentStackSize;
+    }
+    
     /** Function for returning whether an item is wearable/equipable by a user
      * eg armour, character customization items */
     public boolean isWearable() {
@@ -52,5 +60,15 @@ public class BasicStackableItem implements Item {
      * follows a similar method to how entities does textures**/
     public void setTexture(String icon) {
         itemTexture = icon;
+    }
+    
+    @Override
+    public int getBaseValue() {
+        return 1;
+    }
+    
+    @Override
+    public boolean isTradable() {
+        return true;
     }
 }

@@ -115,7 +115,7 @@ public abstract class Enemy extends Character implements Harmable {
      *
      * @author Jingwei WANG
      */
-    public void randomMove(){
+    public void randomMove() {
         float radius;
         float distance;
         float nextPosX;
@@ -127,26 +127,23 @@ public abstract class Enemy extends Character implements Harmable {
         distance = Math.abs(new Random().nextFloat()) * 10 * this.getLevel();
         nextPosX = (float) (this.getPosX() + distance * cos(radius));
         nextPosY = (float) (this.getPosY() + distance * cos(radius));
-        while(this.getPosX() != nextPosX && this.getPosY() != nextPosY){
-            if(this.detectPlayer()){
+        while (this.getPosX() != nextPosX && this.getPosY() != nextPosY) {
+            if (this.detectPlayer()) {
                 this.moveTo(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY());
                 break;
-            }else{
-                if(this.getPosX() < nextPosX){
+            } else {
+                if (this.getPosX() < nextPosX) {
                     speedX -= movementSpeed;
-                }
-                else if(this.getPosX() > nextPosX){
+                } else if (this.getPosX() > nextPosX) {
                     speedX += movementSpeed;
                 }
-                if(this.getPosY() < nextPosY){
+                if (this.getPosY() < nextPosY) {
                     speedY += movementSpeed;
-                }
-                else if(this.getPosY() > nextPosY){
+                } else if (this.getPosY() > nextPosY) {
                     speedY -= movementSpeed;
                 }
             }
         }
-
     }
 
     /**

@@ -3,11 +3,11 @@ package com.deco2800.hcg.items;
 /** Basic class for a simple non stackable item, non wearable item**/
 public class BasicNonstackableItem implements Item {
 
-    String itemName;
-    int itemWeight;
-    String itemTexture;
+    private String itemName;
+    private int itemWeight;
+    private String itemTexture;
 
-    BasicNonstackableItem(String name, int weight) {
+    public BasicNonstackableItem(String name, int weight) {
         itemName = name;
         itemWeight = weight;
     }
@@ -17,7 +17,7 @@ public class BasicNonstackableItem implements Item {
     }
 
     /** Function for returning the max stack size of this item */
-    public int maxStackSize() {
+    public int getMaxStackSize() {
         return 1;
     }
 
@@ -40,5 +40,15 @@ public class BasicNonstackableItem implements Item {
 
     public boolean addToStack(int number) {
         return false;
+    }
+    
+    @Override
+    public int getBaseValue() {
+        return 1; 
+    }
+    
+    @Override
+    public boolean isTradable() {
+        return true;
     }
 }
