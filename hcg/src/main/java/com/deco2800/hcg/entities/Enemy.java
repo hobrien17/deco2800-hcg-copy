@@ -103,6 +103,7 @@ public abstract class Enemy extends Character implements Harmable {
             this.setStatus(3);
             return true;
         }else{
+            this.setStatus(1);
             return false;
         }
     }
@@ -129,7 +130,7 @@ public abstract class Enemy extends Character implements Harmable {
         nextPosY = (float) (this.getPosY() + distance * cos(radius));
         while (this.getPosX() != nextPosX && this.getPosY() != nextPosY) {
             if (this.detectPlayer()) {
-                this.moveTo(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY());
+                this.moveToPlayer();
                 break;
             } else {
                 if (this.getPosX() < nextPosX) {
@@ -154,7 +155,7 @@ public abstract class Enemy extends Character implements Harmable {
      * @author Jingwei WANG
      */
     public void moveTo(float destPosX, float destPosY){
-        while(this.getPosX() != destPosX && this.getPosY() != destPosY){
+        while(this.getPosX() != destPosX && this.getPosY() != destPosY ){
             if(this.getPosX() < destPosX){
                 speedX -= movementSpeed;
             }
@@ -165,6 +166,30 @@ public abstract class Enemy extends Character implements Harmable {
                 speedY += movementSpeed;
             }
             else if(this.getPosY() > destPosY){
+                speedY -= movementSpeed;
+            }
+        }
+    }
+
+    /**
+     * Move enemy to player.
+     *
+     * @author Jingwei WANG
+     */
+    public void moveToPlayer(){
+        while(this.getPosX() != playerManager.getPlayer().getPosX() &&
+                this.getPosY() != playerManager.getPlayer().getPosY() &&
+                this.detectPlayer()){
+            if(this.getPosX() < playerManager.getPlayer().getPosX()){
+                speedX -= movementSpeed;
+            }
+            else if(this.getPosX() > playerManager.getPlayer().getPosX()){
+                speedX += movementSpeed;
+            }
+            if(this.getPosY() < playerManager.getPlayer().getPosY()){
+                speedY += movementSpeed;
+            }
+            else if(this.getPosY() > playerManager.getPlayer().getPosY()){
                 speedY -= movementSpeed;
             }
         }
