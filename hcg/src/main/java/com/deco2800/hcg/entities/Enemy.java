@@ -1,21 +1,28 @@
 package com.deco2800.hcg.entities;
 
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.PlayerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Random;
 
-import com.deco2800.hcg.util.Box3D;
+import static java.lang.Math.*;
 
 public abstract class Enemy extends Character implements Harmable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
+    private PlayerManager playerManager;
+    int status;
     Item drops;
     // Attack Damage - vulnerability 
     
+
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
+        // Current status of enemy. 1:New Born 2:Injured 3:Annoyed
+        int status = 1;
         if (health > 0) {
             this.health = health;
         } else {
@@ -26,6 +33,10 @@ public abstract class Enemy extends Character implements Harmable {
         } else {
             throw new IllegalArgumentException();
         }
+        this.setSpeedX(0);
+        this.setSpeedY(0);
+
+
     }
 
     //public Enemy(Box3D position, float xRenderLength, float yRenderLength, boolean centered) {
@@ -64,6 +75,101 @@ public abstract class Enemy extends Character implements Harmable {
     public void causeDamage(Player player){
         
     }
+
     // set drops
     private void setDrops(Item drops){ this.drops = drops; }
+
+    /**
+     * Set new status of enemy.
+     * @param newStatus
+     */
+    public void setStatus(int newStatus){
+        this.status = newStatus;
+    }
+
+    /**
+     * To detect player's position. If player is near enemy, return 1.
+     * @return: 0. Undetected
+     *          1. Detected player
+     *
+     * @author Jingwei WANG
+     */
+    public boolean detectPlayer(){
+        float diffX = abs(this.getPosX() - playerManager.getPlayer().getPosX());
+        float diffY = abs(this.getPosY() - playerManager.getPlayer().getPosY());
+        double distance = sqrt(diffX * diffX + diffY * diffY);
+        if(distance <= 10*this.getLevel()){
+            //Annoyed by player.
+            this.setStatus(3);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * Randomly go to next position which is inside the circle(Maximum distance depends on enemy level.)
+     * based on current position.
+     *
+     * Go to the player's position if detected player during moving.
+     *
+     * @author Jingwei WANG
+     */
+    public void randomMove(){
+        float radius;
+        float distance;
+        float nextPosX;
+        float nextPosY;
+        float nextPosZ;
+        //Get direction of next position. Randomly be chosen between 0 and 360.
+        radius = Math.abs(new Random().nextFloat()) * 400 % 360;
+        //Get distance to next position which is no more than maximum.
+        distance = Math.abs(new Random().nextFloat()) * 10 * this.getLevel();
+        nextPosX = (float) (this.getPosX() + distance * cos(radius));
+        nextPosY = (float) (this.getPosY() + distance * cos(radius));
+        while(this.getPosX() != nextPosX && this.getPosY() != nextPosY){
+            if(this.detectPlayer()){
+                this.moveTo(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY());
+                break;
+            }else{
+                if(this.getPosX() < nextPosX){
+                    speedX -= movementSpeed;
+                }
+                else if(this.getPosX() > nextPosX){
+                    speedX += movementSpeed;
+                }
+                if(this.getPosY() < nextPosY){
+                    speedY += movementSpeed;
+                }
+                else if(this.getPosY() > nextPosY){
+                    speedY -= movementSpeed;
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Go to the pointed position.
+     * @param destPosX: the X of next position
+     * @param destPosY: the Y of next position
+     *
+     * @author Jingwei WANG
+     */
+    public void moveTo(float destPosX, float destPosY){
+        while(this.getPosX() != destPosX && this.getPosY() != destPosY){
+            if(this.getPosX() < destPosX){
+                speedX -= movementSpeed;
+            }
+            else if(this.getPosX() > destPosX){
+                speedX += movementSpeed;
+            }
+            if(this.getPosY() < destPosY){
+                speedY += movementSpeed;
+            }
+            else if(this.getPosY() > destPosY){
+                speedY -= movementSpeed;
+            }
+        }
+    }
 }
