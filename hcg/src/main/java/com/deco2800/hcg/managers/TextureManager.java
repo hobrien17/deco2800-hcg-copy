@@ -56,22 +56,22 @@ public class TextureManager extends Manager {
 
 		textureMap.put("plant_01", new Texture("resources/sprites/plants/plant_01.png"));
 		textureMap.put("plant_02", new Texture("resources/sprites/plants/plant_02.png"));
-		textureMap.put("sunflower_01", new Texture("resources/sprites/plants/Sunflower_Pot_01.png"));
-		textureMap.put("sunflower_02", new Texture("resources/sprites/plants/Sunflower_Pot_02.png"));
-		textureMap.put("sunflower_03", new Texture("resources/sprites/plants/Sunflower_Pot_03.png"));
-		textureMap.put("cactus_01", new Texture("resources/sprites/plants/Cactus_Pot_01.png"));
-		textureMap.put("cactus_02", new Texture("resources/sprites/plants/Cactus_Pot_02.png"));
-		textureMap.put("cactus_03", new Texture("resources/sprites/plants/Cactus_Pot_03.png"));
-		textureMap.put("lily_01", new Texture("resources/sprites/plants/Waterlily_01.png"));
-		textureMap.put("lily_02", new Texture("resources/sprites/plants/Waterlily_02.png"));
-		textureMap.put("lily_03", new Texture("resources/sprites/plants/Waterlily_03.png"));
-		textureMap.put("grass_01", new Texture("resources/sprites/plants/Grass_Pot_01.png"));
-		textureMap.put("grass_02", new Texture("resources/sprites/plants/Grass_Pot_02.png"));
-		textureMap.put("grass_03", new Texture("resources/sprites/plants/Grass_Pot_03.png"));
-		textureMap.put("inferno_01", new Texture("resources/sprites/plants/Inferno_01.png"));
-		textureMap.put("inferno_02", new Texture("resources/sprites/plants/Inferno_02.png"));
-		textureMap.put("inferno_03", new Texture("resources/sprites/plants/Inferno_03.png"));
-		textureMap.put("pot", new Texture("resources/sprites/plants/Pot.png"));
+		textureMap.put("sunflower_01", new Texture("resources/sprites/plants/sunflower_pot_01.png"));
+		textureMap.put("sunflower_02", new Texture("resources/sprites/plants/sunflower_pot_02.png"));
+		textureMap.put("sunflower_03", new Texture("resources/sprites/plants/sunflower_pot_03.png"));
+		textureMap.put("cactus_01", new Texture("resources/sprites/plants/cactus_pot_01.png"));
+		textureMap.put("cactus_02", new Texture("resources/sprites/plants/cactus_pot_02.png"));
+		textureMap.put("cactus_03", new Texture("resources/sprites/plants/cactus_pot_03.png"));
+		textureMap.put("lily_01", new Texture("resources/sprites/plants/waterlily_01.png"));
+		textureMap.put("lily_02", new Texture("resources/sprites/plants/waterlily_02.png"));
+		textureMap.put("lily_03", new Texture("resources/sprites/plants/waterlily_03.png"));
+		textureMap.put("grass_01", new Texture("resources/sprites/plants/grass_pot_01.png"));
+		textureMap.put("grass_02", new Texture("resources/sprites/plants/grass_pot_02.png"));
+		textureMap.put("grass_03", new Texture("resources/sprites/plants/grass_pot_03.png"));
+		textureMap.put("inferno_01", new Texture("resources/sprites/plants/inferno_01.png"));
+		textureMap.put("inferno_02", new Texture("resources/sprites/plants/inferno_02.png"));
+		textureMap.put("inferno_03", new Texture("resources/sprites/plants/inferno_03.png"));
+		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 
 	}

@@ -8,14 +8,17 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
 import com.deco2800.hcg.entities.garden_entities.plants.Grass;
 import com.deco2800.hcg.entities.garden_entities.plants.Inferno;
+import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TimeManager;
 
 public class GardenTest {
@@ -48,6 +51,8 @@ public class GardenTest {
 		assertEquals(p.getYRenderLength(), 1, 0.01);
 		
 		assertEquals(p.getTexture(), "pot");
+		
+		assertEquals(p.getPlant(), null);
 	}
 	
 	@Test
