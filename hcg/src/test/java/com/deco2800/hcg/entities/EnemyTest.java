@@ -12,7 +12,7 @@ public class EnemyTest {
     @Before
     public void createBasicEnemy() {
         // create enemy
-        enemy = new Squirrel(5,5,0);
+        enemy = new Squirrel(5,5,0, 1);
     }
 
     @Test

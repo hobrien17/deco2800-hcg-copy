@@ -1,28 +1,38 @@
 package com.deco2800.hcg.entities;
 
-import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 import java.util.Random;
 
 import static java.lang.Math.*;
 
-public abstract class Enemy extends Character implements Harmable {
+public abstract class Enemy extends Character implements Lootable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
     private PlayerManager playerManager;
     int status;
-    Item drops;
+    int ID;
+    Map<String, Double> lootRarity;
     // Attack Damage - vulnerability 
     
 
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
-                   int health, int strength) {
+                   int health, int strength, int ID) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
         // Current status of enemy. 1:New Born 2:Injured 3:Annoyed
+        this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         int status = 1;
+        if (ID > 0) {
+            this.ID = ID;
+        } else {
+            throw new IllegalArgumentException();
+        }
         if (health > 0) {
             this.health = health;
         } else {
@@ -43,6 +53,12 @@ public abstract class Enemy extends Character implements Harmable {
     //    super(position, xRenderLength, yRenderLength, centered);
     //}
 
+    /**
+     * Gets the enemy ID
+     *
+     * @return the integer ID of the enemy
+     */
+    public int getID() { return ID; }
 
     /**
      * Take the damage inflicted by the other entities
@@ -76,8 +92,64 @@ public abstract class Enemy extends Character implements Harmable {
         
     }
 
-    // set drops
-    private void setDrops(Item drops){ this.drops = drops; }
+    @Override
+    public Map<String, Double> getRarity() {
+        return lootRarity;
+    }
+
+    /**
+     * Gets a list of all possible loot dropped by this plant
+     *
+     * @return An array of all possible loot
+     */
+    public String[] getLoot() {
+        return lootRarity.keySet().toArray(new String[lootRarity.size()]);
+    }
+
+    /**
+     * Sets up the loot rarity map for a plant
+     */
+    abstract void setupLoot();
+    //Use this in special enemy classes to set up drops
+
+    /**
+     * Generates a random item based on the loot rarity
+     *
+     * @return A random item string in the plant's loot map
+     */
+    public String randItem() {
+        Double prob = Math.random();
+        Double total = 0.0;
+        for (Map.Entry<String, Double> entry : lootRarity.entrySet()) {
+            total += entry.getValue();
+            if (total > prob) {
+                return entry.getKey();
+            }
+        }
+        LOGGER.warn("No item has been selected, returning null");
+        return null;
+    }
+
+    /**
+     * Checks that the loot rarity is valid
+     *
+     * @return true if the loot rarity is valid, otherwise false
+     */
+    public boolean checkLootRarity() {
+        double sum = 0.0;
+        for (Double rarity : lootRarity.values()) {
+            if (rarity < 0.0 || rarity > 1.0) {
+                LOGGER.error("Rarity should be between 0 and 1");
+                return false;
+            }
+            sum += rarity;
+        }
+        if (Double.compare(sum, 1.0) != 0) {
+            LOGGER.warn("Total rarity should be 1");
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Set new status of enemy.
