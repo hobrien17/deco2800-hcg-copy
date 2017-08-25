@@ -1,8 +1,6 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ItemManager;
@@ -15,15 +13,7 @@ import com.deco2800.hcg.managers.ItemManager;
 public class Cactus extends AbstractGardenPlant {
 
     public Cactus(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
-    }
-
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
-
+        super(master, 750);
     }
     
     @Override
@@ -32,7 +22,7 @@ public class Cactus extends AbstractGardenPlant {
 		case SPROUT:
 			return "cactus_01";
 		case SMALL:
-			return "cactus_01";
+			return "cactus_02";
 		case LARGE:
 			return "cactus_03";
 		}
@@ -45,16 +35,7 @@ public class Cactus extends AbstractGardenPlant {
 
         lootRarity.put("rock_seed", 1.0);
 
-        double sum = 0.0;
-        for (Double rarity : lootRarity.values()) {
-            if (rarity < 0.0 || rarity > 1.0) {
-                LOGGER.error("Rarity should be between 0 and 1");
-            }
-            sum += rarity;
-        }
-        if (sum != 1.0) {
-            LOGGER.warn("Total rarity should be 1");
-        }
+        checkLootRarity();
     }
 
     @Override

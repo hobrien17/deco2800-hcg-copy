@@ -1,10 +1,7 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.FireSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ItemManager;
 
@@ -16,28 +13,20 @@ import com.deco2800.hcg.managers.ItemManager;
 public class Inferno extends AbstractGardenPlant {
 
     public Inferno(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
+        super(master, 1200);
     }
 
     @Override
     public String getThisTexture() {
         switch (this.getStage()) {
             case SPROUT:
-                return null;
+                return "inferno_01";
             case SMALL:
-                return null;
+                return "inferno_02";
             case LARGE:
-                return null;
+                return "inferno_03";
         }
         return null;
-
-    }
-
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
 
     }
 
@@ -47,16 +36,7 @@ public class Inferno extends AbstractGardenPlant {
 
         lootRarity.put("fire_seed", 1.0);
 
-        double sum = 0.0;
-        for (Double rarity : lootRarity.values()) {
-            if (rarity < 0.0 || rarity > 1.0) {
-                LOGGER.error("Rarity should be between 0 and 1");
-            }
-            sum += rarity;
-        }
-        if (sum != 1.0) {
-            LOGGER.warn("Total rarity should be 1");
-        }
+        checkLootRarity();
     }
 
     @Override
