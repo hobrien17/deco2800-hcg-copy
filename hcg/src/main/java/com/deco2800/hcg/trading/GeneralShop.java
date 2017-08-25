@@ -42,7 +42,7 @@ public class GeneralShop implements Shop{
     @Override
     public void buyStock(Item item) {
         shopStock.put(item, new Integer(shopStock.get(item) - 1));
-        //code to modify player's inventory
+        player.addItemToInventory(item);
     }
 
     @Override
