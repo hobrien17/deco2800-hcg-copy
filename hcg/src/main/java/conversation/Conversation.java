@@ -32,8 +32,9 @@ public class Conversation {
 			active = false;
 			return goodbye;
 		}
-		if(conversation.indexOf(iterator) == conversation.size()-1){
+		if(iterator == conversation.size()-1){
 			active= false;
+			iterator = -1;
 			return goodbye;
 		}
 		iterator++;
