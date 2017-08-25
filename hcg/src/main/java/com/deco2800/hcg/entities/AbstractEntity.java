@@ -199,8 +199,9 @@ public abstract class AbstractEntity implements Renderable,
 
         float isoXo = (cartXo - cartYo) / 2.0f;
         float isoYo = (cartXo + cartYo) / 2.0f;
+        
 
-        if ((isoY - isoYo) <= floatEpsilon) {
+        if (Math.abs(isoY - isoYo) <= floatEpsilon) {
             if (isoX < isoXo) {
                 return 1;
             } else if (isoX > isoXo) {
