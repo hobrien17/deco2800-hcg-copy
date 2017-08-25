@@ -79,7 +79,9 @@ public class Player extends Character implements Tickable {
         Bullet bullet = new Bullet(this.getPosX(), this.getPosY(),
                 this.getPosZ(), worldCoords.x,
                 worldCoords.y);
+
         GameManager.get().getWorld().addEntity(bullet);
+
     }
 
     /**
@@ -375,7 +377,7 @@ public class Player extends Character implements Tickable {
      */
     private void ifSwim(String name) {
       if (name != null) {
-        if (name.equals("water-deep")) {
+        if ("water-deep".equals(name)) {
             this.setTexture("spacman_swim");
             playSound("swimming");
             
