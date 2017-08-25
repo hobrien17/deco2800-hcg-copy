@@ -3,8 +3,11 @@ package com.deco2800.hcg.conversation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Basic data structure to hold conversations that will be utilised by the NPC class and the UI
+ * @author Blake Bodycote
+ */
 public class Conversation {
-
 	private List<String> conversation; // The sequence of questions asked by NPC if player chooses yes
 	private String greeting; // what the NPC says when the conversation is started
 	private String goodbye; // what the NPC says when the conversation is ended

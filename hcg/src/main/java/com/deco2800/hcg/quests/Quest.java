@@ -46,6 +46,15 @@ public class Quest {
 		return itemToReward;
 	}
 	
+	/**
+	 * Returns the instruction of the quest, utilised by the UI in order to display a quest .
+	 * 
+	 * @return the instruction for the quest
+	 */
+	public String getInstruction(){
+		return instruction;
+	}
+	
 	
 	
 	
