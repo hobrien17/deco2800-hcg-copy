@@ -12,19 +12,23 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Explosive extends AbstractGardenPlant {
 
+    /**
+     * Creates a new Explosive plant in the given pot
+     * @param master the pot to associate the plant with
+     */
     public Explosive(Pot master) {
-        super(master, 100);
+        super(master, 59);
     }
 
     @Override
     public String getThisTexture() {
         switch (this.getStage()) {
             case SPROUT:
-                return null;
+                return "sunflower_01"; //sprites currently not implemented
             case SMALL:
-                return null;
+                return "sunflower_02";
             case LARGE:
-                return null;
+                return "sunflower_03";
         }
         return null;
 

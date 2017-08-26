@@ -2,7 +2,7 @@ package com.deco2800.hcg.entities;
 
 /**
  * Tickable An interface to allow Entities to be ticked at a constant rate
- * allowing for AI and other tasks to occour
+ * allowing for AI and other tasks to occur
  *
  * @Author Tim Hadwen
  */
