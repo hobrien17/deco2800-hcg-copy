@@ -1,5 +1,7 @@
 package com.deco2800.hcg.items;
 
+import com.deco2800.hcg.util.MathHelper;
+
 public class BasicStackableItem implements Item {
     private String itemName;
     private int itemWeight;
@@ -27,6 +29,7 @@ public class BasicStackableItem implements Item {
      * Retrieves the current size of this stack of items.
      * @return The stack size of this item.
      */
+    @Override
     public int getStackSize() {
         return this.itemCurrentStackSize;
     }
@@ -69,6 +72,26 @@ public class BasicStackableItem implements Item {
     
     @Override
     public boolean isTradable() {
+        return true;
+    }
+    
+    @Override
+    public boolean sameItem(Item item) {
+        return item.getClass().equals(this.getClass());
+    }
+    
+    @Override
+    public boolean equals(Item item) {
+        return item.getStackSize() == this.getStackSize() && this.sameItem(item);
+    }
+    
+    @Override
+    public void setStackSize(int number) {
+        this.itemCurrentStackSize = MathHelper.clamp(number, 1, this.getStackSize());
+    }
+    
+    @Override
+    public boolean isStackable() {
         return true;
     }
 }

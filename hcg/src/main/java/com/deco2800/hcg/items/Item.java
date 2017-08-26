@@ -23,9 +23,23 @@ public interface Item {
 
     /** Function for returning the name of an item **/
     String getName();
+    
+    /**
+     * Returns the current stack size of this item.
+     * 
+     * @return the current stack size of this item. Always returns 1 for
+     *         non-stackable items.
+     */
+    int getStackSize();
 
     /**Function for getting the max stack size. 1 indicates a non stackable item */
     int getMaxStackSize();
+    
+    /** 
+     * Return whether or not this item is stackable.
+     * @return whether or not this item is stackable.
+     */
+    boolean isStackable();
 
     /** Function for returning whether an item is wearable/equipable by a user
      * eg armour, character customization items */
@@ -50,12 +64,42 @@ public interface Item {
      * Implemented similar to the AbstractEntitry texture. Be sure to register texture with
      * TextureRegister before assigning the texture to a item*/
     void setTexture(String texture);
-
-    /** Function for adding a number of an item to the stack of the current item.
-     * Note that for non stackable items, this always returns false;
-     * @param number: the number of items to add to this items stack
+    
+    /**
+     * Function for adding a number of an item to the stack of the current item.
+     * Note that for non stackable items, this always returns false.
+     * 
+     * @param number
+     *            the number of items to add to this items stack
      * @return true or false depending on whether the item was added or not
      */
     boolean addToStack(int number);
-
+    
+    /**
+     * Set this item's current stack size to the given number.
+     * 
+     * @param number
+     *            the new stack size of this item.
+     */
+    void setStackSize(int number);
+    
+    /**
+     * Determine whether or not this Item and the given Item are functionally the
+     * same item. Disregard stack size.
+     * 
+     * @param item
+     *            The item to compare this item to.
+     * @return whether or not this item and the given item are functionally the
+     *         same.
+     */
+    boolean sameItem(Item item);
+    
+    /**
+     * Determine whether or not this Item and the given Item are equivalent items.
+     * 
+     * @param item
+     *            The item to compare this item to.
+     * @return whether or not this item and the given item are equivalent.
+     */
+    boolean equals(Item item);
 }

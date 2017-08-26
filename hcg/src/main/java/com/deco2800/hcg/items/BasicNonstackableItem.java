@@ -1,5 +1,7 @@
 package com.deco2800.hcg.items;
 
+import com.deco2800.hcg.util.MathHelper;
+
 /** Basic class for a simple non stackable item, non wearable item**/
 public class BasicNonstackableItem implements Item {
 
@@ -50,5 +52,30 @@ public class BasicNonstackableItem implements Item {
     @Override
     public boolean isTradable() {
         return true;
+    }
+    
+    @Override
+    public int getStackSize() {
+        return 1;
+    }
+
+    @Override
+    public boolean sameItem(Item item) {
+        return item.getClass().equals(this.getClass());
+    }
+    
+    @Override
+    public boolean equals(Item item) {
+        return item.getStackSize() == this.getStackSize() && this.sameItem(item);
+    }
+    
+    @Override
+    public void setStackSize(int number) {
+        return;
+    }
+    
+    @Override
+    public boolean isStackable() {
+        return false;
     }
 }
