@@ -15,7 +15,7 @@ import java.util.Random;
  * A generic player instance for the game
  */
 public class Squirrel extends Enemy implements Tickable {
-	
+
 	private float speed = 0.1f;
 	
 	private PlayerManager playerManager;
@@ -93,4 +93,5 @@ public class Squirrel extends Enemy implements Tickable {
 			setPosY(getPosY() + changeY);
 		}
 	}
+
 }

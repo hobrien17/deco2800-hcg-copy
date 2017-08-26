@@ -12,8 +12,12 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Cactus extends AbstractGardenPlant {
 
+    /**
+     * Creates a new Cactus plant in the given pot
+     * @param master the pot to associate the plant with
+     */
     public Cactus(Pot master) {
-        super(master, 750);
+        super(master, 20);
     }
     
     @Override
