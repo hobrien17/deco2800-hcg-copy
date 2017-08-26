@@ -17,7 +17,7 @@ public class Grass extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Grass(Pot master) {
-        super(master, 600);
+        super(master, 15);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class Water extends AbstractGardenPlant {
 	 */
 	public Water(Pot master) {
 
-		super(master, 1000);
+		super(master, 30);
 	}
 
 	@Override

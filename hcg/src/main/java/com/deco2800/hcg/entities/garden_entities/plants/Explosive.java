@@ -17,7 +17,7 @@ public class Explosive extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Explosive(Pot master) {
-        super(master, 100);
+        super(master, 59);
     }
 
     @Override

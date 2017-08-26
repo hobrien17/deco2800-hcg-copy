@@ -17,7 +17,7 @@ public class Ice extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Ice(Pot master) {
-        super(master, 100);
+        super(master, 45);
     }
 
     @Override

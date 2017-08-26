@@ -45,7 +45,7 @@ public abstract class AbstractGardenPlant implements Lootable {
     public AbstractGardenPlant(Pot master, int delay) {
         this.stage = Stage.SPROUT;
         growDelay = delay;
-        this.lastGrow = ((TimeManager)GameManager.get().getManager(TimeManager.class)).getTimeElapsed();
+        this.lastGrow = ((TimeManager)GameManager.get().getManager(TimeManager.class)).getMinutes();
         this.master = master;
         setupLoot();
     }
@@ -55,8 +55,8 @@ public abstract class AbstractGardenPlant implements Lootable {
      */
     public void checkGrow() {
         TimeManager tm = (TimeManager)GameManager.get().getManager(TimeManager.class);
-        int time = tm.getTimeElapsed();
-        if (time - lastGrow >= growDelay) {
+        int time = tm.getMinutes();
+        if (time == (lastGrow + growDelay)%60) {
         	lastGrow = time;
         	this.advanceStage();
         }

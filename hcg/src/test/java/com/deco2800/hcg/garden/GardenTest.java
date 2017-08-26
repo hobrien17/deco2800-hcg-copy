@@ -73,7 +73,7 @@ public class GardenTest {
 	}
 	
 	@Test
-	public void testAllPlantsSprite() {
+	public void testAllPlants() {
 		Pot p = new Pot(5, 5, 0);
 		AbstractGardenPlant[] plants = {new Sunflower(p), new Cactus(p), new Water(p), new Grass(p), new Inferno(p)};
 		for(AbstractGardenPlant plant : plants) {
@@ -82,35 +82,6 @@ public class GardenTest {
 			testSprite(plant, p);
 			testLoot(plant);
 		}
-	}
-	
-	@Test
-	public void testAllPlantsGrow() {
-		Pot p = new Pot(5, 5, 0);
-		AbstractGardenPlant[] plants = {new Sunflower(p), new Cactus(p), new Water(p), new Grass(p), new Inferno(p)};
-		for(AbstractGardenPlant plant : plants) {
-			p.removePlant();
-			p.addPlant(plant);
-			testGrow(plant, p);
-		}
-	}
-	
-	private void testGrow(AbstractGardenPlant plant, Pot pot) {
-		TimeManager tm = (TimeManager)GameManager.get().getManager(TimeManager.class);
-		tm.setTimeElapsed(0);
-		
-		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.SPROUT);
-		
-		pot.onTick(0);
-		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.SPROUT);
-		
-		tm.setTimeElapsed(plant.getGrowDelay());
-		pot.onTick(0);
-		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.SMALL);
-		
-		tm.setTimeElapsed(plant.getGrowDelay()*2);
-		pot.onTick(0);
-		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.LARGE);
 	}
 	
 	private void testLoot(AbstractGardenPlant plant) {

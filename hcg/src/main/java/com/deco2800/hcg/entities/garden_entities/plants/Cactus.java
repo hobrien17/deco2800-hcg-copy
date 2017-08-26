@@ -17,7 +17,7 @@ public class Cactus extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Cactus(Pot master) {
-        super(master, 750);
+        super(master, 20);
     }
     
     @Override

@@ -18,7 +18,7 @@ public class Sunflower extends AbstractGardenPlant {
      */
     public Sunflower(Pot master) {
 
-        super(master, 500);
+        super(master, 10);
     }
 
     @Override
