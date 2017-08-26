@@ -20,7 +20,7 @@ public abstract class Enemy extends Character implements Lootable {
     // Current status of enemy. 1 : New Born, 2 : Injured 3 : Annoyed
     int status;
     int ID;
-    Map<String, Double> lootRarity;
+    transient Map<String, Double> lootRarity;
     
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength, int ID) {
@@ -84,7 +84,7 @@ public abstract class Enemy extends Character implements Lootable {
 
     /**
      * Attack the player
-     * 
+     *
      */
     public void causeDamage(Player player) {
         //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
@@ -197,7 +197,8 @@ public abstract class Enemy extends Character implements Lootable {
         distance = Math.abs(new Random().nextFloat()) * 10 * this.getLevel();
         nextPosX = (float) (this.getPosX() + distance * cos(radius));
         nextPosY = (float) (this.getPosY() + distance * cos(radius));
-        while (this.getPosX() != nextPosX && this.getPosY() != nextPosY) {
+        while ((this.getPosX() > nextPosX || this.getPosX() < nextPosX) &&
+                (this.getPosY() > nextPosY || this.getPosY() < nextPosY)) {
             if (this.detectPlayer()) {
                 this.moveToPlayer();
                 break;
@@ -223,7 +224,8 @@ public abstract class Enemy extends Character implements Lootable {
      *
      */
     public void moveTo(float destPosX, float destPosY){
-        while(this.getPosX() != destPosX && this.getPosY() != destPosY ){
+        while ((this.getPosX() > destPosX || this.getPosX() < destPosX) &&
+                (this.getPosY() > destPosY || this.getPosY() < destPosY)) {
             if(this.getPosX() < destPosX){
                 speedX -= movementSpeed;
             }
