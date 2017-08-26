@@ -1,7 +1,5 @@
 package com.deco2800.hcg.items;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 /**
  * Item interface provides a high level guide for others to implement custom items.
  * The following methods outline the most basic methods an item requires
@@ -24,6 +22,7 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
  **/
 public interface Item {
     /**Each item has four required fields: name, isStackable (a boolean value), itemWeight and itemIcon **/
+    boolean isStackable();
 
     /**
      * Retrieves an items display name
@@ -56,13 +55,7 @@ public interface Item {
      * @return Whether or not item can be equipped in hot bar
      */
     boolean isEquippable();
-
-    /**
-     * Checks if max stack size is 1
-     * @return Whether or not item will stack in inventory
-     */
-    boolean isStackable();
-
+    
     /**
      * Retrieves the total weight of current stack of items
      * @return Item weight multiplied by current stack size
@@ -85,7 +78,7 @@ public interface Item {
      * Function for setting the icon of an item
      * Implemented similar to the AbstractEntitry texture. Be sure to register texture with
      * TextureRegister before assigning the texture to a item
-     * @param texture: filename of texture
+     * @param texture filename of texture
      * @throws IllegalArgumentException if texture is an invalid file name
      */
     void setTexture(String texture) throws IllegalArgumentException;
@@ -93,7 +86,7 @@ public interface Item {
     /**
      * Function for adding a number of an item to the stack of the current item.
      * Note that for non stackable items, this always returns false;
-     * @param number: the number of items to add to this items stack
+     * @param number the number of items to add to this items stack
      * @return true or false depending on whether the item was added or not
      * @throws IllegalArgumentException if number is too large or less than 1
      */
@@ -102,25 +95,25 @@ public interface Item {
     /**
      * Set this item's current stack size to the given number.
      *
-     * @param number: the new stack size of this item.
+     * @param number the new stack size of this item.
      */
-    void setStackSize(int number);
+    void setStackSize(int number) throws IllegalArgumentException;
 
     /**
      * Determine whether or not this Item and the given Item are functionally the
      * same item. Disregard stack size.
      *
-     * @param item: he item to compare this item to.
+     * @param item The item to compare this item to.
      * @return whether or not this item and the given item are functionally the
      *         same.
      */
-    boolean sameItem(Item item);
+    boolean sameItem(Item item) throws IllegalArgumentException;
 
     /**
      * Determine whether or not this Item and the given Item are equivalent items.
      *
-     * @param item: The item to compare this item to.
+     * @param item The item to compare this item to.
      * @return whether or not this item and the given item are equivalent.
      */
-    boolean equals(Item item);
+    boolean equals(Item item) throws IllegalArgumentException;
 }

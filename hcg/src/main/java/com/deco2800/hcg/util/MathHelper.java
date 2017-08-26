@@ -2,7 +2,6 @@ package com.deco2800.hcg.util;
 
 /**
  * Helper class with some useful math functions.
- * @author Will Stibbards
  */
 public class MathHelper {
     

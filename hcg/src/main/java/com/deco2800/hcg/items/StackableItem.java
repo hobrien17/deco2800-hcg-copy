@@ -1,6 +1,40 @@
 package com.deco2800.hcg.items;
 
 public abstract class StackableItem implements Item{
+    protected int maxStackSize;
+    protected int currentStackSize;
+    protected int baseValue;
+    protected int itemWeight;
+    protected String itemName;
+    protected String texture;
+    /**
+     * Retrieves an items display name
+     * @return Name of item as String
+     */
+    @Override
+    public String getName() {
+        return this.itemName;
+    }
+
+    /**
+     * Returns the current stack size of this item.
+     *
+     * @return the current stack size of this item. Always returns 1 for
+     *         non-stackable items.
+     */
+    @Override
+    public int getStackSize() {
+        return this.currentStackSize;
+    }
+
+    /**
+     * Retrieves the stack limit of item type
+     * @return Maximum stack size of item
+     */
+    @Override
+    public int getMaxStackSize() {
+        return this.currentStackSize;
+    }
 
     /**
      * Checks if the item is armour or character customisation item
@@ -9,16 +43,6 @@ public abstract class StackableItem implements Item{
      */
     @Override
     public boolean isWearable() {
-        return false;
-    }
-
-    /**
-     * Checks if item is a weapon/ potion etc. and can be held in hot bar
-     *
-     * @return Whether or not item can be equipped in hot bar
-     */
-    @Override
-    public boolean isEquippable() {
         return false;
     }
 
@@ -38,7 +62,7 @@ public abstract class StackableItem implements Item{
      */
     @Override
     public int getWeight() {
-        return this.itemWeight * this.;
+        return this.itemWeight * this.currentStackSize;
     }
 
     /**
@@ -48,18 +72,9 @@ public abstract class StackableItem implements Item{
      */
     @Override
     public int getBaseValue() {
-        return 0;
+        return this.baseValue;
     }
 
-    /**
-     * Checks whether or not this item is able to be sold to shops.
-     *
-     * @return Whether or not this item can be traded.
-     */
-    @Override
-    public boolean isTradable() {
-        return false;
-    }
 
     /**
      * Function for setting the icon of an item
@@ -71,7 +86,7 @@ public abstract class StackableItem implements Item{
      */
     @Override
     public void setTexture(String texture) throws IllegalArgumentException {
-
+        // TODO: implement textures
     }
 
     /**
@@ -84,7 +99,11 @@ public abstract class StackableItem implements Item{
      */
     @Override
     public boolean addToStack(int number) {
-        return false;
+        if ((this.currentStackSize + number) > this.maxStackSize) {
+            return false;
+        }
+        this.currentStackSize = this.currentStackSize + number;
+        return true;
     }
 
     /**
@@ -93,8 +112,11 @@ public abstract class StackableItem implements Item{
      * @param number : the new stack size of this item.
      */
     @Override
-    public void setStackSize(int number) {
-
+    public void setStackSize(int number) throws IllegalArgumentException{
+        if (number < 1) {
+            throw new IllegalArgumentException();
+        }
+        this.currentStackSize = number;
     }
 
     /**
@@ -106,8 +128,9 @@ public abstract class StackableItem implements Item{
      * same.
      */
     @Override
-    public boolean sameItem(Item item) {
-        return false;
+    public boolean sameItem(Item item) throws IllegalArgumentException {
+        // for stackable items we compare if strings are the same
+        return this.itemName.equals(item.getName());
     }
 
     /**
@@ -117,7 +140,7 @@ public abstract class StackableItem implements Item{
      * @return whether or not this item and the given item are equivalent.
      */
     @Override
-    public boolean equals(Item item) {
-        return false;
+    public boolean equals(Item item) throws IllegalArgumentException{
+        return this==item;
     }
 }

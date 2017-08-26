@@ -1,6 +1,11 @@
 package com.deco2800.hcg.items;
 
 public abstract class SingleItem implements Item{
+    protected int baseValue;
+    protected int itemWeight;
+    protected String itemName;
+    protected String texture;
+    protected String uniqueData = ""; // not yet implemented
     /**
      * Retrieves an items display name
      *
@@ -8,7 +13,7 @@ public abstract class SingleItem implements Item{
      */
     @Override
     public String getName() {
-        return null;
+        return String.format("%s (%s)", this.itemName, this.uniqueData);
     }
 
     /**
@@ -19,7 +24,7 @@ public abstract class SingleItem implements Item{
      */
     @Override
     public int getStackSize() {
-        return 0;
+        return 1;
     }
 
     /**
@@ -29,28 +34,9 @@ public abstract class SingleItem implements Item{
      */
     @Override
     public int getMaxStackSize() {
-        return 0;
+        return 1;
     }
 
-    /**
-     * Checks if the item is armour or character customisation item
-     *
-     * @return Whether or not item is wearable
-     */
-    @Override
-    public boolean isWearable() {
-        return false;
-    }
-
-    /**
-     * Checks if item is a weapon/ potion etc. and can be held in hot bar
-     *
-     * @return Whether or not item can be equipped in hot bar
-     */
-    @Override
-    public boolean isEquippable() {
-        return false;
-    }
 
     /**
      * Checks if max stack size is 1
@@ -59,7 +45,7 @@ public abstract class SingleItem implements Item{
      */
     @Override
     public boolean isStackable() {
-        return true;
+        return false;
     }
 
     /**
@@ -69,7 +55,7 @@ public abstract class SingleItem implements Item{
      */
     @Override
     public int getWeight() {
-        return 0;
+        return this.itemWeight;
     }
 
     /**
@@ -79,17 +65,7 @@ public abstract class SingleItem implements Item{
      */
     @Override
     public int getBaseValue() {
-        return 0;
-    }
-
-    /**
-     * Checks whether or not this item is able to be sold to shops.
-     *
-     * @return Whether or not this item can be traded.
-     */
-    @Override
-    public boolean isTradable() {
-        return false;
+        return this.baseValue;
     }
 
     /**
@@ -100,9 +76,8 @@ public abstract class SingleItem implements Item{
      * @param texture : filename of texture
      * @throws IllegalArgumentException if texture is an invalid file name
      */
-    @Override
     public void setTexture(String texture) throws IllegalArgumentException {
-
+        // TODO: implement textures
     }
 
     /**
@@ -124,8 +99,10 @@ public abstract class SingleItem implements Item{
      * @param number : the new stack size of this item.
      */
     @Override
-    public void setStackSize(int number) {
-
+    public void setStackSize(int number) throws IllegalArgumentException{
+        if (number < 1) {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -137,18 +114,17 @@ public abstract class SingleItem implements Item{
      * same.
      */
     @Override
-    public boolean sameItem(Item item) {
-        return false;
+    public boolean sameItem(Item item) throws IllegalArgumentException {
+        // for stackable items we compare if strings are the same
+        return this.itemName.equals(item.getName());
     }
 
-    /**
-     * Determine whether or not this Item and the given Item are equivalent items.
-     *
-     * @param item : The item to compare this item to.
-     * @return whether or not this item and the given item are equivalent.
-     */
+    public void setUniqueData(String data) {
+        this.uniqueData = data;
+    }
+
     @Override
     public boolean equals(Item item) {
-        return false;
+        return this == item;
     }
 }
