@@ -14,7 +14,7 @@ import java.util.Random;
  * A generic player instance for the game
  */
 public class Squirrel extends Enemy implements Tickable {
-	
+
 	private float speed = 0.1f;
 	
 	private PlayerManager playerManager;
@@ -25,7 +25,6 @@ public class Squirrel extends Enemy implements Tickable {
 	public Squirrel(float posX, float posY, float posZ, int ID) {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
-		this.itemManager = (ItemManager) GameManager.get().getManager(ItemManager.class);
 		this.random = new Random();
 	}
 
@@ -41,7 +40,8 @@ public class Squirrel extends Enemy implements Tickable {
 	@Override
 	public Item[] loot() {
 		Item[] arr = new Item[1];
-		arr[0] = itemManager.getNew(randItem());
+		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+
 
 		return arr;
 	}
