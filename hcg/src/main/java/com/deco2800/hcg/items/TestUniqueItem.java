@@ -1,29 +1,41 @@
 package com.deco2800.hcg.items;
 
-public class TestUniqueItem extends BasicNonstackableItem {
+public class TestUniqueItem extends SingleItem {
 
-    private String uniqueData;
-    
     public TestUniqueItem() {
-        super("Unique item", 10);
+        this.baseValue = 100;
+        this.itemWeight = 72;
+        this.itemName = "Basic Sword";
+        this.texture = "sword.png";
     }
-    
+
+    /**
+     * Checks if the item is armour or character customisation item
+     *
+     * @return Whether or not item is wearable
+     */
     @Override
-    public String getName() {
-        return String.format("%s (%s)", super.getName(), this.uniqueData);
-    }
-    
-    public void setUniqueData(String data) {
-        this.uniqueData = data;
-    }
-    
-    @Override
-    public boolean sameItem(Item item) {
-        if(item instanceof TestUniqueItem) {
-            TestUniqueItem castedItem = (TestUniqueItem) item;
-            return castedItem.uniqueData.equals(this.uniqueData);
-        }
-        
+    public boolean isWearable() {
         return false;
+    }
+
+    /**
+     * Checks if item is a weapon/ potion etc. and can be held in hot bar
+     *
+     * @return Whether or not item can be equipped in hot bar
+     */
+    @Override
+    public boolean isEquippable() {
+        return true;
+    }
+
+    /**
+     * Checks whether or not this item is able to be sold to shops.
+     *
+     * @return Whether or not this item can be traded.
+     */
+    @Override
+    public boolean isTradable() {
+        return true;
     }
 }

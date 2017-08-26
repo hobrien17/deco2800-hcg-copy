@@ -22,6 +22,7 @@ package com.deco2800.hcg.items;
  **/
 public interface Item {
     /**Each item has four required fields: name, isStackable (a boolean value), itemWeight and itemIcon **/
+    boolean isStackable();
 
     /**
      * Retrieves an items display name
@@ -42,12 +43,6 @@ public interface Item {
      * @return Maximum stack size of item
      */
     int getMaxStackSize();
-
-    /**
-     * Return whether or not this item is stackable.
-     * @return whether or not this item is stackable.
-     */
-    boolean isStackable();
 
     /**
      * Checks if the item is armour or character customisation item
@@ -102,7 +97,7 @@ public interface Item {
      *
      * @param number the new stack size of this item.
      */
-    void setStackSize(int number);
+    void setStackSize(int number) throws IllegalArgumentException;
 
     /**
      * Determine whether or not this Item and the given Item are functionally the
@@ -112,7 +107,7 @@ public interface Item {
      * @return whether or not this item and the given item are functionally the
      *         same.
      */
-    boolean sameItem(Item item);
+    boolean sameItem(Item item) throws IllegalArgumentException;
 
     /**
      * Determine whether or not this Item and the given Item are equivalent items.
@@ -120,5 +115,5 @@ public interface Item {
      * @param item The item to compare this item to.
      * @return whether or not this item and the given item are equivalent.
      */
-    boolean equals(Item item);
+    boolean equals(Item item) throws IllegalArgumentException;
 }

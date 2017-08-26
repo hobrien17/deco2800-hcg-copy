@@ -1,11 +1,9 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.WaterSeed;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 
 /**
@@ -15,43 +13,42 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Water extends AbstractGardenPlant {
 
-    public Water(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
-    }
+	/**
+	 * Creates a new Water plant in the given pot
+	 * @param master the pot to associate the plant to
+	 */
+	public Water(Pot master) {
 
-    @Override
-    public String getThisTexture() {
-        switch (this.getStage()) {
-            case SPROUT:
-                return null;
-            case SMALL:
-                return null;
-            case LARGE:
-                return null;
-        }
-        return null;
-    }
+		super(master, 30);
+	}
 
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
+	@Override
+	public String getThisTexture() {
+		switch (this.getStage()) {
+		case SPROUT:
+			return "lily_01";
+		case SMALL:
+			return "lily_02";
+		case LARGE:
+			return "lily_03";
+		}
+		return null;
+	}
 
-    }
+	@Override
+	public Item[] loot() {
+		Item[] arr = new Item[1];
+		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+		
+		return arr;
+	}
 
-    @Override
-    public Item[] loot() {
-        Item[] arr = new Item[1];
-        arr[0] = ItemManager.getNew(randItem());
+	@Override
+	void setupLoot() {
+		lootRarity = new HashMap<>();
 
-        return arr;
-    }
+        lootRarity.put("water_seed", 1.0);
 
-    @Override
-    void setupLoot() {
-        // TODO Auto-generated method stub
-
-    }
-
+        checkLootRarity();
+	}
 }

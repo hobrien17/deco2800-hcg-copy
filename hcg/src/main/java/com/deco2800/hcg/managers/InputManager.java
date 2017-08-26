@@ -19,127 +19,182 @@ public class InputManager extends Manager implements InputProcessor {
     private ArrayList<TouchUpObserver> touchUpListeners = new ArrayList<>();
 
     private ArrayList<TouchDraggedObserver> touchDragegdListeners = new ArrayList<>();
+    
+	private ArrayList<MouseMovedObserver> mouseMovedListeners = new ArrayList<>();
 
-    private ArrayList<MouseMovedObserver> mouseMovedListeners = new ArrayList<>();
+	private ArrayList<ScrollObserver> scrollListeners = new ArrayList<>();
 
-    private ArrayList<ScrollObserver> scrollListeners = new ArrayList<>();
+	/**
+	 * Adds a key down listener to the list of key down listeners
+	 * @param observer the key down observer to add
+	 */
+	public void addKeyDownListener(KeyDownObserver observer) {
+		keyDownListeners.add(observer);
+	}
 
+	/**
+	 * Removes the given observer from the list of key down listeners
+	 * @param observer the key down observer to remove
+	 */
+	public void removeKeyDownListener(KeyDownObserver observer) {
+		keyDownListeners.remove(observer);
+	}
 
-    public void addKeyDownListener(KeyDownObserver observer) {
-        keyDownListeners.add(observer);
-    }
+	/**
+	 * Adds a key up listener to the list of key up listeners
+	 * @param observer the key up observer to add
+	 */
+	public void addKeyUpListener(KeyUpObserver observer) {
+		keyUpListeners.add(observer);
+	}
 
-    public void removeKeyDownListener(KeyDownObserver observer) {
-        keyDownListeners.remove(observer);
-    }
+	/**
+	 * Removes the given observer from the list of key up listeners
+	 * @param observer the key up observer to remove
+	 */
+	public void removeKeyUpListener(KeyUpObserver observer) {
+		keyUpListeners.remove(observer);
+	}
 
-    public void addKeyUpListener(KeyUpObserver observer) {
-        keyUpListeners.add(observer);
-    }
+	/**
+	 * Adds a touch down listener to the list of touch down listeners
+	 * @param observer the touch down observer to add
+	 */
+	public void addTouchDownListener(TouchDownObserver observer) {
+		touchDownListeners.add(observer);
+	}
 
-    public void removeKeyUpListener(KeyUpObserver observer) {
-        keyUpListeners.remove(observer);
-    }
+	/**
+	 * Removes the given observer from the list of touch down listeners
+	 * @param observer the touch down observer to remove
+	 */
+	public void removeTouchDownListener(TouchDownObserver observer) {
+		touchDownListeners.remove(observer);
+	}
 
-    public void addTouchDownListener(TouchDownObserver observer) {
-        touchDownListeners.add(observer);
-    }
+	/**
+	 * Adds a touch up listener to the list of touch up listeners
+	 * @param observer the touch up observer to add
+	 */
+	public void addTouchUpListener(TouchUpObserver observer) {
+		touchUpListeners.add(observer);
+	}
 
-    public void removeTouchDownListener(TouchDownObserver observer) {
-        touchDownListeners.remove(observer);
-    }
+	/**
+	 * Removes the given observer from the list of touch up listeners
+	 * @param observer the touch up observer to remove
+	 */
+	public void removeTouchUpListener(TouchUpObserver observer) {
+		touchUpListeners.remove(observer);
+	}
 
-    public void addTouchUpListener(TouchUpObserver observer) {
-        touchUpListeners.add(observer);
-    }
+	/**
+	 * Adds a touch dragged listener to the list of touch dragged listeners
+	 * @param observer the touch dragged observer to add
+	 */
+	public void addTouchDraggedListener(TouchDraggedObserver observer) {
+		touchDragegdListeners.add(observer);
+	}
 
-    public void removeTouchUpListener(TouchUpObserver observer) {
-        touchUpListeners.remove(observer);
-    }
+	/**
+	 * Removes the given observer from the list of touch dragged listeners
+	 * @param observer the touch dragged observer to remove
+	 */
+	public void removeTouchDraggedListener(TouchDraggedObserver observer) {
+		touchDragegdListeners.remove(observer);
+	}
 
-    public void addTouchDraggedListener(TouchDraggedObserver observer) {
-        touchDragegdListeners.add(observer);
-    }
+	/**
+	 * Adds a mouse moved listener to the list of mouse moved listeners
+	 * @param observer the mouse moved observer to add
+	 */
+	public void addMouseMovedListener(MouseMovedObserver observer) {
+		mouseMovedListeners.add(observer);
+	}
 
-    public void removeTouchDraggedListener(TouchDraggedObserver observer) {
-        touchDragegdListeners.remove(observer);
-    }
+	/**
+	 * Removes the given observer from the list of mouse moved listeners
+	 * @param observer the mouse moved observer to remove
+	 */
+	public void removeMouseMovedListener(MouseMovedObserver observer) {
+		mouseMovedListeners.remove(observer);
+	}
 
-    public void addMouseMovedListener(MouseMovedObserver observer) {
-        mouseMovedListeners.add(observer);
-    }
+	/**
+	 * Adds a scroll listener to the list of scroll listeners
+	 * @param observer the scroll observer to add
+	 */
+	public void addScrollListener(ScrollObserver observer) {
+		scrollListeners.add(observer);
+	}
 
-    public void removeMouseMovedListener(MouseMovedObserver observer) {
-        mouseMovedListeners.remove(observer);
-    }
+	/**
+	 * Removes the given observer from the list of scroll listeners
+	 * @param observer the scroll observer to remove
+	 */
+	public void removeScrollListener(ScrollObserver observer) {
+		scrollListeners.remove(observer);
+	}
 
-    public void addScrollListener(ScrollObserver observer) {
-        scrollListeners.add(observer);
-    }
+	@Override
+	public boolean keyDown(int keycode) {
+		for (KeyDownObserver observer : keyDownListeners) {
+			observer.notifyKeyDown(keycode);
+		}
+		return true;
+	}
 
-    public void removeScrollListener(ScrollObserver observer) {
-        scrollListeners.remove(observer);
-    }
+	@Override
+	public boolean keyUp(int keycode) {
+		for (KeyUpObserver observer : keyUpListeners) {
+			observer.notifyKeyUp(keycode);
+		}
+		return true;
+	}
 
-    @Override
-    public boolean keyDown(int keycode) {
-        for (KeyDownObserver observer : keyDownListeners) {
-            observer.notifyKeyDown(keycode);
-        }
-        return true;
-    }
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
 
-    @Override
-    public boolean keyUp(int keycode) {
-        for (KeyUpObserver observer : keyUpListeners) {
-            observer.notifyKeyUp(keycode);
-        }
-        return true;
-    }
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		System.out.printf("%d, %d", screenX, screenY);
+		for (TouchDownObserver observer : touchDownListeners) {
+			observer.notifyTouchDown(screenX, screenY, pointer, button);
+		}
+		return true;
+	}
 
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		for (TouchUpObserver observer : touchUpListeners) {
+			observer.notifyTouchUp(screenX, screenY, pointer, button);
+		}
+		return true;
+	}
 
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer,
-            int button) {
-        for (TouchDownObserver observer : touchDownListeners) {
-            observer.notifyTouchDown(screenX, screenY, pointer, button);
-        }
-        return true;
-    }
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		for (TouchDraggedObserver observer : touchDragegdListeners) {
+			observer.notifyTouchDragged(screenX, screenY, pointer);
+		}
+		return true;
+	}
 
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        for (TouchUpObserver observer : touchUpListeners) {
-            observer.notifyTouchUp(screenX, screenY, pointer, button);
-        }
-        return true;
-    }
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		for (MouseMovedObserver observer : mouseMovedListeners) {
+			observer.notifyMouseMoved(screenX, screenY);
+		}
+		return true;
+	}
 
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        for (TouchDraggedObserver observer : touchDragegdListeners) {
-            observer.notifyTouchDragged(screenX, screenY, pointer);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        for (MouseMovedObserver observer : mouseMovedListeners) {
-            observer.notifyMouseMoved(screenX, screenY);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        for (ScrollObserver observer : scrollListeners) {
-            observer.notifyScrolled(amount);
-        }
-        return true;
-    }
+	@Override
+	public boolean scrolled(int amount) {
+		for (ScrollObserver observer : scrollListeners) {
+			observer.notifyScrolled(amount);
+		}
+		return true;
+	}
 }
