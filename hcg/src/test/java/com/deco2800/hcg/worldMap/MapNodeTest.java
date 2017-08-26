@@ -2,13 +2,9 @@ package com.deco2800.hcg.worldMap;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertFalse;
 
-import com.deco2800.hcg.worlds.AbstractWorld;
-import com.deco2800.hcg.worlds.EmptyWorld;
+import com.deco2800.hcg.worlds.BlankTestWorld;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -16,17 +12,16 @@ import static org.junit.Assert.*;
 import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
-import com.deco2800.hcg.worlds.DemoWorld;
 
 public class MapNodeTest {
 
     WorldMap worldMap;
-    EmptyWorld world;
+    BlankTestWorld world;
     Level tmpLevel;
     MapNode tmpNode;
     @Before
     public void setup() {
-        world = new EmptyWorld();
+        world = new BlankTestWorld();
         tmpLevel = new Level(world, 0, 0, 0);
     }
 

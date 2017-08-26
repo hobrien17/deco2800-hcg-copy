@@ -9,18 +9,36 @@ import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
-// INCOMPLETE CLASS! UPLOADED FOR GROUP EDITTING
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-// Adding temp constructor so that it can compile
+/**
+ * Used to generate a new WorldMap instance based on a set of parameters.
+ * The MapGenerator class can be used similar to a factory in that multiple calls to the generateWorldMap method will
+ * produce different maps each time. There are a number of different parameters that can be changed both within the
+ * MapGenerator class and with different uses of the generateWorldMap method to produce different types of worlds.
+ */
 public class MapGenerator {
-	private int DEFAULT_COLUMN_COUNT = 10; // <- default number of columns in a world (can be changed later)
-	private int DEFAULT_ROW_COUNT = 10; // <- default number of rows in a world (can be changed later)
+	static final Logger LOGGER = LoggerFactory.getLogger(MapGenerator.class);
+	
+	private final int DEFAULT_COLUMN_COUNT = 10; // <- default number of columns in a world (can be changed later)
+	private final int DEFAULT_ROW_COUNT = 10; // <- default number of rows in a world (can be changed later)
+	private final int MAX_COLUMNS_BEFORE_SAFENODE = 5; // <- change as needed
+	private final int MIN_NODES_PER_COLUMN = 2; // <- be very careful with this value. Should never exceed rowNumber/2
+	private final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
 	
 	private List<Level> levelsMaster;
 	private List<Level> levelsOfType;
 	private List<Level> levelsNotOfType;
 	private List<Level> levelsBoss;
 	
+	/**
+	 * Initialises the MapGenerator class.
+	 * @param levelSet
+	 *     The list of levels that the MapGenerator can choose from. Should generally contain a large number (the full
+	 *     set) of levels and a number of boss levels. If the list does not contain enough levels for the MapGenerator
+	 *     to use, the MapGenerator will start to reuse levels.
+	 */
 	public MapGenerator(List<Level> levelSet) {
 		levelsMaster = levelSet;
 		levelsBoss = new ArrayList<>();
@@ -28,7 +46,12 @@ public class MapGenerator {
 		levelsNotOfType = new ArrayList<>();
 	}
 	
-	// generates a random world based on the provided set of game levels
+	/**
+	 * Generates a random world based on the provided set of game levels. Uses default values for row and column count
+	 * and for the world type.
+	 * @return
+	 *     Returns the generated world map
+	 */
 	public WorldMap generateWorldMap() {
 		int rowCount = DEFAULT_ROW_COUNT;
 		int columnCount = DEFAULT_COLUMN_COUNT; 
@@ -37,20 +60,32 @@ public class MapGenerator {
 		return generateNewMap(rowCount, columnCount, worldType); 
 	}
 	
-	// generates a random world based on the provided world type (biome number) and the provided set of game levels
+	/**
+	 * Generates a random world based on the provided set of game levels. Uses default values for row and column count
+	 * and a random value for the world type.
+	 * @return
+	 *     Returns the generated world map
+	 */
 	public WorldMap generateWorldMap(int worldType) {
 		int rowCount = DEFAULT_ROW_COUNT;
 		int columnCount = DEFAULT_COLUMN_COUNT;
 		return generateNewMap(rowCount, columnCount, worldType);
 	}
-	
-	// generates a world from the provided seed value. levelSet must contain all levels found in the seed
+
+	/**
+	 * Generates a world from the provided seed value. levelSet must contain all levels found in the seed's world.
+	 * @return
+	 *     Returns the generated world map
+	 */
 	public WorldMap generateWorldMap(String seed) {
 		return generateMapFromSeed(seed);
 	}
 	
-	/* generates a world with the provided number of rows and columns for nodes. Not all x, y positions are filled with
-	 * nodes but this allows for longer/shorter games
+	/**
+	 * Generates a random world based on the provided set of game levels. Uses the provided row and column numbers and
+	 * a random value for the world type.
+	 * @return
+	 *     Returns the generated world map
 	 */
 	public WorldMap generateWorldMap(int rowNumber, int columnNumber) {
 		Random rand = new Random();
@@ -58,36 +93,81 @@ public class MapGenerator {
 		return generateNewMap(rowNumber, columnNumber, worldType);
 	}
 	
-	//generates a world with the provided number of rows and columns for nodes and with the provided world type
+	/**
+	 * Generates a random world based on the provided set of game levels. Uses the provided row and column numbers and
+	 * for the world type.
+	 * @return
+	 *     Returns the generated world map
+	 */
 	public WorldMap generateWorldMap(int rowNumber, int columnNumber, int worldType) {
 		return generateNewMap(rowNumber, columnNumber, worldType);
 	}
 	
+	/**
+	 * Used to randomly generate a map based on the specified parameters.
+	 * @param rowCount
+	 *     The number of rows to generate in the map
+	 * @param columnCount
+	 *     The number of columns to generate in the map
+	 * @param worldType
+	 *     The world type to use for the map
+	 * @return
+	 *     Returns the generated world map based on the specified parameters
+	 */
 	private WorldMap generateNewMap(int rowCount, int columnCount, int worldType) {
 		resetLevelSets(worldType);
 		List<MapNode> worldNodes = generateNodes(rowCount, columnCount, worldType);
-		/* If a multi-world is introduced, the world position of 0 will need to be changed to a function which returns
-		 * the world's position in the stack/collection of worlds. 
+		/* Optional to view the produced node map */
+		for(MapNode node : worldNodes) {
+			LOGGER.info(node.toString());
+		}
+		/* If a multi-world/WorldStack is introduced, the world position of 0 will need to be changed to a function 
+		 * which returns the world's position in the stack/collection of worlds. 
 		 */
 		WorldMap generatedWorld = new WorldMap(worldType, "", 0, rowCount, columnCount, worldNodes);
 		generatedWorld.addSeed(generateMapSeed(generatedWorld));
 		return generatedWorld;
 	}
 	
+	/**
+	 * Generates a new world map from the specified seed string.
+	 * @param seed
+	 *     The seed to generate from
+	 * @return
+	 *     Returns the generated world map
+	 */
 	private WorldMap generateMapFromSeed(String seed) {
 		return new WorldMap(); //still need to complete!
 	}
+	
+	/**
+	 * Generates a new map seed from the world map provided.
+	 * @param world
+	 *     The world map object to generate the seed from
+	 * @return
+	 *     The seed string of the provieded world
+	 */
 	private String generateMapSeed(WorldMap world) {
 		return "";
-
 	}
 	
+	/**
+	 * Used to generate nodes for the map based on the number of rows and columns on the board. Attempts to make all
+	 * of the selected node levels match the specified world type but will use other levels if this is not possible.
+	 * @param rowNumber
+	 *     The number of rows to generate nodes for
+	 * @param columnNumber
+	 *     The number of columns to generate nodes for
+	 * @param worldType
+	 *     The world type to choose levels for
+	 * @return
+	 *     Returns a list of nodes for the world map to use
+	 */
 	private List<MapNode> generateNodes(int rowNumber, int columnNumber, int worldType) {
-		final int MAX_COLUMNS_BEFORE_SAFENODE = 5; // <- change as needed
 		Random rand = new Random();
 		
 		MapNode initialNode = new MapNode(0, rowNumber/2, "", 1, getLevel(), true); //ENTER NODE TEXTURE!!!
-		MapNode finalNode = new MapNode(columnNumber - 1, rowNumber/2, "", 3, getBossLevel(), false); //ENTER NODE TEXTURE!!!
+		MapNode finalNode = new MapNode(columnNumber - 1, rowNumber/2, "", 3, getBossLevel(), false); //AS ABOVE!!!
 		
 		int columnsSinceSafeNode = 0;
 		List<MapNode> nodeList = new ArrayList<>();
@@ -95,7 +175,7 @@ public class MapGenerator {
 		
 		for(int i = 1; i < columnNumber - 1; i++) {
 			boolean safeNodeInColumn = false;
-			int numberOfNodes = rand.nextInt((int) Math.ceil(rowNumber/1.7)) + 1;
+			int numberOfNodes = rand.nextInt((int) Math.ceil(rowNumber/2)) + MIN_NODES_PER_COLUMN;
 			List<Integer> currentOccupiedRows = new ArrayList<>();
 			for(int j = 0; j < numberOfNodes; j++) {
 				int nodeRow = 0;
@@ -108,7 +188,7 @@ public class MapGenerator {
 				}
 				int probability = rand.nextInt(101) + 1; //random integer between 1 and 100;
 				int nodeType;
-				if(probability < 5 || columnsSinceSafeNode >= MAX_COLUMNS_BEFORE_SAFENODE) { //adjust for safenode count
+				if(probability < SAFE_NODE_PROBABILITY || columnsSinceSafeNode >= MAX_COLUMNS_BEFORE_SAFENODE) {
 					nodeType = 0; //node will be a safenode
 					safeNodeInColumn = true;
 					columnsSinceSafeNode = 0;
@@ -123,11 +203,21 @@ public class MapGenerator {
 				}
 			}
 		}
-		nodeList.add(finalNode);
-		nodeList = createMapTree(nodeList, columnNumber);
+		nodeList.add(finalNode); //add the boss node to the end of the list
+		nodeList = createMapTree(nodeList, columnNumber); //create link mapping of nodes for use in world map
 		return nodeList;
 	}
 	
+	/**
+	 * Used to create a map tree from the nodes provided. The provided node list must have at least one node in every
+	 * column.
+	 * @param nodeList
+	 *     The list of nodes to link
+	 * @param columnNumber
+	 *     The number of columns in the world map
+	 * @return
+	 *     Returns a list of connected map nodes for use in the world map
+	 */
 	private List<MapNode> createMapTree(List<MapNode> nodeList, int columnNumber) {
 		Stack<MapNode> nodeStack = new Stack<>();
 		List<List<MapNode>> columnStore = new ArrayList<>();
@@ -168,6 +258,13 @@ public class MapGenerator {
 		return nodeList;
 	}
 	
+	/**
+	 * Generates lists of levels based on their specifications.
+	 * Levels which are of the requested level type are added to the levelsOfType list, levels which are not of the
+	 * requested type are added to the levelsNotOfType list and boss levels are added to the levelsBoss list.
+	 * @param worldType
+	 *     The requested world type
+	 */
 	private void resetLevelSets(int worldType) {
 		levelsOfType.clear();
 		levelsNotOfType.clear();
@@ -183,6 +280,11 @@ public class MapGenerator {
 		}
 	}
 	
+	/**
+	 * Gets a boss level.
+	 * @return
+	 *     Returns a random boss level from the levelsBoss list
+	 */
 	private Level getBossLevel() {
 		if(!(levelsBoss.isEmpty())) {
 			Random rand = new Random();
@@ -193,6 +295,13 @@ public class MapGenerator {
 		}
 	}
 	
+	/**
+	 * Gets a standard level.
+	 * @return
+	 *     Returns a random standard level. If possible, a level of the requested world type is provided. Once these run
+	 *     out, a level not of the requested type is provided. Once both of these lists are empty, a random level from
+	 *     the master set will be chosen.
+	 */
 	private Level getLevel() {
 		Random rand = new Random();
 		

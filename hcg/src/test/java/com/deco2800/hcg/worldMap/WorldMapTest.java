@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.BlankTestWorld;
 
 public class WorldMapTest {
 
@@ -22,8 +22,7 @@ public class WorldMapTest {
 
     @Before
     public void setup() {
-    	DemoWorld world = new DemoWorld();
-    	Level newLevel = new Level(world, 0, 0, 0);
+    	Level newLevel = new Level(new BlankTestWorld(), 0, 0, 0);
     	MapNode node = new MapNode(0, 0, "", 0, newLevel, false);
     	List<MapNode> nodeList = new ArrayList<>();
     	nodeList.add(node);
@@ -39,5 +38,4 @@ public class WorldMapTest {
         assertEquals(5, worldMap.getWorldRows());
         assertEquals(3, worldMap.getWorldColumns());
     }
-
 }
