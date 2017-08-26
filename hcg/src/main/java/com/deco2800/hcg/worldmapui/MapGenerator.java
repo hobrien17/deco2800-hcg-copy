@@ -31,6 +31,7 @@ public class MapGenerator {
 	private List<Level> levelsOfType;
 	private List<Level> levelsNotOfType;
 	private List<Level> levelsBoss;
+	private List<Level> levelsNonBoss;
 	
 	/**
 	 * Initialises the MapGenerator class.
@@ -55,14 +56,19 @@ public class MapGenerator {
 	public WorldMap generateWorldMap() {
 		int rowCount = DEFAULT_ROW_COUNT;
 		int columnCount = DEFAULT_COLUMN_COUNT; 
-		Random rand = new Random();
-		int worldType = rand.nextInt(1); // <- currently only generates a 0. Change later for biomes
+		int worldType = 0; // <- no worldType means any random levels
 		return generateNewMap(rowCount, columnCount, worldType); 
 	}
 	
 	/**
 	 * Generates a random world based on the provided set of game levels. Uses default values for row and column count
 	 * and a random value for the world type.
+	 * @param worldType
+	 *     The type of world to generate. A worldType of 0 will produce a map with no biome/theme and will choose random
+	 *     levels from the provided level set. Different worldType numbers will result in different world themes (jungle,
+	 *     desert, city, etc.). Current biomes to choose from:
+	 *         0 - no biome
+	 *         *** NO OTHER BIOMES YET ***
 	 * @return
 	 *     Returns the generated world map
 	 */
@@ -74,6 +80,8 @@ public class MapGenerator {
 
 	/**
 	 * Generates a world from the provided seed value. levelSet must contain all levels found in the seed's world.
+	 * @param seed
+	 *     The seed to generate the world from
 	 * @return
 	 *     Returns the generated world map
 	 */
@@ -84,18 +92,31 @@ public class MapGenerator {
 	/**
 	 * Generates a random world based on the provided set of game levels. Uses the provided row and column numbers and
 	 * a random value for the world type.
+	 * @param rowNumber
+	 *     The number of rows that the map will have for node positions
+	 * @param columnNumber
+	 *     The number of columns that the map will have for node positions
 	 * @return
 	 *     Returns the generated world map
 	 */
 	public WorldMap generateWorldMap(int rowNumber, int columnNumber) {
-		Random rand = new Random();
-		int worldType = rand.nextInt(1); // <- currently only generates a 0. Change later for biomes
+		int worldType = 0; // <- no worldType means any random levels
 		return generateNewMap(rowNumber, columnNumber, worldType);
 	}
 	
 	/**
 	 * Generates a random world based on the provided set of game levels. Uses the provided row and column numbers and
 	 * for the world type.
+	 * @param worldType
+	 *     The type of world to generate. A worldType of 0 will produce a map with no biome/theme and will choose random
+	 *     levels from the provided level set. Different worldType numbers will result in different world themes (jungle,
+	 *     desert, city, etc.). Current biomes to choose from:
+	 *         0 - no biome
+	 *         *** NO OTHER BIOMES YET ***
+	 * @param rowNumber
+	 *     The number of rows that the map will have for node positions
+	 * @param columnNumber
+	 *     The number of columns that the map will have for node positions
 	 * @return
 	 *     Returns the generated world map
 	 */
@@ -166,7 +187,7 @@ public class MapGenerator {
 	private List<MapNode> generateNodes(int rowNumber, int columnNumber, int worldType) {
 		Random rand = new Random();
 		
-		MapNode initialNode = new MapNode(0, rowNumber/2, "", 1, getLevel(), true); //ENTER NODE TEXTURE!!!
+		MapNode initialNode = new MapNode(0, rowNumber/2, "", 1, getLevel(worldType), true); //ENTER NODE TEXTURE!!!
 		MapNode finalNode = new MapNode(columnNumber - 1, rowNumber/2, "", 3, getBossLevel(), false); //AS ABOVE!!!
 		
 		int columnsSinceSafeNode = 0;
@@ -195,7 +216,7 @@ public class MapGenerator {
 				} else {
 					nodeType = 1;
 				}
-				MapNode basicNode = new MapNode(i, nodeRow, "", nodeType, getLevel(), false);
+				MapNode basicNode = new MapNode(i, nodeRow, "", nodeType, getLevel(worldType), false);
 				currentOccupiedRows.add(nodeRow);
 				nodeList.add(basicNode);
 				if(!safeNodeInColumn) {
@@ -261,7 +282,8 @@ public class MapGenerator {
 	/**
 	 * Generates lists of levels based on their specifications.
 	 * Levels which are of the requested level type are added to the levelsOfType list, levels which are not of the
-	 * requested type are added to the levelsNotOfType list and boss levels are added to the levelsBoss list.
+	 * requested type are added to the levelsNotOfType list and boss levels are added to the levelsBoss list. If no
+	 * worldType is selected (worldType is 0), then all of the non-boss levels are added to the levelsNonBoss list.
 	 * @param worldType
 	 *     The requested world type
 	 */
@@ -269,9 +291,12 @@ public class MapGenerator {
 		levelsOfType.clear();
 		levelsNotOfType.clear();
 		levelsBoss.clear();
+		levelsNonBoss.clear();
 		for(Level i : levelsMaster) {
 			if(i.getLevelType() == 2) {
 				levelsBoss.add(i);
+			} else if(worldType == 0) {
+				levelsNonBoss.add(i);
 			} else if(i.getWorldType() == worldType) {
 				levelsOfType.add(i);
 			} else {
@@ -279,7 +304,7 @@ public class MapGenerator {
 			}
 		}
 	}
-	
+		
 	/**
 	 * Gets a boss level.
 	 * @return
@@ -291,21 +316,27 @@ public class MapGenerator {
 			int index = rand.nextInt(levelsBoss.size());
 			return levelsBoss.get(index);
 		} else {
-			return getLevel();
+			return getLevel(0); //return a random level
 		}
 	}
 	
 	/**
 	 * Gets a standard level.
+	 * @param worldType
+	 *     The world type to choose levels from
 	 * @return
 	 *     Returns a random standard level. If possible, a level of the requested world type is provided. Once these run
 	 *     out, a level not of the requested type is provided. Once both of these lists are empty, a random level from
-	 *     the master set will be chosen.
+	 *     the non boss set will be chosen.
 	 */
-	private Level getLevel() {
+	private Level getLevel(int worldType) {
 		Random rand = new Random();
-		
-		if(!(levelsOfType.isEmpty())) {
+		if(worldType == 0) {
+			int index = rand.nextInt(levelsNonBoss.size());
+			Level levelReturned = levelsNonBoss.get(index);
+			levelsNonBoss.remove(index);
+			return levelReturned;
+		} else if(!(levelsOfType.isEmpty())) {
 			int index = rand.nextInt(levelsOfType.size());
 			Level levelReturned = levelsOfType.get(index);
 			levelsOfType.remove(index);
@@ -316,8 +347,8 @@ public class MapGenerator {
 			levelsNotOfType.remove(index);
 			return levelReturned;
 		} else {
-			int index = rand.nextInt(levelsMaster.size());
-			return levelsMaster.get(index);
+			resetLevelSets(0);
+			return getLevel(0);
 		}
 	}
 }
