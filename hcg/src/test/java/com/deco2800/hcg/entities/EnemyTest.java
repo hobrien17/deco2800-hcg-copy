@@ -20,6 +20,7 @@ public class EnemyTest {
     public void invalidArgument() {
         enemy = new Squirrel(5,5,0,-121);
     }
+
     @Test
     public void testHealth() {
         assertThat("Enemy did not start with health given.", enemy.getHealth(),
@@ -33,5 +34,13 @@ public class EnemyTest {
         enemy.changeHealth(-700);
         assertThat("Enemy did not give expected value when health changed by -700.", enemy.getHealth(),
                 is(equalTo(0)));
+    }
+
+    @Test
+    public void testLoot() {
+        enemy.setupLoot();
+        assertThat("Loot rarity not valid.", enemy.checkLootRarity(), is(equalTo(true)));
+        assertThat("Basic enemy should only have 1 type of loot.", enemy.getLoot().length,
+                is(equalTo(1)));
     }
 }
