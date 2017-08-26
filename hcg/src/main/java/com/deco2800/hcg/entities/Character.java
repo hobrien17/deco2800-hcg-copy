@@ -70,7 +70,7 @@ public abstract class Character extends AbstractEntity {
         // a character
         this.attributes = new HashMap<String,Integer>();
         for (String attribute: CHARACTER_ATTRIBUTES) {
-            attributes.put(attribute, 10);
+            attributes.put(attribute, 5);
         }
         this.speedX = 0.0f;
         this.speedY = 0.0f;
