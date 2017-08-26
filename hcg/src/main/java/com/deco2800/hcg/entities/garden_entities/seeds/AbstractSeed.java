@@ -12,7 +12,18 @@ import com.deco2800.hcg.items.Item;
  *
  */
 public abstract class AbstractSeed implements Item {
-	
+
+    /**
+     * Creates a new plant at the given x and y co-ordinates
+     *
+     * @return a new plant
+     */
+    public abstract AbstractGardenPlant plant(int xPos, int yPos);
+
+    /**
+     * Checks if the seed is stackable.
+     * @return true if the seed is stackable, else false
+     */
     public boolean isStackable() {
     	return true;
     }
@@ -51,12 +62,4 @@ public abstract class AbstractSeed implements Item {
         // TODO Added to fix implementation change. Alter this to whatever you want.
         return false;
     }
-
-    
-    /**
-     * Creates a new plant at the given x and y co-ordinates
-     * 
-     * @return a new plant
-     */
-    public abstract AbstractGardenPlant plant(int xPos, int yPos);
 }

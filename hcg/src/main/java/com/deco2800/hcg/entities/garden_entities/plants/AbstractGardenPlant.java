@@ -1,16 +1,12 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.TimeManager;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.deco2800.hcg.entities.*;
-import com.deco2800.hcg.util.Box3D;
 
 /**
  * Represents a plant in the garden Used as a shell for more specific types of
@@ -18,7 +14,7 @@ import com.deco2800.hcg.util.Box3D;
  *
  * @author Henry O'Brien
  */
-public abstract class AbstractGardenPlant implements Tickable, Lootable {
+public abstract class AbstractGardenPlant implements Lootable {
 
     static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
@@ -28,7 +24,7 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
      *
      * More stages can be added if needed (remember to update relevant methods)
      */
-    enum Stage {
+    public enum Stage {
         SPROUT,
         SMALL,
         LARGE
@@ -36,18 +32,38 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
 
     private Stage stage;
     private Pot master;
+    private int lastGrow;
+    private int growDelay;
 
     Map<String, Double> lootRarity;
 
-    public AbstractGardenPlant(Pot master) {
-        this.stage = Stage.SMALL;
+    /**
+     * Creates a new plant in the given pot with the given growth delay.
+     * @param master the pot the plant is related to
+     * @param delay the growth delay of the plant.
+     */
+    public AbstractGardenPlant(Pot master, int delay) {
+        this.stage = Stage.SPROUT;
+        growDelay = delay;
+        this.lastGrow = ((TimeManager)GameManager.get().getManager(TimeManager.class)).getMinutes();
         this.master = master;
         setupLoot();
+    }
+    
+    /**
+     * Checks if the plant is ready for growing, and advances a stage if it is
+     */
+    public void checkGrow() {
+        TimeManager tm = (TimeManager)GameManager.get().getManager(TimeManager.class);
+        int time = tm.getMinutes();
+        if (time == (lastGrow + growDelay)%60) {
+        	lastGrow = time;
+        	this.advanceStage();
+        }
     }
 
     @Override
     public Map<String, Double> getRarity() {
-        // TODO Auto-generated method stub
         return lootRarity;
     }
 
@@ -77,6 +93,15 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
         }
 
         master.setThisTexture();
+    }
+    
+    /**
+     * Returns the amount of time it takes for the plant to advance a stage
+     * 
+     * @return the growth delay of the plant
+     */
+    public int getGrowDelay() {
+    	return growDelay;
     }
 
     /**
@@ -115,6 +140,27 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
         }
         LOGGER.warn("No item has been selected, returning null");
         return null;
+    }
+    
+    /**
+     * Checks that the loot rarity is valid
+     * 
+     * @return true if the loot rarity is valid, otherwise false
+     */
+    public boolean checkLootRarity() {
+    	double sum = 0.0;
+        for (Double rarity : lootRarity.values()) {
+            if (rarity < 0.0 || rarity > 1.0) {
+                LOGGER.error("Rarity should be between 0 and 1");
+                return false;
+            }
+            sum += rarity;
+        }
+        if (Double.compare(sum, 1.0) != 0) {
+            LOGGER.warn("Total rarity should be 1");
+            return false;
+        }
+        return true;
     }
 
     //Rest to be implemented later

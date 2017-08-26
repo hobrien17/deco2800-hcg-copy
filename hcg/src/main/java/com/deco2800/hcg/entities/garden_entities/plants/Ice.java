@@ -1,11 +1,9 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.IceSeed;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 
 /**
@@ -15,56 +13,45 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Ice extends AbstractGardenPlant {
 
-    public Ice(Pot master) {
-        super(master);
-        this.advanceStage();
-        this.advanceStage();
-    }
+	/**
+	 * Creates a new Ice plant in the given pot
+	 * 
+	 * @param master
+	 *            the pot to associate the plant with
+	 */
+	public Ice(Pot master) {
+		super(master, 45);
+	}
 
-    @Override
-    public String getThisTexture() {
-        switch (this.getStage()) {
-            case SPROUT:
-                return null;
-            case SMALL:
-                return null;
-            case LARGE:
-                return null;
-        }
-        return null;
+	@Override
+	public String getThisTexture() {
+		switch (this.getStage()) {
+		case SPROUT:
+			return "sunflower_01"; // sprites currently not implemented
+		case SMALL:
+			return "sunflower_02";
+		case LARGE:
+			return "sunflower_03";
+		}
+		return null;
 
-    }
+	}
 
-    @Override
-    public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
+	@Override
+	public void setupLoot() {
+		lootRarity = new HashMap<>();
 
-    }
+		lootRarity.put("ice_seed", 1.0);
 
-    @Override
-    public void setupLoot() {
-        lootRarity = new HashMap<>();
+		checkLootRarity();
+	}
 
-        lootRarity.put("ice_seed", 1.0);
+	@Override
+	public Item[] loot() {
+		Item[] arr = new Item[1];
+		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
 
-        double sum = 0.0;
-        for (Double rarity : lootRarity.values()) {
-            if (rarity < 0.0 || rarity > 1.0) {
-                LOGGER.error("Rarity should be between 0 and 1");
-            }
-            sum += rarity;
-        }
-        if (sum != 1.0) {
-            LOGGER.warn("Total rarity should be 1");
-        }
-    }
-
-    @Override
-    public Item[] loot() {
-        Item[] arr = new Item[1];
-        arr[0] = ItemManager.getNew(randItem());
-
-        return arr;
-    }
+		return arr;
+	}
 
 }
