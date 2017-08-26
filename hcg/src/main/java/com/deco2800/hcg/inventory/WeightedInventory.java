@@ -58,9 +58,9 @@ public class WeightedInventory implements Inventory {
     }
 
     @Override
-    public boolean canInsert(Item item, int index) throws IndexOutOfBoundsException {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean canFitItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
+        // TODO
+        return true;
     }
     
     @Override

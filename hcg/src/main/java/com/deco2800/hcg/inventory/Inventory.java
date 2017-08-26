@@ -81,13 +81,13 @@ public interface Inventory extends Iterable<Item> {
      * @return Whether or not the item is able to be inserted into the slot.
 
      */
-    boolean canInsert(Item item, int index) throws IndexOutOfBoundsException;
+    boolean canFitItemInSlot(Item item, int index) throws IndexOutOfBoundsException;
     
     /**
      * Tests whether or not the slot at position <code>index</code> can contain
      * <code>item</code> at all.
      * 
-     * Differs from {@link #canInsert(Item, int)} in that this method should check to see
+     * Differs from {@link #canFitItemInSlot(Item, int)} in that this method should check to see
      * if there's a restriction on this slot preventing the item from being placed
      * there, whereas {@code canInsert} checks to see if there's space for
      * the item.

@@ -7,6 +7,7 @@ public class PlayerEquipment extends FixedSizeInventory {
     
     private PlayerEquipment() {
         super(2);
+        this.slotRestrictions = new SlotRestriction[2];
     }
     
     @Override
@@ -19,6 +20,14 @@ public class PlayerEquipment extends FixedSizeInventory {
     }
     
     /**
+     * For the time being, the currently equipped item is the item in slot 0.
+     * @return The currently equipped item.
+     */
+    public Item getCurrentEquippedItem() {
+        return this.getItem(0);
+    }
+    
+    /**
      * Factory method to get basic PlayerEquipment instance with restrictions placed
      * on slots ahead of time.
      * 
@@ -26,7 +35,10 @@ public class PlayerEquipment extends FixedSizeInventory {
      */
     public static PlayerEquipment getPlayerEquipment() {
         PlayerEquipment equipment = new PlayerEquipment();
-        
+        SlotRestriction equipmentRestriction = new SlotRestriction(equipment);
+        equipmentRestriction.addCondition((inv, item) -> item.isEquippable());
+        equipment.slotRestrictions[0] = equipmentRestriction;
+        equipment.slotRestrictions[1] = equipmentRestriction;
         return equipment;
     }
 }
