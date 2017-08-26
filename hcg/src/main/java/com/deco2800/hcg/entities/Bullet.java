@@ -3,6 +3,9 @@ package com.deco2800.hcg.entities;
 
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
+import com.deco2800.hcg.entities.Enemy;
 
 import java.util.List;
 
@@ -74,9 +77,7 @@ public class Bullet extends AbstractEntity implements Tickable {
     }
 
     /**
-     * Returns a boolean for collision between enemy and bullet
-     *
-     * @return True or false if bullet hits enemy
+     * Detects collision with entity and if enemy, apply effect of bullet.
      */
     public void enemyHit(){
         Box3D pos = getBox3D();
@@ -85,9 +86,11 @@ public class Bullet extends AbstractEntity implements Tickable {
         List<AbstractEntity> entities = GameManager.get().getWorld()
                 .getEntities();
         for(AbstractEntity entity : entities){
-            if (entity instanceof Squirrel
+            if (entity instanceof Enemy
                     && this.collidesWith(entity)) {
-                GameManager.get().getWorld().removeEntity(entity);
+                Enemy target = (Enemy) entity;
+                target.causeEffect(new Effect("test", 2, 1, 0.0, 0));
+                GameManager.get().getWorld().removeEntity(this);
             }
         }
     }
