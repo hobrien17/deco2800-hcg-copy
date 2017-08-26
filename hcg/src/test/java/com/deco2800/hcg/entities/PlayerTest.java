@@ -14,6 +14,8 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.worlds.DemoWorld;
 
+import javax.naming.directory.InvalidAttributesException;
+
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.List;
 
 // author - 
 public class PlayerTest {
+
 	
 	@Test
 	public void testInitialiseNewPlayer() {
@@ -30,6 +33,15 @@ public class PlayerTest {
 		
 		assertTrue("Player agility isn't set to value 0.", player.attributes.get("agility") == 0);
 
+	}
+
+	@Test(expected = InvalidAttributesException.class)
+	public void testAttributesMap() throws InvalidAttributesException{
+		Player player = new Player(0, 0, 0);
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0);
+		player.setAttribute("agility",2);
+		assertEquals("player agility should be 2 after setAttribute changed it",2, player.getAttribute("agility"));
+		player.setAttribute("Throw an exception",1000);
 	}
 
 	@Test

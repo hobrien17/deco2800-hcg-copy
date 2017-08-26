@@ -25,7 +25,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     int status;
     int ID;
     transient Map<String, Double> lootRarity;
-	
+
 	// Effects container
 	protected Effects myEffects;
     
