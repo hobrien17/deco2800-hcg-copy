@@ -14,7 +14,10 @@ public class Quest {
 	private Item itemRequested; //what the player needs to have in order to complete the quest
 	private boolean completed; //whether the quest is completed or not 
 	
-	public Quest(String instruction, Item itemRequested, Item itemToReward){
+	public Quest(String instruction, Item itemRequested, Item itemToReward) throws IllegalArgumentException {
+		if(instruction.equals("") || itemRequested == null || itemToReward == null){
+			throw new IllegalArgumentException(); 
+		}
 		this.instruction = instruction;
 		this.itemRequested = itemRequested;
 		this.itemToReward = itemToReward;

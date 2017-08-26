@@ -67,7 +67,7 @@ public class Conversation {
 	}
 
 	/**
-	 * Move the conversation along to the next sentence/phrase
+	 * Move the conversation along to the next sentence/phrase and return it
 	 * 
 	 * @param answer
 	 *            the input given by the user on the UI. If user selects yes on
