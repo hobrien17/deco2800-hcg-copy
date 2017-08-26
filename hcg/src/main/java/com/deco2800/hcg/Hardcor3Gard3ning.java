@@ -25,6 +25,7 @@ public class Hardcor3Gard3ning extends Game {
     private TimeManager timeManager;
     private ContextManager contextManager;
 	private InputManager inputManager;
+	private ItemManager itemManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -58,6 +59,9 @@ public class Hardcor3Gard3ning extends Game {
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
         inputManager.addKeyUpListener(new Planter());
+        
+        /* Create an item manager */
+        itemManager = (ItemManager) gameManager.getManager(ItemManager.class); 
 
         //TODO everything below this line doesn't belong here
 
