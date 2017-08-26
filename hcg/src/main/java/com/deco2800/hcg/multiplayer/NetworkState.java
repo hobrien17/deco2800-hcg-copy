@@ -25,6 +25,10 @@ public final class NetworkState {
 	private static Thread sendThread;
 	private static Thread receiveThread;
 	
+	private NetworkState() {
+		
+	}
+	
 	/**
 	 * Initialises NetworkState
 	 * @param hostGame

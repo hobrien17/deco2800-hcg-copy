@@ -112,11 +112,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth()*32, 0);
-
-		/**
-		 * Setup multiplayer
-		 */
-		NetworkState networkState = new NetworkState();
 		
 		// stdin chat
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -125,7 +120,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 			public void run() {
 				while (!Thread.interrupted()) {
 					try {
-						networkState.sendChatMessage(reader.readLine());
+						NetworkState.sendChatMessage(reader.readLine());
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -175,7 +170,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		hostButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				networkState.init(true);
+				NetworkState.init(true);
 			}
 		});
 		
@@ -183,8 +178,8 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		joinButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				networkState.init(false);
-				networkState.join(hostField.getText());
+				NetworkState.init(false);
+				NetworkState.join(hostField.getText());
 			}
 		});
 
