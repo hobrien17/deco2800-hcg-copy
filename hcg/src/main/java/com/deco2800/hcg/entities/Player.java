@@ -28,7 +28,7 @@ public class Player extends Character implements Tickable {
     private TimeManager timeManager;
 
     private boolean collided;
-    private int xpThreshold;
+    private int xpThreshold = 200;
     private float lastSpeedX;
     private float lastSpeedY;
     private int oldTime = -1;
