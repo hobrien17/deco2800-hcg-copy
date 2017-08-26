@@ -69,7 +69,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public float getStopwatchTime() {
 		float result = this.minutes;
-		float secondsFraction = this.seconds/60;
+		float secondsFraction = this.seconds/60f;
 		return result + secondsFraction;
 		}
 

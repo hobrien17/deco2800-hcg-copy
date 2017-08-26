@@ -212,7 +212,7 @@ public class Player extends Character implements Tickable {
             this.setPosition(newPosX, newPosY, 1);
         }
 
-        checkXp();
+        //checkXp();
     }
 
     /**
@@ -257,7 +257,9 @@ public class Player extends Character implements Tickable {
      * @param amount the amount of xp to gain
      */
     public void gainXp(int amount) {
+
         this.xp += amount;
+        checkXp();
     }
 
     /**
