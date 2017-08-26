@@ -220,13 +220,11 @@ public class Player extends Character implements Tickable {
      * character in the character creation screen
      */
     public void initialiseNewPlayer(int strength, int vitality, int agility,
-            int charisma,
-            int intellect,
-            int meleeSkill) {
+            int charisma, int intellect, int meleeSkill) {
         setAttributes(strength, vitality, agility, charisma, intellect);
         setSkills(meleeSkill);
         health = 4 * vitality;
-        stamina = 4 * agility;
+        attributes.put("stamina", 4* agility);
     }
 
     /**
@@ -246,9 +244,9 @@ public class Player extends Character implements Tickable {
     private void levelUp() {
         xpThreshold *= 1.3;
         level++;
-        stamina = stamina + agility;
-        health = health + vitality;
-        skillPoints = 4 + intellect;
+        attributes.put("stamina", attributes.get("stamina") + attributes.get("agility"));
+        health = health + attributes.get("vitality");
+        skillPoints = 4 + attributes.get("intellect");
         // TODO: enter level up screen
     }
 
