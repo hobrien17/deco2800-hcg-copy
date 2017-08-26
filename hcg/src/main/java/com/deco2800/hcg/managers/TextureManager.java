@@ -33,19 +33,14 @@ public class TextureManager extends Manager {
 	 * need to.
 	 */
 	public TextureManager() {
-		
 		textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
 		textureMap.put("ground", new Texture("resources/maps/environment/ground.png"));
-		
 		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
 		textureMap.put("spacman_swim", new Texture("resources/sprites/player/spacman_swim.png"));
-		
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
-		
 		textureMap.put("squirrel", new Texture("resources/sprites/enemies/squirrel.png"));
-		
 		textureMap.put("battle_seed", new Texture("resources/sprites/seeds/battle_seed.png"));
 		textureMap.put("explosive_seed", new Texture("resources/sprites/seeds/explosive_seed.png"));
 		textureMap.put("fire_seed", new Texture("resources/sprites/seeds/fire_seed.png"));
@@ -53,7 +48,6 @@ public class TextureManager extends Manager {
 		textureMap.put("grass_seed", new Texture("resources/sprites/seeds/grass_seed.png"));
 		textureMap.put("ice_seed", new Texture("resources/sprites/seeds/ice_seed.png"));
 		textureMap.put("water_seed", new Texture("resources/sprites/seeds/water_seed.png"));
-
 		textureMap.put("plant_01", new Texture("resources/sprites/plants/plant_01.png"));
 		textureMap.put("plant_02", new Texture("resources/sprites/plants/plant_02.png"));
 		textureMap.put("sunflower_01", new Texture("resources/sprites/plants/sunflower_pot_01.png"));
@@ -74,7 +68,6 @@ public class TextureManager extends Manager {
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 		textureMap.put("npc", new Texture("resources/sprites/misc/npc.png"));
-
 	}
 
 	/**
