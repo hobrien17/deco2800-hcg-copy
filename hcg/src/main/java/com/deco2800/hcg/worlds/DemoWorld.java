@@ -43,8 +43,12 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0));
 		}
 		
-		//Add an example entity
-		 this.addEntity(new NPC(10,10,0,1,0.5f,0.5f, false,"Jane","Jensen", NPC.Type.Quest, "tower") {});
+		//Add an example quest NPC
+		 this.addEntity(new NPC(10,10,0,1,0.5f,0.5f, false,"Jane","Jensen", NPC.Type.Quest, "character_1") {});
+
+		//Add an example shop NPC
+		this.addEntity(new NPC(30,15,0,1,0.5f,0.5f, false,"John","Jensen", NPC.Type.Shop, "character_shop") {});
+
 
 	}
 
