@@ -27,7 +27,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     transient Map<String, Double> lootRarity;
 	
 	// Effects container
-	private Effects myEffects;
+	protected Effects myEffects;
     
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength, int ID) {

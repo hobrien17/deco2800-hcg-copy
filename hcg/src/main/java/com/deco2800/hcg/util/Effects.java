@@ -1,7 +1,6 @@
 package com.deco2800.hcg.util;
 
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
 
 import java.util.*;
@@ -15,7 +14,7 @@ import java.util.*;
  * This is currently a skeleton of the effects class and the structure can
  * change in the future.
  */
-public class Effects implements Tickable{
+public class Effects {
 
     // We use a hashset because we don't want duplicate elements
     private HashSet<Effect> currentEffects;
@@ -24,15 +23,17 @@ public class Effects implements Tickable{
     // applied to the owner.
     private AbstractEntity owner;
 
-    private int originalSlow;
+    //private int originalSlow;
 
     public Effects(AbstractEntity owner) {
+        this.owner = owner;
         currentEffects = new HashSet<>();
 
         saveOriginalStats();
     }
 
     public Effects(AbstractEntity owner, Collection<Effect> effects) {
+        this.owner = owner;
         currentEffects = new HashSet<>(effects);
 
         saveOriginalStats();
@@ -67,7 +68,7 @@ public class Effects implements Tickable{
         currentEffects.remove(effect);
     }
 
-    private void execute() {
+    public void execute() {
         for (Effect e : currentEffects) {
             if (e.getDuration() == 0) {
                 currentEffects.remove(e);
@@ -91,15 +92,5 @@ public class Effects implements Tickable{
             }
         }
 
-    }
-
-    /**
-     * On tick is called periodically (time dependant on the world settings)
-     *
-     * @param gameTickCount Current game tick
-     */
-    @Override
-    public void onTick(long gameTickCount) {
-        execute();
     }
 }
