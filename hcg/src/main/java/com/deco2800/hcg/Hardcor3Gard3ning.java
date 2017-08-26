@@ -113,14 +113,24 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth()*32, 0);
 		
-		// stdin chat
+		/**
+		 * Multiplayer prompt
+		 */
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		(new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (!Thread.interrupted()) {
 					try {
-						NetworkState.sendChatMessage(reader.readLine());
+						String line = reader.readLine();
+						if (line.startsWith("HOST")) {
+							NetworkState.init(true);
+						} else if (line.startsWith("JOIN ")) {
+							NetworkState.init(false);
+							NetworkState.join(line.substring(5, line.length()));
+						} else {
+							NetworkState.sendChatMessage(line);
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -145,11 +155,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		clockLabel = new Label(timeManager.getDateTime(), skin);
 		timeManager.setLabel(clockLabel);
 		
-		/* Add a textfield and two buttons for multiplayer */
-		Button hostButton = new TextButton("Host", skin);
-		TextField hostField = new TextField("", skin);
-		Button joinButton = new TextButton("Join", skin);
-		
 		/* Add a programatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
@@ -165,31 +170,11 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 				soundManager.playSound("quack");
 			}
 		});
-		
-		/* Add a handler to host a game */
-		hostButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				NetworkState.init(true);
-			}
-		});
-		
-		/* Add a handler to join a player */
-		joinButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				NetworkState.init(false);
-				NetworkState.join(hostField.getText());
-			}
-		});
 
 		/* Add all elements to the menu */
 		window.add(button);
 		window.add(anotherButton);
 		window.add(clockLabel);
-		window.add(hostButton);
-		window.add(hostField);
-		window.add(joinButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
