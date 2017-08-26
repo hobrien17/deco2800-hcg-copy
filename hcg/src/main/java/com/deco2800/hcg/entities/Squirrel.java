@@ -28,7 +28,7 @@ public class Squirrel extends Enemy implements Tickable {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
 		this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
-		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
+		//this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 
 		this.random = new Random();
 	}
@@ -82,7 +82,7 @@ public class Squirrel extends Enemy implements Tickable {
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
 				if(entity instanceof Player) {
-					soundManager.playSound("ree");
+					//soundManager.playSound("ree");
 				}
 				collided = true;
 			}
