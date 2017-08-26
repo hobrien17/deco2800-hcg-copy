@@ -55,7 +55,7 @@ public class Player extends Character implements Tickable {
         input.addTouchDownListener(this::handleTouchDown);
 
         collided = false;
-        this.setTexture("spacman");
+        this.setTexture("hcg_character");
         this.soundManager = (SoundManager) GameManager.get()
                 .getManager(SoundManager.class);
         this.timeManager = (TimeManager) GameManager.get()
@@ -390,11 +390,11 @@ public class Player extends Character implements Tickable {
     private void ifSwim(String name) {
       if (name != null) {
         if ("water-deep".equals(name)) {
-            this.setTexture("spacman_swim");
+            this.setTexture("hcg_character_swim");
             playSound("swimming");
             
         } else {
-            this.setTexture("spacman");
+            this.setTexture("hcg_character");
             soundManager.stopSound("swimming");
         }
       }
