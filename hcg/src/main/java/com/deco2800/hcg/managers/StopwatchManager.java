@@ -14,10 +14,8 @@ public class StopwatchManager extends Manager implements TickableManager {
 
 	private int seconds;
 	private int minutes;
-	
-	private int timedMinutes;
 
-	
+	private int timedMinutes;
 
 	/**
 	 * Constructor: Initializes the stopwatch with no time limit.
@@ -25,13 +23,12 @@ public class StopwatchManager extends Manager implements TickableManager {
 	public StopwatchManager() {
 		this.minutes = 0;
 		this.seconds = 0;
-		
+
 		this.timedMinutes = 0;
 
 		this.ticksElapsed = 0;
-		}
-	
-	
+	}
+
 	/**
 	 * 
 	 * Set the time limit for the stopwatch
@@ -40,8 +37,8 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public void startTimer(int timeLimit) {
 		this.timedMinutes = timeLimit;
-		}
-	
+	}
+
 	/**
 	 * 
 	 * Removes the time limit from the stopwatch
@@ -49,8 +46,8 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public void stopTimer() {
 		this.timedMinutes = 0;
-		}
-	
+	}
+
 	/**
 	 * 
 	 * Resets the stopwatch
@@ -58,8 +55,10 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public void resetStopwatch() {
 		this.ticksElapsed = 0;
-		}
-	
+		this.minutes = 0;
+		this.seconds = 0;		
+	}
+
 	/**
 	 * 
 	 * Gets the current time of the stopwatch
@@ -69,10 +68,9 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public float getStopwatchTime() {
 		float result = this.minutes;
-		float secondsFraction = this.seconds/60;
+		float secondsFraction = this.seconds / 60;
 		return result + secondsFraction;
-		}
-
+	}
 
 	/**
 	 * Handles incrementing time on tick event.
@@ -82,29 +80,24 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public void onTick(long gameTickCount) {
 
-		
 		this.ticksElapsed++;
-		
-		// as a minute is 50 ticks
-		
-		float secondsDecimal = ticksElapsed%50;
-		secondsDecimal = (secondsDecimal/50)*60;
-		
-		
-		this.minutes = ticksElapsed/50;
-		this.seconds = (int)(secondsDecimal);
 
-		
-		if(this.timedMinutes != 0 && this.minutes >= this.timedMinutes) {
+		// as a minute is 50 ticks
+
+		float secondsDecimal = ticksElapsed % 50;
+		secondsDecimal = (secondsDecimal / 50) * 60;
+
+		this.minutes = ticksElapsed / 50;
+		this.seconds = (int) (secondsDecimal);
+
+		if (this.timedMinutes != 0 && this.minutes >= this.timedMinutes) {
 			setChanged();
 		}
-		
-		if (hasChanged()){
+
+		if (hasChanged()) {
 			notifyObservers();
 		}
 		clearChanged();
 	}
-	
-
 
 }
