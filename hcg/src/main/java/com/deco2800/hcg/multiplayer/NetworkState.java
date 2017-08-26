@@ -63,6 +63,19 @@ public final class NetworkState {
 	}
 	
 	/**
+	 * Add chat message to queue
+	 * @param chatMessage String to be sent
+	 */
+	public void sendChatMessage(String chatMessage) {
+		String printString = socket.getLocalAddress().getHostName() + ": " + chatMessage;
+		Message printMessage = new Message(MessageType.CHAT, printString.getBytes());
+		// print message locally
+				System.out.println(printString);
+		// send message to peers
+		sendMessage(printMessage);
+	}
+	
+	/**
 	 * Switches network state to server mode
 	 */
 	public void host() {
@@ -156,6 +169,7 @@ public final class NetworkState {
 								networkState.peers.put(networkState.peers.size() - 1, packet.getSocketAddress());
 								break;
 							case CHAT:
+								System.out.println(message.getPayloadString());
 								break;
 							default:
 								break;

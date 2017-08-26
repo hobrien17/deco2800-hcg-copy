@@ -1,5 +1,9 @@
 package com.deco2800.hcg;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -114,6 +118,21 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		 */
 		NetworkState networkState = new NetworkState();
 		networkState.startThreads();
+		
+		// stdin chat
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (!Thread.interrupted()) {
+					try {
+						networkState.sendChatMessage(reader.readLine());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		})).start();
 		
 		/**
 		 * Setup GUI
