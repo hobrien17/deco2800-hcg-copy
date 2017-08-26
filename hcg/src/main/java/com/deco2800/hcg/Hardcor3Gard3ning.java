@@ -117,7 +117,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		 * Setup multiplayer
 		 */
 		NetworkState networkState = new NetworkState();
-		networkState.startThreads();
 		
 		// stdin chat
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -152,7 +151,7 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		timeManager.setLabel(clockLabel);
 		
 		/* Add a textfield and two buttons for multiplayer */
-		Button hostButton = new TextButton("host", skin);
+		Button hostButton = new TextButton("Host", skin);
 		TextField hostField = new TextField("", skin);
 		Button joinButton = new TextButton("Join", skin);
 		
@@ -173,17 +172,18 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		});
 		
 		/* Add a handler to host a game */
-		hostButton.addListener(new ChangeListener( ) {
+		hostButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				networkState.host();
+				networkState.init(true);
 			}
 		});
 		
 		/* Add a handler to join a player */
-		joinButton.addListener(new ChangeListener( ) {
+		joinButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				networkState.init(false);
 				networkState.join(hostField.getText());
 			}
 		});

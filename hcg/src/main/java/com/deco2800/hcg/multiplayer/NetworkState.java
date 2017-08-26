@@ -26,29 +26,31 @@ public final class NetworkState {
 	private Thread receiveThread;
 	
 	/**
-	 * Initialise NetworkState
+	 * Initialises NetworkState
+	 * @param hostGame
 	 */
-	public NetworkState() {
+	public void init(boolean hostGame) {
 		peers = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
 		
+		// initialise socket
 		try {
-			socket = new DatagramSocket();
+			if (hostGame) {
+				socket = new DatagramSocket(1337);
+				System.out.println("HOSTING GAME");
+			} else {
+				socket = new DatagramSocket();
+			}
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
 		
+		// initialise threads
 		networkSend = new NetworkSend(this);
 		networkReceive = new NetworkReceive(this);
-		
 		sendThread = new Thread(networkSend);
 		receiveThread = new Thread(networkReceive);
-	}
-	
-	/**
-	 * Start the networking send/receive threads
-	 */
-	public void startThreads() {
+		// start the networking send/receive threads
 		sendThread.start();
 		receiveThread.start();
 	}
@@ -70,22 +72,9 @@ public final class NetworkState {
 		String printString = socket.getLocalAddress().getHostName() + ": " + chatMessage;
 		Message printMessage = new Message(MessageType.CHAT, printString.getBytes());
 		// print message locally
-				System.out.println(printString);
+		System.out.println(printString);
 		// send message to peers
 		sendMessage(printMessage);
-	}
-	
-	/**
-	 * Switches network state to server mode
-	 */
-	public void host() {
-		try {
-			socket.close();
-			socket = new DatagramSocket(1337);
-			System.out.println("HOSTING GAME");
-		} catch (SocketException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
