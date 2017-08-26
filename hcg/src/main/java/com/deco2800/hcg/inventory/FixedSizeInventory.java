@@ -93,6 +93,17 @@ public class FixedSizeInventory implements Inventory {
     }
     
     @Override
+    public boolean canInsert(Item item, int index) throws IndexOutOfBoundsException {
+        if(this.items[index] == null) {
+            return true;
+        } else if(this.items[index].sameItem(item)) {
+            return items[index].getStackSize() + item.getStackSize() >= item.getMaxStackSize();
+        }
+        
+        return false;
+    }
+    
+    @Override
     public boolean insertItem(Item item, int index) throws IndexOutOfBoundsException {
         if(this.items[index] == null) {
             this.items[index] = item;
@@ -102,6 +113,17 @@ public class FixedSizeInventory implements Inventory {
         }
         
         return false;
+    }
+
+    @Override
+    public boolean allowItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
+        if(index < 0 || index >= this.getMaxSize()) {
+            // Even for an implementation without restrictions 
+            // we don't want people calling this with silly indices
+            throw new IndexOutOfBoundsException();
+        }
+        
+        return true;
     }
     
     @Override
