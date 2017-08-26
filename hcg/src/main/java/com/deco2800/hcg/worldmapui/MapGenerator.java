@@ -113,7 +113,7 @@ public class MapGenerator {
 					safeNodeInColumn = true;
 					columnsSinceSafeNode = 0;
 				} else {
-					nodeType = 1;
+					nodeType = 1;  // in the future, will add diffrent node types in here
 				}
 				MapNode basicNode = new MapNode(i, nodeRow, "", nodeType, getLevel(), false);
 				currentOccupiedRows.add(nodeRow);
