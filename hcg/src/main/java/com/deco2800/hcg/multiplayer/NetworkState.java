@@ -160,8 +160,12 @@ public final class NetworkState {
 						// log
 						System.out.println("RECEIVED: " + message.getType().toString());
 					} else if (message.getType() == MessageType.CONFIRMATION) {
+						// get id for logging
+						Message removed = NetworkState.sendQueue.get(message.getPayloadInteger());
 						// remove message from send queue
-						NetworkState.sendQueue.remove(message.getPayloadInteger());
+						if (NetworkState.sendQueue.remove(message.getPayloadInteger()) != null) {
+							System.out.println("REMOVED: " + removed.getType().toString());
+						}
 					} else {
 						Message confirmMessage = new Message(MessageType.CONFIRMATION, message.getIdInBytes());
 						byte byteArray[] = confirmMessage.toByteArray();
