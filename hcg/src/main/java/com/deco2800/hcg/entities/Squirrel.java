@@ -79,7 +79,7 @@ public class Squirrel extends Enemy implements Tickable {
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
 				if(entity instanceof Player) {
-				    this.shoot();
+				    this.shoot(this);
 					this.causeDamage((Player)entity);
 				}
 				collided = true;
@@ -89,6 +89,9 @@ public class Squirrel extends Enemy implements Tickable {
 		if (!collided) {
 			setPosX(getPosX() + changeX);
 			setPosY(getPosY() + changeY);
-		}	
+		}
+
+		// Apply any effects that exist on the entity
+		myEffects.execute();
 	}
 }
