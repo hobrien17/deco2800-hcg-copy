@@ -28,7 +28,7 @@ public class PlayerTest {
 		Player player = new Player(0, 0, 0);
 		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0);
 		
-		assertTrue("Player agility isn't set to value 0.", player.getAgility() == 0);
+		assertTrue("Player agility isn't set to value 0.", player.attributes.get("agility") == 0);
 
 	}
 
