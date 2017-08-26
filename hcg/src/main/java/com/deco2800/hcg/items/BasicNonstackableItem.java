@@ -29,6 +29,16 @@ public class BasicNonstackableItem implements Item {
         return false;
     }
 
+    /**
+     * Checks if item is a weapon/ potion etc. and can be held in hot bar
+     *
+     * @return Whether or not item can be equipped in hot bar
+     */
+    @Override
+    public boolean isEquippable() {
+        return false;
+    }
+
     /** Function for returning the total weight of this item. For stackable items this is equal to itemWeight * stackSize **/
     public int getWeight() {
         return itemWeight;
