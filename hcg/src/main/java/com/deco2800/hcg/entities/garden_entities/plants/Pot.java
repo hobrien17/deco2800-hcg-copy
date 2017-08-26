@@ -12,6 +12,12 @@ public class Pot extends AbstractEntity implements Tickable  {
 	
 	AbstractGardenPlant plant;
 
+	/**
+	 * Creates a pot at the given position
+	 * @param posX the x position
+	 * @param posY the y position
+	 * @param posZ the z position
+	 */
 	public Pot(float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.7f, 0.7f, 1, 1f, 1f, false);
 		plant = null;

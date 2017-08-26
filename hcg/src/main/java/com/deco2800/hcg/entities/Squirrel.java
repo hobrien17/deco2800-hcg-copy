@@ -20,6 +20,12 @@ public class Squirrel extends Enemy implements Tickable {
 
     private Random random;
 
+    /**
+     * Creates a new Squirrel object at the given position
+     * @param posX the x position
+     * @param posY the y position
+     * @param posZ the z position
+     */
     public Squirrel(float posX, float posY, float posZ) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, 1, 1, false);
         this.setTexture("squirrel");

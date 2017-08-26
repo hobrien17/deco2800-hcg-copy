@@ -37,6 +37,8 @@ public class TextureManager extends Manager {
 		textureMap.put("ground", new Texture("resources/maps/environment/ground.png"));
 		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
 		textureMap.put("spacman_swim", new Texture("resources/sprites/player/spacman_swim.png"));
+		textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
+		textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
@@ -68,6 +70,18 @@ public class TextureManager extends Manager {
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 		textureMap.put("npc", new Texture("resources/sprites/misc/npc.png"));
+		
+		// Textures for the Main Menu and In-Game Menu
+		textureMap.put("menu_title", new Texture("resources/ui/main_menu/menu_title.png"));
+		textureMap.put("menu_no_button", new Texture("resources/ui/main_menu/menu_no_button.png"));
+		textureMap.put("menu_options_button", new Texture("resources/ui/main_menu/menu_options_button.png"));
+		textureMap.put("menu_play_button", new Texture("resources/ui/main_menu/menu_play_button.png"));
+		textureMap.put("menu_quit_button", new Texture("resources/ui/main_menu/menu_quit_button.png"));
+		textureMap.put("menu_quit_text", new Texture("resources/ui/main_menu/menu_quit_text.png"));
+		textureMap.put("menu_resume_button", new Texture("resources/ui/main_menu/menu_resume_button.png"));
+		textureMap.put("menu_yes_button", new Texture("resources/ui/main_menu/menu_yes_button.png"));
+		textureMap.put("main_menu_background", new Texture("resources/ui/main_menu/main_menu_background.png"));
+
 	}
 
 	/**

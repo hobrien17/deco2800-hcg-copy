@@ -13,7 +13,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 
     private float speed = 2f;
 
-
     private float goalX;
     private float goalY;
 
@@ -22,6 +21,15 @@ public class Bullet extends AbstractEntity implements Tickable {
     private float changeY;
 
 
+    /**
+     * Creates a new Bullet at the given position with the given direction.
+     *
+     * @param posX the x position of the bullet
+     * @param posY the y position of the bullet
+     * @param posZ the z position of the bullet
+     * @param xd the y direction for the bullet
+     * @param yd the x direction for the bullet
+     */
     public Bullet(float posX, float posY, float posZ, float xd, float yd) {
         super(posX, posY, posZ, 0.6f, 0.6f, 1);
         this.setTexture("battle_seed");
