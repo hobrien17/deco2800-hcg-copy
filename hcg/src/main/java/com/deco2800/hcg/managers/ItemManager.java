@@ -26,7 +26,7 @@ public class ItemManager extends Manager {
      * @param name The name of the item to return
      * @return A new item
      */
-    public static Item getNew(String name) {
+    public Item getNew(String name) {
         if (name == "sunflower_seed") {
             return new SunflowerSeed();
         } else if (name == "explosive_seed") {
