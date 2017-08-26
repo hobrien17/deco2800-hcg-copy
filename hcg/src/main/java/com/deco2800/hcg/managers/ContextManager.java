@@ -13,6 +13,10 @@ import java.util.Deque;
  */
 public class ContextManager extends Manager implements Screen, TickableManager {
 
+    // Track width and height of display, so new contexts can be automatically sized
+    private int displayWidth = 0;
+    private int displayHeight = 0;
+
     // To produce nested-menu behaviour, contexts are help in a stack
     private Deque<Context> contextStack;
 
@@ -35,17 +39,20 @@ public class ContextManager extends Manager implements Screen, TickableManager {
 
     /**
      * Push a new context onto the top of the context stack. This will cause the
-     * game to imediatly jump into displaying the new context.
+     * game to immediately jump into displaying the new context.
      *
      * @param newContext The new game context.
      */
     public void pushContext(Context newContext) {
-        // Hide the old Context and show the new one
+        // Hide the old Context
         if (!contextStack.isEmpty()) {
             contextStack.peek().hide();
         }
-        contextStack.push(newContext);
+
+        // Resize and show the new one
+        newContext.resize(displayWidth, displayHeight);
         newContext.show();
+        contextStack.push(newContext);
     }
 
     /**
@@ -114,6 +121,8 @@ public class ContextManager extends Manager implements Screen, TickableManager {
      */
     @Override
     public void resize(int width, int height) {
+        displayWidth = width;
+        displayHeight = height;
         for (Context context : contextStack) {
             context.resize(width, height);
         }
