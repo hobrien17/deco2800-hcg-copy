@@ -34,7 +34,7 @@ import java.util.*;
  */
 public abstract class Character extends AbstractEntity {
     // TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
-    public final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("stamina", "carryWeight",
+    public final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "health", "stamina", "carryWeight",
             "strength", "vitality", "agility", "charisma", "intellect");
 
     protected float movementSpeed;
@@ -70,7 +70,7 @@ public abstract class Character extends AbstractEntity {
         // a character
         this.attributes = new HashMap<String,Integer>();
         for (String attribute: CHARACTER_ATTRIBUTES) {
-            attributes.put(attribute, 5);
+            attributes.put(attribute, 10);
         }
         this.speedX = 0.0f;
         this.speedY = 0.0f;
