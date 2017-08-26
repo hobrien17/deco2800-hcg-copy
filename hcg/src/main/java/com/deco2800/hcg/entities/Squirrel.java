@@ -19,7 +19,7 @@ public class Squirrel extends Enemy implements Tickable {
 	private float speed = 0.1f;
 	
 	private PlayerManager playerManager;
-	private SoundManager soundManager;
+	//private SoundManager soundManager;
 	
 	private Random random;
 
@@ -58,12 +58,14 @@ public class Squirrel extends Enemy implements Tickable {
 	public void onTick(long gameTickCount) {
 		float goalX = playerManager.getPlayer().getPosX() + random.nextFloat() * 6 - 3;
 		float goalY = playerManager.getPlayer().getPosY() + random.nextFloat() * 6 - 3;
-
-		if(this.distance(playerManager.getPlayer()) < speed) {
+		float distance = this.distance(playerManager.getPlayer());
+		
+		if(distance < speed) {
 			this.setPosX(goalX);
 			this.setPosY(goalY);
 			return;
 		}
+		
 
 		float deltaX = getPosX() - goalX;
 		float deltaY = getPosY() - goalY;
@@ -82,15 +84,20 @@ public class Squirrel extends Enemy implements Tickable {
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
 				if(entity instanceof Player) {
-					//soundManager.playSound("ree");
+				    this.shoot();
+					this.causeDamage((Player)entity);
 				}
 				collided = true;
 			}
 		}
-
+		
 		if (!collided) {
 			setPosX(getPosX() + changeX);
 			setPosY(getPosY() + changeY);
 		}
+		
+		
+		
+		
 	}
 }

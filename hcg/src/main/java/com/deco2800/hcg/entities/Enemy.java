@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities;
 
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -16,6 +17,7 @@ public abstract class Enemy extends Character implements Lootable {
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
     private PlayerManager playerManager;
+    // Current status of enemy. 1 : New Born, 2 : Injured 3 : Annoyed
     int status;
     int ID;
     Map<String, Double> lootRarity;
@@ -25,9 +27,8 @@ public abstract class Enemy extends Character implements Lootable {
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength, int ID) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
-        // Current status of enemy. 1:New Born 2:Injured 3:Annoyed
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
-        int status = 1;
+        status = 1;
         if (ID > 0) {
             this.ID = ID;
         } else {
@@ -48,10 +49,6 @@ public abstract class Enemy extends Character implements Lootable {
 
 
     }
-
-    //public Enemy(Box3D position, float xRenderLength, float yRenderLength, boolean centered) {
-    //    super(position, xRenderLength, yRenderLength, centered);
-    //}
 
     /**
      * Gets the enemy ID
@@ -87,9 +84,13 @@ public abstract class Enemy extends Character implements Lootable {
         health = Math.max(health + amount, 0);
     }
 
-    // attack player
-    public void causeDamage(Player player){
-        
+    /**
+     * Attack the player
+     * 
+     */
+    public void causeDamage(Player player) {
+        //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
+        player.setHealth(player.getHealth() - 10);
     }
 
     @Override
@@ -164,7 +165,6 @@ public abstract class Enemy extends Character implements Lootable {
      * @return: 0. Undetected
      *          1. Detected player
      *
-     * @author Jingwei WANG
      */
     public boolean detectPlayer(){
         float diffX = abs(this.getPosX() - playerManager.getPlayer().getPosX());
@@ -186,7 +186,6 @@ public abstract class Enemy extends Character implements Lootable {
      *
      * Go to the player's position if detected player during moving.
      *
-     * @author Jingwei WANG
      */
     public void randomMove() {
         float radius;
@@ -224,7 +223,6 @@ public abstract class Enemy extends Character implements Lootable {
      * @param destPosX: the X of next position
      * @param destPosY: the Y of next position
      *
-     * @author Jingwei WANG
      */
     public void moveTo(float destPosX, float destPosY){
         while(this.getPosX() != destPosX && this.getPosY() != destPosY ){
@@ -246,7 +244,6 @@ public abstract class Enemy extends Character implements Lootable {
     /**
      * Move enemy to player.
      *
-     * @author Jingwei WANG
      */
     public void moveToPlayer(){
         while(this.getPosX() != playerManager.getPlayer().getPosX() &&
@@ -265,5 +262,12 @@ public abstract class Enemy extends Character implements Lootable {
                 speedY -= movementSpeed;
             }
         }
+    }
+    
+    public void shoot() {
+        Vector3 worldCoords = GameManager.get().getCamera()
+                .unproject(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
+        Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y);
+        GameManager.get().getWorld().addEntity(bullet);
     }
 }
