@@ -16,6 +16,9 @@ public class Effects {
     private ArrayList<String> currentEffects;
     private String[] effectTypes = {"damage", "freeze", "slow", "stun"};
 
+    /**
+     * Creates a new Effects object
+     */
     public Effects() {
         currentEffects = new ArrayList<String>();
     }

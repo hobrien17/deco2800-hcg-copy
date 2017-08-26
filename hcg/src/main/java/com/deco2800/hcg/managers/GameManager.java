@@ -73,7 +73,8 @@ public class GameManager implements TickableManager {
             this.addManager((Manager) ctor.newInstance());
         } catch (Exception e) {
             // Gotta catch 'em all
-            e.printStackTrace();
+            LOGGER.error(e.toString());
+            // e.printStackTrace();
         }
 
 		/* And then return it */

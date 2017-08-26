@@ -43,20 +43,22 @@ public abstract class AbstractWorld {
      * if no such TiledMapTileLayer exists.
      */
     public TiledMapTileLayer getTiledMapTileLayerAtPos(int posX, int posY) {
-        // loop through all layers
-        Iterator<MapLayer> itr = GameManager.get().getWorld().
-                getMap().getLayers().iterator();
-
-        while (itr.hasNext()) {
-
-            TiledMapTileLayer layer = (TiledMapTileLayer) itr.next();
-
-            if (layer.getCell(posX, posY) != null) {
-                return (TiledMapTileLayer) layer;
-            }
-
-        }
-
+      // check for no map
+      if (map != null) {
+          // loop through all layers
+          Iterator<MapLayer> itr = map.getLayers().iterator(); //GameManager.get().getWorld().getMap()
+  
+          while (itr.hasNext()) {
+  
+              TiledMapTileLayer layer = (TiledMapTileLayer) itr.next();
+  
+              if (layer.getCell(posX, posY) != null) {
+                  return (TiledMapTileLayer) layer;
+              }
+  
+          }
+      }
+      
         return null;
 
     }
@@ -87,19 +89,23 @@ public abstract class AbstractWorld {
     }
 
     /**
-     * Changed world width to a specified new width
+     * Changes world width to a specified new width, provided new width is > 0
      * @param width New width
      */
     public void setWidth(int width) {
+      if (width > 0) {
         this.width = width;
+      }
     }
     
     /**
-     * Changed world length to a specified new width
+     * Changes world length to a specified new width, provided new height is > 0
      * @param width New length
      */
     public void setLength(int length) {
+      if (length > 0) {
         this.length = length;
+      }
     }
 
     /**

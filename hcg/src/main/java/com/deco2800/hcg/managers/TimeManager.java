@@ -274,5 +274,4 @@ public class TimeManager extends Manager implements TickableManager {
 				this.day, this.month, this.year, this.hours, this.minutes,
 				this.seconds);
 	}
-
 }

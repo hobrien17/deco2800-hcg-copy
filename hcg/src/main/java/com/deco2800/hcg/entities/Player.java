@@ -28,11 +28,13 @@ public class Player extends Character implements Tickable {
     private TimeManager timeManager;
 
     private boolean collided;
-    private int xpThreshold;
+    private int xpThreshold = 200;
     private float lastSpeedX;
     private float lastSpeedY;
     private int oldTime = -1;
     private int newTime = -1;
+
+    private int skillPoints;
 
     /**
      * Creates a new player at specified position.
@@ -65,6 +67,13 @@ public class Player extends Character implements Tickable {
 
     }
 
+    /**
+     * Handles the processes involved when a touch input is made.
+     * @param screenX the x position being clicked on the screen
+     * @param screenY the y position being clicked on the screen
+     * @param pointer <unknown>
+     * @param button <unknown>
+     */
     private void handleTouchDown(int screenX, int screenY, int pointer,
             int button) {
         Vector3 worldCoords = GameManager.get().getCamera()
@@ -72,7 +81,9 @@ public class Player extends Character implements Tickable {
         Bullet bullet = new Bullet(this.getPosX(), this.getPosY(),
                 this.getPosZ(), worldCoords.x,
                 worldCoords.y);
+
         GameManager.get().getWorld().addEntity(bullet);
+
     }
 
     /**
@@ -214,6 +225,8 @@ public class Player extends Character implements Tickable {
             int meleeSkill) {
         setAttributes(strength, vitality, agility, charisma, intellect);
         setSkills(meleeSkill);
+        health = 4 * vitality;
+        stamina = 4 * agility;
     }
 
     /**
@@ -227,16 +240,24 @@ public class Player extends Character implements Tickable {
     }
 
     /**
-     * Increases the player's level by one, increases the xpThreshold.
+     * Increases the player's level by one, increases the xpThreshold, increases health and stamina based on player
+     * agility and vitality
      */
     private void levelUp() {
-        xpThreshold *= 1.2;
+        xpThreshold *= 1.3;
         level++;
+        stamina = stamina + agility;
+        health = health + vitality;
+        skillPoints = 4 + intellect;
         // TODO: enter level up screen
     }
 
-    public void gainXp(int xp) {
-        this.xp += xp;
+    /**
+     * Increases the xp of the player by the given amount
+     * @param amount the amount of xp to gain
+     */
+    public void gainXp(int amount) {
+        this.xp += amount;
     }
 
     /**
@@ -368,7 +389,7 @@ public class Player extends Character implements Tickable {
      */
     private void ifSwim(String name) {
       if (name != null) {
-        if (name.equals("water-deep")) {
+        if ("water-deep".equals(name)) {
             this.setTexture("spacman_swim");
             playSound("swimming");
             
@@ -405,5 +426,4 @@ public class Player extends Character implements Tickable {
     public String toString() {
         return "The player";
     }
-
 }
