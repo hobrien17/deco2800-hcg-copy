@@ -73,7 +73,21 @@ public class TextureManager extends Manager {
 		textureMap.put("inferno_03", new Texture("resources/sprites/plants/inferno_03.png"));
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
+		
+		// Textures for the Main Menu and In-Game Menu
+		textureMap.put("menu_title", new Texture("resources/ui/main_menu/menu_title.png"));
+		textureMap.put("menu_no_button", new Texture("resources/ui/main_menu/menu_no_button.png"));
+		textureMap.put("menu_options_button", new Texture("resources/ui/main_menu/menu_options_button.png"));
+		textureMap.put("menu_play_button", new Texture("resources/ui/main_menu/menu_play_button.png"));
+		textureMap.put("menu_quit_button", new Texture("resources/ui/main_menu/menu_quit_button.png"));
+		textureMap.put("menu_quit_text", new Texture("resources/ui/main_menu/menu_quit_text.png"));
+		textureMap.put("menu_resume_button", new Texture("resources/ui/main_menu/menu_resume_button.png"));
+		textureMap.put("menu_yes_button", new Texture("resources/ui/main_menu/menu_yes_button.png"));
+		textureMap.put("main_menu_background", new Texture("resources/ui/main_menu/main_menu_background.png"));
 
+		
+		
+		
 	}
 
 	/**
