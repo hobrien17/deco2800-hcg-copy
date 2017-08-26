@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Bullet extends AbstractEntity implements Tickable {
 
-    private float speed = 2f;
+    private float speed = 0.5f;
 
     private float goalX;
     private float goalY;
