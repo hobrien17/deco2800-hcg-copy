@@ -6,6 +6,11 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.deco2800.hcg.managers.GameManager;
+
 /**
  * Represents a datagram packet sent via the networking system
  * 
@@ -13,6 +18,8 @@ import java.util.Arrays;
  *
  */
 public class Message {
+	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+	
 	private static final byte[] HEADER = "H4RDC0R3".getBytes();
 	
 	private long id; // effectively size of an integer
@@ -51,9 +58,12 @@ public class Message {
 			this.type = MessageType.values()[stream.readByte()];
 			// rest is payload
 			this.payload = new byte[stream.available()];
-			stream.read(this.payload);
+			int bytesRead = stream.read(this.payload);
+			if (bytesRead < 1 || bytesRead > 1024) {
+				throw new MessageFormatException();
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Failed to convert byte[] to Message", e);
 		}
 	}
 	
@@ -100,7 +110,7 @@ public class Message {
 			stream.write(typeByte);
 			stream.write(payload);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Failed to convert Message to byte[]", e);
 		}
 		return stream.toByteArray();
 	}

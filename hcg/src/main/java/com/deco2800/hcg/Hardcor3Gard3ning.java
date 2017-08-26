@@ -89,7 +89,7 @@ public class Hardcor3Gard3ning extends Game {
 							NetworkState.sendChatMessage(line);
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						continue;
 					}
 				}
 			}
