@@ -80,6 +80,7 @@ public class Player extends Character implements Tickable {
         // Set equipped weapon and enter game world
         equippedWeapon = peashooter;
         GameManager.get().getWorld().addEntity(equippedWeapon);
+        equippedWeapon.setUser(this);
 
     }
 

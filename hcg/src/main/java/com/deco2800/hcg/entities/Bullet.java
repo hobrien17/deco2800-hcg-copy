@@ -23,6 +23,7 @@ public class Bullet extends AbstractEntity implements Tickable {
     private float changeX;
     private float changeY;
 
+    private AbstractEntity user;
 
     /**
      * Creates a new Bullet at the given position with the given direction.
@@ -33,7 +34,7 @@ public class Bullet extends AbstractEntity implements Tickable {
      * @param xd the y direction for the bullet
      * @param yd the x direction for the bullet
      */
-    public Bullet(float posX, float posY, float posZ, float xd, float yd) {
+    public Bullet(float posX, float posY, float posZ, float xd, float yd, AbstractEntity user) {
         super(posX, posY, posZ, 0.6f, 0.6f, 1);
         this.setTexture("battle_seed");
 
@@ -55,6 +56,7 @@ public class Bullet extends AbstractEntity implements Tickable {
         this.changeX = (float) (speed * Math.cos(angle));
         this.changeY = (float) (speed * Math.sin(angle));
 
+        this.user = user;
     }
 
     /**
@@ -87,10 +89,11 @@ public class Bullet extends AbstractEntity implements Tickable {
                 .getEntities();
         for(AbstractEntity entity : entities){
             if (entity instanceof Enemy
-                    && this.collidesWith(entity)) {
+                    && this.collidesWith(entity) && user instanceof Player) {
                 Enemy target = (Enemy) entity;
                 target.causeEffect(new Effect("test", 2, 1, 0.0, 0));
                 GameManager.get().getWorld().removeEntity(this);
+                break;
             }
         }
     }
