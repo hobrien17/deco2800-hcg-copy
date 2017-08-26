@@ -13,7 +13,7 @@ public class BasicStackableItem implements Item {
         itemName = name;
         itemWeight = weight;
         itemMaxStackSize = maxStackSize;
-        itemCurrentStackSize = 0;
+        itemCurrentStackSize = 1;
     }
     /** Function for returning the name of an item **/
     public String getName() {
@@ -87,11 +87,16 @@ public class BasicStackableItem implements Item {
     
     @Override
     public void setStackSize(int number) {
-        this.itemCurrentStackSize = MathHelper.clamp(number, 1, this.getStackSize());
+        this.itemCurrentStackSize = MathHelper.clamp(number, 1, this.getMaxStackSize());
     }
     
     @Override
     public boolean isStackable() {
         return true;
+    }
+    
+    @Override
+    public boolean isEquippable() {
+        return false;
     }
 }

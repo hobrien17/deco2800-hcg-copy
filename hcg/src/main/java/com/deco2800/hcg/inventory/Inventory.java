@@ -31,8 +31,10 @@ public interface Inventory extends Iterable<Item> {
      * @param index
      *            The position of the item to be retrieved.
      * @return The item stored at position <code>index</code>.
+     * @throws IndexOutOfBoundsException
+     *            if the provided index is not a valid position in the inventory.
      */
-    Item getItem(int index);
+    Item getItem(int index) throws IndexOutOfBoundsException;
     
     /**
      * Remove the item stored at position <code>index</code> inside this inventory.
@@ -40,8 +42,10 @@ public interface Inventory extends Iterable<Item> {
      * @param index
      *            The position of the item to be removed.
      * @return The recently removed item.
+     * @throws IndexOutOfBoundsException
+     *            if the provided index is not a valid position in the inventory.
      */
-    Item removeItem(int index);
+    Item removeItem(int index) throws IndexOutOfBoundsException;
     
     /**
      * Remove the given item from the inventory, if it exists.
@@ -71,7 +75,7 @@ public interface Inventory extends Iterable<Item> {
      *            The position to insert the item into.
      * @return Whether or not the item was able to be inserted into the inventory.
      */
-    boolean insertItem(Item item, int index);
+    boolean insertItem(Item item, int index) throws IndexOutOfBoundsException;
     
     /**
      * Inserts <code>item</code> into the inventory into the first free spaces that
