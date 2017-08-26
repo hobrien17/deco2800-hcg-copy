@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 public class StopwatchManager extends Manager implements TickableManager {
 
 	private int ticksElapsed;
+	private boolean timerFinished;
 
 	private int seconds;
 	private int minutes;
@@ -25,7 +26,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 		this.seconds = 0;
 
 		this.timedMinutes = 0;
-
+		this.timerFinished = false;
 		this.ticksElapsed = 0;
 	}
 
@@ -61,6 +62,16 @@ public class StopwatchManager extends Manager implements TickableManager {
 
 	/**
 	 * 
+	 * Returns true if the timer has finished,
+	 * false if not or no timer actually started.
+	 * 
+	 */
+	public boolean getStatus() {
+		return timerFinished;
+	}
+	
+	/**
+	 * 
 	 * Gets the current time of the stopwatch
 	 * 
 	 * Returns a float of the current minute
@@ -91,6 +102,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 		this.seconds = (int) (secondsDecimal);
 
 		if (this.timedMinutes != 0 && this.minutes >= this.timedMinutes) {
+			this.timerFinished = true;
 			setChanged();
 		}
 
