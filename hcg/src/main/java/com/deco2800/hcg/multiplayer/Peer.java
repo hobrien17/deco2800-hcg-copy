@@ -1,5 +1,7 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
+
 /**
  * Represents a networked peer
  * 
@@ -7,23 +9,23 @@ package com.deco2800.hcg.multiplayer;
  *
  */
 public class Peer {
-	private String hostname;
-	private boolean connected;
+	private SocketAddress socketAddress;
+	private boolean host;
 	
-	public Peer(String hostname) {
-		this.hostname = hostname;
-		this.connected = false;
+	public Peer(SocketAddress socketAddress, boolean isHost) {
+		this.socketAddress = socketAddress;
+		this.host = isHost;
 	}
 	
-	public String getHostname() {
-		return hostname;
+	public SocketAddress getSocketAddress() {
+		return socketAddress;
 	}
 	
-	public boolean isConnected() {
-		return connected;
+	public boolean isHost() {
+		return host;
 	}
 	
-	public void setConnected(boolean connected) {
-		this.connected = connected;
+	public void setHost(boolean host) {
+		this.host = host;
 	}
  }

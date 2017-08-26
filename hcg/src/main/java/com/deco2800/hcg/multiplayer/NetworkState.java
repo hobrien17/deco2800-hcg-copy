@@ -2,10 +2,10 @@ package com.deco2800.hcg.multiplayer;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,7 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class NetworkState {
 	DatagramSocket socket;
-	List<Peer> peers;
+	// TODO: a HashMap is probably not the best collection for the lobby
+	//       shouldn't be a big issue for the moment
+	ConcurrentHashMap<Integer, Peer> peers; // the "lobby"
 	ConcurrentHashMap<Integer, Message> sendQueue;
 	private NetworkSend networkSend;
 	private NetworkReceive networkReceive;
@@ -27,20 +29,20 @@ public final class NetworkState {
 	 * Initialise NetworkState
 	 */
 	public NetworkState() {
-		peers = new ArrayList<>();
+		peers = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
-		
-		networkSend = new NetworkSend(this);
-		networkReceive = new NetworkReceive(this);
-		
-		sendThread = new Thread(networkSend);
-		receiveThread = new Thread(networkReceive);
 		
 		try {
 			socket = new DatagramSocket();
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		
+		networkSend = new NetworkSend(this);
+		networkReceive = new NetworkReceive(this);
+		
+		sendThread = new Thread(networkSend);
+		receiveThread = new Thread(networkReceive);
 	}
 	
 	/**
@@ -56,7 +58,8 @@ public final class NetworkState {
 	 * @param message Message to be sent
 	 */
 	public void sendMessage(Message message) {
-		sendQueue.put(message.getId(), message);
+		Integer id = new Integer((int) message.getId());
+		sendQueue.put(id, message);
 	}
 	
 	/**
@@ -77,9 +80,11 @@ public final class NetworkState {
 	 * @param hostname Hostname of server
 	 */
 	public void join(String hostname) {
-		Peer peer = new Peer(hostname);
-		peers.add(peer);
-		this.sendMessage(new Message(MessageType.JOIN, "test".getBytes()));
+		SocketAddress socketAddress = new InetSocketAddress(hostname, 1337);
+		// add host to peers
+		peers.put(0, new Peer(socketAddress, true));
+		// try to connect
+		this.sendMessage(new Message(MessageType.JOIN, "".getBytes()));
 	}
 	
 	/**
@@ -98,23 +103,23 @@ public final class NetworkState {
 		@Override
 		public void run() {
 			while (!Thread.interrupted()) {
-				if (!networkState.peers.isEmpty()) {
+				// on the server peers contains all connected clients
+				// for a regular peer it only contains the server
+				for (Peer peer : networkState.peers.values()) {
 					for (Message message : networkState.sendQueue.values()) {
 						try {
 							byte[] byteArray = message.toByteArray();
 							DatagramPacket packet = new DatagramPacket(
 									byteArray,
 									byteArray.length,
-							        InetAddress.getByName(networkState.peers.get(0).getHostname()),
-							        1337);
+									peer.getSocketAddress());
 							networkState.socket.send(packet);
-							System.out.println("SENT: " + message.getPayloadString());
+							// log
+							System.out.println("SENT: " + message.getType().toString());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
-					// temporary fix
-					networkState.sendQueue.clear();
 				}
 			}
 		}
@@ -125,9 +130,11 @@ public final class NetworkState {
 	 */
 	private class NetworkReceive implements Runnable {
 		private NetworkState networkState;
+		private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
 		
 		private NetworkReceive(NetworkState networkState) {
 			this.networkState = networkState;
+			this.processedIds = new ArrayList<>();
 		}
 		
 		/**
@@ -140,23 +147,35 @@ public final class NetworkState {
 					DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
 					networkState.socket.receive(packet);
 					Message message = new Message(packet.getData());
-					System.out.println("RECEIVED: " + message.getPayloadString());
-					
-					// this should definitely end up somewhere else
-					switch(message.getType()) {
-						case JOIN:
-							break;
-						case CHAT:
-							break;
-						default:
-							break;
-					}
-					// handle confirmation separately
-					// UDP is unreliable so we have to do this
-					if (message.getType() == MessageType.CONFIRMATION) {
-						networkState.sendQueue.remove(message.getPayloadInt());
+					Integer messageId = new Integer((int) message.getId());
+					if (message.getType() != MessageType.CONFIRMATION && !processedIds.contains(messageId)) {
+						// TODO: this should end up somewhere else
+						switch(message.getType()) {
+							case JOIN:
+								// add peer to lobby
+								Peer peer = new Peer(packet.getSocketAddress(), false);
+								networkState.peers.put(networkState.peers.size() - 1, peer);
+								break;
+							case CHAT:
+								break;
+							default:
+								break;
+						}
+						// make sure we don't process this again
+						processedIds.add(messageId);
+						// log
+						System.out.println("RECEIVED: " + message.getType().toString());
+					} else if (message.getType() == MessageType.CONFIRMATION) {
+						// remove message from send queue
+						networkState.sendQueue.remove(message.getPayloadInteger());
 					} else {
-						networkState.sendMessage(new Message(MessageType.CONFIRMATION, message.getIdInBytes()));
+						Message confirmMessage = new Message(MessageType.CONFIRMATION, message.getIdInBytes());
+						byte byteArray[] = confirmMessage.toByteArray();
+						DatagramPacket confirmPacket = new DatagramPacket(
+								byteArray,
+								byteArray.length,
+								packet.getSocketAddress());
+						networkState.socket.send(confirmPacket);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

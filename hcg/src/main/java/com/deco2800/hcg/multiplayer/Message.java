@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 /**
  * Represents a datagram packet sent via the networking system
@@ -14,7 +12,7 @@ import java.nio.ByteOrder;
  *
  */
 public class Message {
-	private int id;
+	private long id; // effectively size of an integer
 	private MessageType type;
 	private byte[] payload;
 	
@@ -25,7 +23,7 @@ public class Message {
 	 */
 	public Message(MessageType type, byte[] payload) {
 		// need a better way to generate IDs
-		this.id = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
+		this.id = System.currentTimeMillis() % Integer.MAX_VALUE;
 		this.type = type;
 		this.payload = payload;
 	}
@@ -51,9 +49,9 @@ public class Message {
 	
 	/**
 	 * Gets message ID of instance
-	 * @return ID of message as int
+	 * @return ID of message as a long
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
@@ -62,7 +60,12 @@ public class Message {
 	 * @return ID of message as byte[4]
 	 */
 	public byte[] getIdInBytes() {
-		return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(id).array();
+		byte[] idBytes = new byte[4];
+		idBytes[0] = (byte) ((id >> 24) & 0xFF);
+		idBytes[1] = (byte) ((id >> 16) & 0xFF);
+		idBytes[2] = (byte) ((id >> 8) & 0xFF);
+		idBytes[3] = (byte) (id & 0xFF);
+		return idBytes;
 	}
 	
 	/**
@@ -100,11 +103,16 @@ public class Message {
 	}
 	
 	/**
-	 * Gets the content of Message as an int
-	 * @return Int contained in first four payload bytes
+	 * Gets the content of Message as an Integer
+	 * @return Integer contained in first four payload bytes
 	 */
-	public int getPayloadInt() {
-		return ((payload[3] << 24) + (payload[2] << 16) + (payload[1] << 8) + (payload[0] << 0));
+	public Integer getPayloadInteger() {
+		long payloadLong = 0;
+		for (int i = 0; i < 4; i++) {
+			// prevent sign extension, then shift byte
+			payloadLong |= (((long) payload[i]) & 0x00000000000000FFL) << ((3 - i) * 8);
+		}
+		return new Integer((int) payloadLong);
 	}
 	
 	/**
