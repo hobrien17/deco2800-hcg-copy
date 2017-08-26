@@ -34,6 +34,8 @@ public class Player extends Character implements Tickable {
     private int oldTime = -1;
     private int newTime = -1;
 
+    private int skillPoints;
+
     /**
      * Creates a new player at specified position.
      * 
@@ -223,6 +225,8 @@ public class Player extends Character implements Tickable {
             int meleeSkill) {
         setAttributes(strength, vitality, agility, charisma, intellect);
         setSkills(meleeSkill);
+        health = 4 * vitality;
+        stamina = 4 * agility;
     }
 
     /**
@@ -236,11 +240,15 @@ public class Player extends Character implements Tickable {
     }
 
     /**
-     * Increases the player's level by one, increases the xpThreshold.
+     * Increases the player's level by one, increases the xpThreshold, increases health and stamina based on player
+     * agility and vitality
      */
     private void levelUp() {
-        xpThreshold *= 1.2;
+        xpThreshold *= 1.3;
         level++;
+        stamina = stamina + agility;
+        health = health + vitality;
+        skillPoints = 4 + intellect;
         // TODO: enter level up screen
     }
 
@@ -418,5 +426,4 @@ public class Player extends Character implements Tickable {
     public String toString() {
         return "The player";
     }
-
 }

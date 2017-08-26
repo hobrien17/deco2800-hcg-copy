@@ -12,22 +12,19 @@ package com.deco2800.hcg.entities;
  * NPCs do not have to gain xp or level up but they should have a level
  * (possibly displayed in game) that represents its difficulty.
  *
- * level The character's level. Will increment by 1 once the player's xp reaches
- * the level up threshold. xp The character's current experience. Will tick over
- * to 0 once the level up threshold is reached (level up thresholds TBD). health
- * The characters's health. The player's health is determined by the player's
- * level and vitality attribute. stamina The character's stamina. The player's
- * stamina is determined by the player's level and agility attribute. strength
- * The character's strength.  Will increase the character's damage with melee
- * with melee weapons, determines how much the player can have in their
- * inventory. vitality The character's vitality. Determines how much health is
- * gained per level. agility The character's agility. Determines how much the
- * character's stamina is increased by each level, and also determines the
- * character's movement speed charisma The character's charisma. Determines how
- * well the character's interactions with other characters go. intellect The
- * character's intellect. Determines how many skill points the player has to
- * distribute to their skills each level. meleeSkill The character's meleeSkill,
- * determines how much damage is done with melee weapons.
+ * The character's level will increment by 1 once the player's xp reaches
+ * the level up threshold.
+ * The character's experience will tick over to 0 once the level up threshold is reached (level up thresholds TBD).
+ * The character's health is determined by the character's level and vitality attribute.
+ * The character's stamina is determined by the character's level and agility attribute.
+ * The character's strength will increase the character's damage with with melee weapons and also determines how much
+ * the player can have in their inventory.
+ * Vitality determines how much health is gained per level.
+ * Agility Determines how much the character's stamina is increased by each level, and also determines the
+ * character's movement speed.
+ * Charisma  Determines how well the character's interactions with other characters go.
+ * Intellect determines how many skill points the player has to distribute to their skills each level.
+ * meleeSkill determines how much damage the character does with melee weapons.
  *
  * @author avryn
  */
