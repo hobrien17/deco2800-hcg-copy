@@ -21,6 +21,7 @@ public class Hardcor3Gard3ning extends Game {
     private GameManager gameManager;
     private SoundManager soundManager;
     private PlayerManager playerManager;
+    private PlantManager plantManager;
     private TextureManager textureManager;
     private TimeManager timeManager;
     private ContextManager contextManager;
@@ -58,6 +59,9 @@ public class Hardcor3Gard3ning extends Game {
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
         inputManager.addKeyUpListener(new Planter());
+
+        /* Create a plant manager. */
+        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
 
         //TODO everything below this line doesn't belong here
 
