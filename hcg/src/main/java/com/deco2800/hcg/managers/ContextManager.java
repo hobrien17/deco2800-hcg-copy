@@ -13,11 +13,11 @@ import java.util.Deque;
  */
 public class ContextManager extends Manager implements Screen, TickableManager {
 
-    // Track width and height of display, so new contexts can be automatically sized
+    // Track width and height of display, so new contexts can be automatically sized correctly.
     private int displayWidth = 0;
     private int displayHeight = 0;
 
-    // To produce nested-menu behaviour, contexts are help in a stack
+    // To produce nested-menu behaviour, contexts are held in a stack
     private Deque<Context> contextStack;
 
     /**
@@ -56,7 +56,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Destroy the current context, and return to the previous one.
+     * Destroy the current context, and return to the one underneath.
      */
     public void popContext() {
         // Destroy the current context
@@ -75,7 +75,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Called on game shutdown. Calls dispose on all contexts.
+     * Called on game shutdown. Disposes all contexts.
      */
     @Override
     public void dispose() {
@@ -85,7 +85,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Never called, does noting.
+     * Never called, does nothing.
      */
     @Override
     public void show() {
@@ -93,7 +93,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Never called, does noting.
+     * Never called, does nothing.
      */
     @Override
     public void hide() {
@@ -113,8 +113,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Called whenever the game window is resized. Calls resize in all stored
-     * contexts.
+     * Called whenever the game window is resized. Resizes all contexts.
      *
      * @param width The new window width.
      * @param height The new window height.
@@ -129,8 +128,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Called whenever the game window loses focus. Calls pause in all stored
-     * contexts.
+     * Called whenever the game window loses focus. Pauses all contexts.
      */
     @Override
     public void pause() {
@@ -140,8 +138,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Called whenever the game window regains focus. Calls resume in all stored
-     * contexts.
+     * Called whenever the game window regains focus. Resumes all contexts.
      */
     @Override
     public void resume() {
