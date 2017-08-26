@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Represents a datagram packet sent via the networking system
@@ -12,6 +13,8 @@ import java.io.IOException;
  *
  */
 public class Message {
+	private static final byte[] HEADER = "H4RDC0R3".getBytes();
+	
 	private long id; // effectively size of an integer
 	private MessageType type;
 	private byte[] payload;
@@ -31,11 +34,18 @@ public class Message {
 	/**
 	 * Constructor used for receiving messages
 	 * @param received Bytes received from server
+	 * @throws MessageFormatException
 	 */
-	public Message(byte[] received) {
+	public Message(byte[] received) throws MessageFormatException {
 		try {
 			DataInputStream stream = new DataInputStream(new ByteArrayInputStream(received));
-			// first four bytes are id
+			// message begins with header
+			byte[] header = new byte[8];
+			stream.read(header, 0, 8);
+			if (!Arrays.equals(header, HEADER)) {
+				throw new MessageFormatException();
+			}
+			// next four bytes are id
 			this.id = stream.readInt();
 			// next byte indicates type
 			this.type = MessageType.values()[stream.readByte()];
@@ -85,6 +95,7 @@ public class Message {
 		try {
 			byte[] idBytes = getIdInBytes();
 			byte typeByte = (byte) type.ordinal();
+			stream.write(HEADER);
 			stream.write(idBytes);
 			stream.write(typeByte);
 			stream.write(payload);
