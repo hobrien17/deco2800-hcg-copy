@@ -38,7 +38,7 @@ public abstract class Enemy extends Character implements Lootable {
             throw new IllegalArgumentException();
         }
         if (strength > 0) {
-            this.strength = strength;
+            this.attributes.put("strength", strength);
         } else {
             throw new IllegalArgumentException();
         }
