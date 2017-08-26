@@ -1,5 +1,9 @@
 package com.deco2800.hcg;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +14,7 @@ import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worlds.DemoWorld;
 
@@ -64,6 +69,31 @@ public class Hardcor3Gard3ning extends Game {
         itemManager = (ItemManager) gameManager.getManager(ItemManager.class); 
 
         //TODO everything below this line doesn't belong here
+
+        /**
+		 * Multiplayer prompt
+		 */
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (!Thread.interrupted()) {
+					try {
+						String line = reader.readLine();
+						if (line.startsWith("HOST")) {
+							NetworkState.init(true);
+						} else if (line.startsWith("JOIN ")) {
+							NetworkState.init(false);
+							NetworkState.join(line.substring(5, line.length()));
+						} else {
+							NetworkState.sendChatMessage(line);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		})).start();
 
 		/* Create an example world for the engine */
         gameManager.setWorld(new DemoWorld());
