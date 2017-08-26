@@ -16,7 +16,7 @@ public abstract class Enemy extends Character implements Lootable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
-    private PlayerManager playerManager;
+    protected PlayerManager playerManager;
     // Current status of enemy. 1 : New Born, 2 : Injured 3 : Annoyed
     int status;
     int ID;

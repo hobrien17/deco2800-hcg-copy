@@ -2,8 +2,6 @@ package com.deco2800.hcg.inventory;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 
 import org.junit.Test;
 

@@ -56,6 +56,23 @@ public class WeightedInventory implements Inventory {
         
         return false;
     }
+
+    @Override
+    public boolean canFitItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
+        // TODO
+        return true;
+    }
+    
+    @Override
+    public boolean allowItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
+        if(index < 0 || index >= this.getMaxSize()) {
+            // Even for an implementation without restrictions 
+            // we don't want people calling this with silly indices
+            throw new IndexOutOfBoundsException();
+        }
+        
+        return true;
+    }
     
     @Override
     public boolean addItem(Item item) {

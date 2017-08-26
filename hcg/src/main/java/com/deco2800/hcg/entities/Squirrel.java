@@ -17,7 +17,6 @@ public class Squirrel extends Enemy implements Tickable {
 
 	private float speed = 0.1f;
 	
-	private PlayerManager playerManager;
 	private ItemManager itemManager;
 	
 	private Random random;

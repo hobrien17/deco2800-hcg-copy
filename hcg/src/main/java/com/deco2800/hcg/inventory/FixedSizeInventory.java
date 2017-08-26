@@ -93,55 +93,80 @@ public class FixedSizeInventory implements Inventory {
     }
     
     @Override
-    public boolean insertItem(Item item, int index) throws IndexOutOfBoundsException {
+    public boolean canFitItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
         if(this.items[index] == null) {
-            this.items[index] = item;
             return true;
         } else if(this.items[index].sameItem(item)) {
-            return this.items[index].addToStack(item.getStackSize());
+            return items[index].getStackSize() + item.getStackSize() >= item.getMaxStackSize();
         }
         
         return false;
     }
     
     @Override
+    public boolean insertItem(Item item, int index) throws IndexOutOfBoundsException {
+        if(this.allowItemInSlot(item, index) && canFitItemInSlot(item, index)) {
+            if(this.items[index] == null) {
+                this.items[index] = item;
+            } else {
+                this.items[index].addToStack(item.getStackSize());
+            }
+            
+            return true;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public boolean allowItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
+        if(index < 0 || index >= this.getMaxSize()) {
+            // Even for an implementation without restrictions 
+            // we don't want people calling this with silly indices
+            throw new IndexOutOfBoundsException();
+        }
+        
+        return true;
+    }
+    
+    @Override
     public boolean addItem(Item item) {
+        int toAdd = item.getStackSize();
+        
         if(this.canInsert(item)) {
             if(item.isStackable()) {
-                int toAdd = item.getStackSize();
                 for(int i = 0; i < this.getMaxSize(); i++) {
                     Item currentItem = this.items[i];
-                    if(currentItem != null && item.sameItem(currentItem)) {
-                        if(!currentItem.addToStack(toAdd)) {
-                            toAdd -= currentItem.getMaxStackSize() - currentItem.getStackSize();
-                            currentItem.setStackSize(currentItem.getMaxStackSize());
-                        } else {
-                            toAdd = 0;
+                    if(this.allowItemInSlot(currentItem, i)) {
+                        if(currentItem == null) {
+                            this.items[i] = item;
+                            return true;
+                        } else if(item.sameItem(currentItem)) {
+                            if(!currentItem.addToStack(toAdd)) {
+                                toAdd -= currentItem.getMaxStackSize() - currentItem.getStackSize();
+                                currentItem.setStackSize(currentItem.getMaxStackSize());
+                            } else {
+                                return true;
+                            }
                         }
-                    }
-                    
-                    if(toAdd <= 0) {
-                        break;
+                        
+                        if(toAdd <= 0) {
+                            return true;
+                        }
                     }
                 }
                 
                 if(toAdd > 0) {
                     item.setStackSize(toAdd);
-                    for(int i = 0; i < this.getMaxSize(); i++) {
-                        if(items[i] == null) {
-                            items[i] = item;
-                        }
-                    }
-                }
-            } else {
-                for(int i = 0; i < this.getMaxSize(); i++) {
-                    if(items[i] == null) {
-                        items[i] = item;
-                    }
                 }
             }
             
-            return true;
+            for(int i = 0; i < this.getMaxSize(); i++) {
+                if(items[i] == null && allowItemInSlot(item, i)) {
+                    items[i] = item;
+                    return true;
+                }
+            }
         }
         
         return false;
@@ -150,9 +175,9 @@ public class FixedSizeInventory implements Inventory {
     @Override
     public boolean containsItem(Item item) {
         int numFound = 0;
-        for(Item currentItem : this) {
-            if(item.sameItem(currentItem)) {
-                numFound += currentItem.getStackSize();
+        for(int i = 0; i < this.getMaxSize(); i++) {
+            if(this.items[i] != null && this.items[i].sameItem(item)) {
+                numFound += this.items[i].getStackSize();
                 
                 if(numFound >= item.getStackSize()) {
                     return true;
