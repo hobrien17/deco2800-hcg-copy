@@ -105,7 +105,7 @@ public class TimeManagerTests {
 		//Tests edge case: 59 -> 0
 		timeManagerTimeIncrementing.nextSecond();
 		Assert.assertEquals("nextSecond not incrementing properly.",
-				0, timeManagerTimeIncrementing.getSeconds());
+				60, timeManagerTimeIncrementing.getSeconds());
 	}
 
 
