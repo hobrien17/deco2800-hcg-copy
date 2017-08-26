@@ -7,7 +7,6 @@ public class TimeManagerTests {
 	private TimeManager timeManagerPauseTest;
 	private TimeManager timeManagerNextDayTest;
 	private TimeManager timeManagerNextSecondTest;
-	private TimeManager timeManagerTimeIncrementing;
 
 	@Before
 	public void setUp() {
@@ -21,28 +20,21 @@ public class TimeManagerTests {
 
 		// for nextSecondTest
 		timeManagerNextSecondTest = new TimeManager();
-		
-		// for getter method tests
-		timeManagerTimeIncrementing = new TimeManager();
 	}
 
 	@Test
 	public void isLeapYearTest() throws Exception {
 		// not leap year
-		Assert.assertFalse("isLeapYear classificatoin of yr is wrong", 
-				timeManager.isLeapYear(1999));
+		Assert.assertFalse(timeManager.isLeapYear(1999));
 
 		// is leap year
-		Assert.assertTrue("isLeapYear classificatoin of yr is wrong", 
-				timeManager.isLeapYear(2016));
+		Assert.assertTrue(timeManager.isLeapYear(2016));
 
 		// not leap year (because divisible by 100)
-		Assert.assertFalse("isLeapYear classificatoin of yr is wrong", 
-				timeManager.isLeapYear(1900));
+		Assert.assertFalse(timeManager.isLeapYear(1900));
 
 		// not leap year (because divisible by 400)
-		Assert.assertTrue("isLeapYear classificatoin of yr is wrong", 
-				timeManager.isLeapYear(2000));
+		Assert.assertTrue(timeManager.isLeapYear(2000));
 	}
 
 	@Test
@@ -83,30 +75,7 @@ public class TimeManagerTests {
 				1, timeManagerNextSecondTest.getSeconds());
 	}
 
-	@Test
-	public void timeIncrementing() {
-		Assert.assertEquals("time not intialised correctly.",
-				0, timeManagerTimeIncrementing.getSeconds());
-		
-		// check first increment	
-		timeManagerTimeIncrementing.nextSecond();
-		Assert.assertEquals("nextSecond not incrementing properly.",
-				1, timeManagerTimeIncrementing.getSeconds());
-		
-		// 
-		for (int i = 0; i< 59; i++){
-			timeManagerTimeIncrementing.nextSecond();
-		}
-		
-		//Test edge case: 59 seconds
-		Assert.assertEquals("nextSecond not incrementing properly.",
-				59, timeManagerTimeIncrementing.getSeconds());
-		
-		//Tests edge case: 59 -> 0
-		timeManagerTimeIncrementing.nextSecond();
-		Assert.assertEquals("nextSecond not incrementing properly.",
-				0, timeManagerTimeIncrementing.getSeconds());
-	}
+
 
 
 

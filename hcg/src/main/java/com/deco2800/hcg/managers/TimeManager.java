@@ -41,8 +41,7 @@ public class TimeManager extends Manager implements TickableManager {
 		this.year = 2047;
 		this.timeElapsed = 0;
 		this.label = null;
-		this.timePaused = false; // this will need to be set to true when we 
-		                         // have some sort of 'start screen' happening
+		this.timePaused = false; // this will need to be set to true when we have some sort of 'start screen' happening
 	}
 
 	/**
