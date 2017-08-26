@@ -32,10 +32,24 @@ public interface Item {
     String getName();
 
     /**
+     * Returns the current stack size of this item.
+     *
+     * @return the current stack size of this item. Always returns 1 for
+     *         non-stackable items.
+     */
+    int getStackSize();
+
+    /**
      * Retrieves the stack limit of item type
      * @return Maximum stack size of item
      */
     int getMaxStackSize();
+
+    /**
+     * Return whether or not this item is stackable.
+     * @return whether or not this item is stackable.
+     */
+    boolean isStackable();
 
     /**
      * Checks if the item is armour or character customisation item
@@ -60,13 +74,13 @@ public interface Item {
      * @return Item weight multiplied by current stack size
      */
     int getWeight();
-    
+
     /**
      * Retrieves the base value of this particular item.
      * @return The base value of this item.
      */
     int getBaseValue();
-    
+
     /**
      * Checks whether or not this item is able to be sold to shops.
      * @return Whether or not this item can be traded.
@@ -89,6 +103,30 @@ public interface Item {
      * @return true or false depending on whether the item was added or not
      * @throws IllegalArgumentException if number is too large or less than 1
      */
-    boolean addToStack(int number) throws IllegalArgumentException;
+    boolean addToStack(int number);
 
+    /**
+     * Set this item's current stack size to the given number.
+     *
+     * @param number: the new stack size of this item.
+     */
+    void setStackSize(int number);
+
+    /**
+     * Determine whether or not this Item and the given Item are functionally the
+     * same item. Disregard stack size.
+     *
+     * @param item: he item to compare this item to.
+     * @return whether or not this item and the given item are functionally the
+     *         same.
+     */
+    boolean sameItem(Item item);
+
+    /**
+     * Determine whether or not this Item and the given Item are equivalent items.
+     *
+     * @param item: The item to compare this item to.
+     * @return whether or not this item and the given item are equivalent.
+     */
+    boolean equals(Item item);
 }
