@@ -14,6 +14,12 @@ public class Quest {
 	private Item itemRequested; //what the player needs to have in order to complete the quest
 	private boolean completed; //whether the quest is completed or not 
 	
+	/**
+	 * Constructor for a Quest object
+	 * @param instruction - instructions on how to complete the quest
+	 * @param itemRequested - the item the player needs to obtain to complete the quest
+	 * @param itemToReward - the item rewarded to the player once the quest is complete
+	 */
 	public Quest(String instruction, Item itemRequested, Item itemToReward){
 		this.instruction = instruction;
 		this.itemRequested = itemRequested;
@@ -38,7 +44,7 @@ public class Quest {
 	}
 	
 	/**
-	 * Returns the rewarded item, the rewarded item will then be placed in the player's inventory.
+	 * Returns the rewarded item. To be used to place the item in the player's inventory.
 	 * 
 	 * @return the rewarded item
 	 */
@@ -47,7 +53,7 @@ public class Quest {
 	}
 	
 	/**
-	 * Returns the instruction of the quest, utilised by the UI in order to display a quest .
+	 * Returns the instruction of the quest, utilised by the UI in order to display a quest.
 	 * 
 	 * @return the instruction for the quest
 	 */

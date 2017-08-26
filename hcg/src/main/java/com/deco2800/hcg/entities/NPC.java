@@ -22,7 +22,6 @@ public abstract class NPC extends Character implements Clickable {
     public String sName;
     public NPC.Type NPCType;
 
-
     public NPC(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
                boolean centered,String fName,String sName,NPC.Type NPCType,String texture) {
 
