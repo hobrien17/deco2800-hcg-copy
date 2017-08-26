@@ -93,7 +93,7 @@ public class BuffTest {
         String expectedString = "Buff: Test Buff" + LINE_SEPARATOR
                 + "Duration: 100" + LINE_SEPARATOR
                 + "Description: Buff description" + LINE_SEPARATOR;
-        
+
         Assert.assertTrue("Incorrect toString message", buff.toString().equals(expectedString));
     }
 

@@ -9,6 +9,8 @@ import org.lwjgl.Sys;
 public class BuffManagerTest {
 
     private ArrayList<Buff> testBuffs = new ArrayList<>();
+    private static final String LINE_SEPARATOR =
+            System.getProperty("line.separator");
 
     @Before
     public void testSetup() {
@@ -59,5 +61,20 @@ public class BuffManagerTest {
 
         manager.clearBuffs();
         Assert.assertTrue("Incorrect number of buffs in manager", manager.getBuffs().size() == 0);
+    }
+
+    @Test
+    public void testToString() {
+        BuffManager manager = new BuffManager();
+
+        manager.addBuff(testBuffs.get(0));
+        manager.addBuff(testBuffs.get(1));
+        manager.addBuff(testBuffs.get(2));
+
+        String expectedString = "Buff1" + LINE_SEPARATOR
+                + "Buff2" + LINE_SEPARATOR
+                + "Buff3" + LINE_SEPARATOR;
+
+        Assert.assertTrue("Incorrect toString message", manager.toString().equals(expectedString));
     }
 }
