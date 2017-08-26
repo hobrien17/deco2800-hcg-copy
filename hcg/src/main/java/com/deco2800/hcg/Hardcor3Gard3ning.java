@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.deco2800.hcg.contexts.PlayContext;
+import com.deco2800.hcg.contexts.MainMenuContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
@@ -64,7 +64,7 @@ public class Hardcor3Gard3ning extends Game {
 		/* Create an example world for the engine */
         gameManager.setWorld(new DemoWorld());
 
-        contextManager.pushContext(new PlayContext());
+        contextManager.pushContext(new MainMenuContext());
 
         // Set up a player
         Player player = new Player(5, 10, 0);
