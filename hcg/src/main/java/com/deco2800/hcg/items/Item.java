@@ -1,6 +1,6 @@
 package com.deco2800.hcg.items;
 
-/** Item interface provids a high level guide for others to implement custom items.
+/** Item interface provides a high level guide for others to implement custom items.
  * The following methods outline the most basic methods an item requires
  * See the basicItem java class for an example implementation of this interface. Not that simple items are not stackable.
  * For items that are required to be stacked, use the StackableItem interface.
@@ -25,7 +25,7 @@ public interface Item {
     String getName();
 
     /**Function for getting the max stack size. 1 indicates a non stackable item */
-    int maxStackSize();
+    int getMaxStackSize();
 
     /** Function for returning whether an item is wearable/equipable by a user
      * eg armour, character customization items */
@@ -33,6 +33,18 @@ public interface Item {
 
     /** Function for returning the total weight of this item. For stackable items this is equal to itemWeight * stackSize **/
     int getWeight();
+    
+    /**
+     * Retrieves the base value of this particular item.
+     * @return The base value of this item.
+     */
+    int getBaseValue();
+    
+    /**
+     * Checks whether or not this item is able to be sold to shops.
+     * @return Whether or not this item can be traded.
+     */
+    boolean isTradable();
 
     /** Function for setting the icon of an item
      * Implemented similar to the AbstractEntitry texture. Be sure to register texture with
