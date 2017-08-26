@@ -34,7 +34,7 @@ public abstract class NPC extends Character implements Tickable {
     public String fName;
     public String sName;
     public NPC.Type NPCType;
-
+    
     public NPC.movementType NPCMoveType;
     private PlayerManager playerManager;
     private Random random;
