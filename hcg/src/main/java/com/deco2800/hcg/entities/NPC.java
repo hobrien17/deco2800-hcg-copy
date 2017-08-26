@@ -34,7 +34,7 @@ public abstract class NPC extends Character implements Tickable {
     public String fName;
     public String sName;
     public NPC.Type NPCType;
-    
+
     public NPC.movementType NPCMoveType;
     private PlayerManager playerManager;
     private Random random;
@@ -120,7 +120,15 @@ public abstract class NPC extends Character implements Tickable {
             collided = false;
             timeout_count++;
             if (timeout_count > timeout) {
+                changeX = 0.0f;
+                changeY = 0.0f;
                 return;
+            }
+
+            //Calculate new valid direction
+            if (collided || newPos.getX() > this.shortWander_xMax || newPos.getX() < this.shortWander_xMin ||
+                    newPos.getY() > this.shortWander_yMax || newPos.getY() < this.shortWander_yMin) {
+                this.moveDirection = this.random.nextInt() % 4;
             }
 
             switch (this.moveDirection) {
@@ -149,6 +157,12 @@ public abstract class NPC extends Character implements Tickable {
                     break;
             }
 
+            if (this.distance(playerManager.getPlayer()) < 1.5f) {
+                changeX = 0.0f;
+                changeY = 0.0f;
+                return;
+            }
+
             //Calculate new position
             newPos.setX(getPosX() + changeX);
             newPos.setY(getPosY() + changeY);
@@ -159,15 +173,12 @@ public abstract class NPC extends Character implements Tickable {
                 if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
                     if (entity instanceof Player) {
                         //Collided With Player
+                        changeX = 0.0f;
+                        changeY = 0.0f;
+                        return;
                     }
                     collided = true;
                 }
-            }
-
-            //Calculate new valid direction
-            if (collided || newPos.getX() > this.shortWander_xMax || newPos.getX() < this.shortWander_xMin ||
-                    newPos.getY() > this.shortWander_yMax || newPos.getY() < this.shortWander_yMin) {
-                this.moveDirection = this.random.nextInt() % 4;
             }
 
         } while (collided || newPos.getX() > this.shortWander_xMax || newPos.getX() < this.shortWander_xMin ||

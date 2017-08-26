@@ -44,7 +44,7 @@ public class DemoWorld extends AbstractWorld {
 		}
 		
 		//Add an example entity
-		 this.addEntity(new NPC(10,10,0,1,1,1, true,"Jane","Jensen", NPC.Type.Quest, "tower") {});
+		 this.addEntity(new NPC(10,10,0,1,0.5f,0.5f, false,"Jane","Jensen", NPC.Type.Quest, "tower") {});
 
 	}
 
