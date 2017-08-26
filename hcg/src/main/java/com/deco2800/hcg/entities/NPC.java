@@ -1,5 +1,8 @@
 package com.deco2800.hcg.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The NPC class is to be implemented by Non-Player Characters (NPC) used in game
  *
@@ -13,11 +16,13 @@ package com.deco2800.hcg.entities;
  * @author guthers
  */
 public abstract class NPC extends Character implements Clickable {
+
     public enum Type {
         Shop,
         Quest
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
     public String fName;
     public String sName;
     public NPC.Type NPCType;
@@ -53,11 +58,11 @@ public abstract class NPC extends Character implements Clickable {
         //What do we do with this NPC on click?
         if (NPCType == Type.Shop) {
             //Open Shop Menu
-            System.out.print("NPC SHOP CLICKED");
+            LOGGER.info("NPC SHOP CLICKED");
         } else if (NPCType == Type.Quest) {
-            System.out.print("NPC QUEST CLICKED");
+            LOGGER.info("NPC QUEST CLICKED");
         } else {
-            System.out.print("NPC OTHER CLICKED");
+            LOGGER.info("NPC OTHER CLICKED");
         }
     }
 

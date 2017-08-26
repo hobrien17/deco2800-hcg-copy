@@ -40,7 +40,7 @@ public class DemoWorld extends AbstractWorld {
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {
-			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0));
+			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0,i+1));
 		}
 		
 		//Add an example entity
