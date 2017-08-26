@@ -69,6 +69,8 @@ public class Bullet extends AbstractEntity implements Tickable {
         }
         setPosX(getPosX() + changeX);
         setPosY(getPosY() + changeY);
+
+        enemyHit();
     }
 
     /**
@@ -76,18 +78,17 @@ public class Bullet extends AbstractEntity implements Tickable {
      *
      * @return True or false if bullet hits enemy
      */
-    public boolean enemyHit(){
+    public void enemyHit(){
         Box3D pos = getBox3D();
         pos.setX(getPosX());
         pos.setY(getPosY());
         List<AbstractEntity> entities = GameManager.get().getWorld()
                 .getEntities();
         for(AbstractEntity entity : entities){
-            if (!this.equals(entity) && entity instanceof Squirrel
-                    && pos.overlaps(entity.getBox3D())) {
-                return true;
+            if (entity instanceof Squirrel
+                    && this.collidesWith(entity)) {
+                GameManager.get().getWorld().removeEntity(entity);
             }
         }
-        return false;
     }
 }
