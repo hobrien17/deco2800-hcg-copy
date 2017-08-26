@@ -1,9 +1,12 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TimeManager;
 
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Henry O'Brien
  */
-public abstract class AbstractGardenPlant implements Lootable {
+public abstract class AbstractGardenPlant implements Lootable, Observer {
 
     static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
@@ -32,8 +35,8 @@ public abstract class AbstractGardenPlant implements Lootable {
 
     private Stage stage;
     private Pot master;
-    private int lastGrow;
     private int growDelay;
+    private int lastGrow;
 
     Map<String, Double> lootRarity;
 
@@ -45,22 +48,33 @@ public abstract class AbstractGardenPlant implements Lootable {
     public AbstractGardenPlant(Pot master, int delay) {
         this.stage = Stage.SPROUT;
         growDelay = delay;
-        this.lastGrow = ((TimeManager)GameManager.get().getManager(TimeManager.class)).getMinutes();
+        StopwatchManager manager = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);
+        manager.addObserver(this);
+        lastGrow = (int)manager.getStopwatchTime();
         this.master = master;
         setupLoot();
     }
     
+    @Override
+	public void update(Observable o, Object arg) {
+		int time = (int)(float)arg;
+		if (time - lastGrow >= growDelay) {
+        	this.advanceStage();
+        	lastGrow = time;
+        }
+		
+	}
+    
     /**
      * Checks if the plant is ready for growing, and advances a stage if it is
      */
-    public void checkGrow() {
-        TimeManager tm = (TimeManager)GameManager.get().getManager(TimeManager.class);
-        int time = tm.getMinutes();
-        if (time == (lastGrow + growDelay)%60) {
-        	lastGrow = time;
+    /*public void checkGrow() {
+        int time = (int)manager.getStopwatchTime();
+        if (time >= growDelay) {
         	this.advanceStage();
+        	manager.resetStopwatch();
         }
-    }
+    }*/
 
     @Override
     public Map<String, Double> getRarity() {

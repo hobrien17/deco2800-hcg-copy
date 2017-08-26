@@ -3,6 +3,9 @@ package com.deco2800.hcg.entities;
 
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
+import com.deco2800.hcg.entities.Enemy;
 
 import java.util.List;
 
@@ -11,7 +14,7 @@ import java.util.List;
  */
 public class Bullet extends AbstractEntity implements Tickable {
 
-    private float speed = 2f;
+    private float speed = 0.5f;
 
     private float goalX;
     private float goalY;
@@ -20,6 +23,7 @@ public class Bullet extends AbstractEntity implements Tickable {
     private float changeX;
     private float changeY;
 
+    private AbstractEntity user;
 
     /**
      * Creates a new Bullet at the given position with the given direction.
@@ -30,7 +34,7 @@ public class Bullet extends AbstractEntity implements Tickable {
      * @param xd the y direction for the bullet
      * @param yd the x direction for the bullet
      */
-    public Bullet(float posX, float posY, float posZ, float xd, float yd) {
+    public Bullet(float posX, float posY, float posZ, float xd, float yd, AbstractEntity user) {
         super(posX, posY, posZ, 0.6f, 0.6f, 1);
         this.setTexture("battle_seed");
 
@@ -52,6 +56,7 @@ public class Bullet extends AbstractEntity implements Tickable {
         this.changeX = (float) (speed * Math.cos(angle));
         this.changeY = (float) (speed * Math.sin(angle));
 
+        this.user = user;
     }
 
     /**
@@ -69,25 +74,27 @@ public class Bullet extends AbstractEntity implements Tickable {
         }
         setPosX(getPosX() + changeX);
         setPosY(getPosY() + changeY);
+
+        enemyHit();
     }
 
     /**
-     * Returns a boolean for collision between enemy and bullet
-     *
-     * @return True or false if bullet hits enemy
+     * Detects collision with entity and if enemy, apply effect of bullet.
      */
-    public boolean enemyHit(){
+    public void enemyHit(){
         Box3D pos = getBox3D();
         pos.setX(getPosX());
         pos.setY(getPosY());
         List<AbstractEntity> entities = GameManager.get().getWorld()
                 .getEntities();
         for(AbstractEntity entity : entities){
-            if (!this.equals(entity) && entity instanceof Squirrel
-                    && pos.overlaps(entity.getBox3D())) {
-                return true;
+            if (entity instanceof Enemy
+                    && this.collidesWith(entity) && user instanceof Player) {
+                Enemy target = (Enemy) entity;
+                target.causeEffect(new Effect("test", 2, 1, 0.0, 0));
+                GameManager.get().getWorld().removeEntity(this);
+                break;
             }
         }
-        return false;
     }
 }

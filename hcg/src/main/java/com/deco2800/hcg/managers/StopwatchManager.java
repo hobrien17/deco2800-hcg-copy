@@ -15,6 +15,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 	private int seconds;
 	private int minutes;
 	
+	private int delay;
 	private int timedMinutes;
 
 	
@@ -39,6 +40,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 * @param timeLimit
 	 */
 	public void startTimer(int timeLimit) {
+		this.delay = timeLimit;
 		this.timedMinutes = timeLimit;
 		}
 	
@@ -69,7 +71,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public float getStopwatchTime() {
 		float result = this.minutes;
-		float secondsFraction = this.seconds/60;
+		float secondsFraction = this.seconds/60f;
 		return result + secondsFraction;
 		}
 
@@ -81,7 +83,6 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 *            of all game ticks so far.
 	 */
 	public void onTick(long gameTickCount) {
-
 		
 		this.ticksElapsed++;
 		
@@ -97,10 +98,11 @@ public class StopwatchManager extends Manager implements TickableManager {
 		
 		if(this.timedMinutes != 0 && this.minutes >= this.timedMinutes) {
 			setChanged();
+			timedMinutes += delay;
 		}
 		
 		if (hasChanged()){
-			notifyObservers();
+			notifyObservers(getStopwatchTime());
 		}
 		clearChanged();
 	}
