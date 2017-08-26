@@ -1,4 +1,4 @@
-package com.deco2800.potatoes;
+package com.deco2800.hcg;
 
 import org.junit.Test;
 

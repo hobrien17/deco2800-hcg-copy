@@ -13,7 +13,11 @@ import java.util.Deque;
  */
 public class ContextManager extends Manager implements Screen, TickableManager {
 
-    // To produce nested-menu behaviour, contexts are help in a stack
+    // Track width and height of display, so new contexts can be automatically sized correctly.
+    private int displayWidth = 0;
+    private int displayHeight = 0;
+
+    // To produce nested-menu behaviour, contexts are held in a stack
     private Deque<Context> contextStack;
 
     /**
@@ -35,21 +39,24 @@ public class ContextManager extends Manager implements Screen, TickableManager {
 
     /**
      * Push a new context onto the top of the context stack. This will cause the
-     * game to imediatly jump into displaying the new context.
+     * game to immediately jump into displaying the new context.
      *
      * @param newContext The new game context.
      */
     public void pushContext(Context newContext) {
-        // Hide the old Context and show the new one
+        // Hide the old Context
         if (!contextStack.isEmpty()) {
             contextStack.peek().hide();
         }
-        contextStack.push(newContext);
+
+        // Resize and show the new one
+        newContext.resize(displayWidth, displayHeight);
         newContext.show();
+        contextStack.push(newContext);
     }
 
     /**
-     * Destroy the current context, and return to the previous one.
+     * Destroy the current context, and return to the one underneath.
      */
     public void popContext() {
         // Destroy the current context
@@ -68,7 +75,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Called on game shutdown. Calls dispose on all contexts.
+     * Called on game shutdown. Disposes all contexts.
      */
     @Override
     public void dispose() {
@@ -78,7 +85,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Never called, does noting.
+     * Never called, does nothing.
      */
     @Override
     public void show() {
@@ -86,7 +93,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Never called, does noting.
+     * Never called, does nothing.
      */
     @Override
     public void hide() {
@@ -106,22 +113,22 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Called whenever the game window is resized. Calls resize in all stored
-     * contexts.
+     * Called whenever the game window is resized. Resizes all contexts.
      *
      * @param width The new window width.
      * @param height The new window height.
      */
     @Override
     public void resize(int width, int height) {
+        displayWidth = width;
+        displayHeight = height;
         for (Context context : contextStack) {
             context.resize(width, height);
         }
     }
 
     /**
-     * Called whenever the game window loses focus. Calls pause in all stored
-     * contexts.
+     * Called whenever the game window loses focus. Pauses all contexts.
      */
     @Override
     public void pause() {
@@ -131,8 +138,7 @@ public class ContextManager extends Manager implements Screen, TickableManager {
     }
 
     /**
-     * Called whenever the game window regains focus. Calls resume in all stored
-     * contexts.
+     * Called whenever the game window regains focus. Resumes all contexts.
      */
     @Override
     public void resume() {

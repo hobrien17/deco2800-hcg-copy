@@ -21,9 +21,7 @@ public abstract class Enemy extends Character implements Lootable {
     int status;
     int ID;
     Map<String, Double> lootRarity;
-    // Attack Damage - vulnerability 
     
-
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength, int ID) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
@@ -178,7 +176,7 @@ public abstract class Enemy extends Character implements Lootable {
             this.setStatus(1);
             return false;
         }
-    }
+    }    
 
     /**
      * Randomly go to next position which is inside the circle(Maximum distance depends on enemy level.)

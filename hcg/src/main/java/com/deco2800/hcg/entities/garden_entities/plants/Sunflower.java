@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.garden_entities.plants;
 import java.util.HashMap;
 
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 
 /**
@@ -12,8 +13,13 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Sunflower extends AbstractGardenPlant {
 
+    /**
+     * Creates a new Sunflower plant in the given pot
+     * @param master the pot to associate the plant with
+     */
     public Sunflower(Pot master) {
-        super(master, 500);
+
+        super(master, 10);
     }
 
     @Override
@@ -43,7 +49,7 @@ public class Sunflower extends AbstractGardenPlant {
     @Override
     public Item[] loot() {
         Item[] arr = new Item[1];
-        arr[0] = ItemManager.getNew(randItem());
+        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
 
         return arr;
     }

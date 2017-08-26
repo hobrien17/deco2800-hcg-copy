@@ -4,7 +4,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 
 import java.util.HashMap;
@@ -19,17 +18,14 @@ public class Squirrel extends Enemy implements Tickable {
 	private float speed = 0.1f;
 	
 	private PlayerManager playerManager;
-	//private SoundManager soundManager;
+	private ItemManager itemManager;
 	
 	private Random random;
 
 	public Squirrel(float posX, float posY, float posZ, int ID) {
-//		super(posX, posY, posZ, 1, 1, 1);
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
-		this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
-		//this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
-
+		this.itemManager = (ItemManager) GameManager.get().getManager(ItemManager.class);
 		this.random = new Random();
 	}
 
@@ -45,7 +41,7 @@ public class Squirrel extends Enemy implements Tickable {
 	@Override
 	public Item[] loot() {
 		Item[] arr = new Item[1];
-		arr[0] = ItemManager.getNew(randItem());
+		arr[0] = itemManager.getNew(randItem());
 
 		return arr;
 	}
@@ -94,10 +90,6 @@ public class Squirrel extends Enemy implements Tickable {
 		if (!collided) {
 			setPosX(getPosX() + changeX);
 			setPosY(getPosY() + changeY);
-		}
-		
-		
-		
-		
+		}	
 	}
 }
