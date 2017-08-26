@@ -2,17 +2,21 @@ package com.deco2800.hcg.entities;
 
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 
 import static java.lang.Math.*;
 
-public abstract class Enemy extends Character implements Lootable {
+public abstract class Enemy extends Character implements Lootable, Harmable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
@@ -21,6 +25,9 @@ public abstract class Enemy extends Character implements Lootable {
     int status;
     int ID;
     transient Map<String, Double> lootRarity;
+	
+	// Effects container
+	private Effects myEffects;
     
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength, int ID) {
@@ -45,7 +52,8 @@ public abstract class Enemy extends Character implements Lootable {
         this.setSpeedX(0);
         this.setSpeedY(0);
 
-
+		// Effects container 
+		myEffects = new Effects(this);
     }
 
     /**
@@ -94,6 +102,20 @@ public abstract class Enemy extends Character implements Lootable {
     @Override
     public Map<String, Double> getRarity() {
         return lootRarity;
+    }
+
+    /**
+     * Returns a list of new loot items where 0 <= length(\result) <=
+     * length(this.getLoot()) Loot may vary based on rarity and other factors
+     * Possible to return an empty array
+     * <p>
+     * Currently only supports lists of 1 item
+     *
+     * @return A list of items
+     */
+    @Override
+    public Item[] loot() {
+        return new Item[0];
     }
 
     /**
@@ -269,5 +291,16 @@ public abstract class Enemy extends Character implements Lootable {
                 .unproject(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
         Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y);
         GameManager.get().getWorld().addEntity(bullet);
+    }
+	
+	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
+	@Override
+    public void causeEffect(Effect effect) {
+        myEffects.addEffect(effect);
+    }
+
+    @Override
+    public void causeEffect(Collection<Effect> effects) {
+        myEffects.addAllEffects(effects);
     }
 }

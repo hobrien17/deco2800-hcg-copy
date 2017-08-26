@@ -1,5 +1,9 @@
 package com.deco2800.hcg.util;
 
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.managers.GameManager;
+
 import java.util.*;
 
 /**
@@ -11,36 +15,91 @@ import java.util.*;
  * This is currently a skeleton of the effects class and the structure can
  * change in the future.
  */
-public class Effects {
+public class Effects implements Tickable{
 
-    private ArrayList<String> currentEffects;
-    private String[] effectTypes = {"damage", "freeze", "slow", "stun"};
+    // We use a hashset because we don't want duplicate elements
+    private HashSet<Effect> currentEffects;
 
-    /**
-     * Creates a new Effects object
-     */
-    public Effects() {
-        currentEffects = new ArrayList<String>();
+    // The owner of this effects collection. All effects contained here will be
+    // applied to the owner.
+    private AbstractEntity owner;
+
+    private int originalSlow;
+
+    public Effects(AbstractEntity owner) {
+        currentEffects = new HashSet<>();
+
+        saveOriginalStats();
+    }
+
+    public Effects(AbstractEntity owner, Collection<Effect> effects) {
+        currentEffects = new HashSet<>(effects);
+
+        saveOriginalStats();
+    }
+
+    private void saveOriginalStats() {
+        // NOT IMPLEMENTED IN HARMABLE YET
+//        originalSlow = owner.getSpeed();
+//        originalHealth = owner.getHealth();
+//        originalAttackSpeed = owner.getAttackSpeed();
     }
 
     /**
      * Getter method to get the current list of effects available for use
      */
-    public String[] getAvailableEffects() {
-        return effectTypes;
+    public HashSet<Effect> getEffects() {
+        return new HashSet<Effect>(currentEffects);
+    }
+
+    public void addEffect(Effect effect) {
+        // TODO check to see if effect is already in there, if it is, reset the cooldown?
+        currentEffects.add(effect);
+    }
+
+    public void addAllEffects(Collection<Effect> effects) {
+        // TODO check to see if effect is already in there, if it is, reset the cooldown?
+        currentEffects.addAll(effects);
+    }
+
+    public void removeEffect(Effect effect) {
+        // TODO check to make sure the effects are actually in there
+        currentEffects.remove(effect);
+    }
+
+    private void execute() {
+        for (Effect e : currentEffects) {
+            if (e.getDuration() == 0) {
+                currentEffects.remove(e);
+                break;
+            } else {
+                e.decrementDuration();
+            }
+
+            if (!e.onCooldown()) {
+                e.startCooldownTimer();
+
+                // TODO
+                // Handle damage  -  NOT IMPLEMENTED IN HARMABLE YET
+                //owner.takeDamage(e.getDamage());
+                GameManager.get().getWorld().removeEntity(owner);
+
+                // Handle slows  -  NOT IMPLEMENTED IN HARMABLE YET
+                //owner.setSpeed(owner.getSpeed * e.getSlowAmount());
+
+                // Handle damage reduction, fire rate reduction, etc.
+            }
+        }
+
     }
 
     /**
-     * Getter method to return the current effects applied on an entity
+     * On tick is called periodically (time dependant on the world settings)
+     *
+     * @param gameTickCount Current game tick
      */
-    public ArrayList<String> returnCurrentEffects() {
-        return currentEffects;
-    }
-
-    /**
-     * Method to apply an effect to an entity
-     */
-    private void setEffect(String effectName) {
-        currentEffects.add(effectName);
+    @Override
+    public void onTick(long gameTickCount) {
+        execute();
     }
 }
