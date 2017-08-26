@@ -18,7 +18,7 @@ public final class NetworkState {
 	DatagramSocket socket;
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
-	ConcurrentHashMap<Integer, Peer> peers; // the "lobby"
+	ConcurrentHashMap<Integer, SocketAddress> peers; // the "lobby"
 	ConcurrentHashMap<Integer, Message> sendQueue;
 	private NetworkSend networkSend;
 	private NetworkReceive networkReceive;
@@ -82,7 +82,7 @@ public final class NetworkState {
 	public void join(String hostname) {
 		SocketAddress socketAddress = new InetSocketAddress(hostname, 1337);
 		// add host to peers
-		peers.put(0, new Peer(socketAddress, true));
+		peers.put(0, socketAddress);
 		// try to connect
 		this.sendMessage(new Message(MessageType.JOIN, "".getBytes()));
 	}
@@ -105,14 +105,14 @@ public final class NetworkState {
 			while (!Thread.interrupted()) {
 				// on the server peers contains all connected clients
 				// for a regular peer it only contains the server
-				for (Peer peer : networkState.peers.values()) {
+				for (SocketAddress peer : networkState.peers.values()) {
 					for (Message message : networkState.sendQueue.values()) {
 						try {
 							byte[] byteArray = message.toByteArray();
 							DatagramPacket packet = new DatagramPacket(
 									byteArray,
 									byteArray.length,
-									peer.getSocketAddress());
+									peer);
 							networkState.socket.send(packet);
 							// log
 							System.out.println("SENT: " + message.getType().toString());
@@ -153,8 +153,7 @@ public final class NetworkState {
 						switch(message.getType()) {
 							case JOIN:
 								// add peer to lobby
-								Peer peer = new Peer(packet.getSocketAddress(), false);
-								networkState.peers.put(networkState.peers.size() - 1, peer);
+								networkState.peers.put(networkState.peers.size() - 1, packet.getSocketAddress());
 								break;
 							case CHAT:
 								break;
