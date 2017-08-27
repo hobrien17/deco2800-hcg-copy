@@ -92,14 +92,14 @@ public final class NetworkState {
 	/**
 	 * Add chat message to queue
 	 * @param chatMessage String to be sent
+	 * @return String sent to other peers
 	 */
-	public static void sendChatMessage(String chatMessage) {
+	public static String sendChatMessage(String chatMessage) {
 		String printString = socket.getLocalAddress().getHostName() + ": " + chatMessage;
 		Message printMessage = new Message(MessageType.CHAT, printString.getBytes());
-		// print message locally
-		System.out.println(printString);
 		// send message to peers
 		sendMessage(printMessage);
+		return printString;
 	}
 
 	/**

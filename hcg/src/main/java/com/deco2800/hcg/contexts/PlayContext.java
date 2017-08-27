@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.entities.Plant;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.multiplayer.Message;
+import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Color;
@@ -35,6 +37,7 @@ public class PlayContext extends Context {
 	private TimeManager timeManager;
 	private ContextManager contextManager;
 	private PlantManager plantManager;
+	private MessageManager messageManager;
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -78,6 +81,7 @@ public class PlayContext extends Context {
 		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
+        messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -152,7 +156,7 @@ public class PlayContext extends Context {
         chatTextArea = new TextArea("", skin);
         chatTextField = new TextField("", skin);
         chatTextArea.setDisabled(true);
-        chatTextArea.setText(" ");
+        chatTextArea.setText("");
         chatButton = new TextButton("Send", skin);
         chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3);
         chatWindow.row().height(40);
@@ -167,6 +171,18 @@ public class PlayContext extends Context {
 		/*
 		 * Setup inputs for the buttons and the game itself
 		 */
+        
+        chatButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
+				chatTextField.setText("");
+				chatTextArea.appendText(chatMessage + "\n");
+			}
+		});
+        
+        messageManager.addChatMessageListener(this::handleChatMessage);
+        
 		/*
 		 * Setup an Input Multiplexer so that input can be handled by both the UI and
 		 * the game
@@ -216,6 +232,11 @@ public class PlayContext extends Context {
 				return true;
 			}
 		});
+	}
+	
+	
+	private void handleChatMessage(Message message) {
+		chatTextArea.appendText(message.getPayloadString() + "\n");
 	}
 
 	/**
