@@ -160,7 +160,7 @@ public class FixedSizeInventory implements Inventory {
                     item.setStackSize(toAdd);
                 }
             }
-            
+
             for(int i = 0; i < this.getMaxSize(); i++) {
                 if(items[i] == null && allowItemInSlot(item, i)) {
                     items[i] = item;
@@ -175,11 +175,12 @@ public class FixedSizeInventory implements Inventory {
     @Override
     public boolean containsItem(Item item) {
         int numFound = 0;
+
         for(int i = 0; i < this.getMaxSize(); i++) {
             if(this.items[i] != null && this.items[i].sameItem(item)) {
                 numFound += this.items[i].getStackSize();
-                
                 if(numFound >= item.getStackSize()) {
+
                     return true;
                 }
             }

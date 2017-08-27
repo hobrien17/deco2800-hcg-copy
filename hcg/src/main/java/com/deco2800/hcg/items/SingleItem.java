@@ -116,6 +116,7 @@ public abstract class SingleItem implements Item{
     @Override
     public boolean sameItem(Item item) throws IllegalArgumentException {
         // for stackable items we compare if strings are the same
+
         return this.itemName.equals(item.getName());
     }
 

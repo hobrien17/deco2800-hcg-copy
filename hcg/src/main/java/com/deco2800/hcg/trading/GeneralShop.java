@@ -9,29 +9,41 @@ import java.util.Map;
 
 public class GeneralShop implements Shop{
     int modifier = 0;
-    Inventory inventory;
+    Player player;
     Map<Item, Integer> shopStock = new HashMap<>();
 
     @Override
-    public void open(int modifier, Inventory inventory) {
+    public void open(int modifier, Player player) {
         this.modifier = modifier;
-        this.inventory = inventory;
+        this.player = player;
     }
 
     @Override
     public int inStock(Item item){
-        return shopStock.get(item).intValue();
+        try {
+            return shopStock.get(item).intValue();
+        } catch (NullPointerException e) {
+            return 0;
+        }
     }
 
     @Override
     public void addStock(Item item, int available) {
-        shopStock.put(item, new Integer(available));
+        if (shopStock.containsKey(item)) {
+            shopStock.put(item, new Integer(shopStock.get(item) + available));
+        } else {
+            shopStock.put(item, new Integer(available));
+        }
     }
 
     @Override
     public void addStock(Item[] items, int[] available) {
         for (int i = 0; i < items.length; i++) {
-            shopStock.put(items[i], new Integer(available[i]));
+            if (shopStock.containsKey(items[i])) {
+                shopStock.put(items[i], new Integer(shopStock.get(items[i]) + available[i]));
+            } else {
+                shopStock.put(items[i], new Integer(available[i]));
+            }
         }
     }
 
@@ -49,12 +61,18 @@ public class GeneralShop implements Shop{
     @Override
     public void buyStock(Item item, int number) {
         shopStock.put(item, new Integer(shopStock.get(item) - number));
-        //code to modify player's inventory
+        for (int i = 0; i < number; i++) {
+            player.addItemToInventory(item);
+        }
     }
 
     @Override
     public void sellStock(Item item) {
-        shopStock.put(item, new Integer(shopStock.get(item) + 1));
-        //code to modify player's inventory
+        if (shopStock.containsKey(item)) {
+            shopStock.put(item, new Integer(shopStock.get(item) + 1));
+        } else {
+            shopStock.put(item, new Integer(1));
+        }
+        player.getInventory().removeItem(item);
     }
 }
