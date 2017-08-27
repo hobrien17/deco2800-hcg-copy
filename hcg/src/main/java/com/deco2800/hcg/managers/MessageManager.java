@@ -7,24 +7,24 @@ import com.deco2800.hcg.observers.MessageObserver;
 
 public class MessageManager extends Manager {
 	
-	private ArrayList<MessageObserver> messageListeners = new ArrayList<>();
+	private ArrayList<MessageObserver> chatMessageListeners = new ArrayList<>();
 
 	public MessageManager() {}
 	
 	/**
-	 * Adds a message listener
+	 * Adds a chat Message listener
 	 * @param observer The MessageObserver to be added
 	 */
-	public void addMessageListener(MessageObserver observer) {
-		messageListeners.add(observer);
+	public void addChatMessageListener(MessageObserver observer) {
+		chatMessageListeners.add(observer);
 	}
 
 	/**
-	 * Removes the specified listener from the list of message listeners
+	 * Removes the specified listener from the list of chat Message listeners
 	 * @param observer The MessageObserver to be removed
 	 */
-	public void removeMessageListener(MessageObserver observer) {
-		messageListeners.remove(observer);
+	public void removeChatMessageListener(MessageObserver observer) {
+		chatMessageListeners.remove(observer);
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class MessageManager extends Manager {
 	 * @param message The Message that was received
 	 */
 	public void chatMessageReceieved(Message message) {
-		for (MessageObserver observer : messageListeners) {
+		for (MessageObserver observer : chatMessageListeners) {
 			observer.notifyChatMessage(message);
 		}
 	}
