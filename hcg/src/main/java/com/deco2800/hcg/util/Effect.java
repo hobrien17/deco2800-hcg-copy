@@ -1,5 +1,7 @@
 package com.deco2800.hcg.util;
 
+import com.deco2800.hcg.managers.GameManager;
+
 public class Effect {
 
     private String name;
@@ -15,11 +17,11 @@ public class Effect {
      *
      * @param name The name of the effect.
      * @param damage The damage the effect causes each tick.
-     * @param duration The number of times the effect will be applied (the lifetime).
      * @param slowAmount The amount the player is slowed. Expressed as a percentage between 0 and 1. 0 is no slow
      *                   effect, 1 completely prevents movement.
-     * @param cooldown The time (in seconds) before the effect may be applied again, after it has just been applied.
-     * @param delay The time (in seconds) before the effect may be used for the first time.
+     * @param cooldown The time (in ms) before the effect may be applied again, after it has just been applied.
+     * @param duration The number of times the effect will be applied (the lifetime).
+     * @param delay The time (in ms) before the effect may be used for the first time.
      */
     public Effect(String name, int damage, double slowAmount, int cooldown, int duration, int delay) {
         // TODO add checks for invalid values
@@ -84,14 +86,14 @@ public class Effect {
     /**
      * Returns the cooldown time of the effect.
      *
-     * @return Returns an integer denoting the cooldown time.
+     * @return Returns an integer denoting the cooldown time (in ms).
      */
     public int getCooldown() { return cooldown; }
 
     /**
      * Returns the delay time of the effect.
      *
-     * @return Returns an integer denoting the delay time.
+     * @return Returns an integer denoting the delay time (in ms).
      */
     public int getDelay() { return delay; }
 
