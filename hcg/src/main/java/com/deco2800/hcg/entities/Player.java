@@ -159,6 +159,11 @@ public class Player extends Character implements Tickable {
         }
     }
 
+
+    /**
+     * Handles the interaction between player and a NPC
+     * @param npc the NPC (as an entity) that you wish to interact with
+     */
     private void Interaction(AbstractEntity npc) {
 
         if (((NPC) npc).getNPCType() == NPC.Type.Shop) {
@@ -166,7 +171,6 @@ public class Player extends Character implements Tickable {
             LOGGER.info("Shop NPC Interaction Started");
             Shop shop = new GeneralShop();
             shop.open(0, this);
-            System.out.println("Shop Open");
 
         } else if (((NPC) npc).getNPCType() == NPC.Type.Quest) {
             LOGGER.info("Quest NPC Interaction Started");

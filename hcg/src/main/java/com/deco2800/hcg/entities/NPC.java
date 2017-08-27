@@ -206,27 +206,10 @@ public abstract class NPC extends Character implements Tickable {
         }
 
     }
-
-    /**
-     * Dictates what happens when the player interacts with the NPC
-     */
-    public void Interaction() {
-
-        if (NPCType == Type.Shop) {
-            //TODO: open shop menu
-            LOGGER.info("NPC SHOP CLICKED");
-
-        } else if (NPCType == Type.Quest) {
-            LOGGER.info("NPC QUEST CLICKED");
-
-        } else {
-            LOGGER.info("NPC OTHER CLICKED");
-
-        }
-    }
-
     /*
         returns the type of the NPC
+
+        @returns NPC Type
      */
     public NPC.Type getNPCType() {
         return this.NPCType;
