@@ -157,7 +157,7 @@ public class WeightedInventory implements Inventory {
             int toRemove = item.getStackSize();
             for(int i = 0; i < this.items.size(); i++) {
                 Item currentItem = this.getItem(i);
-                if(currentItem != null && item.equals(currentItem)) {
+                if(currentItem != null && item.sameItem(currentItem)) {
                     if(toRemove >= currentItem.getStackSize()) {
                         toRemove -= currentItem.getStackSize();
                         this.removeItem(i);
@@ -181,7 +181,7 @@ public class WeightedInventory implements Inventory {
     public boolean containsItem(Item item) {
         int numFound = 0;
         for(Item currentItem : this.items) {
-            if(item.equals(currentItem)) {
+            if(item.sameItem(currentItem)) {
                 numFound += currentItem.getStackSize();
                 
                 if(numFound >= item.getStackSize()) {

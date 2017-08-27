@@ -1,11 +1,11 @@
 package com.deco2800.hcg.items;
 
-public abstract class SingleItem implements Item{
+public abstract class SingleItem implements Item {
     protected int baseValue;
     protected int itemWeight;
     protected String itemName;
     protected String texture;
-    protected String uniqueData = ""; // not yet implemented
+    
     /**
      * Retrieves an items display name
      *
@@ -13,7 +13,7 @@ public abstract class SingleItem implements Item{
      */
     @Override
     public String getName() {
-        return String.format("%s (%s)", this.itemName, this.uniqueData);
+        return this.itemName;
     }
 
     /**
@@ -36,7 +36,6 @@ public abstract class SingleItem implements Item{
     public int getMaxStackSize() {
         return 1;
     }
-
 
     /**
      * Checks if max stack size is 1
@@ -109,21 +108,16 @@ public abstract class SingleItem implements Item{
      * Determine whether or not this Item and the given Item are functionally the
      * same item. Disregard stack size.
      *
-     * @param item : he item to compare this item to.
+     * @param item : the item to compare this item to.
      * @return whether or not this item and the given item are functionally the
      * same.
      */
     @Override
     public boolean sameItem(Item item) throws IllegalArgumentException {
-        // for stackable items we compare if strings are the same
+        return (item instanceof SingleItem && ((SingleItem) item).itemName == this.itemName);
 
-        return this.itemName.equals(item.getName());
     }
-
-    public void setUniqueData(String data) {
-        this.uniqueData = data;
-    }
-
+    
     @Override
     public boolean equals(Item item) {
         return this == item;

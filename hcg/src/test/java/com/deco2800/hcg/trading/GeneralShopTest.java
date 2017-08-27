@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneralShopTest {
-	Item item1 = new TestUniqueItem();
+	Item item1 = new TestUniqueItem("test1",2);
 	Item item2 = new TestItem();
 	Item arrayOfThings[] = {item1,item2};
 	int arrayOfAmounts[] = {1,2};
