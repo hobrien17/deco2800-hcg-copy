@@ -179,8 +179,10 @@ public class Effects {
     public void apply() {
         for (Effect effect : currentEffects) {
             if (effect.getUseCount() == 0) {
-                currentEffects.remove(effect);
-                continue;
+                if (!effect.onCooldown()) {
+                    currentEffects.remove(effect);
+                    continue;
+                }
             } else {
                 effect.decrementUses();
             }
