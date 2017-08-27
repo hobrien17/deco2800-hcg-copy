@@ -177,10 +177,12 @@ public class PlayContext extends Context {
         chatButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
-				chatTextField.setText("");
-				chatTextArea.appendText(chatMessage + "\n");
-				stage.setKeyboardFocus(null);
+				if (NetworkState.isInitialised()) {
+					String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
+					chatTextField.setText("");
+					chatTextArea.appendText(chatMessage + "\n");
+					stage.setKeyboardFocus(null);
+				}
 			}
 		});
         
