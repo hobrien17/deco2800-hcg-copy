@@ -30,6 +30,7 @@ public class Hardcor3Gard3ning extends Game {
     private TimeManager timeManager;
     private ContextManager contextManager;
 	private InputManager inputManager;
+	private PlantManager plantManager;
 	private ItemManager itemManager;
 	private StopwatchManager stopwatchManager;
     private MouseHandler mouseHandler;
@@ -65,6 +66,9 @@ public class Hardcor3Gard3ning extends Game {
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
         inputManager.addKeyUpListener(new Planter());
+
+        /* Create a plant manager. */
+        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         
         /* Create an item manager */
         itemManager = (ItemManager) gameManager.getManager(ItemManager.class); 
