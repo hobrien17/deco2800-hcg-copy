@@ -16,6 +16,8 @@ import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.trading.GeneralShop;
+import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
@@ -175,6 +177,49 @@ public class Player extends Character implements Tickable {
 	        this.getEquippedWeapon().updatePosition(screenX, screenY);
 	    }
 	}
+
+	/**
+	 * Checks player's proximity to NPCs to see if an interaction can be initiated.
+	 */
+	private void checkForInteraction() {
+		LOGGER.info(this + " attempted to initiate an interaction with a NPC");
+		Box3D interactionRadius = getBox3D();
+		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
+		for (AbstractEntity entity : entities) {
+			if (!this.equals(entity) & (interactionRadius.distance(entity.getBox3D()) < 3.0f)) {
+				if (entity instanceof NPC) {
+
+					LOGGER.info(this + " initiated a interaction with " + entity);
+					this.NPCInteraction(entity);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Handles the interaction between player and a NPC
+	 * @param npc the NPC (as an entity) that you wish to interact with
+	 */
+	/**
+	 * Handles the interaction between player and a NPC
+	 * @param npc the NPC (as an entity) that you wish to interact with
+	 */
+	private void NPCInteraction(AbstractEntity npc) {
+		if (((NPC) npc).getNPCType() == NPC.Type.Shop) {
+
+			LOGGER.info("Shop NPC Interaction Started");
+			Shop shop = new GeneralShop();
+			shop.open(0, this);
+
+		} else if (((NPC) npc).getNPCType() == NPC.Type.Quest) {
+			LOGGER.info("Quest NPC Interaction Started");
+
+		} else {
+			LOGGER.info("Other NPC Interaction Started");
+
+		}
+	}
+
 
 	/**
 	 * On Tick handler
@@ -350,7 +395,8 @@ public class Player extends Character implements Tickable {
 	}
 
 	/**
-	 * Handle movement when wasd keys are pressed down
+	 * Handle movement when wasd keys are pressed down. As well as other possible actions on key press. Such as
+	 * NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
 		switch (keycode) {
@@ -370,6 +416,9 @@ public class Player extends Character implements Tickable {
 		case Input.Keys.D:
 			movementDirection.put("right", true);
 			soundPlay(name);
+			break;
+		case Input.Keys.E:
+			checkForInteraction();
 			break;
 		case Input.Keys.R:
 		    if(this.getEquippedWeapon() != null) {
