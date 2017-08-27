@@ -18,6 +18,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.Map;
@@ -33,6 +34,8 @@ public class GeneralShopTest {
     TiledMapTileLayer layer;
     TiledMap tiledMap;
     MapProperties mapProperties;
+    Shop shop;
+    Player player;
 
 	@Before
     //setup copied from player tests so that the player class being used functions correctly
@@ -60,12 +63,12 @@ public class GeneralShopTest {
         when(layer.getProperties()).thenReturn(mapProperties);
 
         seeds.addToStack(50);
+        shop = new GeneralShop();
+        player = new Player(0,0,0);
     }
 	
     @Test
     public void TestInitialiseShop() {
-    	Shop shop = new GeneralShop();
-    	Player player = new Player(0,0,0);
     	shop.open(0, player);
     	assertEquals(0,shop.inStock(item1));
     	shop.addStock(item1, 1); 	
@@ -74,8 +77,6 @@ public class GeneralShopTest {
     }
     @Test
     public void testAddingAndGettingStock(){
-    	Shop shop = new GeneralShop();
-    	Player player = new Player(0,0,0);
     	shop.open(0, player);
     	shop.addStock(item1, 1);
     	shop.addStock(item2, 2);
@@ -96,8 +97,6 @@ public class GeneralShopTest {
     
     @Test
     public void testBuyingStock(){
-    	Shop shop = new GeneralShop();
-    	Player player = new Player(0,0,0);
         player.getInventory().addItem(seeds);
     	shop.open(0, player);
     	shop.addStock(arrayOfThings, arrayOfAmounts);
@@ -111,12 +110,70 @@ public class GeneralShopTest {
     
     @Test
     public void testSellingStock(){
-    	Shop shop = new GeneralShop();
-    	Player player = new Player(0,0,0);
     	shop.open(0, player);
     	player.addItemToInventory(item1);
     	shop.sellStock(item1);
     	assertEquals(1,shop.inStock(item1));
         assertThat(player.getInventory().containsItem(item1), is(equalTo(false)));
+    }
+
+    @Test
+	public void testSBasicSeedProperties() {
+    	assertTrue(seeds.isTradable());
+    	assertFalse(seeds.isEquippable());
+	}
+
+	@Test
+    public void addStockExistingStock() {
+        shop.addStock(item1,1);
+        shop.addStock(item1, 1);
+        assertThat(shop.inStock(item1), is(equalTo(2)));
+    }
+
+    @Test
+    public void buyStockNotInStock() {
+        assertThat(shop.buyStock(item1), is(equalTo(1)));
+    }
+
+    @Test
+    public void buyStockNoRoomInInventory() {
+        shop.open(0, player);
+        Item item = new TestUniqueItem("heavy item", 100);
+        player.getInventory().addItem(item);
+        shop.addStock(item1, 1);
+        assertThat(shop.buyStock(item1), is(equalTo(2)));
+    }
+
+    @Test
+    public void buyStockNoCurrency() {
+        shop.open(0, player);
+        shop.addStock(item1, 1);
+        assertThat(shop.buyStock(item1), is(equalTo(3)));
+    }
+
+    @Test
+    public void buyManyStockNotInStock() {
+        assertThat(shop.buyStock(item1,2), is(equalTo(1)));
+    }
+
+    @Test
+    public void buyManyStockPass() {
+        shop.open(0, player);
+        Item item = new TestItem();
+        shop.addStock(item, 3);
+        player.getInventory().addItem(seeds);
+        assertThat(shop.buyStock(item,2), is(equalTo(0)));
+        assertThat(player.getInventory().containsItem(item), is(equalTo(true)));
+    }
+
+    @Test
+    public void sellItemAlreadyOneInShop() {
+        Item item = new TestItem();
+        player.getInventory().addItem(seeds);
+        player.getInventory().addItem(item);
+        shop.addStock(item, 1);
+        shop.open(0, player);
+        assertThat(shop.sellStock(item), is(equalTo(0)));
+        assertThat(shop.inStock(item), is(equalTo(2)));
     }
 }

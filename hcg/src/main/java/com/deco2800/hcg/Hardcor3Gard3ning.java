@@ -8,7 +8,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.deco2800.hcg.contexts.WorldMapContext;
 import com.deco2800.hcg.contexts.MainMenuContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
