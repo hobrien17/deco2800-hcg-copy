@@ -34,7 +34,9 @@ public class Effects {
      */
     public Effects(AbstractEntity owner) {
         // Check for valid arguments
-        if (owner == null) throw new NullPointerException("Reference to owner cannot be null.");
+        if (owner == null) {
+            throw new NullPointerException("Reference to owner cannot be null.");
+        }
 
         // Set the class properties to the supplied values and initialise the effects set.
         this.owner = owner;
@@ -54,8 +56,12 @@ public class Effects {
      */
     public Effects(AbstractEntity owner, Collection<Effect> effects) {
         // Check for valid arguments
-        if (owner == null) throw new NullPointerException("Reference to owner cannot be null.");
-        if (effects == null) throw new NullPointerException("Effects collection cannot be null.");
+        if (owner == null) {
+            throw new NullPointerException("Reference to owner cannot be null.");
+        }
+        if (effects == null) {
+            throw new NullPointerException("Effects collection cannot be null.");
+        }
 
         // Set the class properties to the supplied values and initialise the effects set.
         this.owner = owner;

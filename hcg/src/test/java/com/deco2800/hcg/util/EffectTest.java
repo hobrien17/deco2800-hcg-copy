@@ -78,4 +78,12 @@ public class EffectTest {
 
         Assert.assertTrue("Effects are equals", !effect.equals(effect3));
     }
+
+    @Test
+    public void effectHashCodeTest() {
+        Effect effect = new Effect("Test", 3, 5, 0, 500, 2, 0);
+        Effect effect2 = new Effect("Test", 3, 5, 0, 500, 2, 0);
+
+        Assert.assertTrue("Effects' hash codes are not equal", effect.hashCode() == effect2.hashCode());
+    }
 }
