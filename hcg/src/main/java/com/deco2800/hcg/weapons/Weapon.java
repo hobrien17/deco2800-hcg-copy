@@ -1,10 +1,12 @@
-package com.deco2800.hcg.entities;
+package com.deco2800.hcg.weapons;
 
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Bullet;
+import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 
 /**
@@ -37,18 +39,18 @@ import com.deco2800.hcg.managers.PlayerManager;
 
 public class Weapon extends AbstractEntity implements Tickable {
     
-    private PlayerManager playerManager;
+    protected PlayerManager playerManager;
     
-    private float mouseFollowX;
-    private float mouseFollowY;
-    private int aimX;
-    private int aimY;
-    private float angle;
-    private double radius;
-    private boolean shoot;
-    int counter;
-    private WeaponType weaponType;
-    private AbstractEntity user;
+    protected float followX;
+    protected float followY;
+    protected int aimX;
+    protected int aimY;
+    protected double radius;
+    protected boolean shoot;
+    protected int counter;
+    protected int cooldown;
+    protected WeaponType weaponType;
+    protected AbstractEntity user;
     
     /**
      * Constructor for Weapon objects.
@@ -62,22 +64,47 @@ public class Weapon extends AbstractEntity implements Tickable {
      *
      */
     public Weapon(float posX, float posY, float posZ,
-            WeaponType weaponType, AbstractEntity user) {        
-        super(posX, posY, posZ, 0.6f, 0.6f, 1);
+            float xLength, float yLength, float zLength,
+            WeaponType weaponType, AbstractEntity user,
+            double radius, String texture, int cooldown) {        
+        super(posX, posY, posZ, xLength, yLength, zLength);
         
-        this.radius = 0.7;
         this.shoot = false;
         this.counter = 0;
+        
         this.weaponType = weaponType;
         this.user = user;
-        this.setTexture("battle_seed");
+        this.radius = radius;
+        // TODO: Get proper weapon textures
+        this.setTexture(texture);
+        this.cooldown = cooldown;
         
         this.playerManager = (PlayerManager) GameManager.get()
                 .getManager(PlayerManager.class);
     }
+    
+    public void setPlayerManager(PlayerManager playerManager) {
+        this.playerManager = playerManager;
+    }
+    
+    public void setWeaponType(WeaponType weaponType) {
+        this.weaponType = weaponType;
+    }
 
     public void setUser(AbstractEntity user){
         this.user = user;
+    }
+    
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+    
+    public WeaponType getWeaponType() {
+        return weaponType;
+    }
+    
+    public AbstractEntity getUser() {
+        return user;
     }
     
     /**
@@ -124,8 +151,8 @@ public class Weapon extends AbstractEntity implements Tickable {
         projY = -(worldCoords.y - 32f / 2f) / 32f + projX;
         projX -= projY - projX;
         
-        this.mouseFollowX = projX;
-        this.mouseFollowY = projY;
+        this.followX = projX;
+        this.followY = projY;
     }
     
     /**
@@ -138,10 +165,10 @@ public class Weapon extends AbstractEntity implements Tickable {
      * @param goalX float x coordinate of bullet end
      * @param goalY float y coordinate of bullet end
      */
-    private void shootBullet(float posX, float posY, float posZ,
+    protected void shootBullet(float posX, float posY, float posZ,
             float goalX, float goalY) {
         Bullet bullet = new Bullet(posX, posY, posZ,
-                goalX, goalY, user);
+                goalX, goalY, this.user);
         GameManager.get().getWorld().addEntity(bullet);
     }
     
@@ -149,66 +176,23 @@ public class Weapon extends AbstractEntity implements Tickable {
      * Fires weapon using different firing method based on weapon type
      * Takes local variables aimX and aimY as firing coordinates
      */
-    private void fireWeapon() {
-        Vector3 worldCoords = GameManager.get().getCamera()
-                .unproject(new Vector3(this.aimX, this.aimY, 0));
-       
-        // Conditional will be removed when Weapon is
-        // converted into Interface/Factory
-        if(weaponType == WeaponType.MACHINEGUN) {
-            shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                    worldCoords.x, worldCoords.y);
-        } else if(weaponType == WeaponType.SHOTGUN) {
-            Random random = new Random();
-            // Shoot bullets at random locations around cursor
-            for(int i = 0; i < weaponType.getPellets(); i++) {
-                shootBullet(this.getPosX() + 0.2f *
-                        (float) random.nextGaussian(),
-                        this.getPosY() + 0.2f *
-                        (float) random.nextGaussian(),
-                        this.getPosZ(),
-                        worldCoords.x + 20 *
-                        (float) random.nextGaussian(),
-                        worldCoords.y + 20 *
-                        (float) random.nextGaussian());    
-            }            
-        } else if(weaponType == WeaponType.STARFALL) {
-            Random random = new Random();
-            float projX;
-            float projY;
-            projX = worldCoords.x / 55f;
-            projY = -(worldCoords.y - 32f / 2f) / 32f + projX;
-            projX -= projY - projX;
-            // Spawn bullets at random locations around cursor
-            for(int i = 0; i < weaponType.getPellets(); i++) {
-                shootBullet(projX + 5 *
-                        (float) random.nextGaussian(),
-                        projY + 5 *
-                        (float) random.nextGaussian(),
-                        this.getPosZ(),
-                        worldCoords.x,
-                        worldCoords.y);
-            }            
-        }
-    }
+    protected void fireWeapon() {}
     
     /**
      * Changes the position of the weapon in the gameworld
      * sets at certain distance from player character facing cursor
      */
-    private void setPosition() {
+    protected void setPosition() {
         // Calculate the angle between the cursor and player
-        float deltaX = playerManager.getPlayer().getPosX() -
-                this.mouseFollowX;
-        float deltaY = playerManager.getPlayer().getPosY() -
-                this.mouseFollowY;
-        this.angle = (float) (Math.atan2(deltaY, deltaX)) +
+        float deltaX = this.user.getPosX() - this.followX;
+        float deltaY = this.user.getPosY() - this.followY;
+        float angle = (float) (Math.atan2(deltaY, deltaX)) +
                 (float) (Math.PI);
         // Set weapon position along angle
-        setPosX(playerManager.getPlayer().getPosX() +
-                (float) (radius * Math.cos(angle)));
-        setPosY(playerManager.getPlayer().getPosY() +
-                (float) (radius * Math.sin(angle)));
+        setPosX(this.user.getPosX() +
+                (float) (this.radius * Math.cos(angle)));
+        setPosY(this.user.getPosY() +
+                (float) (this.radius * Math.sin(angle)));
     }
     
     /**
@@ -220,10 +204,10 @@ public class Weapon extends AbstractEntity implements Tickable {
     public void onTick(long gameTickCount) {
         setPosition();
         
-        if(counter < weaponType.getCounter()) {
-            counter++;
+        if(this.counter < this.cooldown) {
+            this.counter++;
         } else if(shoot) {  
-            counter = 0;
+            this.counter = 0;
             fireWeapon();
         }
     }

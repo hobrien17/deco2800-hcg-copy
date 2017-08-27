@@ -12,6 +12,9 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.weapons.Weapon;
+import com.deco2800.hcg.weapons.WeaponBuilder;
+import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
 
 import java.util.HashMap;
@@ -46,13 +49,6 @@ public class Player extends Character implements Tickable {
     private HashMap<String, Boolean> movementDirection = new HashMap<>();
     
     private Weapon equippedWeapon;
-    
-    private Weapon peashooter = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.MACHINEGUN, this);
-    private Weapon shotgun = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.SHOTGUN, this);
-    private Weapon stargun = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.STARFALL, this);
 
     /**
      * Creates a new player at specified position.
@@ -87,7 +83,11 @@ public class Player extends Character implements Tickable {
         lastSpeedY = 0;
 
         // Set equipped weapon and enter game world
-        equippedWeapon = peashooter;
+        equippedWeapon = new WeaponBuilder()
+                .setWeaponType(WeaponType.MACHINEGUN)
+                .setUser(this)
+                .setRadius(0.7)
+                .build();
         GameManager.get().getWorld().addEntity(equippedWeapon);
 
         // for direction of movement
@@ -339,17 +339,29 @@ public class Player extends Character implements Tickable {
                 movementDirection.put("right", true);
                 break;
             case Input.Keys.R:
-                if(equippedWeapon.equals(peashooter)) {
+                if(equippedWeapon.getWeaponType() == WeaponType.MACHINEGUN) {
                     GameManager.get().getWorld().removeEntity(equippedWeapon);
-                    equippedWeapon = shotgun;
+                    equippedWeapon = new WeaponBuilder()
+                            .setWeaponType(WeaponType.SHOTGUN)
+                            .setUser(this)
+                            .setRadius(0.7)
+                            .build();
                     GameManager.get().getWorld().addEntity(equippedWeapon);
-                } else if(equippedWeapon.equals(shotgun)){
+                } else if(equippedWeapon.getWeaponType() == WeaponType.SHOTGUN){
                     GameManager.get().getWorld().removeEntity(equippedWeapon);
-                    equippedWeapon = stargun;
+                    equippedWeapon = new WeaponBuilder()
+                            .setWeaponType(WeaponType.STARFALL)
+                            .setUser(this)
+                            .setRadius(0.7)
+                            .build();
                     GameManager.get().getWorld().addEntity(equippedWeapon);
                 } else {
                     GameManager.get().getWorld().removeEntity(equippedWeapon);
-                    equippedWeapon = peashooter;
+                    equippedWeapon = new WeaponBuilder()
+                            .setWeaponType(WeaponType.MACHINEGUN)
+                            .setUser(this)
+                            .setRadius(0.7)
+                            .build();
                     GameManager.get().getWorld().addEntity(equippedWeapon);
                 }
             default:
