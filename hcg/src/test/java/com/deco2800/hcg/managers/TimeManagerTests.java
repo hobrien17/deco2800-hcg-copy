@@ -298,13 +298,16 @@ public class TimeManagerTests {
 
 	// getDateTime test
 	@Test
-	public void printDateTest() {
+	public void getDateTimeTest() {
 		timeManager.setDateTime(5, 6, 7, 8, 9,2010);
 		Assert.assertEquals("Incorrect date being printed", "08/09/2010 07:06:05",
 				timeManager.getDateTime());
 	}
 
-	// GetDateTime (not sure how to test this)
+
+
+
+
 
 	@Test
 	public void calanderIncrementingTest() {
@@ -424,12 +427,6 @@ public class TimeManagerTests {
 		Assert.assertEquals("first second that hr == 1", 1,
 				timeManagerIncrementingHrTest.getHours());
 	}
-
-
-
-
-
-
 
 	// setTimeLabel (not sure how to test this)
 
