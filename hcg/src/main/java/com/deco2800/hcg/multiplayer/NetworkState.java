@@ -27,6 +27,7 @@ public final class NetworkState {
 	//       shouldn't be a big issue for the moment
 	static ConcurrentHashMap<Integer, SocketAddress> peers; // the "lobby"
 	static ConcurrentHashMap<Integer, Message> sendQueue;
+	private static boolean initialised = false;
 	private static NetworkSend networkSend;
 	private static NetworkReceive networkReceive;
 	private static Thread sendThread;
@@ -64,6 +65,16 @@ public final class NetworkState {
 		// start the networking send/receive threads
 		sendThread.start();
 		receiveThread.start();
+		
+		initialised = true;
+	}
+	
+	/**
+	 * Check if network state is initialised
+	 * @return Boolean indicating if network state has been initialised
+	 */
+	public static boolean isInitialised() {
+		return initialised;
 	}
 	
 	/**

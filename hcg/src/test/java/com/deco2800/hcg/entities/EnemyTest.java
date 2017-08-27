@@ -43,4 +43,34 @@ public class EnemyTest {
         assertThat("Basic enemy should only have 1 type of loot.", enemy.getLoot().length,
                 is(equalTo(1)));
     }
+    
+    @Test (expected = IllegalArgumentException.class)
+    public void testTakeDamageException() {
+        enemy.takeDamage(-100);
+    }
+    
+    @Test 
+    public void testTakeDamangeNoHealthLeft() {
+        enemy.takeDamage(2000);
+        assertThat("Enemy health is not reduced to 0", enemy.getHealth(), is(equalTo(0)));
+    }
+    
+    @Test
+    public void testTakeDamageNormalCase() {
+        enemy.takeDamage(100);
+        assertThat("Enemy health is not 900 after taking the damage", enemy.getHealth(), is(equalTo(900)));
+    }
+    
+    @Test
+    public void testOtherGetterMethods() {
+        assertThat("Enemy ID is not equal the given ID", enemy.getID(), is(equalTo(1)));
+        assertThat("Enemy Strength is not what it is given", enemy.getStrength(), is(equalTo(5)));
+        assertThat("Enemy level is not what is given", enemy.getLevel(), is(equalTo(1)));
+    }
+    
+    @Test
+    public void testSetLevel() {
+        enemy.setLevel(2);
+        assertThat("Enemy level is not changed", enemy.getLevel(), is(equalTo(2)));
+    }
 }

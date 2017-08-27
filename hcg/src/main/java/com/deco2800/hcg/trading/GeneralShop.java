@@ -2,6 +2,7 @@ package com.deco2800.hcg.trading;
 
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
 
 import java.util.HashMap;
@@ -9,29 +10,42 @@ import java.util.Map;
 
 public class GeneralShop implements Shop{
     int modifier = 0;
-    Inventory inventory;
+    Player player;
+    BasicSeed seed = new BasicSeed();
     Map<Item, Integer> shopStock = new HashMap<>();
 
     @Override
-    public void open(int modifier, Inventory inventory) {
+    public void open(int modifier, Player player) {
         this.modifier = modifier;
-        this.inventory = inventory;
+        this.player = player;
     }
 
     @Override
     public int inStock(Item item){
-        return shopStock.get(item).intValue();
+        try {
+            return shopStock.get(item).intValue();
+        } catch (NullPointerException e) {
+            return 0;
+        }
     }
 
     @Override
     public void addStock(Item item, int available) {
-        shopStock.put(item, new Integer(available));
+        if (shopStock.containsKey(item)) {
+            shopStock.put(item, new Integer(shopStock.get(item) + available));
+        } else {
+            shopStock.put(item, new Integer(available));
+        }
     }
 
     @Override
     public void addStock(Item[] items, int[] available) {
         for (int i = 0; i < items.length; i++) {
-            shopStock.put(items[i], new Integer(available[i]));
+            if (shopStock.containsKey(items[i])) {
+                shopStock.put(items[i], new Integer(shopStock.get(items[i]) + available[i]));
+            } else {
+                shopStock.put(items[i], new Integer(available[i]));
+            }
         }
     }
 
@@ -41,20 +55,44 @@ public class GeneralShop implements Shop{
     }
 
     @Override
-    public void buyStock(Item item) {
+    public int buyStock(Item item) {
+        if (shopStock.get(item) == 0) {
+            return 1;
+        } else if (!player.addItemToInventory(item)) {
+            return 2;
+        } else if (!player.getInventory().containsItem(seed) && (!player.getInventory().removeItem(seed, item
+                .getBaseValue()+modifier))) {
+            return 3;
+        }
         shopStock.put(item, new Integer(shopStock.get(item) - 1));
-        //code to modify player's inventory
+        return 0;
     }
 
     @Override
-    public void buyStock(Item item, int number) {
-        shopStock.put(item, new Integer(shopStock.get(item) - number));
-        //code to modify player's inventory
+    public int buyStock(Item item, int number) {
+        for (int i = 0; i < number; i++) {
+            int exitStatus = buyStock(item);
+            if (exitStatus != 0) {
+               return exitStatus;
+            }
+        }
+        return 0;
     }
 
     @Override
-    public void sellStock(Item item) {
-        shopStock.put(item, new Integer(shopStock.get(item) + 1));
-        //code to modify player's inventory
+    public int sellStock(Item item) {
+        seed = new BasicSeed();
+        seed.addToStack(item.getBaseValue()+modifier);
+        player.getInventory().removeItem(item);
+        if (!player.getInventory().addItem(seed)) {
+            player.getInventory().addItem(item);
+            return 1;
+        }
+        if (shopStock.containsKey(item)) {
+            shopStock.put(item, new Integer(shopStock.get(item) + 1));
+        } else {
+            shopStock.put(item, new Integer(1));
+        }
+        return 0;
     }
 }

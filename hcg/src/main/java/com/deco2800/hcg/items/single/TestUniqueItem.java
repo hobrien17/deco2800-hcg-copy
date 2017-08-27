@@ -1,4 +1,7 @@
-package com.deco2800.hcg.items;
+package com.deco2800.hcg.items.single;
+
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.SingleItem;
 
 /**
  * This is a test class, intended to be able to have variable properties to
