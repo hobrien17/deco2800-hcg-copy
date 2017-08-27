@@ -260,15 +260,12 @@ public class TimeManagerTests {
 		timeManagerPauseTest.pauseTime();
 
 		int temp = timeManagerPauseTest.getSeconds();
-		int temp2 = timeManagerPauseTest.getTimeElapsed();
 
 		// try and run time
 		timeManagerPauseTest.onTick(0);
 
 		Assert.assertEquals("Time is running whilst paused.", temp,
 				timeManagerPauseTest.getSeconds());
-		Assert.assertEquals("Time is running whilst paused.", temp2,
-				timeManagerPauseTest.getTimeElapsed());
 	}
 
 	@Test
@@ -276,16 +273,12 @@ public class TimeManagerTests {
 		timeManagerPauseTest.unpauseTime();
 
 		int temp = timeManagerPauseTest.getSeconds();
-		int temp2 = timeManagerPauseTest.getTimeElapsed();
 
 		// seconds should increment by 1 on tick
 		timeManagerPauseTest.onTick(0);
 		Assert.assertEquals(
 				"Time is not running correctly after being unpaused.", temp + 1,
 				timeManagerPauseTest.getSeconds());
-		Assert.assertEquals(
-				"Time is not running correctly after being unpaused.",
-				temp2 + 1, timeManagerPauseTest.getTimeElapsed());
 	}
 
 	// getDate test

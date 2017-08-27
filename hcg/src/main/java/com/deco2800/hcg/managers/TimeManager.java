@@ -18,7 +18,6 @@ public class TimeManager extends Manager implements TickableManager {
 	private int day;
 	private int month;
 	private int year;
-	private int timeElapsed;
 
 	private int seconds;
 	private int minutes;
@@ -45,7 +44,6 @@ public class TimeManager extends Manager implements TickableManager {
 		this.month = 1;
 		this.year = 2047;
 		this.isNight = true;
-		this.timeElapsed = 0;
 		this.timeLabel = null;
 		this.dateLabel = null;
 		this.timePaused = false;
@@ -103,24 +101,6 @@ public class TimeManager extends Manager implements TickableManager {
 	 */
 	public int getSeconds() {
 		return this.seconds;
-	}
-
-	/**
-	 * Sets the elapsed (game) time.
-	 * 
-	 * @param timeElapsed
-	 */
-	private void setTimeElapsed(int timeElapsed) {
-		this.timeElapsed = timeElapsed;
-	}
-
-	/**
-	 * Gets the elapsed (game) time.
-	 * 
-	 * @return Returns the elapsed (game) time.
-	 */
-	public int getTimeElapsed() {
-		return this.timeElapsed;
 	}
 
 	/**
@@ -263,7 +243,6 @@ public class TimeManager extends Manager implements TickableManager {
 			return;
 		}
 		
-		this.timeElapsed++;
 		this.nextSecond();
 		if (this.timeLabel != null) {
 			this.timeLabel.setText(this.getTime());
