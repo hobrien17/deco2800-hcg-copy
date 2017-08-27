@@ -40,6 +40,24 @@ public class EffectsTest {
         Effects effects2 = new Effects(entity, null);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void effectsAddEffectNullPointerTest() {
+        Effects effects = new Effects(entity);
+        effects.addEffect(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void effectsAddAllEffectsNullPointerTest() {
+        Effects effects = new Effects(entity);
+        effects.addAllEffects(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void effectRemoveEffectNullPointerTest() {
+        Effects effects = new Effects(entity);
+        effects.removeEffect(null);
+    }
+
     @Test
     public void effectsAddEffectTest() {
         Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0);
