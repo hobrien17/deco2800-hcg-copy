@@ -1,29 +1,32 @@
 package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.deco2800.hcg.entities.worldmap.MapNode;
+import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
+import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.renderers.Render2D;
-import com.deco2800.hcg.renderers.Renderer;
-
-import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.worlds.DemoWorld;
 
+import java.util.ArrayList;
+
 /**
- * Provides implementation of the World Map Context, which instansiates a
- * constructor for UIContext.
+ * Provides the World Map Context, which controls building and rendering of the WorldMap screen.
+ *
+ * Some testing buttons have been included in a UI frame, these are:
+ *
+ * quitButton: Pops the current context from the context manager stack
+ * startButton: Pushes a new DemoWorld level to the context manager stack, and places the player in that level
+ * discoveredButton: Toggles displaying all nodes in the map, and only those discovered.
+ *
+ * Currently there is no method to discover new nodes, as nodes will only be discovered when a level is completed, and
+ * there is not yet a way to complete a level in the game.
+ *
+ * Drawing edges between the nodes is still a WIP, but the MapNode class keeps track of the edges which exist between
+ * nodes.
  *
  * @author jakedunn
  */
@@ -31,53 +34,55 @@ public class WorldMapContext extends UIContext {
 
     // Managers used by the game
     private GameManager gameManager;
-
-    private SoundManager soundManager;
     private PlayerManager playerManager;
-    private TimeManager timeManager;
     private ContextManager contextManager;
 
-    private Window window;
-    //FIXME mouseHandler is never assigned
+    //TODO mouseHandler is never assigned
     private MouseHandler mouseHandler;
 
-    // Multiplexer to take input and distrubute it
-    InputMultiplexer inputMultiplexer;
+    private boolean showAllNodes;
 
-    // Is the game paused?
-    private boolean unpaused = true;
-
-    private Renderer renderer = new Render2D();
-
+    private ArrayList<MapNodeEntity> hiddenNodes;
     public WorldMapContext() {
         gameManager = GameManager.get();
-        soundManager = (SoundManager) gameManager
-                .getManager(SoundManager.class);
-        timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
-        playerManager = (PlayerManager) gameManager
-                .getManager(PlayerManager.class);
-        contextManager = (ContextManager) gameManager
-                .getManager(ContextManager.class);
 
-        // Setup GUI
+        // Not currently used, but might be later
+        SoundManager soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
+        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+        contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+
+        showAllNodes = false;
+
+        // Setup UI + Buttons
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
-        window = new Window("Menu", skin);
+        Window window = new Window("Menu", skin);
 
-		/* Add a quit button to the menu */
         Button quitButton = new TextButton("Quit", skin);
-
-		/* Add another button to the menu */
         Button startButton = new TextButton("Start Level 1", skin);
+        Button discoveredButton = new TextButton("Show all nodes", skin);
 
         window.add(quitButton);
         window.add(startButton);
+        window.add(discoveredButton);
         window.pack();
         window.setMovable(false); // So it doesn't fly around the screen
-        window.setPosition(0,
-                stage.getHeight());
+        window.setPosition(0, stage.getHeight());
+
+        stage.addActor(new WorldMapEntity());
+
+        hiddenNodes = new ArrayList<>();
+
+        for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
+            MapNodeEntity nodeEntry = new MapNodeEntity(node);
+            if (!node.isDiscovered()) {
+                hiddenNodes.add(nodeEntry);
+                nodeEntry.setVisible(false);
+            }
+            stage.addActor(nodeEntry);
+        }
+
         stage.addActor(window);
 
-        /* Add a programmatic listener to the quit button */
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -88,21 +93,27 @@ public class WorldMapContext extends UIContext {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                setUpLevel();
+                gameManager.setWorld(new DemoWorld());
+                gameManager.getWorld().addEntity(playerManager.getPlayer());
                 contextManager.pushContext(new PlayContext());
             }
         });
 
+        discoveredButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showAllNodes = !showAllNodes;
 
-    }
-
-    public void setUpLevel() {
-        gameManager.setWorld(new DemoWorld());
-        // Set up a player
-        Player player = new Player(5, 10, 0);
-        player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
-        playerManager.setPlayer(player);
-        gameManager.getWorld().addEntity(playerManager.getPlayer());
-        contextManager.pushContext(new PlayContext());
+                for (MapNodeEntity node:hiddenNodes) {
+                    if (showAllNodes) {
+                        node.setVisible(true);
+                    } else {
+                        if (!node.getNode().isDiscovered()) {
+                            node.setVisible(false);
+                        }
+                    }
+                }
+            }
+        });
     }
 }

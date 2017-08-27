@@ -7,10 +7,15 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.deco2800.hcg.contexts.WorldMapContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.entities.worldmap.Level;
+import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worldmapui.MapGenerator;
+import com.deco2800.hcg.worlds.BlankTestWorld;
+
+import java.util.ArrayList;
 
 /**
  * Handles the creation of the world and rendering.
@@ -53,10 +58,30 @@ public class Hardcor3Gard3ning extends Game {
 
         /* Create a player manager. */
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+        Player player = new Player(5, 10, 0);
+        player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+        playerManager.setPlayer(player);
+
+        ArrayList<Level> levelList = new ArrayList<Level>();
+        // Creates some test levels
+        Level testLevel = new Level(new BlankTestWorld(), 0, 1, 1);
+        Level testLevel2 = new Level(new BlankTestWorld(), 0, 1, 0);
+        Level testLevel3 = new Level(new BlankTestWorld(), 0, 1, 1);
+        Level testLevel4 = new Level(new BlankTestWorld(), 0, 1, 2);
+
+        // Eventually this will contain all the playable game levels
+        levelList.add(testLevel);
+        levelList.add(testLevel2);
+        levelList.add(testLevel3);
+        levelList.add(testLevel4);
+
+        // Procedurally generate the world map and store it.
+        MapGenerator mapGenerator = new MapGenerator(levelList);
+        WorldMap worldMap = mapGenerator.generateWorldMap();
+        gameManager.setWorldMap(worldMap);
 
         // Eventually this first context should be the main menu.
         contextManager.pushContext(new WorldMapContext());
-
     }
 
     /**
