@@ -93,7 +93,7 @@ public class Bullet extends AbstractEntity implements Tickable {
                     && this.collidesWith(entity) && user instanceof Player) {
                 //Set target to be the enemy whose collision got detected and give it an effect
                 Enemy target = (Enemy) entity;
-                target.giveEffect(new Effect("Shot", 2, 0, 0, 1, 0));
+                target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
                 //Remove this bullet from the world to ensure no other squirrels are killed
                 GameManager.get().getWorld().removeEntity(this);
                 break;
