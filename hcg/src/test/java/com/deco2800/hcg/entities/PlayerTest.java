@@ -14,6 +14,8 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.worlds.DemoWorld;
 
+import javax.naming.directory.InvalidAttributesException;
+
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.List;
 
 // author - 
 public class PlayerTest {
+
 	
 	@Test
 	public void testInitialiseNewPlayer() {
@@ -30,6 +33,16 @@ public class PlayerTest {
 		
 		assertTrue("Player agility isn't set to value 0.", player.attributes.get("agility") == 0);
 
+	}
+
+	@Test
+	public void testAttributesMap() {
+		Player player = new Player(0, 0, 0);
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0);
+		player.setAttribute("agility",2);
+		assertEquals("player agility should be 2 after setAttribute changed it",2, player.getAttribute("agility"));
+		player.setAttribute("DontAddThis",1000);
+		assertEquals("attribute should not be added", player.getAttribute("DontAddThis"), -1);
 	}
 
 	@Test
@@ -261,14 +274,16 @@ public class PlayerTest {
 
 		int startHealth = 1000;
 		
-		player.setHealth(startHealth);
+		player.setHealthMax(startHealth);
+		player.setHealthCur(startHealth);
 		
-		assertTrue("Player health not set correctly", player.getHealth() == startHealth);
+		assertTrue("Player max health not set correctly", player.getHealthMax() == startHealth);
+		assertTrue("Player current health not set correctly", player.getHealthCur() == startHealth);
 
 		// do one tick of movement
 		player.onTick(0);	
 
-		assertTrue("Player health wasn't decreased when it should have been", player.getHealth() == startHealth - 1);
+		assertTrue("Player health wasn't decreased when it should have been", player.getHealthCur() == startHealth - 1);
 		
 		// reset damage
 		when(mapProperties.get("damage")).thenReturn("2");
@@ -276,14 +291,14 @@ public class PlayerTest {
 		// do one tick of movement
 		player.onTick(1);	
 
-		assertTrue("Player health wasn't decreased as much it should have been", player.getHealth() == startHealth - 3);
+		assertTrue("Player health wasn't decreased as much it should have been", player.getHealthCur() == startHealth - 3);
 
 		when(mapProperties.get("damagetype")).thenReturn("0");
 
 		// do one tick of movement
 		player.onTick(1);	
 		
-		assertTrue("Player health was decreased when the tile was enemy only", player.getHealth() == startHealth - 3);
+		assertTrue("Player health was decreased when the tile was enemy only", player.getHealthCur() == startHealth - 3);
 
 	}
 	

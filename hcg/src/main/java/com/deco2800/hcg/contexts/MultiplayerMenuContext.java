@@ -66,7 +66,7 @@ public class MultiplayerMenuContext extends UIContext {
 			public void changed(ChangeEvent event, Actor actor) {
 				NetworkState.init(false);
 				NetworkState.join(name.getText());
-				contextManager.pushContext(new PlayContext());
+				contextManager.pushContext(new WorldMapContext());
 			}
 		});
 		
@@ -74,7 +74,7 @@ public class MultiplayerMenuContext extends UIContext {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				NetworkState.init(true);
-				contextManager.pushContext(new PlayContext());
+				contextManager.pushContext(new WorldMapContext());
 			}
 		});
 		

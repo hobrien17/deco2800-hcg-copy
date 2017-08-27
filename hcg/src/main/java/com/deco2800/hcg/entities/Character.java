@@ -38,17 +38,19 @@ import com.deco2800.hcg.items.Item;
  * @author avryn, trent_s
  */
 public abstract class Character extends AbstractEntity {
-    // TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
-    public final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "health", "stamina", "carryWeight",
+    // TODO: Change class implementation to use a single method  to get skills and attributes without using a map.
+    public final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("stamina", "carryWeight",
             "strength", "vitality", "agility", "charisma", "intellect");
 
     protected float movementSpeed;
+    protected float movementSpeedNorm;
     protected float speedX;
     protected float speedY;
 
     protected int level;
     protected int xp;
-    protected int health;
+    protected int healthMax;
+    protected int healthCur;
     //Attributes map
     protected Map<String,Integer> attributes;
 
@@ -80,10 +82,12 @@ public abstract class Character extends AbstractEntity {
         this.speedX = 0.0f;
         this.speedY = 0.0f;
         this.movementSpeed = 0.02f * attributes.get("agility");
+        this.movementSpeedNorm = movementSpeed;
 
         this.level = 1;
         this.xp = 1;
-        this.health = 20;
+        this.healthMax = 20;
+        this.healthCur = healthMax;
         this.meleeSkill = 1;
 
     }
@@ -157,20 +161,30 @@ public abstract class Character extends AbstractEntity {
      *
      * @param health
      */
-    protected void setHealth(int health) {
-        this.health = health;
+    protected void setHealthMax(int health) {
+        this.healthMax = health;
     }
+    
+    /**
+    *
+    * @param health
+    */
+   protected void setHealthCur(int health) {
+       if (health > this.healthMax) {
+           this.healthCur = healthMax;
+       } else {
+           this.healthCur = health;
+       }
+   }
 
     /**
      *
      * @param attribute is in CHARACTER_ATTRIBUTES
      */
-    protected void setAttribute(String attribute,int value) throws InvalidAttributesException{
-        if (!(CHARACTER_ATTRIBUTES.contains(attribute))) {
-            throw new InvalidAttributesException("attribute is not part of the players current set of attributes" +
-                    "please add to CHARACTER_ATTRIBUTES array");
-        }
+    protected void setAttribute(String attribute,int value){
+        if ((CHARACTER_ATTRIBUTES.contains(attribute))) {
             this.attributes.put(attribute, value);
+        }
     }
     /**
      *
@@ -234,19 +248,27 @@ public abstract class Character extends AbstractEntity {
      *
      * @return
      */
-    public int getHealth() {
-        return health;
+    public int getHealthMax() {
+        return healthMax;
     }
+    
+    /**
+    *
+    * @return
+    */
+   public int getHealthCur() {
+       return healthCur;
+   }
 
     /**
      * @param attribute is an attribute in CHARACTER_ATTRIBUTES
      * @return value of attribute
      */
-    public int getAttribute(String attribute) throws InvalidAttributesException {
-        if (!(CHARACTER_ATTRIBUTES.contains(attribute))) {
-            throw new InvalidAttributesException("Attribute is not part of CHARACTER_ATTRIBUTES");
+    public int getAttribute(String attribute) {
+        if ((CHARACTER_ATTRIBUTES.contains(attribute))) {
+            return new Integer(attributes.get(attribute));
         }
-        return new Integer(attributes.get(attribute));
+        return -1;
     }
 
     /**
