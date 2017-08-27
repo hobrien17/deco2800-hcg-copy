@@ -36,7 +36,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     protected float lastPlayerX;
     protected float lastPlayerY;
     protected float movementSpeed;
-	
+
 	// Effects container
 	protected Effects myEffects;
     
@@ -149,7 +149,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      */
     public void causeDamage(Player player) {
         //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
-        player.setHealth(player.getHealth() - 10);
+        player.takeDamage(10);
     }
 
     @Override

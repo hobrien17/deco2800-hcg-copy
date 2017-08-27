@@ -41,6 +41,7 @@ public class Player extends Character implements Tickable {
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
+	private boolean sprinting;
 
 	// current tile name
 	private String name = "";
@@ -77,6 +78,7 @@ public class Player extends Character implements Tickable {
 		input.addMouseMovedListener(this::handleMouseMoved);
 
 		collided = false;
+		sprinting = false;
 		this.setTexture("hcg_character");
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 
@@ -284,7 +286,9 @@ public class Player extends Character implements Tickable {
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
-				this.setHealth(this.getHealth() - Integer.parseInt((String) layer.getProperties().get("damage")));
+				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
+				//this.setHealth(this.getHealth() - Integer.parseInt((String) layer.getProperties().get("damage")));
+
 			}
 
 			// log
@@ -333,6 +337,7 @@ public class Player extends Character implements Tickable {
 
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
+
 			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps(entity.getBox3D())
 					&& !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
 				LOGGER.info(this + " colliding with " + entity);
@@ -356,7 +361,8 @@ public class Player extends Character implements Tickable {
 			int meleeSkill) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
 		setSkills(meleeSkill);
-		health = 4 * vitality;
+		healthMax = 4 * vitality;
+		healthCur = healthMax;
 		attributes.put("stamina", 4 * agility);
 	}
 
@@ -378,7 +384,8 @@ public class Player extends Character implements Tickable {
 		xpThreshold *= 1.3;
 		level++;
 		attributes.put("stamina", attributes.get("stamina") + attributes.get("agility"));
-		health = health + attributes.get("vitality");
+		healthMax = healthMax + attributes.get("vitality");
+		healthCur = healthCur + attributes.get("vitality");
 		skillPoints = 4 + attributes.get("intellect");
 		// TODO: enter level up screen
 	}
@@ -394,46 +401,72 @@ public class Player extends Character implements Tickable {
 		this.xp += amount;
 		checkXp();
 	}
+	
+	/**
+     * Decrease the current health of the player by the given amount
+     * 
+     * @param amount
+     *            the amount of health to lose
+     */
+    public void takeDamage(int amount) {
+
+        if (amount < this.healthCur) {
+            this.healthCur -= amount;
+        } else {
+            this.healthCur = 0;
+        }
+    }
+	
 
 	/**
 	 * Handle movement when wasd keys are pressed down. As well as other possible actions on key press. Such as
 	 * NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
-		switch (keycode) {
-		case Input.Keys.W:
-			movementDirection.put("up", true);
-			// check terrain type and play corresponding sound effect
-			soundPlay(name);
-			break;
-		case Input.Keys.S:
-			movementDirection.put("down", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.A:
-			movementDirection.put("left", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.D:
-			movementDirection.put("right", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.E:
-			checkForInteraction();
-			break;
-		case Input.Keys.R:
-		    if(this.getEquippedWeapon() != null) {
-		        GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
-		    }
-		    this.equippedItems.cycleEquippedSlot();
-		    if(this.getEquippedWeapon() != null) {
-	            GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
-		        
-		    }
+		if (sprinting) {
+			setAttribute("stamina", getAttribute("stamina") - 40);
+		} else {
+			setAttribute("stamina", getAttribute("stamina") + 10);
+		}
+			switch (keycode) {
+				case Input.Keys.SHIFT_LEFT:
+					if (getAttribute("stamina") > 0) {
+						setMovementSpeed(getMovementSpeed() * 3);
+						sprinting = true;
+					}
+					break;
+				case Input.Keys.W:
+					movementDirection.put("up", true);
+					// check terrain type and play corresponding sound effect
+					soundPlay(name);
+					break;
+				case Input.Keys.S:
+					movementDirection.put("down", true);
+					soundPlay(name);
+					break;
+				case Input.Keys.A:
+					movementDirection.put("left", true);
+					soundPlay(name);
+					break;
+				case Input.Keys.D:
+					movementDirection.put("right", true);
+					soundPlay(name);
+					break;
+				case Input.Keys.R:
+		    		if(this.getEquippedWeapon() != null) {
+		  		      GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
+				    }
+				    this.equippedItems.cycleEquippedSlot();
+				    if(this.getEquippedWeapon() != null) {
+	  		          GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
+			 	   }
 		default:
 			break;
 		}
-
+		if (getAttribute("stamina") <= 0) {
+			sprinting = false;
+			setMovementSpeed(movementSpeedNorm);
+		}
 		handleDirectionInput();
 		handleNoInput();
 	}
@@ -442,29 +475,34 @@ public class Player extends Character implements Tickable {
 	 * Handle movement when wasd keys are released
 	 */
 	private void handleKeyUp(int keycode) {
-		switch (keycode) {
-		case Input.Keys.W:
-			movementDirection.put("up", false);
-			soundStop(name);
-			break;
-		case Input.Keys.S:
-			movementDirection.put("down", false);
-			soundStop(name);
-			break;
-		case Input.Keys.A:
-			movementDirection.put("left", false);
-			soundStop(name);
-			break;
-		case Input.Keys.D:
-			movementDirection.put("right", false);
-			soundStop(name);
-			break;
-		default:
-			break;
-		}
+			switch (keycode) {
+				case Input.Keys.SHIFT_LEFT:
+					sprinting = false;
+					setMovementSpeed(movementSpeedNorm);
+					break;
+				case Input.Keys.W:
+					movementDirection.put("up", false);
+					soundStop(name);
+					break;
+				case Input.Keys.S:
+					movementDirection.put("down", false);
+					soundStop(name);
+					break;
+				case Input.Keys.A:
+					movementDirection.put("left", false);
+					soundStop(name);
+					break;
+				case Input.Keys.D:
+					movementDirection.put("right", false);
+					soundStop(name);
+					break;
+				default:
+					break;
+			}
 
-		handleDirectionInput();
-		handleNoInput();
+
+			handleDirectionInput();
+			handleNoInput();
 	}
 
 	/**
