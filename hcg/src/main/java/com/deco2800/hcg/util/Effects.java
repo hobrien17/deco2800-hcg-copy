@@ -68,11 +68,11 @@ public class Effects {
         currentEffects.remove(effect);
     }
 
-    public void execute() {
+    public void apply() {
         for (Effect e : currentEffects) {
             if (e.getDuration() == 0) {
                 currentEffects.remove(e);
-                break;
+                continue;
             } else {
                 e.decrementDuration();
             }

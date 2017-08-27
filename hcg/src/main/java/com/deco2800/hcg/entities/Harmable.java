@@ -8,8 +8,8 @@ public interface Harmable {
     //TODO Whatever harmable things need to be able to do
 
     // Method to cause an effect
-    void causeEffect(Effect effect);
+    void giveEffect(Effect effect);
 
     // Method to cause multiple effects at once
-    void causeEffect(Collection<Effect> effects);
+    void giveEffect(Collection<Effect> effects);
 }
