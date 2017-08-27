@@ -47,17 +47,13 @@ public class Squirrel extends Enemy implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		float goalX = playerManager.getPlayer().getPosX() + random.nextFloat() * 6 - 3;
-		float goalY = playerManager.getPlayer().getPosY() + random.nextFloat() * 6 - 3;
-		float distance = this.distance(playerManager.getPlayer());
-		
-		if(distance < speed) {
-			this.setPosX(goalX);
-			this.setPosY(goalY);
-			return;
+		if(this.detectPlayer()) {
+			this.moveToPlayer();
+		} else {
+			this.randomMove();
 		}
-		
 
+		/**
 		float deltaX = getPosX() - goalX;
 		float deltaY = getPosY() - goalY;
 
@@ -65,11 +61,12 @@ public class Squirrel extends Enemy implements Tickable {
 
 		float changeX = (float)(speed * Math.cos(angle));
 		float changeY = (float)(speed * Math.sin(angle));
+		 **/
 
 		Box3D newPos = getBox3D();
-		newPos.setX(getPosX() + changeX);
-		newPos.setY(getPosY() + changeY);
-		
+		newPos.setX(this.getPosX());
+		newPos.setY(this.getPosY());
+
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		boolean collided = false;
 		for (AbstractEntity entity : entities) {
@@ -82,8 +79,11 @@ public class Squirrel extends Enemy implements Tickable {
 		}
 		
 		if (!collided) {
-			setPosX(getPosX() + changeX);
-			setPosY(getPosY() + changeY);
+            if(this.detectPlayer()) {
+                this.moveToPlayer();
+            } else {
+                this.randomMove();
+            }
 		}
 
 		// Apply any effects that exist on the entity

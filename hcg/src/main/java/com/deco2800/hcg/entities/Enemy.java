@@ -49,8 +49,12 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         this.strength = strength;
         this.speedX = 0;
         this.speedY = 0;
+<<<<<<< HEAD
+        this.movementSpeed = this.level;
+=======
         this.movementSpeed = 0;
         this.level = 1;
+>>>>>>> 9191ec127d230e8b30b14f8ca27a6279d8c26497
 
 		// Effects container 
 		myEffects = new Effects(this);
@@ -214,15 +218,13 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
 
     /**
      * To detect player's position. If player is near enemy, return 1.
-     * @return: 0. Undetected
-     *          1. Detected player
+     * @return: false: Undetected
+     *          true: Detected player
      *
      */
     public boolean detectPlayer(){
-        float diffX = abs(this.getPosX() - playerManager.getPlayer().getPosX());
-        float diffY = abs(this.getPosY() - playerManager.getPlayer().getPosY());
-        double distance = sqrt(diffX * diffX + diffY * diffY);
-        if(distance <= 10*this.level){
+        float distance = this.distance(playerManager.getPlayer());
+        if(distance <= 10 * this.level){
             //Annoyed by player.
             this.setStatus(3);
             return true;
@@ -251,44 +253,22 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         distance = Math.abs(new Random().nextFloat()) * 10 * this.level;
         nextPosX = (float) (this.getPosX() + distance * cos(radius));
         nextPosY = (float) (this.getPosY() + distance * cos(radius));
-        while (this.getPosX() - nextPosX > 0.05 && this.getPosY() - nextPosY > 0.05) {
-            if (this.detectPlayer()) {
-                this.moveToPlayer();
-                break;
-            } else {
-                if (this.getPosX() < nextPosX) {
-                    speedX -= movementSpeed;
-                } else if (this.getPosX() > nextPosX) {
-                    speedX += movementSpeed;
-                }
-                if (this.getPosY() < nextPosY) {
-                    speedY += movementSpeed;
-                } else if (this.getPosY() > nextPosY) {
-                    speedY -= movementSpeed;
-                }
-            }
-        }
-    }
-
-    /**
-     * Go to the pointed position.
-     * @param destPosX: the X of next position
-     * @param destPosY: the Y of next position
-     *
-     */
-    public void moveTo(float destPosX, float destPosY){
-        while (this.getPosX() - destPosX > 0.05 && this.getPosY() - destPosY > 0.05) {
-            if(this.getPosX() < destPosX){
+        if (this.detectPlayer()) {
+            this.moveToPlayer();
+        } else {
+            if (this.getPosX() < nextPosX) {
                 speedX -= movementSpeed;
-            }
-            else if(this.getPosX() > destPosX){
+            } else if (this.getPosX() > nextPosX) {
                 speedX += movementSpeed;
+            } else {
+                speedX = 0;
             }
-            if(this.getPosY() < destPosY){
+            if (this.getPosY() < nextPosY) {
                 speedY += movementSpeed;
-            }
-            else if(this.getPosY() > destPosY){
+            } else if (this.getPosY() > nextPosY) {
                 speedY -= movementSpeed;
+            } else {
+                speedY = 0;
             }
         }
     }
@@ -298,21 +278,21 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      *
      */
     public void moveToPlayer(){
-        while(this.getPosX() != playerManager.getPlayer().getPosX() &&
-                this.getPosY() != playerManager.getPlayer().getPosY() &&
-                this.detectPlayer()){
-            if(this.getPosX() < playerManager.getPlayer().getPosX()){
-                speedX -= movementSpeed;
-            }
-            else if(this.getPosX() > playerManager.getPlayer().getPosX()){
-                speedX += movementSpeed;
-            }
-            if(this.getPosY() < playerManager.getPlayer().getPosY()){
-                speedY += movementSpeed;
-            }
-            else if(this.getPosY() > playerManager.getPlayer().getPosY()){
-                speedY -= movementSpeed;
-            }
+        if(this.getPosX() < playerManager.getPlayer().getPosX()){
+            speedX -= movementSpeed;
+        }
+        else if(this.getPosX() > playerManager.getPlayer().getPosX()){
+            speedX += movementSpeed;
+        } else {
+            speedX = 0;
+        }
+        if(this.getPosY() < playerManager.getPlayer().getPosY()){
+            speedY += movementSpeed;
+        }
+        else if(this.getPosY() > playerManager.getPlayer().getPosY()){
+            speedY -= movementSpeed;
+        } else {
+            speedY = 0;
         }
     }
     
