@@ -2,6 +2,15 @@ package com.deco2800.hcg.weapons;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 
+
+/**
+ * WeaponBuilder is a Builder Pattern design made for creating weapons
+ * Call the constructor and then each method with valid input to set
+ * the variables, otherwise they will go to default values.
+ * weaponType and user are required to be set.
+ * 
+ * @author Bodhi Howe - @sinquios
+ */
 public class WeaponBuilder {
     private WeaponType weaponType = null;
     private AbstractEntity user = null;
@@ -16,9 +25,7 @@ public class WeaponBuilder {
     private int cooldown = -1;
     private int pellets = -1;
     
-    public WeaponBuilder() {
-        
-    }
+    public WeaponBuilder() {}
     
     public WeaponBuilder setWeaponType(WeaponType weaponType) {
         this.weaponType = weaponType;
@@ -80,6 +87,15 @@ public class WeaponBuilder {
         return this;
     }
     
+    
+    /**
+     * Call this method after setting desired values to return
+     * a new Weapon object.
+     * 
+     * @ensure Weapon = null if weaponType == null || user == null
+     * 
+     * @return Weapon object
+     */
     public Weapon build() {
         if(weaponType == null || user == null) {
             return null;

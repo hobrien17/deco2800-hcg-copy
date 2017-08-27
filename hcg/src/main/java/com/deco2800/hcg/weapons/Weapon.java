@@ -7,7 +7,6 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Bullet;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
 
 /**
  * Weapon class containing all values and methods required for
@@ -24,23 +23,11 @@ import com.deco2800.hcg.managers.PlayerManager;
  * turned into an Interface to be used with a factory pattern
  * to remove excess conditional statements and duplicate code
  * 
- * Weapon(float, float, float, WeaponType)
- * openFire()
- * ceaseFire()
- * updateAim(int, int)
- * updatePosition(int, int)
- * shootBullet(float, float, float, float, float)
- * fireWeapon()
- * setPosition()
- * onTick(long)
- * 
  * @author Bodhi Howe - Sinquios
  */
 
-public class Weapon extends AbstractEntity implements Tickable {
-    
-    protected PlayerManager playerManager;
-    
+public abstract class Weapon extends AbstractEntity implements Tickable {
+        
     protected float followX;
     protected float followY;
     protected int aimX;
@@ -78,25 +65,6 @@ public class Weapon extends AbstractEntity implements Tickable {
         // TODO: Get proper weapon textures
         this.setTexture(texture);
         this.cooldown = cooldown;
-        
-        this.playerManager = (PlayerManager) GameManager.get()
-                .getManager(PlayerManager.class);
-    }
-    
-    public void setPlayerManager(PlayerManager playerManager) {
-        this.playerManager = playerManager;
-    }
-    
-    public void setWeaponType(WeaponType weaponType) {
-        this.weaponType = weaponType;
-    }
-
-    public void setUser(AbstractEntity user){
-        this.user = user;
-    }
-    
-    public void setRadius(double radius) {
-        this.radius = radius;
     }
     
     public WeaponType getWeaponType() {
