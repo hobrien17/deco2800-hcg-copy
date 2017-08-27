@@ -76,7 +76,7 @@ public class TestUniqueItem extends SingleItem {
             if(this.uniqueData == null) {
                 return (((TestUniqueItem) item).getUniqueData() == null && super.sameItem(item));
             }
-            
+
             return (this.uniqueData.equals(((TestUniqueItem) item).getUniqueData())
                     && super.sameItem(item));
         }
