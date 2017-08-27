@@ -3,6 +3,8 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
+import com.deco2800.hcg.contexts.PerksSelectionScreen;
+import com.deco2800.hcg.managers.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +15,6 @@ import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
@@ -34,6 +33,7 @@ public class Player extends Character implements Tickable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
 	private SoundManager soundManager;
+	private ContextManager contextManager;
 
 	private boolean collided;
 	private int xpThreshold = 200;
@@ -63,8 +63,12 @@ public class Player extends Character implements Tickable {
 	 *            beginning player Z position
 	 */
 	public Player(float posX, float posY, float posZ) {
-
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
+
+		// Get necessary managers
+		GameManager gameManager = GameManager.get();
+		this.contextManager = (ContextManager)
+				gameManager.getManager(ContextManager.class);
 
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
 
@@ -428,6 +432,8 @@ public class Player extends Character implements Tickable {
 			setAttribute("stamina", getAttribute("stamina") + 10);
 		}
 			switch (keycode) {
+				case Input.Keys.P:
+					this.contextManager.pushContext(new PerksSelectionScreen());
 				case Input.Keys.SHIFT_LEFT:
 					if (getAttribute("stamina") > 0) {
 						setMovementSpeed(getMovementSpeed() * 3);

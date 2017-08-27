@@ -90,6 +90,12 @@ public class TextureManager extends Manager {
 		textureMap.put("menu_host_button", new Texture("resources/ui/main_menu/menu_host_button.png"));
 		textureMap.put("menu_back_button", new Texture("resources/ui/main_menu/menu_back_button.png"));
 
+		//Perks
+		textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
+		textureMap.put("red_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
+		textureMap.put("purple_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
+		textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
+
 	}
 
 	/**
