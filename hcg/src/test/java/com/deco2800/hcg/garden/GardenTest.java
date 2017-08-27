@@ -2,24 +2,188 @@ package com.deco2800.hcg.garden;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
+import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
+import com.deco2800.hcg.entities.garden_entities.plants.Grass;
+import com.deco2800.hcg.entities.garden_entities.plants.Ice;
+import com.deco2800.hcg.entities.garden_entities.plants.Inferno;
+import com.deco2800.hcg.entities.garden_entities.plants.Planter;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
-import com.deco2800.hcg.entities.garden_entities.seeds.SunflowerSeed;
-import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.entities.garden_entities.plants.Water;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.TimeManager;
 
 public class GardenTest {
+	
+	private static Map<Class<?>, String> sprites;
+	private static Map<Class<?>, String> names;
+	private static Map<Seed.Type, String> seedNames;
+	private static Map<Seed.Type, Class<? extends AbstractGardenPlant>> seedPlants;
 
-	@Test
-	public void testLoot() {
-		/*AbstractGardenPlant flower = new Sunflower(0, 0, 0);
+	@BeforeClass
+	public static void setup() {
+		sprites = new HashMap<>();
+		names = new HashMap<>();
 		
-		String[] expectedLoot = {"sunflower_seed"};
-		assertArrayEquals(flower.getLoot(), expectedLoot);
+		sprites.put(Sunflower.class, "sunflower");
+		sprites.put(Cactus.class, "cactus");
+		sprites.put(Grass.class, "grass");
+		sprites.put(Water.class, "lily");
+		sprites.put(Inferno.class, "inferno");
+		sprites.put(Ice.class, "sunflower"); //need to change
 		
-		Item[] loot = flower.loot();
-		assertEquals(loot.length, 1);
-		assertTrue(loot[0] instanceof SunflowerSeed);*/
+		names.put(Sunflower.class, "sunflower");
+		names.put(Cactus.class, "cactus");
+		names.put(Grass.class, "grass");
+		names.put(Water.class, "lily");
+		names.put(Inferno.class, "inferno");
+		names.put(Ice.class, "ice");
 	}
+
+	@BeforeClass
+	public static void setupSeed() {
+		seedNames = new HashMap<>();
+		seedPlants = new HashMap<>();
+
+		seedNames.put(Seed.Type.EXPLOSIVE, "EXPLOSIVE");
+		seedNames.put(Seed.Type.FIRE, "FIRE");
+		seedNames.put(Seed.Type.GRASS, "GRASS");
+		seedNames.put(Seed.Type.ICE, "ICE");
+		seedNames.put(Seed.Type.SUNFLOWER, "SUNFLOWER");
+		seedNames.put(Seed.Type.WATER, "WATER");
+		
+		seedPlants.put(Seed.Type.EXPLOSIVE, Cactus.class);
+		seedPlants.put(Seed.Type.FIRE, Inferno.class);
+		seedPlants.put(Seed.Type.GRASS, Grass.class);
+		seedPlants.put(Seed.Type.ICE, Ice.class);
+		seedPlants.put(Seed.Type.SUNFLOWER, Sunflower.class);
+		seedPlants.put(Seed.Type.WATER, Water.class);
+	}
+
+	/*
+	 * Tests the details of an empty pot
+	 */
+	@Test
+	public void testEmptyPot() {
+		Pot p = new Pot(5, 5, 0);
+				
+		assertEquals(p.getPosX(), 5, 0.01);
+		assertEquals(p.getPosY(), 5, 0.01);
+		assertEquals(p.getPosZ(), 0, 0.01);
+		
+		assertEquals(p.getXLength(), 0.7, 0.01);
+		assertEquals(p.getYLength(), 0.7, 0.01);
+		assertEquals(p.getZLength(), 1, 0.01);
+		assertEquals(p.getXRenderLength(), 1, 0.01);
+		assertEquals(p.getYRenderLength(), 1, 0.01);
+		
+		assertEquals(p.getTexture(), "pot");
+		
+		assertEquals(p.getPlant(), null);
+	}
+	
+	/*
+	 * Tests adding to a pot
+	 */
+	@Test
+	public void testAddSunflower() {
+		Pot p = new Pot(5, 5, 0);
+		AbstractGardenPlant plant = new Sunflower(p);
+		assertTrue(p.addPlant(plant));
+		assertEquals(p.getPlant(), plant);
+		assertEquals(plant.getGrowDelay(), 10);
+	}
+	
+	/*
+	 * Tests that a pot can only contain one plant
+	 */
+	@Test
+	public void testAddTwice() {
+		Pot p = new Pot(5, 5, 0);
+		AbstractGardenPlant plant1 = new Sunflower(p);
+		AbstractGardenPlant plant2 = new Cactus(p);
+		assertTrue(p.addPlant(plant1));
+		assertFalse(p.addPlant(plant2));
+	}
+	
+	/*
+	 * Tests the details of all in-game plants
+	 */
+	@Test
+	public void testAllPlants() {
+		Pot p = new Pot(5, 5, 0);
+		AbstractGardenPlant[] plants = {new Sunflower(p), new Cactus(p), new Water(p), new Grass(p), new Inferno(p),
+				new Ice(p)};
+		for(AbstractGardenPlant plant : plants) {
+			p.removePlant();
+			p.addPlant(plant);
+			testSprite(plant, p);
+			testName(plant);
+			testLoot(plant);
+		}
+	}
+	
+	@Test
+	public void testAllSeeds() {
+		Seed.Type[] types = {Seed.Type.EXPLOSIVE, Seed.Type.FIRE, Seed.Type.GRASS, Seed.Type.ICE, Seed.Type.SUNFLOWER,
+				Seed.Type.WATER};
+		for(Seed.Type type : types) {
+			Seed seed = new Seed(type);
+			testSeedDetails(seed);
+			
+		}
+	}
+	
+	private void testLoot(AbstractGardenPlant plant) {
+		assertNotEquals(plant.getLoot().length, 0);
+		assertNotEquals(plant.loot().length, 0);
+		
+		assertTrue(plant.checkLootRarity());
+	}
+	
+	private void testName(AbstractGardenPlant plant) {
+		assertEquals(plant.getName(), names.get(plant.getClass()));
+	}
+	
+	private void testSprite(AbstractGardenPlant plant, Pot pot) {
+		
+		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.SPROUT);
+		assertEquals(pot.getTexture(), sprites.get(plant.getClass()) + "_01");
+		
+		plant.advanceStage();
+		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.SMALL);
+		assertEquals(pot.getTexture(), sprites.get(plant.getClass()) + "_02");
+		
+		plant.advanceStage();
+		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.LARGE);
+		assertEquals(pot.getTexture(), sprites.get(plant.getClass()) + "_03");
+		
+		plant.advanceStage();
+		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.LARGE);
+		assertEquals(pot.getTexture(), sprites.get(plant.getClass()) + "_03");
+	}
+
+	private void testSeedDetails(Seed seed) {
+		Pot p = new Pot(5, 5, 0);
+		assertEquals(seed.getName(), seedNames.get(seed.getType()));
+		try {
+			assertTrue(seedPlants.get(seed.getType()).isInstance(seed.getNewPlant(p)));
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+				InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+			ex.printStackTrace();
+			fail();
+		}
+	}
+	
 }

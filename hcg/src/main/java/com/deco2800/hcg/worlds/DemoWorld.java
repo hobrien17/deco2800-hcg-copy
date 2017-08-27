@@ -7,6 +7,7 @@ import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.renderers.Renderable;
+import com.deco2800.hcg.entities.NPC;
 
 import java.util.Random;
 
@@ -39,9 +40,16 @@ public class DemoWorld extends AbstractWorld {
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {
-			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0));
+			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0,i+1));
 		}
 		
+		//Add an example quest NPC
+		this.addEntity(new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.Quest, "character_1") {});
+
+		//Add an example shop NPC
+		this.addEntity(new NPC(30,15,0,0.5f,0.5f,1.0f, false,"John","Jensen", NPC.Type.Shop, "character_shop") {});
+
+
 	}
 
 	/**
