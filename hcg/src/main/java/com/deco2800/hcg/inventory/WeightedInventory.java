@@ -76,9 +76,9 @@ public class WeightedInventory implements Inventory {
     
     @Override
     public boolean addItem(Item item) {
+        int toAdd = item.getStackSize();
         if(this.canInsert(item)) {
             if(item.isStackable()) {
-                int toAdd = item.getStackSize();
                 for(int i = 0; i < this.items.size(); i++) {
                     Item currentItem = this.getItem(i);
                     if(currentItem != null && item.sameItem(currentItem)) {
@@ -86,22 +86,21 @@ public class WeightedInventory implements Inventory {
                             toAdd -= currentItem.getMaxStackSize() - currentItem.getStackSize();
                             currentItem.setStackSize(currentItem.getMaxStackSize());
                         } else {
-                            toAdd = 0;
+                            return true;
                         }
                     }
                     
                     if(toAdd <= 0) {
-                        break;
+                        return true;
                     }
                 }
                 
                 if(toAdd > 0) {
                     item.setStackSize(toAdd);
-                    this.items.add(item);
                 }
-            } else {
-                this.items.add(item);
             }
+
+            this.items.add(item);
             
             return true;
         }
