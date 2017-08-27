@@ -45,6 +45,7 @@ public class MapGenerator {
 		levelsBoss = new ArrayList<>();
 		levelsOfType = new ArrayList<>();
 		levelsNotOfType = new ArrayList<>();
+		levelsNonBoss = new ArrayList<>();
 	}
 	
 	/**
