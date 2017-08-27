@@ -9,20 +9,15 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
 import com.deco2800.hcg.entities.garden_entities.plants.Grass;
 import com.deco2800.hcg.entities.garden_entities.plants.Ice;
 import com.deco2800.hcg.entities.garden_entities.plants.Inferno;
-import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.TimeManager;
 
 public class GardenTest {
 	
@@ -134,6 +129,9 @@ public class GardenTest {
 		}
 	}
 	
+	/*
+	 * Tests the details of all in-game seeds
+	 */
 	@Test
 	public void testAllSeeds() {
 		Seed.Type[] types = {Seed.Type.EXPLOSIVE, Seed.Type.FIRE, Seed.Type.GRASS, Seed.Type.ICE, Seed.Type.SUNFLOWER,
@@ -145,6 +143,9 @@ public class GardenTest {
 		}
 	}
 	
+	/*
+	 * Tests that the plant returns valid loot
+	 */
 	private void testLoot(AbstractGardenPlant plant) {
 		assertNotEquals(plant.getLoot().length, 0);
 		assertNotEquals(plant.loot().length, 0);
@@ -152,10 +153,16 @@ public class GardenTest {
 		assertTrue(plant.checkLootRarity());
 	}
 	
+	/*
+	 * Tests that the name of the plant is correct
+	 */
 	private void testName(AbstractGardenPlant plant) {
 		assertEquals(plant.getName(), names.get(plant.getClass()));
 	}
 	
+	/*
+	 * Tests that the plant's sprite is correct, depending on its stage
+	 */
 	private void testSprite(AbstractGardenPlant plant, Pot pot) {
 		
 		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.SPROUT);
@@ -174,6 +181,9 @@ public class GardenTest {
 		assertEquals(pot.getTexture(), sprites.get(plant.getClass()) + "_03");
 	}
 
+	/*
+	 * Tests that a seed's details are correct
+	 */
 	private void testSeedDetails(Seed seed) {
 		Pot p = new Pot(5, 5, 0);
 		assertEquals(seed.getName(), seedNames.get(seed.getType()));
@@ -181,7 +191,6 @@ public class GardenTest {
 			assertTrue(seedPlants.get(seed.getType()).isInstance(seed.getNewPlant(p)));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-			ex.printStackTrace();
 			fail();
 		}
 	}

@@ -1,20 +1,8 @@
 package com.deco2800.hcg.items;
 
-public abstract class StackableItem implements Item{
+public abstract class StackableItem extends GenericItem{
     protected int maxStackSize;
     protected int currentStackSize;
-    protected int baseValue;
-    protected int itemWeight;
-    protected String itemName;
-    protected String texture;
-    /**
-     * Retrieves an items display name
-     * @return Name of item as String
-     */
-    @Override
-    public String getName() {
-        return this.itemName;
-    }
 
     /**
      * Returns the current stack size of this item.
@@ -66,30 +54,6 @@ public abstract class StackableItem implements Item{
     }
 
     /**
-     * Retrieves the base value of this particular item.
-     *
-     * @return The base value of this item.
-     */
-    @Override
-    public int getBaseValue() {
-        return this.baseValue;
-    }
-
-
-    /**
-     * Function for setting the icon of an item
-     * Implemented similar to the AbstractEntitry texture. Be sure to register texture with
-     * TextureRegister before assigning the texture to a item
-     *
-     * @param texture : filename of texture
-     * @throws IllegalArgumentException if texture is an invalid file name
-     */
-    @Override
-    public void setTexture(String texture) throws IllegalArgumentException {
-        // TODO: implement textures
-    }
-
-    /**
      * Function for adding a number of an item to the stack of the current item.
      * Note that for non stackable items, this always returns false;
      *
@@ -131,16 +95,5 @@ public abstract class StackableItem implements Item{
     public boolean sameItem(Item item) throws IllegalArgumentException {
         // for stackable items we compare if strings are the same
         return this.itemName.equals(item.getName());
-    }
-
-    /**
-     * Determine whether or not this Item and the given Item are equivalent items.
-     *
-     * @param item : The item to compare this item to.
-     * @return whether or not this item and the given item are equivalent.
-     */
-    @Override
-    public boolean equals(Item item) throws IllegalArgumentException{
-        return this==item;
     }
 }

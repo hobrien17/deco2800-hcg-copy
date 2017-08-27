@@ -613,10 +613,10 @@ public class Player extends Character implements Tickable {
 
     public Inventory getInventory(){
 		return inventory;
-    }
-    
-    public boolean addItemToInventory(Item item){
-    	return inventory.addItem(item);
-    }
+	}
+
+	public boolean addItemToInventory(Item item) {
+		return inventory.addItem(item);
+	}
 
 }
