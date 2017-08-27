@@ -1,6 +1,6 @@
 package com.deco2800.hcg.items;
 
-public abstract class GenericItem implements Item{
+public abstract class GenericItem implements Item {
     protected int baseValue;
     protected int itemWeight;
     protected String itemName;
