@@ -62,9 +62,10 @@ public interface Shop {
      *
      * @param item
      *          The stock to buy
-     * @return void, function should modify player's inventory directly
+     * @return 0 if bought successfully, 1 if no items available to buy, 2 if no space in player's inventory, 3 if not
+     * enough currency in player's inventory
      */
-    public void buyStock(Item item);
+    public int buyStock(Item item);
 
     /**Method to buy a number of the specified stock item
      *
@@ -72,14 +73,16 @@ public interface Shop {
      *          The item to buy
      * @param number
      *          The number to buy
-     * @return void, function should modify player's inventory directly
+     * @return 0 if bought successfully, 1 if no items available to buy, 2 if no space in player's inventory, 3 if not
+     * enough currency in player's inventory
      */
-    public void buyStock(Item item, int number);
+    public int buyStock(Item item, int number);
 
     /**Method to sell an item of stock to the shop
      *
      * @param item
      *          Item that is to be sold
+     * @return 0 if sold successfully, 1 if player cannot accept more currency
      */
-    public void sellStock(Item item);
+    public int sellStock(Item item);
 }

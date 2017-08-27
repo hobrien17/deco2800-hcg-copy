@@ -173,7 +173,31 @@ public class WeightedInventory implements Inventory {
             }
             return true;
         }
-        
+        return false;
+    }
+
+    @Override
+    public boolean removeItem(Item item, int number) {
+        if(this.containsItem(item)) {
+            int toRemove = number;
+            for(int i = 0; i < this.items.size(); i++) {
+                Item currentItem = this.getItem(i);
+                if(currentItem != null && item.sameItem(currentItem)) {
+                    if(toRemove >= currentItem.getStackSize()) {
+                        toRemove -= currentItem.getStackSize();
+                        this.removeItem(i);
+                    } else {
+                        currentItem.setStackSize(currentItem.getStackSize() - toRemove);
+                        toRemove = 0;
+                    }
+                }
+
+                if(toRemove <= 0) {
+                    break;
+                }
+            }
+            return true;
+        }
         return false;
     }
 
@@ -183,7 +207,7 @@ public class WeightedInventory implements Inventory {
         for(Item currentItem : this.items) {
             if(item.sameItem(currentItem)) {
                 numFound += currentItem.getStackSize();
-                
+
                 if(numFound >= item.getStackSize()) {
                     return true;
                 }

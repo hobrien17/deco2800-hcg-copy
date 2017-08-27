@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.TestItem;
 import com.deco2800.hcg.items.TestUniqueItem;
@@ -19,14 +20,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneralShopTest {
 	Item item1 = new TestUniqueItem("test1",2);
 	Item item2 = new TestItem();
+	BasicSeed seeds = new BasicSeed();
 	Item arrayOfThings[] = {item1,item2};
 	int arrayOfAmounts[] = {1,2};
     GameManager gameManager;
@@ -59,6 +58,8 @@ public class GeneralShopTest {
         when(mapProperties.get("tileheight")).thenReturn(32);
 
         when(layer.getProperties()).thenReturn(mapProperties);
+
+        seeds.addToStack(50);
     }
 	
     @Test
@@ -97,12 +98,12 @@ public class GeneralShopTest {
     public void testBuyingStock(){
     	Shop shop = new GeneralShop();
     	Player player = new Player(0,0,0);
+        player.getInventory().addItem(seeds);
     	shop.open(0, player);
     	shop.addStock(arrayOfThings, arrayOfAmounts);
     	shop.buyStock(item1);
     	assertEquals(0, shop.inStock(item1));
     	player.getInventory().addItem(item1);
-    	System.out.println(item1.equals(item1));
         assertThat(player.getInventory().containsItem(item1), is(equalTo(true)));
     	assertThat(player.getInventory().containsItem(item2), is(equalTo(false)));
     	
