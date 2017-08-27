@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Tickable;
 
 /**
  * An entity that contains a plant
