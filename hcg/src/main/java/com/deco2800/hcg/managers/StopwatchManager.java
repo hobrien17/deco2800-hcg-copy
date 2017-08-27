@@ -16,7 +16,9 @@ public class StopwatchManager extends Manager implements TickableManager {
 	private int seconds;
 	private int minutes;
 
+	private int delay;
 	private int timedMinutes;
+
 
 	/**
 	 * Constructor: Initializes the stopwatch with no time limit.
@@ -37,6 +39,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 * 
 	 */
 	public void startTimer(int timeLimit) {
+		this.delay = timeLimit;
 		this.timedMinutes = timeLimit;
 	}
 
@@ -73,7 +76,9 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public float getStopwatchTime() {
 		float result = this.minutes;
-		float secondsFraction = this.seconds / 60;
+
+		float secondsFraction = this.seconds/60f;
+
 		return result + secondsFraction;
 	}
 
@@ -98,10 +103,13 @@ public class StopwatchManager extends Manager implements TickableManager {
 		if (this.timedMinutes != 0 && this.minutes >= this.timedMinutes) {
 			this.timerFinished = true;
 			setChanged();
+			timedMinutes += delay;
 		}
 
-		if (hasChanged()) {
-			notifyObservers();
+		
+		if (hasChanged()){
+			notifyObservers(getStopwatchTime());
+
 		}
 		clearChanged();
 	}
