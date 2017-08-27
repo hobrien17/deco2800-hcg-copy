@@ -1,6 +1,7 @@
 package com.deco2800.hcg.items;
 
-/** Item interface provides a high level guide for others to implement custom items.
+/**
+ * Item interface provides a high level guide for others to implement custom items.
  * The following methods outline the most basic methods an item requires
  * See the basicItem java class for an example implementation of this interface. Not that simple items are not stackable.
  * For items that are required to be stacked, use the StackableItem interface.
@@ -17,33 +18,102 @@ package com.deco2800.hcg.items;
  * isWearable: A simple boolean return value representing whether the item can be equipped/worn by a user. These
  *              items dont necessarily need to provide damange protection to the character and could simply be a
  *              customization item.
+ * @authors coppers-j, willcs, raymogg
  **/
 public interface Item {
     /**Each item has four required fields: name, isStackable (a boolean value), itemWeight and itemIcon **/
+    boolean isStackable();
 
-    /** Function for returning the name of an item **/
+    /**
+     * Retrieves an items display name
+     * @return Name of item as String
+     */
     String getName();
 
-    /**Function for getting the max stack size. 1 indicates a non stackable item */
-    int maxStackSize();
+    /**
+     * Returns the current stack size of this item.
+     *
+     * @return the current stack size of this item. Always returns 1 for
+     *         non-stackable items.
+     */
+    int getStackSize();
 
-    /** Function for returning whether an item is wearable/equipable by a user
-     * eg armour, character customization items */
+    /**
+     * Retrieves the stack limit of item type
+     * @return Maximum stack size of item
+     */
+    int getMaxStackSize();
+
+    /**
+     * Checks if the item is armour or character customisation item
+     * @return Whether or not item is wearable
+     */
     boolean isWearable();
 
-    /** Function for returning the total weight of this item. For stackable items this is equal to itemWeight * stackSize **/
+    /**
+     * Checks if item is a weapon/ potion etc. and can be held in hot bar
+     * @return Whether or not item can be equipped in hot bar
+     */
+    boolean isEquippable();
+    
+    /**
+     * Retrieves the total weight of current stack of items
+     * @return Item weight multiplied by current stack size
+     */
     int getWeight();
 
-    /** Function for setting the icon of an item
-     * Implemented similar to the AbstractEntitry texture. Be sure to register texture with
-     * TextureRegister before assigning the texture to a item*/
-    void setTexture(String texture);
+    /**
+     * Retrieves the base value of this particular item.
+     * @return The base value of this item.
+     */
+    int getBaseValue();
 
-    /** Function for adding a number of an item to the stack of the current item.
+    /**
+     * Checks whether or not this item is able to be sold to shops.
+     * @return Whether or not this item can be traded.
+     */
+    boolean isTradable();
+
+    /**
+     * Function for setting the icon of an item
+     * Implemented similar to the AbstractEntitry texture. Be sure to register texture with
+     * TextureRegister before assigning the texture to a item
+     * @param texture filename of texture
+     * @throws IllegalArgumentException if texture is an invalid file name
+     */
+    void setTexture(String texture) throws IllegalArgumentException;
+
+    /**
+     * Function for adding a number of an item to the stack of the current item.
      * Note that for non stackable items, this always returns false;
-     * @param number: the number of items to add to this items stack
+     * @param number the number of items to add to this items stack
      * @return true or false depending on whether the item was added or not
+     * @throws IllegalArgumentException if number is too large or less than 1
      */
     boolean addToStack(int number);
 
+    /**
+     * Set this item's current stack size to the given number.
+     *
+     * @param number the new stack size of this item.
+     */
+    void setStackSize(int number) throws IllegalArgumentException;
+
+    /**
+     * Determine whether or not this Item and the given Item are functionally the
+     * same item. Disregard stack size.
+     *
+     * @param item The item to compare this item to.
+     * @return whether or not this item and the given item are functionally the
+     *         same.
+     */
+    boolean sameItem(Item item) throws IllegalArgumentException;
+
+    /**
+     * Determine whether or not this Item and the given Item are equivalent items.
+     *
+     * @param item The item to compare this item to.
+     * @return whether or not this item and the given item are equivalent.
+     */
+    boolean equals(Item item) throws IllegalArgumentException;
 }

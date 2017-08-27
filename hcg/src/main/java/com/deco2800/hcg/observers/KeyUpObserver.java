@@ -5,6 +5,11 @@ package com.deco2800.hcg.observers;
  */
 public interface KeyUpObserver {
 
-	void notifyKeyUp(int keycode);
+    /**
+     * Runs when a key up is detected.
+     *
+     * @param keycode the code of the keyboard key that was released
+     */
+    void notifyKeyUp(int keycode);
 
 }

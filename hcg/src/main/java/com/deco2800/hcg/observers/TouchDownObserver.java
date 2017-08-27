@@ -5,7 +5,15 @@ package com.deco2800.hcg.observers;
  */
 public interface TouchDownObserver {
 
-	void notifyTouchDown(int screenX, int screenY, int pointer, int button);
+    /**
+     * Runs when a touch down event is detected at the given position
+     *
+     * @param screenX the x position on the screen
+     * @param screenY the y position on the screen
+     * @param pointer <unknown>
+     * @param button <unknown>
+     */
+    void notifyTouchDown(int screenX, int screenY, int pointer, int button);
 
 
 }

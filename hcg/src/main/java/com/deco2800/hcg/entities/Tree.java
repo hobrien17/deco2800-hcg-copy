@@ -4,8 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Simple tree to test the engine.
- * This tree is a hasProgress to test that interface
+ * Simple tree to test the engine. This tree is a hasProgress to test that
+ * interface
+ *
  * @Author Tim Hadwen
  */
 public class Tree extends AbstractEntity implements HasProgress {
@@ -14,9 +15,6 @@ public class Tree extends AbstractEntity implements HasProgress {
 
     /**
      * Constructor for a Tree
-     * @param posX
-     * @param posY
-     * @param posZ
      */
     public Tree(float posX, float posY, float posZ) {
         super(posX, posY, posZ, 1f, 1f, 1f);

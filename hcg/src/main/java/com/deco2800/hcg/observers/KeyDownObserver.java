@@ -5,7 +5,12 @@ package com.deco2800.hcg.observers;
  */
 public interface KeyDownObserver {
 
-	void notifyKeyDown(int keycode);
+    /**
+     * Runs when a key down is detected
+     *
+     * @param keycode the keyboard key that was pressed
+     */
+    void notifyKeyDown(int keycode);
 
 
 }

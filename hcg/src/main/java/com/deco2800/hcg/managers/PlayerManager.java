@@ -4,30 +4,27 @@ import com.deco2800.hcg.entities.Player;
 
 /**
  * PlayerManager for managing the Player instance.
- * 
- * @author leggy
  *
+ * @author leggy
  */
 public class PlayerManager extends Manager {
 
-	private Player player;
+    private Player player;
 
-	/**
-	 * Sets the player.
-	 * 
-	 * @param player
-	 */
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
+    /**
+     * Sets the player.
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
-	/**
-	 * Gets the player.
-	 * 
-	 * @return Returns the player.
-	 */
-	public Player getPlayer() {
-		return this.player;
-	}
+    /**
+     * Gets the player.
+     *
+     * @return Returns the player.
+     */
+    public Player getPlayer() {
+        return this.player;
+    }
 
 }

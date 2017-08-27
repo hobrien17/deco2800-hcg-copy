@@ -7,13 +7,13 @@ import com.deco2800.hcg.renderers.Renderable;
 import java.util.Optional;
 
 /**
- * A utility class for the World instances
- * Created by timhadwen on 23/7/17.
+ * A utility class for the World instances Created by timhadwen on 23/7/17.
  */
 public class WorldUtil {
 
 	/**
 	 * Finds the closest entity to a position within a delta
+	 * 
 	 * @param x
 	 * @param y
 	 * @param delta
@@ -23,6 +23,7 @@ public class WorldUtil {
 		AbstractEntity result = null;
 		double distance = Double.MAX_VALUE;
 		for (Renderable r : GameManager.get().getWorld().getEntities()) {
+
 			double tempDistance = Math.sqrt(Math.pow((r.getPosX() - x), 2) + Math.pow((r.getPosY() - y), 2));
 
 			if (tempDistance < distance) {
@@ -31,7 +32,36 @@ public class WorldUtil {
 				result = (AbstractEntity) r;
 			}
 		}
-		if (distance < delta){
+		if (distance < delta) {
+			return Optional.of(result);
+		} else {
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Finds the closest entity of given type to a position within a delta
+	 * 
+	 * @param x
+	 * @param y
+	 * @param delta
+	 * @return Optional of WorldEntity
+	 */
+	public static Optional<AbstractEntity> closestEntityToPosition(float x, float y, float delta, Class<?> type) {
+		AbstractEntity result = null;
+		double distance = Double.MAX_VALUE;
+		for (Renderable r : GameManager.get().getWorld().getEntities()) {
+			if (type.isInstance(r)) {
+				double tempDistance = Math.sqrt(Math.pow((r.getPosX() - x), 2) + Math.pow((r.getPosY() - y), 2));
+
+				if (tempDistance < distance) {
+					// Closer than current closest
+					distance = tempDistance;
+					result = (AbstractEntity) r;
+				}
+			}
+		}
+		if (distance < delta) {
 			return Optional.of(result);
 		} else {
 			return Optional.empty();

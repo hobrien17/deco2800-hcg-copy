@@ -8,6 +8,11 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.deco2800.hcg.managers.GameManager;
+
 /**
  * Asynchronous UDP networking
  * 
@@ -15,11 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  */
 public final class NetworkState {
+	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+	
 	static DatagramSocket socket;
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
 	static ConcurrentHashMap<Integer, SocketAddress> peers; // the "lobby"
 	static ConcurrentHashMap<Integer, Message> sendQueue;
+	private static boolean initialised = false;
 	private static NetworkSend networkSend;
 	private static NetworkReceive networkReceive;
 	private static Thread sendThread;
@@ -46,7 +54,7 @@ public final class NetworkState {
 				socket = new DatagramSocket();
 			}
 		} catch (SocketException e) {
-			e.printStackTrace();
+			LOGGER.error("Failed to initialise socket", e);
 		}
 		
 		// initialise threads
@@ -57,6 +65,16 @@ public final class NetworkState {
 		// start the networking send/receive threads
 		sendThread.start();
 		receiveThread.start();
+		
+		initialised = true;
+	}
+	
+	/**
+	 * Check if network state is initialised
+	 * @return Boolean indicating if network state has been initialised
+	 */
+	public static boolean isInitialised() {
+		return initialised;
 	}
 	
 	/**
@@ -117,7 +135,7 @@ public final class NetworkState {
 							// log
 							System.out.println("SENT: " + message.getType().toString());
 						} catch (Exception e) {
-							e.printStackTrace();
+							LOGGER.error("Failed to send message", e);
 						}
 					}
 				}
@@ -180,7 +198,7 @@ public final class NetworkState {
 						NetworkState.socket.send(confirmPacket);
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error("Failed to receive message", e);
 				}
 			}
 		}
