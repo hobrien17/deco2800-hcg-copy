@@ -5,6 +5,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.worlds.AbstractWorld;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,15 +16,12 @@ import java.util.Random;
  */
 public class Squirrel extends Enemy implements Tickable {
 
-	private float speed = 0.03f;
-	
-	private Random random;
+	// private float speed = 0.03f;
 	private boolean collided;
 
 	public Squirrel(float posX, float posY, float posZ, int ID) {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
-		this.random = new Random();
 		this.level = 1;
 	}
 
@@ -61,6 +59,10 @@ public class Squirrel extends Enemy implements Tickable {
 			newPos = getBox3D();
 			newPos.setX(this.getPosX());
 			newPos.setY(this.getPosY());
+		}
+		AbstractWorld world = GameManager.get().getWorld();
+		if (world.getTiledMapTileLayerAtPos((int) newPos.getX(), (int) newPos.getY()) == null) {
+			collided = true;
 		}
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		collided = false;
