@@ -5,6 +5,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.worlds.AbstractWorld;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,10 @@ public class Squirrel extends Enemy implements Tickable {
 			newPos = getBox3D();
 			newPos.setX(this.getPosX());
 			newPos.setY(this.getPosY());
+		}
+		AbstractWorld world = GameManager.get().getWorld();
+		if (world.getTiledMapTileLayerAtPos((int) newPos.getX(), (int) newPos.getY()) == null) {
+			collided = true;
 		}
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		collided = false;
