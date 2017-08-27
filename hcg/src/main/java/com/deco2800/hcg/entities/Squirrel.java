@@ -54,7 +54,7 @@ public class Squirrel extends Enemy implements Tickable {
 		} else if (this.getStatus() == 2){
 			this.moveToPlayer();
 		} else if (this.getStatus() == 3){
-			this.moveToPlayer();
+            this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
 		}
 		Box3D newPos = getBox3D();
 		newPos.setX(this.getPosX());
@@ -75,7 +75,7 @@ public class Squirrel extends Enemy implements Tickable {
 			} else if (this.getStatus() == 2){
 				this.moveToPlayer();
 			} else if (this.getStatus() == 3){
-				this.moveToPlayer();
+				this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
 			}
 		}
 		// Apply any effects that exist on the entity

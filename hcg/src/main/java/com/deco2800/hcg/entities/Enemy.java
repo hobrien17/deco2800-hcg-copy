@@ -67,6 +67,23 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     public int getID() { return ID; }
 
     /**
+     * Gets the last position X of player.
+     *
+     * @return the last position X of player
+     */
+    public float getLastPlayerX(){
+        return this.lastPlayerX;
+    }
+
+    /**
+     * Gets the last position Y of player.
+     *
+     * @return the last position Y of player
+     */
+    public float getLastPlayerY(){
+        return this.lastPlayerY;
+    }
+    /**
      * Take the damage inflicted by the other entities
      * 
      * @param damage: the amount of the damage
@@ -242,7 +259,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
                 this.setStatus(1);
             }
         }
-    }    
+    }
 
     /**
      * Randomly go to next position which is inside the circle(Maximum distance depends on enemy level.)
