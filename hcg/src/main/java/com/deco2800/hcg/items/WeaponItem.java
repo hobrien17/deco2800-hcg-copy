@@ -1,6 +1,6 @@
 package com.deco2800.hcg.items;
 
-import com.deco2800.hcg.entities.Weapon;
+import com.deco2800.hcg.weapons.Weapon;
 
 public class WeaponItem extends SingleItem {
     private Weapon weapon;
