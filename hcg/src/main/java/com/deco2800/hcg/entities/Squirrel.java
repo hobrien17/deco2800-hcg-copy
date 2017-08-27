@@ -17,8 +17,6 @@ public class Squirrel extends Enemy implements Tickable {
 
 	private float speed = 0.1f;
 	
-	private ItemManager itemManager;
-	
 	private Random random;
 
 	public Squirrel(float posX, float posY, float posZ, int ID) {
@@ -79,7 +77,7 @@ public class Squirrel extends Enemy implements Tickable {
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
 				if(entity instanceof Player) {
-				    this.shoot(this);
+				    //this.shoot(this);
 					this.causeDamage((Player)entity);
 				}
 				collided = true;
