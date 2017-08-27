@@ -17,11 +17,6 @@ import org.slf4j.LoggerFactory;
  *
  * This class extends the character class as the functionality provided there is built upon by the NPCs
  *
- *
- *
- *
- *
- *
  * @author guthers
  */
 
@@ -40,12 +35,12 @@ public abstract class NPC extends Character implements Tickable {
     }
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
-    public String fName;
-    public String sName;
-    public NPC.Type NPCType;
+    //private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
+    private String fName;
+    private String sName;
+    private NPC.Type NPCType;
 
-    public NPC.movementType NPCMoveType;
+    private NPC.movementType NPCMoveType;
     private PlayerManager playerManager;
     private Random random;
 
@@ -125,7 +120,7 @@ public abstract class NPC extends Character implements Tickable {
         Box3D newPos = getBox3D();
         float changeX = 0.0f;
         float changeY = 0.0f;
-        boolean collided = false;
+        boolean collided;
         int timeout = 100;
         int timeout_count = 0;
 
@@ -163,13 +158,15 @@ public abstract class NPC extends Character implements Tickable {
                     changeX = -this.movementSpeed;
                     changeY = 0.0f;
                     break;
+
+                default:
+                    changeX = 0.0f;
+                    changeY = 0.0f;
             }
 
             //Stop when in close proximity to player
             //Currently bugged, one or both of this coordinates if offset significantly to the left.
             if (this.distance(playerManager.getPlayer()) < 2.5f) {
-                changeX = 0.0f;
-                changeY = 0.0f;
                 return;
             }
 
