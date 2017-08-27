@@ -210,7 +210,7 @@ public abstract class NPC extends Character implements Tickable {
     /**
      * Dictates what happens when the player interacts with the NPC
      */
-    public void interaction() {
+    public void Interaction() {
 
         if (NPCType == Type.Shop) {
             //TODO: open shop menu
