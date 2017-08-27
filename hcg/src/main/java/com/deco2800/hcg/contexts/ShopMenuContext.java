@@ -14,8 +14,9 @@ import com.deco2800.hcg.managers.TimeManager;
 
 /**
  * Shop Menu
- *
- * @author(s) willc138 georgesburt97
+ * Extention of UIContext that initialises the shop menu when the context is pushed.
+ * @author willc138
+ * @author georgesburt97
  */
 public class ShopMenuContext extends UIContext {
 
