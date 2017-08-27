@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.multiplayer.NetworkState;
 
 /**
  * Multiplayer Menu
@@ -60,11 +61,11 @@ public class MultiplayerMenuContext extends UIContext {
 		table.add(back);
 		stage.addActor(table);
 		
-		
-		// Change this to implement Multiplayer
 		go.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				NetworkState.init(false);
+				NetworkState.join(name.getText());
 				contextManager.pushContext(new PlayContext());
 			}
 		});
@@ -72,6 +73,7 @@ public class MultiplayerMenuContext extends UIContext {
 		host.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				NetworkState.init(true);
 				contextManager.pushContext(new PlayContext());
 			}
 		});
