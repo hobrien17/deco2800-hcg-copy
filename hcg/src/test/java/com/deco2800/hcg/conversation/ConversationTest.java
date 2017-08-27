@@ -1,5 +1,6 @@
 package com.deco2800.hcg.conversation;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,16 +26,31 @@ public class ConversationTest {
 	}
 	
 	@Test
-	public void testConversation(){
+	public void testConversationAnswerYesToAll(){
 		assert(conversation.nextSentence(true).equals("A"));
 		assert(conversation.nextSentence(true).equals("B"));
 		assert(conversation.nextSentence(true).equals("C"));
 		assert(conversation.nextSentence(true).equals("D"));
 		assert(conversation.nextSentence(true).equals("Okay, goodbye"));
 		assert(conversation.nextSentence(true).equals("A"));
-	
+		assert(conversation.greet().equals("Hello welcome"));
 	}
 	
+	@Test
+	public void testConversationAnswersNo(){
+		assert(conversation.nextSentence(true).equals("A"));
+		assert(conversation.nextSentence(true).equals("B"));
+		assert(conversation.nextSentence(false).equals("Okay, goodbye"));
+	}
+	
+	@Test
+	public void testConversationActivation(){
+		assert(conversation.conversationActive() == false);
+		conversation.activateConversation();
+		assert(conversation.conversationActive() == true);
+		conversation.deactivateConversation();
+		assert(conversation.conversationActive() == false);
+	}
 	
 
 }

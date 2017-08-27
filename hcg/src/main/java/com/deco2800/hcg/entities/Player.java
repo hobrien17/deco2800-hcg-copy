@@ -42,11 +42,11 @@ public class Player extends Character implements Tickable {
     private Weapon equippedWeapon;
     
     private Weapon peashooter = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.MACHINEGUN);
+            getPosY(), getPosZ(), WeaponType.MACHINEGUN, this);
     private Weapon shotgun = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.SHOTGUN);
+            getPosY(), getPosZ(), WeaponType.SHOTGUN, this);
     private Weapon stargun = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.STARFALL);
+            getPosY(), getPosZ(), WeaponType.STARFALL, this);
 
     /**
      * Creates a new player at specified position.
@@ -83,7 +83,6 @@ public class Player extends Character implements Tickable {
         // Set equipped weapon and enter game world
         equippedWeapon = peashooter;
         GameManager.get().getWorld().addEntity(equippedWeapon);
-        equippedWeapon.setUser(this);
 
         // for direction of movement
         movementDirection.put("left", false);
