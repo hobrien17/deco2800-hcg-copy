@@ -189,6 +189,10 @@ public final class NetworkState {
 						// remove message from send queue
 						if (NetworkState.sendQueue.remove(message.getPayloadInteger()) != null) {
 							System.out.println("REMOVED: " + removed.getType().toString());
+							// log ping
+							Integer ping = (int) ((System.currentTimeMillis() % Integer.MAX_VALUE)
+									- message.getPayloadInteger());
+							LOGGER.debug("PING: " + ping.toString());
 						}
 					} else {
 
