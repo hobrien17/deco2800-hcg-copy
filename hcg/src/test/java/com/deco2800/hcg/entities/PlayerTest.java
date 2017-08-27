@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class PlayerTest {
 		Player player = new Player(0, 0, 0);
 		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0);
 		
-		assertTrue("Player agility isn't set to value 0.", player.getAgility() == 0);
+		assertTrue("Player agility isn't set to value 0.", player.attributes.get("agility") == 0);
 
 	}
 
@@ -36,14 +37,14 @@ public class PlayerTest {
 
 		Player player = new Player(0, 0, 0);
 		player.setXp(0);
-		
+
 		assertTrue("Player xp isn't set to 0.", player.getXp() == 0);
 
 		player.gainXp(10);
 
 		assertTrue("Player xp wasn't gained.", player.getXp() == 10);
 	}
-	
+
 	@Test
 	public void testToString() {
 		
