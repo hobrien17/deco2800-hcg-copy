@@ -28,7 +28,7 @@ public class Effects {
     /**
      * Creates a new Effects container to store a set of active effects.
      *
-     * @param owner A reference to the owner of this set.
+     * @param owner A reference to the owner of this set. Must not be null.
      *
      * @throws NullPointerException if owner is null.
      */
@@ -47,7 +47,7 @@ public class Effects {
     /**
      * Creates a new Effects container to store a set of active effects.
      *
-     * @param owner A reference to the owner of this set.
+     * @param owner A reference to the owner of this set. Must not be null.
      * @param effects A non-null collection of effects to be merged into this set upon creation.
      *
      * @throws NullPointerException is owner is null, or effects is null.
@@ -101,12 +101,12 @@ public class Effects {
         // Do things depending on the level of the new effect, and whether it overrides a current effect.
         for (Effect effect : currentEffects) {
             // Only do things if the type of effects are the same
-            if (effect.getName().equals(newEffect.getName())) {
+            if (effect.getName().toUpperCase().equals(newEffect.getName().toUpperCase())) {
                 if (newEffect.getLevel() - effect.getLevel() > 0) {         // new effect is stronger
                     removeEffect(effect);
                     return addEffect(newEffect);
                 } else if (newEffect.getLevel() - effect.getLevel() == 0) { // effects are the same level
-                    effect.resetCooldownTimer();
+                    effect.resetUseCounter();
                     return true;
                 } else {    // new effect is weaker
                     return false;
@@ -168,18 +168,18 @@ public class Effects {
      * Attempts to apply each effect in the set of active effects to the owner. An effect is only applied if
      * it abides to the following conditions:
      *      - The effect is contained within the set of current effects
-     *      - The effect has a duration greater than 0
+     *      - The effect has a use counter greater than 0
      *      - The effect is not on a cooldown
      * When all of these conditions have been met, the effect is applied to the owner and the cooldown timer for the
      * effect is restarted.
      */
     public void apply() {
         for (Effect effect : currentEffects) {
-            if (effect.getDuration() == 0) {
+            if (effect.getUseCount() == 0) {
                 currentEffects.remove(effect);
                 continue;
             } else {
-                effect.decrementDuration();
+                effect.decrementUses();
             }
 
             if (!effect.onCooldown()) {
