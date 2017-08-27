@@ -86,7 +86,6 @@ public class GeneralShop implements Shop{
         player.getInventory().removeItem(item);
         if (!player.getInventory().addItem(seed)) {
             player.getInventory().addItem(item);
-            System.out.println("fds");
             return 1;
         }
         if (shopStock.containsKey(item)) {
