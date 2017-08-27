@@ -23,6 +23,9 @@ public class Effects {
     // applied to the owner.
     private AbstractEntity owner;
 
+    // Store a copy of the original attributes of the owner (allows for temporary effects to take place)
+    // Maybe initialise this to -1 or something? That way if there is more than one effect that modifies the
+    // attribute, it won't overwrite the value.
     //private int originalSlow;
 
     public Effects(AbstractEntity owner) {
@@ -68,11 +71,11 @@ public class Effects {
         currentEffects.remove(effect);
     }
 
-    public void execute() {
+    public void apply() {
         for (Effect e : currentEffects) {
             if (e.getDuration() == 0) {
                 currentEffects.remove(e);
-                break;
+                continue;
             } else {
                 e.decrementDuration();
             }
@@ -92,5 +95,24 @@ public class Effects {
             }
         }
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Effects effects = (Effects) o;
+
+        if (currentEffects != null ? !currentEffects.equals(effects.currentEffects) : effects.currentEffects != null)
+            return false;
+        return owner != null ? owner.equals(effects.owner) : effects.owner == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = currentEffects != null ? currentEffects.hashCode() : 0;
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        return result;
     }
 }

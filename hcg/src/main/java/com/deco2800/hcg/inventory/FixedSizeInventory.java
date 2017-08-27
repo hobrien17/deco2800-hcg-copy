@@ -74,6 +74,32 @@ public class FixedSizeInventory implements Inventory {
         
         return false;
     }
+
+    @Override
+    public boolean removeItem(Item item, int number) {
+        if(this.containsItem(item)) {
+            int toRemove = number;
+            for(int i = 0; i < this.getMaxSize(); i++) {
+                Item currentItem = this.items[i];
+                if(currentItem != null && item.sameItem(currentItem)) {
+                    if(toRemove >= currentItem.getStackSize()) {
+                        toRemove -= currentItem.getStackSize();
+                        this.removeItem(i);
+                    } else {
+                        currentItem.setStackSize(currentItem.getStackSize() - toRemove);
+                        toRemove = 0;
+                    }
+                }
+
+                if(toRemove <= 0) {
+                    break;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
     
     @Override
     public boolean canInsert(Item item) {
@@ -160,7 +186,7 @@ public class FixedSizeInventory implements Inventory {
                     item.setStackSize(toAdd);
                 }
             }
-            
+
             for(int i = 0; i < this.getMaxSize(); i++) {
                 if(items[i] == null && allowItemInSlot(item, i)) {
                     items[i] = item;
@@ -175,11 +201,12 @@ public class FixedSizeInventory implements Inventory {
     @Override
     public boolean containsItem(Item item) {
         int numFound = 0;
+
         for(int i = 0; i < this.getMaxSize(); i++) {
             if(this.items[i] != null && this.items[i].sameItem(item)) {
                 numFound += this.items[i].getStackSize();
-                
                 if(numFound >= item.getStackSize()) {
+
                     return true;
                 }
             }
