@@ -24,21 +24,17 @@ public class StopwatchManagerTests {
 		
 		// See if the minute component follows (to avoid trickery 
 		// with float equality)
-		Assert.assertTrue((int) stopwatch.getStopwatchTime() == 1);
+		Assert.assertTrue("Stopwatch not returning correct time value",
+				(int) stopwatch.getStopwatchTime() == 1);
 		
-		Assert.assertFalse((int) stopwatch.getStopwatchTime() != 1);
+		Assert.assertFalse("Stopwatch not returning correct time value",
+				(int) stopwatch.getStopwatchTime() != 1);
 		
-		Assert.assertFalse((int) stopwatch.getStopwatchTime() == 0);
+		Assert.assertFalse("Stopwatch not returning correct time value",
+				(int) stopwatch.getStopwatchTime() == 0);
 		
-		Assert.assertFalse((int) stopwatch.getStopwatchTime() == 2);
-		
-		//test to see if Stopwatch reset has worked. 
-		stopwatch.resetStopwatch();
-		
-		Assert.assertTrue((int) stopwatch.getStopwatchTime() == 0);
-		
-		Assert.assertFalse((int) stopwatch.getStopwatchTime() != 0);
-		
+		Assert.assertFalse("Stopwatch not returning correct time value",
+				(int) stopwatch.getStopwatchTime() == 2);	
 
 	}
 	
@@ -49,11 +45,14 @@ public class StopwatchManagerTests {
 		//test to see if Stopwatch reset has worked. 
 		stopwatch.resetStopwatch();
 		
-		Assert.assertTrue((int) stopwatch.getStopwatchTime() == 0);
+		Assert.assertTrue("Stopwatch has not reset",
+				(int) stopwatch.getStopwatchTime() == 0);
 		
-		Assert.assertFalse((int) stopwatch.getStopwatchTime() == 1);
+		Assert.assertFalse("Stopwatch has not reset",
+				(int) stopwatch.getStopwatchTime() == 1);
 		
-		Assert.assertFalse((int) stopwatch.getStopwatchTime() != 0);
+		Assert.assertFalse("Stopwatch has not reset",
+				(int) stopwatch.getStopwatchTime() != 0);
 		
 
 	}
@@ -68,8 +67,10 @@ public class StopwatchManagerTests {
 		}		
 		
 		// no timers set
-		Assert.assertFalse(stopwatch.getStatus());
-		Assert.assertFalse(stopwatchClean.getStatus());
+		Assert.assertFalse("Stopwatch should not have timer set",
+				stopwatch.getStatus());
+		Assert.assertFalse("Stopwatch should not have timer set",
+				stopwatchClean.getStatus());
 		
 		int timelimit = 2; // 2 minute limit
 	
@@ -77,8 +78,10 @@ public class StopwatchManagerTests {
 		stopwatchClean.startTimer(timelimit);
 		
 		// timers set, but not reached yet
-		Assert.assertFalse(stopwatch.getStatus());
-		Assert.assertFalse(stopwatchClean.getStatus());
+		Assert.assertFalse("Timer should not be finished",
+				stopwatch.getStatus());
+		Assert.assertFalse("Timer should not be finished",
+				stopwatchClean.getStatus());
 		
 		for(int i=0; i<50; i++) {
 			stopwatch.onTick(i);
@@ -86,8 +89,10 @@ public class StopwatchManagerTests {
 		}		
 		
 		// time elapsed
-		Assert.assertTrue(stopwatch.getStatus());
-		Assert.assertTrue(stopwatchClean.getStatus());
+		Assert.assertTrue("Timer should be finished",
+				stopwatch.getStatus());
+		Assert.assertTrue("Timer should be finished",
+				stopwatchClean.getStatus());
 
 		// I'm trusting that reset works
 		// switching order around a bit.
@@ -103,8 +108,10 @@ public class StopwatchManagerTests {
 			stopwatchClean.onTick(i);
 		}		
 		
-		Assert.assertFalse(stopwatchClean.getStatus());
-		Assert.assertFalse(stopwatch.getStatus());
+		Assert.assertFalse("Stopwatch should be reset",
+				stopwatchClean.getStatus());
+		Assert.assertFalse("Stopwatch should be reset",
+				stopwatch.getStatus());
 		
 		stopwatch.stopTimer();
 		
@@ -113,8 +120,10 @@ public class StopwatchManagerTests {
 			stopwatchClean.onTick(i);
 		}	
 		
-		Assert.assertTrue(stopwatchClean.getStatus());
-		Assert.assertFalse(stopwatch.getStatus());
+		Assert.assertTrue("Stopwatch should be finished",
+				stopwatchClean.getStatus());
+		Assert.assertFalse("Timer should be reset",
+				stopwatch.getStatus());
 
 	}
 

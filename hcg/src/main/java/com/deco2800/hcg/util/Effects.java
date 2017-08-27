@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * An effect container class to store the active effects on an entity.
  *
- * Every entity that implements harmable maintains an Effects object, to store a set of the
+ * Every entity that implements Harmable maintains an Effects object, to store a set of the
  * active effects on the entity.
  *
  * @author Alex Subaric (deadmeu)
@@ -29,6 +29,8 @@ public class Effects {
      * Creates a new Effects container to store a set of active effects.
      *
      * @param owner A reference to the owner of this set.
+     *
+     * @throws NullPointerException if owner is null.
      */
     public Effects(AbstractEntity owner) {
         // Check for valid arguments
@@ -46,7 +48,9 @@ public class Effects {
      * Creates a new Effects container to store a set of active effects.
      *
      * @param owner A reference to the owner of this set.
-     * @param effects A collection of effects to be merged into this set upon creation.
+     * @param effects A non-null collection of effects to be merged into this set upon creation.
+     *
+     * @throws NullPointerException is owner is null, or effects is null.
      */
     public Effects(AbstractEntity owner, Collection<Effect> effects) {
         // Check for valid arguments
@@ -83,9 +87,11 @@ public class Effects {
     /**
      * Adds a new effect to the set of active effects.
      *
-     * @param newEffect The effect to be added to the set.
+     * @param newEffect The effect to be added to the set. Must not be null.
      *
      * @return Returns true if the effect was applied, false otherwise.
+     *
+     * @throws NullPointerException if newEffect is null.
      */
     public boolean addEffect(Effect newEffect) {
         // TODO check to see if effect is already in there, if it is, reset the cooldown?
@@ -115,9 +121,11 @@ public class Effects {
     /**
      * Adds a collection of new effects to the set of active effects.
      *
-     * @param effects The collection of effects to be added to the set.
+     * @param effects The collection of effects to be added to the set. Must not be null.
      *
      * @return Returns true if the current effects set changed as a result of the call.
+     *
+     * @throws NullPointerException if effects is null.
      */
     public boolean addAllEffects(Collection<Effect> effects) {
         // TODO check to see if effect is already in there, if it is, reset the cooldown?
@@ -136,9 +144,11 @@ public class Effects {
     /**
      * Removes an effect from the set of active effects.
      *
-     * @param effect The effect to be removed from the set.
+     * @param effect The effect to be removed from the set. Must not be null.
      *
      * @return Returns true if this set contained the specified element
+     *
+     * @throws NullPointerException if effect is null.
      */
     public boolean removeEffect(Effect effect) {
         // TODO check to make sure the effects are actually in there
