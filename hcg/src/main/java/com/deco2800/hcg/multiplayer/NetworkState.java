@@ -185,11 +185,15 @@ public final class NetworkState {
 						// log
 						System.out.println("RECEIVED: " + message.getType().toString());
 					} else if (message.getType() == MessageType.CONFIRMATION) {
-						// get id for logging
+						// get message for logging
 						Message removed = NetworkState.sendQueue.get(message.getPayloadInteger());
 						// remove message from send queue
 						if (NetworkState.sendQueue.remove(message.getPayloadInteger()) != null) {
 							System.out.println("REMOVED: " + removed.getType().toString());
+							// log ping
+							Integer ping = (int) ((System.currentTimeMillis() % Integer.MAX_VALUE)
+									- message.getPayloadInteger());
+							LOGGER.debug("PING: " + ping.toString());
 						}
 					} else {
 						Message confirmMessage =
