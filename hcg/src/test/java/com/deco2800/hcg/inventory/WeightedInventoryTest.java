@@ -60,4 +60,6 @@ public class WeightedInventoryTest {
        /*assertThat("Improper amount of items in inventory.",
                inventory.getNumItems(), is(4));*/
     }
+
+
 }
