@@ -55,6 +55,22 @@ public abstract class NPC extends Character implements Tickable {
     private float shortWander_yMax = 0.0f;
     private int moveDirection = 0;
 
+    
+    /**
+     * Constructor for an NPC entity 
+     * 
+     * @param posX the x position
+     * @param posY the y position
+     * @param posZ the z position
+     * @param xLength the length of the character in regard to the x axis
+     * @param yLength the length of the character in regard to the y axis
+     * @param zLength the length of the character in regard to the z axis
+     * @param centered specifies if the entity is centered at the position or not
+     * @param fName NPC's first name
+     * @param sName NPC's surname
+     * @param NPCType NPC's type
+     * @param texture NPC's texture
+     */
     public NPC(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
                boolean centered,String fName,String sName,NPC.Type NPCType,String texture) {
 
@@ -90,18 +106,6 @@ public abstract class NPC extends Character implements Tickable {
 
         setTexture(texture);
 
-    }
-
-    private void interact() {
-        //What do we do with this NPC on click?
-        if (NPCType == Type.Shop) {
-            //Open Shop Menu
-            LOGGER.info("NPC SHOP CLICKED");
-        } else if (NPCType == Type.Quest) {
-            LOGGER.info("NPC QUEST CLICKED");
-        } else {
-            LOGGER.info("NPC OTHER CLICKED");
-        }
     }
 
     /**
@@ -202,5 +206,12 @@ public abstract class NPC extends Character implements Tickable {
         }
 
     }
+    /*
+        returns the type of the NPC
 
+        @returns NPC Type
+     */
+    public NPC.Type getNPCType() {
+        return this.NPCType;
+    }
 }

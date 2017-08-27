@@ -82,7 +82,7 @@ public class Bullet extends AbstractEntity implements Tickable {
      * Detects collision with entity and if enemy, apply effect of bullet.
      * After applying effect, bullet is removed from the world.
      */
-    public void enemyHit(){
+    private void enemyHit(){
         Box3D pos = getBox3D();
         pos.setX(getPosX());
         pos.setY(getPosY());
