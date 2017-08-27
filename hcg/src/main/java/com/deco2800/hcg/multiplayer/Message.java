@@ -1,6 +1,7 @@
 package com.deco2800.hcg.multiplayer;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import com.deco2800.hcg.managers.GameManager;
  * Represents a datagram packet sent via the networking system
  * 
  * @author Max Crofts
+ * Edit: Duc (Ethan) Phan
  *
  */
 public class Message {
