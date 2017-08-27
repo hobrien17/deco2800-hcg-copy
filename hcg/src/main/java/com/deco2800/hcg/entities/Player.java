@@ -233,22 +233,16 @@ public class Player extends Character implements Tickable {
 			int damagetype = -1;
 
 			if (layer.getProperties().get("damagetype") != null) {
-				damagetype = Integer.parseInt((String) layer.getProperties().get
-
-("damagetype"));
+				damagetype = Integer.parseInt((String) layer.getProperties().get("damagetype"));
 			}
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
-				this.setHealth(this.getHealth() - Integer.parseInt((String) layer.getProperties
-
-().get("damage")));
+				this.setHealth(this.getHealth() - Integer.parseInt((String) layer.getProperties().get("damage")));
 			}
 
 			// log
-			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + 
-
-speed);
+			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
 
 		}
 
@@ -260,12 +254,8 @@ speed);
 			float slipperyFactor2 = slippery * 0.06f;
 
 			// created helper function to avoid duplicate code
-			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed, slipperyFactor, 
-
-slipperyFactor2);
-			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed, slipperyFactor, 
-
-slipperyFactor2);
+			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed, slipperyFactor, slipperyFactor2);
+			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed, slipperyFactor, slipperyFactor2);
 
 		} else {
 			// non slippery movement
@@ -297,9 +287,7 @@ slipperyFactor2);
 
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps
-
-(entity.getBox3D())
+			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps(entity.getBox3D())
 					&& !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
 				LOGGER.info(this + " colliding with " + entity);
 				collided = true;
@@ -392,28 +380,6 @@ slipperyFactor2);
 	            GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 		        
 		    }
-			/*if (equippedWeapon.getWeaponType() == WeaponType.MACHINEGUN) {
-				GameManager.get().getWorld().removeEntity(equippedWeapon);
-				equippedWeapon = new WeaponBuilder().setWeaponType
-
-(WeaponType.SHOTGUN).setUser(this).setRadius(0.7)
-						.build();
-				GameManager.get().getWorld().addEntity(equippedWeapon);
-			} else if (equippedWeapon.getWeaponType() == WeaponType.SHOTGUN) {
-				GameManager.get().getWorld().removeEntity(equippedWeapon);
-				equippedWeapon = new WeaponBuilder().setWeaponType
-
-(WeaponType.STARFALL).setUser(this).setRadius(0.7)
-						.build();
-				GameManager.get().getWorld().addEntity(equippedWeapon);
-			} else {
-				GameManager.get().getWorld().removeEntity(equippedWeapon);
-				equippedWeapon = new WeaponBuilder().setWeaponType
-
-(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
-						.build();
-				GameManager.get().getWorld().addEntity(equippedWeapon);
-			}*/
 		default:
 			break;
 		}
@@ -496,9 +462,7 @@ slipperyFactor2);
 	 * Sets the player's movement speed to zero if no keys are pressed.
 	 */
 	private void handleNoInput() {
-		if (!movementDirection.get("up") && !movementDirection.get("down") && !
-
-movementDirection.get("left")
+		if (!movementDirection.get("up") && !movementDirection.get("down") && ! movementDirection.get("left")
 				&& !movementDirection.get("right")) {
 			speedX = 0;
 			speedY = 0;
@@ -519,31 +483,27 @@ movementDirection.get("left")
 	 *            Scalar for speeding up player
 	 * @return New lastSpeed
 	 */
-	private float slipperySpeedHelper(float speed, float lastSpeed, float tileSpeed, float slipperyFactor,
-			float slipperyFactor2) {
-		// speed up user in X dirn
-		float lastSpeedNew;
-		if (speed > 0) {
-			lastSpeedNew = Math.min(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * 
-
-tileSpeed);
-		} else if (speed < 0) {
-			lastSpeedNew = Math.max(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * 
-
-tileSpeed);
-		} else {
-			// slow down user
-			if (Math.abs(lastSpeed) > slipperyFactor) {
-				lastSpeedNew = lastSpeed - Math.signum(lastSpeed) * slipperyFactor;
-			} else {
-				// ensure that speed eventually goes to zero
-				lastSpeedNew = 0;
-			}
-		}
-
-		return lastSpeedNew;
-
-	}
+    private float slipperySpeedHelper(float speed, float lastSpeed, float tileSpeed, float slipperyFactor,
+            float slipperyFactor2) {
+        // speed up user in X dirn
+        float lastSpeedNew;
+        if(speed > 0) {
+            lastSpeedNew = Math.min(lastSpeed + speed * tileSpeed * slipperyFactor2, speed *tileSpeed);
+        } else if(speed < 0) {
+            lastSpeedNew = Math.max(lastSpeed + speed * tileSpeed * slipperyFactor2, speed *tileSpeed);
+        } else {
+            // slow down user
+            if(Math.abs(lastSpeed) > slipperyFactor) {
+                lastSpeedNew = lastSpeed - Math.signum(lastSpeed) * slipperyFactor;
+            } else {
+                // ensure that speed eventually goes to zero
+                lastSpeedNew = 0;
+            }
+        }
+        
+        return lastSpeedNew;
+        
+    }
 
 	/**
 	 * Updates the game camera so that it is centered on the player
