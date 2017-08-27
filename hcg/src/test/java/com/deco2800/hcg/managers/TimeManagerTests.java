@@ -6,8 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 public class TimeManagerTests {
 	private TimeManager timeManager;
 	private TimeManager timeManagerPauseTest;
-	private TimeManager timeManagerNextDayTest;
-	private TimeManager timeManagerNextSecondTest;
 	private TimeManager timeManagerGetDateTest;
 	private TimeManager timeManagerNightDayTest;
 	private TimeManager timeManagerIncrementingMinTest;
@@ -21,12 +19,6 @@ public class TimeManagerTests {
 
 		// for (un)pauseTest
 		timeManagerPauseTest = new TimeManager();
-
-		// for nextDayTest
-		timeManagerNextDayTest = new TimeManager();
-
-		// for nextSecondTest
-		timeManagerNextSecondTest = new TimeManager();
 
 		// for getDateTest
 		timeManagerGetDateTest = new TimeManager();
@@ -52,26 +44,24 @@ public class TimeManagerTests {
 	// setDateTimeTests
 	@Test
 	public void setDateTimeTest() {
-		// invalid input cases
-		Assert.assertEquals("Invalid seconds input not recognised", false,
-				timeManager.setDateTime(-1, 0, 0, 1, 1, 1));
+		// invalid input cases (MathHelper.java not tested yet so testing here for own sanity)
+		timeManager.setDateTime(-1, 0, 0, 1, 1, 1);
+		Assert.assertEquals("Invalid seconds input not clamped", 0, timeManager.getSeconds());
 
-		Assert.assertEquals("Invalid minutes input not recognised", false,
-				timeManager.setDateTime(0, 62, 0, 1, 1, 1));
+		timeManager.setDateTime(0, 62, 0, 1, 1, 1);
+		Assert.assertEquals("Invalid minutes input not clamped", 59, timeManager.getMinutes());
 
+		timeManager.setDateTime(34, 58, 29, 1, 1, 1);
+		Assert.assertEquals("Invalid hours input not clamped", 23, timeManager.getHours());
 
-		Assert.assertEquals("Invalid hours input not recognised", false,
-				timeManager.setDateTime(34, 58, 29, 1, 1, 1));
+		timeManager.setDateTime(23, 23, 23, -4, 1, 1);
+		Assert.assertEquals("Invalid day input not clamped", 1, timeManager.getDay());
 
-		Assert.assertEquals("Invalid day input not recognised", false,
-				timeManager.setDateTime(23, 23, 23, -4, 1, 1));
+		timeManager.setDateTime(15, 35, 3, 5, 13, 1);
+		Assert.assertEquals("Invalid month input not clamped", 12, timeManager.getMonth());
 
-
-		Assert.assertEquals("Invalid month input not recognised", false,
-				timeManager.setDateTime(15, 35, 3, 5, 13, 1));
-
-		Assert.assertEquals("Invalid year input not recognised", false,
-				timeManager.setDateTime(0, 0, 0, 1, 1, -1));
+		timeManager.setDateTime(0, 0, 0, 1, 1, -1);
+		Assert.assertEquals("Invalid year input not clamped", 1, timeManager.getYear());
 
 		// typical case
 		timeManager.setDateTime(0, 0, 0, 1, 1, 1);
@@ -267,7 +257,7 @@ public class TimeManagerTests {
 	public void getTimeTest() {
 		timeManager.setDateTime(34, 53,16, 3, 8,2017);
 		Assert.assertEquals("getDate string not printing correctly.",
-				"03 August", timeManager.getDate());
+				"16:53", timeManager.getTime());
 	}
 
 	// getDateTime test
@@ -276,14 +266,6 @@ public class TimeManagerTests {
 		timeManager.setDateTime(5, 6, 7, 8, 9,2010);
 		Assert.assertEquals("Incorrect date being printed", "08/09/2010 07:06:05",
 				timeManager.getDateTime());
-	}
-
-
-
-	// onTick test
-	@Test
-	public void onTickTest() {
-		
 	}
 
 
