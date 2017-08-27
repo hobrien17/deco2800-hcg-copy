@@ -35,13 +35,14 @@ public class PlayerTest {
 
 	}
 
-	@Test(expected = InvalidAttributesException.class)
-	public void testAttributesMap() throws InvalidAttributesException{
+	@Test
+	public void testAttributesMap() {
 		Player player = new Player(0, 0, 0);
 		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0);
 		player.setAttribute("agility",2);
 		assertEquals("player agility should be 2 after setAttribute changed it",2, player.getAttribute("agility"));
-		player.setAttribute("Throw an exception",1000);
+		player.setAttribute("DontAddThis",1000);
+		assertEquals("attribute should not be added", player.getAttribute("DontAddThis"), -1);
 	}
 
 	@Test

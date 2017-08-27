@@ -38,6 +38,7 @@ public class Player extends Character implements Tickable {
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
+	private boolean sprinting;
 
 	// current tile name
 	private String name = "";
@@ -73,6 +74,7 @@ public class Player extends Character implements Tickable {
 		input.addMouseMovedListener(this::handleMouseMoved);
 
 		collided = false;
+		sprinting = false;
 		this.setTexture("hcg_character");
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 
@@ -346,82 +348,104 @@ slipperyFactor2);
 	 * Handle movement when wasd keys are pressed down
 	 */
 	private void handleKeyDown(int keycode) {
-		switch (keycode) {
-		case Input.Keys.W:
-			movementDirection.put("up", true);
-			// check terrain type and play corresponding sound effect
-			soundPlay(name);
-			break;
-		case Input.Keys.S:
-			movementDirection.put("down", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.A:
-			movementDirection.put("left", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.D:
-			movementDirection.put("right", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.R:
-			if (equippedWeapon.getWeaponType() == WeaponType.MACHINEGUN) {
-				GameManager.get().getWorld().removeEntity(equippedWeapon);
-				equippedWeapon = new WeaponBuilder().setWeaponType
+		if (sprinting) {
+			setAttribute("stamina", getAttribute("stamina") - 30);
+		} else {
+			setAttribute("stamina", getAttribute("stamina") + 10);
+		}
+			switch (keycode) {
+				case Input.Keys.SHIFT_LEFT:
+					if (getAttribute("stamina") > 0) {
+						setMovementSpeed(getMovementSpeed() * 3);
+						sprinting = true;
+					}
+					break;
+				case Input.Keys.W:
+					movementDirection.put("up", true);
+					// check terrain type and play corresponding sound effect
+					soundPlay(name);
+					break;
+				case Input.Keys.S:
+					movementDirection.put("down", true);
+					soundPlay(name);
+					break;
+				case Input.Keys.A:
+					movementDirection.put("left", true);
+					soundPlay(name);
+					break;
+				case Input.Keys.D:
+					movementDirection.put("right", true);
+					soundPlay(name);
+					break;
+				case Input.Keys.R:
+					if (equippedWeapon.getWeaponType() == WeaponType.MACHINEGUN) {
+						GameManager.get().getWorld().removeEntity(equippedWeapon);
+						equippedWeapon = new WeaponBuilder().setWeaponType
 
-(WeaponType.SHOTGUN).setUser(this).setRadius(0.7)
-						.build();
-				GameManager.get().getWorld().addEntity(equippedWeapon);
-			} else if (equippedWeapon.getWeaponType() == WeaponType.SHOTGUN) {
-				GameManager.get().getWorld().removeEntity(equippedWeapon);
-				equippedWeapon = new WeaponBuilder().setWeaponType
+								(WeaponType.SHOTGUN).setUser(this).setRadius(0.7)
+								.build();
+						GameManager.get().getWorld().addEntity(equippedWeapon);
+					} else if (equippedWeapon.getWeaponType() == WeaponType.SHOTGUN) {
+						GameManager.get().getWorld().removeEntity(equippedWeapon);
+						equippedWeapon = new WeaponBuilder().setWeaponType
 
-(WeaponType.STARFALL).setUser(this).setRadius(0.7)
-						.build();
-				GameManager.get().getWorld().addEntity(equippedWeapon);
-			} else {
-				GameManager.get().getWorld().removeEntity(equippedWeapon);
-				equippedWeapon = new WeaponBuilder().setWeaponType
+								(WeaponType.STARFALL).setUser(this).setRadius(0.7)
+								.build();
+						GameManager.get().getWorld().addEntity(equippedWeapon);
+					} else {
+						GameManager.get().getWorld().removeEntity(equippedWeapon);
+						equippedWeapon = new WeaponBuilder().setWeaponType
 
-(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
-						.build();
-				GameManager.get().getWorld().addEntity(equippedWeapon);
+								(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
+								.build();
+						GameManager.get().getWorld().addEntity(equippedWeapon);
+					}
+				default:
+					break;
+
 			}
-		default:
-			break;
+			handleDirectionInput();
+			handleNoInput();
+
+		if (getAttribute("stamina") <= 0){
+			sprinting = false;
+			movementSpeed = movementSpeedNorm;
 		}
 
-		handleDirectionInput();
-		handleNoInput();
 	}
 
 	/**
 	 * Handle movement when wasd keys are released
 	 */
 	private void handleKeyUp(int keycode) {
-		switch (keycode) {
-		case Input.Keys.W:
-			movementDirection.put("up", false);
-			soundStop(name);
-			break;
-		case Input.Keys.S:
-			movementDirection.put("down", false);
-			soundStop(name);
-			break;
-		case Input.Keys.A:
-			movementDirection.put("left", false);
-			soundStop(name);
-			break;
-		case Input.Keys.D:
-			movementDirection.put("right", false);
-			soundStop(name);
-			break;
-		default:
-			break;
-		}
+			switch (keycode) {
+				case Input.Keys.SHIFT_LEFT:
+					sprinting = false;
+					setMovementSpeed(movementSpeedNorm);
+					break;
+				case Input.Keys.W:
+					movementDirection.put("up", false);
+					soundStop(name);
+					break;
+				case Input.Keys.S:
+					movementDirection.put("down", false);
+					soundStop(name);
+					break;
+				case Input.Keys.A:
+					movementDirection.put("left", false);
+					soundStop(name);
+					break;
+				case Input.Keys.D:
+					movementDirection.put("right", false);
+					soundStop(name);
+					break;
+				default:
+					break;
+			}
 
-		handleDirectionInput();
-		handleNoInput();
+
+			handleDirectionInput();
+			handleNoInput();
 	}
 
 	/**
