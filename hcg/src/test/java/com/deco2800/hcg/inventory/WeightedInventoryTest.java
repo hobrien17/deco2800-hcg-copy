@@ -45,10 +45,6 @@ public class WeightedInventoryTest {
        uItem2.setUniqueData("TWO");
        
        inventory.addItem(uItem1);
-       
-       TestUniqueItem uItem3 = new TestUniqueItem("Unique Item", 5);
-       TestUniqueItem uItem4 = new TestUniqueItem("Unique Item", 5);
-
        assertTrue("Unique item found in inventor.",
                inventory.containsItem(uItem1));
        

@@ -2,12 +2,19 @@ package com.deco2800.hcg.inventory;
 
 import com.deco2800.hcg.items.Item;
 
+/**
+ * Inventory purpose built to contain the player's currently equipped items
+ * (Hotbar?) with methods to easily get the currently equipped item and change
+ * the equipped slot.
+ */
 public class PlayerEquipment extends FixedSizeInventory {
     private SlotRestriction[] slotRestrictions;
+    private int equippedSlot;
     
-    private PlayerEquipment() {
-        super(2);
-        this.slotRestrictions = new SlotRestriction[2];
+    private PlayerEquipment(int equipSlots) {
+        super(equipSlots);
+        this.slotRestrictions = new SlotRestriction[equipSlots];
+        this.equippedSlot = 0;
     }
     
     @Override
@@ -20,11 +27,38 @@ public class PlayerEquipment extends FixedSizeInventory {
     }
     
     /**
-     * For the time being, the currently equipped item is the item in slot 0.
      * @return The currently equipped item.
      */
     public Item getCurrentEquippedItem() {
-        return this.getItem(0);
+        return this.getItem(this.equippedSlot);
+    }
+
+    /**
+     * Sets the currently equipped item slot.
+     * 
+     * @param slot
+     *            The slot to equip.
+     */
+    public void setEquippedSlot(int slot) {
+        this.equippedSlot = slot;
+    }
+    
+    /**
+     * Return the index of the currently equipped item slot.
+     * 
+     * @return the index of the currently equipped item slot.
+     */
+    public int getEquippedSlot() {
+        return this.equippedSlot;
+    }
+    
+    /**
+     * Cycle the currently equipped slot. Equips the next item in the equipment
+     * inventory, looping around to the beginning if necessary.
+     */
+    public void cycleEquippedSlot() {
+        this.equippedSlot++;
+        this.equippedSlot %= this.getMaxSize();
     }
     
     /**
@@ -34,7 +68,7 @@ public class PlayerEquipment extends FixedSizeInventory {
      * @return A ready to use instance of PlayerEquipment
      */
     public static PlayerEquipment getPlayerEquipment() {
-        PlayerEquipment equipment = new PlayerEquipment();
+        PlayerEquipment equipment = new PlayerEquipment(2);
         SlotRestriction equipmentRestriction = new SlotRestriction(equipment);
         equipmentRestriction.addCondition((inv, item) -> item.isEquippable());
         equipment.slotRestrictions[0] = equipmentRestriction;
