@@ -191,15 +191,17 @@ public class Player extends Character implements Tickable {
 			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
 			String newname = layer.getProperties().get("name", String.class);
 			// if move to different tile, change walk sound effect
-			if (!newname.equals(name) && !name.equals("")) {
-				soundStop(name);
-				soundPlay(newname);
-			}
-			name = newname;
-			if (name.equals("water-deep")) {
-				this.setTexture("hcg_character_swim");
-			}else{
-				this.setTexture("hcg_character");
+			if (newname != null) {
+    			if (!newname.equals(name) && !name.equals("")) {
+    				soundStop(name);
+    				soundPlay(newname);
+    			}
+    	         name = newname;
+    	            if (name.equals("water-deep")) {
+    	                this.setTexture("hcg_character_swim");
+    	            }else{
+    	                this.setTexture("hcg_character");
+    	         }
 			}
 
 			// see if current tile is slippery. Save the slippery value if it is
@@ -546,14 +548,18 @@ tileSpeed);
 	 * play corresponding sound effect on terrain
 	 */
 	private void soundPlay(String name) {
+	  if (soundManager != null) {
 		soundManager.loopSound(name);
+	  }
 	}
 
 	/**
 	 * stop playing sound effect
 	 */
 	private void soundStop(String name) {
+	   if (soundManager != null) {
 		soundManager.stopSound(name);
+	   }
 	}
 
 	@Override
