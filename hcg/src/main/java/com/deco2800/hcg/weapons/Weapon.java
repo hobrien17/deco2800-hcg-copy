@@ -179,5 +179,22 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
             fireWeapon();
         }
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Weapon weapon = (Weapon) o;
+
+        return weaponType == weapon.weaponType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (weaponType != null ? weaponType.hashCode() : 0);
+        return result;
+    }
 }
