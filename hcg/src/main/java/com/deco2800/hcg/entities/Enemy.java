@@ -49,12 +49,9 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         this.strength = strength;
         this.speedX = 0;
         this.speedY = 0;
-<<<<<<< HEAD
-        this.movementSpeed = this.level;
-=======
         this.movementSpeed = 0;
         this.level = 1;
->>>>>>> 9191ec127d230e8b30b14f8ca27a6279d8c26497
+
 
 		// Effects container 
 		myEffects = new Effects(this);
