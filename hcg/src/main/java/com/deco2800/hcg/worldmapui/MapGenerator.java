@@ -19,13 +19,13 @@ import org.slf4j.LoggerFactory;
  * MapGenerator class and with different uses of the generateWorldMap method to produce different types of worlds.
  */
 public class MapGenerator {
-	static final Logger LOGGER = LoggerFactory.getLogger(MapGenerator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MapGenerator.class);
 	
-	private final int DEFAULT_COLUMN_COUNT = 10; // <- default number of columns in a world (can be changed later)
-	private final int DEFAULT_ROW_COUNT = 10; // <- default number of rows in a world (can be changed later)
-	private final int MAX_COLUMNS_BEFORE_SAFENODE = 5; // <- change as needed
-	private final int MIN_NODES_PER_COLUMN = 2; // <- be very careful with this value. Should never exceed rowNumber/2
-	private final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
+	private static final int DEFAULT_COLUMN_COUNT = 10; // <- default number of columns in a world (can be changed later)
+	private static final int DEFAULT_ROW_COUNT = 10; // <- default number of rows in a world (can be changed later)
+	private static final int MAX_COLUMNS_BEFORE_SAFENODE = 5; // <- change as needed
+	private static final int MIN_NODES_PER_COLUMN = 2; // <- be very careful with this value. Should never exceed rowNumber/2
+	private static final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
 	
 	private List<Level> levelsMaster;
 	private List<Level> levelsOfType;
@@ -197,7 +197,7 @@ public class MapGenerator {
 		
 		for(int i = 1; i < columnNumber - 1; i++) {
 			boolean safeNodeInColumn = false;
-			int numberOfNodes = rand.nextInt((int) Math.ceil(rowNumber/2)) + MIN_NODES_PER_COLUMN;
+			int numberOfNodes = rand.nextInt(rowNumber/2) + MIN_NODES_PER_COLUMN;
 			List<Integer> currentOccupiedRows = new ArrayList<>();
 			for(int j = 0; j < numberOfNodes; j++) {
 				int nodeRow = 0;
@@ -208,7 +208,8 @@ public class MapGenerator {
 						correctRow = true;
 					}
 				}
-				int probability = rand.nextInt(101) + 1; //random integer between 1 and 100;
+				// Get a random integer between 1 and 100
+				int probability = rand.nextInt(101) + 1;
 				int nodeType;
 				if(probability < SAFE_NODE_PROBABILITY || columnsSinceSafeNode >= MAX_COLUMNS_BEFORE_SAFENODE) {
 					nodeType = 0; //node will be a safenode
