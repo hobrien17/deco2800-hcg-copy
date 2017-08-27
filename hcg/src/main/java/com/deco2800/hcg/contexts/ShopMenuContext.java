@@ -22,8 +22,8 @@ public class ShopMenuContext extends UIContext {
     private Image title;
     private Image shopFunds;
     private Image shopInventory;
-    private ImageButton shopBuy;
-    private ImageButton shopSell;
+    private ImageButton shopBuyButton;
+    private ImageButton shopSellButton;
     private ImageButton shopExit;
     private Table centreTable;
 
@@ -50,8 +50,8 @@ public class ShopMenuContext extends UIContext {
         title = new Image(textureManager.getTexture("shop_title"));
         shopFunds = new Image(textureManager.getTexture("shop_funds"));
         shopInventory = new Image(textureManager.getTexture("shop_inventory"));
-        shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy")).getDrawable());
-        shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell")).getDrawable());
+        shopBuyButton = new ImageButton(new Image(textureManager.getTexture("shop_buy")).getDrawable());
+        shopSellButton = new ImageButton(new Image(textureManager.getTexture("shop_sell")).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
 
         //add elements to table
@@ -60,8 +60,8 @@ public class ShopMenuContext extends UIContext {
         centreTable.row();
         centreTable.add(shopInventory);
         centreTable.row();
-        centreTable.add(shopBuy);
-        centreTable.add(shopSell);
+        centreTable.add(shopBuyButton);
+        centreTable.add(shopSellButton);
         centreTable.row();
         centreTable.add(shopExit);
 
