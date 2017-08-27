@@ -89,7 +89,9 @@ public class Hardcor3Gard3ning extends Game {
 				while (!Thread.interrupted()) {
 					try {
 						String line = reader.readLine();
-						NetworkState.sendChatMessage(line);
+						if (NetworkState.isInitialised()) {
+							NetworkState.sendChatMessage(line);
+						}
 					} catch (IOException e) {
 						continue;
 					}
