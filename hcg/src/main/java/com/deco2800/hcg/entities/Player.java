@@ -432,8 +432,8 @@ public class Player extends Character implements Tickable {
 			setAttribute("stamina", getAttribute("stamina") + 10);
 		}
 			switch (keycode) {
-				case Input.Keys.P:
-					this.contextManager.pushContext(new PerksSelectionScreen());
+				//case Input.Keys.P:
+				//	this.contextManager.pushContext(new PerksSelectionScreen());
 				case Input.Keys.SHIFT_LEFT:
 					if (getAttribute("stamina") > 0) {
 						setMovementSpeed(getMovementSpeed() * 3);
