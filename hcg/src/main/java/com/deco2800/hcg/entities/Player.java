@@ -3,11 +3,18 @@ package com.deco2800.hcg.entities;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
+import com.deco2800.hcg.inventory.FixedSizeInventory;
+import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.inventory.WeightedInventory;
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.weapons.Weapon;
+import com.deco2800.hcg.weapons.WeaponBuilder;
+import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
 
 import java.util.HashMap;
@@ -35,18 +42,13 @@ public class Player extends Character implements Tickable {
     private float lastSpeedY;
     private int oldTime = -1;
     private int newTime = -1;
+    
+    private Inventory inventory;
 
     private int skillPoints;
     private HashMap<String, Boolean> movementDirection = new HashMap<>();
     
     private Weapon equippedWeapon;
-    
-    private Weapon peashooter = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.MACHINEGUN, this);
-    private Weapon shotgun = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.SHOTGUN, this);
-    private Weapon stargun = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.STARFALL, this);
 
     /**
      * Creates a new player at specified position.
@@ -79,9 +81,13 @@ public class Player extends Character implements Tickable {
         // for slippery
         lastSpeedX = 0;
         lastSpeedY = 0;
-        
+
         // Set equipped weapon and enter game world
-        equippedWeapon = peashooter;
+        equippedWeapon = new WeaponBuilder()
+                .setWeaponType(WeaponType.MACHINEGUN)
+                .setUser(this)
+                .setRadius(0.7)
+                .build();
         GameManager.get().getWorld().addEntity(equippedWeapon);
 
         // for direction of movement
@@ -89,6 +95,10 @@ public class Player extends Character implements Tickable {
         movementDirection.put("right", false);
         movementDirection.put("up", false);
         movementDirection.put("down", false);
+
+        //inventory
+        inventory = new WeightedInventory(100);
+
     }
 
     /**
@@ -329,17 +339,29 @@ public class Player extends Character implements Tickable {
                 movementDirection.put("right", true);
                 break;
             case Input.Keys.R:
-                if(equippedWeapon.equals(peashooter)) {
+                if(equippedWeapon.getWeaponType() == WeaponType.MACHINEGUN) {
                     GameManager.get().getWorld().removeEntity(equippedWeapon);
-                    equippedWeapon = shotgun;
+                    equippedWeapon = new WeaponBuilder()
+                            .setWeaponType(WeaponType.SHOTGUN)
+                            .setUser(this)
+                            .setRadius(0.7)
+                            .build();
                     GameManager.get().getWorld().addEntity(equippedWeapon);
-                } else if(equippedWeapon.equals(shotgun)){
+                } else if(equippedWeapon.getWeaponType() == WeaponType.SHOTGUN){
                     GameManager.get().getWorld().removeEntity(equippedWeapon);
-                    equippedWeapon = stargun;
+                    equippedWeapon = new WeaponBuilder()
+                            .setWeaponType(WeaponType.STARFALL)
+                            .setUser(this)
+                            .setRadius(0.7)
+                            .build();
                     GameManager.get().getWorld().addEntity(equippedWeapon);
                 } else {
                     GameManager.get().getWorld().removeEntity(equippedWeapon);
-                    equippedWeapon = peashooter;
+                    equippedWeapon = new WeaponBuilder()
+                            .setWeaponType(WeaponType.MACHINEGUN)
+                            .setUser(this)
+                            .setRadius(0.7)
+                            .build();
                     GameManager.get().getWorld().addEntity(equippedWeapon);
                 }
             default:
@@ -541,4 +563,13 @@ public class Player extends Character implements Tickable {
     public String toString() {
         return "The player";
     }
+
+    public Inventory getInventory(){
+		return inventory;
+    }
+    
+    public boolean addItemToInventory(Item item){
+    	return inventory.addItem(item);
+    }
+
 }
