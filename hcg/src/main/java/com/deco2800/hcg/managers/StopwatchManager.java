@@ -31,51 +31,45 @@ public class StopwatchManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * 
 	 * Set the time limit for the stopwatch
 	 * 
 	 * @param timeLimit
+	 * 
 	 */
 	public void startTimer(int timeLimit) {
 		this.timedMinutes = timeLimit;
 	}
 
 	/**
-	 * 
 	 * Removes the time limit from the stopwatch
-	 * 
 	 */
 	public void stopTimer() {
 		this.timedMinutes = 0;
 	}
 
 	/**
-	 * 
 	 * Resets the stopwatch
-	 * 
 	 */
 	public void resetStopwatch() {
 		this.ticksElapsed = 0;
 		this.minutes = 0;
-		this.seconds = 0;		
+		this.seconds = 0;
 	}
 
 	/**
+	 * Returns a boolean for the status of the timer (True if time has finished)
 	 * 
-	 * Returns true if the timer has finished,
-	 * false if not or no timer actually started.
-	 * 
+	 * @return bool: true if the timer has finished, false if not or no timer
+	 *         actually started.
 	 */
 	public boolean getStatus() {
 		return timerFinished;
 	}
-	
+
 	/**
-	 * 
 	 * Gets the current time of the stopwatch
 	 * 
-	 * Returns a float of the current minute
-	 * 
+	 * @return the float of the current minute
 	 */
 	public float getStopwatchTime() {
 		float result = this.minutes;
