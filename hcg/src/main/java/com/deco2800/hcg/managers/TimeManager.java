@@ -132,10 +132,22 @@ public class TimeManager extends Manager implements TickableManager {
 		return this.timeElapsed;
 	}
 
+	/**
+	 * Setter method to change the time in the gui
+	 * 
+	 * @param label:
+	 *            the text to change the time label in the gui
+	 */
 	public void setTimeLabel(Label label) {
 		this.timeLabel = label;
 	}
 
+	/**
+	 * Setter method to change the date in the gui
+	 * 
+	 * @param label:
+	 *            the text to change the date label in the gui
+	 */
 	public void setDateLabel(Label label) {
 		this.dateLabel = label;
 	}
