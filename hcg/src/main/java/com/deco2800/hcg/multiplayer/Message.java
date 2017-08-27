@@ -1,6 +1,7 @@
 package com.deco2800.hcg.multiplayer;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -10,11 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.managers.GameManager;
-
+import java.lang.*;
 /**
  * Represents a datagram packet sent via the networking system
  * 
  * @author Max Crofts
+ * Edit: Duc (Ethan) Phan
  *
  */
 public class Message {
@@ -53,9 +55,25 @@ public class Message {
 				throw new MessageFormatException();
 			}
 			// next four bytes are id
-			this.id = stream.readInt();
+			String idTemp = "";
+			for (int i = 0; i < 4; i++){
+				idTemp += (char)(stream.readByte());
+			}
+			this.id = Long.valueOf(idTemp);
+		
 			// next byte indicates type
-			this.type = MessageType.values()[stream.readByte()];
+			String tmp = "";
+			for (int i=0; i < 4; i++){
+				tmp += (char)(stream.readByte());
+			}
+			for (MessageType e: MessageType.values()){
+				if (e.toString().equals(tmp)){
+					this.type = MessageType.valueOf(tmp);
+				}
+			}	
+			if (this.type == null){
+					throw new MessageFormatException();
+			}
 			// rest is payload
 			this.payload = new byte[stream.available()];
 			int bytesRead = stream.read(this.payload);
