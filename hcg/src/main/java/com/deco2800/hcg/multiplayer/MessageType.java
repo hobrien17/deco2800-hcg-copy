@@ -7,5 +7,8 @@ package com.deco2800.hcg.multiplayer;
  *
  */
 public enum MessageType {
-	CONFIRMATION, JOIN, COMMAND, CHAT
+	CONFIRMATION, // sent after receiving message
+	JOIN,         // sent from client when joining
+	COMMAND,      // not used (yet)
+	CHAT          // sent when a peer enters a chat message
 }
