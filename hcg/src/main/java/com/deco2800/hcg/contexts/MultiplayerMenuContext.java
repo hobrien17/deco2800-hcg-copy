@@ -79,7 +79,7 @@ public class MultiplayerMenuContext extends UIContext {
 		back.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				contextManager.pushContext(new MainMenuContext());
+				contextManager.popContext();
 			}
 		});
 		
