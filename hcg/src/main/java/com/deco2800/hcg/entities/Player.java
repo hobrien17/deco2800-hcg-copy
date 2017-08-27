@@ -423,7 +423,7 @@ public class Player extends Character implements Tickable {
 	 */
 	private void handleKeyDown(int keycode) {
 		if (sprinting) {
-			setAttribute("stamina", getAttribute("stamina") - 30);
+			setAttribute("stamina", getAttribute("stamina") - 40);
 		} else {
 			setAttribute("stamina", getAttribute("stamina") + 10);
 		}
@@ -462,6 +462,12 @@ public class Player extends Character implements Tickable {
 		default:
 			break;
 		}
+		if (getAttribute("stamina") <= 0) {
+			sprinting = false;
+			setMovementSpeed(movementSpeedNorm);
+		}
+		handleDirectionInput();
+		handleNoInput();
 	}
 
 	/**
