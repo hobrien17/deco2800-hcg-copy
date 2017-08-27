@@ -1,6 +1,7 @@
 package com.deco2800.hcg.managers;
 
 import org.junit.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class TimeManagerTests {
 	private TimeManager timeManager;
@@ -12,6 +13,7 @@ public class TimeManagerTests {
 	private TimeManager timeManagerIncrementingMinTest;
 	private TimeManager timeManagerIncrementingHrTest;
 	private TimeManager timeManagerCalanderIncrementingTest;
+
 
 	@Before
 	public void setUp() {
@@ -44,90 +46,34 @@ public class TimeManagerTests {
 		// for Calander Incrementing Test
 		timeManagerCalanderIncrementingTest = new TimeManager();
 		timeManagerCalanderIncrementingTest.pauseTime();
+
 	}
 
-	/*// setDateTime tests
-
+	// setDateTimeTests
 	@Test
-	public void setDateTimeInvalidSecond() {
-		timeManager.setDateTime(-1, 0, 0, 1, 1, 1);
-	}
-
-	@Test
-	public void setDateTimeInvalidMinute() {
-		timeManager.setDateTime(0, 62, 0, 1, 1, 1);
-	}
-
-	@Test
-	public void setDateTimeInvalidHour() {
-		timeManager.setDateTime(34, 58, 29, 1, 1, 1);
-	}
-
-	@Test
-	public void setDateTimeInvalidDay() {
-		timeManager.setDateTime(23, 23, 23, -4, 1, 1);
-	}
-
-	@Test
-	public void setDateTimeInvalidMonth() {
-		timeManager.setDateTime(15, 35, 3, 5, 13, 1);
-	}
-
-	@Test
-	public void setDateTimeInvalidYear() {
-		timeManager.setDateTime(0, 0, 0, 1, 1, -1);
-	}*/
-
 	public void setDateTimeTest() {
 		// invalid input cases
-		boolean invalidSeconds = false;
-		try {
-			timeManager.setDateTime(-1, 0, 0, 1, 1, 1);
-		} catch (IllegalArgumentException e) {
-			invalidSeconds = true;
-		}
-		Assert.assertEquals("Invalid seconds input not recognised", true, invalidSeconds);
+		Assert.assertEquals("Invalid seconds input not recognised", false,
+				timeManager.setDateTime(-1, 0, 0, 1, 1, 1));
 
-		boolean invalidMinutes = false;
-		try {
-			timeManager.setDateTime(0, 62, 0, 1, 1, 1);
-		} catch (IllegalArgumentException e) {
-			invalidMinutes = true;
-		}
-		Assert.assertEquals("Invalid minutes input not recognised", true, invalidMinutes);
+		Assert.assertEquals("Invalid minutes input not recognised", false,
+				timeManager.setDateTime(0, 62, 0, 1, 1, 1));
 
-		boolean invalidHours = false;
-		try {
-			timeManager.setDateTime(34, 58, 29, 1, 1, 1);
-		} catch (IllegalArgumentException e) {
-			invalidHours = true;
-		}
-		Assert.assertEquals("Invalid hours input not recognised", true, invalidHours);
 
-		boolean invalidDay = false;
-		try {
-			timeManager.setDateTime(23, 23, 23, -4, 1, 1);
-		} catch (IllegalArgumentException e) {
-			invalidDay = true;
-		}
-		Assert.assertEquals("Invalid day input not recognised", true, invalidDay);
+		Assert.assertEquals("Invalid hours input not recognised", false,
+				timeManager.setDateTime(34, 58, 29, 1, 1, 1));
 
-		boolean invalidMonth = false;
-		try {
-			timeManager.setDateTime(15, 35, 3, 5, 13, 1);
-		} catch (IllegalArgumentException e) {
-			invalidMonth = true;
-		}
-		Assert.assertEquals("Invalid month input not recognised", true, invalidMonth);
+		Assert.assertEquals("Invalid day input not recognised", false,
+				timeManager.setDateTime(23, 23, 23, -4, 1, 1));
 
-		boolean invalidYear = false;
-		try {
-			timeManager.setDateTime(0, 0, 0, 1, 1, -1);
-		} catch (IllegalArgumentException e) {
-			invalidYear = true;
-		}
-		Assert.assertEquals("Invalid year input not recognised", true, invalidYear);
-		//typical case
+
+		Assert.assertEquals("Invalid month input not recognised", false,
+				timeManager.setDateTime(15, 35, 3, 5, 13, 1));
+
+		Assert.assertEquals("Invalid year input not recognised", false,
+				timeManager.setDateTime(0, 0, 0, 1, 1, -1));
+
+		// typical case
 		timeManager.setDateTime(0, 0, 0, 1, 1, 1);
 		Assert.assertEquals("Second not correctly set.", 0,
 				timeManager.getSeconds());
@@ -135,7 +81,8 @@ public class TimeManagerTests {
 				timeManager.getMinutes());
 		Assert.assertEquals("Hour not correctly set.", 0,
 				timeManager.getHours());
-		Assert.assertEquals("Day not correctly set.", 1, timeManager.getDay());
+		Assert.assertEquals("Day not correctly set.", 1,
+				timeManager.getDay());
 		Assert.assertEquals("Month not correctly set.", 1,
 				timeManager.getMonth());
 		Assert.assertEquals("Year not correctly set.", 1,
@@ -266,19 +213,6 @@ public class TimeManagerTests {
 
 	}
 
-	// getTime
-	@Test
-	public void getTimeTest() {
-		// for second to minute tests
-		timeManagerIncrementingMinTest = new TimeManager();
-		timeManagerIncrementingMinTest.pauseTime();
-
-		// for minute to hour tests
-		timeManagerIncrementingHrTest = new TimeManager();
-		timeManagerIncrementingHrTest.pauseTime();
-
-	}
-
 	@Test
 	public void isLeapYearTest() throws Exception {
 		// not leap year
@@ -300,15 +234,12 @@ public class TimeManagerTests {
 		timeManagerPauseTest.pauseTime();
 
 		int temp = timeManagerPauseTest.getSeconds();
-		int temp2 = timeManagerPauseTest.getTimeElapsed();
 
 		// try and run time
 		timeManagerPauseTest.onTick(0);
 
 		Assert.assertEquals("Time is running whilst paused.", temp,
 				timeManagerPauseTest.getSeconds());
-		Assert.assertEquals("Time is running whilst paused.", temp2,
-				timeManagerPauseTest.getTimeElapsed());
 	}
 
 	@Test
@@ -316,31 +247,45 @@ public class TimeManagerTests {
 		timeManagerPauseTest.unpauseTime();
 
 		int temp = timeManagerPauseTest.getSeconds();
-		int temp2 = timeManagerPauseTest.getTimeElapsed();
 
 		// seconds should increment by 1 on tick
 		timeManagerPauseTest.onTick(0);
 		Assert.assertEquals(
 				"Time is not running correctly after being unpaused.", temp + 1,
 				timeManagerPauseTest.getSeconds());
-		Assert.assertEquals(
-				"Time is not running correctly after being unpaused.",
-				temp2 + 1, timeManagerPauseTest.getTimeElapsed());
 	}
 
+	// getDate test
 	@Test
 	public void getDateTest() {
 		Assert.assertEquals("getDate string not printing correctly.",
 				"01 January", timeManagerGetDateTest.getDate());
 	}
 
-	// setTimeLabel (not sure how to test this)
+	// getTime test
+	@Test
+	public void getTimeTest() {
+		timeManager.setDateTime(34, 53,16, 3, 8,2017);
+		Assert.assertEquals("getDate string not printing correctly.",
+				"03 August", timeManager.getDate());
+	}
 
-	// setDateLabel (not sure how to test this)
+	// getDateTime test
+	@Test
+	public void getDateTimeTest() {
+		timeManager.setDateTime(5, 6, 7, 8, 9,2010);
+		Assert.assertEquals("Incorrect date being printed", "08/09/2010 07:06:05",
+				timeManager.getDateTime());
+	}
 
-	// printDate (not sure how to test this)
 
-	// GetDateTime (not sure how to test this)
+
+	// onTick test
+	@Test
+	public void onTickTest() {
+		
+	}
+
 
 	@Test
 	public void calanderIncrementingTest() {
@@ -460,5 +405,9 @@ public class TimeManagerTests {
 		Assert.assertEquals("first second that hr == 1", 1,
 				timeManagerIncrementingHrTest.getHours());
 	}
+
+	// setTimeLabel (not sure how to test this)
+
+	// setDateLabel (not sure how to test this)
 
 }
