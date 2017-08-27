@@ -1,6 +1,7 @@
 package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -60,10 +61,11 @@ public class PlayContext extends Context {
 	private Label clockLabel;
 	private Label dateLabel;
 
-	/**
-	 * Create the PlayContext
-	 */
-	public PlayContext() {
+
+    /**
+     * Create the PlayContext
+     */
+    public PlayContext() {
 
 		// Set up managers for this game
 		gameManager = GameManager.get();
@@ -148,6 +150,8 @@ public class PlayContext extends Context {
 		inputMultiplexer.addProcessor(stage); // Add the UI as a processor
 		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
 		inputMultiplexer.addProcessor(input);
+
+        input.addKeyDownListener(this::handleKeyDown);
 
 		/*
 		 * Set up some input handlers for panning with dragging.
@@ -280,8 +284,15 @@ public class PlayContext extends Context {
 		// Do nothing
 	}
 
-	@Override
-	public boolean ticksRunning() {
-		return unpaused;
-	}
+    @Override
+    public boolean ticksRunning() {
+        return unpaused;
+    }
+
+    // Handle switching to World Map by pressing "m"
+    private void handleKeyDown(int keycode) {
+        if (keycode == Input.Keys.M) {
+            contextManager.pushContext(new WorldMapContext());
+        }
+    }
 }
