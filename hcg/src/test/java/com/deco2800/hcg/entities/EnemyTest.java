@@ -3,7 +3,10 @@ package com.deco2800.hcg.entities;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.worlds.DemoWorld;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,11 +15,17 @@ import java.util.Map;
 
 public class EnemyTest {
     Squirrel enemy;
+    GameManager gameManager;
+    DemoWorld demoWorld;
 
     @Before
     public void createBasicEnemy() {
       // create enemy
       enemy = new Squirrel(5,5,0, 1);
+      // create mock game
+      gameManager = GameManager.get();
+      demoWorld = mock(DemoWorld.class);
+      gameManager.setWorld(demoWorld);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -80,5 +89,24 @@ public class EnemyTest {
     public void testSetLevel() {
         enemy.setLevel(2);
         assertThat("Enemy level is not changed", enemy.getLevel(), is(equalTo(2)));
+    }
+
+    @Test
+    public void testStatus() {
+        enemy.setStatus(1);
+        assertThat("Status was not status given", enemy.getStatus(), is(equalTo(1)));
+    }
+    @Test
+    public void testMovement() {
+        enemy.move(3,3);
+        assertThat("PosX is not the given position", enemy.getPosX(), is(equalTo(3.0f)));
+        assertThat("PosY is not the given position", enemy.getPosY(), is(equalTo(3.0f)));
+        //gameManager.getWorld().addEntity(enemy);
+        //Player player = new Player(0, 0, 0);
+        //gameManager.getWorld().addEntity(player);
+        //enemy.onTick(0);
+        //assertThat("Status was not status given", enemy.getStatus(), is(equalTo(2)));
+        //assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0)));
+        //assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0)));
     }
 }

@@ -84,6 +84,11 @@ public abstract class SingleItem extends GenericItem {
     
     @Override
     public boolean equals(Item item) {
-        return this.sameItem(item) && this.getStackSize() == item.getStackSize();
+        //Due to item being nullable (according to sonar)
+        if (item != null) {
+            return this.sameItem(item) && this.getStackSize() == item.getStackSize();
+        }
+        //Will always be false as item.getStackSize will (or should) throw a null pointer which isn't equal to int
+        return false;
     }
 }
