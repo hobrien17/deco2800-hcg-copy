@@ -44,10 +44,29 @@ public class TimeManager extends Manager implements TickableManager {
 		this.day = 1;
 		this.month = 1;
 		this.year = 2047;
+		this.isNight = false;
 		this.timeElapsed = 0;
 		this.timeLabel = null;
 		this.dateLabel = null;
 		this.timePaused = false; // this will need to be set to true when we have some sort of 'start screen' happening
+	}
+
+	/**
+	 * Gets the year.
+	 *
+	 * @return Returns the year.
+	 */
+	public int getYear() {
+		return this.year;
+	}
+
+	/**
+	 * Gets the month.
+	 *
+	 * @return Returns the month.
+	 */
+	public int getMonth() {
+		return this.month;
 	}
 
 	/**
@@ -60,45 +79,17 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Gets the month.
-	 * 
-	 * @return Returns the month.
+	 * Gets the hours.
+	 *
+	 * @return Returns the hours.
 	 */
-	public int getMonth() {
-		return this.month;
-	}
-
-
-	/**
-	 * Gets the year.
-	 * 
-	 * @return Returns the year.
-	 */
-	public int getYear() {
-		return this.year;
-	}
-
-	/**
-	 * Sets the seconds.
-	 * 
-	 * @param seconds
-	 */
-	public void setSeconds(int seconds) {
-		this.seconds = seconds;
-	}
-
-	/**
-	 * Gets the seconds.
-	 * 
-	 * @return Returns the seconds.
-	 */
-	public int getSeconds() {
-		return this.seconds;
+	public int getHours() {
+		return this.hours;
 	}
 
 	/**
 	 * Gets the minutes.
-	 * 
+	 *
 	 * @return Returns the minutes.
 	 */
 	public int getMinutes() {
@@ -106,12 +97,12 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Gets the hours.
-	 * 
-	 * @return Returns the hours.
+	 * Gets the seconds.
+	 *
+	 * @return Returns the seconds.
 	 */
-	public int getHours() {
-		return this.hours;
+	public int getSeconds() {
+		return this.seconds;
 	}
 
 	/**
@@ -209,7 +200,7 @@ public class TimeManager extends Manager implements TickableManager {
 		}
 
 		this.minutes = 0;
-		if (this.hours != 24) {
+		if (this.hours != 23) {
 			this.hours++;
 			// check if nighttime every hour
 			checkNight();
@@ -227,7 +218,7 @@ public class TimeManager extends Manager implements TickableManager {
 		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d",
 				this.day, this.month, this.year, this.hours, this.minutes,
 				this.seconds);
-		System.out.println(dateTime);
+		LOGGER.info(dateTime);
 	}
 
 	/**
@@ -253,9 +244,10 @@ public class TimeManager extends Manager implements TickableManager {
 
 	/**
 	 * Updates internal boolean tracking day/night cycle.
-	 * Nighttime between 7:00pm and 5:00am
+	 *
+	 * <p>Nighttime between 7:00pm and 5:00am.</p>
 	 */
-	public void checkNight() {
+	private void checkNight() {
 		if (this.hours > 18 || this.hours < 5) {
 			isNight = true;
 			return;
@@ -362,6 +354,58 @@ public class TimeManager extends Manager implements TickableManager {
 		}
 
 		return String.format("%02d %s", this.day, month);
+	}
+
+	/**
+	 * Sets the date and time (FOR TESTING PURPOSES ONLY)
+	 *
+	 * @param second
+	 * 			The second to be set.
+	 *
+	 * @param minute
+	 * 			The minute to be set.
+	 *
+	 * @param hour
+	 * 			The hour to be set.
+	 *
+	 * @param day
+	 * 			The day to be set.
+	 *
+	 * @param month
+	 * 			The month to be set
+	 *
+	 * @param year
+	 * 			The year to be set.
+	 */
+	public void setDateTime(int second, int minute, int hour, int day, int month, int year)
+			throws IllegalArgumentException {
+		// check validity of inputs
+		if (second < 0 || second > 59) {
+			throw new IllegalArgumentException("Seconds must be a valid input.");
+		}
+		if (minute < 0 || minute > 59) {
+			throw new IllegalArgumentException("Seconds must be a valid input.");
+		}
+		if (hour < 0 || hour > 23) {
+			throw new IllegalArgumentException("Seconds must be a valid input.");
+		}
+		if (day < 1 || day > 31) {
+			throw new IllegalArgumentException("Seconds must be a valid input.");
+		}
+		if (month < 1 || month > 12) {
+			throw new IllegalArgumentException("Seconds must be a valid input.");
+		}
+		if (year < 0) {
+			throw new IllegalArgumentException("Seconds must be a valid input.");
+		}
+		// set date & time
+		this.seconds = second;
+		this.minutes = minute;
+		this.hours = hour;
+		this.day = day;
+		this.month = month;
+		this.year = year;
+		checkNight();
 	}
 
  }
