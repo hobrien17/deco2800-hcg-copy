@@ -70,7 +70,7 @@ public class TimeManager extends Manager implements TickableManager {
 
 
 	/**
-	 * Gets the year.
+	 * Gets the current year.
 	 * 
 	 * @return Returns the year.
 	 */

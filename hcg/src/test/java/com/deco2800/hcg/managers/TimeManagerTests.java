@@ -6,6 +6,7 @@ public class TimeManagerTests {
 	private TimeManager timeManager;
 	private TimeManager timeManagerPauseTest;
 	private TimeManager timeManagerNextDayTest;
+	private TimeManager timeManagerCalanderIncrementingTest;
 	private TimeManager timeManagerNextSecondTest;
 	private TimeManager timeManagerGetDateTest;
 
@@ -18,6 +19,9 @@ public class TimeManagerTests {
 
 		// for nextDayTest
 		timeManagerNextDayTest = new TimeManager();
+		
+		// for Calander Incrementing Test
+		timeManagerCalanderIncrementingTest = new TimeManager();
 
 		// for nextSecondTest
 		timeManagerNextSecondTest = new TimeManager();
@@ -52,10 +56,10 @@ public class TimeManagerTests {
 		// try and run time
 		timeManagerPauseTest.onTick(0);
 
-		Assert.assertEquals("Time is running whilst paused.",
-				temp, timeManagerPauseTest.getSeconds());
-		Assert.assertEquals("Time is running whilst paused.",
-				temp2, timeManagerPauseTest.getTimeElapsed());
+		Assert.assertEquals("Time is running whilst paused.", temp,
+				timeManagerPauseTest.getSeconds());
+		Assert.assertEquals("Time is running whilst paused.", temp2,
+				timeManagerPauseTest.getTimeElapsed());
 	}
 
 	@Test
@@ -67,26 +71,28 @@ public class TimeManagerTests {
 
 		// seconds should increment by 1 on tick
 		timeManagerPauseTest.onTick(0);
-		Assert.assertEquals("Time is not running correctly after being unpaused.", temp + 1,
+		Assert.assertEquals(
+				"Time is not running correctly after being unpaused.", temp + 1,
 				timeManagerPauseTest.getSeconds());
-		Assert.assertEquals("Time is not running correctly after being unpaused.", temp2 + 1,
-				timeManagerPauseTest.getTimeElapsed());
+		Assert.assertEquals(
+				"Time is not running correctly after being unpaused.",
+				temp2 + 1, timeManagerPauseTest.getTimeElapsed());
 	}
 
 	@Test
 	public void nextDayTest() {
 		// timeManagerNextDayTest.days should increment from 1 to 2
 		timeManagerNextDayTest.nextDay();
-		Assert.assertEquals("nextDay not incrementing properly",
-				2, timeManagerNextDayTest.getDay());
+		Assert.assertEquals("nextDay not incrementing properly", 2,
+				timeManagerNextDayTest.getDay());
 	}
 
 	@Test
 	public void nextSecondTest() {
 		// timeManagerNextSecondTest.seconds should increment from 0 to 1
 		timeManagerNextSecondTest.nextSecond();
-		Assert.assertEquals("nextSecond not incrementing properly.",
-				1, timeManagerNextSecondTest.getSeconds());
+		Assert.assertEquals("nextSecond not incrementing properly.", 1,
+				timeManagerNextSecondTest.getSeconds());
 	}
 
 	@Test
@@ -95,6 +101,49 @@ public class TimeManagerTests {
 				"01 January", timeManagerGetDateTest.getDate());
 	}
 
+	@Test
+	public void calanderIncrementingTest() {
+		Assert.assertEquals(
+				"month is not intalised to jan", 1,
+				timeManagerCalanderIncrementingTest.getMonth());
+		
+		// changing calendar to Feb 01
+		for (int i = 0; i < 31; i++) {
+			timeManagerCalanderIncrementingTest.nextDay();
+		}
 
+		// testing nextDay increments months correctly (general case jan -> feb)
+		Assert.assertEquals(
+				"nextDay not incrementing properly when changing months", 2,
+				timeManagerCalanderIncrementingTest.getMonth());
 
+		Assert.assertEquals(
+				"nextDay not incrementing properly when changing months", 1,
+				timeManagerCalanderIncrementingTest.getDay());
+
+		// testing edge case increments month correctly (edge case: feb -> mar)
+		int numIncrements = 0;
+
+		if (timeManagerCalanderIncrementingTest
+				.isLeapYear(timeManagerCalanderIncrementingTest.getYear())) {
+			numIncrements = 29;
+		} else {
+			numIncrements = 28;
+		}
+
+		// change time to Mar 01
+		for (int i = 0; i < numIncrements; i++) {
+			timeManagerCalanderIncrementingTest.nextDay();
+		}
+
+		// testing calender increments if it is a leap year correctly
+		Assert.assertEquals(
+				"nextDay not incrementing properly when changing months", 3,
+				timeManagerCalanderIncrementingTest.getMonth());
+
+		Assert.assertEquals(
+				"nextDay not incrementing properly when changing months", 1,
+				timeManagerCalanderIncrementingTest.getDay());
+
+	}
 }
