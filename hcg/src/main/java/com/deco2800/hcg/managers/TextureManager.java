@@ -94,7 +94,7 @@ public class TextureManager extends Manager {
 		textureMap.put("shop_sell_button", new Texture("resources/ui/shop_ui/shop_sell.png"));
 		textureMap.put("shop_funds", new Texture("resources/ui/shop_ui/shop_funds.png"));
 		textureMap.put("shop_inventory", new Texture("resources/ui/shop_ui/shop_inventory.png"));
-		textureMap.put("shop_background", new Texture("resources/ui/shop_ui/wooden_background.png"));
+		textureMap.put("wooden_background", new Texture("resources/ui/shop_ui/wooden_background.png"));
 		textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
 
 	}
