@@ -15,9 +15,7 @@ import java.util.Random;
  */
 public class Squirrel extends Enemy implements Tickable {
 
-	private float speed = 0.1f;
-	
-	private ItemManager itemManager;
+	private float speed = 0.03f;
 	
 	private Random random;
 
@@ -40,8 +38,6 @@ public class Squirrel extends Enemy implements Tickable {
 	public Item[] loot() {
 		Item[] arr = new Item[1];
 		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-
-
 		return arr;
 	}
 
@@ -79,7 +75,6 @@ public class Squirrel extends Enemy implements Tickable {
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
 				if(entity instanceof Player) {
-				    this.shoot(this);
 					this.causeDamage((Player)entity);
 				}
 				collided = true;
@@ -92,6 +87,6 @@ public class Squirrel extends Enemy implements Tickable {
 		}
 
 		// Apply any effects that exist on the entity
-		myEffects.execute();
+		myEffects.apply();
 	}
 }
