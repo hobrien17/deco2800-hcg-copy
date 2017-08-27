@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.deco2800.hcg.entities.Plant;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
@@ -32,6 +33,7 @@ public class PlayContext extends Context {
 	private PlayerManager playerManager;
 	private TimeManager timeManager;
 	private ContextManager contextManager;
+	private PlantManager plantManager;
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -53,6 +55,8 @@ public class PlayContext extends Context {
 	// TODO Game UI should probably be moved to a separate file
 	private Stage stage;
 	private Window window;
+	private Window plantWindow;
+	private Label plantInfo;
 	private Label clockLabel;
 	private Label dateLabel;
 
@@ -67,6 +71,7 @@ public class PlayContext extends Context {
 		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
 		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -76,12 +81,10 @@ public class PlayContext extends Context {
 		stage = new Stage(new ScreenViewport());
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
+        plantWindow = new Window("Plants", skin);
 
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
-
-		/* Add another button to the menu */
-		Button anotherButton = new TextButton("Play Duck Sound", skin);
 
 		/* Add clock. */
 		Image clockImage = new Image(new
@@ -100,17 +103,9 @@ public class PlayContext extends Context {
 			}
 		});
 
-		/* Add a handler to play a sound */
-		anotherButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				soundManager.playSound("quack");
-			}
-		});
 
 		/* Add all buttons to the menu */
 		window.add(button);
-		window.add(anotherButton);
 		window.add(clockLabel);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
@@ -130,6 +125,17 @@ public class PlayContext extends Context {
         group.addActor(clockLabel);
         group.addActor(dateLabel);
         stage.addActor(group);
+
+        /* Create the window for plant. */
+        plantInfo = new Label("null",skin);
+        plantManager.setPlantLabel(plantInfo);
+        plantManager.setPlantWindow(plantWindow);
+        plantWindow.add(plantInfo);
+        plantManager.updateLabel();
+        plantWindow.pack();
+        plantWindow.setMovable(false);
+        plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+        stage.addActor(plantWindow);
 
 		/*
 		 * Setup inputs for the buttons and the game itself

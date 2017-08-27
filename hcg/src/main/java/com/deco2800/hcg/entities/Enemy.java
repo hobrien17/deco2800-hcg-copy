@@ -318,12 +318,12 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
 	
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
 	@Override
-    public void causeEffect(Effect effect) {
+    public void giveEffect(Effect effect) {
         myEffects.addEffect(effect);
     }
 
     @Override
-    public void causeEffect(Collection<Effect> effects) {
+    public void giveEffect(Collection<Effect> effects) {
         myEffects.addAllEffects(effects);
     }
 }

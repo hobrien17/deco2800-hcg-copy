@@ -2,6 +2,8 @@ package com.deco2800.hcg.items;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+
+import com.deco2800.hcg.items.single.TestUniqueItem;
 import org.junit.Test;
 
 public class SingleItemTest {
@@ -15,7 +17,7 @@ public class SingleItemTest {
     public void TestIntilization() {
 
         /** Test Initialisation values **/
-        TestUniqueItem testItem = new TestUniqueItem("UniqueItem", 10);
+        com.deco2800.hcg.items.single.TestUniqueItem testItem = new com.deco2800.hcg.items.single.TestUniqueItem("UniqueItem", 10);
         testItem.setUniqueData("Some Awesome Sword");
         //assertTrue(testItem.getName() == (testItemName+"("+testItem.getUniqueData()+")"));
         assertTrue(testItem.getBaseValue() == testBaseValue);
@@ -33,15 +35,15 @@ public class SingleItemTest {
     public void TestSameItem() {
 
         /** Test Initialisation values **/
-        TestUniqueItem testItem = new TestUniqueItem("UniqueItem", 10);
+        com.deco2800.hcg.items.single.TestUniqueItem testItem = new com.deco2800.hcg.items.single.TestUniqueItem("UniqueItem", 10);
         testItem.setUniqueData("Some Awesome Sword");
-        TestUniqueItem testItem2 = new TestUniqueItem("UniqueItem", 10);
+        com.deco2800.hcg.items.single.TestUniqueItem testItem2 = new com.deco2800.hcg.items.single.TestUniqueItem("UniqueItem", 10);
         testItem2.setUniqueData("Some Awesome Sword");
-        TestUniqueItem testItem3 = new TestUniqueItem("UniqueItem", 10);
+        com.deco2800.hcg.items.single.TestUniqueItem testItem3 = new com.deco2800.hcg.items.single.TestUniqueItem("UniqueItem", 10);
         testItem3.setUniqueData("Another Awesome Sword");
-        TestUniqueItem testItem4 = new TestUniqueItem("UniqueItem2", 10);
+        com.deco2800.hcg.items.single.TestUniqueItem testItem4 = new com.deco2800.hcg.items.single.TestUniqueItem("UniqueItem2", 10);
         testItem4.setUniqueData("Another Awesome Sword");
-        TestUniqueItem testItem5 = new TestUniqueItem("UniqueItem2", 10);
+        com.deco2800.hcg.items.single.TestUniqueItem testItem5 = new TestUniqueItem("UniqueItem2", 10);
         //Exact same item
         assertTrue(testItem.sameItem(testItem2));
         //Different unique data fields
