@@ -15,10 +15,12 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.worlds.*;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -109,7 +111,6 @@ public class Player extends Character implements Tickable {
         equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
         equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
-        GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 	}
 
 	/**
@@ -654,7 +655,7 @@ public class Player extends Character implements Tickable {
         return this.equippedItems.getCurrentEquippedItem();
     }
     
-    protected Weapon getEquippedWeapon() {
+    public Weapon getEquippedWeapon() {
         Item item = this.getCurrentEquippedItem();
         if(item != null && item instanceof WeaponItem) {
             return ((WeaponItem) item).getWeapon();

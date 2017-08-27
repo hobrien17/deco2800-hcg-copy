@@ -1,6 +1,7 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.worlds.AbstractWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ public class GameManager implements TickableManager {
     private AbstractWorld gameWorld;
 
     private OrthographicCamera camera;
+
+    private WorldMap worldMap;
 
     /**
      * Returns an instance of the GM
@@ -128,5 +131,17 @@ public class GameManager implements TickableManager {
             }
         }
     }
+
+    /**
+     * Gets the worldMap
+     * @return the stored WorldMap structure
+     */
+    public WorldMap getWorldMap() { return worldMap; }
+
+    /**
+     * Sets the worldMap
+     * @param worldMap the generated map to store
+     */
+    public void setWorldMap(WorldMap worldMap) { this.worldMap = worldMap; }
 
 }
