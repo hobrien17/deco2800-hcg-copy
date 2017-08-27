@@ -109,7 +109,6 @@ public class Player extends Character implements Tickable {
         equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
         equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
-        GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 	}
 
 	/**
@@ -618,7 +617,7 @@ public class Player extends Character implements Tickable {
         return this.equippedItems.getCurrentEquippedItem();
     }
     
-    protected Weapon getEquippedWeapon() {
+    public Weapon getEquippedWeapon() {
         Item item = this.getCurrentEquippedItem();
         if(item != null && item instanceof WeaponItem) {
             return ((WeaponItem) item).getWeapon();

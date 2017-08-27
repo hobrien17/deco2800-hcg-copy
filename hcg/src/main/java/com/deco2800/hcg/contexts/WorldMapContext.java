@@ -95,6 +95,7 @@ public class WorldMapContext extends UIContext {
             public void changed(ChangeEvent event, Actor actor) {
                 gameManager.setWorld(new DemoWorld());
                 gameManager.getWorld().addEntity(playerManager.getPlayer());
+				GameManager.get().getWorld().addEntity(playerManager.getPlayer().getEquippedWeapon());
                 contextManager.pushContext(new PlayContext());
             }
         });

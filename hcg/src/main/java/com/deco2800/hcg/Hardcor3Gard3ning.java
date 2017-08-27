@@ -118,9 +118,6 @@ public class Hardcor3Gard3ning extends Game {
 			}
 		})).start();
 
-		/* Create an example world for the engine */
-        gameManager.setWorld(new DemoWorld());
-
         // Procedurally generate the world map and store it.
         MapGenerator mapGenerator = new MapGenerator(levelList);
         WorldMap worldMap = mapGenerator.generateWorldMap();
