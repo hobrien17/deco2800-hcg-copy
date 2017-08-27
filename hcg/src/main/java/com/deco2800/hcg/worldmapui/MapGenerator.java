@@ -332,7 +332,7 @@ public class MapGenerator {
 	 */
 	private Level getLevel(int worldType) {
 		Random rand = new Random();
-		if(worldType == 0) {
+		if(worldType == 0 && !levelsNonBoss.isEmpty()) {
 			int index = rand.nextInt(levelsNonBoss.size());
 			Level levelReturned = levelsNonBoss.get(index);
 			levelsNonBoss.remove(index);
