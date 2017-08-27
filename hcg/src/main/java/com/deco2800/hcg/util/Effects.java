@@ -107,6 +107,9 @@ public class Effects {
                     return addEffect(newEffect);
                 } else if (newEffect.getLevel() - effect.getLevel() == 0) { // effects are the same level
                     effect.resetUseCounter();
+                    // We only want to reset the cooldowns on effects that don't apply damage, otherwise lots of
+                    // extra damage would be added each time the effect is given to the entity.
+                    if (effect.getDamage() == 0) effect.resetCooldownTimer();
                     return true;
                 } else {    // new effect is weaker
                     return false;
