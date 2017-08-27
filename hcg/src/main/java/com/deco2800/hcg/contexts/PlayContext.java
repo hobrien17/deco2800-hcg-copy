@@ -178,6 +178,7 @@ public class PlayContext extends Context {
 				String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
 				chatTextField.setText("");
 				chatTextArea.appendText(chatMessage + "\n");
+				stage.setKeyboardFocus(null);
 			}
 		});
         
