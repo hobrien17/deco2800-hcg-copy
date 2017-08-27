@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.MessageManager;
 
 /**
  * Asynchronous UDP networking
@@ -32,6 +33,8 @@ public final class NetworkState {
 	private static NetworkReceive networkReceive;
 	private static Thread sendThread;
 	private static Thread receiveThread;
+	
+	private static MessageManager messageManager;
 
 	private NetworkState() {}
 
@@ -42,6 +45,8 @@ public final class NetworkState {
 	public static void init(boolean hostGame) {
 		peers = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
+		
+		messageManager = (MessageManager) GameManager.get().getManager(MessageManager.class);
 
 		// initialise socket
 		try {
@@ -170,7 +175,7 @@ public final class NetworkState {
 										NetworkState.peers.size() - 1, packet.getSocketAddress());
 								break;
 							case CHAT:
-								System.out.println(message.getPayloadString());
+								messageManager.chatMessageReceieved(message);
 								break;
 							default:
 								break;
