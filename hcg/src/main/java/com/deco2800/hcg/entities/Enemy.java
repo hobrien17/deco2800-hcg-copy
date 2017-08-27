@@ -251,8 +251,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         distance = Math.abs(new Random().nextFloat()) * 10 * this.level;
         nextPosX = (float) (this.getPosX() + distance * cos(radius));
         nextPosY = (float) (this.getPosY() + distance * cos(radius));
-        while ((this.getPosX() > nextPosX || this.getPosX() < nextPosX) &&
-                (this.getPosY() > nextPosY || this.getPosY() < nextPosY)) {
+        while (this.getPosX() - nextPosX > 0.05 && this.getPosY() - nextPosY > 0.05) {
             if (this.detectPlayer()) {
                 this.moveToPlayer();
                 break;
@@ -278,8 +277,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      *
      */
     public void moveTo(float destPosX, float destPosY){
-        while ((this.getPosX() > destPosX || this.getPosX() < destPosX) &&
-                (this.getPosY() > destPosY || this.getPosY() < destPosY)) {
+        while (this.getPosX() - destPosX > 0.05 && this.getPosY() - destPosY > 0.05) {
             if(this.getPosX() < destPosX){
                 speedX -= movementSpeed;
             }
