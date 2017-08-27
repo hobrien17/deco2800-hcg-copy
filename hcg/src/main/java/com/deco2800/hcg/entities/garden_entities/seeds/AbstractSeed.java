@@ -14,6 +14,26 @@ import com.deco2800.hcg.items.Item;
 public abstract class AbstractSeed implements Item {
 
     /**
+     * Creates an Enum type for the different seed types
+     */
+    public enum Seed{
+        SUNFLOWER ("sunflower_seed", "sunflower"),
+        CACTUS ("explosive_seed", "cactus"),
+        GRASS ("grass_seed", "grass"),
+        ICE ("ice_seed", "ice"),
+        INFERNO ("fire_seed", "inferno"),
+        WATER ("water_seed", "water");
+
+        private String textureName;
+        private String plantName;
+
+        Seed(String textureName, String plantName){
+            this.textureName = textureName;
+            this.plantName = plantName;
+        }
+    }
+
+    /**
      * Creates a new plant at the given x and y co-ordinates
      *
      * @return a new plant

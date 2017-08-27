@@ -37,7 +37,7 @@ public class Cactus extends AbstractGardenPlant {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put("rock_seed", 1.0);
+        lootRarity.put("explosive_seed", 1.0);
 
         checkLootRarity();
     }
