@@ -1,7 +1,6 @@
 package com.deco2800.hcg.trading;
 
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
 
@@ -22,9 +21,9 @@ public class GeneralShop implements Shop{
 
     @Override
     public int inStock(Item item){
-        try {
+        if (shopStock.containsKey(item)) {
             return shopStock.get(item).intValue();
-        } catch (NullPointerException e) {
+        } else {
             return 0;
         }
     }
@@ -56,11 +55,11 @@ public class GeneralShop implements Shop{
 
     @Override
     public int buyStock(Item item) {
-        if (shopStock.get(item) == 0) {
+        if (!shopStock.containsKey(item) || (shopStock.get(item) == 0)) {
             return 1;
         } else if (!player.addItemToInventory(item)) {
             return 2;
-        } else if (!player.getInventory().containsItem(seed) && (!player.getInventory().removeItem(seed, item
+        } else if (!player.getInventory().containsItem(seed) || (!player.getInventory().removeItem(seed, item
                 .getBaseValue()+modifier))) {
             return 3;
         }
