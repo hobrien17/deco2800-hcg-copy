@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.deco2800.hcg.contexts.PlayContext;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.ShopKeeper;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
@@ -71,6 +72,10 @@ public class Hardcor3Gard3ning extends Game {
         player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
         playerManager.setPlayer(player);
         gameManager.getWorld().addEntity(playerManager.getPlayer());
+        
+        //Set up the shopkeeper
+        ShopKeeper shopkeeper = new ShopKeeper();
+        
     }
 
     /**

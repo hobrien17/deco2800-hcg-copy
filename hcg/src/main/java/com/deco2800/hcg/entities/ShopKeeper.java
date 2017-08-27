@@ -7,16 +7,16 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.trading.Shop;
 
 public class ShopKeeper implements Selectable{
-
+	boolean selected;
 
     @Override
     public boolean isSelected() {
-        return false;
+        return selected;
     }
 
     @Override
     public void deselect() {
-
+    	selected = false;
     }
 
     @Override
