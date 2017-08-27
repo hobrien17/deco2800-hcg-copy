@@ -62,13 +62,14 @@ public class Weapon extends AbstractEntity implements Tickable {
      *
      */
     public Weapon(float posX, float posY, float posZ,
-            WeaponType weaponType) {        
+            WeaponType weaponType, AbstractEntity user) {        
         super(posX, posY, posZ, 0.6f, 0.6f, 1);
         
         this.radius = 0.7;
         this.shoot = false;
         this.counter = 0;
         this.weaponType = weaponType;
+        this.user = user;
         this.setTexture("battle_seed");
         
         this.playerManager = (PlayerManager) GameManager.get()
