@@ -83,7 +83,12 @@ public class TextureManager extends Manager {
                 new Texture("resources/sprites/plants/pot_empty.png"));
         textureMap
                 .put("tree", new Texture("resources/sprites/plants/tree.png"));
-
+        textureMap.put("wm_blue_bg", new Texture("resources/worldmap/blue_background.png"));
+        textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
+        textureMap.put("completed_node", new Texture("resources/worldmap/completed_node.png"));
+        textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node.png"));
+        textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
+        textureMap.put("safe_node", new Texture("resources/worldmap/safe_node.png"));
     }
 
     /**
