@@ -14,6 +14,9 @@ import com.deco2800.hcg.items.Item;
 
 public class Seed implements Item {
 	
+	/**
+	 * Stores the many different types of seeds in the game	 *
+	 */
 	public enum Type {
 		SUNFLOWER ("gardening_seed", Sunflower.class),
 		EXPLOSIVE ("explosive_seed", Cactus.class),
@@ -23,16 +26,30 @@ public class Seed implements Item {
 		WATER ("water_seed", Water.class);
 		
 		private String texture;
+		
+		/**
+		 * Constructor for creating a new seed type
+		 */
 		private Class<? extends AbstractGardenPlant> plant;
 		Type(String textureName, Class<? extends AbstractGardenPlant> plantClass) {
 			texture = textureName;
 			plant = plantClass;
 		}
 		
+		/**
+		 * Returns the seed's texture
+		 * 
+		 * @return the texture name
+		 */
 		private String getTexture() {
 			return texture;
 		}
 		
+		/**
+		 * Returns the type of plant that this seed grows into
+		 * 
+		 * @return A plant class
+		 */
 		private Class<? extends AbstractGardenPlant> getPlant() {
 			return plant;
 		}
@@ -40,6 +57,11 @@ public class Seed implements Item {
 	
 	private Type type;
 	
+	/**
+	 * Constructor for a new seed with Type type
+	 * 
+	 * @param type the type of seed
+	 */
 	public Seed(Type type) {
 		this.type = type;
 	}
@@ -118,10 +140,27 @@ public class Seed implements Item {
 		return false;
 	}
 	
+	/**
+	 * Returns the type of seed
+	 * 
+	 * @return the seed's type
+	 */
 	public Type getType() {
 		return type;
 	}
 	
+	/**
+	 * Returns a new plant, depending on the seed's type
+	 * 
+	 * @param pot The pot this plant is to be planted in
+	 * @return A new plant
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
 	public AbstractGardenPlant getNewPlant(Pot pot) throws InstantiationException, IllegalAccessException, 
 						IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		return type.getPlant().getDeclaredConstructor(Pot.class).newInstance(pot);
