@@ -9,6 +9,7 @@ public class TimeManagerTests {
 	private TimeManager timeManagerCalanderIncrementingTest;
 	private TimeManager timeManagerNextSecondTest;
 	private TimeManager timeManagerGetDateTest;
+	private TimeManager timeManagerNightDayTest;
 
 	@Before
 	public void setUp() {
@@ -19,7 +20,7 @@ public class TimeManagerTests {
 
 		// for nextDayTest
 		timeManagerNextDayTest = new TimeManager();
-		
+
 		// for Calander Incrementing Test
 		timeManagerCalanderIncrementingTest = new TimeManager();
 
@@ -28,6 +29,10 @@ public class TimeManagerTests {
 
 		// for getDateTest
 		timeManagerGetDateTest = new TimeManager();
+		
+		// for NightDayTest
+		timeManagerNightDayTest = new TimeManager();
+		timeManagerNightDayTest.pauseTime();
 	}
 
 	@Test
@@ -103,10 +108,9 @@ public class TimeManagerTests {
 
 	@Test
 	public void calanderIncrementingTest() {
-		Assert.assertEquals(
-				"month is not intalised to jan", 1,
+		Assert.assertEquals("month is not intalised to jan", 1,
 				timeManagerCalanderIncrementingTest.getMonth());
-		
+
 		// changing calendar to Feb 01
 		for (int i = 0; i < 31; i++) {
 			timeManagerCalanderIncrementingTest.nextDay();
@@ -146,4 +150,25 @@ public class TimeManagerTests {
 				timeManagerCalanderIncrementingTest.getDay());
 
 	}
+
+	@Test
+	public void NightDayTest() {	
+		Assert.assertEquals("night is not intiated to true",
+				true, timeManagerNightDayTest.isNight());
+		
+
+		// get to a second before 5am (change over to day)
+		for (int i = 0; i<17999; i++){
+			timeManagerNightDayTest.nextSecond();
+		}
+		
+		// edge case: last second that it is night
+		Assert.assertEquals("fudf",
+				true, timeManagerNightDayTest.isNight());
+		
+		// edge case: the first second that it is day
+		timeManagerNightDayTest.nextSecond();
+		Assert.assertEquals("fudf",
+				false, timeManagerNightDayTest.isNight());
+	}	
 }
