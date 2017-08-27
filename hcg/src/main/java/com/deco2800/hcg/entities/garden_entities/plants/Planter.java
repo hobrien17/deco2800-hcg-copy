@@ -9,6 +9,12 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.observers.KeyUpObserver;
 import com.deco2800.hcg.util.WorldUtil;
 
+/**
+ * A key observer that handles keypresses and puts plants in pots depending on these presses
+ * 
+ * @author Henry O'Brien
+ *
+ */
 public class Planter implements KeyUpObserver {
 
 	@Override

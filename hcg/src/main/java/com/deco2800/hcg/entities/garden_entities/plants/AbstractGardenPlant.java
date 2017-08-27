@@ -186,6 +186,4 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         return true;
     }
 
-    //Rest to be implemented later
-
 }

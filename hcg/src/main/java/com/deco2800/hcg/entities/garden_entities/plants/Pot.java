@@ -68,9 +68,4 @@ public class Pot extends AbstractEntity  {
 			this.setTexture(plant.getThisTexture());
 		}
 	}
-
-	public void onTick(long gameTickCount) {
-		
-		
-	}
 }
