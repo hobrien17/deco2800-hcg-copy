@@ -87,6 +87,6 @@ public class Squirrel extends Enemy implements Tickable {
 		}
 
 		// Apply any effects that exist on the entity
-		myEffects.execute();
+		myEffects.apply();
 	}
 }
