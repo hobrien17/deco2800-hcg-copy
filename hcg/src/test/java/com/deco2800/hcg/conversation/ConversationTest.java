@@ -3,12 +3,14 @@ package com.deco2800.hcg.conversation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class ConversationTest {
+	private Conversation conversation;
 	
-	@Test
-	public void testConversation(){
+	@Before
+	public void initialiseConversation(){
 		List<String> testConversation = new ArrayList<String>();
 		testConversation.add("A");
 		testConversation.add("B");
@@ -19,13 +21,17 @@ public class ConversationTest {
 		String goodbye = "Okay, goodbye";
 		
 		Conversation testConvo = new Conversation(greeting, goodbye, testConversation);
-		
-		assert(testConvo.nextSentence(true).equals("A"));
-		assert(testConvo.nextSentence(true).equals("B"));
-		assert(testConvo.nextSentence(true).equals("C"));
-		assert(testConvo.nextSentence(true).equals("D"));
-		assert(testConvo.nextSentence(true).equals("Okay, goodbye"));
-		assert(testConvo.nextSentence(true).equals("A"));
+		this.conversation = testConvo;
+	}
+	
+	@Test
+	public void testConversation(){
+		assert(conversation.nextSentence(true).equals("A"));
+		assert(conversation.nextSentence(true).equals("B"));
+		assert(conversation.nextSentence(true).equals("C"));
+		assert(conversation.nextSentence(true).equals("D"));
+		assert(conversation.nextSentence(true).equals("Okay, goodbye"));
+		assert(conversation.nextSentence(true).equals("A"));
 	
 	}
 	

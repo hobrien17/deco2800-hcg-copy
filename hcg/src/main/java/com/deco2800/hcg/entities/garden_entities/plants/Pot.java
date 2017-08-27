@@ -8,7 +8,7 @@ import com.deco2800.hcg.entities.Tickable;
  *
  * @author Henry O'Brien
  */
-public class Pot extends AbstractEntity implements Tickable  {
+public class Pot extends AbstractEntity  {
 	
 	AbstractGardenPlant plant;
 
@@ -69,11 +69,8 @@ public class Pot extends AbstractEntity implements Tickable  {
 		}
 	}
 
-	@Override
 	public void onTick(long gameTickCount) {
-		if(plant != null) {
-			plant.checkGrow();
-		}
+		
 		
 	}
 }
