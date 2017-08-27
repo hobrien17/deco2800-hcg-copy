@@ -18,7 +18,6 @@ public class TimeManager extends Manager implements TickableManager {
 	private int day;
 	private int month;
 	private int year;
-	private int timeElapsed;
 
 	private int seconds;
 	private int minutes;
@@ -45,7 +44,6 @@ public class TimeManager extends Manager implements TickableManager {
 		this.month = 1;
 		this.year = 2047;
 		this.isNight = true;
-		this.timeElapsed = 0;
 		this.timeLabel = null;
 		this.dateLabel = null;
 		this.timePaused = false;
@@ -103,24 +101,6 @@ public class TimeManager extends Manager implements TickableManager {
 	 */
 	public int getSeconds() {
 		return this.seconds;
-	}
-
-	/**
-	 * Sets the elapsed (game) time.
-	 * 
-	 * @param timeElapsed
-	 */
-	private void setTimeElapsed(int timeElapsed) {
-		this.timeElapsed = timeElapsed;
-	}
-
-	/**
-	 * Gets the elapsed (game) time.
-	 * 
-	 * @return Returns the elapsed (game) time.
-	 */
-	public int getTimeElapsed() {
-		return this.timeElapsed;
 	}
 
 	/**
@@ -263,7 +243,6 @@ public class TimeManager extends Manager implements TickableManager {
 			return;
 		}
 		
-		this.timeElapsed++;
 		this.nextSecond();
 		if (this.timeLabel != null) {
 			this.timeLabel.setText(this.getTime());
@@ -306,73 +285,33 @@ public class TimeManager extends Manager implements TickableManager {
 	public String getDate() {
 		// My computer is not recognizing Strings in HashMaps so for now this 
 		// is going to be a switch
-		String month;
-		switch (this.month) {
-			case 1:
-				month = "January";
-				break;
-			case 2:
-				month = "February";
-				break;
-			case 3:
-				month = "March";
-				break;
-			case 4:
-				month = "April";
-				break;
-			case 5:
-				month = "May";
-				break;
-			case 6:
-				month = "June";
-				break;
-			case 7:
-				month = "July";
-				break;
-			case 8:
-				month = "August";
-				break;
-			case 9:
-				month = "September";
-				break;
-			case 10:
-				month = "October";
-				break;
-			case 11:
-				month = "November";
-				break;
-			case 12:
-				month = "December";
-				break;
-			default:
-				// Indicates bug in TimeManager class
-				LOGGER.warn("Issue in TimeManager class");
-				month = "Error";
-		}
 
-		return String.format("%02d %s", this.day, month);
+		String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September",
+				"October", "November", "December"};
+
+		return String.format("%02d %s", this.day, months[this.getMonth()-1]);
 	}
 
 	/**
-	 * Sets the date and time (FOR TESTING PURPOSES ONLY)
+	 * Sets the date and time (FOR TESTING PURPOSES ONLY).
 	 *
 	 * @param second
-	 * 			The second to be set.
+	 * 			The second to be set (0 <= second < 60).
 	 *
 	 * @param minute
-	 * 			The minute to be set.
+	 * 			The minute to be set (0 <= minute < 60).
 	 *
 	 * @param hour
-	 * 			The hour to be set.
+	 * 			The hour to be set (0 <= hour < 24).
 	 *
 	 * @param day
-	 * 			The day to be set.
+	 * 			The day to be set (0 <= day <= 31).
 	 *
 	 * @param month
-	 * 			The month to be set
+	 * 			The month to be set (0 <= month <= 12).
 	 *
 	 * @param year
-	 * 			The year to be set.
+	 * 			The year to be set (0 < year ).
 	 */
 	public boolean setDateTime(int second, int minute, int hour, int day, int month, int year) {
 		// check validity of inputs
