@@ -58,6 +58,10 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         
         this.shoot = false;
         this.counter = 0;
+        this.followX = 0;
+        this.followY = 0;
+        this.aimX = 0;
+        this.aimY = 0;
         
         this.weaponType = weaponType;
         this.user = user;

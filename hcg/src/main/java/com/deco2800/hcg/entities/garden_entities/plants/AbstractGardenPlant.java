@@ -3,7 +3,6 @@ package com.deco2800.hcg.entities.garden_entities.plants;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.StopwatchManager;
-import com.deco2800.hcg.managers.TimeManager;
 
 import java.util.Map;
 import java.util.Observable;
@@ -64,8 +63,8 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	public void update(Observable o, Object arg) {
 		int time = (int)(float)arg;
 		if (time - lastGrow >= growDelay) {
-		    plantManager.updateLabel();
         	this.advanceStage();
+		    plantManager.updateLabel();
         	lastGrow = time;
         }
 		
