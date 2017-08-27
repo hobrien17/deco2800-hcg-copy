@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.items.TestItem;
-import com.deco2800.hcg.items.TestUniqueItem;
+import com.deco2800.hcg.items.stackable.TestItem;
+import com.deco2800.hcg.items.single.TestUniqueItem;
 
 public class QuestTest {
 	

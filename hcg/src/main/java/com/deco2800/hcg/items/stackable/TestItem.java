@@ -1,4 +1,6 @@
-package com.deco2800.hcg.items;
+package com.deco2800.hcg.items.stackable;
+
+import com.deco2800.hcg.items.StackableItem;
 
 public class TestItem extends StackableItem {
     

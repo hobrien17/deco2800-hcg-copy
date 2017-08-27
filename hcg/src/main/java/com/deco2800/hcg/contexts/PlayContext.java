@@ -86,9 +86,6 @@ public class PlayContext extends Context {
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
 
-		/* Add another button to the menu */
-		Button anotherButton = new TextButton("Play Duck Sound", skin);
-
 		/* Add clock. */
 		Image clockImage = new Image(new
 				Texture(Gdx.files.internal("resources/ui/clock_outline.png")));
@@ -106,17 +103,9 @@ public class PlayContext extends Context {
 			}
 		});
 
-		/* Add a handler to play a sound */
-		anotherButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				soundManager.playSound("quack");
-			}
-		});
 
 		/* Add all buttons to the menu */
 		window.add(button);
-		window.add(anotherButton);
 		window.add(clockLabel);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
