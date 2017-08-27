@@ -1,12 +1,27 @@
 package com.deco2800.hcg.items;
 
+/**
+ * This is a test class, intended to be able to have variable properties to
+ * avoid having to create a bunch of different item classes to test with.
+ */
 public class TestUniqueItem extends SingleItem {
-
-    public TestUniqueItem() {
+    private String uniqueData;
+    
+    public TestUniqueItem(String name, int weight) {
         this.baseValue = 100;
-        this.itemWeight = 72;
-        this.itemName = "Basic Sword";
+        this.itemWeight = weight;
+        this.itemName = name;
         this.texture = "sword.png";
+    }
+    
+    /**
+     * Retrieves an items display name
+     *
+     * @return Name of item as String
+     */
+    @Override
+    public String getName() {
+        return String.format("%s (%s)", this.itemName, this.uniqueData);
     }
 
     /**
@@ -26,7 +41,7 @@ public class TestUniqueItem extends SingleItem {
      */
     @Override
     public boolean isEquippable() {
-        return true;
+        return false;
     }
 
     /**
@@ -37,5 +52,27 @@ public class TestUniqueItem extends SingleItem {
     @Override
     public boolean isTradable() {
         return true;
+    }
+
+    public void setUniqueData(String data) {
+        this.uniqueData = data;
+    }
+
+    public String getUniqueData() {
+        return this.uniqueData;
+    }
+    
+    @Override
+    public boolean sameItem(Item item) {
+        if(item instanceof TestUniqueItem) {
+            if(this.uniqueData == null) {
+                return ((TestUniqueItem) item).getUniqueData() == null;
+            }
+            
+            return this.uniqueData.equals(((TestUniqueItem) item).getUniqueData())
+                    && super.sameItem(item);
+        }
+        
+        return false;
     }
 }
