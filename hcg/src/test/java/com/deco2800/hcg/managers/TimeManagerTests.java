@@ -10,6 +10,7 @@ public class TimeManagerTests {
 	private TimeManager timeManagerNextSecondTest;
 	private TimeManager timeManagerGetDateTest;
 	private TimeManager timeManagerNightDayTest;
+	private TimeManager timeManagertimeIncrementingTest;
 
 	@Before
 	public void setUp() {
@@ -29,10 +30,14 @@ public class TimeManagerTests {
 
 		// for getDateTest
 		timeManagerGetDateTest = new TimeManager();
-		
+
 		// for NightDayTest
 		timeManagerNightDayTest = new TimeManager();
 		timeManagerNightDayTest.pauseTime();
+
+		// for NightDayTest
+		timeManagertimeIncrementingTest = new TimeManager();
+		timeManagertimeIncrementingTest.pauseTime();
 	}
 
 	@Test
@@ -152,23 +157,47 @@ public class TimeManagerTests {
 	}
 
 	@Test
-	public void NightDayTest() {	
-		Assert.assertEquals("night is not intiated to true",
-				true, timeManagerNightDayTest.isNight());
-		
+	public void NightDayTest() {
+		Assert.assertEquals("night is not intiated to true", true,
+				timeManagerNightDayTest.isNight());
 
 		// get to a second before 5am (change over to day)
-		for (int i = 0; i<17999; i++){
+		for (int i = 0; i < 17999; i++) {
 			timeManagerNightDayTest.nextSecond();
 		}
-		
+
 		// edge case: last second that it is night
-		Assert.assertEquals("fudf",
-				true, timeManagerNightDayTest.isNight());
-		
+		Assert.assertEquals("last second that it is night is not", true,
+				timeManagerNightDayTest.isNight());
+
 		// edge case: the first second that it is day
 		timeManagerNightDayTest.nextSecond();
-		Assert.assertEquals("fudf",
-				false, timeManagerNightDayTest.isNight());
-	}	
+		Assert.assertEquals("first second that is day is not", false,
+				timeManagerNightDayTest.isNight());
+	}
+	
+	@Test
+	public void timeIncrementingTests() {
+		// get to a second before 5am (change over to day)
+		for (int i = 0; i < 59; i++) {
+			timeManagertimeIncrementingTest.nextSecond();
+		}
+
+		// edge case: last second that it is minute 0 and 59 seconds
+		Assert.assertEquals("last second of the minute", 59,
+				timeManagertimeIncrementingTest.getSeconds());
+
+		Assert.assertEquals("last second that minute == 0", 0,
+				timeManagertimeIncrementingTest.getMinutes());
+		
+		timeManagertimeIncrementingTest.nextSecond();
+		
+		// edge case: first second that it is minute 1 and 0 seconds
+		Assert.assertEquals("first second of the minute", 0,
+				timeManagertimeIncrementingTest.getSeconds());
+
+		Assert.assertEquals("first second that minute == 1", 1,
+				timeManagertimeIncrementingTest.getMinutes());
+	}
+
 }
