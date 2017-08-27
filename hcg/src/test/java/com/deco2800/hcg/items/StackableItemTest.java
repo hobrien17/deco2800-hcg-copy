@@ -2,6 +2,8 @@ package com.deco2800.hcg.items;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+
+import com.deco2800.hcg.items.stackable.TestItem;
 import org.junit.Test;
 
 public class StackableItemTest {
@@ -17,7 +19,7 @@ public class StackableItemTest {
     public void TestIntilization() {
 
         /** Test Initialisation values **/
-        StackableItem testItem = new TestItem();
+        StackableItem testItem = new com.deco2800.hcg.items.stackable.TestItem();
         assertTrue(testItem.getName() == testItemName);
         assertTrue(testItem.getBaseValue() == testBaseValue);
         assertTrue(testItem.getMaxStackSize() == testMaxStackSize);
@@ -34,7 +36,7 @@ public class StackableItemTest {
     @Test
     public void TestAddToStack() {
         /** Test Initialisation values **/
-        StackableItem testItem = new TestItem();
+        StackableItem testItem = new com.deco2800.hcg.items.stackable.TestItem();
         //Max stack size is 64, current stack is 1
         //Add 30 to the stack, size now 31
         testItem.addToStack(30);
@@ -47,7 +49,7 @@ public class StackableItemTest {
         //Cant add another item as its full
         assertFalse(testItem.addToStack(1));
         //Adding too much to stack in one go
-        StackableItem testItem2 = new TestItem();
+        StackableItem testItem2 = new com.deco2800.hcg.items.stackable.TestItem();
         assertFalse(testItem2.addToStack(64));
     }
 
@@ -55,7 +57,7 @@ public class StackableItemTest {
     @Test
     public void TestSetStackSize() {
         /** Test Initialisation values **/
-        StackableItem testItem = new TestItem();
+        StackableItem testItem = new com.deco2800.hcg.items.stackable.TestItem();
         testItem.setStackSize(30);
         assertTrue(testItem.getStackSize() == 30);
 
@@ -65,7 +67,7 @@ public class StackableItemTest {
     @Test
     public void TestSameItem() {
         /** Test Initialisation values **/
-        StackableItem testItem = new TestItem();
+        StackableItem testItem = new com.deco2800.hcg.items.stackable.TestItem();
         StackableItem testItem2 = new TestItem();
         assertTrue(testItem.sameItem(testItem2));
         testItem2.setStackSize(35);

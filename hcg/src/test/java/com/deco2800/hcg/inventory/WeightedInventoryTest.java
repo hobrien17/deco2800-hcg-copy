@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.deco2800.hcg.items.TestItem;
-import com.deco2800.hcg.items.TestUniqueItem;
+import com.deco2800.hcg.items.stackable.TestItem;
+import com.deco2800.hcg.items.single.TestUniqueItem;
 
 public class WeightedInventoryTest {
     
