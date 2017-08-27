@@ -15,13 +15,13 @@ import com.deco2800.hcg.managers.GameManager;
 
 /**
  * Asynchronous UDP networking
- * 
+ *
  * @author Max Crofts
  *
  */
 public final class NetworkState {
 	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
-	
+
 	static DatagramSocket socket;
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
@@ -32,11 +32,9 @@ public final class NetworkState {
 	private static NetworkReceive networkReceive;
 	private static Thread sendThread;
 	private static Thread receiveThread;
-	
-	private NetworkState() {
-		
-	}
-	
+
+	private NetworkState() {}
+
 	/**
 	 * Initialises NetworkState
 	 * @param hostGame
@@ -44,7 +42,7 @@ public final class NetworkState {
 	public static void init(boolean hostGame) {
 		peers = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
-		
+
 		// initialise socket
 		try {
 			if (hostGame) {
@@ -56,7 +54,7 @@ public final class NetworkState {
 		} catch (SocketException e) {
 			LOGGER.error("Failed to initialise socket", e);
 		}
-		
+
 		// initialise threads
 		networkSend = new NetworkSend();
 		networkReceive = new NetworkReceive();
@@ -65,10 +63,10 @@ public final class NetworkState {
 		// start the networking send/receive threads
 		sendThread.start();
 		receiveThread.start();
-		
+
 		initialised = true;
 	}
-	
+
 	/**
 	 * Check if network state is initialised
 	 * @return Boolean indicating if network state has been initialised
@@ -76,7 +74,7 @@ public final class NetworkState {
 	public static boolean isInitialised() {
 		return initialised;
 	}
-	
+
 	/**
 	 * Add message to queue
 	 * @param message Message to be sent
@@ -85,7 +83,7 @@ public final class NetworkState {
 		Integer id = new Integer((int) message.getId());
 		sendQueue.put(id, message);
 	}
-	
+
 	/**
 	 * Add chat message to queue
 	 * @param chatMessage String to be sent
@@ -98,7 +96,7 @@ public final class NetworkState {
 		// send message to peers
 		sendMessage(printMessage);
 	}
-	
+
 	/**
 	 * Join server
 	 * @param hostname Hostname of server
@@ -110,7 +108,7 @@ public final class NetworkState {
 		// try to connect
 		sendMessage(new Message(MessageType.JOIN, "".getBytes()));
 	}
-	
+
 	/**
 	 * Used to run network send thread
 	 */
@@ -127,10 +125,8 @@ public final class NetworkState {
 					for (Message message : NetworkState.sendQueue.values()) {
 						try {
 							byte[] byteArray = message.toByteArray();
-							DatagramPacket packet = new DatagramPacket(
-									byteArray,
-									byteArray.length,
-									peer);
+							DatagramPacket packet =
+									new DatagramPacket(byteArray, byteArray.length, peer);
 							NetworkState.socket.send(packet);
 							// log
 							System.out.println("SENT: " + message.getType().toString());
@@ -142,17 +138,17 @@ public final class NetworkState {
 			}
 		}
 	}
-	
+
 	/**
 	 * Used to run network receive thread
 	 */
 	private static class NetworkReceive implements Runnable {
 		private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
-		
+
 		private NetworkReceive() {
 			this.processedIds = new ArrayList<>();
 		}
-		
+
 		/**
 		 * Receive thread process
 		 */
@@ -164,12 +160,14 @@ public final class NetworkState {
 					NetworkState.socket.receive(packet);
 					Message message = new Message(packet.getData());
 					Integer messageId = new Integer((int) message.getId());
-					if (message.getType() != MessageType.CONFIRMATION && !processedIds.contains(messageId)) {
+					if (message.getType() != MessageType.CONFIRMATION
+							&& !processedIds.contains(messageId)) {
 						// TODO: this should end up somewhere else
-						switch(message.getType()) {
+						switch (message.getType()) {
 							case JOIN:
 								// add peer to lobby
-								NetworkState.peers.put(NetworkState.peers.size() - 1, packet.getSocketAddress());
+								NetworkState.peers.put(
+										NetworkState.peers.size() - 1, packet.getSocketAddress());
 								break;
 							case CHAT:
 								System.out.println(message.getPayloadString());
@@ -189,12 +187,11 @@ public final class NetworkState {
 							System.out.println("REMOVED: " + removed.getType().toString());
 						}
 					} else {
-						Message confirmMessage = new Message(MessageType.CONFIRMATION, message.getIdInBytes());
+						Message confirmMessage =
+								new Message(MessageType.CONFIRMATION, message.getIdInBytes());
 						byte byteArray[] = confirmMessage.toByteArray();
 						DatagramPacket confirmPacket = new DatagramPacket(
-								byteArray,
-								byteArray.length,
-								packet.getSocketAddress());
+								byteArray, byteArray.length, packet.getSocketAddress());
 						NetworkState.socket.send(confirmPacket);
 					}
 				} catch (Exception e) {
@@ -202,6 +199,5 @@ public final class NetworkState {
 				}
 			}
 		}
-
 	}
 }
