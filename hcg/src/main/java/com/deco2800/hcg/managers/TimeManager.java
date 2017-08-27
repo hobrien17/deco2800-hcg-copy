@@ -48,7 +48,7 @@ public class TimeManager extends Manager implements TickableManager {
 		this.timeElapsed = 0;
 		this.timeLabel = null;
 		this.dateLabel = null;
-		this.timePaused = false; // this will need to be set to true when we have some sort of 'start screen' happening
+		this.timePaused = false;
 	}
 
 	/**
@@ -215,10 +215,7 @@ public class TimeManager extends Manager implements TickableManager {
 	 * Debugging method for printing date to stdout
 	 */
 	public void printDate() {
-		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d",
-				this.day, this.month, this.year, this.hours, this.minutes,
-				this.seconds);
-		LOGGER.info(dateTime);
+		LOGGER.info(this.getDateTime());
 	}
 
 	/**
@@ -377,26 +374,25 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @param year
 	 * 			The year to be set.
 	 */
-	public void setDateTime(int second, int minute, int hour, int day, int month, int year)
-			throws IllegalArgumentException {
+	public boolean setDateTime(int second, int minute, int hour, int day, int month, int year) {
 		// check validity of inputs
 		if (second < 0 || second > 59) {
-			throw new IllegalArgumentException("Seconds must be a valid input.");
+			return false;
 		}
 		if (minute < 0 || minute > 59) {
-			throw new IllegalArgumentException("Seconds must be a valid input.");
+			return false;
 		}
 		if (hour < 0 || hour > 23) {
-			throw new IllegalArgumentException("Seconds must be a valid input.");
+			return false;
 		}
 		if (day < 1 || day > 31) {
-			throw new IllegalArgumentException("Seconds must be a valid input.");
+			return false;
 		}
 		if (month < 1 || month > 12) {
-			throw new IllegalArgumentException("Seconds must be a valid input.");
+			return false;
 		}
 		if (year < 0) {
-			throw new IllegalArgumentException("Seconds must be a valid input.");
+			return false;
 		}
 		// set date & time
 		this.seconds = second;
@@ -406,6 +402,7 @@ public class TimeManager extends Manager implements TickableManager {
 		this.month = month;
 		this.year = year;
 		checkNight();
+		return true;
 	}
 
- }
+}
