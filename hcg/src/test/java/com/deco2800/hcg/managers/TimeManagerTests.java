@@ -1,6 +1,5 @@
 package com.deco2800.hcg.managers;
 
-
 import org.junit.*;
 
 public class TimeManagerTests {
@@ -29,7 +28,7 @@ public class TimeManagerTests {
 
 		// for getDateTest
 		timeManagerGetDateTest = new TimeManager();
-		
+
 		// for NightDayTest
 		timeManagerNightDayTest = new TimeManager();
 		timeManagerNightDayTest.pauseTime();
@@ -41,9 +40,10 @@ public class TimeManagerTests {
 		// for minute to hour tests
 		timeManagerIncrementingHrTest = new TimeManager();
 		timeManagerIncrementingHrTest.pauseTime();
-		
+
 		// for Calander Incrementing Test
 		timeManagerCalanderIncrementingTest = new TimeManager();
+		timeManagerCalanderIncrementingTest.pauseTime();
 	}
 
 	// setDateTime tests
@@ -396,10 +396,10 @@ public class TimeManagerTests {
 
 		Assert.assertEquals("last second that minute == 59", 59,
 				timeManagerIncrementingHrTest.getMinutes());
-		
+
 		Assert.assertEquals("last second that hr == 0", 0,
 				timeManagerIncrementingHrTest.getHours());
-		
+
 		timeManagerIncrementingHrTest.nextSecond();
 
 		// edge case: first second that it is minute 1 and 0 seconds
@@ -408,10 +408,9 @@ public class TimeManagerTests {
 
 		Assert.assertEquals("0th minute of the first hr", 0,
 				timeManagerIncrementingHrTest.getMinutes());
-		
+
 		Assert.assertEquals("first second that hr == 1", 1,
 				timeManagerIncrementingHrTest.getHours());
 	}
-
 
 }
