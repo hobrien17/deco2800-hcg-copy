@@ -48,6 +48,7 @@ public class Weapon extends AbstractEntity implements Tickable {
     private boolean shoot;
     int counter;
     private WeaponType weaponType;
+    private AbstractEntity user;
     
     /**
      * Constructor for Weapon objects.
@@ -61,17 +62,22 @@ public class Weapon extends AbstractEntity implements Tickable {
      *
      */
     public Weapon(float posX, float posY, float posZ,
-            WeaponType weaponType) {        
+            WeaponType weaponType, AbstractEntity user) {        
         super(posX, posY, posZ, 0.6f, 0.6f, 1);
         
         this.radius = 0.7;
         this.shoot = false;
         this.counter = 0;
         this.weaponType = weaponType;
+        this.user = user;
         this.setTexture("battle_seed");
         
         this.playerManager = (PlayerManager) GameManager.get()
                 .getManager(PlayerManager.class);
+    }
+
+    public void setUser(AbstractEntity user){
+        this.user = user;
     }
     
     /**
@@ -135,7 +141,7 @@ public class Weapon extends AbstractEntity implements Tickable {
     private void shootBullet(float posX, float posY, float posZ,
             float goalX, float goalY) {
         Bullet bullet = new Bullet(posX, posY, posZ,
-                goalX, goalY);
+                goalX, goalY, user);
         GameManager.get().getWorld().addEntity(bullet);
     }
     

@@ -1,6 +1,8 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An 'Observer' class to manage the game's internal system of time. Time is initialised to
@@ -27,6 +29,9 @@ public class TimeManager extends Manager implements TickableManager {
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	private boolean timePaused;
 	private boolean isNight;
+
+	static final Logger LOGGER =
+			LoggerFactory.getLogger(TimeManager.class);
 
 	/**
 	 * Constructor: Initializes day to 01/01/2047 and elapsed time to 0 on
@@ -127,10 +132,22 @@ public class TimeManager extends Manager implements TickableManager {
 		return this.timeElapsed;
 	}
 
+	/**
+	 * Setter method to change the time in the gui
+	 * 
+	 * @param label:
+	 *            the text to change the time label in the gui
+	 */
 	public void setTimeLabel(Label label) {
 		this.timeLabel = label;
 	}
 
+	/**
+	 * Setter method to change the date in the gui
+	 * 
+	 * @param label:
+	 *            the text to change the date label in the gui
+	 */
 	public void setDateLabel(Label label) {
 		this.dateLabel = label;
 	}
@@ -340,7 +357,7 @@ public class TimeManager extends Manager implements TickableManager {
 				break;
 			default:
 				// Indicates bug in TimeManager class
-				System.out.println("Issue in TimeManager class");
+				LOGGER.warn("Issue in TimeManager class");
 				month = "Error";
 		}
 

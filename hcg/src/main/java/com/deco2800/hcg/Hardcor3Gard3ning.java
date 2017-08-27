@@ -31,6 +31,7 @@ public class Hardcor3Gard3ning extends Game {
     private ContextManager contextManager;
 	private InputManager inputManager;
 	private ItemManager itemManager;
+	private StopwatchManager stopwatchManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -67,6 +68,10 @@ public class Hardcor3Gard3ning extends Game {
         
         /* Create an item manager */
         itemManager = (ItemManager) gameManager.getManager(ItemManager.class); 
+        
+        /* Setup stopwatch manager */
+        stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
+        stopwatchManager.startTimer(1);
 
         //TODO everything below this line doesn't belong here
 

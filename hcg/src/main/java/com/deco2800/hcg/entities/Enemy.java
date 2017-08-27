@@ -45,7 +45,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
             throw new IllegalArgumentException();
         }
         if (strength > 0) {
-            this.strength = strength;
+            this.attributes.put("strength", strength);
         } else {
             throw new IllegalArgumentException();
         }
@@ -286,10 +286,10 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         }
     }
     
-    public void shoot() {
+    public void shoot(AbstractEntity thisEnemy) {
         Vector3 worldCoords = GameManager.get().getCamera()
                 .unproject(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
-        Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y);
+        Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y, thisEnemy);
         GameManager.get().getWorld().addEntity(bullet);
     }
 	

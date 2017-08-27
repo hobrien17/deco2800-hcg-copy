@@ -10,6 +10,8 @@ import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.worlds.AbstractWorld;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,15 +37,16 @@ public class Player extends Character implements Tickable {
     private int newTime = -1;
 
     private int skillPoints;
+    private HashMap<String, Boolean> movementDirection = new HashMap<>();
     
     private Weapon equippedWeapon;
     
     private Weapon peashooter = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.MACHINEGUN);
+            getPosY(), getPosZ(), WeaponType.MACHINEGUN, this);
     private Weapon shotgun = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.SHOTGUN);
+            getPosY(), getPosZ(), WeaponType.SHOTGUN, this);
     private Weapon stargun = new Weapon(getPosX(),
-            getPosY(), getPosZ(), WeaponType.STARFALL);
+            getPosY(), getPosZ(), WeaponType.STARFALL, this);
 
     /**
      * Creates a new player at specified position.
@@ -81,6 +84,11 @@ public class Player extends Character implements Tickable {
         equippedWeapon = peashooter;
         GameManager.get().getWorld().addEntity(equippedWeapon);
 
+        // for direction of movement
+        movementDirection.put("left", false);
+        movementDirection.put("right", false);
+        movementDirection.put("up", false);
+        movementDirection.put("down", false);
     }
 
     /**
@@ -263,13 +271,11 @@ public class Player extends Character implements Tickable {
      * character in the character creation screen
      */
     public void initialiseNewPlayer(int strength, int vitality, int agility,
-            int charisma,
-            int intellect,
-            int meleeSkill) {
+            int charisma, int intellect, int meleeSkill) {
         setAttributes(strength, vitality, agility, charisma, intellect);
         setSkills(meleeSkill);
         health = 4 * vitality;
-        stamina = 4 * agility;
+        attributes.put("stamina", 4* agility);
     }
 
     /**
@@ -289,9 +295,9 @@ public class Player extends Character implements Tickable {
     private void levelUp() {
         xpThreshold *= 1.3;
         level++;
-        stamina = stamina + agility;
-        health = health + vitality;
-        skillPoints = 4 + intellect;
+        attributes.put("stamina", attributes.get("stamina") + attributes.get("agility"));
+        health = health + attributes.get("vitality");
+        skillPoints = 4 + attributes.get("intellect");
         // TODO: enter level up screen
     }
 
@@ -311,20 +317,16 @@ public class Player extends Character implements Tickable {
     private void handleKeyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.W:
-                speedY -= movementSpeed;
-                speedX += movementSpeed;
+                movementDirection.put("up", true);
                 break;
             case Input.Keys.S:
-                speedY += movementSpeed;
-                speedX -= movementSpeed;
+                movementDirection.put("down", true);
                 break;
             case Input.Keys.A:
-                speedX -= movementSpeed;
-                speedY -= movementSpeed;
+                movementDirection.put("left", true);
                 break;
             case Input.Keys.D:
-                speedX += movementSpeed;
-                speedY += movementSpeed;
+                movementDirection.put("right", true);
                 break;
             case Input.Keys.R:
                 if(equippedWeapon.equals(peashooter)) {
@@ -343,6 +345,9 @@ public class Player extends Character implements Tickable {
             default:
                 break;
         }
+
+        handleDirectionInput();
+        handleNoInput();
     }
 
     /**
@@ -351,23 +356,74 @@ public class Player extends Character implements Tickable {
     private void handleKeyUp(int keycode) {
         switch (keycode) {
             case Input.Keys.W:
-                speedY += movementSpeed;
-                speedX -= movementSpeed;
+                movementDirection.put("up", false);
                 break;
             case Input.Keys.S:
-                speedY -= movementSpeed;
-                speedX += movementSpeed;
+                movementDirection.put("down", false);
                 break;
             case Input.Keys.A:
-                speedX += movementSpeed;
-                speedY += movementSpeed;
+                movementDirection.put("left", false);
                 break;
             case Input.Keys.D:
-                speedX -= movementSpeed;
-                speedY -= movementSpeed;
+                movementDirection.put("right", false);
                 break;
             default:
                 break;
+        }
+
+        handleDirectionInput();
+        handleNoInput();
+    }
+
+    /**
+     * Sets the player's movement speed based on the combination of keys being
+     * pressed
+     */
+    private void handleDirectionInput() {
+
+        float diagonalSpeed = (float) Math.sqrt(2*(movementSpeed*movementSpeed))/2;
+
+        if (movementDirection.get("up") && movementDirection.get("right")) {
+            speedX = movementSpeed;
+            speedY= 0;
+        } else if (movementDirection.get("up") && movementDirection.get("left")) {
+            speedY = -movementSpeed;
+            speedX = 0;
+        } else if (movementDirection.get("down") && movementDirection.get("right")) {
+            speedY = movementSpeed;
+            speedX = 0;
+        } else if (movementDirection.get("down") && movementDirection.get("left")) {
+            speedX = -movementSpeed;
+            speedY = 0;
+        } else if (movementDirection.get("up") && movementDirection.get("down")) {
+            speedX = 0;
+            speedY = 0;
+        } else if (movementDirection.get("left") && movementDirection.get("right")) {
+            speedX = 0;
+            speedY = 0;
+        } else if (movementDirection.get("up")) {
+            speedY = -diagonalSpeed;
+            speedX = diagonalSpeed;
+        } else if (movementDirection.get("down")) {
+            speedY = diagonalSpeed;
+            speedX = -diagonalSpeed;
+        } else if (movementDirection.get("left")) {
+            speedX = -diagonalSpeed;
+            speedY = -diagonalSpeed;
+        } else if (movementDirection.get("right")) {
+            speedX = diagonalSpeed;
+            speedY = diagonalSpeed;
+        }
+    }
+
+    /**
+     * Sets the player's movement speed to zero if no keys are pressed.
+     */
+    private void handleNoInput() {
+        if (!movementDirection.get("up") && !movementDirection.get("down") &&
+                !movementDirection.get("left") && !movementDirection.get("right")) {
+            speedX = 0;
+            speedY = 0;
         }
     }
 
