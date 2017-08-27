@@ -46,13 +46,14 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      * @param master the pot the plant is related to
      * @param delay the growth delay of the plant.
      */
-    public AbstractGardenPlant(Pot master, int delay) {
+    public AbstractGardenPlant(Pot master, String name, int delay) {
         this.stage = Stage.SPROUT;
         growDelay = delay;
         StopwatchManager manager = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
         lastGrow = (int)manager.getStopwatchTime();
         this.master = master;
+        this.name = name;
         setupLoot();
     }
     
@@ -76,6 +77,9 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      *
      * @return The current stage of growth (i.e. SPROUT, SMALL, or LARGE)
      */
+    public Stage getStage() {
+    	return stage;
+    }
 
     /**
      * Gets the pot of this plant
@@ -93,10 +97,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      */
     public String getName(){
         return name;
-    }
-
-    public Stage getStage() {
-        return stage;
     }
 
     /**

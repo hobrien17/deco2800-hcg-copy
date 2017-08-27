@@ -19,7 +19,7 @@ public class Water extends AbstractGardenPlant {
 	 */
 	public Water(Pot master) {
 
-		super(master, 30);
+		super(master, "lily", 30);
 	}
 
 	@Override
