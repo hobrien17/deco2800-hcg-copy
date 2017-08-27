@@ -466,6 +466,9 @@ public class Player extends Character implements Tickable {
 					movementDirection.put("right", true);
 					soundPlay(name);
 					break;
+				case Input.Keys.E:
+					checkForInteraction();
+					break;
 				case Input.Keys.R:
 		    		if(this.getEquippedWeapon() != null) {
 		  		      GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
