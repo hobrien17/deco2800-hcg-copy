@@ -1,5 +1,7 @@
 package com.deco2800.hcg.items;
 
+import com.deco2800.hcg.items.single.TestUniqueItem;
+
 public abstract class SingleItem extends GenericItem {
     /**
      * Returns the current stack size of this item.
@@ -77,7 +79,16 @@ public abstract class SingleItem extends GenericItem {
      */
     @Override
     public boolean sameItem(Item item) throws IllegalArgumentException {
-        return (item instanceof SingleItem && ((SingleItem) item).itemName == this.itemName);
-
+        return (item instanceof SingleItem && item.getName().equals(this.getName()));
+    }
+    
+    @Override
+    public boolean equals(Item item) {
+        //Due to item being nullable (according to sonar)
+        if (item != null) {
+            return this.sameItem(item) && this.getStackSize() == item.getStackSize();
+        }
+        //Will always be false as item.getStackSize will (or should) throw a null pointer which isn't equal to int
+        return false;
     }
 }

@@ -1,8 +1,13 @@
 package com.deco2800.hcg.entities;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.naming.directory.InvalidAttributesException;
-import javax.print.DocFlavor;
-import java.util.*;
+
+import com.deco2800.hcg.items.Item;
 
 /**
  * The Character abstract class is to be extended by all Characters, both
@@ -33,8 +38,14 @@ import java.util.*;
  * @author avryn, trent_s
  */
 public abstract class Character extends AbstractEntity {
+<<<<<<< HEAD
     // TODO: Change class implementation to use a single method  to get skills and attributes without using a map.
     public final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("stamina", "carryWeight",
+=======
+    // TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
+    // Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
+    protected final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "health", "stamina", "carryWeight",
+>>>>>>> master
             "strength", "vitality", "agility", "charisma", "intellect");
 
     protected float movementSpeed;
@@ -187,6 +198,16 @@ public abstract class Character extends AbstractEntity {
      */
     protected void setMeleeSkill(int meleeSkill) {
         this.meleeSkill = meleeSkill;
+    }
+    
+    /**
+     * Fetches the item this character currently has equipped, or null if this
+     * character has no item equipped.
+     * 
+     * @return This character's equipped item.
+     */
+    public Item getCurrentEquippedItem() {
+        return null;
     }
 
     /**

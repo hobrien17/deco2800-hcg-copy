@@ -1,7 +1,5 @@
 package com.deco2800.hcg.managers;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
 /**
  * An 'Observeable' class that is used to time in game events
  *
@@ -57,6 +55,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 		this.ticksElapsed = 0;
 		this.minutes = 0;
 		this.seconds = 0;
+		this.timerFinished = false;
 	}
 
 	/**
@@ -92,11 +91,11 @@ public class StopwatchManager extends Manager implements TickableManager {
 
 		this.ticksElapsed++;
 
-		// as a minute is 50 ticks
-
+		// converting 50 tick minutes to 60 seconds
 		float secondsDecimal = ticksElapsed % 50;
 		secondsDecimal = (secondsDecimal / 50) * 60;
 
+		// as a minute is 50 ticks
 		this.minutes = ticksElapsed / 50;
 		this.seconds = (int) (secondsDecimal);
 

@@ -1,6 +1,7 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.deco2800.hcg.util.MathHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,6 @@ public class TimeManager extends Manager implements TickableManager {
 	private int day;
 	private int month;
 	private int year;
-	private int timeElapsed;
 
 	private int seconds;
 	private int minutes;
@@ -44,10 +44,28 @@ public class TimeManager extends Manager implements TickableManager {
 		this.day = 1;
 		this.month = 1;
 		this.year = 2047;
-		this.timeElapsed = 0;
+		this.isNight = true;
 		this.timeLabel = null;
 		this.dateLabel = null;
-		this.timePaused = false; // this will need to be set to true when we have some sort of 'start screen' happening
+		this.timePaused = false;
+	}
+
+	/**
+	 * Gets the year.
+	 *
+	 * @return Returns the year.
+	 */
+	public int getYear() {
+		return this.year;
+	}
+
+	/**
+	 * Gets the month.
+	 *
+	 * @return Returns the month.
+	 */
+	public int getMonth() {
+		return this.month;
 	}
 
 	/**
@@ -60,54 +78,8 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Gets the month.
-	 * 
-	 * @return Returns the month.
-	 */
-	public int getMonth() {
-		return this.month;
-	}
-
-
-	/**
-	 * Gets the year.
-	 * 
-	 * @return Returns the year.
-	 */
-	public int getYear() {
-		return this.year;
-	}
-
-	/**
-	 * Sets the seconds.
-	 * 
-	 * @param seconds
-	 */
-	public void setSeconds(int seconds) {
-		this.seconds = seconds;
-	}
-
-	/**
-	 * Gets the seconds.
-	 * 
-	 * @return Returns the seconds.
-	 */
-	public int getSeconds() {
-		return this.seconds;
-	}
-
-	/**
-	 * Gets the minutes.
-	 * 
-	 * @return Returns the minutes.
-	 */
-	public int getMinutes() {
-		return this.minutes;
-	}
-
-	/**
 	 * Gets the hours.
-	 * 
+	 *
 	 * @return Returns the hours.
 	 */
 	public int getHours() {
@@ -115,21 +87,21 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Sets the elapsed (game) time.
-	 * 
-	 * @param timeElapsed
+	 * Gets the minutes.
+	 *
+	 * @return Returns the minutes.
 	 */
-	private void setTimeElapsed(int timeElapsed) {
-		this.timeElapsed = timeElapsed;
+	public int getMinutes() {
+		return this.minutes;
 	}
 
 	/**
-	 * Gets the elapsed (game) time.
-	 * 
-	 * @return Returns the elapsed (game) time.
+	 * Gets the seconds.
+	 *
+	 * @return Returns the seconds.
 	 */
-	public int getTimeElapsed() {
-		return this.timeElapsed;
+	public int getSeconds() {
+		return this.seconds;
 	}
 
 	/**
@@ -209,7 +181,7 @@ public class TimeManager extends Manager implements TickableManager {
 		}
 
 		this.minutes = 0;
-		if (this.hours != 24) {
+		if (this.hours != 23) {
 			this.hours++;
 			// check if nighttime every hour
 			checkNight();
@@ -218,16 +190,6 @@ public class TimeManager extends Manager implements TickableManager {
 
 		this.hours = 0;
 		this.nextDay();
-	}
-
-	/**
-	 * Debugging method for printing date to stdout
-	 */
-	public void printDate() {
-		String dateTime = String.format("%02d/%02d/%02d %02d:%02d:%02d",
-				this.day, this.month, this.year, this.hours, this.minutes,
-				this.seconds);
-		System.out.println(dateTime);
 	}
 
 	/**
@@ -253,9 +215,10 @@ public class TimeManager extends Manager implements TickableManager {
 
 	/**
 	 * Updates internal boolean tracking day/night cycle.
-	 * Nighttime between 7:00pm and 5:00am
+	 *
+	 * <p>Nighttime between 7:00pm and 5:00am.</p>
 	 */
-	public void checkNight() {
+	private void checkNight() {
 		if (this.hours > 18 || this.hours < 5) {
 			isNight = true;
 			return;
@@ -274,7 +237,6 @@ public class TimeManager extends Manager implements TickableManager {
 			return;
 		}
 		
-		this.timeElapsed++;
 		this.nextSecond();
 		if (this.timeLabel != null) {
 			this.timeLabel.setText(this.getTime());
@@ -317,51 +279,45 @@ public class TimeManager extends Manager implements TickableManager {
 	public String getDate() {
 		// My computer is not recognizing Strings in HashMaps so for now this 
 		// is going to be a switch
-		String month;
-		switch (this.month) {
-			case 1:
-				month = "January";
-				break;
-			case 2:
-				month = "February";
-				break;
-			case 3:
-				month = "March";
-				break;
-			case 4:
-				month = "April";
-				break;
-			case 5:
-				month = "May";
-				break;
-			case 6:
-				month = "June";
-				break;
-			case 7:
-				month = "July";
-				break;
-			case 8:
-				month = "August";
-				break;
-			case 9:
-				month = "September";
-				break;
-			case 10:
-				month = "October";
-				break;
-			case 11:
-				month = "November";
-				break;
-			case 12:
-				month = "December";
-				break;
-			default:
-				// Indicates bug in TimeManager class
-				LOGGER.warn("Issue in TimeManager class");
-				month = "Error";
-		}
 
-		return String.format("%02d %s", this.day, month);
+		String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September",
+				"October", "November", "December"};
+
+		return String.format("%02d %s", this.day, months[this.getMonth()-1]);
 	}
 
- }
+	/**
+	 * Sets the date and time (FOR TESTING PURPOSES ONLY).
+	 *
+	 * @param second
+	 * 			The second to be set (0 <= second < 60).
+	 *
+	 * @param minute
+	 * 			The minute to be set (0 <= minute < 60).
+	 *
+	 * @param hour
+	 * 			The hour to be set (0 <= hour < 24).
+	 *
+	 * @param day
+	 * 			The day to be set (0 <= day <= 31).
+	 *
+	 * @param month
+	 * 			The month to be set (0 <= month <= 12).
+	 *
+	 * @param year
+	 * 			The year to be set (0 < year ).
+	 */
+	public void setDateTime(int second, int minute, int hour, int day, int month, int year) {
+
+		// clamp inputs just in case they're not valid numbers
+				this.seconds = MathHelper.clamp(second, 0, 59);
+				this.minutes = MathHelper.clamp(minute, 0, 59);
+				this.hours = MathHelper.clamp(hour, 0, 23);
+				this.day = MathHelper.clamp(day, 1, 31);
+				this.month = MathHelper.clamp(month, 1, 12);
+				this.year = MathHelper.clamp(year, 1, 10000);
+				checkNight();
+
+	}
+
+}

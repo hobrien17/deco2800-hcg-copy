@@ -1,27 +1,28 @@
 package com.deco2800.hcg.entities;
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Vector3;
-import com.deco2800.hcg.inventory.FixedSizeInventory;
 import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.trading.GeneralShop;
+import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * Entity for the playable character.
@@ -44,11 +45,12 @@ public class Player extends Character implements Tickable {
 	private String name = "";
 
 	private Inventory inventory;
+	private PlayerEquipment equippedItems;
 
 	private int skillPoints;
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
-	private Weapon equippedWeapon;
+	//private Weapon equippedWeapon;
 
 	/**
 	 * Creates a new player at specified position.
@@ -83,10 +85,8 @@ public class Player extends Character implements Tickable {
 		lastSpeedY = 0;
 
 		// Set equipped weapon and enter game world
-		equippedWeapon = new WeaponBuilder().setWeaponType
-
-(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7).build();
-		GameManager.get().getWorld().addEntity(equippedWeapon);
+        //GameManager.get().getWorld().addEntity(weaponToEquip);
+        //GameManager.get().getWorld().removeEntity(weaponToEquip);
 
 		// for direction of movement
 		movementDirection.put("left", false);
@@ -96,7 +96,20 @@ public class Player extends Character implements Tickable {
 
 		// inventory
 		inventory = new WeightedInventory(100);
+		equippedItems = PlayerEquipment.getPlayerEquipment();
+		
+		// Add weapons to inventory
+        Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN).setUser(this).setRadius(0.7)
+                .build();
+        Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL).setUser(this).setRadius(0.7)
+                .build();
+        Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
+                .build();
+		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
+        equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+        equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
+        GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 	}
 
 	/**
@@ -112,8 +125,10 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
-		equippedWeapon.updateAim(screenX, screenY);
-		equippedWeapon.openFire();
+        if(this.getEquippedWeapon() != null) {
+            this.getEquippedWeapon().updateAim(screenX, screenY);
+    		this.getEquippedWeapon().openFire();
+        }
 	}
 
 	/**
@@ -127,8 +142,10 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDragged(int screenX, int screenY, int pointer) {
-		equippedWeapon.updatePosition(screenX, screenY);
-		equippedWeapon.updateAim(screenX, screenY);
+        if(this.getEquippedWeapon() != null) {
+            this.getEquippedWeapon().updatePosition(screenX, screenY);
+    		this.getEquippedWeapon().updateAim(screenX, screenY);
+        }
 	}
 
 	/**
@@ -144,7 +161,9 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchUp(int screenX, int screenY, int pointer, int button) {
-		equippedWeapon.ceaseFire();
+        if(this.getEquippedWeapon() != null) {
+            this.getEquippedWeapon().ceaseFire();
+        }
 	}
 
 	/**
@@ -156,8 +175,53 @@ public class Player extends Character implements Tickable {
 	 *            the y position of mouse movement on the screen
 	 */
 	private void handleMouseMoved(int screenX, int screenY) {
-		equippedWeapon.updatePosition(screenX, screenY);
+	    if(this.getEquippedWeapon() != null) {
+	        this.getEquippedWeapon().updatePosition(screenX, screenY);
+	    }
 	}
+
+	/**
+	 * Checks player's proximity to NPCs to see if an interaction can be initiated.
+	 */
+	private void checkForInteraction() {
+		LOGGER.info(this + " attempted to initiate an interaction with a NPC");
+		Box3D interactionRadius = getBox3D();
+		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
+		for (AbstractEntity entity : entities) {
+			if (!this.equals(entity) & (interactionRadius.distance(entity.getBox3D()) < 3.0f)) {
+				if (entity instanceof NPC) {
+
+					LOGGER.info(this + " initiated a interaction with " + entity);
+					this.NPCInteraction(entity);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Handles the interaction between player and a NPC
+	 * @param npc the NPC (as an entity) that you wish to interact with
+	 */
+	/**
+	 * Handles the interaction between player and a NPC
+	 * @param npc the NPC (as an entity) that you wish to interact with
+	 */
+	private void NPCInteraction(AbstractEntity npc) {
+		if (((NPC) npc).getNPCType() == NPC.Type.Shop) {
+
+			LOGGER.info("Shop NPC Interaction Started");
+			Shop shop = new GeneralShop();
+			shop.open(0, this);
+
+		} else if (((NPC) npc).getNPCType() == NPC.Type.Quest) {
+			LOGGER.info("Quest NPC Interaction Started");
+
+		} else {
+			LOGGER.info("Other NPC Interaction Started");
+
+		}
+	}
+
 
 	/**
 	 * On Tick handler
@@ -221,7 +285,11 @@ public class Player extends Character implements Tickable {
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
+<<<<<<< HEAD
 				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
+=======
+				this.setHealth(this.getHealth() - Integer.parseInt((String) layer.getProperties().get("damage")));
+>>>>>>> master
 			}
 
 			// log
@@ -237,10 +305,15 @@ public class Player extends Character implements Tickable {
 			float slipperyFactor2 = slippery * 0.06f;
 
 			// created helper function to avoid duplicate code
+<<<<<<< HEAD
 			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed, slipperyFactor, 
 			        slipperyFactor2);
 			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed, slipperyFactor, 
 			        slipperyFactor2);
+=======
+			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed, slipperyFactor, slipperyFactor2);
+			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed, slipperyFactor, slipperyFactor2);
+>>>>>>> master
 
 		} else {
 			// non slippery movement
@@ -272,9 +345,14 @@ public class Player extends Character implements Tickable {
 
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
+<<<<<<< HEAD
 			if (!this.equals(entity) && !(entity instanceof Squirrel) && 
 			        newPos.overlaps(entity.getBox3D()) && 
 			        !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
+=======
+			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps(entity.getBox3D())
+					&& !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
+>>>>>>> master
 				LOGGER.info(this + " colliding with " + entity);
 				collided = true;
 
@@ -354,9 +432,11 @@ public class Player extends Character implements Tickable {
 	
 
 	/**
-	 * Handle movement when wasd keys are pressed down
+	 * Handle movement when wasd keys are pressed down. As well as other possible actions on key press. Such as
+	 * NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
+<<<<<<< HEAD
 		if (sprinting) {
 			setAttribute("stamina", getAttribute("stamina") - 30);
 		} else {
@@ -419,6 +499,40 @@ public class Player extends Character implements Tickable {
 		if (getAttribute("stamina") <= 0){
 			sprinting = false;
 			movementSpeed = movementSpeedNorm;
+=======
+		switch (keycode) {
+		case Input.Keys.W:
+			movementDirection.put("up", true);
+			// check terrain type and play corresponding sound effect
+			soundPlay(name);
+			break;
+		case Input.Keys.S:
+			movementDirection.put("down", true);
+			soundPlay(name);
+			break;
+		case Input.Keys.A:
+			movementDirection.put("left", true);
+			soundPlay(name);
+			break;
+		case Input.Keys.D:
+			movementDirection.put("right", true);
+			soundPlay(name);
+			break;
+		case Input.Keys.E:
+			checkForInteraction();
+			break;
+		case Input.Keys.R:
+		    if(this.getEquippedWeapon() != null) {
+		        GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
+		    }
+		    this.equippedItems.cycleEquippedSlot();
+		    if(this.getEquippedWeapon() != null) {
+	            GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
+		        
+		    }
+		default:
+			break;
+>>>>>>> master
 		}
 
 	}
@@ -502,9 +616,7 @@ public class Player extends Character implements Tickable {
 	 * Sets the player's movement speed to zero if no keys are pressed.
 	 */
 	private void handleNoInput() {
-		if (!movementDirection.get("up") && !movementDirection.get("down") && !
-
-movementDirection.get("left")
+		if (!movementDirection.get("up") && !movementDirection.get("down") && ! movementDirection.get("left")
 				&& !movementDirection.get("right")) {
 			speedX = 0;
 			speedY = 0;
@@ -525,31 +637,27 @@ movementDirection.get("left")
 	 *            Scalar for speeding up player
 	 * @return New lastSpeed
 	 */
-	private float slipperySpeedHelper(float speed, float lastSpeed, float tileSpeed, float slipperyFactor,
-			float slipperyFactor2) {
-		// speed up user in X dirn
-		float lastSpeedNew;
-		if (speed > 0) {
-			lastSpeedNew = Math.min(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * 
-
-tileSpeed);
-		} else if (speed < 0) {
-			lastSpeedNew = Math.max(lastSpeed + speed * tileSpeed * slipperyFactor2, speed * 
-
-tileSpeed);
-		} else {
-			// slow down user
-			if (Math.abs(lastSpeed) > slipperyFactor) {
-				lastSpeedNew = lastSpeed - Math.signum(lastSpeed) * slipperyFactor;
-			} else {
-				// ensure that speed eventually goes to zero
-				lastSpeedNew = 0;
-			}
-		}
-
-		return lastSpeedNew;
-
-	}
+    private float slipperySpeedHelper(float speed, float lastSpeed, float tileSpeed, float slipperyFactor,
+            float slipperyFactor2) {
+        // speed up user in X dirn
+        float lastSpeedNew;
+        if(speed > 0) {
+            lastSpeedNew = Math.min(lastSpeed + speed * tileSpeed * slipperyFactor2, speed *tileSpeed);
+        } else if(speed < 0) {
+            lastSpeedNew = Math.max(lastSpeed + speed * tileSpeed * slipperyFactor2, speed *tileSpeed);
+        } else {
+            // slow down user
+            if(Math.abs(lastSpeed) > slipperyFactor) {
+                lastSpeedNew = lastSpeed - Math.signum(lastSpeed) * slipperyFactor;
+            } else {
+                // ensure that speed eventually goes to zero
+                lastSpeedNew = 0;
+            }
+        }
+        
+        return lastSpeedNew;
+        
+    }
 
 	/**
 	 * Updates the game camera so that it is centered on the player
@@ -608,4 +716,17 @@ tileSpeed);
 		return inventory.addItem(item);
 	}
 
+    @Override
+    public Item getCurrentEquippedItem() {
+        return this.equippedItems.getCurrentEquippedItem();
+    }
+    
+    protected Weapon getEquippedWeapon() {
+        Item item = this.getCurrentEquippedItem();
+        if(item != null && item instanceof WeaponItem) {
+            return ((WeaponItem) item).getWeapon();
+        }
+        
+        return null;
+    }
 }

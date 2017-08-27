@@ -49,7 +49,7 @@ public final class NetworkState {
 		try {
 			if (hostGame) {
 				socket = new DatagramSocket(1337);
-				System.out.println("HOSTING GAME");
+				LOGGER.debug("HOSTING GAME");
 			} else {
 				socket = new DatagramSocket();
 			}
@@ -133,7 +133,7 @@ public final class NetworkState {
 									peer);
 							NetworkState.socket.send(packet);
 							// log
-							System.out.println("SENT: " + message.getType().toString());
+							LOGGER.debug("SENT: " + message.getType().toString());
 						} catch (Exception e) {
 							LOGGER.error("Failed to send message", e);
 						}
@@ -180,13 +180,13 @@ public final class NetworkState {
 						// make sure we don't process this again
 						processedIds.add(messageId);
 						// log
-						System.out.println("RECEIVED: " + message.getType().toString());
+						LOGGER.debug("RECEIVED: " + message.getType().toString());
 					} else if (message.getType() == MessageType.CONFIRMATION) {
 						// get id for logging
 						Message removed = NetworkState.sendQueue.get(message.getPayloadInteger());
 						// remove message from send queue
 						if (NetworkState.sendQueue.remove(message.getPayloadInteger()) != null) {
-							System.out.println("REMOVED: " + removed.getType().toString());
+							LOGGER.debug("REMOVED: " + removed.getType().toString());
 						}
 					} else {
 						Message confirmMessage = new Message(MessageType.CONFIRMATION, message.getIdInBytes());
