@@ -89,6 +89,17 @@ public class TextureManager extends Manager {
 		textureMap.put("menu_go_button", new Texture("resources/ui/main_menu/menu_go_button.png"));
 		textureMap.put("menu_host_button", new Texture("resources/ui/main_menu/menu_host_button.png"));
 		textureMap.put("menu_back_button", new Texture("resources/ui/main_menu/menu_back_button.png"));
+
+		//Shop textures
+		textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_name.png"));
+		textureMap.put("shop_buy_button", new Texture("resources/ui/shop_ui/shop_buy.png"));
+		textureMap.put("shop_sell_button", new Texture("resources/ui/shop_ui/shop_sell.png"));
+		textureMap.put("shop_funds", new Texture("resources/ui/shop_ui/shop_funds.png"));
+		textureMap.put("shop_inventory", new Texture("resources/ui/shop_ui/shop_inventory.png"));
+		textureMap.put("wooden_background", new Texture("resources/ui/shop_ui/wooden_background.png"));
+		textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
+
+		//World map textures
 		textureMap.put("wm_blue_bg", new Texture("resources/worldmap/blue_background.png"));
         textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
         textureMap.put("completed_node", new Texture("resources/worldmap/completed_node.png"));

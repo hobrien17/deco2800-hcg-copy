@@ -17,6 +17,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
@@ -25,6 +26,8 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.contexts.ShopMenuContext;
+
 
 /**
  * Entity for the playable character.
@@ -36,6 +39,7 @@ public class Player extends Character implements Tickable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
 	private SoundManager soundManager;
+	private ContextManager contextManager;
 
 	private boolean collided;
 	private int xpThreshold = 200;
@@ -81,6 +85,7 @@ public class Player extends Character implements Tickable {
 		sprinting = false;
 		this.setTexture("hcg_character");
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
+		this.contextManager = (ContextManager) GameManager.get().getManager(ContextManager.class);
 
 		// for slippery
 		lastSpeedX = 0;
@@ -211,6 +216,7 @@ public class Player extends Character implements Tickable {
 		if (((NPC) npc).getNPCType() == NPC.Type.Shop) {
 
 			LOGGER.info("Shop NPC Interaction Started");
+			contextManager.pushContext(new ShopMenuContext());
 			Shop shop = new GeneralShop();
 			shop.open(0, this);
 
