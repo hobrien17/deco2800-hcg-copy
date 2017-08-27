@@ -26,6 +26,7 @@ public class MultiplayerMenuContext extends UIContext {
 	private Table table;
 	private ImageButton go;
 	private ImageButton host;
+	private ImageButton back;
 	
 	public MultiplayerMenuContext() {
 		
@@ -45,6 +46,7 @@ public class MultiplayerMenuContext extends UIContext {
 		title = new Image(textureManager.getTexture("menu_title"));
 		go = new ImageButton(new Image(textureManager.getTexture("menu_go_button")).getDrawable());
 		host = new ImageButton(new Image(textureManager.getTexture("menu_host_button")).getDrawable());
+		back = new ImageButton(new Image(textureManager.getTexture("menu_back_button")).getDrawable());
 		
 		table.add(title);
 		table.row();
@@ -53,6 +55,8 @@ public class MultiplayerMenuContext extends UIContext {
 		table.add(go);
 		table.row();
 		table.add(host);
+		table.row();
+		table.add(back);
 		
 		
 		// Change this to implement Multiplayer
