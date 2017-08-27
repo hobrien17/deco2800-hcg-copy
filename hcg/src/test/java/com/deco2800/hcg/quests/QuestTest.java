@@ -40,4 +40,31 @@ public class QuestTest {
 		assert(questToTest.itemRewarded().sameItem(new TestUniqueItem("x", 5)) == true);
 	}
 	
+	@Test (expected = IllegalArgumentException.class)
+	public void testEmptyStringConstructor(){
+		String instruction = "";
+		Item itemRequested = new TestItem();
+		Item itemRewarded = new TestUniqueItem("x", 5);
+		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
+		questToTest = quest;
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testNullItemRequestedConstructor(){
+		String instruction = "Go find me the item at the end of the map";
+		Item itemRequested = null;
+		Item itemRewarded = new TestUniqueItem("x", 5);
+		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
+		questToTest = quest;
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testNullItemRewardedConstructor(){
+		String instruction = "Go find me the item at the end of the map";
+		Item itemRequested = new TestItem();
+		Item itemRewarded = null;
+		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
+		questToTest = quest;
+	}
+	
 }

@@ -18,7 +18,7 @@ public class Inferno extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Inferno(Pot master) {
-        super(master, 59);
+        super(master, "inferno", 59);
     }
 
     @Override

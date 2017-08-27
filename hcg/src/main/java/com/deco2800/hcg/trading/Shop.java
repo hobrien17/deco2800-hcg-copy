@@ -1,6 +1,7 @@
 package com.deco2800.hcg.trading;
 
 
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
 
@@ -15,11 +16,11 @@ public interface Shop {
      *
      * @param modifier
      *          modifier to apply to the prices of the items in the shop, percentage
-     * @param inventory
-     *          Reference to the player's inventory so that the shop can modify it directly
+     * @param player
+     *          Reference to the player's and their inventory so that the shop can modify it directly
      *
      * @return nothing*/
-    public void open(int modifier, Inventory inventory);
+    public void open(int modifier, Player player);
 
     /**Retrieve the number of a certain item this shop currently has in stock
      *
@@ -61,9 +62,10 @@ public interface Shop {
      *
      * @param item
      *          The stock to buy
-     * @return void, function should modify player's inventory directly
+     * @return 0 if bought successfully, 1 if no items available to buy, 2 if no space in player's inventory, 3 if not
+     * enough currency in player's inventory
      */
-    public void buyStock(Item item);
+    public int buyStock(Item item);
 
     /**Method to buy a number of the specified stock item
      *
@@ -71,14 +73,16 @@ public interface Shop {
      *          The item to buy
      * @param number
      *          The number to buy
-     * @return void, function should modify player's inventory directly
+     * @return 0 if bought successfully, 1 if no items available to buy, 2 if no space in player's inventory, 3 if not
+     * enough currency in player's inventory
      */
-    public void buyStock(Item item, int number);
+    public int buyStock(Item item, int number);
 
     /**Method to sell an item of stock to the shop
      *
      * @param item
      *          Item that is to be sold
+     * @return 0 if sold successfully, 1 if player cannot accept more currency
      */
-    public void sellStock(Item item);
+    public int sellStock(Item item);
 }
