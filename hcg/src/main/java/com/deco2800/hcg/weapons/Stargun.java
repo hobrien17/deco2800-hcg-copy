@@ -7,7 +7,7 @@ import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
 
 public class Stargun extends Weapon implements Tickable {
-    private int pellets;
+    protected int pellets;
     
     public Stargun(float posX, float posY, float posZ, float xLength,
             float yLength, float zLength, WeaponType weaponType,
