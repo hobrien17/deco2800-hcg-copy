@@ -30,8 +30,6 @@ public class TimeManager extends Manager implements TickableManager {
 	private boolean timePaused;
 	private boolean isNight;
 
-	MathHelper mathHelper = new MathHelper();
-
 	static final Logger LOGGER =
 			LoggerFactory.getLogger(TimeManager.class);
 
@@ -312,21 +310,14 @@ public class TimeManager extends Manager implements TickableManager {
 	public void setDateTime(int second, int minute, int hour, int day, int month, int year) {
 
 		// clamp inputs just in case they're not valid numbers
-		second = mathHelper.clamp(second, 0, 59);
-		minute = mathHelper.clamp(minute, 0, 59);
-		hour = mathHelper.clamp(hour, 0, 23);
-		day = mathHelper.clamp(day, 1, 31);
-		month = mathHelper.clamp(month, 1, 12);
-		year = mathHelper.clamp(year, 1, 10000);
+				this.seconds = MathHelper.clamp(second, 0, 59);
+				this.minutes = MathHelper.clamp(minute, 0, 59);
+				this.hours = MathHelper.clamp(hour, 0, 23);
+				this.day = MathHelper.clamp(day, 1, 31);
+				this.month = MathHelper.clamp(month, 1, 12);
+				this.year = MathHelper.clamp(year, 1, 10000);
+				checkNight();
 
-		// set date & time
-		this.seconds = second;
-		this.minutes = minute;
-		this.hours = hour;
-		this.day = day;
-		this.month = month;
-		this.year = year;
-		checkNight();
 	}
 
 }
