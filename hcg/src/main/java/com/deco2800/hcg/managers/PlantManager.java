@@ -6,6 +6,9 @@ import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 
 import java.util.ArrayList;
 
+import static com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant.Stage.SMALL;
+import static com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant.Stage.SPROUT;
+
 
 /**
  * Plant Manager manages all the plants on map.
@@ -14,14 +17,12 @@ import java.util.ArrayList;
  */
 public class PlantManager extends Manager{
 
-    private TimeManager timeManager;
     private ArrayList <AbstractGardenPlant> plantList;
-    private ArrayList timeleft;
     private Label plantInfo;
+    private Window plantWindow;
 
     public PlantManager(){
         plantList = new ArrayList<>();
-        timeleft = new ArrayList();
     }
 
     /**
@@ -47,15 +48,6 @@ public class PlantManager extends Manager{
     }
 
     /**
-     * Link to the time manager
-     *
-     * @param timeManager The time manager of the whole
-     */
-    public void setTimeManager(TimeManager timeManager){
-        this.timeManager = timeManager;
-    }
-
-    /**
      * Link to label of the plant window
      *
      * @param label The label of plant window
@@ -64,11 +56,16 @@ public class PlantManager extends Manager{
         this.plantInfo = label;
     }
 
+    public void setPlantWindow(Window plantWindow){
+        this.plantWindow = plantWindow;
+    }
+
     /**
      * Update the label
      */
     public void updateLabel(){
         plantInfo.setText(labelContent());
+        plantWindow.pack();
     }
 
     /**
@@ -88,13 +85,19 @@ public class PlantManager extends Manager{
                     result = new StringBuilder();
                 }
                 AbstractGardenPlant plant = plantList.get(i);
-                result.append(i).append(": ").append(plant.getName()).append(" Stage ")
+                String stage;
+                if (plant.getStage() == SPROUT){
+                    stage = "Sprout";
+                }else if(plant.getStage() == SMALL){
+                    stage = "Small";
+                }else{
+                    stage = "Large";
+                }
+                result.append(plant.getName()).append(" Stage: ").append(stage)
                         .append("\n").append("X:")
                         .append(plant.getPot().getPosX())
                         .append(" Y:")
                         .append(plant.getPot().getPosY())
-                        .append(" Z:")
-                        .append(plant.getPot().getPosZ())
                         .append("\n");
             }
         }

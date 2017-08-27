@@ -140,9 +140,9 @@ public class PlayContext extends Context {
         /* Create the window for plant. */
         plantInfo = new Label("null",skin);
         plantManager.setPlantLabel(plantInfo);
-        plantManager.setTimeManager(timeManager);
-        plantManager.updateLabel();
+        plantManager.setPlantWindow(plantWindow);
         plantWindow.add(plantInfo);
+        plantManager.updateLabel();
         plantWindow.pack();
         plantWindow.setMovable(false);
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
