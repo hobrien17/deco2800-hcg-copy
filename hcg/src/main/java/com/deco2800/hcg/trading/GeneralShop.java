@@ -7,6 +7,11 @@ import com.deco2800.hcg.items.Item;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * General Shop class that implements all the methods of the shop
+ *
+ * @author Taari Meiners / Team 1
+ */
 public class GeneralShop implements Shop{
     int modifier = 0;
     Player player;
