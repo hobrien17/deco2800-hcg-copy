@@ -38,6 +38,15 @@ public class Player extends Character implements Tickable {
 
     private int skillPoints;
     private HashMap<String, Boolean> movementDirection = new HashMap<>();
+    
+    private Weapon equippedWeapon;
+    
+    private Weapon peashooter = new Weapon(getPosX(),
+            getPosY(), getPosZ(), WeaponType.MACHINEGUN);
+    private Weapon shotgun = new Weapon(getPosX(),
+            getPosY(), getPosZ(), WeaponType.SHOTGUN);
+    private Weapon stargun = new Weapon(getPosX(),
+            getPosY(), getPosZ(), WeaponType.STARFALL);
 
     /**
      * Creates a new player at specified position.
@@ -56,6 +65,9 @@ public class Player extends Character implements Tickable {
         input.addKeyDownListener(this::handleKeyDown);
         input.addKeyUpListener(this::handleKeyUp);
         input.addTouchDownListener(this::handleTouchDown);
+        input.addTouchDraggedListener(this::handleTouchDragged);
+        input.addTouchUpListener(this::handleTouchUp);
+        input.addMouseMovedListener(this::handleMouseMoved);
 
         collided = false;
         this.setTexture("hcg_character");
@@ -67,6 +79,11 @@ public class Player extends Character implements Tickable {
         // for slippery
         lastSpeedX = 0;
         lastSpeedY = 0;
+        
+        // Set equipped weapon and enter game world
+        equippedWeapon = peashooter;
+        GameManager.get().getWorld().addEntity(equippedWeapon);
+        equippedWeapon.setUser(this);
 
         // for direction of movement
         movementDirection.put("left", false);
@@ -81,17 +98,43 @@ public class Player extends Character implements Tickable {
      * @param screenY the y position being clicked on the screen
      * @param pointer <unknown>
      * @param button <unknown>
-     */
+     */    
     private void handleTouchDown(int screenX, int screenY, int pointer,
             int button) {
-        Vector3 worldCoords = GameManager.get().getCamera()
-                .unproject(new Vector3(screenX, screenY, 0));
-        Bullet bullet = new Bullet(this.getPosX(), this.getPosY(),
-                this.getPosZ(), worldCoords.x,
-                worldCoords.y);
-
-        GameManager.get().getWorld().addEntity(bullet);
-
+        equippedWeapon.updateAim(screenX, screenY);
+        equippedWeapon.openFire();
+    }
+    
+    /**
+     * Handles the processes involved when a drag input is made.
+     * @param screenX the x position on the screen that mouse is dragged to
+     * @param screenY the y position on the screen that mouse is dragged to
+     * @param pointer <unknown>
+     */   
+    private void handleTouchDragged(int screenX, int screenY, int pointer) {
+        equippedWeapon.updatePosition(screenX, screenY);
+        equippedWeapon.updateAim(screenX, screenY);
+    }
+    
+    /**
+     * Handles the processes involved when a touch input is released.
+     * @param screenX the x position mouse is being released on the screen
+     * @param screenY the y position mouse is being released on the screen
+     * @param pointer <unknown>
+     * @param button <unknown>
+     */   
+    private void handleTouchUp(int screenX, int screenY, int pointer,
+            int button) {
+        equippedWeapon.ceaseFire();
+    }
+    
+    /**
+     * Handles the processes involved when a mouse movement is made.
+     * @param screenX the x position of mouse movement on the screen
+     * @param screenY the y position of mouse movement on the screen
+     */   
+    private void handleMouseMoved(int screenX, int screenY) {
+        equippedWeapon.updatePosition(screenX, screenY);
     }
 
     /**
@@ -209,7 +252,8 @@ public class Player extends Character implements Tickable {
         for (AbstractEntity entity : entities) {
             if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos
                     .overlaps(entity.getBox3D())
-                    && !(entity instanceof Bullet)) {
+                    && !(entity instanceof Bullet)
+                    && !(entity instanceof Weapon)) {
                 LOGGER.info(this + " colliding with " + entity);
                 collided = true;
 
@@ -228,13 +272,11 @@ public class Player extends Character implements Tickable {
      * character in the character creation screen
      */
     public void initialiseNewPlayer(int strength, int vitality, int agility,
-            int charisma,
-            int intellect,
-            int meleeSkill) {
+            int charisma, int intellect, int meleeSkill) {
         setAttributes(strength, vitality, agility, charisma, intellect);
         setSkills(meleeSkill);
         health = 4 * vitality;
-        stamina = 4 * agility;
+        attributes.put("stamina", 4* agility);
     }
 
     /**
@@ -254,9 +296,9 @@ public class Player extends Character implements Tickable {
     private void levelUp() {
         xpThreshold *= 1.3;
         level++;
-        stamina = stamina + agility;
-        health = health + vitality;
-        skillPoints = 4 + intellect;
+        attributes.put("stamina", attributes.get("stamina") + attributes.get("agility"));
+        health = health + attributes.get("vitality");
+        skillPoints = 4 + attributes.get("intellect");
         // TODO: enter level up screen
     }
 
@@ -287,6 +329,20 @@ public class Player extends Character implements Tickable {
             case Input.Keys.D:
                 movementDirection.put("right", true);
                 break;
+            case Input.Keys.R:
+                if(equippedWeapon.equals(peashooter)) {
+                    GameManager.get().getWorld().removeEntity(equippedWeapon);
+                    equippedWeapon = shotgun;
+                    GameManager.get().getWorld().addEntity(equippedWeapon);
+                } else if(equippedWeapon.equals(shotgun)){
+                    GameManager.get().getWorld().removeEntity(equippedWeapon);
+                    equippedWeapon = stargun;
+                    GameManager.get().getWorld().addEntity(equippedWeapon);
+                } else {
+                    GameManager.get().getWorld().removeEntity(equippedWeapon);
+                    equippedWeapon = peashooter;
+                    GameManager.get().getWorld().addEntity(equippedWeapon);
+                }
             default:
                 break;
         }
