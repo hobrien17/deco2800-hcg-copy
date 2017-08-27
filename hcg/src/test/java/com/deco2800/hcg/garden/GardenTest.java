@@ -2,6 +2,7 @@ package com.deco2800.hcg.garden;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TimeManager;
@@ -26,7 +28,9 @@ import com.deco2800.hcg.managers.TimeManager;
 public class GardenTest {
 	
 	private static Map<Class<?>, String> sprites;
-	
+	private static Map<Seed.Type, String> seedNames;
+	private static Map<Seed.Type, Class<? extends AbstractGardenPlant>> seedPlants;
+
 	@BeforeClass
 	public static void setup() {
 		sprites = new HashMap<>();
@@ -38,6 +42,26 @@ public class GardenTest {
 		sprites.put(Inferno.class, "inferno");
 		sprites.put(Ice.class, "sunflower"); //need to change
 		sprites.put(Explosive.class, "sunflower"); //need to change
+	}
+
+	@BeforeClass
+	public static void setupSeed() {
+		seedNames = new HashMap<>();
+		seedPlants = new HashMap<>();
+
+		seedNames.put(Seed.Type.EXPLOSIVE, "EXPLOSIVE");
+		seedNames.put(Seed.Type.FIRE, "FIRE");
+		seedNames.put(Seed.Type.GRASS, "GRASS");
+		seedNames.put(Seed.Type.ICE, "ICE");
+		seedNames.put(Seed.Type.SUNFLOWER, "SUNFLOWER");
+		seedNames.put(Seed.Type.WATER, "WATER");
+		
+		seedPlants.put(Seed.Type.EXPLOSIVE, Cactus.class);
+		seedPlants.put(Seed.Type.FIRE, Inferno.class);
+		seedPlants.put(Seed.Type.GRASS, Grass.class);
+		seedPlants.put(Seed.Type.ICE, Ice.class);
+		seedPlants.put(Seed.Type.SUNFLOWER, Sunflower.class);
+		seedPlants.put(Seed.Type.WATER, Water.class);
 	}
 
 	@Test
@@ -90,6 +114,17 @@ public class GardenTest {
 		}
 	}
 	
+	@Test
+	public void testAllSeeds() {
+		Seed.Type[] types = {Seed.Type.EXPLOSIVE, Seed.Type.FIRE, Seed.Type.GRASS, Seed.Type.ICE, Seed.Type.SUNFLOWER,
+				Seed.Type.WATER};
+		for(Seed.Type type : types) {
+			Seed seed = new Seed(type);
+			testSeedDetails(seed);
+			
+		}
+	}
+	
 	private void testLoot(AbstractGardenPlant plant) {
 		assertNotEquals(plant.getLoot().length, 0);
 		assertNotEquals(plant.loot().length, 0);
@@ -112,6 +147,18 @@ public class GardenTest {
 		plant.advanceStage();
 		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.LARGE);
 		assertEquals(pot.getTexture(), sprites.get(plant.getClass()) + "_03");
+	}
+
+	private void testSeedDetails(Seed seed) {
+		Pot p = new Pot(5, 5, 0);
+		assertEquals(seed.getName(), seedNames.get(seed.getType()));
+		try {
+			assertTrue(seedPlants.get(seed.getType()).isInstance(seed.getNewPlant(p)));
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+				InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+			ex.printStackTrace();
+			fail();
+		}
 	}
 	
 }

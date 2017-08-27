@@ -21,16 +21,16 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
     protected PlayerManager playerManager;
-    int level;
+    protected int level;
     // Current status of enemy. 1 : New Born, 2 : Injured 3 : Annoyed
-    int status;
-    int ID;
-    transient Map<String, Double> lootRarity;
-    int health;
-    int strength;
-    float speedX;
-    float speedY;
-    float movementSpeed;
+    protected int status;
+    protected int ID;
+    protected transient Map<String, Double> lootRarity;
+    protected int health;
+    protected int strength;
+    protected float speedX;
+    protected float speedY;
+    protected float movementSpeed;
 	
 	// Effects container
 	protected Effects myEffects;
@@ -45,19 +45,16 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         } else {
             throw new IllegalArgumentException();
         }
-        if (health > 0) {
-            this.health = health;
-        } else {
-            throw new IllegalArgumentException();
-        }
-        if (strength > 0) {
-            this.strength = strength;
-        } else {
-            throw new IllegalArgumentException();
-        }
+        this.health = health;
+        this.strength = strength;
         this.speedX = 0;
         this.speedY = 0;
+<<<<<<< HEAD
         this.movementSpeed = this.level;
+=======
+        this.movementSpeed = 0;
+        this.level = 1;
+>>>>>>> 9191ec127d230e8b30b14f8ca27a6279d8c26497
 
 		// Effects container 
 		myEffects = new Effects(this);
@@ -94,6 +91,22 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      */
     public int getStrength() {
         return strength;
+    }
+    
+    /**
+     * Get the current level of the enemy
+     */
+    public int getLevel() {
+        return this.level;
+    }
+    
+    /**
+     * Set the level of the enemy
+     * @param level: the new level of the enemy
+     * 
+     */
+    public void setLevel(int level) {
+        this.level = level;
     }
     
     /**
