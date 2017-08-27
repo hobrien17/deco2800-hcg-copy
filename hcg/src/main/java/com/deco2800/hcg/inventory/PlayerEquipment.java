@@ -68,7 +68,7 @@ public class PlayerEquipment extends FixedSizeInventory {
      * @return A ready to use instance of PlayerEquipment
      */
     public static PlayerEquipment getPlayerEquipment() {
-        PlayerEquipment equipment = new PlayerEquipment(2);
+        PlayerEquipment equipment = new PlayerEquipment(3);
         SlotRestriction equipmentRestriction = new SlotRestriction(equipment);
         equipmentRestriction.addCondition((inv, item) -> item.isEquippable());
         equipment.slotRestrictions[0] = equipmentRestriction;

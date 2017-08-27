@@ -1,5 +1,7 @@
 package com.deco2800.hcg.items;
 
+import com.deco2800.hcg.items.single.TestUniqueItem;
+
 public abstract class SingleItem extends GenericItem {
     /**
      * Returns the current stack size of this item.
@@ -77,7 +79,7 @@ public abstract class SingleItem extends GenericItem {
      */
     @Override
     public boolean sameItem(Item item) throws IllegalArgumentException {
-        return (item instanceof SingleItem && item.getName().equals(this.itemName));
+        return (item instanceof SingleItem && item.getName().equals(this.getName()));
     }
     
     @Override

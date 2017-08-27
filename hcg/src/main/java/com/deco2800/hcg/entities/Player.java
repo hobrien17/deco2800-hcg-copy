@@ -1,12 +1,18 @@
 package com.deco2800.hcg.entities;
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Vector3;
-import com.deco2800.hcg.inventory.FixedSizeInventory;
 import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.SoundManager;
@@ -15,13 +21,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * Entity for the playable character.
@@ -43,11 +42,12 @@ public class Player extends Character implements Tickable {
 	private String name = "";
 
 	private Inventory inventory;
+	private PlayerEquipment equippedItems;
 
 	private int skillPoints;
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
-	private Weapon equippedWeapon;
+	//private Weapon equippedWeapon;
 
 	/**
 	 * Creates a new player at specified position.
@@ -81,10 +81,8 @@ public class Player extends Character implements Tickable {
 		lastSpeedY = 0;
 
 		// Set equipped weapon and enter game world
-		equippedWeapon = new WeaponBuilder().setWeaponType
-
-(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7).build();
-		GameManager.get().getWorld().addEntity(equippedWeapon);
+        //GameManager.get().getWorld().addEntity(weaponToEquip);
+        //GameManager.get().getWorld().removeEntity(weaponToEquip);
 
 		// for direction of movement
 		movementDirection.put("left", false);
@@ -94,7 +92,20 @@ public class Player extends Character implements Tickable {
 
 		// inventory
 		inventory = new WeightedInventory(100);
+		equippedItems = PlayerEquipment.getPlayerEquipment();
+		
+		// Add weapons to inventory
+        Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN).setUser(this).setRadius(0.7)
+                .build();
+        Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL).setUser(this).setRadius(0.7)
+                .build();
+        Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
+                .build();
+		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
+        equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+        equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
+        GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 	}
 
 	/**
@@ -110,8 +121,10 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
-		equippedWeapon.updateAim(screenX, screenY);
-		equippedWeapon.openFire();
+        if(this.getEquippedWeapon() != null) {
+            this.getEquippedWeapon().updateAim(screenX, screenY);
+    		this.getEquippedWeapon().openFire();
+        }
 	}
 
 	/**
@@ -125,8 +138,10 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDragged(int screenX, int screenY, int pointer) {
-		equippedWeapon.updatePosition(screenX, screenY);
-		equippedWeapon.updateAim(screenX, screenY);
+        if(this.getEquippedWeapon() != null) {
+            this.getEquippedWeapon().updatePosition(screenX, screenY);
+    		this.getEquippedWeapon().updateAim(screenX, screenY);
+        }
 	}
 
 	/**
@@ -142,7 +157,9 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchUp(int screenX, int screenY, int pointer, int button) {
-		equippedWeapon.ceaseFire();
+        if(this.getEquippedWeapon() != null) {
+            this.getEquippedWeapon().ceaseFire();
+        }
 	}
 
 	/**
@@ -154,7 +171,9 @@ public class Player extends Character implements Tickable {
 	 *            the y position of mouse movement on the screen
 	 */
 	private void handleMouseMoved(int screenX, int screenY) {
-		equippedWeapon.updatePosition(screenX, screenY);
+	    if(this.getEquippedWeapon() != null) {
+	        this.getEquippedWeapon().updatePosition(screenX, screenY);
+	    }
 	}
 
 	/**
@@ -365,7 +384,15 @@ slipperyFactor2);
 			soundPlay(name);
 			break;
 		case Input.Keys.R:
-			if (equippedWeapon.getWeaponType() == WeaponType.MACHINEGUN) {
+		    if(this.getEquippedWeapon() != null) {
+		        GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
+		    }
+		    this.equippedItems.cycleEquippedSlot();
+		    if(this.getEquippedWeapon() != null) {
+	            GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
+		        
+		    }
+			/*if (equippedWeapon.getWeaponType() == WeaponType.MACHINEGUN) {
 				GameManager.get().getWorld().removeEntity(equippedWeapon);
 				equippedWeapon = new WeaponBuilder().setWeaponType
 
@@ -386,7 +413,7 @@ slipperyFactor2);
 (WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
 						.build();
 				GameManager.get().getWorld().addEntity(equippedWeapon);
-			}
+			}*/
 		default:
 			break;
 		}
@@ -575,4 +602,17 @@ tileSpeed);
 		return inventory.addItem(item);
 	}
 
+    @Override
+    public Item getCurrentEquippedItem() {
+        return this.equippedItems.getCurrentEquippedItem();
+    }
+    
+    protected Weapon getEquippedWeapon() {
+        Item item = this.getCurrentEquippedItem();
+        if(item != null && item instanceof WeaponItem) {
+            return ((WeaponItem) item).getWeapon();
+        }
+        
+        return null;
+    }
 }
