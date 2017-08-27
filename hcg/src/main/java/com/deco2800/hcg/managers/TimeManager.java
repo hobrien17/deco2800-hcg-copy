@@ -293,25 +293,25 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Sets the date and time (FOR TESTING PURPOSES ONLY)
+	 * Sets the date and time (FOR TESTING PURPOSES ONLY).
 	 *
 	 * @param second
-	 * 			The second to be set.
+	 * 			The second to be set (0 <= second < 60).
 	 *
 	 * @param minute
-	 * 			The minute to be set.
+	 * 			The minute to be set (0 <= minute < 60).
 	 *
 	 * @param hour
-	 * 			The hour to be set.
+	 * 			The hour to be set (0 <= hour < 24).
 	 *
 	 * @param day
-	 * 			The day to be set.
+	 * 			The day to be set (0 <= day <= 31).
 	 *
 	 * @param month
-	 * 			The month to be set
+	 * 			The month to be set (0 <= month <= 12).
 	 *
 	 * @param year
-	 * 			The year to be set.
+	 * 			The year to be set (0 < year ).
 	 */
 	public boolean setDateTime(int second, int minute, int hour, int day, int month, int year) {
 		// check validity of inputs

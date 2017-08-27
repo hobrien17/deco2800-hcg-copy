@@ -53,54 +53,27 @@ public class TimeManagerTests {
 	@Test
 	public void setDateTimeTest() {
 		// invalid input cases
-		boolean invalidSeconds = false;
-		try {
-			timeManager.setDateTime(-1, 0, 0, 1, 1, 1);
-		} catch (IllegalArgumentException e) {
-			invalidSeconds = true;
-		}
-		Assert.assertEquals("Invalid seconds input not recognised", true, invalidSeconds);
+		Assert.assertEquals("Invalid seconds input not recognised", false,
+				timeManager.setDateTime(-1, 0, 0, 1, 1, 1));
 
-		boolean invalidMinutes = false;
-		try {
-			timeManager.setDateTime(0, 62, 0, 1, 1, 1);
-		} catch (IllegalArgumentException e) {
-			invalidMinutes = true;
-		}
-		Assert.assertEquals("Invalid minutes input not recognised", true, invalidMinutes);
+		Assert.assertEquals("Invalid minutes input not recognised", false,
+				timeManager.setDateTime(0, 62, 0, 1, 1, 1));
 
-		boolean invalidHours = false;
-		try {
-			timeManager.setDateTime(34, 58, 29, 1, 1, 1);
-		} catch (IllegalArgumentException e) {
-			invalidHours = true;
-		}
-		Assert.assertEquals("Invalid hours input not recognised", true, invalidHours);
 
-		boolean invalidDay = false;
-		try {
-			timeManager.setDateTime(23, 23, 23, -4, 1, 1);
-		} catch (IllegalArgumentException e) {
-			invalidDay = true;
-		}
-		Assert.assertEquals("Invalid day input not recognised", true, invalidDay);
+		Assert.assertEquals("Invalid hours input not recognised", false,
+				timeManager.setDateTime(34, 58, 29, 1, 1, 1));
 
-		boolean invalidMonth = false;
-		try {
-			timeManager.setDateTime(15, 35, 3, 5, 13, 1);
-		} catch (IllegalArgumentException e) {
-			invalidMonth = true;
-		}
-		Assert.assertEquals("Invalid month input not recognised", true, invalidMonth);
+		Assert.assertEquals("Invalid day input not recognised", false,
+				timeManager.setDateTime(23, 23, 23, -4, 1, 1));
 
-		boolean invalidYear = false;
-		try {
-			timeManager.setDateTime(0, 0, 0, 1, 1, -1);
-		} catch (IllegalArgumentException e) {
-			invalidYear = true;
-		}
-		Assert.assertEquals("Invalid year input not recognised", true, invalidYear);
-		//typical case
+
+		Assert.assertEquals("Invalid month input not recognised", false,
+				timeManager.setDateTime(15, 35, 3, 5, 13, 1));
+
+		Assert.assertEquals("Invalid year input not recognised", false,
+				timeManager.setDateTime(0, 0, 0, 1, 1, -1));
+
+		// typical case
 		timeManager.setDateTime(0, 0, 0, 1, 1, 1);
 		Assert.assertEquals("Second not correctly set.", 0,
 				timeManager.getSeconds());
@@ -108,7 +81,8 @@ public class TimeManagerTests {
 				timeManager.getMinutes());
 		Assert.assertEquals("Hour not correctly set.", 0,
 				timeManager.getHours());
-		Assert.assertEquals("Day not correctly set.", 1, timeManager.getDay());
+		Assert.assertEquals("Day not correctly set.", 1,
+				timeManager.getDay());
 		Assert.assertEquals("Month not correctly set.", 1,
 				timeManager.getMonth());
 		Assert.assertEquals("Year not correctly set.", 1,
@@ -306,7 +280,11 @@ public class TimeManagerTests {
 
 
 
-
+	// onTick test
+	@Test
+	public void onTickTest() {
+		
+	}
 
 
 	@Test
