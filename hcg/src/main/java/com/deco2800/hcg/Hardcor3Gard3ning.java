@@ -83,26 +83,6 @@ public class Hardcor3Gard3ning extends Game {
 
         //TODO everything below this line doesn't belong here
 
-        /**
-		 * Multiplayer chat prompt
-		 */
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		(new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (!Thread.interrupted()) {
-					try {
-						String line = reader.readLine();
-						if (NetworkState.isInitialised()) {
-							NetworkState.sendChatMessage(line);
-						}
-					} catch (IOException e) {
-						continue;
-					}
-				}
-			}
-		})).start();
-
 		/* Create an example world for the engine */
         gameManager.setWorld(new DemoWorld());
 
