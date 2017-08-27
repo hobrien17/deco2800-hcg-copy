@@ -46,7 +46,7 @@ public class TimeManagerTests {
 		timeManagerCalanderIncrementingTest.pauseTime();
 	}
 
-	// setDateTime tests
+	/*// setDateTime tests
 
 	@Test
 	public void setDateTimeInvalidSecond() {
@@ -76,7 +76,7 @@ public class TimeManagerTests {
 	@Test
 	public void setDateTimeInvalidYear() {
 		timeManager.setDateTime(0, 0, 0, 1, 1, -1);
-	}
+	}*/
 
 	public void setDateTimeTest() {
 		// invalid input cases

@@ -44,7 +44,7 @@ public class TimeManager extends Manager implements TickableManager {
 		this.day = 1;
 		this.month = 1;
 		this.year = 2047;
-		this.isNight = false;
+		this.isNight = true;
 		this.timeElapsed = 0;
 		this.timeLabel = null;
 		this.dateLabel = null;
