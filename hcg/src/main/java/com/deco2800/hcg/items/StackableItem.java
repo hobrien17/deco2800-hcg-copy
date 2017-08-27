@@ -33,7 +33,7 @@ public abstract class StackableItem implements Item{
      */
     @Override
     public int getMaxStackSize() {
-        return this.currentStackSize;
+        return this.maxStackSize;
     }
 
     /**
