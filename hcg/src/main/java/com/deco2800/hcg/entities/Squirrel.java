@@ -18,11 +18,13 @@ public class Squirrel extends Enemy implements Tickable {
 	private float speed = 0.03f;
 	
 	private Random random;
+	private boolean collided;
 
 	public Squirrel(float posX, float posY, float posZ, int ID) {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
 		this.random = new Random();
+		this.level = 1;
 	}
 
 	@Override
@@ -47,45 +49,32 @@ public class Squirrel extends Enemy implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		float goalX = playerManager.getPlayer().getPosX() + random.nextFloat() * 6 - 3;
-		float goalY = playerManager.getPlayer().getPosY() + random.nextFloat() * 6 - 3;
-		float distance = this.distance(playerManager.getPlayer());
-		
-		if(distance < speed) {
-			this.setPosX(goalX);
-			this.setPosY(goalY);
-			return;
+		this.detectPlayer();
+		Box3D newPos;
+		if(this.getStatus() == 1) {
+			newPos = this.randomMove();
+		} else if (this.getStatus() == 2){
+			newPos = this.moveToPlayer();
+		} else if (this.getStatus() == 3){
+			newPos = this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
+		} else {
+			newPos = getBox3D();
+			newPos.setX(this.getPosX());
+			newPos.setY(this.getPosY());
 		}
-		
-
-		float deltaX = getPosX() - goalX;
-		float deltaY = getPosY() - goalY;
-
-		float angle = (float)(Math.atan2(deltaY, deltaX)) + (float)(Math.PI);
-
-		float changeX = (float)(speed * Math.cos(angle));
-		float changeY = (float)(speed * Math.sin(angle));
-
-		Box3D newPos = getBox3D();
-		newPos.setX(getPosX() + changeX);
-		newPos.setY(getPosY() + changeY);
-		
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
-		boolean collided = false;
+		collided = false;
 		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
+			if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
 				if(entity instanceof Player) {
 					this.causeDamage((Player)entity);
 				}
 				collided = true;
 			}
 		}
-		
 		if (!collided) {
-			setPosX(getPosX() + changeX);
-			setPosY(getPosY() + changeY);
+			this.move(newPos.getX(), newPos.getY());
 		}
-
 		// Apply any effects that exist on the entity
 		myEffects.apply();
 	}
