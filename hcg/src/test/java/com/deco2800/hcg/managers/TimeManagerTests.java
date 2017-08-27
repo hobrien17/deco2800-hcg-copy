@@ -27,7 +27,7 @@ public class TimeManagerTests {
 		timeManagerGetDateTest = new TimeManager();
 	}
 
-	// setDateTime tests
+	// setDateTime tests xxxxxx
 
 	@Test (expected = IllegalArgumentException.class)
 	public void setDateTimeInvalidSecond () {
