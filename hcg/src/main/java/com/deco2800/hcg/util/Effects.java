@@ -101,24 +101,35 @@ public class Effects {
         // Do things depending on the level of the new effect, and whether it overrides a current effect.
         for (Effect effect : currentEffects) {
             // Only do things if the type of effects are the same
-            if (effect.getName().toUpperCase().equals(newEffect.getName().toUpperCase())) {
-                if (newEffect.getLevel() - effect.getLevel() > 0) {         // new effect is stronger
-                    removeEffect(effect);
-                    return addEffect(newEffect);
-                } else if (newEffect.getLevel() - effect.getLevel() == 0) { // effects are the same level
-                    effect.resetUseCounter();
-                    // We only want to reset the cooldowns on effects that don't apply damage, otherwise lots of
-                    // extra damage would be added each time the effect is given to the entity.
-                    if (effect.getDamage() == 0) effect.resetCooldownTimer();
-                    return true;
-                } else {    // new effect is weaker
-                    return false;
-                }
+            if (!checkNames(effect.getName(), newEffect.getName())) { continue; }
+
+            if (newEffect.getLevel() - effect.getLevel() > 0) {         // new effect is stronger
+                removeEffect(effect);
+                return addEffect(newEffect);
+            } else if (newEffect.getLevel() - effect.getLevel() == 0) { // effects are the same level
+                effect.resetUseCounter();
+                // We only want to reset the cooldowns on effects that don't apply damage, otherwise lots of
+                // extra damage would be added each time the effect is given to the entity.
+                if (effect.getDamage() == 0) effect.resetCooldownTimer();
+                return true;
+            } else {    // new effect is weaker
+                return false;
             }
         }
 
         // new effect doesn't override any existing effect
         return currentEffects.add(newEffect);
+    }
+
+    /**
+     * Checks whether two names are the same.
+     *
+     * @param name1 The first name to be checked, a string.
+     * @param name2 The second name to be checked, a string.
+     * @return Returns true if the two strings are equal, false otherwise.
+     */
+    private boolean checkNames(String name1, String name2) {
+        return name1.toUpperCase().equals(name2.toUpperCase());
     }
 
     /**
