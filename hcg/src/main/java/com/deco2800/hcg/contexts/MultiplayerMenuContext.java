@@ -2,80 +2,73 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 
 /**
- * Main Menu
+ * Multiplayer Menu
  * 
- * @author Richy McGregor
+ * @author Dylan Ridings
  */
-public class MainMenuContext extends UIContext {
 
+public class MultiplayerMenuContext extends UIContext {
+	
 	private Image title;
-	private ImageButton newGame;
-	private ImageButton quit;
-	private ImageButton multiplayer;
+	private TextField name;
 	private Table table;
-
-	public MainMenuContext() {
-
-        // Get necessary managers
+	private ImageButton go;
+	private ImageButton host;
+	
+	public MultiplayerMenuContext() {
+		
+		 // Get necessary managers
         GameManager gameManager = GameManager.get();
 		ContextManager contextManager = (ContextManager)
                 gameManager.getManager(ContextManager.class);
 		TextureManager textureManager = (TextureManager) 
 				gameManager.getManager(TextureManager.class);
-
+		
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
-
+		
 		table = new Table();
 		table.setFillParent(true);
 		table.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
-
+		
 		title = new Image(textureManager.getTexture("menu_title"));
-		newGame = new ImageButton(new Image(textureManager.getTexture("menu_play_button")).getDrawable());
-		quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
-		multiplayer = new ImageButton(new Image(textureManager.getTexture("menu_multiplayer_button")).getDrawable());
-
+		go = new ImageButton(new Image(textureManager.getTexture("menu_go_button")).getDrawable());
+		host = new ImageButton(new Image(textureManager.getTexture("menu_host_button")).getDrawable());
+		
 		table.add(title);
-        table.row();
-		table.add(newGame);
 		table.row();
-		table.add(multiplayer);
+		table.add(name);
 		table.row();
-		table.add(quit);
-		stage.addActor(table);
-
-		newGame.addListener(new ChangeListener() {
+		table.add(go);
+		table.row();
+		table.add(host);
+		
+		
+		// Change this to implement Multiplayer
+		go.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				contextManager.pushContext(new PlayContext());
 			}
 		});
 		
-		multiplayer.addListener(new ChangeListener() {
+		host.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				contextManager.pushContext(new MultiplayerMenuContext());
+				contextManager.pushContext(new PlayContext());
 			}
 		});
-
-		quit.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				contextManager.popContext();
-			}
-		});
-
+		
 	}
-
 }
