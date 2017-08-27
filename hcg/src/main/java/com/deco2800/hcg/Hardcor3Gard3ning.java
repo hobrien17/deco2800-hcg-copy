@@ -1,5 +1,9 @@
 package com.deco2800.hcg;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -102,12 +106,31 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth()*32, 0);
-
+		
 		/**
-		 * Setup multiplayer
+		 * Multiplayer prompt
 		 */
-		NetworkState networkState = new NetworkState();
-		networkState.startThreads();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (!Thread.interrupted()) {
+					try {
+						String line = reader.readLine();
+						if (line.startsWith("HOST")) {
+							NetworkState.init(true);
+						} else if (line.startsWith("JOIN ")) {
+							NetworkState.init(false);
+							NetworkState.join(line.substring(5, line.length()));
+						} else {
+							NetworkState.sendChatMessage(line);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		})).start();
 		
 		/**
 		 * Setup GUI
@@ -126,11 +149,6 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 		clockLabel = new Label(timeManager.getDateTime(), skin);
 		timeManager.setLabel(clockLabel);
 		
-		/* Add a textfield and two buttons for multiplayer */
-		Button hostButton = new TextButton("host", skin);
-		TextField hostField = new TextField("", skin);
-		Button joinButton = new TextButton("Join", skin);
-		
 		/* Add a programatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
@@ -146,30 +164,11 @@ public class Hardcor3Gard3ning extends ApplicationAdapter implements Application
 				soundManager.playSound("quack");
 			}
 		});
-		
-		/* Add a handler to host a game */
-		hostButton.addListener(new ChangeListener( ) {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				networkState.host();
-			}
-		});
-		
-		/* Add a handler to join a player */
-		joinButton.addListener(new ChangeListener( ) {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				networkState.join(hostField.getText());
-			}
-		});
 
 		/* Add all elements to the menu */
 		window.add(button);
 		window.add(anotherButton);
 		window.add(clockLabel);
-		window.add(hostButton);
-		window.add(hostField);
-		window.add(joinButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
