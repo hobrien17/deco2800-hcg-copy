@@ -10,7 +10,8 @@ public class TimeManagerTests {
 	private TimeManager timeManagerNextSecondTest;
 	private TimeManager timeManagerGetDateTest;
 	private TimeManager timeManagerNightDayTest;
-	private TimeManager timeManagertimeIncrementingTest;
+	private TimeManager timeManagerIncrementingMinTest;
+	private TimeManager timeManagerIncrementingHrTest;
 
 	@Before
 	public void setUp() {
@@ -35,9 +36,13 @@ public class TimeManagerTests {
 		timeManagerNightDayTest = new TimeManager();
 		timeManagerNightDayTest.pauseTime();
 
-		// for NightDayTest
-		timeManagertimeIncrementingTest = new TimeManager();
-		timeManagertimeIncrementingTest.pauseTime();
+		// for second to minute tests
+		timeManagerIncrementingMinTest = new TimeManager();
+		timeManagerIncrementingMinTest.pauseTime();
+
+		// for minute to hour tests
+		timeManagerIncrementingHrTest = new TimeManager();
+		timeManagerIncrementingHrTest.pauseTime();
 	}
 
 	@Test
@@ -175,29 +180,59 @@ public class TimeManagerTests {
 		Assert.assertEquals("first second that is day is not", false,
 				timeManagerNightDayTest.isNight());
 	}
-	
+
 	@Test
-	public void timeIncrementingTests() {
+	public void incrementingMinTests() {
 		// get to a second before 5am (change over to day)
 		for (int i = 0; i < 59; i++) {
-			timeManagertimeIncrementingTest.nextSecond();
+			timeManagerIncrementingMinTest.nextSecond();
 		}
 
 		// edge case: last second that it is minute 0 and 59 seconds
 		Assert.assertEquals("last second of the minute", 59,
-				timeManagertimeIncrementingTest.getSeconds());
+				timeManagerIncrementingMinTest.getSeconds());
 
 		Assert.assertEquals("last second that minute == 0", 0,
-				timeManagertimeIncrementingTest.getMinutes());
-		
-		timeManagertimeIncrementingTest.nextSecond();
-		
+				timeManagerIncrementingMinTest.getMinutes());
+
+		timeManagerIncrementingMinTest.nextSecond();
+
 		// edge case: first second that it is minute 1 and 0 seconds
 		Assert.assertEquals("first second of the minute", 0,
-				timeManagertimeIncrementingTest.getSeconds());
+				timeManagerIncrementingMinTest.getSeconds());
 
 		Assert.assertEquals("first second that minute == 1", 1,
-				timeManagertimeIncrementingTest.getMinutes());
+				timeManagerIncrementingMinTest.getMinutes());
+	}
+
+	@Test
+	public void minuteToHourTests() {
+		// get to a 00:59:59 (hr:min:sec)
+		for (int i = 0; i < 3599; i++) {
+			timeManagerIncrementingHrTest.nextSecond();
+		}
+
+		// edge case: last second where hr is 0
+		Assert.assertEquals("last second where hr == 0", 59,
+				timeManagerIncrementingHrTest.getSeconds());
+
+		Assert.assertEquals("last second that minute == 59", 59,
+				timeManagerIncrementingHrTest.getMinutes());
+		
+		Assert.assertEquals("last second that hr == 0", 0,
+				timeManagerIncrementingHrTest.getHours());
+		
+		timeManagerIncrementingHrTest.nextSecond();
+
+		// edge case: first second that it is minute 1 and 0 seconds
+		Assert.assertEquals("0th second of the first hr", 0,
+				timeManagerIncrementingHrTest.getSeconds());
+
+		Assert.assertEquals("0th minute of the first hr", 0,
+				timeManagerIncrementingHrTest.getMinutes());
+		
+		Assert.assertEquals("first second that hr == 1", 1,
+				timeManagerIncrementingHrTest.getHours());
 	}
 
 }
