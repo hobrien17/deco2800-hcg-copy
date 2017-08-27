@@ -1,0 +1,40 @@
+package com.deco2800.hcg.managers;
+
+import java.util.ArrayList;
+
+import com.deco2800.hcg.multiplayer.Message;
+import com.deco2800.hcg.observers.MessageObserver;
+
+public class MessageManager extends Manager {
+	
+	private ArrayList<MessageObserver> chatMessageListeners = new ArrayList<>();
+
+	public MessageManager() {}
+	
+	/**
+	 * Adds a chat Message listener
+	 * @param observer The MessageObserver to be added
+	 */
+	public void addChatMessageListener(MessageObserver observer) {
+		chatMessageListeners.add(observer);
+	}
+
+	/**
+	 * Removes the specified listener from the list of chat Message listeners
+	 * @param observer The MessageObserver to be removed
+	 */
+	public void removeChatMessageListener(MessageObserver observer) {
+		chatMessageListeners.remove(observer);
+	}
+	
+	/**
+	 * Called when a chat message is received
+	 * @param message The Message that was received
+	 */
+	public void chatMessageReceieved(Message message) {
+		for (MessageObserver observer : chatMessageListeners) {
+			observer.notifyChatMessage(message);
+		}
+	}
+
+}
