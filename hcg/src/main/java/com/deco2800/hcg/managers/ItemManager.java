@@ -1,8 +1,5 @@
 package com.deco2800.hcg.managers;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,17 +25,17 @@ public class ItemManager extends Manager {
      */
     public Item getNew(String name) {
         if (name == "sunflower_seed") {
-            return new SunflowerSeed();
+            return new Seed(Seed.Type.SUNFLOWER);
         } else if (name == "explosive_seed") {
-        	return new ExplosiveSeed();
+        	 return new Seed(Seed.Type.EXPLOSIVE);
         } else if (name == "fire_seed") {
-        	return new FireSeed();
+        	 return new Seed(Seed.Type.FIRE);
         } else if (name == "grass_seed") {
-        	return new GrassSeed();
+        	 return new Seed(Seed.Type.GRASS);
         } else if (name == "ice_seed") {
-        	return new IceSeed();
+        	 return new Seed(Seed.Type.ICE);
         } else if (name == "water_seed") {
-        	return new WaterSeed();
+        	 return new Seed(Seed.Type.WATER);
         }
 
         LOGGER.warn("Unable to find given class, returning null");

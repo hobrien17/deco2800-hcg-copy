@@ -16,22 +16,29 @@ import java.util.Random;
 
 import static java.lang.Math.*;
 
-public abstract class Enemy extends Character implements Lootable, Harmable {
+public abstract class Enemy extends AbstractEntity implements Lootable, Harmable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
     protected PlayerManager playerManager;
+    protected int level;
     // Current status of enemy. 1 : New Born, 2 : Injured 3 : Annoyed
-    int status;
-    int ID;
-    transient Map<String, Double> lootRarity;
+
+    protected int status;
+    protected int ID;
+    protected transient Map<String, Double> lootRarity;
+    protected int health;
+    protected int strength;
+    protected float speedX;
+    protected float speedY;
+    protected float movementSpeed;
 
 	// Effects container
 	protected Effects myEffects;
     
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength, int ID) {
-        super(posX, posY, posZ, xLength, yLength, zLength, centered);
+        super(posX, posY, posZ, xLength, yLength, zLength, 1, 1, centered);
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         status = 1;
         if (ID > 0) {
@@ -39,18 +46,12 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         } else {
             throw new IllegalArgumentException();
         }
-        if (health > 0) {
-            this.health = health;
-        } else {
-            throw new IllegalArgumentException();
-        }
-        if (strength > 0) {
-            this.attributes.put("strength", strength);
-        } else {
-            throw new IllegalArgumentException();
-        }
-        this.setSpeedX(0);
-        this.setSpeedY(0);
+        this.health = health;
+        this.strength = strength;
+        this.speedX = 0;
+        this.speedY = 0;
+        this.movementSpeed = 0;
+        this.level = 1;
 
 		// Effects container 
 		myEffects = new Effects(this);
@@ -79,6 +80,38 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         else {
             health -= damage;
         }
+    }
+    
+    /**
+     * 
+     * @return the strength of the enemy
+     */
+    public int getStrength() {
+        return strength;
+    }
+    
+    /**
+     * Get the current level of the enemy
+     */
+    public int getLevel() {
+        return this.level;
+    }
+    
+    /**
+     * Set the level of the enemy
+     * @param level: the new level of the enemy
+     * 
+     */
+    public void setLevel(int level) {
+        this.level = level;
+    }
+    
+    /**
+     * 
+     * @return the health of the enemy
+     */
+    public int getHealth() {
+        return this.health;
     }
 
     /**
@@ -190,7 +223,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         float diffX = abs(this.getPosX() - playerManager.getPlayer().getPosX());
         float diffY = abs(this.getPosY() - playerManager.getPlayer().getPosY());
         double distance = sqrt(diffX * diffX + diffY * diffY);
-        if(distance <= 10*this.getLevel()){
+        if(distance <= 10*this.level){
             //Annoyed by player.
             this.setStatus(3);
             return true;
@@ -216,11 +249,10 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         //Get direction of next position. Randomly be chosen between 0 and 360.
         radius = Math.abs(new Random().nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
-        distance = Math.abs(new Random().nextFloat()) * 10 * this.getLevel();
+        distance = Math.abs(new Random().nextFloat()) * 10 * this.level;
         nextPosX = (float) (this.getPosX() + distance * cos(radius));
         nextPosY = (float) (this.getPosY() + distance * cos(radius));
-        while ((this.getPosX() > nextPosX || this.getPosX() < nextPosX) &&
-                (this.getPosY() > nextPosY || this.getPosY() < nextPosY)) {
+        while (this.getPosX() - nextPosX > 0.05 && this.getPosY() - nextPosY > 0.05) {
             if (this.detectPlayer()) {
                 this.moveToPlayer();
                 break;
@@ -246,8 +278,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      *
      */
     public void moveTo(float destPosX, float destPosY){
-        while ((this.getPosX() > destPosX || this.getPosX() < destPosX) &&
-                (this.getPosY() > destPosY || this.getPosY() < destPosY)) {
+        while (this.getPosX() - destPosX > 0.05 && this.getPosY() - destPosY > 0.05) {
             if(this.getPosX() < destPosX){
                 speedX -= movementSpeed;
             }
@@ -286,6 +317,10 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         }
     }
     
+    /**
+     * Shoot the entity
+     * @param thisEnemy: the entity that is the aim. 
+     */
     public void shoot(AbstractEntity thisEnemy) {
         Vector3 worldCoords = GameManager.get().getCamera()
                 .unproject(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
@@ -295,12 +330,12 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 	
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
 	@Override
-    public void causeEffect(Effect effect) {
+    public void giveEffect(Effect effect) {
         myEffects.addEffect(effect);
     }
 
     @Override
-    public void causeEffect(Collection<Effect> effects) {
+    public void giveEffect(Collection<Effect> effects) {
         myEffects.addAllEffects(effects);
     }
 }
