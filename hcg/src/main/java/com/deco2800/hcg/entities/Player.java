@@ -15,13 +15,21 @@ import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.worlds.*;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.contexts.ShopMenuContext;
+
 
 /**
  * Entity for the playable character.
@@ -83,6 +91,7 @@ public class Player extends Character implements Tickable {
 		sprinting = false;
 		this.setTexture("hcg_character");
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
+		this.contextManager = (ContextManager) GameManager.get().getManager(ContextManager.class);
 
 		// for slippery
 		lastSpeedX = 0;
@@ -113,7 +122,6 @@ public class Player extends Character implements Tickable {
         equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
         equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
-        GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 	}
 
 	/**
@@ -214,6 +222,7 @@ public class Player extends Character implements Tickable {
 		if (((NPC) npc).getNPCType() == NPC.Type.Shop) {
 
 			LOGGER.info("Shop NPC Interaction Started");
+			contextManager.pushContext(new ShopMenuContext());
 			Shop shop = new GeneralShop();
 			shop.open(0, this);
 
@@ -660,7 +669,7 @@ public class Player extends Character implements Tickable {
         return this.equippedItems.getCurrentEquippedItem();
     }
     
-    protected Weapon getEquippedWeapon() {
+    public Weapon getEquippedWeapon() {
         Item item = this.getCurrentEquippedItem();
         if(item != null && item instanceof WeaponItem) {
             return ((WeaponItem) item).getWeapon();

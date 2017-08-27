@@ -1,7 +1,15 @@
 package com.deco2800.hcg.items;
 
+/**
+ * Basic Seed class that is used as the main currency of the game
+ *
+ * @author Taari Meiners / Team 1
+ */
 public class BasicSeed extends StackableItem {
 
+    /**
+     * Create new instance of BasicSeed
+     */
     public BasicSeed() {
         this.baseValue = 1;
         this.itemName = "Basic Seed";

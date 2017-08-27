@@ -15,6 +15,7 @@ public class Effect {
     private int level;          // level of the effect
     private int damage;         // damage the effect deals
     private int duration;       // lifetime of the effect (in # of applications)
+    private int useCounter;     // counter to keep track of number of applications.
     private int cooldown;       // effect cooldown (in ms)
     private int delay;          // delay until effect is ready for use (in ms)
     private long cooldownTimer; // timer used to keep track of whether effect is on ready to be used
@@ -59,6 +60,8 @@ public class Effect {
 
         // Set the cooldown timer based on the supplied delay value
         this.cooldownTimer = System.currentTimeMillis() - (cooldown - delay);
+
+        resetUseCounter();
     }
 
     /**
@@ -69,6 +72,11 @@ public class Effect {
     public boolean onCooldown() {
         return System.currentTimeMillis() - cooldownTimer < cooldown;
     }
+
+    /**
+     * Resets the use counter back to the defined duration.
+     */
+    public void resetUseCounter() { useCounter = duration; }
 
     /**
      * Resets the effect's active cooldown timer.
@@ -99,6 +107,13 @@ public class Effect {
     public int getDamage() {
         return damage;
     }
+
+    /**
+     * Returns the number of applications left until the effect is killed.
+     *
+     * @return Returns a positive integer denoting number of uses left.
+     */
+    public int getUseCount() { return useCounter; }
 
     /**
      * Returns the number of times the effect may be applied (duration).
@@ -140,10 +155,10 @@ public class Effect {
     }
 
     /**
-     * Decrements the duration of the effect by one.
+     * Decrements the use counter of the effect by one.
      */
-    public void decrementDuration() {
-        duration--;
+    public void decrementUses() {
+        useCounter--;
     }
 
     @Override
@@ -158,7 +173,6 @@ public class Effect {
         if (duration != effect.duration) return false;
         if (cooldown != effect.cooldown) return false;
         if (delay != effect.delay) return false;
-        if (cooldownTimer != effect.cooldownTimer) return false;
 
         return Double.compare(effect.slowAmount, slowAmount) == 0
                 && (name != null ? name.equals(effect.name) : effect.name == null);
@@ -175,7 +189,6 @@ public class Effect {
         result = 31 * result + duration;
         result = 31 * result + cooldown;
         result = 31 * result + delay;
-        result = 31 * result + (int) (cooldownTimer ^ (cooldownTimer >>> 32));
         temp = Double.doubleToLongBits(slowAmount);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
 
