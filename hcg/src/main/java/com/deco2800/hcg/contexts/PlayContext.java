@@ -19,6 +19,7 @@ import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -56,9 +57,14 @@ public class PlayContext extends Context {
 	private Stage stage;
 	private Window window;
 	private Window plantWindow;
+	private Table chatWindow;
 	private Label plantInfo;
 	private Label clockLabel;
 	private Label dateLabel;
+	private Label chatLabel;
+	private TextField chatTextField;
+	private TextArea chatTextArea;
+	private  Button chatButton;
 
 	/**
 	 * Create the PlayContext
@@ -136,6 +142,27 @@ public class PlayContext extends Context {
         plantWindow.setMovable(false);
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
         stage.addActor(plantWindow);
+
+        /* Create window for chat and all components */
+		chatWindow = new Table(skin);
+		chatWindow.setPosition(0, 0);
+		chatWindow.setSize(350,250);
+		chatLabel = new Label("Say: ", skin);
+		chatLabel.setColor(new Color().GRAY);
+        chatTextArea = new TextArea("", skin);
+        chatTextField = new TextField("", skin);
+        chatTextArea.setDisabled(true);
+        chatTextArea.setText(" ");
+        chatButton = new TextButton("Send", skin);
+        chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3);
+        chatWindow.row().height(40);
+        chatWindow.add(chatLabel).left().prefWidth(10);
+        chatWindow.add(chatTextField).prefWidth(350);
+        chatWindow.add(chatButton);
+        chatWindow.setDebug(false);//display lines for debugging
+
+
+        stage.addActor(chatWindow);
 
 		/*
 		 * Setup inputs for the buttons and the game itself
