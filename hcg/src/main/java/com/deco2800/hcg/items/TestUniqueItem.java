@@ -61,16 +61,21 @@ public class TestUniqueItem extends SingleItem {
     public String getUniqueData() {
         return this.uniqueData;
     }
-    
+
+    /**
+     *
+     * @param item : the item to compare this item to.
+     * @return true iff the unique data and the name of the items are the same
+     */
     @Override
     public boolean sameItem(Item item) {
         if(item instanceof TestUniqueItem) {
             if(this.uniqueData == null) {
-                return ((TestUniqueItem) item).getUniqueData() == null;
+                return (((TestUniqueItem) item).getUniqueData() == null && super.sameItem(item));
             }
             
-            return this.uniqueData.equals(((TestUniqueItem) item).getUniqueData())
-                    && super.sameItem(item);
+            return (this.uniqueData.equals(((TestUniqueItem) item).getUniqueData())
+                    && super.sameItem(item));
         }
         
         return false;
