@@ -256,7 +256,7 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Handles incrementing time on tick event. laihbflksa
+	 * Handles incrementing time on tick event.
 	 *
 	 * @param gameTickCount
 	 *            of all game ticks so far.
