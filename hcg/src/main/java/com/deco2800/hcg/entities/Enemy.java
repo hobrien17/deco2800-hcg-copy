@@ -22,7 +22,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
     protected PlayerManager playerManager;
     protected int level;
-    // Current status of enemy. 1 : New Born, 2 : Injured 3 : Annoyed
+    // Current status of enemy. 1 : New Born, 2 : Chasing 3 : Annoyed
     protected int status;
     protected int ID;
     protected transient Map<String, Double> lootRarity;
@@ -32,6 +32,8 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     protected float speedY;
     protected float randomX;
     protected float randomY;
+    protected float lastPlayerX;
+    protected float lastPlayerY;
     protected float movementSpeed;
 	
 	// Effects container
@@ -51,9 +53,8 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         this.strength = strength;
         this.speedX = 0;
         this.speedY = 0;
-        this.movementSpeed = (float) (0.01 + this.level * 0.01);
         this.level = 1;
-        this.level = 1;
+        this.movementSpeed = (float)(this.level * 0.01);
 		// Effects container 
 		myEffects = new Effects(this);
     }
@@ -207,6 +208,13 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     }
 
     /**
+     * Return enemy's status.
+     */
+    public int getStatus(){
+        return this.status;
+    }
+
+    /**
      * Set new status of enemy.
      * @param newStatus
      */
@@ -220,15 +228,19 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      *          true: Detected player
      *
      */
-    public boolean detectPlayer(){
+    public void detectPlayer(){
         float distance = this.distance(playerManager.getPlayer());
         if(distance <= 10 * this.level){
             //Annoyed by player.
-            this.setStatus(3);
-            return true;
+            this.setStatus(2);
+            this.lastPlayerX = playerManager.getPlayer().getPosX();
+            this.lastPlayerY = playerManager.getPlayer().getPosY();
         }else{
-            this.setStatus(1);
-            return false;
+            if (this.getStatus() == 2){
+                this.setStatus(3);
+            } else {
+                this.setStatus(1);
+            }
         }
     }    
 
@@ -266,8 +278,6 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
             this.randomX = tempX;
             this.randomY = tempY;
         }
-
-
         if (currPosX < nextPosX) {
             currPosX += movementSpeed;
         } else if (currPosX > nextPosX) {
@@ -304,7 +314,34 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         this.setPosX(currPosX);
         this.setPosY(currPosY);
     }
-    
+
+    /**
+     * Move enemy to pointed position. Use for going to the player's last position.
+     *
+     */
+    public void moveTo(float posX, float posY){
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
+        if(this.getPosX() < posX){
+            currPosX += movementSpeed;
+        }
+        else if(this.getPosX() > posX){
+            currPosX -= movementSpeed;
+        }
+        if(this.getPosY() < posY){
+            currPosY += movementSpeed;
+        }
+        else if(this.getPosY() > posY){
+            currPosY -= movementSpeed;
+        }
+        this.setPosX(currPosX);
+        this.setPosY(currPosY);
+        if((abs(posX - currPosX) < 1) &&
+                (abs(posY - currPosY) < 1)){
+            this.setStatus(1);
+        }
+    }
+
     /**
      * Shoot the entity
      * @param thisEnemy: the entity that is the aim. 
