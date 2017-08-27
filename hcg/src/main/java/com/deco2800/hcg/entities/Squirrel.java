@@ -15,15 +15,12 @@ import java.util.Random;
  */
 public class Squirrel extends Enemy implements Tickable {
 
-	private float speed = 0.03f;
-	
-	private Random random;
+	// private float speed = 0.03f;
 	private boolean collided;
 
 	public Squirrel(float posX, float posY, float posZ, int ID) {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
-		this.random = new Random();
 		this.level = 1;
 	}
 
