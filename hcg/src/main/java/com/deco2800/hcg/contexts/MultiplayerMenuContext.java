@@ -47,6 +47,7 @@ public class MultiplayerMenuContext extends UIContext {
 		go = new ImageButton(new Image(textureManager.getTexture("menu_go_button")).getDrawable());
 		host = new ImageButton(new Image(textureManager.getTexture("menu_host_button")).getDrawable());
 		back = new ImageButton(new Image(textureManager.getTexture("menu_back_button")).getDrawable());
+		name = new TextField(null, skin);
 		
 		table.add(title);
 		table.row();
@@ -57,6 +58,7 @@ public class MultiplayerMenuContext extends UIContext {
 		table.add(host);
 		table.row();
 		table.add(back);
+		stage.addActor(table);
 		
 		
 		// Change this to implement Multiplayer
@@ -71,6 +73,13 @@ public class MultiplayerMenuContext extends UIContext {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				contextManager.pushContext(new PlayContext());
+			}
+		});
+		
+		back.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				contextManager.pushContext(new MainMenuContext());
 			}
 		});
 		
