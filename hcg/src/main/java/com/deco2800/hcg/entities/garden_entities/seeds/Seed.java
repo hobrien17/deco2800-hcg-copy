@@ -1,10 +1,13 @@
 package com.deco2800.hcg.entities.garden_entities.seeds;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
 import com.deco2800.hcg.entities.garden_entities.plants.Grass;
 import com.deco2800.hcg.entities.garden_entities.plants.Ice;
 import com.deco2800.hcg.entities.garden_entities.plants.Inferno;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.items.Item;
@@ -119,8 +122,9 @@ public class Seed implements Item {
 		return type;
 	}
 	
-	public AbstractGardenPlant getNewPlant() throws InstantiationException, IllegalAccessException {
-		return type.getPlant().newInstance();
+	public AbstractGardenPlant getNewPlant(Pot pot) throws InstantiationException, IllegalAccessException, 
+						IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		return type.getPlant().getDeclaredConstructor(Pot.class).newInstance(pot);
 	}
 
 }
