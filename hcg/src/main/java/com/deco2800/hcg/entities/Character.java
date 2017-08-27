@@ -43,7 +43,8 @@ public abstract class Character extends AbstractEntity {
 
     protected int level;
     protected int xp;
-    protected int health;
+    protected int healthMax;
+    protected int healthCur;
     //Attributes map
     protected Map<String,Integer> attributes;
 
@@ -78,7 +79,8 @@ public abstract class Character extends AbstractEntity {
 
         this.level = 1;
         this.xp = 1;
-        this.health = 20;
+        this.healthMax = 20;
+        this.healthCur = healthMax;
         this.meleeSkill = 1;
 
     }
@@ -152,9 +154,21 @@ public abstract class Character extends AbstractEntity {
      *
      * @param health
      */
-    protected void setHealth(int health) {
-        this.health = health;
+    protected void setHealthMax(int health) {
+        this.healthMax = health;
     }
+    
+    /**
+    *
+    * @param health
+    */
+   protected void setHealthCur(int health) {
+       if (health > this.healthMax) {
+           this.healthCur = healthMax;
+       } else {
+           this.healthCur = health;
+       }
+   }
 
     /**
      *
@@ -219,9 +233,17 @@ public abstract class Character extends AbstractEntity {
      *
      * @return
      */
-    public int getHealth() {
-        return health;
+    public int getHealthMax() {
+        return healthMax;
     }
+    
+    /**
+    *
+    * @return
+    */
+   public int getHealthCur() {
+       return healthCur;
+   }
 
     /**
      * @param attribute is an attribute in CHARACTER_ATTRIBUTES

@@ -214,22 +214,16 @@ public class Player extends Character implements Tickable {
 			int damagetype = -1;
 
 			if (layer.getProperties().get("damagetype") != null) {
-				damagetype = Integer.parseInt((String) layer.getProperties().get
-
-("damagetype"));
+				damagetype = Integer.parseInt((String) layer.getProperties().get("damagetype"));
 			}
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
-				this.setHealth(this.getHealth() - Integer.parseInt((String) layer.getProperties
-
-().get("damage")));
+				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
 			}
 
 			// log
-			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + 
-
-speed);
+			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
 
 		}
 
@@ -242,11 +236,9 @@ speed);
 
 			// created helper function to avoid duplicate code
 			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed, slipperyFactor, 
-
-slipperyFactor2);
+			        slipperyFactor2);
 			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed, slipperyFactor, 
-
-slipperyFactor2);
+			        slipperyFactor2);
 
 		} else {
 			// non slippery movement
@@ -278,10 +270,9 @@ slipperyFactor2);
 
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps
-
-(entity.getBox3D())
-					&& !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
+			if (!this.equals(entity) && !(entity instanceof Squirrel) && 
+			        newPos.overlaps(entity.getBox3D()) && 
+			        !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
 				LOGGER.info(this + " colliding with " + entity);
 				collided = true;
 
@@ -303,7 +294,8 @@ slipperyFactor2);
 			int meleeSkill) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
 		setSkills(meleeSkill);
-		health = 4 * vitality;
+		healthMax = 4 * vitality;
+		healthCur = healthMax;
 		attributes.put("stamina", 4 * agility);
 	}
 
@@ -325,7 +317,8 @@ slipperyFactor2);
 		xpThreshold *= 1.3;
 		level++;
 		attributes.put("stamina", attributes.get("stamina") + attributes.get("agility"));
-		health = health + attributes.get("vitality");
+		healthMax = healthMax + attributes.get("vitality");
+		healthCur = healthCur + attributes.get("vitality");
 		skillPoints = 4 + attributes.get("intellect");
 		// TODO: enter level up screen
 	}
@@ -341,6 +334,22 @@ slipperyFactor2);
 		this.xp += amount;
 		checkXp();
 	}
+	
+	/**
+     * Decrease the current health of the player by the given amount
+     * 
+     * @param amount
+     *            the amount of health to lose
+     */
+    public void takeDamage(int amount) {
+
+        if (amount < this.healthCur) {
+            this.healthCur -= amount;
+        } else {
+            this.healthCur = 0;
+        }
+    }
+	
 
 	/**
 	 * Handle movement when wasd keys are pressed down

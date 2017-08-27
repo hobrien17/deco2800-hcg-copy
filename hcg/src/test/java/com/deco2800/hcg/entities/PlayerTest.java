@@ -273,14 +273,16 @@ public class PlayerTest {
 
 		int startHealth = 1000;
 		
-		player.setHealth(startHealth);
+		player.setHealthMax(startHealth);
+		player.setHealthCur(startHealth);
 		
-		assertTrue("Player health not set correctly", player.getHealth() == startHealth);
+		assertTrue("Player max health not set correctly", player.getHealthMax() == startHealth);
+		assertTrue("Player current health not set correctly", player.getHealthCur() == startHealth);
 
 		// do one tick of movement
 		player.onTick(0);	
 
-		assertTrue("Player health wasn't decreased when it should have been", player.getHealth() == startHealth - 1);
+		assertTrue("Player health wasn't decreased when it should have been", player.getHealthCur() == startHealth - 1);
 		
 		// reset damage
 		when(mapProperties.get("damage")).thenReturn("2");
@@ -288,14 +290,14 @@ public class PlayerTest {
 		// do one tick of movement
 		player.onTick(1);	
 
-		assertTrue("Player health wasn't decreased as much it should have been", player.getHealth() == startHealth - 3);
+		assertTrue("Player health wasn't decreased as much it should have been", player.getHealthCur() == startHealth - 3);
 
 		when(mapProperties.get("damagetype")).thenReturn("0");
 
 		// do one tick of movement
 		player.onTick(1);	
 		
-		assertTrue("Player health was decreased when the tile was enemy only", player.getHealth() == startHealth - 3);
+		assertTrue("Player health was decreased when the tile was enemy only", player.getHealthCur() == startHealth - 3);
 
 	}
 	
