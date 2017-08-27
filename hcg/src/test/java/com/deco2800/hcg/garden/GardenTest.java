@@ -12,7 +12,6 @@ import org.junit.Test;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
-import com.deco2800.hcg.entities.garden_entities.plants.Explosive;
 import com.deco2800.hcg.entities.garden_entities.plants.Grass;
 import com.deco2800.hcg.entities.garden_entities.plants.Ice;
 import com.deco2800.hcg.entities.garden_entities.plants.Inferno;
@@ -28,12 +27,14 @@ import com.deco2800.hcg.managers.TimeManager;
 public class GardenTest {
 	
 	private static Map<Class<?>, String> sprites;
+	private static Map<Class<?>, String> names;
 	private static Map<Seed.Type, String> seedNames;
 	private static Map<Seed.Type, Class<? extends AbstractGardenPlant>> seedPlants;
 
 	@BeforeClass
 	public static void setup() {
 		sprites = new HashMap<>();
+		names = new HashMap<>();
 		
 		sprites.put(Sunflower.class, "sunflower");
 		sprites.put(Cactus.class, "cactus");
@@ -41,7 +42,13 @@ public class GardenTest {
 		sprites.put(Water.class, "lily");
 		sprites.put(Inferno.class, "inferno");
 		sprites.put(Ice.class, "sunflower"); //need to change
-		sprites.put(Explosive.class, "sunflower"); //need to change
+		
+		names.put(Sunflower.class, "sunflower");
+		names.put(Cactus.class, "cactus");
+		names.put(Grass.class, "grass");
+		names.put(Water.class, "lily");
+		names.put(Inferno.class, "inferno");
+		names.put(Ice.class, "ice");
 	}
 
 	@BeforeClass
@@ -64,6 +71,9 @@ public class GardenTest {
 		seedPlants.put(Seed.Type.WATER, Water.class);
 	}
 
+	/*
+	 * Tests the details of an empty pot
+	 */
 	@Test
 	public void testEmptyPot() {
 		Pot p = new Pot(5, 5, 0);
@@ -83,6 +93,9 @@ public class GardenTest {
 		assertEquals(p.getPlant(), null);
 	}
 	
+	/*
+	 * Tests adding to a pot
+	 */
 	@Test
 	public void testAddSunflower() {
 		Pot p = new Pot(5, 5, 0);
@@ -92,6 +105,9 @@ public class GardenTest {
 		assertEquals(plant.getGrowDelay(), 10);
 	}
 	
+	/*
+	 * Tests that a pot can only contain one plant
+	 */
 	@Test
 	public void testAddTwice() {
 		Pot p = new Pot(5, 5, 0);
@@ -101,15 +117,19 @@ public class GardenTest {
 		assertFalse(p.addPlant(plant2));
 	}
 	
+	/*
+	 * Tests the details of all in-game plants
+	 */
 	@Test
 	public void testAllPlants() {
 		Pot p = new Pot(5, 5, 0);
 		AbstractGardenPlant[] plants = {new Sunflower(p), new Cactus(p), new Water(p), new Grass(p), new Inferno(p),
-				new Ice(p), new Explosive(p)};
+				new Ice(p)};
 		for(AbstractGardenPlant plant : plants) {
 			p.removePlant();
 			p.addPlant(plant);
 			testSprite(plant, p);
+			testName(plant);
 			testLoot(plant);
 		}
 	}
@@ -132,7 +152,12 @@ public class GardenTest {
 		assertTrue(plant.checkLootRarity());
 	}
 	
+	private void testName(AbstractGardenPlant plant) {
+		assertEquals(plant.getName(), names.get(plant.getClass()));
+	}
+	
 	private void testSprite(AbstractGardenPlant plant, Pot pot) {
+		
 		assertEquals(plant.getStage(), AbstractGardenPlant.Stage.SPROUT);
 		assertEquals(pot.getTexture(), sprites.get(plant.getClass()) + "_01");
 		

@@ -30,6 +30,7 @@ public class Hardcor3Gard3ning extends Game {
     private TimeManager timeManager;
     private ContextManager contextManager;
 	private InputManager inputManager;
+	private PlantManager plantManager;
 	private ItemManager itemManager;
 	private StopwatchManager stopwatchManager;
     private MouseHandler mouseHandler;
@@ -65,6 +66,9 @@ public class Hardcor3Gard3ning extends Game {
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
         inputManager.addKeyUpListener(new Planter());
+
+        /* Create a plant manager. */
+        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         
         /* Create an item manager */
         itemManager = (ItemManager) gameManager.getManager(ItemManager.class); 
@@ -76,7 +80,7 @@ public class Hardcor3Gard3ning extends Game {
         //TODO everything below this line doesn't belong here
 
         /**
-		 * Multiplayer prompt
+		 * Multiplayer chat prompt
 		 */
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		(new Thread(new Runnable() {
@@ -85,12 +89,7 @@ public class Hardcor3Gard3ning extends Game {
 				while (!Thread.interrupted()) {
 					try {
 						String line = reader.readLine();
-						if (line.startsWith("HOST")) {
-							NetworkState.init(true);
-						} else if (line.startsWith("JOIN ")) {
-							NetworkState.init(false);
-							NetworkState.join(line.substring(5, line.length()));
-						} else {
+						if (NetworkState.isInitialised()) {
 							NetworkState.sendChatMessage(line);
 						}
 					} catch (IOException e) {

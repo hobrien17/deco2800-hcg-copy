@@ -86,6 +86,9 @@ public class TextureManager extends Manager {
 		textureMap.put("menu_yes_button", new Texture("resources/ui/main_menu/menu_yes_button.png"));
 		textureMap.put("main_menu_background", new Texture("resources/ui/main_menu/main_menu_background.png"));
 		textureMap.put("menu_multiplayer_button", new Texture("resources/ui/main_menu/menu_multiplayer_button.png"));
+		textureMap.put("menu_go_button", new Texture("resources/ui/main_menu/menu_go_button.png"));
+		textureMap.put("menu_host_button", new Texture("resources/ui/main_menu/menu_host_button.png"));
+		textureMap.put("menu_back_button", new Texture("resources/ui/main_menu/menu_back_button.png"));
 
 	}
 

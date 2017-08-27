@@ -72,7 +72,7 @@ public class Effects {
         for (Effect e : currentEffects) {
             if (e.getDuration() == 0) {
                 currentEffects.remove(e);
-                break;
+                continue;
             } else {
                 e.decrementDuration();
             }

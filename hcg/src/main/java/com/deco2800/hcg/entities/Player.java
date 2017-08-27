@@ -3,6 +3,10 @@ package com.deco2800.hcg.entities;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
+import com.deco2800.hcg.inventory.FixedSizeInventory;
+import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.inventory.WeightedInventory;
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.SoundManager;
@@ -38,6 +42,8 @@ public class Player extends Character implements Tickable {
     private float lastSpeedY;
     private int oldTime = -1;
     private int newTime = -1;
+    
+    private Inventory inventory;
 
     private int skillPoints;
     private HashMap<String, Boolean> movementDirection = new HashMap<>();
@@ -75,7 +81,7 @@ public class Player extends Character implements Tickable {
         // for slippery
         lastSpeedX = 0;
         lastSpeedY = 0;
-        
+
         // Set equipped weapon and enter game world
         equippedWeapon = new WeaponBuilder()
                 .setWeaponType(WeaponType.MACHINEGUN)
@@ -89,6 +95,10 @@ public class Player extends Character implements Tickable {
         movementDirection.put("right", false);
         movementDirection.put("up", false);
         movementDirection.put("down", false);
+
+        //inventory
+        inventory = new WeightedInventory(100);
+
     }
 
     /**
@@ -553,4 +563,13 @@ public class Player extends Character implements Tickable {
     public String toString() {
         return "The player";
     }
+
+    public Inventory getInventory(){
+		return inventory;
+    }
+    
+    public boolean addItemToInventory(Item item){
+    	return inventory.addItem(item);
+    }
+
 }

@@ -33,6 +33,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         LARGE
     }
 
+    private String name;
     private Stage stage;
     private Pot master;
     private int growDelay;
@@ -45,13 +46,14 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      * @param master the pot the plant is related to
      * @param delay the growth delay of the plant.
      */
-    public AbstractGardenPlant(Pot master, int delay) {
+    public AbstractGardenPlant(Pot master, String name, int delay) {
         this.stage = Stage.SPROUT;
         growDelay = delay;
         StopwatchManager manager = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
         lastGrow = (int)manager.getStopwatchTime();
         this.master = master;
+        this.name = name;
         setupLoot();
     }
     
@@ -64,17 +66,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         }
 		
 	}
-    
-    /**
-     * Checks if the plant is ready for growing, and advances a stage if it is
-     */
-    /*public void checkGrow() {
-        int time = (int)manager.getStopwatchTime();
-        if (time >= growDelay) {
-        	this.advanceStage();
-        	manager.resetStopwatch();
-        }
-    }*/
 
     @Override
     public Map<String, Double> getRarity() {
@@ -87,7 +78,25 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      * @return The current stage of growth (i.e. SPROUT, SMALL, or LARGE)
      */
     public Stage getStage() {
-        return stage;
+    	return stage;
+    }
+
+    /**
+     * Gets the pot of this plant
+     *
+     * @return The pot object
+     */
+    public Pot getPot(){
+        return master;
+    }
+
+    /**
+     * Gets the plant's name
+     *
+     * @return The name for this plant
+     */
+    public String getName(){
+        return name;
     }
 
     /**
