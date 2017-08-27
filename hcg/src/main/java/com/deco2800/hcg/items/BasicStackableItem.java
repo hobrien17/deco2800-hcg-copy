@@ -7,6 +7,12 @@ public class BasicStackableItem implements Item {
     private int itemMaxStackSize;
     private int itemCurrentStackSize;
 
+    /**
+     * Creates a new BasicStackableItem
+     * @param name the name of the item
+     * @param weight the weight of the item
+     * @param maxStackSize the maximum stack size of the item
+     */
     BasicStackableItem(String name, int weight, int maxStackSize) {
         itemName = name;
         itemWeight = weight;

@@ -22,9 +22,9 @@ public class TimeManager extends Manager implements TickableManager {
 	private int minutes;
 	private int hours;
 
-	private Label label;
+	private Label timeLabel;
+	private Label dateLabel;
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
 	private boolean timePaused;
 	private boolean isNight;
 
@@ -40,7 +40,8 @@ public class TimeManager extends Manager implements TickableManager {
 		this.month = 1;
 		this.year = 2047;
 		this.timeElapsed = 0;
-		this.label = null;
+		this.timeLabel = null;
+		this.dateLabel = null;
 		this.timePaused = false; // this will need to be set to true when we have some sort of 'start screen' happening
 	}
 
@@ -126,8 +127,12 @@ public class TimeManager extends Manager implements TickableManager {
 		return this.timeElapsed;
 	}
 
-	public void setLabel(Label label) {
-		this.label = label;
+	public void setTimeLabel(Label label) {
+		this.timeLabel = label;
+	}
+
+	public void setDateLabel(Label label) {
+		this.dateLabel = label;
 	}
 
 	/**
@@ -254,8 +259,11 @@ public class TimeManager extends Manager implements TickableManager {
 		
 		this.timeElapsed++;
 		this.nextSecond();
-		if (this.label != null) {
-			label.setText(this.getDateTime());
+		if (this.timeLabel != null) {
+			this.timeLabel.setText(this.getTime());
+		}
+		if (this.dateLabel != null) {
+			this.dateLabel.setText(this.getDate());
 		}
 		
 		if (hasChanged()){
@@ -275,4 +283,68 @@ public class TimeManager extends Manager implements TickableManager {
 				this.seconds);
 	}
 
-}
+	/**
+	 * Returns a formatted time string for the current game time (hh:mm).
+	 *
+	 * @return Returns a string denoting the current time in the game.
+	 */
+	public String getTime() {
+		return String.format("%02d:%02d", this.hours, this.minutes);
+	}
+
+	/**
+	 * Returns a formatted date string for the current game date.
+	 *
+	 * @return Returns a string denoting the current date in the game.
+	 */
+	public String getDate() {
+		// My computer is not recognizing Strings in HashMaps so for now this 
+		// is going to be a switch
+		String month;
+		switch (this.month) {
+			case 1:
+				month = "January";
+				break;
+			case 2:
+				month = "February";
+				break;
+			case 3:
+				month = "March";
+				break;
+			case 4:
+				month = "April";
+				break;
+			case 5:
+				month = "May";
+				break;
+			case 6:
+				month = "June";
+				break;
+			case 7:
+				month = "July";
+				break;
+			case 8:
+				month = "August";
+				break;
+			case 9:
+				month = "September";
+				break;
+			case 10:
+				month = "October";
+				break;
+			case 11:
+				month = "November";
+				break;
+			case 12:
+				month = "December";
+				break;
+			default:
+				// Indicates bug in TimeManager class
+				System.out.println("Issue in TimeManager class");
+				month = "Error";
+		}
+
+		return String.format("%02d %s", this.day, month);
+	}
+
+ }

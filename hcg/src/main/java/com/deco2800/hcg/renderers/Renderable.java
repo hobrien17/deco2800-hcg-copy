@@ -19,13 +19,33 @@ public interface Renderable {
      */
     String getTexture();
 
+    /**
+     * Returns the x position of the object
+     * @return the x position of the object
+     */
     float getPosX();
 
+    /**
+     * Returns the y position of the object
+     * @return the y position of the object
+     */
     float getPosY();
 
+    /**
+     * Returns the z position of the object
+     * @return the z position of the object
+     */
     float getPosZ();
 
+    /**
+     * Returns the rendering length in relation to the x axis of the object.
+     * @return the rendering length in relation to the x axis
+     */
     float getXRenderLength();
 
+    /**
+     * Returns the rendering length in relation to the y axis of the object
+     * @return the rendering length in relation to the y axis
+     */
     float getYRenderLength();
 }

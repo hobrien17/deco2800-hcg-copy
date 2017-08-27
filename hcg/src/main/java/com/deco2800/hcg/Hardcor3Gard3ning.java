@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.deco2800.hcg.contexts.PlayContext;
+import com.deco2800.hcg.contexts.MainMenuContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
@@ -25,6 +25,7 @@ public class Hardcor3Gard3ning extends Game {
     private TimeManager timeManager;
     private ContextManager contextManager;
 	private InputManager inputManager;
+	private ItemManager itemManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -58,13 +59,16 @@ public class Hardcor3Gard3ning extends Game {
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
         inputManager.addKeyUpListener(new Planter());
+        
+        /* Create an item manager */
+        itemManager = (ItemManager) gameManager.getManager(ItemManager.class); 
 
         //TODO everything below this line doesn't belong here
 
 		/* Create an example world for the engine */
         gameManager.setWorld(new DemoWorld());
 
-        contextManager.pushContext(new PlayContext());
+        contextManager.pushContext(new MainMenuContext());
 
         // Set up a player
         Player player = new Player(5, 10, 0);
@@ -93,13 +97,17 @@ public class Hardcor3Gard3ning extends Game {
         contextManager.dispose();
     }
 
-    // Clear the entire display as we are using lazy rendering
+    /**
+     * Clears the entire display as we are using lazy rendering
+     */
     public void clearScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
-    // Fire waiting game ticks
+    /**
+     * Fires waiting game ticks
+     */
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
             if (contextManager.ticksRunning()) {
