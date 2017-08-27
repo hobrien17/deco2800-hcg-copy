@@ -64,8 +64,8 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	public void update(Observable o, Object arg) {
 		int time = (int)(float)arg;
 		if (time - lastGrow >= growDelay) {
-		    plantManager.updateLabel();
         	this.advanceStage();
+		    plantManager.updateLabel();
         	lastGrow = time;
         }
 		
