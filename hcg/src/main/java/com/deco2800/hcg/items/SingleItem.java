@@ -114,7 +114,7 @@ public abstract class SingleItem implements Item {
      */
     @Override
     public boolean sameItem(Item item) throws IllegalArgumentException {
-        return item instanceof SingleItem;
+        return (item instanceof SingleItem && ((SingleItem) item).itemName == this.itemName);
     }
     
     @Override

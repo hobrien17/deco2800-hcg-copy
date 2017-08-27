@@ -71,9 +71,8 @@ public class TextureManager extends Manager {
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 
 		//NPCs
-		textureMap.put("character_1", new Texture("resources/sprites/npc/character_1.png"));
-		textureMap.put("character_2", new Texture("resources/sprites/npc/character_2.png"));
-		textureMap.put("character_shop", new Texture("resources/sprites/npc/character_shop.png"));
+		textureMap.put("character_1", new Texture("resources/sprites/npc/basic_character.png"));
+		textureMap.put("character_shop", new Texture("resources/sprites/npc/shop_keeper.png"));
 
 		
 		// Textures for the Main Menu and In-Game Menu

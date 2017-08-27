@@ -132,13 +132,7 @@ public abstract class NPC extends Character implements Tickable {
             if (timeout_count > timeout) {
                 changeX = 0.0f;
                 changeY = 0.0f;
-                return;
-            }
-
-            //Calculate new valid direction
-            if (collided || newPos.getX() > this.shortWander_xMax || newPos.getX() < this.shortWander_xMin ||
-                    newPos.getY() > this.shortWander_yMax || newPos.getY() < this.shortWander_yMin) {
-                this.moveDirection = this.random.nextInt() % 4;
+                break;
             }
 
             switch (this.moveDirection) {
@@ -167,7 +161,9 @@ public abstract class NPC extends Character implements Tickable {
                     break;
             }
 
-            if (this.distance(playerManager.getPlayer()) < 1.5f) {
+            //Stop when in close proximity to player
+            //Currently bugged, one or both of this coordinates if offset significantly to the left.
+            if (this.distance(playerManager.getPlayer()) < 2.5f) {
                 changeX = 0.0f;
                 changeY = 0.0f;
                 return;
@@ -182,13 +178,18 @@ public abstract class NPC extends Character implements Tickable {
             for (AbstractEntity entity : entities) {
                 if (!this.equals(entity) & newPos.overlaps(entity.getBox3D())) {
                     if (entity instanceof Player) {
-                        //Collided With Player
+                        //Collided With Player - Stop
                         changeX = 0.0f;
                         changeY = 0.0f;
-                        return;
                     }
                     collided = true;
                 }
+            }
+
+            //Calculate new valid direction
+            if (collided || newPos.getX() > this.shortWander_xMax || newPos.getX() < this.shortWander_xMin ||
+                    newPos.getY() > this.shortWander_yMax || newPos.getY() < this.shortWander_yMin) {
+                this.moveDirection = this.random.nextInt() % 4;
             }
 
         } while (collided || newPos.getX() > this.shortWander_xMax || newPos.getX() < this.shortWander_xMin ||

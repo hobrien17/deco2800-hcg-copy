@@ -33,6 +33,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         LARGE
     }
 
+    private String name;
     private Stage stage;
     private Pot master;
     private int growDelay;
@@ -86,6 +87,25 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      *
      * @return The current stage of growth (i.e. SPROUT, SMALL, or LARGE)
      */
+
+    /**
+     * Gets the pot of this plant
+     *
+     * @return The pot object
+     */
+    public Pot getPot(){
+        return master;
+    }
+
+    /**
+     * Gets the plant's name
+     *
+     * @return The name for this plant
+     */
+    public String getName(){
+        return name;
+    }
+
     public Stage getStage() {
         return stage;
     }

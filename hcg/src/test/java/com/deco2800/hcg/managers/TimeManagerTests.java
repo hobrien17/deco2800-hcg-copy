@@ -7,6 +7,7 @@ public class TimeManagerTests {
 	private TimeManager timeManagerPauseTest;
 	private TimeManager timeManagerNextDayTest;
 	private TimeManager timeManagerNextSecondTest;
+	private TimeManager timeManagerGetDateTest;
 
 	@Before
 	public void setUp() {
@@ -20,6 +21,9 @@ public class TimeManagerTests {
 
 		// for nextSecondTest
 		timeManagerNextSecondTest = new TimeManager();
+
+		// for getDateTest
+		timeManagerGetDateTest = new TimeManager();
 	}
 
 	@Test
@@ -41,21 +45,31 @@ public class TimeManagerTests {
 	public void pauseTimeTest() {
 		// time is paused, nothing should increment during onTick method call
 		timeManagerPauseTest.pauseTime();
+
+		int temp = timeManagerPauseTest.getSeconds();
+		int temp2 = timeManagerPauseTest.getTimeElapsed();
+
+		// try and run time
 		timeManagerPauseTest.onTick(0);
+
 		Assert.assertEquals("Time is running whilst paused.",
-				0, timeManagerPauseTest.getSeconds());
+				temp, timeManagerPauseTest.getSeconds());
 		Assert.assertEquals("Time is running whilst paused.",
-				0, timeManagerPauseTest.getTimeElapsed());
+				temp2, timeManagerPauseTest.getTimeElapsed());
 	}
 
 	@Test
 	public void unpauseTimeTest() {
 		timeManagerPauseTest.unpauseTime();
+
+		int temp = timeManagerPauseTest.getSeconds();
+		int temp2 = timeManagerPauseTest.getTimeElapsed();
+
 		// seconds should increment by 1 on tick
 		timeManagerPauseTest.onTick(0);
-		Assert.assertEquals("Time is not running correctly after being unpaused.", 1,
+		Assert.assertEquals("Time is not running correctly after being unpaused.", temp + 1,
 				timeManagerPauseTest.getSeconds());
-		Assert.assertEquals("Time is not running correctly after being unpaused.", 1,
+		Assert.assertEquals("Time is not running correctly after being unpaused.", temp2 + 1,
 				timeManagerPauseTest.getTimeElapsed());
 	}
 
@@ -75,8 +89,11 @@ public class TimeManagerTests {
 				1, timeManagerNextSecondTest.getSeconds());
 	}
 
-
-
+	@Test
+	public void getDateTest() {
+		Assert.assertEquals("getDate string not printing correctly.",
+				"01 January", timeManagerGetDateTest.getDate());
+	}
 
 
 
