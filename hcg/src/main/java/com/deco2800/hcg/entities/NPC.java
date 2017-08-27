@@ -225,4 +225,10 @@ public abstract class NPC extends Character implements Tickable {
         }
     }
 
+    /*
+        returns the type of the NPC
+     */
+    public NPC.Type getNPCType() {
+        return this.NPCType;
+    }
 }

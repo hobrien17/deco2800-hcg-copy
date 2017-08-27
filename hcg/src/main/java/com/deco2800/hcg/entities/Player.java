@@ -11,6 +11,8 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.trading.GeneralShop;
+import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
@@ -151,9 +153,27 @@ public class Player extends Character implements Tickable {
                 if (entity instanceof NPC) {
 
                     LOGGER.info(this + " initiated a interaction with " + entity);
-                    ((NPC) entity).Interaction();
+                    this.Interaction(entity);
                 }
             }
+        }
+    }
+
+    private void Interaction(AbstractEntity npc) {
+
+        if (((NPC) npc).getNPCType() == NPC.Type.Shop) {
+
+            LOGGER.info("Shop NPC Interaction Started");
+            Shop shop = new GeneralShop();
+            shop.open(0, this);
+            System.out.println("Shop Open");
+
+        } else if (((NPC) npc).getNPCType() == NPC.Type.Quest) {
+            LOGGER.info("Quest NPC Interaction Started");
+
+        } else {
+            LOGGER.info("Other NPC Interaction Started");
+
         }
     }
     
