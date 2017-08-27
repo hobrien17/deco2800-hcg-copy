@@ -3,7 +3,6 @@ package com.deco2800.hcg.entities.garden_entities.plants;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.StopwatchManager;
-import com.deco2800.hcg.managers.TimeManager;
 
 import java.util.Map;
 import java.util.Observable;
