@@ -126,6 +126,26 @@ public class Player extends Character implements Tickable {
             int button) {
         equippedWeapon.ceaseFire();
     }
+
+    /**
+     * Checks player's proximity to NPCs to see if an interaction can be initiated.
+     */
+    private void checkForInteraction() {
+
+        LOGGER.info(this + " attempted to initiate an interaction with a NPC");
+
+        Box3D interactionRadius = getBox3D();
+        List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
+        for (AbstractEntity entity : entities) {
+            if (!this.equals(entity) & (interactionRadius.distance(entity.getBox3D()) < 3.0f)) {
+                if (entity instanceof NPC) {
+
+                    LOGGER.info(this + " initiated a interaction with " + entity);
+                    ((NPC) entity).Interaction();
+                }
+            }
+        }
+    }
     
     /**
      * Handles the processes involved when a mouse movement is made.
@@ -327,6 +347,9 @@ public class Player extends Character implements Tickable {
                 break;
             case Input.Keys.D:
                 movementDirection.put("right", true);
+                break;
+            case Input.Keys.E:
+                checkForInteraction();
                 break;
             case Input.Keys.R:
                 if(equippedWeapon.equals(peashooter)) {

@@ -92,18 +92,6 @@ public abstract class NPC extends Character implements Tickable {
 
     }
 
-    private void interact() {
-        //What do we do with this NPC on click?
-        if (NPCType == Type.Shop) {
-            //Open Shop Menu
-            LOGGER.info("NPC SHOP CLICKED");
-        } else if (NPCType == Type.Quest) {
-            LOGGER.info("NPC QUEST CLICKED");
-        } else {
-            LOGGER.info("NPC OTHER CLICKED");
-        }
-    }
-
     /**
      * On Tick handler
      *
@@ -201,6 +189,24 @@ public abstract class NPC extends Character implements Tickable {
             setPosY(getPosY() + changeY);
         }
 
+    }
+
+    /*
+        Handles what occurs when an interaction with the player is initiated
+     */
+    public void Interaction() {
+
+        if (NPCType == Type.Shop) {
+            //TODO: open shop menu
+            LOGGER.info("NPC SHOP CLICKED");
+
+        } else if (NPCType == Type.Quest) {
+            LOGGER.info("NPC QUEST CLICKED");
+
+        } else {
+            LOGGER.info("NPC OTHER CLICKED");
+
+        }
     }
 
 }
