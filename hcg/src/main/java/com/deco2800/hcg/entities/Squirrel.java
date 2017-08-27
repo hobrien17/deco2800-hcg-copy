@@ -50,10 +50,18 @@ public class Squirrel extends Enemy implements Tickable {
 	@Override
 	public void onTick(long gameTickCount) {
 		this.detectPlayer();
-		this.move();
-		Box3D newPos = getBox3D();
-		newPos.setX(this.getPosX());
-		newPos.setY(this.getPosY());
+		Box3D newPos;
+		if(this.getStatus() == 1) {
+			newPos = this.randomMove();
+		} else if (this.getStatus() == 2){
+			newPos = this.moveToPlayer();
+		} else if (this.getStatus() == 3){
+			newPos = this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
+		} else {
+			newPos = getBox3D();
+			newPos.setX(this.getPosX());
+			newPos.setY(this.getPosY());
+		}
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		collided = false;
 		for (AbstractEntity entity : entities) {
@@ -65,7 +73,7 @@ public class Squirrel extends Enemy implements Tickable {
 			}
 		}
 		if (!collided) {
-			this.move();
+			this.move(newPos.getX(), newPos.getY());
 		}
 		// Apply any effects that exist on the entity
 		myEffects.apply();

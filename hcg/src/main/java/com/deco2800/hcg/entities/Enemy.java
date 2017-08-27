@@ -5,6 +5,7 @@ import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import org.slf4j.Logger;
@@ -268,7 +269,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      * Go to the player's position if detected player during moving.
      *
      */
-    public void randomMove() {
+    public Box3D randomMove() {
         float radius;
         float distance;
         float currPosX = this.getPosX();
@@ -305,15 +306,19 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         } else if (this.getPosY() > nextPosY) {
             currPosY -= movementSpeed;
         }
-        this.setPosX(currPosX);
-        this.setPosY(currPosY);
+        //this.setPosX(currPosX);
+        //this.setPosY(currPosY);
+        Box3D newPos = getBox3D();
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
     }
 
     /**
      * Move enemy to player.
      *
      */
-    public void moveToPlayer(){
+    public Box3D moveToPlayer(){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
         if(this.getPosX() < playerManager.getPlayer().getPosX()){
@@ -328,15 +333,19 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         else if(this.getPosY() > playerManager.getPlayer().getPosY()){
             currPosY -= movementSpeed;
         }
-        this.setPosX(currPosX);
-        this.setPosY(currPosY);
+        //this.setPosX(currPosX);
+        //this.setPosY(currPosY);
+        Box3D newPos = getBox3D();
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
     }
 
     /**
      * Move enemy to pointed position. Use for going to the player's last position.
      *
      */
-    public void moveTo(float posX, float posY){
+    public Box3D moveTo(float posX, float posY){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
         if(this.getPosX() < posX){
@@ -351,26 +360,25 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         else if(this.getPosY() > posY){
             currPosY -= movementSpeed;
         }
-        this.setPosX(currPosX);
-        this.setPosY(currPosY);
+        //this.setPosX(currPosX);
+        //this.setPosY(currPosY);
         if((abs(posX - currPosX) < 1) &&
                 (abs(posY - currPosY) < 1)){
             this.setStatus(1);
         }
+        Box3D newPos = getBox3D();
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
     }
 
     /**
      * Move enemy by different situation.
      *
      */
-    public void move(){
-        if(this.getStatus() == 1) {
-            this.randomMove();
-        } else if (this.getStatus() == 2){
-            this.moveToPlayer();
-        } else if (this.getStatus() == 3){
-            this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
-        }
+    public void move(float currPosX, float currPosY){
+        this.setPosX(currPosX);
+        this.setPosY(currPosY);
     }
 
     /**
