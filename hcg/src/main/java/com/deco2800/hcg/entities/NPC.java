@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author guthers
  */
-
 public abstract class NPC extends Character implements Tickable {
 
     public enum Type {
@@ -206,10 +205,11 @@ public abstract class NPC extends Character implements Tickable {
         }
 
     }
-    /*
-        returns the type of the NPC
 
-        @returns NPC Type
+    /**
+     * Returns the type of the NPC
+     *
+     * @returns the type of the NPC
      */
     public NPC.Type getNPCType() {
         return this.NPCType;

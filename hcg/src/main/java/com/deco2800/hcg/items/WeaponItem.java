@@ -2,9 +2,21 @@ package com.deco2800.hcg.items;
 
 import com.deco2800.hcg.weapons.Weapon;
 
+/**
+ * The WeaponItem class represents inventory items that have weapons
+ * as their basis. (e.g the same weapon basis can be used to make
+ * multiple different items)
+ */
 public class WeaponItem extends SingleItem {
     private Weapon weapon;
-    
+
+    /**
+     * Constructor for the WeaponItem class. It creates a new WeaponItem
+     * with the given weapon, name and weight
+     * @param weapon the weapon to make an item of
+     * @param name the name of the item
+     * @param weight the weight of the item
+     */
     public WeaponItem(Weapon weapon, String name, int weight) {
         this.weapon = weapon;
         this.itemName = name;

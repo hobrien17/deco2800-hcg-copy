@@ -13,6 +13,10 @@ import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 
+/**
+ * The PerksSelectionScreen represents a context where users can
+ * select their player's perks
+ */
 public class PerksSelectionScreen extends UIContext{
 
     private ImageButton quitButton1;
@@ -21,6 +25,9 @@ public class PerksSelectionScreen extends UIContext{
     private Table Branch2;
     private Table Branch3;
 
+    /**
+     * Creates a new PerksSelectionScreen
+     */
     public PerksSelectionScreen() {
 
         // Get necessary managers

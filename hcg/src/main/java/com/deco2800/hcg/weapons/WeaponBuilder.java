@@ -24,64 +24,127 @@ public class WeaponBuilder {
     private String texture = "";
     private int cooldown = -1;
     private int pellets = -1;
-    
+
+    /**
+     * Initialises a new WeaponBuilder
+     */
     public WeaponBuilder() {}
-    
+
+    /**
+     * Sets the weapon type of the weapon builder
+     * @param weaponType the type to set the weapon builder to
+     * @return the weapon builder
+     */
     public WeaponBuilder setWeaponType(WeaponType weaponType) {
         this.weaponType = weaponType;
         return this;
     }
-    
+
+    /**
+     * Sets the current user of the weapon builder
+     * @param user the user to set the weapon builder to
+     * @return the weapon builder
+     */
     public WeaponBuilder setUser(AbstractEntity user) {
         this.user = user;
         return this;
     }
-    
+
+    /**
+     * Sets the x position of the weapon builder
+     * @param posX the new x position
+     * @return the weapon builder
+     */
     public WeaponBuilder setPosX(float posX) {
         this.posX = posX;
         return this;
     }
-    
+
+    /**
+     * Sets the y position of the weapon builder
+     * @param posY the new y position
+     * @return the weapon builder
+     */
     public WeaponBuilder setPosY(float posY) {
         this.posY = posY;
         return this;
     }
-    
+
+    /**
+     * Sets the x position of the weapon builder
+     * @param posZ the new z position
+     * @return the weapon builder
+     */
     public WeaponBuilder setPosZ(float posZ) {
         this.posZ = posZ;
         return this;
     }
-    
+
+    /**
+     * Sets the x-length of the weapon builder
+     * @param xLength the x length to set it to
+     * @return the weapon builder
+     */
     public WeaponBuilder setXLength(float xLength) {
         this.xLength = xLength;
         return this;
     }
-    
+
+    /**
+     * Sets the y-length of the weapon builder
+     * @param yLength the y length to set it to
+     * @return the weapon builder
+     */
     public WeaponBuilder setYLength(float yLength) {
         this.yLength = yLength;
         return this;
     }
-    
+
+    /**
+     * Sets the z-length of the weapon builder
+     * @param zLength the z length to set it to
+     * @return the weapon builder
+     */
     public WeaponBuilder setZLength(float zLength) {
         this.zLength = zLength;
         return this;
     }
-    
+
+    /**
+     * Sets the radius of the weapon builder
+     * @param radius the radius to set it to
+     * @return the weapon builder
+     */
     public WeaponBuilder setRadius(double radius) {
         this.radius = radius;
         return this;
     }
-    
+
+    /**
+     * Sets the texture of the weapon builder
+     * @param texture the texture to set it to
+     * @return the weapon builder
+     */
     public WeaponBuilder setTexture(String texture) {
         this.texture = texture;
         return this;
     }
-    
+
+    /**
+     * Sets the cooldown period of the weapon builder
+     * @param cooldown the cooldown period to set it to
+     * @return the weapon builder
+     */
     public WeaponBuilder setCooldown(int cooldown) {
         this.cooldown = cooldown;
         return this;
     }
-    
+
+    /**
+     * Sets the pellets of the weapon builder
+     * @param pellets the pellet type to set it to
+     * @return the weapon builder
+     */
     public WeaponBuilder setPellets(int pellets) {
         this.pellets = pellets;
         return this;

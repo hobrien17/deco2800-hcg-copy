@@ -9,6 +9,9 @@ public class MessageManager extends Manager {
 	
 	private ArrayList<MessageObserver> chatMessageListeners = new ArrayList<>();
 
+	/**
+	 * Constructor for the MessageManager
+	 */
 	public MessageManager() {}
 	
 	/**

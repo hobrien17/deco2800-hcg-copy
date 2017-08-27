@@ -2,8 +2,14 @@ package com.deco2800.hcg.items.stackable;
 
 import com.deco2800.hcg.items.StackableItem;
 
+/**
+ * TestItem is a class used to test the StackableItem class
+ */
 public class TestItem extends StackableItem {
-    
+
+    /**
+     * Initialises a new test item
+     */
     public TestItem(){
         this.baseValue = 2;
         this.itemName = "Test Item";

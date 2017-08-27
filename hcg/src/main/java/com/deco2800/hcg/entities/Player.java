@@ -668,8 +668,12 @@ public class Player extends Character implements Tickable {
     public Item getCurrentEquippedItem() {
         return this.equippedItems.getCurrentEquippedItem();
     }
-    
-    public Weapon getEquippedWeapon() {
+
+	/**
+	 * Returns the player's currently equipped weapon
+	 * @return the player's currently equipped weapon
+	 */
+	public Weapon getEquippedWeapon() {
         Item item = this.getCurrentEquippedItem();
         if(item != null && item instanceof WeaponItem) {
             return ((WeaponItem) item).getWeapon();

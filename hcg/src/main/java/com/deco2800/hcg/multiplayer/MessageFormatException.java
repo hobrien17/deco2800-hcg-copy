@@ -1,5 +1,8 @@
 package com.deco2800.hcg.multiplayer;
 
+/**
+ * An exception that is called due to an error in the format of a message.
+ */
 public class MessageFormatException extends Exception {
 
 	public MessageFormatException() {

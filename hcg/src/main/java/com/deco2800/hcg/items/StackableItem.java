@@ -1,5 +1,9 @@
 package com.deco2800.hcg.items;
 
+/**
+ * The StackableItem class represents items that can be
+ * stacked (i.e items that one can have multiples of)
+ */
 public abstract class StackableItem extends GenericItem{
     protected int maxStackSize;
     protected int currentStackSize;

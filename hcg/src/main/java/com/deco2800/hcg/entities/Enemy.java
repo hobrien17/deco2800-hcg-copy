@@ -39,7 +39,20 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
 
 	// Effects container
 	protected Effects myEffects;
-    
+
+    /**
+     * Creates a new enemy at the given position
+     * @param posX the x position
+     * @param posY the y position
+     * @param posZ the z position
+     * @param xLength the length of the enemy in terms of thw x-axis
+     * @param yLength the length of the enemy in terms of the y axis
+     * @param zLength the length of the enemy in terms if the x axis
+     * @param centered whether the enemy is centered or not
+     * @param health the health of the enemy
+     * @param strength the strength of the enemy
+     * @param ID the enemy ID
+     */
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength, int ID) {
         super(posX, posY, posZ, xLength, yLength, zLength, 1, 1, centered);

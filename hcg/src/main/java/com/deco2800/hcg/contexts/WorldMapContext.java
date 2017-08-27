@@ -43,6 +43,10 @@ public class WorldMapContext extends UIContext {
     private boolean showAllNodes;
 
     private ArrayList<MapNodeEntity> hiddenNodes;
+
+    /**
+     * Constructor to create a new WorldMapContext
+     */
     public WorldMapContext() {
         gameManager = GameManager.get();
 

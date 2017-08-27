@@ -70,11 +70,19 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.setTexture(texture);
         this.cooldown = cooldown;
     }
-    
+
+    /**
+     * Returns the type of the weapon
+     * @return the type of the weapon
+     */
     public WeaponType getWeaponType() {
         return weaponType;
     }
-    
+
+    /**
+     * Returns the weapon's user
+     * @return the user of the weapon
+     */
     public AbstractEntity getUser() {
         return user;
     }

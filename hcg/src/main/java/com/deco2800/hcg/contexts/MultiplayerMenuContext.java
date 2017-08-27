@@ -28,7 +28,10 @@ public class MultiplayerMenuContext extends UIContext {
 	private ImageButton go;
 	private ImageButton host;
 	private ImageButton back;
-	
+
+	/**
+	 * Constructor for the MultiplayerMenuContext
+	 */
 	public MultiplayerMenuContext() {
 		
 		 // Get necessary managers
