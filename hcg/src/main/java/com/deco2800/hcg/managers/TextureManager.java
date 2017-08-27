@@ -42,7 +42,7 @@ public class TextureManager extends Manager {
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
-		textureMap.put("squirrel", new Texture("resources/sprites/enemies/squirrel.png"));
+		textureMap.put("squirrel", new Texture("resources/sprites/enemies/squirrel_basic.png"));
 		textureMap.put("battle_seed", new Texture("resources/sprites/seeds/battle_seed.png"));
 		textureMap.put("explosive_seed", new Texture("resources/sprites/seeds/explosive_seed.png"));
 		textureMap.put("fire_seed", new Texture("resources/sprites/seeds/fire_seed.png"));
@@ -86,6 +86,9 @@ public class TextureManager extends Manager {
 		textureMap.put("menu_yes_button", new Texture("resources/ui/main_menu/menu_yes_button.png"));
 		textureMap.put("main_menu_background", new Texture("resources/ui/main_menu/main_menu_background.png"));
 		textureMap.put("menu_multiplayer_button", new Texture("resources/ui/main_menu/menu_multiplayer_button.png"));
+		textureMap.put("menu_go_button", new Texture("resources/ui/main_menu/menu_go_button.png"));
+		textureMap.put("menu_host_button", new Texture("resources/ui/main_menu/menu_host_button.png"));
+		textureMap.put("menu_back_button", new Texture("resources/ui/main_menu/menu_back_button.png"));
 
 	}
 

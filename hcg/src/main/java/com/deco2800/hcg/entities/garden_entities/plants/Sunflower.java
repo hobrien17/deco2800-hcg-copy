@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
 import java.util.HashMap;
-import java.util.Observable;
 
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
@@ -20,7 +19,7 @@ public class Sunflower extends AbstractGardenPlant {
      */
     public Sunflower(Pot master) {
 
-        super(master, 10);
+        super(master, "sunflower", 10);
     }
 
     @Override
