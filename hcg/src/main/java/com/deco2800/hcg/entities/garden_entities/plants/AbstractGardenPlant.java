@@ -65,17 +65,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         }
 		
 	}
-    
-    /**
-     * Checks if the plant is ready for growing, and advances a stage if it is
-     */
-    /*public void checkGrow() {
-        int time = (int)manager.getStopwatchTime();
-        if (time >= growDelay) {
-        	this.advanceStage();
-        	manager.resetStopwatch();
-        }
-    }*/
 
     @Override
     public Map<String, Double> getRarity() {
