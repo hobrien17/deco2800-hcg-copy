@@ -165,7 +165,7 @@ public final class NetworkState {
 					NetworkState.socket.receive(packet);
 					Message message = new Message(packet.getData());
 					Integer messageId = new Integer((int) message.getId());
-					if (message.getType() != MessageType.CONF && !processedIds.contains(messageId)) {
+					if (message.getType() != MessageType.CONFIRMATION && !processedIds.contains(messageId)) {
 						// TODO: this should end up somewhere else
 						switch (message.getType()) {
 							case JOIN:
@@ -183,7 +183,8 @@ public final class NetworkState {
 						processedIds.add(messageId);
 						// log
 						System.out.println("RECEIVED: " + message.getType().toString());
-					} else if (message.getType() == MessageType.CONF) {
+						System.out.println(new String(packet.getData()));
+					} else if (message.getType() == MessageType.CONFIRMATION) {
 						// get id for logging
 						Message removed = NetworkState.sendQueue.get(message.getPayloadInteger());
 						// remove message from send queue
@@ -196,7 +197,7 @@ public final class NetworkState {
 						}
 					} else {
 
-						Message confirmMessage = new Message(MessageType.CONF, message.getIdInBytes());
+						Message confirmMessage = new Message(MessageType.CONFIRMATION, message.getIdInBytes());
 						byte byteArray[] = confirmMessage.toByteArray();
 						DatagramPacket confirmPacket = new DatagramPacket(
 								byteArray, byteArray.length, packet.getSocketAddress());
