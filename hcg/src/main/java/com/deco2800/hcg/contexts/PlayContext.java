@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -17,7 +16,6 @@ import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-import com.badlogic.gdx.graphics.Texture;
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -54,7 +52,6 @@ public class PlayContext extends Context {
     private Stage stage;
     private Window window;
     private Label clockLabel;
-    private Label dateLabel;
 
     /**
      * Create the PlayContext
@@ -87,14 +84,9 @@ public class PlayContext extends Context {
 		/* Add another button to the menu */
         Button anotherButton = new TextButton("Play Duck Sound", skin);
 
-		/* Add clock. */
-        Image clockImage = new Image(new 
-            Texture(Gdx.files.internal("resources/ui/clock_outline.png")));
-        //clockImage.setPosition(stage.getWidth() - 215, 10);
-        clockLabel = new Label(timeManager.getTime(), skin);
-        dateLabel = new Label(timeManager.getDate(), skin);
-        timeManager.setTimeLabel(clockLabel);
-        timeManager.setDateLabel(dateLabel);
+		/* Add a label for the clock; change to be prettier later. */
+        clockLabel = new Label(timeManager.getDateTime(), skin);
+        timeManager.setLabel(clockLabel);
 
 		/* Add a programmatic listener to the quit button */
         button.addListener(new ChangeListener() {
@@ -115,6 +107,7 @@ public class PlayContext extends Context {
 		/* Add all buttons to the menu */
         window.add(button);
         window.add(anotherButton);
+        window.add(clockLabel);
         window.pack();
         window.setMovable(false); // So it doesn't fly around the screen
         window.setPosition(0,
@@ -122,18 +115,6 @@ public class PlayContext extends Context {
 
 		/* Add the window to the stage */
         stage.addActor(window);
-        
-        /* Create clock GUI and add it to the stage */
-        Group group = new Group();
-        group.setPosition(stage.getWidth() - 220, 20);
-        group.addActor(clockImage);
-        clockLabel.setPosition(58, 95);
-        clockLabel.setFontScale((float)2.1);
-        dateLabel.setPosition(65, 60);
-        dateLabel.setFontScale((float)0.9);
-        group.addActor(clockLabel);
-        group.addActor(dateLabel);
-        stage.addActor(group);
 
 		/*
          * Setup inputs for the buttons and the game itself
