@@ -1,11 +1,9 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Map;
 
-import com.deco2800.hcg.entities.garden_entities.seeds.WaterSeed;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 
 /**
@@ -15,10 +13,13 @@ import com.deco2800.hcg.managers.ItemManager;
  */
 public class Water extends AbstractGardenPlant {
 
+	/**
+	 * Creates a new Water plant in the given pot
+	 * @param master the pot to associate the plant to
+	 */
 	public Water(Pot master) {
-		super(master);
-		this.advanceStage();
-		this.advanceStage();
+
+		super(master, 30);
 	}
 
 	@Override
@@ -35,22 +36,19 @@ public class Water extends AbstractGardenPlant {
 	}
 
 	@Override
-	public void onTick(long gameTickCount) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Item[] loot() {
 		Item[] arr = new Item[1];
-		arr[0] = ItemManager.getNew(randItem());
+		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
 		
 		return arr;
 	}
 
 	@Override
 	void setupLoot() {
-		// TODO Auto-generated method stub
-		
+		lootRarity = new HashMap<>();
+
+        lootRarity.put("water_seed", 1.0);
+
+        checkLootRarity();
 	}
 }

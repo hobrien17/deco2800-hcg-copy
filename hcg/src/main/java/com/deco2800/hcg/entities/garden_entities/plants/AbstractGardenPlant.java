@@ -1,16 +1,15 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.TimeManager;
 
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.deco2800.hcg.entities.*;
-import com.deco2800.hcg.util.Box3D;
 
 /**
  * Represents a plant in the garden Used as a shell for more specific types of
@@ -18,7 +17,7 @@ import com.deco2800.hcg.util.Box3D;
  *
  * @author Henry O'Brien
  */
-public abstract class AbstractGardenPlant implements Tickable, Lootable {
+public abstract class AbstractGardenPlant implements Lootable, Observer {
 
     static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
@@ -28,26 +27,58 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
      *
      * More stages can be added if needed (remember to update relevant methods)
      */
-    enum Stage {
+    public enum Stage {
         SPROUT,
         SMALL,
         LARGE
     }
 
+    private String name;
     private Stage stage;
     private Pot master;
+    private int growDelay;
+    private int lastGrow;
 
     Map<String, Double> lootRarity;
 
-    public AbstractGardenPlant(Pot master) {
-        this.stage = Stage.SMALL;
+    /**
+     * Creates a new plant in the given pot with the given growth delay.
+     * @param master the pot the plant is related to
+     * @param delay the growth delay of the plant.
+     */
+    public AbstractGardenPlant(Pot master, int delay) {
+        this.stage = Stage.SPROUT;
+        growDelay = delay;
+        StopwatchManager manager = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);
+        manager.addObserver(this);
+        lastGrow = (int)manager.getStopwatchTime();
         this.master = master;
         setupLoot();
     }
+    
+    @Override
+	public void update(Observable o, Object arg) {
+		int time = (int)(float)arg;
+		if (time - lastGrow >= growDelay) {
+        	this.advanceStage();
+        	lastGrow = time;
+        }
+		
+	}
+    
+    /**
+     * Checks if the plant is ready for growing, and advances a stage if it is
+     */
+    /*public void checkGrow() {
+        int time = (int)manager.getStopwatchTime();
+        if (time >= growDelay) {
+        	this.advanceStage();
+        	manager.resetStopwatch();
+        }
+    }*/
 
     @Override
     public Map<String, Double> getRarity() {
-        // TODO Auto-generated method stub
         return lootRarity;
     }
 
@@ -56,6 +87,25 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
      *
      * @return The current stage of growth (i.e. SPROUT, SMALL, or LARGE)
      */
+
+    /**
+     * Gets the pot of this plant
+     *
+     * @return The pot object
+     */
+    public Pot getPot(){
+        return master;
+    }
+
+    /**
+     * Gets the plant's name
+     *
+     * @return The name for this plant
+     */
+    public String getName(){
+        return name;
+    }
+
     public Stage getStage() {
         return stage;
     }
@@ -77,6 +127,15 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
         }
 
         master.setThisTexture();
+    }
+    
+    /**
+     * Returns the amount of time it takes for the plant to advance a stage
+     * 
+     * @return the growth delay of the plant
+     */
+    public int getGrowDelay() {
+    	return growDelay;
     }
 
     /**
@@ -115,6 +174,27 @@ public abstract class AbstractGardenPlant implements Tickable, Lootable {
         }
         LOGGER.warn("No item has been selected, returning null");
         return null;
+    }
+    
+    /**
+     * Checks that the loot rarity is valid
+     * 
+     * @return true if the loot rarity is valid, otherwise false
+     */
+    public boolean checkLootRarity() {
+    	double sum = 0.0;
+        for (Double rarity : lootRarity.values()) {
+            if (rarity < 0.0 || rarity > 1.0) {
+                LOGGER.error("Rarity should be between 0 and 1");
+                return false;
+            }
+            sum += rarity;
+        }
+        if (Double.compare(sum, 1.0) != 0) {
+            LOGGER.warn("Total rarity should be 1");
+            return false;
+        }
+        return true;
     }
 
     //Rest to be implemented later
