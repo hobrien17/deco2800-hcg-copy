@@ -1,21 +1,16 @@
 package com.deco2800.hcg;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.deco2800.hcg.contexts.MainMenuContext;
+import com.deco2800.hcg.contexts.PlayContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.ShopKeeper;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worlds.DemoWorld;
 
@@ -31,9 +26,6 @@ public class Hardcor3Gard3ning extends Game {
     private TimeManager timeManager;
     private ContextManager contextManager;
 	private InputManager inputManager;
-	private PlantManager plantManager;
-	private ItemManager itemManager;
-	private StopwatchManager stopwatchManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -68,42 +60,12 @@ public class Hardcor3Gard3ning extends Game {
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
         inputManager.addKeyUpListener(new Planter());
 
-        /* Create a plant manager. */
-        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
-        
-        /* Create an item manager */
-        itemManager = (ItemManager) gameManager.getManager(ItemManager.class); 
-        
-        /* Setup stopwatch manager */
-        stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
-        stopwatchManager.startTimer(1);
-
         //TODO everything below this line doesn't belong here
-
-        /**
-		 * Multiplayer chat prompt
-		 */
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		(new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (!Thread.interrupted()) {
-					try {
-						String line = reader.readLine();
-						if (NetworkState.isInitialised()) {
-							NetworkState.sendChatMessage(line);
-						}
-					} catch (IOException e) {
-						continue;
-					}
-				}
-			}
-		})).start();
 
 		/* Create an example world for the engine */
         gameManager.setWorld(new DemoWorld());
 
-        contextManager.pushContext(new MainMenuContext());
+        contextManager.pushContext(new PlayContext());
 
         // Set up a player
         Player player = new Player(5, 10, 0);
@@ -111,8 +73,6 @@ public class Hardcor3Gard3ning extends Game {
         playerManager.setPlayer(player);
         gameManager.getWorld().addEntity(playerManager.getPlayer());
         
-        //Set up the shopkeeper
-        ShopKeeper shopkeeper = new ShopKeeper();
         
     }
 
@@ -136,17 +96,13 @@ public class Hardcor3Gard3ning extends Game {
         contextManager.dispose();
     }
 
-    /**
-     * Clears the entire display as we are using lazy rendering
-     */
+    // Clear the entire display as we are using lazy rendering
     public void clearScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
-    /**
-     * Fires waiting game ticks
-     */
+    // Fire waiting game ticks
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
             if (contextManager.ticksRunning()) {
