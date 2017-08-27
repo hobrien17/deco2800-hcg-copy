@@ -30,6 +30,8 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     protected int strength;
     protected float speedX;
     protected float speedY;
+    protected float randomX;
+    protected float randomY;
     protected float movementSpeed;
 	
 	// Effects container
@@ -49,12 +51,8 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         this.strength = strength;
         this.speedX = 0;
         this.speedY = 0;
-<<<<<<< HEAD
-        this.movementSpeed = this.level;
-=======
-        this.movementSpeed = 0;
+        this.movementSpeed = (float) (0.01 + this.level * 0.01);
         this.level = 1;
->>>>>>> 9191ec127d230e8b30b14f8ca27a6279d8c26497
 
 		// Effects container 
 		myEffects = new Effects(this);
@@ -244,33 +242,44 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     public void randomMove() {
         float radius;
         float distance;
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
         float nextPosX;
         float nextPosY;
         float nextPosZ;
+        float tempX;
+        float tempY;
         //Get direction of next position. Randomly be chosen between 0 and 360.
         radius = Math.abs(new Random().nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
-        distance = Math.abs(new Random().nextFloat()) * 10 * this.level;
-        nextPosX = (float) (this.getPosX() + distance * cos(radius));
-        nextPosY = (float) (this.getPosY() + distance * cos(radius));
-        if (this.detectPlayer()) {
-            this.moveToPlayer();
+        distance = Math.abs(new Random().nextFloat()) * this.level + 5;
+        nextPosX = (float) (currPosX + distance * cos(radius));
+        nextPosY = (float) (currPosY + distance * sin(radius));
+        tempX = nextPosX;
+        tempY = nextPosY;
+        //Keep enemy continue to next position.
+        if((abs(this.randomX - currPosX) > 1) &&
+                (abs(this.randomY - currPosY) > 1)){
+            nextPosX = this.randomX;
+            nextPosY = this.randomY;
         } else {
-            if (this.getPosX() < nextPosX) {
-                speedX -= movementSpeed;
-            } else if (this.getPosX() > nextPosX) {
-                speedX += movementSpeed;
-            } else {
-                speedX = 0;
-            }
-            if (this.getPosY() < nextPosY) {
-                speedY += movementSpeed;
-            } else if (this.getPosY() > nextPosY) {
-                speedY -= movementSpeed;
-            } else {
-                speedY = 0;
-            }
+            this.randomX = tempX;
+            this.randomY = tempY;
         }
+
+
+        if (currPosX < nextPosX) {
+            currPosX += movementSpeed;
+        } else if (currPosX > nextPosX) {
+            currPosX -= movementSpeed;
+        }
+        if (this.getPosY() < nextPosY) {
+            currPosY += movementSpeed;
+        } else if (this.getPosY() > nextPosY) {
+            currPosY -= movementSpeed;
+        }
+        this.setPosX(currPosX);
+        this.setPosY(currPosY);
     }
 
     /**
@@ -278,22 +287,22 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      *
      */
     public void moveToPlayer(){
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
         if(this.getPosX() < playerManager.getPlayer().getPosX()){
-            speedX -= movementSpeed;
+            currPosX += movementSpeed;
         }
         else if(this.getPosX() > playerManager.getPlayer().getPosX()){
-            speedX += movementSpeed;
-        } else {
-            speedX = 0;
+            currPosX -= movementSpeed;
         }
         if(this.getPosY() < playerManager.getPlayer().getPosY()){
-            speedY += movementSpeed;
+            currPosY += movementSpeed;
         }
         else if(this.getPosY() > playerManager.getPlayer().getPosY()){
-            speedY -= movementSpeed;
-        } else {
-            speedY = 0;
+            currPosY -= movementSpeed;
         }
+        this.setPosX(currPosX);
+        this.setPosY(currPosY);
     }
     
     /**

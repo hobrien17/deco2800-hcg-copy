@@ -23,6 +23,7 @@ public class Squirrel extends Enemy implements Tickable {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
 		this.random = new Random();
+		this.level = 1;
 	}
 
 	@Override
@@ -52,21 +53,9 @@ public class Squirrel extends Enemy implements Tickable {
 		} else {
 			this.randomMove();
 		}
-
-		/**
-		float deltaX = getPosX() - goalX;
-		float deltaY = getPosY() - goalY;
-
-		float angle = (float)(Math.atan2(deltaY, deltaX)) + (float)(Math.PI);
-
-		float changeX = (float)(speed * Math.cos(angle));
-		float changeY = (float)(speed * Math.sin(angle));
-		 **/
-
 		Box3D newPos = getBox3D();
 		newPos.setX(this.getPosX());
 		newPos.setY(this.getPosY());
-
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		boolean collided = false;
 		for (AbstractEntity entity : entities) {
@@ -77,7 +66,6 @@ public class Squirrel extends Enemy implements Tickable {
 				collided = true;
 			}
 		}
-		
 		if (!collided) {
             if(this.detectPlayer()) {
                 this.moveToPlayer();
@@ -85,7 +73,6 @@ public class Squirrel extends Enemy implements Tickable {
                 this.randomMove();
             }
 		}
-
 		// Apply any effects that exist on the entity
 		myEffects.execute();
 	}
