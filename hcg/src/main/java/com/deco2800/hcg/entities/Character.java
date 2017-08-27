@@ -1,8 +1,13 @@
 package com.deco2800.hcg.entities;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.naming.directory.InvalidAttributesException;
-import javax.print.DocFlavor;
-import java.util.*;
+
+import com.deco2800.hcg.items.Item;
 
 /**
  * The Character abstract class is to be extended by all Characters, both
@@ -173,6 +178,16 @@ public abstract class Character extends AbstractEntity {
      */
     protected void setMeleeSkill(int meleeSkill) {
         this.meleeSkill = meleeSkill;
+    }
+    
+    /**
+     * Fetches the item this character currently has equipped, or null if this
+     * character has no item equipped.
+     * 
+     * @return This character's equipped item.
+     */
+    public Item getCurrentEquippedItem() {
+        return null;
     }
 
     /**

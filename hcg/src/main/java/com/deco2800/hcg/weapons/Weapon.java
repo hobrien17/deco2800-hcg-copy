@@ -58,6 +58,10 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         
         this.shoot = false;
         this.counter = 0;
+        this.followX = 0;
+        this.followY = 0;
+        this.aimX = 0;
+        this.aimY = 0;
         
         this.weaponType = weaponType;
         this.user = user;
@@ -179,5 +183,22 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
             fireWeapon();
         }
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Weapon weapon = (Weapon) o;
+
+        return weaponType == weapon.weaponType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (weaponType != null ? weaponType.hashCode() : 0);
+        return result;
+    }
 }

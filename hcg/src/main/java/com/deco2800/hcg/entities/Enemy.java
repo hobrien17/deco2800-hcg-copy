@@ -5,6 +5,7 @@ import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
     protected PlayerManager playerManager;
     protected int level;
-    // Current status of enemy. 1 : New Born, 2 : Injured 3 : Annoyed
+    // Current status of enemy. 1 : New Born, 2 : Chasing 3 : Annoyed
     protected int status;
     protected int ID;
     protected transient Map<String, Double> lootRarity;
@@ -30,6 +31,10 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     protected int strength;
     protected float speedX;
     protected float speedY;
+    protected float randomX;
+    protected float randomY;
+    protected float lastPlayerX;
+    protected float lastPlayerY;
     protected float movementSpeed;
 	
 	// Effects container
@@ -49,9 +54,8 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         this.strength = strength;
         this.speedX = 0;
         this.speedY = 0;
-        this.movementSpeed = 0;
         this.level = 1;
-
+        this.movementSpeed = (float)(this.level * 0.01);
 		// Effects container 
 		myEffects = new Effects(this);
     }
@@ -63,6 +67,23 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      */
     public int getID() { return ID; }
 
+    /**
+     * Gets the last position X of player.
+     *
+     * @return the last position X of player
+     */
+    public float getLastPlayerX(){
+        return this.lastPlayerX;
+    }
+
+    /**
+     * Gets the last position Y of player.
+     *
+     * @return the last position Y of player
+     */
+    public float getLastPlayerY(){
+        return this.lastPlayerY;
+    }
     /**
      * Take the damage inflicted by the other entities
      * 
@@ -205,6 +226,13 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     }
 
     /**
+     * Return enemy's status.
+     */
+    public int getStatus(){
+        return this.status;
+    }
+
+    /**
      * Set new status of enemy.
      * @param newStatus
      */
@@ -214,23 +242,25 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
 
     /**
      * To detect player's position. If player is near enemy, return 1.
-     * @return: 0. Undetected
-     *          1. Detected player
+     * @return: false: Undetected
+     *          true: Detected player
      *
      */
-    public boolean detectPlayer(){
-        float diffX = abs(this.getPosX() - playerManager.getPlayer().getPosX());
-        float diffY = abs(this.getPosY() - playerManager.getPlayer().getPosY());
-        double distance = sqrt(diffX * diffX + diffY * diffY);
-        if(distance <= 10*this.level){
+    public void detectPlayer(){
+        float distance = this.distance(playerManager.getPlayer());
+        if(distance <= 10 * this.level){
             //Annoyed by player.
-            this.setStatus(3);
-            return true;
+            this.setStatus(2);
+            this.lastPlayerX = playerManager.getPlayer().getPosX();
+            this.lastPlayerY = playerManager.getPlayer().getPosY();
         }else{
-            this.setStatus(1);
-            return false;
+            if (this.getStatus() == 2){
+                this.setStatus(3);
+            } else {
+                this.setStatus(1);
+            }
         }
-    }    
+    }
 
     /**
      * Randomly go to next position which is inside the circle(Maximum distance depends on enemy level.)
@@ -239,83 +269,118 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      * Go to the player's position if detected player during moving.
      *
      */
-    public void randomMove() {
+    public Box3D randomMove() {
         float radius;
         float distance;
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
         float nextPosX;
         float nextPosY;
         float nextPosZ;
+        float tempX;
+        float tempY;
         //Get direction of next position. Randomly be chosen between 0 and 360.
         radius = Math.abs(new Random().nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
-        distance = Math.abs(new Random().nextFloat()) * 10 * this.level;
-        nextPosX = (float) (this.getPosX() + distance * cos(radius));
-        nextPosY = (float) (this.getPosY() + distance * cos(radius));
-        while (this.getPosX() - nextPosX > 0.05 && this.getPosY() - nextPosY > 0.05) {
-            if (this.detectPlayer()) {
-                this.moveToPlayer();
-                break;
-            } else {
-                if (this.getPosX() < nextPosX) {
-                    speedX -= movementSpeed;
-                } else if (this.getPosX() > nextPosX) {
-                    speedX += movementSpeed;
-                }
-                if (this.getPosY() < nextPosY) {
-                    speedY += movementSpeed;
-                } else if (this.getPosY() > nextPosY) {
-                    speedY -= movementSpeed;
-                }
-            }
+        distance = Math.abs(new Random().nextFloat()) * this.level + 5;
+        nextPosX = (float) (currPosX + distance * cos(radius));
+        nextPosY = (float) (currPosY + distance * sin(radius));
+        tempX = nextPosX;
+        tempY = nextPosY;
+        //Keep enemy continue to next position.
+        if((abs(this.randomX - currPosX) > 1) &&
+                (abs(this.randomY - currPosY) > 1)){
+            nextPosX = this.randomX;
+            nextPosY = this.randomY;
+        } else {
+            this.randomX = tempX;
+            this.randomY = tempY;
         }
-    }
-
-    /**
-     * Go to the pointed position.
-     * @param destPosX: the X of next position
-     * @param destPosY: the Y of next position
-     *
-     */
-    public void moveTo(float destPosX, float destPosY){
-        while (this.getPosX() - destPosX > 0.05 && this.getPosY() - destPosY > 0.05) {
-            if(this.getPosX() < destPosX){
-                speedX -= movementSpeed;
-            }
-            else if(this.getPosX() > destPosX){
-                speedX += movementSpeed;
-            }
-            if(this.getPosY() < destPosY){
-                speedY += movementSpeed;
-            }
-            else if(this.getPosY() > destPosY){
-                speedY -= movementSpeed;
-            }
+        if (currPosX < nextPosX) {
+            currPosX += movementSpeed;
+        } else if (currPosX > nextPosX) {
+            currPosX -= movementSpeed;
         }
+        if (this.getPosY() < nextPosY) {
+            currPosY += movementSpeed;
+        } else if (this.getPosY() > nextPosY) {
+            currPosY -= movementSpeed;
+        }
+        //this.setPosX(currPosX);
+        //this.setPosY(currPosY);
+        Box3D newPos = getBox3D();
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
     }
 
     /**
      * Move enemy to player.
      *
      */
-    public void moveToPlayer(){
-        while(this.getPosX() != playerManager.getPlayer().getPosX() &&
-                this.getPosY() != playerManager.getPlayer().getPosY() &&
-                this.detectPlayer()){
-            if(this.getPosX() < playerManager.getPlayer().getPosX()){
-                speedX -= movementSpeed;
-            }
-            else if(this.getPosX() > playerManager.getPlayer().getPosX()){
-                speedX += movementSpeed;
-            }
-            if(this.getPosY() < playerManager.getPlayer().getPosY()){
-                speedY += movementSpeed;
-            }
-            else if(this.getPosY() > playerManager.getPlayer().getPosY()){
-                speedY -= movementSpeed;
-            }
+    public Box3D moveToPlayer(){
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
+        if(this.getPosX() < playerManager.getPlayer().getPosX()){
+            currPosX += movementSpeed;
         }
+        else if(this.getPosX() > playerManager.getPlayer().getPosX()){
+            currPosX -= movementSpeed;
+        }
+        if(this.getPosY() < playerManager.getPlayer().getPosY()){
+            currPosY += movementSpeed;
+        }
+        else if(this.getPosY() > playerManager.getPlayer().getPosY()){
+            currPosY -= movementSpeed;
+        }
+        //this.setPosX(currPosX);
+        //this.setPosY(currPosY);
+        Box3D newPos = getBox3D();
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
     }
-    
+
+    /**
+     * Move enemy to pointed position. Use for going to the player's last position.
+     *
+     */
+    public Box3D moveTo(float posX, float posY){
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
+        if(this.getPosX() < posX){
+            currPosX += movementSpeed;
+        }
+        else if(this.getPosX() > posX){
+            currPosX -= movementSpeed;
+        }
+        if(this.getPosY() < posY){
+            currPosY += movementSpeed;
+        }
+        else if(this.getPosY() > posY){
+            currPosY -= movementSpeed;
+        }
+        //this.setPosX(currPosX);
+        //this.setPosY(currPosY);
+        if((abs(posX - currPosX) < 1) &&
+                (abs(posY - currPosY) < 1)){
+            this.setStatus(1);
+        }
+        Box3D newPos = getBox3D();
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
+    }
+
+    /**
+     * Move enemy by different situation.
+     *
+     */
+    public void move(float currPosX, float currPosY){
+        this.setPosX(currPosX);
+        this.setPosY(currPosY);
+    }
+
     /**
      * Shoot the entity
      * @param thisEnemy: the entity that is the aim. 

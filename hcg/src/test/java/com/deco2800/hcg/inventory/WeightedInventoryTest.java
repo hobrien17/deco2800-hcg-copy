@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.deco2800.hcg.items.TestItem;
-import com.deco2800.hcg.items.TestUniqueItem;
+import com.deco2800.hcg.items.stackable.TestItem;
+import com.deco2800.hcg.items.single.TestUniqueItem;
 
 public class WeightedInventoryTest {
     
@@ -44,12 +44,12 @@ public class WeightedInventoryTest {
        TestUniqueItem uItem2 = new TestUniqueItem("Unique Item", 5);
        uItem2.setUniqueData("TWO");
        
+       assertTrue("Cannot fit item into inventory",
+               inventory.canInsert(uItem1));
+       
        inventory.addItem(uItem1);
        
-       TestUniqueItem uItem3 = new TestUniqueItem("Unique Item", 5);
-       TestUniqueItem uItem4 = new TestUniqueItem("Unique Item", 5);
-
-       assertTrue("Unique item found in inventor.",
+       assertTrue("Unique item not found in inventory.",
                inventory.containsItem(uItem1));
        
        assertFalse("Unique item not present in inventory was found in inventory.",
@@ -60,4 +60,6 @@ public class WeightedInventoryTest {
        /*assertThat("Improper amount of items in inventory.",
                inventory.getNumItems(), is(4));*/
     }
+
+
 }
