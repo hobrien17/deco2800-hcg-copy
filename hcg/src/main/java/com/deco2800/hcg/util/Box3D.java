@@ -129,6 +129,11 @@ public class Box3D {
     }
 
 
+    /**
+     * Checks if the box is overlapping another 3D box
+     * @param box the 3D box to check an overlap with
+     * @return true if the box is overlapping, else false
+     */
     public boolean overlaps(Box3D box) {
         /*
 		 * Checking non-collision on all 6 directions.
@@ -167,6 +172,11 @@ public class Box3D {
         return true;
     }
 
+    /**
+     * Returns the distance of the box from the given 3D box
+     * @param o the 3D box to check the distance of
+     * @return the Euclidean distance between this box and the given box.
+     */
     public float distance(Box3D o) {
         return (float) (Math
                 .sqrt(Math.pow((o.x - this.x), 2) + Math.pow((o.y - this.y), 2)

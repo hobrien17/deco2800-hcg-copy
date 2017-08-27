@@ -2,15 +2,19 @@ package com.deco2800.hcg.entities;
 
 
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
+import com.deco2800.hcg.entities.Enemy;
 
+import java.util.List;
 
 /**
  * A generic player instance for the game
  */
 public class Bullet extends AbstractEntity implements Tickable {
 
-    private float speed = 2f;
-
+    private float speed = 0.5f;
 
     private float goalX;
     private float goalY;
@@ -19,8 +23,18 @@ public class Bullet extends AbstractEntity implements Tickable {
     private float changeX;
     private float changeY;
 
+    private AbstractEntity user;
 
-    public Bullet(float posX, float posY, float posZ, float xd, float yd) {
+    /**
+     * Creates a new Bullet at the given position with the given direction.
+     *
+     * @param posX the x position of the bullet
+     * @param posY the y position of the bullet
+     * @param posZ the z position of the bullet
+     * @param xd the y direction for the bullet
+     * @param yd the x direction for the bullet
+     */
+    public Bullet(float posX, float posY, float posZ, float xd, float yd, AbstractEntity user) {
         super(posX, posY, posZ, 0.6f, 0.6f, 1);
         this.setTexture("battle_seed");
 
@@ -42,6 +56,7 @@ public class Bullet extends AbstractEntity implements Tickable {
         this.changeX = (float) (speed * Math.cos(angle));
         this.changeY = (float) (speed * Math.sin(angle));
 
+        this.user = user;
     }
 
     /**
@@ -59,5 +74,30 @@ public class Bullet extends AbstractEntity implements Tickable {
         }
         setPosX(getPosX() + changeX);
         setPosY(getPosY() + changeY);
+
+        enemyHit();
+    }
+
+    /**
+     * Detects collision with entity and if enemy, apply effect of bullet.
+     * After applying effect, bullet is removed from the world.
+     */
+    private void enemyHit(){
+        Box3D pos = getBox3D();
+        pos.setX(getPosX());
+        pos.setY(getPosY());
+        List<AbstractEntity> entities = GameManager.get().getWorld()
+                .getEntities();
+        for(AbstractEntity entity : entities){
+            if (entity instanceof Enemy
+                    && this.collidesWith(entity) && user instanceof Player) {
+                //Set target to be the enemy whose collision got detected and give it an effect
+                Enemy target = (Enemy) entity;
+                target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
+                //Remove this bullet from the world to ensure no other squirrels are killed
+                GameManager.get().getWorld().removeEntity(this);
+                break;
+            }
+        }
     }
 }

@@ -1,17 +1,23 @@
 package com.deco2800.hcg.entities;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.worlds.DemoWorld;
 
 import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // author - 
 public class PlayerTest {
@@ -22,7 +28,7 @@ public class PlayerTest {
 		Player player = new Player(0, 0, 0);
 		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0);
 		
-		assertTrue("Player agility isn't set to value 0.", player.getAgility() == 0);
+		assertTrue("Player agility isn't set to value 0.", player.attributes.get("agility") == 0);
 
 	}
 
@@ -31,14 +37,14 @@ public class PlayerTest {
 
 		Player player = new Player(0, 0, 0);
 		player.setXp(0);
-		
+
 		assertTrue("Player xp isn't set to 0.", player.getXp() == 0);
 
 		player.gainXp(10);
 
 		assertTrue("Player xp wasn't gained.", player.getXp() == 10);
 	}
-	
+
 	@Test
 	public void testToString() {
 		
@@ -49,7 +55,7 @@ public class PlayerTest {
 	@Test
 	public void testSetSpeedAndPosition() {
 		
-		Player player = new Player(0, 0, 0);//mock(Player.class);
+		Player player = new Player(0, 0, 0);
 			
 		assertTrue("Player X not correctly initialised", player.getPosX() == 0);
 		assertTrue("Player Y not correctly initialised", player.getPosY() == 0);
@@ -67,8 +73,46 @@ public class PlayerTest {
 		assertTrue("Player Y speed not set correctly", player.getSpeedY() != 0);
 
 	}
-	
-	//TODO: change setup for mockito to a @Before setup method to reduce duplications.
+		
+	@Test
+	public void testPlayerInput() {
+	  
+	  Player player = new Player(0, 0, 0);
+	  
+      InputManager input = (InputManager) GameManager.get()
+          .getManager(InputManager.class);
+
+	  input.keyDown(Input.Keys.S);
+	  
+	  assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
+      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
+
+      input.keyUp(Input.Keys.S);
+      
+      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
+      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
+
+      input.keyDown(Input.Keys.A);
+      
+      assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
+      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
+
+      input.keyUp(Input.Keys.A);
+      
+      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
+      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
+      
+      input.keyDown(Input.Keys.D);
+      
+      assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
+      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
+
+      input.keyUp(Input.Keys.D);
+      
+      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
+      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
+
+	}
 	
 	GameManager gameManager;
 	DemoWorld demoWorld;
@@ -101,7 +145,6 @@ public class PlayerTest {
 		when(layer.getProperties()).thenReturn(mapProperties);
 
 	}
-
 	
 	// note - any change to player may break these tests - add more mocking
 	@Test
@@ -243,4 +286,43 @@ public class PlayerTest {
 		assertTrue("Player health was decreased when the tile was enemy only", player.getHealth() == startHealth - 3);
 
 	}
+	
+	// note - any change to player may break these tests - add more mocking
+    @Test
+    public void testTowerCollision() {
+
+      Player player = new Player(0, 0, 0);
+      
+      // ensure player can move to the squares we're testing
+      when(demoWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
+      when(demoWorld.getTiledMapTileLayerAtPos(1, 1)).thenReturn(layer);
+
+      // add the custom properties of speed and name
+      when(mapProperties.get("speed")).thenReturn("1");
+      when(mapProperties.get("name")).thenReturn("Sample Text");
+      
+      // add player
+      gameManager.getWorld().addEntity(player);
+
+      Tower tower = new Tower(1, 1, 0);
+      
+      List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
+      
+      entities.add(tower);
+      
+      when(demoWorld.getEntities()).thenReturn(entities);
+      
+      // set positive speed
+      player.setSpeedX(1.0f);
+      player.setSpeedY(1.0f);
+
+      player.onTick(0);
+      
+      assertTrue("Player moved to position of tower when it should have collided with Tower",
+          player.getPosX() == 0);
+      assertTrue("Player moved to position of tower when it should have collided with Tower",
+          player.getPosY() == 0);
+
+    }
+	
 }
