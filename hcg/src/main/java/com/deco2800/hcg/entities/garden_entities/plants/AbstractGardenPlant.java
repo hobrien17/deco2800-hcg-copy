@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TimeManager;
 
@@ -18,6 +19,8 @@ import org.slf4j.LoggerFactory;
  * @author Henry O'Brien
  */
 public abstract class AbstractGardenPlant implements Lootable, Observer {
+
+    private PlantManager plantManager = (PlantManager) GameManager.get().getManager(PlantManager.class);
 
     static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
@@ -60,6 +63,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	public void update(Observable o, Object arg) {
 		int time = (int)(float)arg;
 		if (time - lastGrow >= growDelay) {
+		    plantManager.updateLabel();
         	this.advanceStage();
         	lastGrow = time;
         }
@@ -95,6 +99,15 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      */
     public Pot getPot(){
         return master;
+    }
+
+    /**
+     * Sets the current plant's name
+     *
+     * @param name plant's name
+     */
+    public void setName(String name){
+        this.name = name;
     }
 
     /**
