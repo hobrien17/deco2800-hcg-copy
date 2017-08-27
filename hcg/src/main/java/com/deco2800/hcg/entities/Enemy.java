@@ -360,6 +360,20 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     }
 
     /**
+     * Move enemy by different situation.
+     *
+     */
+    public void move(){
+        if(this.getStatus() == 1) {
+            this.randomMove();
+        } else if (this.getStatus() == 2){
+            this.moveToPlayer();
+        } else if (this.getStatus() == 3){
+            this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
+        }
+    }
+
+    /**
      * Shoot the entity
      * @param thisEnemy: the entity that is the aim. 
      */
