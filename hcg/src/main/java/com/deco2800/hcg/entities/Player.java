@@ -285,11 +285,9 @@ public class Player extends Character implements Tickable {
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
-<<<<<<< HEAD
 				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
-=======
-				this.setHealth(this.getHealth() - Integer.parseInt((String) layer.getProperties().get("damage")));
->>>>>>> master
+				//this.setHealth(this.getHealth() - Integer.parseInt((String) layer.getProperties().get("damage")));
+
 			}
 
 			// log
@@ -305,15 +303,8 @@ public class Player extends Character implements Tickable {
 			float slipperyFactor2 = slippery * 0.06f;
 
 			// created helper function to avoid duplicate code
-<<<<<<< HEAD
-			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed, slipperyFactor, 
-			        slipperyFactor2);
-			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed, slipperyFactor, 
-			        slipperyFactor2);
-=======
 			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed, slipperyFactor, slipperyFactor2);
 			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed, slipperyFactor, slipperyFactor2);
->>>>>>> master
 
 		} else {
 			// non slippery movement
@@ -345,14 +336,9 @@ public class Player extends Character implements Tickable {
 
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
-<<<<<<< HEAD
-			if (!this.equals(entity) && !(entity instanceof Squirrel) && 
-			        newPos.overlaps(entity.getBox3D()) && 
-			        !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
-=======
+
 			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps(entity.getBox3D())
 					&& !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
->>>>>>> master
 				LOGGER.info(this + " colliding with " + entity);
 				collided = true;
 
@@ -436,7 +422,6 @@ public class Player extends Character implements Tickable {
 	 * NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
-<<<<<<< HEAD
 		if (sprinting) {
 			setAttribute("stamina", getAttribute("stamina") - 30);
 		} else {
@@ -467,74 +452,16 @@ public class Player extends Character implements Tickable {
 					soundPlay(name);
 					break;
 				case Input.Keys.R:
-					if (equippedWeapon.getWeaponType() == WeaponType.MACHINEGUN) {
-						GameManager.get().getWorld().removeEntity(equippedWeapon);
-						equippedWeapon = new WeaponBuilder().setWeaponType
-
-								(WeaponType.SHOTGUN).setUser(this).setRadius(0.7)
-								.build();
-						GameManager.get().getWorld().addEntity(equippedWeapon);
-					} else if (equippedWeapon.getWeaponType() == WeaponType.SHOTGUN) {
-						GameManager.get().getWorld().removeEntity(equippedWeapon);
-						equippedWeapon = new WeaponBuilder().setWeaponType
-
-								(WeaponType.STARFALL).setUser(this).setRadius(0.7)
-								.build();
-						GameManager.get().getWorld().addEntity(equippedWeapon);
-					} else {
-						GameManager.get().getWorld().removeEntity(equippedWeapon);
-						equippedWeapon = new WeaponBuilder().setWeaponType
-
-								(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
-								.build();
-						GameManager.get().getWorld().addEntity(equippedWeapon);
-					}
-				default:
-					break;
-
-			}
-			handleDirectionInput();
-			handleNoInput();
-
-		if (getAttribute("stamina") <= 0){
-			sprinting = false;
-			movementSpeed = movementSpeedNorm;
-=======
-		switch (keycode) {
-		case Input.Keys.W:
-			movementDirection.put("up", true);
-			// check terrain type and play corresponding sound effect
-			soundPlay(name);
-			break;
-		case Input.Keys.S:
-			movementDirection.put("down", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.A:
-			movementDirection.put("left", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.D:
-			movementDirection.put("right", true);
-			soundPlay(name);
-			break;
-		case Input.Keys.E:
-			checkForInteraction();
-			break;
-		case Input.Keys.R:
-		    if(this.getEquippedWeapon() != null) {
-		        GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
-		    }
-		    this.equippedItems.cycleEquippedSlot();
-		    if(this.getEquippedWeapon() != null) {
-	            GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
-		        
-		    }
+		    		if(this.getEquippedWeapon() != null) {
+		  		      GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
+				    }
+				    this.equippedItems.cycleEquippedSlot();
+				    if(this.getEquippedWeapon() != null) {
+	  		          GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
+			 	   }
 		default:
 			break;
->>>>>>> master
 		}
-
 	}
 
 	/**

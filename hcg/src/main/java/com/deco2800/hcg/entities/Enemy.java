@@ -23,12 +23,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
     protected PlayerManager playerManager;
     protected int level;
-<<<<<<< HEAD
-    // Current status of enemy. 1 : New Born, 2 : Injured 3 : Annoyed
-
-=======
     // Current status of enemy. 1 : New Born, 2 : Chasing 3 : Annoyed
->>>>>>> master
     protected int status;
     protected int ID;
     protected transient Map<String, Double> lootRarity;
