@@ -1,6 +1,7 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.deco2800.hcg.util.MathHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,13 +193,6 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Debugging method for printing date to stdout
-	 */
-	public void printDate() {
-		LOGGER.info(this.getDateTime());
-	}
-
-	/**
 	 * Pause the time.
 	 */
 	public void pauseTime() {
@@ -313,35 +307,17 @@ public class TimeManager extends Manager implements TickableManager {
 	 * @param year
 	 * 			The year to be set (0 < year ).
 	 */
-	public boolean setDateTime(int second, int minute, int hour, int day, int month, int year) {
-		// check validity of inputs
-		if (second < 0 || second > 59) {
-			return false;
-		}
-		if (minute < 0 || minute > 59) {
-			return false;
-		}
-		if (hour < 0 || hour > 23) {
-			return false;
-		}
-		if (day < 1 || day > 31) {
-			return false;
-		}
-		if (month < 1 || month > 12) {
-			return false;
-		}
-		if (year < 0) {
-			return false;
-		}
-		// set date & time
-		this.seconds = second;
-		this.minutes = minute;
-		this.hours = hour;
-		this.day = day;
-		this.month = month;
-		this.year = year;
-		checkNight();
-		return true;
+	public void setDateTime(int second, int minute, int hour, int day, int month, int year) {
+
+		// clamp inputs just in case they're not valid numbers
+				this.seconds = MathHelper.clamp(second, 0, 59);
+				this.minutes = MathHelper.clamp(minute, 0, 59);
+				this.hours = MathHelper.clamp(hour, 0, 23);
+				this.day = MathHelper.clamp(day, 1, 31);
+				this.month = MathHelper.clamp(month, 1, 12);
+				this.year = MathHelper.clamp(year, 1, 10000);
+				checkNight();
+
 	}
 
 }
