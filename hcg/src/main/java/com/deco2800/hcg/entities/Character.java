@@ -38,8 +38,9 @@ import com.deco2800.hcg.items.Item;
  * @author avryn, trent_s
  */
 public abstract class Character extends AbstractEntity {
-    // TODO: Change class implementation to use a single method  to get skills and attributes without using a map.
-    public final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("stamina", "carryWeight",
+	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
+	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
+	protected final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "health", "stamina", "carryWeight",
             "strength", "vitality", "agility", "charisma", "intellect");
 
     protected float movementSpeed;
