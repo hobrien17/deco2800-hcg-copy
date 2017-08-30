@@ -16,6 +16,7 @@ public class TerrainEntity extends AbstractEntity {
      * @param zLength the height of the entity
      */
     public TerrainEntity(float posX, float posY, float posZ, float xLength, float yLength, float zLength) {
+
         super(posX, posY, posZ, xLength, yLength, zLength);
 //        this.setTexture(texture);
     }

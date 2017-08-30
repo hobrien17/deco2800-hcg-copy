@@ -70,6 +70,10 @@ public class TextureManager extends Manager {
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 
+		//Terrain objects
+		textureMap.put("wallblock", new Texture("resources/terrain_objects/wallblock.png"));
+
+
 		//NPCs
 		textureMap.put("character_1", new Texture("resources/sprites/npc/basic_character.png"));
 		textureMap.put("character_shop", new Texture("resources/sprites/npc/shop_keeper.png"));
