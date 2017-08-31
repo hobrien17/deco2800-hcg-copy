@@ -1,5 +1,9 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
@@ -11,6 +15,9 @@ import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.entities.NPC;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -23,6 +30,7 @@ public class DemoWorld extends AbstractWorld {
     /**
      * Constructor for DemoWorld
      */
+    @SuppressWarnings("finally")
     public DemoWorld() {
         /* Load up the map for this world */
         this.map = new TmxMapLoader()
@@ -40,44 +48,67 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(pots[i]);
 		}
 
+		//TODO: move this to own method getObjectLayers
+		
+		List<MapLayer> objectLayers = new ArrayList<MapLayer>();
+		
+		//MapLayer wall = null;
+		
+		Iterator<MapLayer> itr = map.getLayers().iterator(); //GameManager.get().getWorld().getMap()
 
-		/**
-		 * Build some walls (terrain entity) - @ken
-		 */
-		//demo wall around the South-Western corner of the demo map
-		//south wall
-		//todo: wall-builder type class
-		WallBlock[] southWall = new WallBlock[15];
-		for (int i = 0; i < 15; i++) {
-			southWall[i] = new WallBlock(0, i,0);
-			this.addEntity(southWall[i]);
-		}
-		//east wall
-		WallBlock[] westWall = new WallBlock[14];
-		for (int i = 0; i < 14; i++) {
-			westWall[i] = new WallBlock(i+1, 0,0);
-			this.addEntity(westWall[i]);
-		}
+	    while (itr.hasNext()) {
+	      
+	      MapLayer layer = null;
+	      
+	      try{
+	        
+	          layer = itr.next();  
+	          //wall = layer;
+	          
+	          // attempt to cast to tiled map layer. if it can't, the its an objectlayer
+	          TiledMapTileLayer cast = (TiledMapTileLayer) layer;
+	              	      
+	      }
+	      catch (Exception e){	     
+	        
+	          // if the cast didn't work, we have found an object layer
+	          objectLayers.add(layer);
+	      }
+	      
+	    }
 
-		//demo wall lining the main path in the demo map
-		//south wall
-		WallBlock[] pathWallSouth = new WallBlock[16];
-		for (int i = 0; i < 16; i++) {
-			pathWallSouth[i] = new WallBlock(i+20, 21,0);
-			this.addEntity(pathWallSouth[i]);
-		}
-		//north wall part 1
-		WallBlock[] pathWallNorthP1 = new WallBlock[9];
-		for (int i = 0; i < 9; i++) {
-			pathWallNorthP1[i] = new WallBlock(i + 20, 18, 0);
-			this.addEntity(pathWallNorthP1[i]);
-		}
-		//north wall part 2
-		WallBlock[] pathWallNorthP2 = new WallBlock[4];
-		for (int i = 0; i < 4; i++) {
-			pathWallNorthP2[i] = new WallBlock(i + 32, 18, 0);
-			this.addEntity(pathWallNorthP2[i]);
-		}
+	    // loop over all object layers
+	    for (MapLayer layer : objectLayers){
+	        //System.out.println(layer);
+          
+	        Iterator<MapObject> objects = layer.getObjects().iterator();
+
+	        while (objects.hasNext()) {
+	          	          
+	          MapObject obj = objects.next();
+	                  
+	          // get x and y
+	          float x = (float) obj.getProperties().get("y"); // no clue why these are switched
+	          float y = (float) obj.getProperties().get("x");
+	          
+	          x/=32; // divide by the width / height
+	          y/=32;
+	          
+	          // do different things based on the layer name   
+	          switch((String) layer.getProperties().get("name")){
+	            case "wall": // walls
+	              this.addEntity(new WallBlock(x, y, 0f));
+	              break;
+	            case "tree": // tree
+	              this.addEntity(new BasicGreenTree(x, y, 0f));
+	              break;
+	          }
+	          
+	        }
+	        
+	        map.getLayers().remove(layer);
+
+	    }
 
 		/**
 		 * plant some trees (terrain entity) - @ken
@@ -87,9 +118,6 @@ public class DemoWorld extends AbstractWorld {
 			rowOfTrees[i] = new BasicGreenTree(18, i*3 + 19, 0);
 			this.addEntity(rowOfTrees[i]);
 		}
-
-//		WallBlock wallBlock = new WallBlock(1,1,0);
-//		this.addEntity(wallBlock);
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {
