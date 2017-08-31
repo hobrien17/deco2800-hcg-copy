@@ -4,8 +4,13 @@ import com.deco2800.hcg.entities.AbstractEntity;
 
 public class TerrainEntity extends AbstractEntity {
 
+    boolean destructible = false;
+    boolean buildable = false;
+    boolean impassable = true; // meaning collision is enabled and characters cannot move through/over it
+
+
     /**
-     * Creates a new AbstractEntity at the given position with the given size
+     * Creates a new TerrainEntity at the given position with the given size
      * parameters.
      *
      * @param posX    the x position
@@ -18,6 +23,5 @@ public class TerrainEntity extends AbstractEntity {
     public TerrainEntity(float posX, float posY, float posZ, float xLength, float yLength, float zLength) {
 
         super(posX, posY, posZ, xLength, yLength, zLength);
-//        this.setTexture(texture);
     }
 }

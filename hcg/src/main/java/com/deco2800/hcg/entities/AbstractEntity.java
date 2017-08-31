@@ -327,4 +327,11 @@ public abstract class AbstractEntity implements Renderable,
     public float distance(AbstractEntity e) {
         return this.getBox3D().distance(e.getBox3D());
     }
+
+    /**
+     * set the centered attributes to true - @ken
+     */
+    public void setCentered() {
+        this.centered = true;
+    }
 }

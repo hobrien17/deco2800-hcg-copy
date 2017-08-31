@@ -6,6 +6,7 @@ import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
+import com.deco2800.hcg.entities.terrain_entities.BasicGreenTree;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.entities.NPC;
@@ -39,6 +40,10 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(pots[i]);
 		}
 
+
+		/**
+		 * Build some walls (terrain entity) - @ken
+		 */
 		//demo wall around the South-Western corner of the demo map
 		//south wall
 		//todo: wall-builder type class
@@ -74,7 +79,14 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(pathWallNorthP2[i]);
 		}
 
-
+		/**
+		 * plant some trees (terrain entity) - @ken
+		 */
+		BasicGreenTree[] rowOfTrees = new BasicGreenTree[6];
+		for (int i = 0; i < 6; i++) {
+			rowOfTrees[i] = new BasicGreenTree(18, i*3 + 19, 0);
+			this.addEntity(rowOfTrees[i]);
+		}
 
 //		WallBlock wallBlock = new WallBlock(1,1,0);
 //		this.addEntity(wallBlock);
