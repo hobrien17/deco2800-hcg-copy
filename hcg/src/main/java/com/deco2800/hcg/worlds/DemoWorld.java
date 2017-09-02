@@ -4,11 +4,10 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
-import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
-import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
-import com.deco2800.hcg.entities.garden_entities.plants.Water;
-import com.deco2800.hcg.entities.terrain_entities.BasicGreenTree;
+import com.deco2800.hcg.entities.terrain_entities.Tree;
+import com.deco2800.hcg.entities.terrain_entities.TreeState;
+import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.entities.NPC;
@@ -67,7 +66,11 @@ public class DemoWorld extends AbstractWorld {
 	              this.addEntity(new WallBlock(x, y, 0f));
 	              break;
 	            case "tree": // tree
-	              this.addEntity(new BasicGreenTree(x, y, 0f));
+				  Tree tree = new Tree(x, y, 0f, true);
+				  if (tree.getType() == TreeType.BASIC) {
+				  	tree.randomiseState();
+				  }
+	              this.addEntity(tree);
 	              break;
 	            case "squirrel":
 	              this.addEntity(new Squirrel(x, y, 0f, i + 1));
@@ -86,12 +89,52 @@ public class DemoWorld extends AbstractWorld {
 		/**
 		 * plant some trees (terrain entity) - @ken
 		 */
-		BasicGreenTree[] rowOfTrees = new BasicGreenTree[6];
+		//trees lining the path
+		Tree[] rowOfTrees1 = new Tree[6];
 		for (int i = 0; i < 6; i++) {
-			rowOfTrees[i] = new BasicGreenTree(18, i*3 + 19, 0);
-			this.addEntity(rowOfTrees[i]);
+			rowOfTrees1[i] = new Tree(17.5f, i*3 + 20.5f, 0, TreeType.BASIC);
+			this.addEntity(rowOfTrees1[i]);
 		}
-				
+		Tree[] rowOfTrees2 = new Tree[6];
+		for (int i = 0; i < 6; i++) {
+			rowOfTrees2[i] = new Tree(20.5f, i*3 + 20.5f, 0, TreeType.BASIC);
+			this.addEntity(rowOfTrees2[i]);
+		}
+
+		// ORCHARD
+		// leafless trees
+		Tree[] rowOfTrees3 = new Tree[6];
+		for (int i = 0; i < 6; i++) {
+			Tree tree = new Tree(i*2 + 24.5f, 0.5f, 0, TreeType.BASIC);
+			tree.setState(TreeState.LEAFLESS);
+			rowOfTrees3[i] = tree;
+			this.addEntity(rowOfTrees3[i]);
+		}
+		// budding trees
+		Tree[] rowOfTrees4 = new Tree[6];
+		for (int i = 0; i < 6; i++) {
+			Tree tree = new Tree(i*2 + 24.5f, 2.5f, 0, TreeType.BASIC);
+			tree.setState(TreeState.BUDDING);
+			rowOfTrees4[i] = tree;
+			this.addEntity(rowOfTrees4[i]);
+		}
+		// leafy trees
+		Tree[] rowOfTrees5 = new Tree[6];
+		for (int i = 0; i < 6; i++) {
+			Tree tree = new Tree(i*2 + 24.5f, 4.5f, 0, TreeType.BASIC);
+			tree.setState(TreeState.LEAFY);
+			rowOfTrees5[i] = tree;
+			this.addEntity(rowOfTrees5[i]);
+		}
+		// fruiting trees
+		Tree[] rowOfTrees6 = new Tree[6];
+		for (int i = 0; i < 6; i++) {
+			Tree tree = new Tree(i*2 + 24.5f, 6.5f, 0, TreeType.BASIC);
+			tree.setState(TreeState.FRUITING);
+			rowOfTrees6[i] = tree;
+			this.addEntity(rowOfTrees6[i]);
+		}
+
 		//Add an example quest NPC
 		this.addEntity(new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.Quest, "character_1") {});
 

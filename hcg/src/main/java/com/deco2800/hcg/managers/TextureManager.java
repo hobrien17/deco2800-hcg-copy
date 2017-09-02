@@ -72,7 +72,13 @@ public class TextureManager extends Manager {
 
 		//Terrain objects
 		textureMap.put("wallblock", new Texture("resources/terrain_objects/wallblock.png"));
-		textureMap.put("tree_01", new Texture("resources/terrain_objects/tree_01.png"));
+		//trees
+		textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
+		textureMap.put("tree_leafless", new Texture("resources/terrain_objects/tree_dead_01.png"));
+		textureMap.put("tree_budding", new Texture("resources/terrain_objects/tree_budding_01.png"));
+		textureMap.put("tree_fruiting", new Texture("resources/terrain_objects/tree_fruit_01.png"));
+		textureMap.put("tree_snowy", new Texture("resources/terrain_objects/tree_snow_01.png"));
+		textureMap.put("tree_flaming", new Texture("resources/terrain_objects/tree_flame_01.png"));
 
 
 		//NPCs
