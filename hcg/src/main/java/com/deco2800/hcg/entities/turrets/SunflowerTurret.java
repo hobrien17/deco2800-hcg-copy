@@ -15,23 +15,20 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.util.WorldUtil;
 
-public class SunflowerTurret extends AbstractTurret implements Observer {
+public class SunflowerTurret extends AbstractTurret {
 	
     static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
     
-    private int range;
+    private static final int RANGE = 5;
 
 	public SunflowerTurret() {
 		super("Sunflower");
 		this.setTexture("tree");
-		StopwatchManager manager = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);
-        manager.addObserver(this);
-		range = 5;
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), range, 
+		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), RANGE, 
 				Enemy.class);
 		if (closest.isPresent()) {
 			Enemy enemy = (Enemy)closest.get();

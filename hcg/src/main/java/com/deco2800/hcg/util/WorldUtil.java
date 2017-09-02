@@ -4,6 +4,8 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.renderers.Renderable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -33,23 +35,41 @@ public class WorldUtil {
 	 */
 	public static Optional<AbstractEntity> closestEntityToPosition(float x, float y, float delta, 
 			Class<? extends AbstractEntity> type) {
+		List<AbstractEntity> entities = allEntitiesToPosition(x, y, delta, type);
+		if (entities.isEmpty()) {
+			return Optional.empty();
+		}
+		double distance = Double.MAX_VALUE;
 		AbstractEntity result = null;
+		for(AbstractEntity entity : entities) {
+			double tempDistance = getDistance(entity, x, y);
+			if (tempDistance < distance) {
+				distance = tempDistance;
+				result = entity;
+			}
+		}
+		return Optional.of(result);
+	}
+	
+	public static List<AbstractEntity> allEntitiesToPosition(float x, float y, float delta, 
+			Class<? extends AbstractEntity> type) {
+		List<AbstractEntity> ret = new ArrayList<>();
+		AbstractEntity entity = null;
 		double distance = Double.MAX_VALUE;
 		for (Renderable r : GameManager.get().getWorld().getEntities()) {
 			if (type.isInstance(r)) {
-				double tempDistance = Math.sqrt(Math.pow((r.getPosX() - x), 2) + Math.pow((r.getPosY() - y), 2));
-
-				if (tempDistance < distance) {
-					// Closer than current closest
-					distance = tempDistance;
-					result = (AbstractEntity) r;
+				entity = (AbstractEntity)r;
+				distance = getDistance(entity, x, y);
+				if (distance < delta) {
+					ret.add(entity);
 				}
 			}
 		}
-		if (distance < delta) {
-			return Optional.of(result);
-		} else {
-			return Optional.empty();
-		}
+		
+		return ret;
+	}
+	
+	private static double getDistance(AbstractEntity entity, float x, float y) {
+		return Math.sqrt(Math.pow((entity.getPosX() - x), 2) + Math.pow((entity.getPosY() - y), 2));
 	}
 }
