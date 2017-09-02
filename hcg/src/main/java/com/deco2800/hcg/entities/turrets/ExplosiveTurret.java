@@ -9,6 +9,13 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.util.WorldUtil;
 
+/**
+ * Explosive Turret
+ * After a few seconds, destroys itself and all enemies in a limited range
+ * 
+ * @author Henry O'Brien
+ *
+ */
 public class ExplosiveTurret extends AbstractTurret {
 
 	private int seconds;

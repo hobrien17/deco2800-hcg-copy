@@ -41,32 +41,15 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 *            the x direction for the bullet
 	 */
 	public Bullet(float posX, float posY, float posZ, float xd, float yd, AbstractEntity user) {
-		super(posX, posY, posZ, 0.6f, 0.6f, 1);
-		this.setTexture("battle_seed");
-
-		float projX;
-		float projY;
-
-		projX = xd / 55f;
-		projY = -(yd - 32f / 2f) / 32f + projX;
-		projX -= projY - projX;
-
-		this.goalX = projX;
-		this.goalY = projY;
-
-		float deltaX = getPosX() - goalX;
-		float deltaY = getPosY() - goalY;
-
-		this.angle = (float) (Math.atan2(deltaY, deltaX)) + (float) (Math.PI);
-
-		this.changeX = (float) (speed * Math.cos(angle));
-		this.changeY = (float) (speed * Math.sin(angle));
-
-		this.user = user;
+		this(posX, posY, posZ, getProj(xd, yd)[0], getProj(xd, yd)[1], posZ, user);
 	}
 
 	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
-		super(posX, posY, posZ, 0.6f, 0.6f, 1);
+		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user);
+	}
+	
+	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength, float yLength, float zLength, AbstractEntity user) {
+		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
 
 		this.goalX = newX;
@@ -81,6 +64,16 @@ public class Bullet extends AbstractEntity implements Tickable {
 		this.changeY = (float) (speed * Math.sin(angle));
 
 		this.user = user;
+	}
+	
+	private static float[] getProj(float xd, float yd) {
+		float[] proj = new float[2];
+		
+		proj[0] = xd / 55f;
+		proj[1] = -(yd - 32f / 2f) / 32f + proj[0];
+		proj[0] -= proj[1] - proj[0];
+		
+		return proj;
 	}
 
 	/**
@@ -114,15 +107,24 @@ public class Bullet extends AbstractEntity implements Tickable {
 		for (AbstractEntity entity : entities) {
 			if (entity instanceof Enemy && this.collidesWith(entity) && (user instanceof Player || 
 					user instanceof AbstractTurret)) {
-				// Set target to be the enemy whose collision got detected and
-				// give it an effect
-				Enemy target = (Enemy) entity;
-				target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
-				// Remove this bullet from the world to ensure no other
-				// squirrels are killed
-				GameManager.get().getWorld().removeEntity(this);
+				removeEnemy((Enemy)entity);
 				break;
 			}
 		}
+	}
+	
+	protected void removeEnemy(Enemy target) {
+		// Set target to be the enemy whose collision got detected and
+		// give it an effect
+		target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
+		// Remove this bullet from the world to ensure no other
+		// squirrels are killed
+		GameManager.get().getWorld().removeEntity(this);
+	}
+	
+	protected void setSpeed(float speed) {
+		this.speed = speed;
+		this.changeX = (float) (speed * Math.cos(angle));
+		this.changeY = (float) (speed * Math.sin(angle));
 	}
 }

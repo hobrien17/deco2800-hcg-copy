@@ -7,6 +7,7 @@ import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
+import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.entities.NPC;
@@ -40,7 +41,8 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(pots[i]);
 		}
 		
-		this.addEntity(new ExplosiveTurret());
+		this.addEntity(new FireTurret());
+		//this.addEntity(new SunflowerTurret());
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {

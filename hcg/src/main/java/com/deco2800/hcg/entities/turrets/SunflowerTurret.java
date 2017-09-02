@@ -15,6 +15,13 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.util.WorldUtil;
 
+/**
+ * Basic sunflower turret
+ * Shoots standard seeds at any enemies in a limited range
+ * 
+ * @author Henry O'Brien
+ *
+ */
 public class SunflowerTurret extends AbstractTurret {
 	
     static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
