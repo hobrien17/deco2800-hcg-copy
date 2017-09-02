@@ -2,8 +2,6 @@ package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
@@ -15,10 +13,7 @@ import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.entities.NPC;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Initial world using preset world file.
@@ -30,7 +25,6 @@ public class DemoWorld extends AbstractWorld {
     /**
      * Constructor for DemoWorld
      */
-    @SuppressWarnings("finally")
     public DemoWorld() {
         /* Load up the map for this world */
         this.map = new TmxMapLoader()
@@ -47,54 +41,27 @@ public class DemoWorld extends AbstractWorld {
 			pots[i] = new Pot(20, 10 + 2*i, 0);
 			this.addEntity(pots[i]);
 		}
-
-		//TODO: move this to own method getObjectLayers
-		
-		List<MapLayer> objectLayers = new ArrayList<MapLayer>();
-		
-		//MapLayer wall = null;
-		
-		Iterator<MapLayer> itr = map.getLayers().iterator(); //GameManager.get().getWorld().getMap()
-
-	    while (itr.hasNext()) {
-	      
-	      MapLayer layer = null;
-	      
-	      try{
-	        
-	          layer = itr.next();  
-	          //wall = layer;
-	          
-	          // attempt to cast to tiled map layer. if it can't, the its an objectlayer
-	          TiledMapTileLayer cast = (TiledMapTileLayer) layer;
-	              	      
-	      }
-	      catch (Exception e){	     
-	        
-	          // if the cast didn't work, we have found an object layer
-	          objectLayers.add(layer);
-	      }
-	      
-	    }
-
+						
 	    // loop over all object layers
-	    for (MapLayer layer : objectLayers){
-	        //System.out.println(layer);
+	    for (MapLayer layer : getObjectLayers()){
           
 	        Iterator<MapObject> objects = layer.getObjects().iterator();
 
+	        int i = 0; // for enemy's because they need unique id's i guess
+	        
 	        while (objects.hasNext()) {
 	          	          
 	          MapObject obj = objects.next();
 	                  
 	          // get x and y
-	          float x = (float) obj.getProperties().get("y"); // no clue why these are switched
+	          float x = (float) obj.getProperties().get("y"); // no clue why these are switched, help
 	          float y = (float) obj.getProperties().get("x");
 	          
-	          x/=32; // divide by the width / height
+	          x/=32; // divide by the width / height, I guess this might screw up bigger tiles
 	          y/=32;
 	          
 	          // do different things based on the layer name   
+	          // ADD MORE CASES FOR YOUR OWN OBJECT LAYERS HERE
 	          switch((String) layer.getProperties().get("name")){
 	            case "wall": // walls
 	              this.addEntity(new WallBlock(x, y, 0f));
@@ -102,10 +69,16 @@ public class DemoWorld extends AbstractWorld {
 	            case "tree": // tree
 	              this.addEntity(new BasicGreenTree(x, y, 0f));
 	              break;
+	            case "squirrel":
+	              this.addEntity(new Squirrel(x, y, 0f, i + 1));
+	              break;
 	          }
+	          
+	          i++; // add to ensure uniqueness of the id, may be bad if there's multiple enemy types
 	          
 	        }
 	        
+	        // Remove this layer! After this method we will only have tile layers, which is good
 	        map.getLayers().remove(layer);
 
 	    }
@@ -118,12 +91,7 @@ public class DemoWorld extends AbstractWorld {
 			rowOfTrees[i] = new BasicGreenTree(18, i*3 + 19, 0);
 			this.addEntity(rowOfTrees[i]);
 		}
-		
-		Random random = new Random();
-		for(int i = 0; i < 20; i++) {
-			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0,i+1));
-		}
-		
+				
 		//Add an example quest NPC
 		this.addEntity(new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.Quest, "character_1") {});
 
