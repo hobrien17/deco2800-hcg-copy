@@ -20,23 +20,7 @@ public class WorldUtil {
 	 * @return Optional of WorldEntity
 	 */
 	public static Optional<AbstractEntity> closestEntityToPosition(float x, float y, float delta) {
-		AbstractEntity result = null;
-		double distance = Double.MAX_VALUE;
-		for (Renderable r : GameManager.get().getWorld().getEntities()) {
-
-			double tempDistance = Math.sqrt(Math.pow((r.getPosX() - x), 2) + Math.pow((r.getPosY() - y), 2));
-
-			if (tempDistance < distance) {
-				// Closer than current closest
-				distance = tempDistance;
-				result = (AbstractEntity) r;
-			}
-		}
-		if (distance < delta) {
-			return Optional.of(result);
-		} else {
-			return Optional.empty();
-		}
+		return closestEntityToPosition(x, y, delta, AbstractEntity.class);
 	}
 
 	/**
@@ -47,7 +31,8 @@ public class WorldUtil {
 	 * @param delta
 	 * @return Optional of WorldEntity
 	 */
-	public static Optional<AbstractEntity> closestEntityToPosition(float x, float y, float delta, Class<?> type) {
+	public static Optional<AbstractEntity> closestEntityToPosition(float x, float y, float delta, 
+			Class<? extends AbstractEntity> type) {
 		AbstractEntity result = null;
 		double distance = Double.MAX_VALUE;
 		for (Renderable r : GameManager.get().getWorld().getEntities()) {
