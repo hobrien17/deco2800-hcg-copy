@@ -4,7 +4,6 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.managers.GameManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,6 +30,42 @@ public abstract class AbstractWorld {
      */
     public List<AbstractEntity> getEntities() {
         return new ArrayList<AbstractEntity>(this.entities);
+    }
+    
+    /**
+     * Returns all Object Layers present in the map. 
+     * Implementation assumes that the only types of layers are Tile Layers
+     * and Object Layers(!!!).
+     * 
+     * @return A list of all Object Layers in the map
+     */
+    public List<MapLayer> getObjectLayers() {
+      
+      // create object layers list
+      List<MapLayer> objectLayers = new ArrayList<MapLayer>();
+
+      // ensure no errors with empty map for testing later
+      if (map != null){
+        
+        // iterate through all map layers
+        Iterator<MapLayer> itr = map.getLayers().iterator();
+  
+        // Magic, loop through each layer and if the cast to TiledMapTileLayer fails then it
+        // is an object layer. So add that to the list of object layers
+        while (itr.hasNext()) {
+          
+          MapLayer layer = itr.next();  
+          
+          // Attempt to cast to tiled map layer. if it can't, the it's an objectlayer by assumption
+          if (!(layer instanceof TiledMapTileLayer)){
+            objectLayers.add(layer);
+          }
+                      
+        }
+        
+      }
+      return objectLayers;
+      
     }
 
     /**
