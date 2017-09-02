@@ -53,21 +53,14 @@ public abstract class AbstractWorld {
         // Magic, loop through each layer and if the cast to TiledMapTileLayer fails then it
         // is an object layer. So add that to the list of object layers
         while (itr.hasNext()) {
-          MapLayer layer = null;
           
-          try{
-              layer = itr.next();  
-              
-              // Attempt to cast to tiled map layer. if it can't, the its an objectlayer
-              @SuppressWarnings("unused")
-              TiledMapTileLayer cast = (TiledMapTileLayer) layer;
-                          
-          }
-          catch (Exception e){    
-              // if the cast didn't work, we have found an object layer
-              objectLayers.add(layer);
-          }
+          MapLayer layer = itr.next();  
           
+          // Attempt to cast to tiled map layer. if it can't, the it's an objectlayer by assumption
+          if (!(layer instanceof TiledMapTileLayer)){
+            objectLayers.add(layer);
+          }
+                      
         }
         
       }
