@@ -59,6 +59,8 @@ public class DemoWorld extends AbstractWorld {
 	          x/=32; // divide by the width / height, I guess this might screw up bigger tiles
 	          y/=32;
 	          
+	          y--; // this fixes it for some reason
+
 	          // do different things based on the layer name   
 	          // ADD MORE CASES FOR YOUR OWN OBJECT LAYERS HERE
 	          switch((String) layer.getProperties().get("name")){
