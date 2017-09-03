@@ -10,8 +10,6 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.deco2800.hcg.managers.GameManager;
-
 /**
  * Represents a datagram packet sent via the networking system
  * 
@@ -20,7 +18,7 @@ import com.deco2800.hcg.managers.GameManager;
  *
  */
 public class Message {
-	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+	static final Logger LOGGER = LoggerFactory.getLogger(Message.class);
 	
 	private static final byte[] HEADER = "H4RDC0R3".getBytes();
 	

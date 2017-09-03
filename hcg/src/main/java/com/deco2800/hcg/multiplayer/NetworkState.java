@@ -21,7 +21,7 @@ import com.deco2800.hcg.managers.MessageManager;
  *
  */
 public final class NetworkState {
-	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+	static final Logger LOGGER = LoggerFactory.getLogger(NetworkState.class);
 
 	static DatagramSocket socket;
 	// TODO: a HashMap is probably not the best collection for the lobby
