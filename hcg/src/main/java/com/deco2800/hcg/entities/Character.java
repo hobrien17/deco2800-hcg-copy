@@ -38,7 +38,7 @@ import com.deco2800.hcg.items.Item;
 public abstract class Character extends AbstractEntity {
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
-	protected final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "health", "stamina", "carryWeight",
+	protected final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "carryWeight",
             "strength", "vitality", "agility", "charisma", "intellect");
 
     protected float movementSpeed;
@@ -50,6 +50,8 @@ public abstract class Character extends AbstractEntity {
     protected int xp;
     protected int healthMax;
     protected int healthCur;
+    protected int staminaMax;
+    protected int staminaCur;
     //Attributes map
     protected Map<String,Integer> attributes;
 
@@ -157,24 +159,66 @@ public abstract class Character extends AbstractEntity {
     }
 
     /**
-     *
-     * @param health
+     * Sets the character's maximum health to the passed value. Defaults to
+     * zero if passed a negative number.
+     * 
+     * @param health The value to set maximum health to
      */
     protected void setHealthMax(int health) {
-        this.healthMax = health;
+        if (health < 0) {
+            this.healthMax = 0;
+        } else {
+            this.healthMax = health;
+        }
     }
     
     /**
-    *
-    * @param health
+    * Sets the character's current health to the passed value. Defaults to
+    * zero if passed a negative number. Defaults to the character's
+    * maximum health if passed a value greater than it.
+    * 
+    * @param health The value to set current health to
     */
-   protected void setHealthCur(int health) {
-       if (health > this.healthMax) {
-           this.healthCur = healthMax;
-       } else {
-           this.healthCur = health;
-       }
-   }
+    protected void setHealthCur(int health) {
+        if (health < 0) {
+            this.healthCur = 0;
+        } else if (health > this.healthMax) {
+            this.healthCur = this.healthMax;
+        } else {
+            this.healthCur = health;
+        }
+    }
+   
+    /**
+    * Sets the character's maximum stamina to the passed value. Defaults to
+    * zero if passed a negative number.
+    * 
+    * @param stamina The value to set maximum stamina to
+    */
+    protected void setStaminaMax(int stamina) {
+        if (stamina < 0) {
+            this.staminaMax = 0;
+        } else {
+            this.staminaMax = stamina;
+        }
+    }
+    
+    /**
+    * Sets the character's current stamina to the passed value. Defaults to
+    * zero if passed a negative number. Defaults to the character's
+    * maximum stamina if passed a value greater than it.
+    * 
+    * @param health The value to set current health to
+    */
+    protected void setStaminaCur(int stamina) {
+        if (stamina < 0) {
+            this.staminaCur = 0;
+        } else if (stamina > this.staminaMax) {
+            this.staminaCur = this.staminaMax;
+        } else {
+            this.staminaCur = stamina;
+        }
+    }
 
     /**
      *
@@ -245,7 +289,7 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's maximum health.
      */
     public int getHealthMax() {
         return healthMax;
@@ -253,11 +297,27 @@ public abstract class Character extends AbstractEntity {
     
     /**
     *
-    * @return
+    * @return The character's current health.
     */
-   public int getHealthCur() {
-       return healthCur;
-   }
+    public int getHealthCur() {
+        return healthCur;
+    }
+
+    /**
+    *
+    * @return The character's maximum stamina.
+    */
+    public int getStaminaMax() {
+        return staminaMax;
+    }
+   
+    /**
+     *
+     * @return The character's current stamina.
+     */
+    public int getStaminaCur() {
+        return staminaCur;
+    }
 
     /**
      * @param attribute is an attribute in CHARACTER_ATTRIBUTES
