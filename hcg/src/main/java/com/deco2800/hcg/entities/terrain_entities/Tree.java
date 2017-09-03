@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.terrain_entities;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 
 public class Tree extends TerrainEntity {
@@ -15,6 +14,8 @@ public class Tree extends TerrainEntity {
     private ArrayList<TreeState> treeStates;
 
     /**
+     * constructs a new tree. if not random defaults to basic leafy tree
+     *
      * @param posX x position of the tree
      * @param posY y position of the tree
      * @param posZ z position of the tree
@@ -38,6 +39,8 @@ public class Tree extends TerrainEntity {
     }
 
     /**
+     * constructs a new specific tree
+     *
      * @param posX x position of the tree
      * @param posY y position of the tree
      * @param posZ z position of the tree
@@ -54,16 +57,6 @@ public class Tree extends TerrainEntity {
             state = TreeState.LEAFY;
         }
         this.setTexture();
-    }
-
-
-    public void setState(TreeState s) {
-        state = s;
-        setTexture();
-    }
-
-    public void setType(TreeType t) {
-        this.type = t;
     }
 
     /**
@@ -96,7 +89,6 @@ public class Tree extends TerrainEntity {
         }
     }
 
-
     /**
      * generates a list of tree states
      * @return list of tree states
@@ -122,7 +114,7 @@ public class Tree extends TerrainEntity {
     }
 
     /**
-     * randomises the tree type/state
+     * randomises the tree type, and state if applicable
      */
     private void randomiseTree(){
         int index = random.nextInt(treeStates.size() + treeTypes.size() - 1);
@@ -134,6 +126,9 @@ public class Tree extends TerrainEntity {
         }
     }
 
+    /**
+     * randomises the tree state (currently only the BASIC tree type can be in different states)
+     */
     public void randomiseState(){
         int index = random.nextInt(treeStates.size());
         this.setState(treeStates.get(index));
@@ -145,5 +140,15 @@ public class Tree extends TerrainEntity {
 
     public TreeState getState() {
         return state;
+    }
+
+    public void setState(TreeState s) {
+        state = s;
+        setTexture();
+    }
+
+    public void setType(TreeType t) {
+        this.type = t;
+        setTexture();
     }
 }
