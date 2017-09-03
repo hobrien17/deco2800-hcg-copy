@@ -15,7 +15,7 @@ import com.deco2800.hcg.managers.GameManager;
 public class FireTurret extends AbstractTurret {
 
 	private int seconds;
-	private final static int RANGE = 10;
+	private final static int RANGE = 15;
 
 	public FireTurret() {
 		super("Fire");
