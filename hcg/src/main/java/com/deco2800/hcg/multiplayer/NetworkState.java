@@ -26,7 +26,7 @@ public final class NetworkState {
 	static DatagramSocket socket;
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
-	static ConcurrentHashMap<Integer, SocketAddress> peers; // the "lobby"
+	static ConcurrentHashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
 	static ConcurrentHashMap<Integer, Message> sendQueue;
 	private static boolean initialised = false;
 	private static NetworkSend networkSend;
@@ -43,7 +43,7 @@ public final class NetworkState {
 	 * @param hostGame
 	 */
 	public static void init(boolean hostGame) {
-		peers = new ConcurrentHashMap<>();
+		sockets = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
 		
 		messageManager = (MessageManager) GameManager.get().getManager(MessageManager.class);
@@ -88,6 +88,15 @@ public final class NetworkState {
 		Integer id = new Integer((int) message.getId());
 		sendQueue.put(id, message);
 	}
+	
+	/**
+	 * Add input message to queue
+	 */
+	public static void sendInputMessage(int... args) {
+		Message inputMessage = new Message(MessageType.INPUT, args);
+		// send message to peers
+		sendMessage(inputMessage);
+	}
 
 	/**
 	 * Add chat message to queue
@@ -109,9 +118,9 @@ public final class NetworkState {
 	public static void join(String hostname) {
 		SocketAddress socketAddress = new InetSocketAddress(hostname, 1337);
 		// add host to peers
-		peers.put(0, socketAddress);
+		sockets.put(0, socketAddress);
 		// try to connect
-		sendMessage(new Message(MessageType.JOIN, "".getBytes()));
+		sendMessage(new Message(MessageType.JOINING, new byte[0]));
 	}
 
 	/**
@@ -126,7 +135,7 @@ public final class NetworkState {
 			while (!Thread.interrupted()) {
 				// on the server peers contains all connected clients
 				// for a regular peer it only contains the server
-				for (SocketAddress peer : NetworkState.peers.values()) {
+				for (SocketAddress peer : NetworkState.sockets.values()) {
 					for (Message message : NetworkState.sendQueue.values()) {
 						try {
 							byte[] byteArray = message.toByteArray();
@@ -168,10 +177,20 @@ public final class NetworkState {
 					if (message.getType() != MessageType.CONFIRMATION && !processedIds.contains(messageId)) {
 						// TODO: this should end up somewhere else
 						switch (message.getType()) {
-							case JOIN:
+							case JOINING:
 								// add peer to lobby
-								NetworkState.peers.put(
-										NetworkState.peers.size() - 1, packet.getSocketAddress());
+								NetworkState.sockets.put(
+										NetworkState.sockets.size() - 1, packet.getSocketAddress());
+								// send joined message
+								Message joinedMessage = new Message(MessageType.JOINED, message.getIdInBytes());
+								byte byteArray[] = joinedMessage.toByteArray();
+								DatagramPacket joinedPacket = new DatagramPacket(
+										byteArray, byteArray.length, packet.getSocketAddress());
+								NetworkState.socket.send(joinedPacket);
+								break;
+							case INPUT:
+								InputType inputType = InputType.values()[message.getPayloadInt(0)];
+								System.out.println(inputType.toString());
 								break;
 							case CHAT:
 								messageManager.chatMessageReceieved(message);
@@ -196,7 +215,6 @@ public final class NetworkState {
 							LOGGER.debug("PING: " + ping.toString());
 						}
 					} else {
-
 						Message confirmMessage = new Message(MessageType.CONFIRMATION, message.getIdInBytes());
 						byte byteArray[] = confirmMessage.toByteArray();
 						DatagramPacket confirmPacket = new DatagramPacket(

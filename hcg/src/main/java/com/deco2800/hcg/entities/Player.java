@@ -16,6 +16,8 @@ import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.multiplayer.InputType;
+import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
@@ -132,6 +134,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
+		NetworkState.sendInputMessage(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+		
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().updateAim(screenX, screenY);
 			this.getEquippedWeapon().openFire();
@@ -149,6 +153,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDragged(int screenX, int screenY, int pointer) {
+		NetworkState.sendInputMessage(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
+		
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().updatePosition(screenX, screenY);
 			this.getEquippedWeapon().updateAim(screenX, screenY);
@@ -168,6 +174,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchUp(int screenX, int screenY, int pointer, int button) {
+		NetworkState.sendInputMessage(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+		
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().ceaseFire();
 		}
@@ -457,6 +465,8 @@ public class Player extends Character implements Tickable {
 	 * possible actions on key press. Such as NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
+		NetworkState.sendInputMessage(InputType.KEY_DOWN.ordinal(), keycode);
+		
 		if (sprinting) {
 		    // TODO: Should this be in OnTick?
 			this.setStaminaCur(this.getStaminaCur() - 10);
@@ -511,6 +521,8 @@ public class Player extends Character implements Tickable {
 	 * Handle movement when wasd keys are released
 	 */
 	private void handleKeyUp(int keycode) {
+		NetworkState.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
+		
 		switch (keycode) {
 		case Input.Keys.SHIFT_LEFT:
 			sprinting = false;
