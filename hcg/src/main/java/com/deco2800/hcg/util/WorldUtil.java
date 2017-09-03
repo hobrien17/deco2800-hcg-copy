@@ -33,7 +33,7 @@ public class WorldUtil {
 	 * @param delta
 	 * @return Optional of WorldEntity
 	 */
-	public static Optional<AbstractEntity> closestEntityToPosition(float x, float y, float delta, 
+	public static Optional<AbstractEntity> closestEntityToPosition(float x, float y, float delta,
 			Class<? extends AbstractEntity> type) {
 		List<AbstractEntity> entities = allEntitiesToPosition(x, y, delta, type);
 		if (entities.isEmpty()) {
@@ -41,7 +41,7 @@ public class WorldUtil {
 		}
 		double distance = Double.MAX_VALUE;
 		AbstractEntity result = null;
-		for(AbstractEntity entity : entities) {
+		for (AbstractEntity entity : entities) {
 			double tempDistance = getDistance(entity, x, y);
 			if (tempDistance < distance) {
 				distance = tempDistance;
@@ -50,25 +50,25 @@ public class WorldUtil {
 		}
 		return Optional.of(result);
 	}
-	
-	public static List<AbstractEntity> allEntitiesToPosition(float x, float y, float delta, 
+
+	public static List<AbstractEntity> allEntitiesToPosition(float x, float y, float delta,
 			Class<? extends AbstractEntity> type) {
 		List<AbstractEntity> ret = new ArrayList<>();
 		AbstractEntity entity = null;
 		double distance = Double.MAX_VALUE;
 		for (Renderable r : GameManager.get().getWorld().getEntities()) {
 			if (type.isInstance(r)) {
-				entity = (AbstractEntity)r;
+				entity = (AbstractEntity) r;
 				distance = getDistance(entity, x, y);
 				if (distance < delta) {
 					ret.add(entity);
 				}
 			}
 		}
-		
+
 		return ret;
 	}
-	
+
 	private static double getDistance(AbstractEntity entity, float x, float y) {
 		return Math.sqrt(Math.pow((entity.getPosX() - x), 2) + Math.pow((entity.getPosY() - y), 2));
 	}

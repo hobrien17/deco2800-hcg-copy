@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.directory.InvalidAttributesException;
-
 import com.deco2800.hcg.items.Item;
 
 /**
@@ -183,7 +181,7 @@ public abstract class Character extends AbstractEntity {
      * @param attribute is in CHARACTER_ATTRIBUTES
      */
     protected void setAttribute(String attribute,int value){
-        if ((CHARACTER_ATTRIBUTES.contains(attribute))) {
+        if (CHARACTER_ATTRIBUTES.contains(attribute)) {
             this.attributes.put(attribute, value);
         }
     }
@@ -266,7 +264,7 @@ public abstract class Character extends AbstractEntity {
      * @return value of attribute
      */
     public int getAttribute(String attribute) {
-        if ((CHARACTER_ATTRIBUTES.contains(attribute))) {
+        if (CHARACTER_ATTRIBUTES.contains(attribute)) {
             return new Integer(attributes.get(attribute));
         }
         return -1;

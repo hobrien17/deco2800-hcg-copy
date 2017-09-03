@@ -192,16 +192,23 @@ public class Effect {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+          return true;
+        if (o == null || getClass() != o.getClass())
+          return false;
 
         Effect effect = (Effect) o;
 
-        if (level != effect.level) return false;
-        if (damage != effect.damage) return false;
-        if (duration != effect.duration) return false;
-        if (cooldown != effect.cooldown) return false;
-        if (delay != effect.delay) return false;
+        if (level != effect.level)
+          return false;
+        if (damage != effect.damage)
+          return false;
+        if (duration != effect.duration)
+          return false;
+        if (cooldown != effect.cooldown)
+          return false;
+        if (delay != effect.delay)
+          return false;
 
         return Double.compare(effect.slowAmount, slowAmount) == 0
                 && (name != null ? name.equals(effect.name) : effect.name == null);
