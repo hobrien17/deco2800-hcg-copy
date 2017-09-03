@@ -152,7 +152,8 @@ public class Effects {
         boolean newChange = false;
 
         // Check for valid arguments
-        if (effects == null) throw new NullPointerException("Effects collection to be added cannot be null.");
+        if (effects == null)
+          throw new NullPointerException("Effects collection to be added cannot be null.");
 
         for (Effect effect : effects) {
             if (addEffect(effect)) newChange = true;
@@ -173,7 +174,8 @@ public class Effects {
     public boolean removeEffect(Effect effect) {
         // TODO check to make sure the effects are actually in there
         // Check for valid arguments
-        if (effect == null) throw new NullPointerException("Effect to be removed cannot be null.");
+        if (effect == null)
+          throw new NullPointerException("Effect to be removed cannot be null.");
 
         return currentEffects.remove(effect); // HashSet will only remove an effect if it is present
     }
@@ -223,8 +225,10 @@ public class Effects {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+          return true;
+        if (o == null || getClass() != o.getClass())
+          return false;
 
         Effects effects = (Effects) o;
 

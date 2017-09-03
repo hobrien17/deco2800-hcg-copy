@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.terrain_entities;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 
 public class Tree extends TerrainEntity {

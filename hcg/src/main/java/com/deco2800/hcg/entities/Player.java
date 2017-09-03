@@ -3,8 +3,6 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
-import com.deco2800.hcg.managers.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,13 +15,11 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.worlds.*;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -316,8 +312,6 @@ public class Player extends Character implements Tickable {
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
 				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
-				// this.setHealth(this.getHealth() - Integer.parseInt((String)
-				// layer.getProperties().get("damage")));
 
 			}
 
@@ -382,7 +376,6 @@ public class Player extends Character implements Tickable {
 			this.setPosition(newPosX, newPosY, 1);
 		}
 
-		// checkXp();
 	}
 
 	/**

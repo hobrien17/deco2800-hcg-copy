@@ -3,13 +3,11 @@ package com.deco2800.hcg.entities;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.worlds.AbstractWorld;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 /**
  * A generic player instance for the game

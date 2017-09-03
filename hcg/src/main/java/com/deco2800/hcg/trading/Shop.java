@@ -2,7 +2,6 @@ package com.deco2800.hcg.trading;
 
 
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
 
 import java.util.Map;

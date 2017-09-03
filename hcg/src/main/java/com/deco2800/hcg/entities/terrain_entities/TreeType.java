@@ -1,6 +1,4 @@
 package com.deco2800.hcg.entities.terrain_entities;
-import java.util.Collections;
-import java.util.Arrays;
 
 
 

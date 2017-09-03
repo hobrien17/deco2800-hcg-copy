@@ -1,9 +1,5 @@
 package com.deco2800.hcg;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,7 +12,6 @@ import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worldmapui.MapGenerator;
 import com.deco2800.hcg.worlds.BlankTestWorld;

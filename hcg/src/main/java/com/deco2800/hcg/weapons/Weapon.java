@@ -1,7 +1,5 @@
 package com.deco2800.hcg.weapons;
 
-import java.util.Random;
-
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Bullet;
@@ -194,9 +192,12 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o)
+          return true;
+        if (o == null || getClass() != o.getClass())
+          return false;
+        if (!super.equals(o))
+          return false;
 
         Weapon weapon = (Weapon) o;
 

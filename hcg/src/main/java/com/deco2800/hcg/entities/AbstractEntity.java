@@ -134,12 +134,14 @@ public abstract class AbstractEntity implements Renderable,
      * @param z the z position
      */
     public void setPosition(float x, float y, float z) {
+      float newY = y;
+      float newX = x;
         if (this.centered) {
-            y += (1 - this.position.getYLength() / 2);
-            x += (1 - this.position.getXLength() / 2);
+            newY += 1 - this.position.getYLength() / 2;
+            newX += 1 - this.position.getXLength() / 2;
         }
-        this.position.setX(x);
-        this.position.setY(y);
+        this.position.setX(newX);
+        this.position.setY(newY);
         this.position.setZ(z);
     }
 
@@ -148,10 +150,11 @@ public abstract class AbstractEntity implements Renderable,
      * @param x the position to set the current x position to
      */
     public void setPosX(float x) {
+        float newX = x;
         if (this.centered) {
-            x += (1 - this.position.getXLength() / 2);
+          newX += (1 - this.position.getXLength() / 2);
         }
-        this.position.setX(x);
+        this.position.setX(newX);
     }
 
     /**
@@ -159,10 +162,11 @@ public abstract class AbstractEntity implements Renderable,
      * @param y the position to set the current y position to
      */
     public void setPosY(float y) {
+        float newY = y;
         if (this.centered) {
-            y += (1 - this.position.getYLength() / 2);
+          newY += (1 - this.position.getYLength() / 2);
         }
-        this.position.setY(y);
+        this.position.setY(newY);
     }
 
     /**
