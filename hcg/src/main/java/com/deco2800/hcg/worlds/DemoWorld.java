@@ -47,7 +47,7 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(pots[i]);
 		}
 		
-		this.addEntity(new FireTurret());
+		//this.addEntity(new FireTurret());
 		//this.addEntity(new SunflowerTurret());
 		
 		Random random = new Random();

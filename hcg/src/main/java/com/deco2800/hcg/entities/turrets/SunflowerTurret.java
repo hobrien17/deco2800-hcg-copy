@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Bullet;
 import com.deco2800.hcg.entities.Enemy;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
@@ -28,22 +29,27 @@ public class SunflowerTurret extends AbstractTurret {
     
     private static final int RANGE = 5;
 
-	public SunflowerTurret() {
-		super("Sunflower");
-		this.setTexture("tree");
+	public SunflowerTurret(Corpse master) {
+		super(master, "Sunflower");
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), RANGE, 
-				Enemy.class);
+		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getCorpse().getPosX(), 
+				this.getCorpse().getPosY(), RANGE, Enemy.class);
 		if (closest.isPresent()) {
 			Enemy enemy = (Enemy)closest.get();
-			Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), enemy.getPosX(), 
-					enemy.getPosY(), enemy.getPosZ(), this);
+			Bullet bullet = new Bullet(this.getCorpse().getPosX(), this.getCorpse().getPosY(), 
+					this.getCorpse().getPosZ(), enemy.getPosX(), enemy.getPosY(), enemy.getPosZ(), this.getCorpse());
 			GameManager.get().getWorld().addEntity(bullet);
 		}
 		
+	}
+
+	@Override
+	public String getThisTexture() {
+		// TODO Auto-generated method stub
+		return "tree";
 	}
 	
 	

@@ -187,12 +187,7 @@ public class GardenTest {
 	private void testSeedDetails(Seed seed) {
 		Pot p = new Pot(5, 5, 0);
 		assertEquals(seed.getName(), seedNames.get(seed.getType()));
-		try {
-			assertTrue(seedPlants.get(seed.getType()).isInstance(seed.getNewPlant(p)));
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
-				InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-			fail();
-		}
+		assertTrue(seedPlants.get(seed.getType()).isInstance(seed.getNewPlant(p)));
 	}
 	
 }

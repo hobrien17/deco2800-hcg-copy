@@ -4,6 +4,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.Enemy;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 
@@ -105,7 +106,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
 			if (entity instanceof Enemy && this.collidesWith(entity) && (user instanceof Player || 
-					user instanceof AbstractTurret)) {
+					user instanceof Corpse)) {
 				removeEnemy((Enemy)entity);
 				break;
 			}

@@ -5,6 +5,7 @@ import java.util.Observable;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Enemy;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.util.WorldUtil;
@@ -22,24 +23,26 @@ public class ExplosiveTurret extends AbstractTurret {
 	private static final int BLOW = 5;
 	private static final int RANGE = 3;
 	
-	public ExplosiveTurret() {
-		super("Explosive");
-		this.setTexture("tree");
+	public ExplosiveTurret(Corpse master) {
+		super(master, "Explosive");
 		seconds = 0;
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
-			List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(this.getPosX(), this.getPosY(), RANGE, 
-					Enemy.class);
+			List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(this.getCorpse().getPosX(), 
+					this.getCorpse().getPosY(), RANGE, Enemy.class);
 			for(AbstractEntity entity : entities) {
 				GameManager.get().getWorld().removeEntity(entity);
 			}
-			GameManager.get().getWorld().removeEntity(this);
+			GameManager.get().getWorld().removeEntity(this.getCorpse());
 		}	
 	}
 	
-	
+	@Override
+	public String getThisTexture() {
+		return "tree";
+	}
 
 }
