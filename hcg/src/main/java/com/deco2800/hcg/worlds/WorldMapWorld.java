@@ -5,8 +5,6 @@ import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.entities.worldmap.*;
 import com.deco2800.hcg.renderers.Renderable;
 
-import java.util.Random;
-
 /**
  * Initial world using preset world file.
  *

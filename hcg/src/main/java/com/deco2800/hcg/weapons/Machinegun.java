@@ -1,6 +1,5 @@
 package com.deco2800.hcg.weapons;
 
-import java.util.Random;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;

@@ -179,8 +179,8 @@ public class Box3D {
      */
     public float distance(Box3D o) {
         return (float) (Math
-                .sqrt(Math.pow((o.x - this.x), 2) + Math.pow((o.y - this.y), 2)
-                        + Math.pow((o.z - this.z), 2)));
+                .sqrt(Math.pow(o.x - this.x, 2) + Math.pow(o.y - this.y, 2)
+                        + Math.pow(o.z - this.z, 2)));
     }
 
 }
