@@ -164,7 +164,9 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDown(int screenX, int screenY, int pointer, int button) {
-		NetworkState.sendInputMessage(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+		if (NetworkState.isInitialised() && peerId == -1) {
+			NetworkState.sendInputMessage(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+		}
 		
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().updateAim(screenX, screenY);
