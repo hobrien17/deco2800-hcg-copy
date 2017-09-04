@@ -11,8 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.deco2800.hcg.contexts.PlayContext;
+import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.MessageManager;
+import com.deco2800.hcg.managers.PeerInputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.worlds.DemoWorld;
 
 /**
  * Asynchronous UDP networking
@@ -34,7 +40,11 @@ public final class NetworkState {
 	private static Thread sendThread;
 	private static Thread receiveThread;
 	
+	private static GameManager gameManager;
+	private static ContextManager contextManager;
 	private static MessageManager messageManager;
+	private static PeerInputManager peerInputManager;
+	private static PlayerManager playerManager;
 
 	private NetworkState() {}
 
@@ -46,7 +56,11 @@ public final class NetworkState {
 		sockets = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
 		
+		gameManager = GameManager.get();
+		contextManager = (ContextManager) GameManager.get().getManager(ContextManager.class);
 		messageManager = (MessageManager) GameManager.get().getManager(MessageManager.class);
+		peerInputManager = (PeerInputManager) GameManager.get().getManager(PeerInputManager.class);
+		playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 
 		// initialise socket
 		try {
@@ -187,10 +201,50 @@ public final class NetworkState {
 								DatagramPacket joinedPacket = new DatagramPacket(
 										byteArray, byteArray.length, packet.getSocketAddress());
 								NetworkState.socket.send(joinedPacket);
+								// TODO: extra players should probably be handled by player manager
+								Player player = new Player(0, 5, 10, 0);
+			                		player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+			                		gameManager.getWorld().addEntity(player);
 								break;
+							case JOINED:
+								// TODO:
+						        break;
 							case INPUT:
 								InputType inputType = InputType.values()[message.getPayloadInt(0)];
-								System.out.println(inputType.toString());
+								System.out.println(inputType);
+								switch (inputType) {
+									case KEY_DOWN:
+										peerInputManager.keyDown(0, message.getPayloadInt(1));
+										break;
+									case KEY_UP:
+										peerInputManager.keyUp(0, message.getPayloadInt(1));
+										break;
+									case TOUCH_DOWN:
+										peerInputManager.touchDown(
+												0,
+												message.getPayloadInt(1),
+												message.getPayloadInt(2),
+												message.getPayloadInt(3),
+												message.getPayloadInt(4));
+										break;
+									case TOUCH_DRAGGED:
+										peerInputManager.touchDragged(
+												0,
+												message.getPayloadInt(1),
+												message.getPayloadInt(2),
+												message.getPayloadInt(3));
+										break;
+									case TOUCH_UP:
+										peerInputManager.touchUp(
+												0,
+												message.getPayloadInt(1),
+												message.getPayloadInt(2),
+												message.getPayloadInt(3),
+												message.getPayloadInt(4));
+										break;
+									default:
+										break;
+								}
 								break;
 							case CHAT:
 								messageManager.chatMessageReceieved(message);

@@ -36,12 +36,25 @@ public class Message {
 		this(type, new byte[0]);
 		this.payload = new byte[args.length * 4];
 		// iterate through arguments and add them to payload
-		for (int i = 0; i < args.length; i ++) {
+		for (int i = 0; i < args.length; i++) {
 			byte[] argBytes = getIntInBytes(args[i]);
 			this.payload[i * 4 + 0] = argBytes[0];
 			this.payload[i * 4 + 1] = argBytes[1];
 			this.payload[i * 4 + 2] = argBytes[2];
 			this.payload[i * 4 + 3] = argBytes[3];
+			System.out.println(i);
+		}
+		for (int i = 0; i < args.length; i++) {
+			System.out.println(args[i]);
+			long value = 0;
+			for (int j = i * 4; j < (i + 1) * 4; j++) {
+				// prevent sign extension, then shift byte
+				value |= (((long) payload[j]) & 0x00000000000000FFL) << ((3 - j) * 8);
+				System.out.println(payload[j]);
+			}
+			if (args[i] != value) {
+				System.out.println("(" + i + ")oops: " + args[i] + " != " + value);
+			}
 		}
 	}
 	
@@ -158,7 +171,7 @@ public class Message {
 	/**
 	 * Gets the content of Message as an Integer
 	 * @param index The integer to get
-	 * @return Integer contained in first four payload bytes
+	 * @return Integer contained in nth four payload bytes
 	 */
 	public int getPayloadInt(int index) {
 		long value = 0;

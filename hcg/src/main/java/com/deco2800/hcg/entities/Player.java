@@ -15,6 +15,7 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PeerInputManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.multiplayer.NetworkState;
@@ -59,10 +60,14 @@ public class Player extends Character implements Tickable {
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
 	// private Weapon equippedWeapon;
+	
+	private int peerId;
 
 	/**
 	 * Creates a new player at specified position.
 	 * 
+	 * @param peerId
+	 *            peer that controls player
 	 * @param posX
 	 *            beginning player X position
 	 * @param posY
@@ -70,21 +75,31 @@ public class Player extends Character implements Tickable {
 	 * @param posZ
 	 *            beginning player Z position
 	 */
-	public Player(float posX, float posY, float posZ) {
+	public Player(int peerId, float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
 		// Get necessary managers
 		GameManager gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 
-		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
-
-		input.addKeyDownListener(this::handleKeyDown);
-		input.addKeyUpListener(this::handleKeyUp);
-		input.addTouchDownListener(this::handleTouchDown);
-		input.addTouchDraggedListener(this::handleTouchDragged);
-		input.addTouchUpListener(this::handleTouchUp);
-		input.addMouseMovedListener(this::handleMouseMoved);
+		this.peerId = peerId;
+		if (peerId == -1) {
+			InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
+			input.addKeyDownListener(this::handleKeyDown);
+			input.addKeyUpListener(this::handleKeyUp);
+			input.addTouchDownListener(this::handleTouchDown);
+			input.addTouchDraggedListener(this::handleTouchDragged);
+			input.addTouchUpListener(this::handleTouchUp);
+			input.addMouseMovedListener(this::handleMouseMoved);
+		} else {
+			PeerInputManager input = (PeerInputManager) GameManager.get().getManager(PeerInputManager.class);
+			input.addKeyDownListener(peerId, this::handleKeyDown);
+			input.addKeyUpListener(peerId, this::handleKeyUp);
+			input.addTouchDownListener(peerId, this::handleTouchDown);
+			input.addTouchDraggedListener(peerId, this::handleTouchDragged);
+			input.addTouchUpListener(peerId, this::handleTouchUp);
+			input.addMouseMovedListener(peerId, this::handleMouseMoved);
+		}
 
 		collided = false;
 		sprinting = false;
@@ -120,6 +135,21 @@ public class Player extends Character implements Tickable {
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
 	}
+	
+	/**
+	 * Creates a new player at specified position.
+	 * 
+	 * @param posX
+	 *            beginning player X position
+	 * @param posY
+	 *            beginning player Y position
+	 * @param posZ
+	 *            beginning player Z position
+	 */
+	public Player(float posX, float posY, float posZ) {
+		// -1 is local player
+		this(-1, posX, posY, posZ);
+	}
 
 	/**
 	 * Handles the processes involved when a touch input is made.
@@ -153,7 +183,9 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDragged(int screenX, int screenY, int pointer) {
-		NetworkState.sendInputMessage(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
+		if (NetworkState.isInitialised() && peerId == -1) {
+			NetworkState.sendInputMessage(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
+		}
 		
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().updatePosition(screenX, screenY);
@@ -174,7 +206,9 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchUp(int screenX, int screenY, int pointer, int button) {
-		NetworkState.sendInputMessage(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+		if (NetworkState.isInitialised() && peerId == -1) {
+			NetworkState.sendInputMessage(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+		}
 		
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().ceaseFire();
@@ -465,7 +499,9 @@ public class Player extends Character implements Tickable {
 	 * possible actions on key press. Such as NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
-		NetworkState.sendInputMessage(InputType.KEY_DOWN.ordinal(), keycode);
+		if (NetworkState.isInitialised() && peerId == -1) {
+			NetworkState.sendInputMessage(InputType.KEY_DOWN.ordinal(), keycode);
+		}
 		
 		if (sprinting) {
 		    // TODO: Should this be in OnTick?
@@ -521,7 +557,9 @@ public class Player extends Character implements Tickable {
 	 * Handle movement when wasd keys are released
 	 */
 	private void handleKeyUp(int keycode) {
-		NetworkState.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
+		if (NetworkState.isInitialised() && peerId == -1) {
+			NetworkState.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
+		}
 		
 		switch (keycode) {
 		case Input.Keys.SHIFT_LEFT:
@@ -652,7 +690,11 @@ public class Player extends Character implements Tickable {
 	 * Updates the game camera so that it is centered on the player
 	 */
 	private void updateCamera() {
-
+		// don't follow co-op players
+		if (peerId >= 0) {
+			return;
+		}
+		
 		int worldLength = GameManager.get().getWorld().getLength();
 		int worldWidth = GameManager.get().getWorld().getWidth();
 		int tileWidth = (int) GameManager.get().getWorld().getMap().getProperties().get("tilewidth");
