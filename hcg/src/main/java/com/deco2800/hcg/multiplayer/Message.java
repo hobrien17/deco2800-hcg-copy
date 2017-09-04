@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class Message {
 	/**
 	 * Constructor used for sending messages containing an array of integers
 	 * @param type Type of message
-	 * @param payload Content of message
+	 * @param args Content of message
 	 */
 	public Message(MessageType type, int... args) {
 		// call other constructor to generate id
@@ -42,19 +43,6 @@ public class Message {
 			this.payload[i * 4 + 1] = argBytes[1];
 			this.payload[i * 4 + 2] = argBytes[2];
 			this.payload[i * 4 + 3] = argBytes[3];
-			System.out.println(i);
-		}
-		for (int i = 0; i < args.length; i++) {
-			System.out.println(args[i]);
-			long value = 0;
-			for (int j = i * 4; j < (i + 1) * 4; j++) {
-				// prevent sign extension, then shift byte
-				value |= (((long) payload[j]) & 0x00000000000000FFL) << ((3 - j) * 8);
-				System.out.println(payload[j]);
-			}
-			if (args[i] != value) {
-				System.out.println("(" + i + ")oops: " + args[i] + " != " + value);
-			}
 		}
 	}
 	
@@ -174,12 +162,8 @@ public class Message {
 	 * @return Integer contained in nth four payload bytes
 	 */
 	public int getPayloadInt(int index) {
-		long value = 0;
-		for (int i = index * 4; i < (index + 1) * 4; i++) {
-			// prevent sign extension, then shift byte
-			value |= (((long) payload[i]) & 0x00000000000000FFL) << ((3 - i) * 8);
-		}
-		return (int) value;
+		final ByteBuffer byteBuffer = ByteBuffer.wrap(payload);
+		return (int) byteBuffer.getInt(index * 4);
 	}
 	
 	/**
