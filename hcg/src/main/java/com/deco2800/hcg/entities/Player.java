@@ -25,6 +25,7 @@ import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
 import com.deco2800.hcg.contexts.ShopMenuContext;
+import com.deco2800.hcg.contexts.PerksSelectionScreen;
 
 /**
  * Entity for the playable character.
@@ -453,23 +454,53 @@ public class Player extends Character implements Tickable {
 	}
 
 	/**
+	 * Stamina determines how the player can use additional movement mechanics
+	 * when sprinting or dodge rolling, the player loses stamina that they recover
+	 * over time.
+	 *
+	 */
+	protected void handleStamina() {
+
+
+		//conditionals to handle players sprint
+		if (sprinting) {
+			/* if the player is sprinting they will be exerting themselves and running out of stamina, hence it is
+			 * drained on tick. Otherwise, they will be recovering, gaining stamina back.
+			 */
+			staminaCur -= 5;
+		} else {
+			if (staminaCur < staminaMax) {
+				//recovering
+				staminaCur += 2;
+			}
+			if (staminaCur > staminaMax) {
+				// over recovered, so revert to max.
+				staminaCur = staminaMax;
+			}
+		}
+		if (staminaCur <= 0) {
+			//if the player is out of stamina, return them to the normal movement
+			// speed and set their sprinting conditional to false.
+			sprinting = false;
+			// TODO: I don't think this works as intended
+			movementSpeed = movementSpeedNorm;
+		}
+
+	}
+
+	/**
 	 * Handle movement when wasd keys are pressed down. As well as other
 	 * possible actions on key press. Such as NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
-		if (sprinting) {
-		    // TODO: Should this be in OnTick?
-			this.setStaminaCur(this.getStaminaCur() - 10);
-		} else {
-		    this.setStaminaCur(this.getStaminaCur() + 10);
-		}
+
 		switch (keycode) {
-		// case Input.Keys.P:
-		// this.contextManager.pushContext(new PerksSelectionScreen());
+		case Input.Keys.P:
+			this.contextManager.pushContext(new PerksSelectionScreen());
 		case Input.Keys.SHIFT_LEFT:
 			if (staminaCur > 0) {
                 sprinting = true;
-				setMovementSpeed(getMovementSpeed() * 3);
+				movementSpeed = movementSpeed * 3;
 			}
 			break;
 		case Input.Keys.W:
@@ -498,11 +529,7 @@ public class Player extends Character implements Tickable {
 		default:
 			break;
 		}
-		if (staminaCur <= 0) {
-			sprinting = false;
-			// TODO: I don't think this works as intended
-			setMovementSpeed(movementSpeedNorm);
-		}
+		handleStamina();
 		handleDirectionInput();
 		handleNoInput();
 	}
@@ -514,7 +541,7 @@ public class Player extends Character implements Tickable {
 		switch (keycode) {
 		case Input.Keys.SHIFT_LEFT:
 			sprinting = false;
-			setMovementSpeed(movementSpeedNorm);
+			movementSpeed = movementSpeedNorm;
 			break;
 		case Input.Keys.W:
 			movementDirection.put("up", false);

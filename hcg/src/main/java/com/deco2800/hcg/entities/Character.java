@@ -323,6 +323,7 @@ public abstract class Character extends AbstractEntity {
      * @param attribute is an attribute in CHARACTER_ATTRIBUTES
      * @return value of attribute
      */
+
     public int getAttribute(String attribute) {
         if (CHARACTER_ATTRIBUTES.contains(attribute)) {
             return new Integer(attributes.get(attribute));

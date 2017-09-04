@@ -37,10 +37,13 @@ public class PerksSelectionScreen extends UIContext{
 
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
-        masterTable = new Table();
-        branch1 = new Table(); //branch1.setFillParent(true);
-        branch2 = new Table(); //branch2.setFillParent(true);
-        branch3 = new Table(); //branch3.setFillParent(true);
+        masterTable = new Table(skin);
+        masterTable.setFillParent(true);
+        masterTable.setBackground("white");
+
+        branch1 = new Table(skin);
+        branch2 = new Table(skin);
+        branch3 = new Table(skin);
 
         branch1.setBackground(new Image(textureManager.getTexture("red_tree_path")).getDrawable());
         branch2.setBackground(new Image(textureManager.getTexture("green_tree_path")).getDrawable());
@@ -48,28 +51,17 @@ public class PerksSelectionScreen extends UIContext{
 
         quitButton1 = new ImageButton(new Image(textureManager.getTexture("perk_place_holder")).getDrawable());
 
-        for (int i = 0; i < 7; i++) {
-            branch1.add(quitButton1);
-            branch1.row();
-        }
-        for (int i = 0; i < 3; i++) {
-            branch2.add(quitButton1);
-            branch2.row();
-        }
-        for (int i = 0; i < 9; i++) {
-            branch3.add(quitButton1);
-            branch3.row();
-        }
-
         masterTable.add(branch1);
+        masterTable.add(branch2);
+        masterTable.add(branch3);
         stage.addActor(masterTable);
+
         quitButton1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 contextManager.popContext();
             }
         });
-
     }
 
 }
