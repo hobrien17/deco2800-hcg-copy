@@ -7,6 +7,7 @@ import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
 import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
@@ -16,6 +17,8 @@ import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.entities.NPC;
+import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -47,6 +50,9 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(pots[i]);
 		}
 		
+		Corpse corpse = new BasicCorpse(12, 12, 0, "sunflower_01");
+		this.addEntity(corpse);
+		corpse.plantInside(new Seed(Seed.Type.ICE));
 		//this.addEntity(new FireTurret());
 		//this.addEntity(new SunflowerTurret());
 		

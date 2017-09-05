@@ -8,6 +8,7 @@ public class BasicCorpse extends Corpse {
 
     public BasicCorpse(float posX, float posY, float posZ, String texture) {
         super(posX, posY, posZ,texture);
+        this.setThisTexture();
     }
     
     public void setThisTexture() {
@@ -16,6 +17,7 @@ public class BasicCorpse extends Corpse {
     	} else {
     		this.setTexture(turret.getThisTexture());
     	}
+
     }
 
     @Override

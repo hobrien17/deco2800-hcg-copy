@@ -19,9 +19,12 @@ public class Seed implements Item {
 	 * Stores the many different types of seeds in the game *
 	 */
 	public enum Type {
-		SUNFLOWER("gardening_seed", Sunflower.class, SunflowerTurret.class), EXPLOSIVE("explosive_seed", Cactus.class,
-				ExplosiveTurret.class), FIRE("fire_seed", Inferno.class, FireTurret.class), GRASS("grass_seed",
-						Grass.class, null), ICE("ice_seed", Ice.class, null), WATER("water_seed", Water.class, null);
+		SUNFLOWER("gardening_seed", Sunflower.class, SunflowerTurret.class), 
+		EXPLOSIVE("explosive_seed", Cactus.class, ExplosiveTurret.class), 
+		FIRE("fire_seed", Inferno.class, FireTurret.class), 
+		GRASS("grass_seed",	Grass.class, null), 
+		ICE("ice_seed", Ice.class, IceTurret.class), 
+		WATER("water_seed", Water.class, null);
 
 		private String texture;
 		private Class<? extends AbstractGardenPlant> plant;
