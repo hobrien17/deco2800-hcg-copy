@@ -79,6 +79,7 @@ public class MultiplayerMenuContext extends UIContext {
 				Player player1 = new Player(0, 5, 10, 0);
 				player1.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
 				gameManager.getWorld().addEntity(player1);
+				gameManager.getWorld().addEntity(player1.getEquippedWeapon());
 				contextManager.pushContext(new PlayContext());
 			}
 		});

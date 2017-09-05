@@ -205,6 +205,7 @@ public final class NetworkState {
 								Player player = new Player(0, 5, 10, 0);
 			                		player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
 			                		gameManager.getWorld().addEntity(player);
+			                		gameManager.getWorld().addEntity(player.getEquippedWeapon());
 								break;
 							case JOINED:
 								// TODO:
@@ -218,6 +219,12 @@ public final class NetworkState {
 										break;
 									case KEY_UP:
 										peerInputManager.keyUp(0, message.getPayloadInt(1));
+										break;
+									case MOUSE_MOVED:
+										peerInputManager.mouseMoved(
+												0,
+												message.getPayloadInt(1),
+												message.getPayloadInt(2));
 										break;
 									case TOUCH_DOWN:
 										peerInputManager.touchDown(
