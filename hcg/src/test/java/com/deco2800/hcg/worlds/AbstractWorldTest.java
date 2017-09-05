@@ -5,10 +5,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Tower;
+import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 
 class TestWorld extends AbstractWorld{
 
@@ -95,6 +99,28 @@ public class AbstractWorldTest extends AbstractWorld{
     
     assertTrue("Existing layer was not returned.", testWorld.getTiledMapTileLayerAtPos(1, 0) == layer2);
 
+  }
+  
+  @Test
+  public void testGetObjectLayer() {
+    TestWorld testWorld = new TestWorld();
+
+    testWorld.setWidth(10);
+    testWorld.setLength(10);
+
+    assertTrue("Nonexisting layer was returned.", testWorld.getObjectLayers().size() == 0);
+
+    TiledMapTileLayer layer1 = mock(TiledMapTileLayer.class);
+    
+    testWorld.map = new TiledMap();
+
+    testWorld.map.getLayers().add(layer1);
+    
+    assertTrue("Non object layer was returned.", testWorld.getObjectLayers().size() == 0);
+    
+    // Cannot mock object layer class, there is none! 
+    // Had issues with throwing exception on cast, gave up   
+    
   }
   
 }

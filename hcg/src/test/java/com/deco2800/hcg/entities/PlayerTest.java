@@ -206,6 +206,19 @@ public class PlayerTest {
 
 	}
 	
+	@Test
+	public void testSprint() {
+	    
+	    Player player = new Player(0, 0, 0);
+	    
+	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+	    
+	    assertTrue("Player's maximum stamina was not initialised correctly",
+	            player.getStaminaMax() == 20);
+        assertTrue("Player's current stamina was not initialised correctly",
+                player.getStaminaCur() == 20);
+	}
+	
 	// note - any change to player may break these tests - add more mocking
 	@Test
 	public void testSlipperyMovement() {

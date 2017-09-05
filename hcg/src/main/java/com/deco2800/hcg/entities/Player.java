@@ -3,8 +3,6 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
-import com.deco2800.hcg.managers.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,13 +15,11 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.worlds.*;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -247,6 +243,7 @@ public class Player extends Character implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
+	    // TODO: Refactor this monstrosity
 		float newPosX = this.getPosX();
 		float newPosY = this.getPosY();
 
@@ -316,8 +313,6 @@ public class Player extends Character implements Tickable {
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
 				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
-				// this.setHealth(this.getHealth() - Integer.parseInt((String)
-				// layer.getProperties().get("damage")));
 
 			}
 
@@ -382,7 +377,6 @@ public class Player extends Character implements Tickable {
 			this.setPosition(newPosX, newPosY, 1);
 		}
 
-		// checkXp();
 	}
 
 	/**
@@ -395,7 +389,8 @@ public class Player extends Character implements Tickable {
 		setSkills(meleeSkill);
 		healthMax = 4 * vitality;
 		healthCur = healthMax;
-		attributes.put("stamina", 4 * agility);
+		staminaMax = 4 * agility;
+		staminaCur = staminaMax;
 	}
 
 	/**
@@ -415,9 +410,17 @@ public class Player extends Character implements Tickable {
 	private void levelUp() {
 		xpThreshold *= 1.3;
 		level++;
-		attributes.put("stamina", attributes.get("stamina") + attributes.get("agility"));
-		healthMax = healthMax + attributes.get("vitality");
-		healthCur = healthCur + attributes.get("vitality");
+		
+		// Increase health by vitality points
+		int vitality = attributes.get("vitality");
+		healthMax += vitality;
+		healthCur += vitality;
+		
+		// Increase stamina by agility points
+		int agility = attributes.get("agility");
+		staminaMax += agility;
+		staminaCur += agility;
+		
 		skillPoints = 4 + attributes.get("intellect");
 		// TODO: enter level up screen
 	}
@@ -455,17 +458,18 @@ public class Player extends Character implements Tickable {
 	 */
 	private void handleKeyDown(int keycode) {
 		if (sprinting) {
-			setAttribute("stamina", getAttribute("stamina") - 40);
+		    // TODO: Should this be in OnTick?
+			this.setStaminaCur(this.getStaminaCur() - 10);
 		} else {
-			setAttribute("stamina", getAttribute("stamina") + 10);
+		    this.setStaminaCur(this.getStaminaCur() + 10);
 		}
 		switch (keycode) {
 		// case Input.Keys.P:
 		// this.contextManager.pushContext(new PerksSelectionScreen());
 		case Input.Keys.SHIFT_LEFT:
-			if (getAttribute("stamina") > 0) {
+			if (staminaCur > 0) {
+                sprinting = true;
 				setMovementSpeed(getMovementSpeed() * 3);
-				sprinting = true;
 			}
 			break;
 		case Input.Keys.W:
@@ -494,8 +498,9 @@ public class Player extends Character implements Tickable {
 		default:
 			break;
 		}
-		if (getAttribute("stamina") <= 0) {
+		if (staminaCur <= 0) {
 			sprinting = false;
+			// TODO: I don't think this works as intended
 			setMovementSpeed(movementSpeedNorm);
 		}
 		handleDirectionInput();
