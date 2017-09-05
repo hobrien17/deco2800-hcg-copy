@@ -205,8 +205,8 @@ public final class NetworkState {
 								// TODO: we need to support more (4?) players
 							case JOINED:
 								// TODO: we need to communicate how many other players are already in the
-								//       game, their stats, as well as where to spawn them (if we want join
-								//       in progress)
+								//       game as well as their state, unless we only finalise that after
+								//       the host starts the game from the lobby
 								Player otherPlayer = new Player(0, 5, 10, 0);
 								otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
 								playerManager.addPlayer(otherPlayer);

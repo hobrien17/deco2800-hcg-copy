@@ -26,17 +26,13 @@ public class PlayerManager extends Manager {
     }
     
     /**
-     * Spawns players who haven't already spawned in the current world.
+     * Spawns players in current world.
      */
     public void spawnPlayers() {
     		AbstractWorld world = GameManager.get().getWorld();
     		for (Player player : players) {
-    			// the next if statement is only necessary if we want to support the ability to join games that
-    			// are in progress
-    			if (!world.containsEntity(player)) {
-    				GameManager.get().getWorld().addEntity(player);
-    				GameManager.get().getWorld().addEntity(player.getEquippedWeapon());
-    			}
+    			world.addEntity(player);
+    			world.addEntity(player.getEquippedWeapon());
     		}
     }
 
