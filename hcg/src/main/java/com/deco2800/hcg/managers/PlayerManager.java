@@ -35,6 +35,14 @@ public class PlayerManager extends Manager {
     			world.addEntity(player.getEquippedWeapon());
     		}
     }
+    
+    /**
+     * Gets all players.
+     * @return List of players
+     */
+    public Set<Player> getPlayers() {
+    		return players;
+    }
 
     /**
      * Sets the player.
