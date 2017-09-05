@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -11,9 +10,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Bullet;
 import com.deco2800.hcg.entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.util.WorldUtil;
 
 /**
@@ -35,12 +32,12 @@ public class SunflowerTurret extends AbstractTurret {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getCorpse().getPosX(), 
-				this.getCorpse().getPosY(), RANGE, Enemy.class);
+		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(master.getPosX(), 
+				master.getPosY(), RANGE, Enemy.class);
 		if (closest.isPresent()) {
 			Enemy enemy = (Enemy)closest.get();
-			Bullet bullet = new Bullet(this.getCorpse().getPosX(), this.getCorpse().getPosY(), 
-					this.getCorpse().getPosZ(), enemy.getPosX(), enemy.getPosY(), enemy.getPosZ(), this.getCorpse());
+			Bullet bullet = new Bullet(master.getPosX(), master.getPosY(), 
+					master.getPosZ(), enemy.getPosX(), enemy.getPosY(), enemy.getPosZ(), master);
 			GameManager.get().getWorld().addEntity(bullet);
 		}
 		

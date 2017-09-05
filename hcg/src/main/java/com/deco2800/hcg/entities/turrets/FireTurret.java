@@ -2,13 +2,13 @@ package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observable;
 
-import com.deco2800.hcg.entities.Bullet;
 import com.deco2800.hcg.entities.Fireball;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 
 /**
- * Fire turret Fires four massive fireballs in different directions
+ * Fire turret 
+ * Fires four massive fireballs in different directions
  * 
  * @author Henry
  *
@@ -25,16 +25,16 @@ public class FireTurret extends AbstractTurret {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		float[][] pos = { { this.getCorpse().getPosX() + RANGE, this.getCorpse().getPosY() }, 
-				{ this.getCorpse().getPosX(), this.getCorpse().getPosY() + RANGE },
-				{ Math.max(0, this.getCorpse().getPosX() - RANGE), this.getCorpse().getPosY() }, 
-				{ this.getCorpse().getPosX(), Math.max(0, this.getCorpse().getPosY() - RANGE) } };
+		float[][] pos = { { master.getPosX() + RANGE, master.getPosY() }, 
+				{ master.getPosX(), master.getPosY() + RANGE },
+				{ Math.max(0, master.getPosX() - RANGE), master.getPosY() }, 
+				{ master.getPosX(), Math.max(0, master.getPosY() - RANGE) } };
 		if (seconds == 5) {
-			GameManager.get().getWorld().removeEntity(this.getCorpse());
+			GameManager.get().getWorld().removeEntity(master);
 		} else if(seconds > 0 && seconds < 5) {
-			Fireball fire = new Fireball(this.getCorpse().getPosX(), this.getCorpse().getPosY(), 
-					this.getCorpse().getPosZ(), pos[seconds-1][0], pos[seconds-1][1], this.getCorpse().getPosZ(), 
-					this.getCorpse());
+			Fireball fire = new Fireball(master.getPosX(), master.getPosY(), 
+					master.getPosZ(), pos[seconds-1][0], pos[seconds-1][1], master.getPosZ(), 
+					master);
 			GameManager.get().getWorld().addEntity(fire);
 		}
 		seconds++;

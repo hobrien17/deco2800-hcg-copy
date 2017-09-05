@@ -7,7 +7,6 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.util.WorldUtil;
 
 /**
@@ -31,12 +30,12 @@ public class ExplosiveTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
-			List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(this.getCorpse().getPosX(), 
-					this.getCorpse().getPosY(), RANGE, Enemy.class);
+			List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(master.getPosX(), 
+					master.getPosY(), RANGE, Enemy.class);
 			for(AbstractEntity entity : entities) {
 				GameManager.get().getWorld().removeEntity(entity);
 			}
-			GameManager.get().getWorld().removeEntity(this.getCorpse());
+			GameManager.get().getWorld().removeEntity(master);
 		}	
 	}
 	

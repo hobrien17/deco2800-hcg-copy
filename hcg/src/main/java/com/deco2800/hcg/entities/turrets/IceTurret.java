@@ -6,8 +6,17 @@ import java.util.Observable;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.WorldUtil;
 
+/**
+ * Ice turret
+ * Freezes enemies in a short range
+ * Slows down enemies in a longer range
+ * 
+ * @author Henry O'Brien
+ *
+ */
 public class IceTurret extends AbstractTurret {
 
 	private int seconds;
@@ -26,10 +35,10 @@ public class IceTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
-			near = WorldUtil.allEntitiesToPosition(this.getCorpse().getPosX(), 
-					this.getCorpse().getPosY(), CLOSE_RANGE, Enemy.class);
-			far = WorldUtil.allEntitiesToPosition(this.getCorpse().getPosX(), 
-					this.getCorpse().getPosY(), FAR_RANGE, Enemy.class);
+			near = WorldUtil.allEntitiesToPosition(master.getPosX(), 
+					master.getPosY(), CLOSE_RANGE, Enemy.class);
+			far = WorldUtil.allEntitiesToPosition(master.getPosX(), 
+					master.getPosY(), FAR_RANGE, Enemy.class);
 			for(AbstractEntity entity : near) {
 				Enemy enemy = (Enemy)entity;
 				enemy.setSpeed(0);
@@ -50,6 +59,7 @@ public class IceTurret extends AbstractTurret {
 				Enemy enemy = (Enemy)entity;
 				enemy.resetSpeed();
 			}
+			GameManager.get().getWorld().removeEntity(master);
 		}
 	}
 
