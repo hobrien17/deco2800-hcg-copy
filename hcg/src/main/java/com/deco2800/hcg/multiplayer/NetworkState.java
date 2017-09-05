@@ -201,15 +201,17 @@ public final class NetworkState {
 								DatagramPacket joinedPacket = new DatagramPacket(
 										byteArray, byteArray.length, packet.getSocketAddress());
 								NetworkState.socket.send(joinedPacket);
-								// TODO: extra players should probably be handled by player manager
-								Player player = new Player(0, 5, 10, 0);
-			                		player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
-			                		gameManager.getWorld().addEntity(player);
-			                		gameManager.getWorld().addEntity(player.getEquippedWeapon());
-								break;
+								// fall through to spawn other player
+								// TODO: we need to support more (4?) players
 							case JOINED:
-								// TODO:
-						        break;
+								// TODO: we need to communicate how many other players are already in the
+								//       game, their stats, as well as where to spawn them (if we want join
+								//       in progress)
+								Player otherPlayer = new Player(0, 5, 10, 0);
+								otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+								playerManager.addPlayer(otherPlayer);
+								playerManager.spawnPlayers();
+								break;
 							case INPUT:
 								InputType inputType = InputType.values()[message.getPayloadInt(0)];
 								System.out.println(inputType);
