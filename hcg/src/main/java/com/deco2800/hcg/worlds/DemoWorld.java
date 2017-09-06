@@ -12,6 +12,8 @@ import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
 import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeState;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
@@ -44,6 +46,13 @@ public class DemoWorld extends AbstractWorld {
 		 */
 		this.setWidth(this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(this.getMap().getProperties().get("height", Integer.class));
+
+		// get player
+		Player player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
+		
+		// change player position based on the properties below
+		player.setPosX(Float.parseFloat((String) this.getMap().getProperties().get("PlayerX")));
+	    player.setPosY(Float.parseFloat((String) this.getMap().getProperties().get("PlayerY")));
 
 		Pot[] pots = new Pot[4];
 		for(int i = 0; i < 4; i++) {
