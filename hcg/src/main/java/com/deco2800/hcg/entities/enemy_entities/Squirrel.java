@@ -72,7 +72,6 @@ public class Squirrel extends Enemy implements Tickable {
 			newPos = this.randomMove();
 		} else if (this.getStatus() == 2){
 			newPos = this.moveToPlayer();
-			enemyWeapon.updatePosition((int)this.getPosX(), (int)this.getPosY());
 			this.shoot();
 		} else if (this.getStatus() == 3){
 			newPos = this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
@@ -97,6 +96,8 @@ public class Squirrel extends Enemy implements Tickable {
 		}
 		if (!collided) {
 			this.move(newPos.getX(), newPos.getY());
+			enemyWeapon.updatePosition((int)this.getPosX(), (int)this.getPosY());
+
 		}
 		// Apply any effects that exist on the entity
 		myEffects.apply();
