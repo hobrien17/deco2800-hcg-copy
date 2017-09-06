@@ -108,15 +108,23 @@ public abstract class AbstractWorld {
     }
 
     /**
-     * Adds entitiy to the world.
+     * Adds entity to the world.
      * @param entity Entity to be added
      */
     public void addEntity(AbstractEntity entity) {
         entities.add(entity);
     }
+    
+    /**
+     * Checks if world contains entity.
+     * @param entity Entity to be checked
+     */
+    public boolean containsEntity(AbstractEntity entity) {
+        return entities.contains(entity);
+    }
 
     /**
-     * Adds entitiy from the world.
+     * Removes entity from the world.
      * @param entity Entity to be removed
      */
     public void removeEntity(AbstractEntity entity) {
