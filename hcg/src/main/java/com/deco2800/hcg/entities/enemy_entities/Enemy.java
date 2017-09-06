@@ -13,6 +13,7 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
+import com.deco2800.hcg.weapons.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,8 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 
 	// Effects container
 	protected Effects myEffects;
+
+	protected Weapon enemyWeapon;
 
     /**
      * Creates a new enemy at the given position
@@ -383,13 +386,17 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 
     /**
      * Shoot the entity
-     * @param thisEnemy: the entity that is the aim. 
+     *
      */
-    public void shoot(AbstractEntity thisEnemy) {
-        Vector3 worldCoords = GameManager.get().getCamera()
+    public void shoot() {
+        /*Vector3 worldCoords = GameManager.get().getCamera()
                 .unproject(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
         Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y, thisEnemy);
         GameManager.get().getWorld().addEntity(bullet);
+    */
+        enemyWeapon.updateAim((int)playerManager.getPlayer().getPosX(), (int)playerManager.getPlayer().getPosY());
+        //System.out.println("123   " + playerManager.getPlayer().getPosX());
+        enemyWeapon.openFire();
     }
     
     /**
