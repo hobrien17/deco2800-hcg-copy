@@ -371,5 +371,6 @@ public class PlayerTest {
 		assertEquals(10,player.killLogGet(exampleID2));
 		assertEquals(1,player.killLogGet(exampleID1));
 		assertEquals(false,player.killLogContains(exampleID3));
+		assertEquals(0,player.killLogGet(exampleID3));
 	}
 }
