@@ -13,19 +13,20 @@ import java.util.List;
  */
 public class Conversation {
 
-	private List<ConversationNode> nodes;
+	private List<ConversationNode> conversationNodes;
 	private ConversationNode currentNode;
 	private ConversationContext conversationContext;
 	private ContextManager contextManager;
 
-	public Conversation() { //TODO write a proper constructor
+	public Conversation(List<ConversationNode> conversationNodes) {
+		//TODO write a proper constructor
 		// Get necessary managers
 		GameManager gameManager = GameManager.get();
 		contextManager = (ContextManager)
 				gameManager.getManager(ContextManager.class);
 
-		nodes = new ArrayList<>();
-		currentNode = null;
+		this.conversationNodes = new ArrayList<>(conversationNodes);
+		currentNode = conversationNodes.get(0);
 	}
 
 	public void initiateConversation() {
