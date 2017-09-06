@@ -321,12 +321,16 @@ public class PlayContext extends Context {
 
 	@Override
 	public void pause() {
-		unpaused = false;
+		if (!NetworkState.isInitialised()) {
+			unpaused = false;
+		}
 	}
 
 	@Override
 	public void resume() {
-		unpaused = true;
+		if (!NetworkState.isInitialised()) {
+			unpaused = true;
+		}
 	}
 
 	@Override

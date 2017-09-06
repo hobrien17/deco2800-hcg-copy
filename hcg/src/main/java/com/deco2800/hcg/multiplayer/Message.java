@@ -5,28 +5,46 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.deco2800.hcg.managers.GameManager;
-
 /**
  * Represents a datagram packet sent via the networking system
  * 
  * @author Max Crofts
- * Edit: Duc (Ethan) Phan
+ * @author Duc (Ethan) Phan
  *
  */
 public class Message {
-	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+	static final Logger LOGGER = LoggerFactory.getLogger(Message.class);
 	
 	private static final byte[] HEADER = "H4RDC0R3".getBytes();
 	
 	private long id; // effectively size of an integer
 	private MessageType type;
 	private byte[] payload;
+	
+	/**
+	 * Constructor used for sending messages containing an array of integers
+	 * @param type Type of message
+	 * @param args Content of message
+	 */
+	public Message(MessageType type, int... args) {
+		// call other constructor to generate id
+		this(type, new byte[0]);
+		this.payload = new byte[args.length * 4];
+		// iterate through arguments and add them to payload
+		for (int i = 0; i < args.length; i++) {
+			byte[] argBytes = getIntInBytes(args[i]);
+			this.payload[i * 4 + 0] = argBytes[0];
+			this.payload[i * 4 + 1] = argBytes[1];
+			this.payload[i * 4 + 2] = argBytes[2];
+			this.payload[i * 4 + 3] = argBytes[3];
+		}
+	}
 	
 	/**
 	 * Constructor used for sending messages
@@ -75,6 +93,19 @@ public class Message {
 	}
 	
 	/**
+	 * Converts given int to byte array
+	 * @return int as byte[4]
+	 */
+	private byte[] getIntInBytes(int integer) {
+		byte[] intBytes = new byte[4];
+		intBytes[0] = (byte) ((integer >> 24) & 0xFF);
+		intBytes[1] = (byte) ((integer >> 16) & 0xFF);
+		intBytes[2] = (byte) ((integer >> 8) & 0xFF);
+		intBytes[3] = (byte) (integer & 0xFF);
+		return intBytes;
+	}
+	
+	/**
 	 * Gets message ID of instance
 	 * @return ID of message as a long
 	 */
@@ -87,12 +118,7 @@ public class Message {
 	 * @return ID of message as byte[4]
 	 */
 	public byte[] getIdInBytes() {
-		byte[] idBytes = new byte[4];
-		idBytes[0] = (byte) ((id >> 24) & 0xFF);
-		idBytes[1] = (byte) ((id >> 16) & 0xFF);
-		idBytes[2] = (byte) ((id >> 8) & 0xFF);
-		idBytes[3] = (byte) (id & 0xFF);
-		return idBytes;
+		return getIntInBytes((int) id);
 	}
 	
 	/**
@@ -132,15 +158,20 @@ public class Message {
 	
 	/**
 	 * Gets the content of Message as an Integer
+	 * @param index The integer to get
+	 * @return Integer contained in nth four payload bytes
+	 */
+	public int getPayloadInt(int index) {
+		final ByteBuffer byteBuffer = ByteBuffer.wrap(payload);
+		return (int) byteBuffer.getInt(index * 4);
+	}
+	
+	/**
+	 * Gets the content of Message as an Integer
 	 * @return Integer contained in first four payload bytes
 	 */
 	public Integer getPayloadInteger() {
-		long payloadLong = 0;
-		for (int i = 0; i < 4; i++) {
-			// prevent sign extension, then shift byte
-			payloadLong |= (((long) payload[i]) & 0x00000000000000FFL) << ((3 - i) * 8);
-		}
-		return new Integer((int) payloadLong);
+		return new Integer((int) getPayloadInt(0));
 	}
 	
 	/**

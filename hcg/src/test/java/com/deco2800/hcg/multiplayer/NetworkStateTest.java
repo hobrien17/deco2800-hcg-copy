@@ -40,8 +40,8 @@ public class NetworkStateTest {
 		assertTrue("Incorrect number of messages sent", network.sendQueue.size() == 2);
 		
 		network.join("HOST_1");
-		System.out.println(network.peers.values());
-		assertTrue("Correct name of socket address", network.peers.values().toString().equals("[HOST_1:1337]"));
+		System.out.println(network.sockets.values());
+		assertTrue("Correct name of socket address", network.sockets.values().toString().equals("[HOST_1:1337]"));
 	}
 
 	
