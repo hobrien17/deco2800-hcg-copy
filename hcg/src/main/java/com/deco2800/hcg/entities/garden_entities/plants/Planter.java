@@ -18,11 +18,17 @@ import com.deco2800.hcg.util.WorldUtil;
  *
  */
 public class Planter implements KeyUpObserver {
+	
+	private PlantManager plantManager;
+	
+	public Planter() {
+		plantManager = (PlantManager) GameManager.get().getManager(PlantManager.class);
+	}
 
-    private PlantManager plantManager = (PlantManager) GameManager.get().getManager(PlantManager.class);
+    
 	@Override
 	public void notifyKeyUp(int keycode) {
-		if(keycode >= 8 && keycode <= 12) {
+		if((keycode >= 8 && keycode <= 12) || keycode == 49) {
 			PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 			Player player = pm.getPlayer();
 			float px = player.getPosX();
@@ -46,6 +52,8 @@ public class Planter implements KeyUpObserver {
 				} else if(keycode == 12) {
 					pot.addPlant(new Inferno(pot));  
 					updateManager(pot);
+				} else if(keycode == 49) {
+					pot.unlock();
 				}
 			} 
 		}

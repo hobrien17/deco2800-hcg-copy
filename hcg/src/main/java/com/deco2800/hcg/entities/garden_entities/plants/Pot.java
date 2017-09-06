@@ -79,6 +79,7 @@ public class Pot extends AbstractEntity  {
 	 */
 	public void unlock() {
 		locked = false;
+		setThisTexture();
 	}
 	
 	/**
