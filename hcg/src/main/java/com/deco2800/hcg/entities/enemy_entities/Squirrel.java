@@ -1,5 +1,9 @@
-package com.deco2800.hcg.entities;
+package com.deco2800.hcg.entities.enemy_entities;
 
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;

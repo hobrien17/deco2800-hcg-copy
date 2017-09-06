@@ -1,6 +1,11 @@
-package com.deco2800.hcg.entities;
+package com.deco2800.hcg.entities.enemy_entities;
 
 import com.badlogic.gdx.math.Vector3;
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Bullet;
+import com.deco2800.hcg.entities.Character;
+import com.deco2800.hcg.entities.Harmable;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
@@ -17,7 +22,7 @@ import java.util.Random;
 
 import static java.lang.Math.*;
 
-public abstract class Enemy extends AbstractEntity implements Lootable, Harmable {
+public abstract class Enemy extends Character implements Lootable, Harmable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
@@ -27,8 +32,6 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
     protected int status;
     protected int ID;
     protected transient Map<String, Double> lootRarity;
-    protected int health;
-    protected int strength;
     protected float speedX;
     protected float speedY;
     protected float randomX;
@@ -55,20 +58,25 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      */
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
                    int health, int strength, int ID) {
-        super(posX, posY, posZ, xLength, yLength, zLength, 1, 1, centered);
+        super(posX, posY, posZ, xLength, yLength, zLength, centered);
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         status = 1;
-        if (ID > 0) {
+        if (ID >= 0) {
             this.ID = ID;
         } else {
             throw new IllegalArgumentException();
         }
-        this.health = health;
-        this.strength = strength;
+        this.healthCur = health;
+        this.attributes.put("strength", strength);
+        this.attributes.put("vitality", 1);
+        this.attributes.put("agility", 1);
+        this.attributes.put("charisma", 1);
+        this.attributes.put("intellect", 1);
+        this.healthMax = 1000;
         this.speedX = 0;
         this.speedY = 0;
         this.level = 1;
-        this.movementSpeed = (float)(this.level * 0.01);
+        this.movementSpeed = (float)(this.level * 0.03);
 		// Effects container 
 		myEffects = new Effects(this);
     }
@@ -107,11 +115,11 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
         if (damage < 0){
             throw new IllegalArgumentException();
         }
-        else if (damage > health){
-            health = 0;
+        else if (damage > healthCur){
+            healthCur = 0;
         }
         else {
-            health -= damage;
+            healthCur -= damage;
         }
     }
     
@@ -120,32 +128,9 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      * @return the strength of the enemy
      */
     public int getStrength() {
-        return strength;
+        return this.getAttribute("strength");
     }
     
-    /**
-     * Get the current level of the enemy
-     */
-    public int getLevel() {
-        return this.level;
-    }
-    
-    /**
-     * Set the level of the enemy
-     * @param level: the new level of the enemy
-     * 
-     */
-    public void setLevel(int level) {
-        this.level = level;
-    }
-    
-    /**
-     * 
-     * @return the health of the enemy
-     */
-    public int getHealth() {
-        return this.health;
-    }
 
     /**
      * Change the health level of the enemy i.e can increase or decrease the health level (depending on whether the amount is positive or negative)
@@ -153,7 +138,7 @@ public abstract class Enemy extends AbstractEntity implements Lootable, Harmable
      * @param amount: the amount that the health level will change by
      */
     public void changeHealth(int amount) {
-        health = Math.max(health + amount, 0);
+        healthCur = Math.max(healthCur + amount, 0);
     }
 
     /**

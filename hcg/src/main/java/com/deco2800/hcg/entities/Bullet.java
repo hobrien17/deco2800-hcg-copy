@@ -4,7 +4,7 @@ package com.deco2800.hcg.entities;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
-import com.deco2800.hcg.entities.Enemy;
+import com.deco2800.hcg.entities.enemy_entities.Enemy;
 
 import java.util.List;
 

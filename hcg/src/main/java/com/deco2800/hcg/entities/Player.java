@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
+import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
