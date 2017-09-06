@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import com.deco2800.hcg.entities.AbstractEntity;
@@ -32,32 +33,28 @@ public class Planter implements KeyUpObserver {
 				Pot pot = (Pot)closest.get();
 				if(keycode == 8) {
 					pot.addPlant(new Sunflower(pot));
-					pot.getPlant().setName("Sunflower");
-					plantManager.addPlants(pot.getPlant());
-					plantManager.updateLabel();
+					updateManager(pot);
 				} else if(keycode == 9) {
 					pot.addPlant(new Cactus(pot));
-                    pot.getPlant().setName("Cactus");
-                    plantManager.addPlants(pot.getPlant());
-                    plantManager.updateLabel();
+					updateManager(pot);
 				} else if(keycode == 10) {
 					pot.addPlant(new Water(pot));
-                    pot.getPlant().setName("Water");
-                    plantManager.addPlants(pot.getPlant());
-                    plantManager.updateLabel();
+					updateManager(pot);
 				} else if(keycode == 11) {
 					pot.addPlant(new Grass(pot));
-                    pot.getPlant().setName("Grass");
-                    plantManager.addPlants(pot.getPlant());
-                    plantManager.updateLabel();
+					updateManager(pot);
 				} else if(keycode == 12) {
-					pot.addPlant(new Inferno(pot));
-                    pot.getPlant().setName("Inferno");
-                    plantManager.addPlants(pot.getPlant());
-                    plantManager.updateLabel();
+					pot.addPlant(new Inferno(pot));  
+					updateManager(pot);
 				}
-				
 			} 
+		}
+	}
+	
+	private void updateManager(Pot pot) {
+		if(!pot.isEmpty()) {
+			plantManager.addPlants(pot.getPlant());
+			plantManager.updateLabel();
 		}
 	}
 

@@ -9,7 +9,8 @@ import com.deco2800.hcg.entities.AbstractEntity;
  */
 public class Pot extends AbstractEntity  {
 	
-	AbstractGardenPlant plant;
+	protected AbstractGardenPlant plant;
+	private boolean locked;
 
 	/**
 	 * Creates a pot at the given position
@@ -20,6 +21,7 @@ public class Pot extends AbstractEntity  {
 	public Pot(float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.7f, 0.7f, 1, 1f, 1f, false);
 		plant = null;
+		locked = true;
 		setThisTexture();
 	}
 	
@@ -30,7 +32,7 @@ public class Pot extends AbstractEntity  {
 	 * @return true if the plant was added, false if it could not be added
 	 */
 	public boolean addPlant(AbstractGardenPlant plant) {
-		if(this.plant == null) {
+		if(this.plant == null && !locked) {
 			this.plant = plant;
 			setThisTexture();
 			return true;
@@ -62,9 +64,29 @@ public class Pot extends AbstractEntity  {
 	 */
 	public void setThisTexture() {
 		if(plant == null) {
-			this.setTexture("pot");
+			if(locked) {
+				this.setTexture("pot");
+			} else {
+				this.setTexture("pot");
+			}
 		} else {
 			this.setTexture(plant.getThisTexture());
 		}
+	}
+	
+	/**
+	 * Unlocks the pot, allowing it to be planted in
+	 */
+	public void unlock() {
+		locked = false;
+	}
+	
+	/**
+	 * Determines whether the pot is empty or not
+	 * 
+	 * @return true if no plant is planted inside, otherwise false
+	 */
+	public boolean isEmpty() {
+		return plant == null;
 	}
 }
