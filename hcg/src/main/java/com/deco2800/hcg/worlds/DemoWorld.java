@@ -6,14 +6,23 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
+import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
+import com.deco2800.hcg.entities.garden_entities.plants.Water;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
+import com.deco2800.hcg.entities.turrets.FireTurret;
+import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeState;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.entities.NPC;
+import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Initial world using preset world file.
@@ -40,6 +49,15 @@ public class DemoWorld extends AbstractWorld {
 		for(int i = 0; i < 4; i++) {
 			pots[i] = new Pot(20, 10 + 2*i, 0);
 			this.addEntity(pots[i]);
+		}
+		
+		Corpse corpse = new BasicCorpse(12, 12, 0, "sunflower_01");
+		this.addEntity(corpse);
+		corpse.plantInside(new Seed(Seed.Type.FIRE));
+		
+		Random random = new Random();
+		for(int i = 0; i < 20; i++) {
+			this.addEntity(new Squirrel(random.nextFloat() * 20, random.nextFloat() * 20, 0,i+1));
 		}
 						
 	    // loop over all object layers
@@ -89,7 +107,7 @@ public class DemoWorld extends AbstractWorld {
 
 	    }
 
-		/**
+		/*
 		 * plant some trees (terrain entity) - @ken
 		 */
 		//trees lining the path

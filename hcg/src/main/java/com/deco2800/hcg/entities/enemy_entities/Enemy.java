@@ -38,6 +38,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected float randomY;
     protected float lastPlayerX;
     protected float lastPlayerY;
+    protected float normalSpeed;
     protected float movementSpeed;
 
 	// Effects container
@@ -77,6 +78,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.speedY = 0;
         this.level = 1;
         this.movementSpeed = (float)(this.level * 0.03);
+
 		// Effects container 
 		myEffects = new Effects(this);
     }
@@ -388,6 +390,34 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
                 .unproject(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
         Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y, thisEnemy);
         GameManager.get().getWorld().addEntity(bullet);
+    }
+    
+    /**
+     * Changes the speed by modifier amount
+     * 
+     * @param modifier 
+     * 			the amount to change the speed (<1 to slow,  >1 to speed)
+     */
+    public void changeSpeed(float modifier) {
+    	this.movementSpeed *= modifier;
+    }
+    
+    /**
+     * Sets the movement speed of the enemy
+     * 
+     * @param speed
+     * 			the new movement speed
+     */
+    public void setSpeed(float speed) {
+    	this.movementSpeed = speed;
+    }
+    
+    /**
+     * Sets the enemy's speed to its original value
+     * 
+     */
+    public void resetSpeed() {
+    	this.movementSpeed = normalSpeed;
     }
 	
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working

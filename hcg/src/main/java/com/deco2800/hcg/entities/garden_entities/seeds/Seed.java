@@ -2,40 +2,44 @@ package com.deco2800.hcg.entities.garden_entities.seeds;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
-import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
-import com.deco2800.hcg.entities.garden_entities.plants.Grass;
-import com.deco2800.hcg.entities.garden_entities.plants.Ice;
-import com.deco2800.hcg.entities.garden_entities.plants.Inferno;
-import com.deco2800.hcg.entities.garden_entities.plants.Pot;
-import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
-import com.deco2800.hcg.entities.garden_entities.plants.Water;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.garden_entities.plants.*;
+import com.deco2800.hcg.entities.turrets.*;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.GameManager;
 
 public class Seed implements Item {
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+
 	/**
-	 * Stores the many different types of seeds in the game	 *
+	 * Stores the many different types of seeds in the game *
 	 */
 	public enum Type {
-		SUNFLOWER ("gardening_seed", Sunflower.class),
-		EXPLOSIVE ("explosive_seed", Cactus.class),
-		FIRE ("fire_seed", Inferno.class),
-		GRASS ("grass_seed", Grass.class),
-		ICE ("ice_seed", Ice.class),
-		WATER ("water_seed", Water.class);
-		
+		SUNFLOWER("gardening_seed", Sunflower.class, SunflowerTurret.class), 
+		EXPLOSIVE("explosive_seed", Cactus.class, ExplosiveTurret.class), 
+		FIRE("fire_seed", Inferno.class, FireTurret.class), 
+		GRASS("grass_seed",	Grass.class, null), 
+		ICE("ice_seed", Ice.class, IceTurret.class), 
+		WATER("water_seed", Water.class, null);
+
 		private String texture;
-		
+		private Class<? extends AbstractGardenPlant> plant;
+		private Class<? extends AbstractTurret> turret;
+
 		/**
 		 * Constructor for creating a new seed type
 		 */
-		private Class<? extends AbstractGardenPlant> plant;
-		Type(String textureName, Class<? extends AbstractGardenPlant> plantClass) {
+		Type(String textureName, Class<? extends AbstractGardenPlant> plantClass,
+				Class<? extends AbstractTurret> turretClass) {
 			texture = textureName;
 			plant = plantClass;
+			turret = turretClass;
 		}
-		
+
 		/**
 		 * Returns the seed's texture
 		 * 
@@ -44,7 +48,7 @@ public class Seed implements Item {
 		private String getTexture() {
 			return texture;
 		}
-		
+
 		/**
 		 * Returns the type of plant that this seed grows into
 		 * 
@@ -53,14 +57,19 @@ public class Seed implements Item {
 		private Class<? extends AbstractGardenPlant> getPlant() {
 			return plant;
 		}
+
+		private Class<? extends AbstractTurret> getTurret() {
+			return turret;
+		}
 	}
-	
+
 	private Type type;
-	
+
 	/**
 	 * Constructor for a new seed with Type type
 	 * 
-	 * @param type the type of seed
+	 * @param type
+	 *            the type of seed
 	 */
 	public Seed(Type type) {
 		this.type = type;
@@ -113,7 +122,7 @@ public class Seed implements Item {
 
 	@Override
 	public void setTexture(String texture) throws IllegalArgumentException {
-		//to implement
+		// to implement
 	}
 
 	@Override
@@ -133,13 +142,13 @@ public class Seed implements Item {
 
 	@Override
 	public boolean equals(Item item) throws IllegalArgumentException {
-		if(item instanceof Seed) {
-			Seed other = (Seed)item;
+		if (item instanceof Seed) {
+			Seed other = (Seed) item;
 			return type.toString().equals(other.getType().toString());
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns the type of seed
 	 * 
@@ -148,22 +157,37 @@ public class Seed implements Item {
 	public Type getType() {
 		return type;
 	}
-	
+
 	/**
 	 * Returns a new plant, depending on the seed's type
 	 * 
-	 * @param pot The pot this plant is to be planted in
-	 * @return A new plant
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
+	 * @param pot
+	 *            The pot this plant is to be planted in
 	 */
-	public AbstractGardenPlant getNewPlant(Pot pot) throws InstantiationException, IllegalAccessException, 
-						IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		return type.getPlant().getDeclaredConstructor(Pot.class).newInstance(pot);
+	public AbstractGardenPlant getNewPlant(Pot pot) {
+		try {
+			return type.getPlant().getDeclaredConstructor(Pot.class).newInstance(pot);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException ex) {
+			LOGGER.error("Error creating new object: " + ex.getStackTrace());
+			return null;
+		}
+	}
+
+	/**
+	 * Returns a new plant, depending on the seed's type
+	 * 
+	 * @param corpse
+	 *            The corpse this plant is to be planted in
+	 */
+	public AbstractTurret getNewTurret(Corpse corpse) {
+		try {
+			return type.getTurret().getDeclaredConstructor(Corpse.class).newInstance(corpse);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException ex) {
+			LOGGER.error("Error creating new object: " + ex.getStackTrace());
+			return null;
+		}
 	}
 
 }

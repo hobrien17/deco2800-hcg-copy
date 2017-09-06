@@ -67,6 +67,9 @@ public class TextureManager extends Manager {
 		textureMap.put("inferno_01", new Texture("resources/sprites/plants/inferno_01.png"));
 		textureMap.put("inferno_02", new Texture("resources/sprites/plants/inferno_02.png"));
 		textureMap.put("inferno_03", new Texture("resources/sprites/plants/inferno_03.png"));
+		textureMap.put("ice_01", new Texture("resources/sprites/plants/Christmas_01.png"));
+		textureMap.put("ice_02", new Texture("resources/sprites/plants/Christmas_02.png"));
+		textureMap.put("ice_03", new Texture("resources/sprites/plants/Christmas_03.png"));
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 
