@@ -5,6 +5,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.weapons.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * A generic player instance for the game
  */
 public class Squirrel extends Enemy implements Tickable {
+
 
 	// private float speed = 0.03f;
 	private boolean collided;
@@ -30,6 +32,12 @@ public class Squirrel extends Enemy implements Tickable {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
 		this.setTexture("squirrel");
 		this.level = 1;
+		this.enemyWeapon = new WeaponBuilder()
+				.setWeaponType(WeaponType.MACHINEGUN)
+				.setUser(this)
+				.setCooldown(50)
+				.setTexture("battle_seed")
+				.build();
 	}
 
 	@Override
@@ -60,6 +68,8 @@ public class Squirrel extends Enemy implements Tickable {
 			newPos = this.randomMove();
 		} else if (this.getStatus() == 2){
 			newPos = this.moveToPlayer();
+			enemyWeapon.updatePosition((int)this.getPosX(), (int)this.getPosY());
+			this.shoot();
 		} else if (this.getStatus() == 3){
 			newPos = this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
 		} else {
