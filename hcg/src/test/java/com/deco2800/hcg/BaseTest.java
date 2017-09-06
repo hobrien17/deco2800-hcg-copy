@@ -11,9 +11,12 @@ import org.junit.BeforeClass;
 import org.mockito.Mockito;
 
 /**
+ * Initialises libGDX in preparation for testing.
+ * All tests that depend on libGDX code should extend this class.
+ *
  * Created by josh on 8/07/2017.
  */
-public class BaseTest {
+public abstract class BaseTest {
 
     private static Application game;
 

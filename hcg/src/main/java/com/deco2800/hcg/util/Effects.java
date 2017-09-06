@@ -34,7 +34,9 @@ public class Effects {
      */
     public Effects(AbstractEntity owner) {
         // Check for valid arguments
-        if (owner == null) throw new NullPointerException("Reference to owner cannot be null.");
+        if (owner == null) {
+            throw new NullPointerException("Reference to owner cannot be null.");
+        }
 
         // Set the class properties to the supplied values and initialise the effects set.
         this.owner = owner;
@@ -54,8 +56,12 @@ public class Effects {
      */
     public Effects(AbstractEntity owner, Collection<Effect> effects) {
         // Check for valid arguments
-        if (owner == null) throw new NullPointerException("Reference to owner cannot be null.");
-        if (effects == null) throw new NullPointerException("Effects collection cannot be null.");
+        if (owner == null) {
+            throw new NullPointerException("Reference to owner cannot be null.");
+        }
+        if (effects == null) {
+            throw new NullPointerException("Effects collection cannot be null.");
+        }
 
         // Set the class properties to the supplied values and initialise the effects set.
         this.owner = owner;
@@ -101,21 +107,35 @@ public class Effects {
         // Do things depending on the level of the new effect, and whether it overrides a current effect.
         for (Effect effect : currentEffects) {
             // Only do things if the type of effects are the same
-            if (effect.getName().toUpperCase().equals(newEffect.getName().toUpperCase())) {
-                if (newEffect.getLevel() - effect.getLevel() > 0) {         // new effect is stronger
-                    removeEffect(effect);
-                    return addEffect(newEffect);
-                } else if (newEffect.getLevel() - effect.getLevel() == 0) { // effects are the same level
-                    effect.resetUseCounter();
-                    return true;
-                } else {    // new effect is weaker
-                    return false;
-                }
+            if (!checkNames(effect.getName(), newEffect.getName())) { continue; }
+
+            if (newEffect.getLevel() - effect.getLevel() > 0) {         // new effect is stronger
+                removeEffect(effect);
+                return addEffect(newEffect);
+            } else if (newEffect.getLevel() - effect.getLevel() == 0) { // effects are the same level
+                effect.resetUseCounter();
+                // We only want to reset the cooldowns on effects that don't apply damage, otherwise lots of
+                // extra damage would be added each time the effect is given to the entity.
+                if (effect.getDamage() == 0) effect.resetCooldownTimer();
+                return true;
+            } else {    // new effect is weaker
+                return false;
             }
         }
 
         // new effect doesn't override any existing effect
         return currentEffects.add(newEffect);
+    }
+
+    /**
+     * Checks whether two names are the same.
+     *
+     * @param name1 The first name to be checked, a string.
+     * @param name2 The second name to be checked, a string.
+     * @return Returns true if the two strings are equal, false otherwise.
+     */
+    private boolean checkNames(String name1, String name2) {
+        return name1.toUpperCase().equals(name2.toUpperCase());
     }
 
     /**
@@ -132,7 +152,8 @@ public class Effects {
         boolean newChange = false;
 
         // Check for valid arguments
-        if (effects == null) throw new NullPointerException("Effects collection to be added cannot be null.");
+        if (effects == null)
+          throw new NullPointerException("Effects collection to be added cannot be null.");
 
         for (Effect effect : effects) {
             if (addEffect(effect)) newChange = true;
@@ -153,7 +174,8 @@ public class Effects {
     public boolean removeEffect(Effect effect) {
         // TODO check to make sure the effects are actually in there
         // Check for valid arguments
-        if (effect == null) throw new NullPointerException("Effect to be removed cannot be null.");
+        if (effect == null)
+          throw new NullPointerException("Effect to be removed cannot be null.");
 
         return currentEffects.remove(effect); // HashSet will only remove an effect if it is present
     }
@@ -176,8 +198,10 @@ public class Effects {
     public void apply() {
         for (Effect effect : currentEffects) {
             if (effect.getUseCount() == 0) {
-                currentEffects.remove(effect);
-                continue;
+                if (!effect.onCooldown()) {
+                    currentEffects.remove(effect);
+                    continue;
+                }
             } else {
                 effect.decrementUses();
             }
@@ -201,8 +225,10 @@ public class Effects {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+          return true;
+        if (o == null || getClass() != o.getClass())
+          return false;
 
         Effects effects = (Effects) o;
 

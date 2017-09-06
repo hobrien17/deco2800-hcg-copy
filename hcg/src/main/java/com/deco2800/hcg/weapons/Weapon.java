@@ -1,7 +1,5 @@
 package com.deco2800.hcg.weapons;
 
-import java.util.Random;
-
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Bullet;
@@ -70,11 +68,19 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.setTexture(texture);
         this.cooldown = cooldown;
     }
-    
+
+    /**
+     * Returns the type of the weapon
+     * @return the type of the weapon
+     */
     public WeaponType getWeaponType() {
         return weaponType;
     }
-    
+
+    /**
+     * Returns the weapon's user
+     * @return the user of the weapon
+     */
     public AbstractEntity getUser() {
         return user;
     }
@@ -186,9 +192,12 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o)
+          return true;
+        if (o == null || getClass() != o.getClass())
+          return false;
+        if (!super.equals(o))
+          return false;
 
         Weapon weapon = (Weapon) o;
 

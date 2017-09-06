@@ -70,6 +70,7 @@ subprojects {
         // Headless gdx
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+		
     }
 
     sourceSets {

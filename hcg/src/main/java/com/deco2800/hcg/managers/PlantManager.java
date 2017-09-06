@@ -20,6 +20,9 @@ public class PlantManager extends Manager {
 	private Label plantInfo;
 	private Window plantWindow;
 
+	/**
+	 * Creates a new PlantManager
+	 */
 	public PlantManager() {
 		plantList = new ArrayList<>();
 	}
@@ -59,6 +62,10 @@ public class PlantManager extends Manager {
 		this.plantInfo = label;
 	}
 
+	/**
+	 * Sets the window for the manager
+	 * @param plantWindow the Window to set it to
+	 */
 	public void setPlantWindow(Window plantWindow) {
 		this.plantWindow = plantWindow;
 	}

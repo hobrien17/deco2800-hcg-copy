@@ -1,7 +1,5 @@
 package com.deco2800.hcg.util;
 
-import java.lang.IllegalArgumentException;
-
 /**
  * An effect class to store all the properties of an effect. Effects may be added to an Effects container which
  * each harmable entity has.
@@ -24,7 +22,7 @@ public class Effect {
     /**
      * Creates a new Effect with the given properties.
      *
-     * @param name The name of the effect, a non-null string.
+     * @param name The name of the effect, a non-null string. Cannot be empty.
      * @param level The level of the effect, an integer greater than 0.
      * @param damage The damage caused each application, an integer greater than or equal to 1.
      * @param slowAmount The amount the player is slowed. Expressed as a percentage between 0 and 1. 0 is no slow
@@ -41,13 +39,32 @@ public class Effect {
      */
     public Effect(String name, int level, int damage, double slowAmount, int cooldown, int duration, int delay) {
         // Check for valid arguments
-        if (name == null) throw new NullPointerException("Effect name cannot be null.");
-        if (!(level >= 1)) throw new IllegalArgumentException("Level must be a positive integer and at least 1.");
-        if (!(damage >= 0)) throw new IllegalArgumentException("Damage must be a positive integer.");
-        if (!(slowAmount >= 0 && slowAmount <= 1)) throw new IllegalArgumentException("Slow amount must be between 0 and 1.");
-        if (!(cooldown >= 0)) throw new IllegalArgumentException("Cooldown must be a positive integer.");
-        if (!(duration >= 0)) throw new IllegalArgumentException("Duration must be a positive integer.");
-        if (!(delay >= 0)) throw new IllegalArgumentException("Delay must be a positive integer.");
+        if (name == null) {
+            throw new NullPointerException("Effect name cannot be null.");
+        }
+
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Effect name cannot be empty.");
+        }
+
+        if (!(level >= 1)) {
+            throw new IllegalArgumentException("Level must be a positive integer and at least 1.");
+        }
+        if (!(damage >= 0)) {
+            throw new IllegalArgumentException("Damage must be a positive integer.");
+        }
+        if (!(slowAmount >= 0 && slowAmount <= 1)) {
+            throw new IllegalArgumentException("Slow amount must be between 0 and 1.");
+        }
+        if (!(cooldown >= 0)) {
+            throw new IllegalArgumentException("Cooldown must be a positive integer.");
+        }
+        if (!(duration >= 0)) {
+            throw new IllegalArgumentException("Duration must be a positive integer.");
+        }
+        if (!(delay >= 0)) {
+            throw new IllegalArgumentException("Delay must be a positive integer.");
+        }
 
         // Set the class properties to the supplied values
         this.name = name;
@@ -76,7 +93,9 @@ public class Effect {
     /**
      * Resets the use counter back to the defined duration.
      */
-    public void resetUseCounter() { useCounter = duration; }
+    public void resetUseCounter() {
+        useCounter = duration;
+    }
 
     /**
      * Resets the effect's active cooldown timer.
@@ -97,7 +116,9 @@ public class Effect {
      *
      * @return Returns a positive integer (minimum of 1) denoting the level.
      */
-    public int getLevel() { return level; }
+    public int getLevel() {
+        return level;
+    }
 
     /**
      * Returns the amount of damage caused by the effect when it is applied.
@@ -113,7 +134,9 @@ public class Effect {
      *
      * @return Returns a positive integer denoting number of uses left.
      */
-    public int getUseCount() { return useCounter; }
+    public int getUseCount() {
+        return useCounter;
+    }
 
     /**
      * Returns the number of times the effect may be applied (duration).
@@ -129,21 +152,27 @@ public class Effect {
      *
      * @return Returns a string denoting the name.
      */
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     /**
      * Returns the cooldown time of the effect.
      *
      * @return Returns an integer denoting the cooldown time (in ms).
      */
-    public int getCooldown() { return cooldown; }
+    public int getCooldown() {
+        return cooldown;
+    }
 
     /**
      * Returns the delay time of the effect.
      *
      * @return Returns an integer denoting the delay time (in ms).
      */
-    public int getDelay() { return delay; }
+    public int getDelay() {
+        return delay;
+    }
 
     /**
      * Returns the amount of slow caused by the effect when it is applied.
@@ -163,16 +192,23 @@ public class Effect {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+          return true;
+        if (o == null || getClass() != o.getClass())
+          return false;
 
         Effect effect = (Effect) o;
 
-        if (level != effect.level) return false;
-        if (damage != effect.damage) return false;
-        if (duration != effect.duration) return false;
-        if (cooldown != effect.cooldown) return false;
-        if (delay != effect.delay) return false;
+        if (level != effect.level)
+          return false;
+        if (damage != effect.damage)
+          return false;
+        if (duration != effect.duration)
+          return false;
+        if (cooldown != effect.cooldown)
+          return false;
+        if (delay != effect.delay)
+          return false;
 
         return Double.compare(effect.slowAmount, slowAmount) == 0
                 && (name != null ? name.equals(effect.name) : effect.name == null);

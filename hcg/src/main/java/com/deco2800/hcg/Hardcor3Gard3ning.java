@@ -1,9 +1,5 @@
 package com.deco2800.hcg;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,7 +12,6 @@ import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worldmapui.MapGenerator;
 import com.deco2800.hcg.worlds.BlankTestWorld;
@@ -38,6 +33,7 @@ public class Hardcor3Gard3ning extends Game {
 	private PlantManager plantManager;
 	private ItemManager itemManager;
 	private StopwatchManager stopwatchManager;
+	private MessageManager messageManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -97,25 +93,8 @@ public class Hardcor3Gard3ning extends Game {
         stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
         stopwatchManager.startTimer(1);
         
-        /**
-		 * Multiplayer chat prompt
-		 */
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		(new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (!Thread.interrupted()) {
-					try {
-						String line = reader.readLine();
-						if (NetworkState.isInitialised()) {
-							NetworkState.sendChatMessage(line);
-						}
-					} catch (IOException e) {
-						continue;
-					}
-				}
-			}
-		})).start();
+        /* Create a message manager */
+        messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
 
         // Procedurally generate the world map and store it.
         MapGenerator mapGenerator = new MapGenerator(levelList);

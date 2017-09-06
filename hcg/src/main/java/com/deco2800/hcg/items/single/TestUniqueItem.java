@@ -9,7 +9,12 @@ import com.deco2800.hcg.items.SingleItem;
  */
 public class TestUniqueItem extends SingleItem {
     private String uniqueData;
-    
+
+    /**
+     * Creates a new item to run tests with
+     * @param name the name of the item
+     * @param weight the weight of the item
+     */
     public TestUniqueItem(String name, int weight) {
         this.baseValue = 100;
         this.itemWeight = weight;

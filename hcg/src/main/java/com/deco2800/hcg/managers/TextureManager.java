@@ -70,6 +70,19 @@ public class TextureManager extends Manager {
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 
+		// Miscellaneous textures
+		textureMap.put("error", new Texture("resources/misc/error.png"));
+
+		//Terrain objects
+		textureMap.put("wallblock", new Texture("resources/terrain_objects/wallblock.png"));
+		//trees
+		textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
+		textureMap.put("tree_leafless", new Texture("resources/terrain_objects/tree_dead_01.png"));
+		textureMap.put("tree_budding", new Texture("resources/terrain_objects/tree_budding_01.png"));
+		textureMap.put("tree_fruiting", new Texture("resources/terrain_objects/tree_fruit_01.png"));
+		textureMap.put("tree_snowy", new Texture("resources/terrain_objects/tree_snow_01.png"));
+		textureMap.put("tree_flaming", new Texture("resources/terrain_objects/tree_flame_01.png"));
+
 		//NPCs
 		textureMap.put("character_1", new Texture("resources/sprites/npc/basic_character.png"));
 		textureMap.put("character_shop", new Texture("resources/sprites/npc/shop_keeper.png"));
@@ -89,6 +102,12 @@ public class TextureManager extends Manager {
 		textureMap.put("menu_go_button", new Texture("resources/ui/main_menu/menu_go_button.png"));
 		textureMap.put("menu_host_button", new Texture("resources/ui/main_menu/menu_host_button.png"));
 		textureMap.put("menu_back_button", new Texture("resources/ui/main_menu/menu_back_button.png"));
+
+		//Perks
+		textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
+		textureMap.put("red_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
+		textureMap.put("purple_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
+		textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
 
 		//Shop textures
 		textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_name.png"));
@@ -122,7 +141,6 @@ public class TextureManager extends Manager {
 			return textureMap.get(id);
 		} else {
 			LOGGER.error("No texture exists: " + id);
-			System.err.println("No texture exists: " + id); //FIXME logger is currently broken
 			return null;
 		}
 

@@ -13,7 +13,14 @@ public class Quest {
 	private Item itemToReward; //what the player will receive for doing the quest
 	private Item itemRequested; //what the player needs to have in order to complete the quest
 	private boolean completed; //whether the quest is completed or not 
-	
+
+	/**
+	 * Creates a new Quest with the given parameteres
+	 * @param instruction the instructions of the quest
+	 * @param itemRequested the item required to complete the quest
+	 * @param itemToReward the item being rewarded by the quest
+	 * @throws IllegalArgumentException
+	 */
 	public Quest(String instruction, Item itemRequested, Item itemToReward) throws IllegalArgumentException {
 		if("".equals(instruction) || itemRequested == null || itemToReward == null){
 			throw new IllegalArgumentException(); 

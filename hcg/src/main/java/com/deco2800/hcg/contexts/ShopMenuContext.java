@@ -28,6 +28,9 @@ public class ShopMenuContext extends UIContext {
     private ImageButton shopExit;
     private Table centreTable;
 
+    /**
+     * Constructor for the ShopMenuContext
+     */
     public ShopMenuContext() {
 
         // Get necessary managers

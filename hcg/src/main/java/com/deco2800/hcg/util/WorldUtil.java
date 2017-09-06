@@ -24,7 +24,7 @@ public class WorldUtil {
 		double distance = Double.MAX_VALUE;
 		for (Renderable r : GameManager.get().getWorld().getEntities()) {
 
-			double tempDistance = Math.sqrt(Math.pow((r.getPosX() - x), 2) + Math.pow((r.getPosY() - y), 2));
+			double tempDistance = Math.sqrt(Math.pow(r.getPosX() - x, 2) + Math.pow(r.getPosY() - y, 2));
 
 			if (tempDistance < distance) {
 				// Closer than current closest
@@ -52,7 +52,7 @@ public class WorldUtil {
 		double distance = Double.MAX_VALUE;
 		for (Renderable r : GameManager.get().getWorld().getEntities()) {
 			if (type.isInstance(r)) {
-				double tempDistance = Math.sqrt(Math.pow((r.getPosX() - x), 2) + Math.pow((r.getPosY() - y), 2));
+				double tempDistance = Math.sqrt(Math.pow(r.getPosX() - x, 2) + Math.pow(r.getPosY() - y, 2));
 
 				if (tempDistance < distance) {
 					// Closer than current closest

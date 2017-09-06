@@ -2,6 +2,10 @@ package com.deco2800.hcg.items;
 
 import com.deco2800.hcg.items.single.TestUniqueItem;
 
+/**
+ * The SingleItem class represents items that cannot be stacked.
+ * (i.e weapons, armor etc.)
+ */
 public abstract class SingleItem extends GenericItem {
     /**
      * Returns the current stack size of this item.

@@ -9,7 +9,12 @@ import com.deco2800.hcg.items.Item;
 public class FixedSizeInventory implements Inventory {
     private int size;
     private Item[] items;
-    
+
+    /**
+     * Constructor for the FixedSizeInventory class. It creates a new
+     * FixedSizeInventory of the given size
+     * @param size the size of the inventory
+     */
     public FixedSizeInventory(int size) {
         this.size = size;
         this.items = new Item[size];

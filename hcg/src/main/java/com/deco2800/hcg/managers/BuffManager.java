@@ -64,10 +64,9 @@ public class BuffManager {
     }
 
     /**
-     * Returns the buffs in the BuffManager.
+     * Returns the Buffs in the BuffManager.
      *
-     * @param buffName the name of the buff to get
-     * @return the buff with the given name
+     * @return a list of Buffs in theBuffManager
      */
     public ArrayList<Buff> getBuffs() {
 
