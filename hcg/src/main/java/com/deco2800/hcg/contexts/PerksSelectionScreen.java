@@ -51,6 +51,8 @@ public class PerksSelectionScreen extends UIContext{
 
         quitButton1 = new ImageButton(new Image(textureManager.getTexture("perk_place_holder")).getDrawable());
 
+        branch2.add(quitButton1);
+
         masterTable.add(branch1);
         masterTable.add(branch2);
         masterTable.add(branch3);
