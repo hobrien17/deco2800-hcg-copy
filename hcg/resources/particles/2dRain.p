@@ -164,4 +164,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-Untitled.png
+rainParticle.png
