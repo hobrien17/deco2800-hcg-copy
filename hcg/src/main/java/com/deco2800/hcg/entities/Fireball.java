@@ -20,10 +20,8 @@ public class Fireball extends Bullet {
 
 	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX-2.5f, posY, posZ, newX, newY, newZ, 3f, 3f, 1f, user);
-		this.setSpeed(0.2f);
+		this.speed = 0.2f;
 	}
-	
-	
 	
 	@Override
 	protected void removeEnemy(Enemy target) {
