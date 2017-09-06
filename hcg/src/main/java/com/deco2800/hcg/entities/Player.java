@@ -226,9 +226,10 @@ public class Player extends Character implements Tickable {
 	 *            the y position of mouse movement on the screen
 	 */
 	private void handleMouseMoved(int screenX, int screenY) {
-		if (NetworkState.isInitialised() && peerId == -1) {
-			NetworkState.sendInputMessage(InputType.MOUSE_MOVED.ordinal(), screenX, screenY);
-		}
+		// FIXME: mouse inputs currently saturate the server
+//		if (NetworkState.isInitialised() && peerId == -1) {
+//			NetworkState.sendInputMessage(InputType.MOUSE_MOVED.ordinal(), screenX, screenY);
+//		}
 		
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().updatePosition(screenX, screenY);
