@@ -1,5 +1,9 @@
 package com.deco2800.hcg.conversation;
 
+import com.deco2800.hcg.contexts.ConversationContext;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,84 +12,35 @@ import java.util.List;
  * @author Blake Bodycote
  */
 public class Conversation {
-	private List<String> conversation; // The sequence of questions asked by NPC if player chooses yes
-	private String greeting; // what the NPC says when the conversation is started
-	private String goodbye; // what the NPC says when the conversation is ended
-	private boolean active; // condition to check whether conversation is active
-	private int iterator; // used to iterate over the conversation
 
-	/**
-	 * Constructs a new conversation with the specified sentences/phrases. 
-	 * 
-	 * @param greeting - the generic greeting when conversation starts
-	 * @param goodbye - the generic goodbye when conversation stops
-	 * @param conversation - the collection of questions/sentences that will be iterated over when user answers yes
-	 */
-	public Conversation(String greeting, String goodbye, List<String> conversation) {
-		this.conversation = new ArrayList<String>();
-		for (String string : conversation) {
-			this.conversation.add(string);
-		}
-		this.greeting = greeting;
-		this.goodbye = goodbye;
-		active = false;
-		iterator = -1;
-		this.greeting = greeting;
+	private List<ConversationNode> nodes;
+	private ConversationNode currentNode;
+	private ConversationContext conversationContext;
+	private ContextManager contextManager;
+
+	public Conversation() { //TODO write a proper constructor
+		// Get necessary managers
+		GameManager gameManager = GameManager.get();
+		contextManager = (ContextManager)
+				gameManager.getManager(ContextManager.class);
+
+		nodes = new ArrayList<>();
+		currentNode = null;
 	}
 
-	/**
-	 * Used to evaluate whether or not the UI has to display the current
-	 * sentence
-	 * 
-	 * @return whether or not the conversation is active
-	 */
-	public boolean conversationActive() {
-		return this.active;
+	public void initiateConversation() {
+		conversationContext = new ConversationContext();
+		conversationContext.displayNode(currentNode);
+		contextManager.pushContext(conversationContext);
 	}
 
-	/**
-	 * Used to activate the conversation
-	 */
-	public void activateConversation() {
-		this.active = true;
+	void changeNode(ConversationNode target) {
+		currentNode = target;
+		conversationContext.displayNode(currentNode);
 	}
 
-	/**
-	 * Used to activate the conversation
-	 */
-	public void deactivateConversation() {
-		this.active = false;
-	}
-
-	/**
-	 * Return the specific greeting associated with the conversation
-	 * 
-	 * @return the greeting stored
-	 */
-	public String greet() {
-		return this.greeting;
-	}
-
-	/**
-	 * Move the conversation along to the next sentence/phrase and return it
-	 * 
-	 * @param answer
-	 *            the input given by the user on the UI. If user selects yes on
-	 *            the UI, answer == true. answer == false if user selects no.
-	 * @return the next sentence of the conversation
-	 */
-	public String nextSentence(boolean answer) {
-		if (answer == false) {
-			deactivateConversation();
-			return goodbye;
-		}
-		if (iterator == conversation.size() - 1) {
-			deactivateConversation();
-			iterator = -1;
-			return goodbye;
-		}
-		iterator++;
-		return conversation.get(iterator);
+	void endConversation() {
+		contextManager.popContext();
 	}
 
 }
