@@ -161,7 +161,8 @@ public class Bullet extends AbstractEntity implements Tickable {
 		pos.setY(getPosY());
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
-			if (entity instanceof Enemy && this.collidesWith(entity) && user instanceof Player) {
+			if (entity instanceof Enemy && this.collidesWith(entity) && (user instanceof Player || 
+					user instanceof Corpse)) {
 				Enemy target = (Enemy) entity;
 				removeEnemy(target);
 				break;

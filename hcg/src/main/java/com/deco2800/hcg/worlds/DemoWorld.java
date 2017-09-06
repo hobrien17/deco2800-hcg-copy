@@ -50,9 +50,9 @@ public class DemoWorld extends AbstractWorld {
 			this.addEntity(pots[i]);
 		}
 		
-		//Corpse corpse = new BasicCorpse(12, 12, 0, "sunflower_01");
-		//this.addEntity(corpse);
-		//corpse.plantInside(new Seed(Seed.Type.ICE));
+		Corpse corpse = new BasicCorpse(12, 12, 0, "sunflower_01");
+		this.addEntity(corpse);
+		corpse.plantInside(new Seed(Seed.Type.FIRE));
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {

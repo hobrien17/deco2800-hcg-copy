@@ -28,7 +28,7 @@ public class Planter implements KeyUpObserver {
     
 	@Override
 	public void notifyKeyUp(int keycode) {
-		if((keycode >= 8 && keycode <= 12) || keycode == 49) {
+		if((keycode >= 8 && keycode <= 13) || keycode == 49) {
 			PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 			Player player = pm.getPlayer();
 			float px = player.getPosX();
@@ -51,6 +51,9 @@ public class Planter implements KeyUpObserver {
 					updateManager(pot);
 				} else if(keycode == 12) {
 					pot.addPlant(new Inferno(pot));  
+					updateManager(pot);
+				} else if(keycode == 13) {
+					pot.addPlant(new Ice(pot));
 					updateManager(pot);
 				} else if(keycode == 49) {
 					pot.unlock();
