@@ -67,12 +67,12 @@ public class Squirrel extends Enemy implements Tickable {
 			newPos.setX(this.getPosX());
 			newPos.setY(this.getPosY());
 		}
+		collided = false;
 		AbstractWorld world = GameManager.get().getWorld();
 		if (world.getTiledMapTileLayerAtPos((int) newPos.getX(), (int) newPos.getY()) == null) {
 			collided = true;
 		}
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
-		collided = false;
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
 				if(entity instanceof Player) {
