@@ -353,6 +353,7 @@ public abstract class Character extends AbstractEntity {
     public void killLogAdd(int enemyID) {
         killLog.putIfAbsent(enemyID, 0);
         killLog.put(enemyID,1 + killLog.get(enemyID));
+        updateQuestLog();
     }
 
     /**
@@ -375,5 +376,13 @@ public abstract class Character extends AbstractEntity {
      */
     public boolean killLogContains(int enemyID) {
         return killLog.containsKey(enemyID);
+    }
+
+    /**
+     * Used to tell the quest log that things have changed. Which will be useful if 'notifications'
+     * are enabled to tell the player that they have competed a quest.
+     */
+    public void updateQuestLog() {
+        //Todo: Add the quest log function for updating.
     }
 }
