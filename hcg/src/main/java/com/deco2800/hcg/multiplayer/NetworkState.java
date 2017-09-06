@@ -15,7 +15,7 @@ import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.MessageManager;
-import com.deco2800.hcg.managers.PeerInputManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 
 /**
@@ -38,7 +38,7 @@ public final class NetworkState {
 	private static GameManager gameManager;
 	private static ContextManager contextManager;
 	private static MessageManager messageManager;
-	private static PeerInputManager peerInputManager;
+	private static PlayerInputManager playerInputManager;
 	private static PlayerManager playerManager;
 
 	private NetworkState() {}
@@ -55,7 +55,7 @@ public final class NetworkState {
 		gameManager = GameManager.get();
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 		messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
-		peerInputManager = (PeerInputManager) gameManager.getManager(PeerInputManager.class);
+		playerInputManager = (PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
 		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		
 		// initialise channel
@@ -188,44 +188,45 @@ public final class NetworkState {
 						// TODO: we need to communicate how many other players are already in the
 						//       game as well as their state, unless we only finalise that after
 						//       the host starts the game from the lobby
-						Player otherPlayer = new Player(0, 5, 10, 0);
+						Player otherPlayer = new Player(1, 5, 10, 0);
 						otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
 						playerManager.addPlayer(otherPlayer);
 						playerManager.spawnPlayers();
 						break;
 					case INPUT:
 						InputType inputType = InputType.values()[message.getPayloadInt(0)];
+						// TODO: handle input for more than one player
 						switch (inputType) {
 							case KEY_DOWN:
-								peerInputManager.keyDown(0, message.getPayloadInt(1));
+								playerInputManager.keyDown(1, message.getPayloadInt(1));
 								break;
 							case KEY_UP:
-								peerInputManager.keyUp(0, message.getPayloadInt(1));
+								playerInputManager.keyUp(1, message.getPayloadInt(1));
 								break;
 							case MOUSE_MOVED:
-								peerInputManager.mouseMoved(
-										0,
+								playerInputManager.mouseMoved(
+										1,
 										message.getPayloadInt(1),
 										message.getPayloadInt(2));
 								break;
 							case TOUCH_DOWN:
-								peerInputManager.touchDown(
-										0,
+								playerInputManager.touchDown(
+										1,
 										message.getPayloadInt(1),
 										message.getPayloadInt(2),
 										message.getPayloadInt(3),
 										message.getPayloadInt(4));
 								break;
 							case TOUCH_DRAGGED:
-								peerInputManager.touchDragged(
-										0,
+								playerInputManager.touchDragged(
+										1,
 										message.getPayloadInt(1),
 										message.getPayloadInt(2),
 										message.getPayloadInt(3));
 								break;
 							case TOUCH_UP:
-								peerInputManager.touchUp(
-										0,
+								playerInputManager.touchUp(
+										1,
 										message.getPayloadInt(1),
 										message.getPayloadInt(2),
 										message.getPayloadInt(3),

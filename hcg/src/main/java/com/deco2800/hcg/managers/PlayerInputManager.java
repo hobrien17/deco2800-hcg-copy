@@ -4,7 +4,7 @@ import com.deco2800.hcg.observers.*;
 
 import java.util.HashMap;
 
-public class PeerInputManager extends Manager {
+public class PlayerInputManager extends Manager {
 
     private HashMap<Integer, KeyDownObserver> keyDownListeners = new HashMap<>();
 
@@ -133,7 +133,6 @@ public class PeerInputManager extends Manager {
 	}
 
 	public void keyDown(Integer peer, int keycode) {
-		System.out.println("notify key down");
 		keyDownListeners.get(peer).notifyKeyDown(keycode);
 	}
 
