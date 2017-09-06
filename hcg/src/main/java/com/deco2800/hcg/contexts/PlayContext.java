@@ -1,27 +1,48 @@
 package com.deco2800.hcg.contexts;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.handlers.MouseHandler;
-import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.MessageManager;
+import com.deco2800.hcg.managers.PlantManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.multiplayer.Message;
 import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-import com.badlogic.gdx.graphics.Color;
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -68,6 +89,9 @@ public class PlayContext extends Context {
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private  Button chatButton;
+	
+	// TODO make sure this doesn't stay here.
+	private ShaderProgram shader;
 
 
     /**
@@ -238,6 +262,18 @@ public class PlayContext extends Context {
 				return true;
 			}
 		});
+		
+		FileHandle vertexShader;
+        FileHandle fragmentShader;
+        
+        vertexShader = Gdx.files.internal("resources/shaders/vertex.glsl");
+        fragmentShader = Gdx.files.internal("resources/shaders/fragment_default.glsl");
+        shader = new ShaderProgram(vertexShader, fragmentShader);
+        
+        if(!shader.isCompiled()) {
+            System.out.println("Shader didn't work");
+            shader = null;
+        }
 	}
 	
 	
@@ -255,7 +291,7 @@ public class PlayContext extends Context {
 		 * Create a new render batch. At this stage we only want one but perhaps we need
 		 * more for HUDs etc
 		 */
-		SpriteBatch batch = new SpriteBatch();
+		SpriteBatch batch = shader == null ? new SpriteBatch() : new SpriteBatch(1000, shader);
 
 		/*
 		 * Update the camera
