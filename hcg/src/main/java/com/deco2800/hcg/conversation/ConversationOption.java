@@ -44,4 +44,13 @@ public class ConversationOption {
         return optionText;
     }
 
+    // Needed for serialisation
+	ConversationNode getTarget() {
+		return target;
+	}
+    
+    // Needed for serialisation
+	ArrayList<AbstractConversationAction> getActions() {
+		return new ArrayList<>(actions);
+	}
 }

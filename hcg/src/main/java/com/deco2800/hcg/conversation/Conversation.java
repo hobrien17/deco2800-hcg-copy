@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Conversation {
 
-	private List<ConversationNode> conversationNodes;
+	private List<ConversationNode> conversationNodes;  // this must not contain duplicates
 	private ConversationNode currentNode;
 	private ConversationContext conversationContext;
 	private ContextManager contextManager;
@@ -38,7 +38,7 @@ public class Conversation {
 	 */
 	public Conversation(List<ConversationNode> conversationNodes,
 			ConversationNode initalNode) {
-		Conversation();
+		this();
 		setup(conversationNodes, initalNode);
 	}
 
@@ -48,7 +48,7 @@ public class Conversation {
 	 * @param conversationNodes list of all nodes in this conversation
 	 * @param currentNode reference to the first node to display
 	 */
-	public setup(List<ConversationNode> conversationNodes,
+	public void setup(List<ConversationNode> conversationNodes,
 			ConversationNode initalNode) {
 		this.conversationNodes = new ArrayList<>(conversationNodes);
 		currentNode = initalNode;
@@ -67,6 +67,11 @@ public class Conversation {
 
 	void endConversation() {
 		contextManager.popContext();
+	}
+	
+	// Needed for serialisation
+	List<ConversationNode> getConversationNodes() {
+		return new ArrayList<>(conversationNodes);
 	}
 
 }
