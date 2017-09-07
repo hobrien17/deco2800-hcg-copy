@@ -36,8 +36,7 @@ public class ItemEntity extends AbstractEntity implements Tickable {
     
     @Override
     public String getTexture() {
-        // TODO fix this
-        return "spacman";
+        return this.item.getTexture();
     }
     
     /**
