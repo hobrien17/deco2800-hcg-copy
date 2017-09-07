@@ -59,6 +59,10 @@ public abstract class Character extends AbstractEntity {
     // TODO: Message weapons team to find out what categories of weapons they will implement
     protected int meleeSkill;
 
+    //Kill Log
+    private HashMap<Integer,Integer> killLog;
+
+
     /**
      * Creates a new Character at the given position.
      * @param posX the x position
@@ -91,6 +95,8 @@ public abstract class Character extends AbstractEntity {
         this.healthCur = healthMax;
         this.meleeSkill = 1;
 
+        //Initialize the empty kill log
+        killLog = new HashMap<>();
     }
 
     /**
@@ -336,5 +342,47 @@ public abstract class Character extends AbstractEntity {
      */
     public int getMeleeSkill() {
         return meleeSkill;
+    }
+
+    /**
+     * Add a kill for the specified enemy ID. If it has not being killed before, add it to the kill log and
+     * set its kill count to 1.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     */
+    public void killLogAdd(int enemyID) {
+        killLog.putIfAbsent(enemyID, 0);
+        killLog.put(enemyID,1 + killLog.get(enemyID));
+        updateQuestLog();
+    }
+
+    /**
+     * Gets the amount of kills logged for the specified enemy ID. If it has not being killed before
+     * it returns 0 kills for that enemy.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     * @return The amount of times the specified enemy has being killed in the kill log.
+     */
+    public int killLogGet(int enemyID) {
+        return killLog.getOrDefault(enemyID,0);
+    }
+
+    /**
+     * Used to determine if a particular enemy type has being killed. More useful for determining if
+     * bosses or the like have being killed
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     * @return if the specified enemy has being killed before.
+     */
+    public boolean killLogContains(int enemyID) {
+        return killLog.containsKey(enemyID);
+    }
+
+    /**
+     * Used to tell the quest log that things have changed. Which will be useful if 'notifications'
+     * are enabled to tell the player that they have competed a quest.
+     */
+    public void updateQuestLog() {
+        //Todo: Add the quest log function for updating.
     }
 }

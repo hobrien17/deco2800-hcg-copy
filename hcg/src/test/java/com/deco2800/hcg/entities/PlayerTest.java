@@ -352,5 +352,25 @@ public class PlayerTest {
           player.getPosY() == 0);
 
     }
-	
+
+	@Test
+	public void playerKillLogTests() {
+		Player player = new Player(0, 0, 0);
+
+		int exampleID1 = 0;
+		int exampleID2 = 1;
+		int exampleID3 = 2;
+
+		assertEquals(0,player.killLogGet(exampleID1));
+		player.killLogAdd(exampleID1);
+		assertEquals(1,player.killLogGet(exampleID1));
+		assertEquals(true,player.killLogContains(exampleID1));
+		for (int i=0; i<10; i++) {
+			player.killLogAdd(exampleID2);
+		}
+		assertEquals(10,player.killLogGet(exampleID2));
+		assertEquals(1,player.killLogGet(exampleID1));
+		assertEquals(false,player.killLogContains(exampleID3));
+		assertEquals(0,player.killLogGet(exampleID3));
+	}
 }
