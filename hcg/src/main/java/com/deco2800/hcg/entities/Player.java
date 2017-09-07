@@ -3,7 +3,7 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
-import com.deco2800.hcg.inventory.PlayerEquipmentContext;
+import com.deco2800.hcg.contexts.PlayerEquipmentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -485,10 +485,12 @@ public class Player extends Character implements Tickable {
 			if (this.getEquippedWeapon() != null) {
 				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 			}
-			case Input.Keys.I:
-				//Display Inventory
-				System.out.println("Access player inventory");
-				contextManager.pushContext(new PlayerEquipmentContext());
+			break;
+        case Input.Keys.I:
+            //Display Inventory
+            System.out.println("Access player inventory");
+            contextManager.pushContext(new PlayerEquipmentContext(this));
+            break;
 		default:
 			break;
 		}
