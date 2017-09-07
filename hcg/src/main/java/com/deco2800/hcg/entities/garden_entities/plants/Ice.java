@@ -27,11 +27,11 @@ public class Ice extends AbstractGardenPlant {
 	public String getThisTexture() {
 		switch (this.getStage()) {
 		case SPROUT:
-			return "sunflower_01"; // sprites currently not implemented
+			return "ice_01"; // sprites currently not implemented
 		case SMALL:
-			return "sunflower_02";
+			return "ice_02";
 		case LARGE:
-			return "sunflower_03";
+			return "ice_03";
 		}
 		return null;
 
