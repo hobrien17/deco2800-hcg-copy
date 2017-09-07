@@ -340,7 +340,7 @@ public class PlayContext extends Context {
 	 */
 	@Override
 	public void dispose() {
-		// Don't need this at the moment
+	    shader.dispose();
 	}
 
 	@Override
