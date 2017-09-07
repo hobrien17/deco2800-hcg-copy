@@ -1,6 +1,7 @@
 package com.deco2800.hcg.contexts;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -50,6 +51,7 @@ public class MultiplayerMenuContext extends UIContext {
 		
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		
+		instructions = new ArrayList<>();
 		instructions.add("W = Move Character Forward");
 		instructions.add("S = Move Character Backward");
 		instructions.add("A = Move Character Left");
@@ -61,7 +63,7 @@ public class MultiplayerMenuContext extends UIContext {
 		instructions.add("U = Unlock pot");
 		instructions.add("1 - 6 = Plant a plant (when near a pot)");
 		
-		table = new Table();
+		table = new Table(skin);
 		table.setFillParent(true);
 		table.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 		
