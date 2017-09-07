@@ -17,7 +17,6 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeState;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
-import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.entities.NPC;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
@@ -32,7 +31,7 @@ import java.util.Random;
  * @author leggy
  */
 public class DemoWorld extends AbstractWorld {
-
+   
     /**
      * Constructor for DemoWorld
      */
@@ -76,7 +75,20 @@ public class DemoWorld extends AbstractWorld {
 
 	        int i = 0; // for enemy's because they need unique id's i guess
 	        
-	        while (objects.hasNext()) {
+	        // store layer name
+            String layerName = ((String) layer.getProperties().get("name")).toUpperCase();
+            
+            // make sure the layer has an associating entity type, otherwise we don't want to loop over the objects
+            Boolean found = false;
+            
+            // loop over all entities, make sure the entity exists
+            for(WorldEntities type : WorldEntities.values()){
+              if (type.toString().equals(layerName)){
+                found = true;
+              }
+            }
+            
+	        while (objects.hasNext() && found) {
 	          	          
 	          MapObject obj = objects.next();
 	                  
@@ -88,25 +100,9 @@ public class DemoWorld extends AbstractWorld {
 	          y/=32;
 	          
 	          y--; // this fixes it for some reason
-
-	          // do different things based on the layer name   
-	          // ADD MORE CASES FOR YOUR OWN OBJECT LAYERS HERE
-	          switch((String) layer.getProperties().get("name")){
-	            case "wall": // walls
-	              this.addEntity(new WallBlock(x, y, 0f));
-	              break;
-	            case "tree": // tree
-				  Tree tree = new Tree(x, y, 0f, true);
-				  if (tree.getType() == TreeType.BASIC) {
-				  	tree.randomiseState();
-				  }
-	              this.addEntity(tree);
-	              break;
-	            case "squirrel":
-	              this.addEntity(new Squirrel(x, y, 0f, i + 1));
-	              break;
-	          }
 	          
+	          this.addEntity(WorldEntities.valueOf(layerName).Spawn(x, y, i+1)); // spawn the entity in (we know it exists)
+	          	          	          
 	          i++; // add to ensure uniqueness of the id, may be bad if there's multiple enemy types
 	          
 	        }
