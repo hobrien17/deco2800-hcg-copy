@@ -18,15 +18,40 @@ public class Conversation {
 	private ConversationContext conversationContext;
 	private ContextManager contextManager;
 
-	public Conversation(List<ConversationNode> conversationNodes) {
-		//TODO write a proper constructor
+	/**
+	 * No-Argument constructor
+	 * If this constructor is used, setup must be called before using
+	 * any other method.
+	 */ 
+	public Conversation() {
 		// Get necessary managers
 		GameManager gameManager = GameManager.get();
 		contextManager = (ContextManager)
 				gameManager.getManager(ContextManager.class);
+	}
 
+	/**
+	 * Full constructor
+	 * currentNode MUST be in conversationNodes
+	 * @param conversationNodes list of all nodes in this conversation
+	 * @param currentNode reference to the first node to display
+	 */
+	public Conversation(List<ConversationNode> conversationNodes,
+			ConversationNode initalNode) {
+		Conversation();
+		setup(conversationNodes, initalNode);
+	}
+
+	/**
+	 * Initialise references to conversationNodes
+	 * This should be called once after using the no-argument constructor
+	 * @param conversationNodes list of all nodes in this conversation
+	 * @param currentNode reference to the first node to display
+	 */
+	public setup(List<ConversationNode> conversationNodes,
+			ConversationNode initalNode) {
 		this.conversationNodes = new ArrayList<>(conversationNodes);
-		currentNode = conversationNodes.get(0);
+		currentNode = initalNode;
 	}
 
 	public void initiateConversation() {
