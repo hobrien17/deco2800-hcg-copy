@@ -149,7 +149,7 @@ public class Player extends Character implements Tickable {
         Box3D interactionRadius = getBox3D();
         List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
         for (AbstractEntity entity : entities) {
-            if (!this.equals(entity) & (interactionRadius.distance(entity.getBox3D()) < 3.0f)) {
+            if (!this.equals(entity) && (interactionRadius.distance(entity.getBox3D()) < 3.0f)) {
                 if (entity instanceof NPC) {
 
                     LOGGER.info(this + " initiated a interaction with " + entity);
