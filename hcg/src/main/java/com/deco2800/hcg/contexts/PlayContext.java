@@ -1,9 +1,5 @@
 package com.deco2800.hcg.contexts;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -50,7 +46,7 @@ import com.deco2800.hcg.renderers.Renderer;
  * instantiated once.
  */
 public class PlayContext extends Context {
-
+    
 	// Managers used by the game
 	private GameManager gameManager;
 	private SoundManager soundManager;
@@ -263,6 +259,8 @@ public class PlayContext extends Context {
 			}
 		});
 		
+		/* This won't stay here forever - loading and compiling shaders here is super inefficienct so we should
+		 * do that somewhere else but for testing purposes this is fine. */
 		FileHandle vertexShader;
         FileHandle fragmentShader;
         
@@ -271,7 +269,7 @@ public class PlayContext extends Context {
         shader = new ShaderProgram(vertexShader, fragmentShader);
         
         if(!shader.isCompiled()) {
-            System.out.println("Shader didn't work");
+            System.out.println("Shaders failed to compile.");
             shader = null;
         }
 	}
@@ -340,7 +338,9 @@ public class PlayContext extends Context {
 	 */
 	@Override
 	public void dispose() {
-	    shader.dispose();
+	    if(shader != null) {
+	        shader.dispose();
+	    }
 	}
 
 	@Override
