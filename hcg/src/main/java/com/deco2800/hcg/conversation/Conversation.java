@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Basic data structure to hold conversations that will be utilised by the NPC class and the UI
  * @author Blake Bodycote
+ * @author Richy McGregor
  */
 public class Conversation {
 
@@ -32,9 +33,9 @@ public class Conversation {
 
 	/**
 	 * Full constructor
-	 * currentNode MUST be in conversationNodes
+	 * initalNode MUST be in conversationNodes
 	 * @param conversationNodes list of all nodes in this conversation
-	 * @param currentNode reference to the first node to display
+	 * @param initalNode reference to the first node to display
 	 */
 	public Conversation(List<ConversationNode> conversationNodes,
 			ConversationNode initalNode) {
@@ -46,7 +47,7 @@ public class Conversation {
 	 * Initialise references to conversationNodes
 	 * This should be called once after using the no-argument constructor
 	 * @param conversationNodes list of all nodes in this conversation
-	 * @param currentNode reference to the first node to display
+	 * @param initalNode reference to the first node to display
 	 */
 	public void setup(List<ConversationNode> conversationNodes,
 			ConversationNode initalNode) {

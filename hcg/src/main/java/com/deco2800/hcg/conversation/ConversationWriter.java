@@ -1,15 +1,15 @@
 package com.deco2800.hcg.conversation;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 public class ConversationWriter {
-	
+
+	// Save a Conversation to a file
 	public static void writeConversation(Conversation conversation,
 			ConversationNode initalConversationNode,
 			String filename) throws IOException {
@@ -18,14 +18,15 @@ public class ConversationWriter {
 		fw.write(text);
 		fw.close();
 	}
-	
+
+	// Export a Conversation as a String
 	public static String exportConversation(Conversation conversation,
 			ConversationNode initalConversationNode) {
 		JsonObject jConversation = serialiseConversation(conversation, initalConversationNode);
 		return jConversation.toString();
 	}
 		
-	
+	// Serialise a Conversation as a JsonObject
 	public static JsonObject serialiseConversation(Conversation conversation,
 			ConversationNode initalConversationNode) {
 		
@@ -39,12 +40,11 @@ public class ConversationWriter {
 		for (ConversationNode node : nodes) {
 			jNodes.add(serialiseNode(node, nodes));
 		}
-		
 		jConversation.add("nodes", jNodes);
 		
 		return jConversation;
 	}
-	
+
 	private static JsonObject serialiseNode(ConversationNode node,
 			List<ConversationNode> nodes) {
 		
