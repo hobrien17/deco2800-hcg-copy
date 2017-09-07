@@ -1,5 +1,7 @@
 package com.deco2800.hcg.contexts;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,6 +32,7 @@ public class MultiplayerMenuContext extends UIContext {
 	private ImageButton go;
 	private ImageButton host;
 	private ImageButton back;
+	private List<String> instructions;
 
 	/**
 	 * Constructor for the MultiplayerMenuContext
@@ -47,6 +50,17 @@ public class MultiplayerMenuContext extends UIContext {
 		
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		
+		instructions.add("W = Move Character Forward");
+		instructions.add("S = Move Character Backward");
+		instructions.add("A = Move Character Left");
+		instructions.add("D = Move Character Right");
+		instructions.add("Shift = Run (HOLD)");
+		instructions.add("Left Click = Shoot Weapon");
+		instructions.add("R = Change Weapon");
+		instructions.add("E = Interact with NPC");
+		instructions.add("U = Unlock pot");
+		instructions.add("1 - 6 = Plant a plant (when near a pot)");
+		
 		table = new Table();
 		table.setFillParent(true);
 		table.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
@@ -58,6 +72,8 @@ public class MultiplayerMenuContext extends UIContext {
 		name = new TextField(null, skin);
 		
 		table.add(title);
+		table.row();
+		table.add(instructions.get(0));
 		table.row();
 		table.add(name);
 		table.row();
