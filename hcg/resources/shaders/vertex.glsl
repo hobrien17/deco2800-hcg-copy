@@ -14,21 +14,24 @@ attribute vec2 a_texCoord0;
 /* Takes the world position and translates it into a screen position. */
 uniform mat4 u_projTrans;
 
-
+#define PI 3.14159265359
 /* Outputs into fragment shader
 /* These are linearly interpolated between vertices to get values for pixels
 /* that don't fall exactly on a vertex. */
 
 // The colour of the vertex
-varying vec4 v_color; 
+varying vec4 v_color;
 // The texture coordinates for the vertex
 varying vec2 v_texCoords;
 
 
 void main() {
-	// Send colour information through the pipeline to frag shader
+  // Send colour information through the pipeline to frag shader
     v_color = a_color;
-	v_color.a = v_color.a * (255.0/254.0);
+    v_color.r = 0.3*v_color.r;
+    v_color.g = 0.3*v_color.g;
+    v_color.b = 0.8*v_color.b;
+    v_color.a = v_color.a * (255.0/254.0);
 	// Send texture information through the pipeline to frag shader
 	v_texCoords = a_texCoord0;
 
