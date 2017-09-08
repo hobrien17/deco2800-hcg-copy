@@ -2,11 +2,7 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ContextManager;
@@ -30,6 +26,7 @@ public class MultiplayerMenuContext extends UIContext {
 	private ImageButton go;
 	private ImageButton host;
 	private ImageButton back;
+	private TextButton lobbyTest;
 
 	/**
 	 * Constructor for the MultiplayerMenuContext
@@ -56,6 +53,8 @@ public class MultiplayerMenuContext extends UIContext {
 		host = new ImageButton(new Image(textureManager.getTexture("menu_host_button")).getDrawable());
 		back = new ImageButton(new Image(textureManager.getTexture("menu_back_button")).getDrawable());
 		name = new TextField(null, skin);
+
+		lobbyTest = new TextButton("Lobby", skin); //button used for bringing up the lobby screen
 		
 		table.add(title);
 		table.row();
@@ -66,6 +65,9 @@ public class MultiplayerMenuContext extends UIContext {
 		table.add(host);
 		table.row();
 		table.add(back);
+
+		table.row();
+		table.add(lobbyTest);
 		stage.addActor(table);
 		
 		go.addListener(new ChangeListener() {
@@ -85,6 +87,13 @@ public class MultiplayerMenuContext extends UIContext {
 			public void changed(ChangeEvent event, Actor actor) {
 				NetworkState.init(true);
 				contextManager.pushContext(new WorldMapContext());
+			}
+		});
+
+		lobbyTest.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				contextManager.pushContext(new LobbyContext());
 			}
 		});
 		

@@ -9,11 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
@@ -22,6 +21,8 @@ import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldClickListener;
+
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -68,6 +69,7 @@ public class PlayContext extends Context {
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private  Button chatButton;
+
 
 
     /**
@@ -177,6 +179,18 @@ public class PlayContext extends Context {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (NetworkState.isInitialised()) {
+					String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
+					chatTextField.setText("");
+					chatTextArea.appendText(chatMessage + "\n");
+					stage.setKeyboardFocus(null);
+				}
+			}
+		});
+
+        chatTextField.setTextFieldListener(new TextField.TextFieldListener() {
+			@Override
+			public void keyTyped(TextField textField, char c) {
+				if (c == '\r' && NetworkState.isInitialised()) {
 					String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
 					chatTextField.setText("");
 					chatTextArea.appendText(chatMessage + "\n");
