@@ -196,13 +196,25 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     		return false;
     	}
     	Weapon weapon = (Weapon) o;
-        return ((weaponType == weapon.weaponType) && super.equals(weapon));
+    	if(weaponType!=weapon.weaponType){
+    		return false;
+    	}
+    	if(cooldown!=weapon.cooldown){
+    		return false;
+    	}
+    	if((int)Double.doubleToLongBits(radius)!=(int)Double.doubleToLongBits(weapon.radius)){
+    		return false;
+    	}
+    	
+        return super.equals(weapon);
     }
     
     @Override
     public int hashCode() {
         int result = 11;
         result = 31 * result + weaponType.hashCode();
+        result = 31 * result + cooldown;
+        result = 31 * result + (int)Double.doubleToLongBits(radius);
         result = 31 * result + super.hashCode();
         return result;
     }
