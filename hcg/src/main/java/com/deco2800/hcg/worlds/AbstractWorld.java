@@ -1,5 +1,6 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -18,6 +19,7 @@ import java.util.List;
 public abstract class AbstractWorld {
 
     private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
+    private List<ParticleEffect> effects = new ArrayList<ParticleEffect>();
     protected TiledMap map;
 
     private int width;
@@ -108,19 +110,43 @@ public abstract class AbstractWorld {
     }
 
     /**
-     * Adds entitiy to the world.
+     * Adds entity to the world.
      * @param entity Entity to be added
      */
     public void addEntity(AbstractEntity entity) {
         entities.add(entity);
     }
+    
+    /**
+     * Checks if world contains entity.
+     * @param entity Entity to be checked
+     */
+    public boolean containsEntity(AbstractEntity entity) {
+        return entities.contains(entity);
+    }
 
     /**
-     * Adds entitiy from the world.
+     * Removes entity from the world.
      * @param entity Entity to be removed
      */
     public void removeEntity(AbstractEntity entity) {
         entities.remove(entity);
+    }
+    
+    /**
+     * Adds effect to the world.
+     * @param entity Entity to be added
+     */
+    public void addEffect(ParticleEffect effect) {
+        effects.add(effect);
+    }
+
+    /**
+     * Adds effect from the world.
+     * @param entity Entity to be removed
+     */
+    public void removeEffect(ParticleEffect effect) {
+        effects.remove(effect);
     }
 
     /**

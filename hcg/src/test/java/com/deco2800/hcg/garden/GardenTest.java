@@ -36,7 +36,7 @@ public class GardenTest {
 		sprites.put(Grass.class, "grass");
 		sprites.put(Water.class, "lily");
 		sprites.put(Inferno.class, "inferno");
-		sprites.put(Ice.class, "sunflower"); //need to change
+		sprites.put(Ice.class, "ice"); //need to change
 		
 		names.put(Sunflower.class, "sunflower");
 		names.put(Cactus.class, "cactus");
@@ -72,6 +72,7 @@ public class GardenTest {
 	@Test
 	public void testEmptyPot() {
 		Pot p = new Pot(5, 5, 0);
+		p.unlock();
 				
 		assertEquals(p.getPosX(), 5, 0.01);
 		assertEquals(p.getPosY(), 5, 0.01);
@@ -94,6 +95,7 @@ public class GardenTest {
 	@Test
 	public void testAddSunflower() {
 		Pot p = new Pot(5, 5, 0);
+		p.unlock();
 		AbstractGardenPlant plant = new Sunflower(p);
 		assertTrue(p.addPlant(plant));
 		assertEquals(p.getPlant(), plant);
@@ -106,10 +108,20 @@ public class GardenTest {
 	@Test
 	public void testAddTwice() {
 		Pot p = new Pot(5, 5, 0);
+		p.unlock();
 		AbstractGardenPlant plant1 = new Sunflower(p);
 		AbstractGardenPlant plant2 = new Cactus(p);
 		assertTrue(p.addPlant(plant1));
 		assertFalse(p.addPlant(plant2));
+	}
+	
+	/*
+	 * Tests that plants cannot be added to a locked pot
+	 */
+	@Test
+	public void testLockedPot() {
+		Pot p = new Pot(5, 5, 0);
+		assertFalse(p.addPlant(new Sunflower(p)));
 	}
 	
 	/*
@@ -118,6 +130,7 @@ public class GardenTest {
 	@Test
 	public void testAllPlants() {
 		Pot p = new Pot(5, 5, 0);
+		p.unlock();
 		AbstractGardenPlant[] plants = {new Sunflower(p), new Cactus(p), new Water(p), new Grass(p), new Inferno(p),
 				new Ice(p)};
 		for(AbstractGardenPlant plant : plants) {
@@ -186,13 +199,9 @@ public class GardenTest {
 	 */
 	private void testSeedDetails(Seed seed) {
 		Pot p = new Pot(5, 5, 0);
+		p.unlock();
 		assertEquals(seed.getName(), seedNames.get(seed.getType()));
-		try {
-			assertTrue(seedPlants.get(seed.getType()).isInstance(seed.getNewPlant(p)));
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
-				InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-			fail();
-		}
+		assertTrue(seedPlants.get(seed.getType()).isInstance(seed.getNewPlant(p)));
 	}
 	
 }
