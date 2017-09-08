@@ -27,22 +27,22 @@ import org.slf4j.LoggerFactory;
 public abstract class NPC extends Character implements Tickable {
 
     public enum Type {
-        Shop,
-        Quest
+        SHOP,
+        QUEST
     }
 
 
     public enum movementType {
-        Stationary,
-        shortWander,
-        longWander
+        STATIONARY,
+        SHORTWANDER,
+        LONGWANDER
     }
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
     public String fName;
     public String sName;
-    public NPC.Type NPCType;
+    public NPC.Type npcType;
 
     public NPC.movementType NPCMoveType;
     private PlayerManager playerManager;
@@ -71,7 +71,7 @@ public abstract class NPC extends Character implements Tickable {
      * @param texture NPC's texture
      */
     public NPC(float posX, float posY, float posZ, float xLength, float yLength, float zLength,
-               boolean centered,String fName,String sName,NPC.Type NPCType,String texture) {
+               boolean centered,String fName,String sName,NPC.Type npcType,String texture) {
 
         //Set up the parent constructor
         super(posX,posY,posZ,xLength,yLength,zLength,centered);
@@ -79,16 +79,16 @@ public abstract class NPC extends Character implements Tickable {
         //Set up the new NPC
         this.fName = fName;
         this.sName = sName;
-        this.NPCType = NPCType;
+        this.npcType = npcType;
 
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         this.random = new Random();
 
         //We want specific NPCs to have set speeds
-        if (NPCType == Type.Shop) {
+        if (npcType == Type.SHOP) {
             this.movementSpeed = 0.0f;
-        } else if (NPCType == Type.Quest) {
-            this.NPCMoveType = movementType.shortWander;
+        } else if (npcType == Type.QUEST) {
+            this.NPCMoveType = movementType.SHORTWANDER;
             this.movementSpeed = 0.01f;
         } else {
             //Set all other NPCs to some default speed
@@ -96,7 +96,7 @@ public abstract class NPC extends Character implements Tickable {
         }
 
         //Set Short Wander movement bounds (5 x 5 tile grid)
-        if (this.NPCMoveType == movementType.shortWander) {
+        if (this.NPCMoveType == movementType.SHORTWANDER) {
             shortWander_xMin = posX - 2.5f;
             shortWander_yMin = posY - 2.5f;
             shortWander_xMax = posX + 2.5f;
@@ -114,7 +114,7 @@ public abstract class NPC extends Character implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
-        if (this.NPCMoveType == movementType.Stationary) {
+        if (this.NPCMoveType == movementType.STATIONARY) {
             //No need to move
             return;
         }
@@ -162,6 +162,8 @@ public abstract class NPC extends Character implements Tickable {
                     changeX = -this.movementSpeed;
                     changeY = 0.0f;
                     break;
+                default:
+                	break;
             }
 
             //Stop when in close proximity to player
@@ -212,6 +214,6 @@ public abstract class NPC extends Character implements Tickable {
      * @returns the type of the NPC
      */
     public NPC.Type getNPCType() {
-        return this.NPCType;
+        return this.npcType;
     }
 }

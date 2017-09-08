@@ -63,7 +63,7 @@ public class NPCTest {
         float shortWanderGridY = 5.0f;
 
         //Create NPC
-        NPC testNPC = new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.Quest, "character_1") {};
+        NPC testNPC = new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.QUEST, "character_1") {};
         gameManager.getWorld().addEntity(testNPC);
 
         //Check for movement outside of 5x5 grid
