@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
+import com.deco2800.hcg.contexts.CharacterCreationContext;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -626,7 +627,11 @@ public class Player extends Character implements Tickable {
 
 		switch (keycode) {
 		case Input.Keys.P:
-			this.contextManager.pushContext(new PerksSelectionScreen());
+				this.contextManager.pushContext(new PerksSelectionScreen());
+				break;
+		case Input.Keys.C:
+			this.contextManager.pushContext(new CharacterCreationContext());
+			break;
 		case Input.Keys.SHIFT_LEFT:
 			if (staminaCur > 0) {
                 sprinting = true;
