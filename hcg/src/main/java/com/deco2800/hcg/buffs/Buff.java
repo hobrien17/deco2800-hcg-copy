@@ -2,6 +2,7 @@ package com.deco2800.hcg.buffs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,8 +68,8 @@ public class Buff {
      * Returns a list of effects caused by the buff
      * @return a list of strings that describe the effects caused by the buff
      */
-    public ArrayList<String> getEffects() {
-        ArrayList<String> returnList = new ArrayList<>();
+    public List<String> getEffects() {
+        List<String> returnList = new ArrayList<String>();
         for (Map.Entry<String, Float> entry : effects.entrySet()) {
             returnList.add(entry.getKey());
         }
