@@ -1,9 +1,16 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +22,7 @@ import java.util.List;
  * It provides storage for the WorldEntities and other universal world level
  * items.
  */
-public abstract class AbstractWorld {
+public class AbstractWorld {
 
     private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
     protected TiledMap map;
@@ -23,6 +30,93 @@ public abstract class AbstractWorld {
     private int width;
     private int length;
 
+    /**
+     * Empty abstract world
+     */
+    public AbstractWorld() {
+    }
+    
+    /**
+     * Returns a list of entities in this world
+     *
+     * @return All Entities in the world
+     */
+    public AbstractWorld(String file) {
+      
+      // load the given file
+      this.map = new TmxMapLoader()
+          .load(file);
+
+      /*
+       * Grab the width and length values from the map file to use as the world size
+       */
+      this.setWidth(this.getMap().getProperties().get("width", Integer.class));
+      this.setLength(this.getMap().getProperties().get("height", Integer.class));
+
+      // get player
+      Player player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
+      
+      // change player position based on the properties below
+      player.setPosX(Float.parseFloat((String) this.getMap().getProperties().get("PlayerX")));
+      player.setPosY(Float.parseFloat((String) this.getMap().getProperties().get("PlayerY")));
+                      
+      // loop over all object layers
+      for (MapLayer layer : getObjectLayers()){
+        
+          Iterator<MapObject> objects = layer.getObjects().iterator();
+
+          int i = 0; // for enemy's because they need unique id's i guess
+          
+          // store layer name
+          String layerName = ((String) layer.getProperties().get("name")).toUpperCase();
+          
+          // make sure the layer has an associating entity type, otherwise we don't want to loop over the objects
+          Boolean found = false;
+          
+          // loop over all entities, make sure the entity exists
+          for(WorldEntities type : WorldEntities.values()){
+            if (type.toString().equals(layerName)){
+              found = true;
+            }
+          }
+          
+          while (objects.hasNext() && found) {
+                        
+            MapObject obj = objects.next();
+                    
+            // get x and y
+            float x = (float) obj.getProperties().get("y"); // no clue why these are switched, help
+            float y = (float) obj.getProperties().get("x");
+            
+            x/=32; // divide by the width / height, I guess this might screw up bigger tiles
+            y/=32;
+            
+            y--; // this fixes it for some reason
+            
+            this.addEntity(WorldEntities.valueOf(layerName).Spawn(x, y, i+1)); // spawn the entity in (we know it exists)
+                                    
+            i++; // add to ensure uniqueness of the id, may be bad if there's multiple enemy types
+            
+          }
+          
+          // Remove this layer! After this method we will only have tile layers, which is good
+          map.getLayers().remove(layer);
+
+      }
+
+      // biome testing stuff
+      Biomes biome = Biomes.GRASS;
+      
+      TiledMapTileLayer tiled = (TiledMapTileLayer) map.getLayers().get("ground");
+      
+      for (int i = 0; i < 10; i++){
+          tiled.getCell(i, i).setTile(new StaticTiledMapTile(
+              new TextureRegion(biome.getTexture(TileTypes.PATH))));
+      }
+
+      
+    }
+    
     /**
      * Returns a list of entities in this world
      *

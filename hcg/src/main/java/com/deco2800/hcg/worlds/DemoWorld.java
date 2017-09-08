@@ -1,8 +1,13 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.*;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
@@ -14,6 +19,7 @@ import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeState;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
@@ -27,7 +33,7 @@ import java.util.Random;
 
 /**
  * Initial world using preset world file.
- *
+ * @deprecated
  * @author leggy
  */
 public class DemoWorld extends AbstractWorld {
@@ -110,6 +116,16 @@ public class DemoWorld extends AbstractWorld {
 	        // Remove this layer! After this method we will only have tile layers, which is good
 	        map.getLayers().remove(layer);
 
+	    }
+
+	    // biome testing stuff
+	    Biomes biome = Biomes.GRASS;
+	    
+	    TiledMapTileLayer tiled = (TiledMapTileLayer) map.getLayers().get("ground");
+	   	
+	    for (int i = 0; i < 10; i++){
+	        tiled.getCell(i, i).setTile(new StaticTiledMapTile(
+	            new TextureRegion(biome.getTexture(TileTypes.PATH))));
 	    }
 
 		/*

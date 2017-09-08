@@ -14,7 +14,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.multiplayer.NetworkState;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.AbstractWorld;
 
 /**
  * Multiplayer Menu
@@ -74,7 +74,7 @@ public class MultiplayerMenuContext extends UIContext {
 				NetworkState.init(false);
 				NetworkState.join(name.getText());
 				// TODO: there should probably be a lobby screen
-				gameManager.setWorld(new DemoWorld());
+				gameManager.setWorld(new AbstractWorld("resources/maps/initial-map-test.tmx"));
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}
