@@ -39,6 +39,7 @@ import com.deco2800.hcg.multiplayer.Message;
 import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
+import com.deco2800.hcg.shading.ShaderState;
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -289,6 +290,15 @@ public class PlayContext extends Context {
 		 * Create a new render batch. At this stage we only want one but perhaps we need
 		 * more for HUDs etc
 		 */
+
+        if(shader != null) {
+            ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));   
+            state.setTime(timeManager);
+            Color color = state.getGlobalLightColour();
+            shader.begin();
+            shader.setUniformf("u_globalColor", color);
+        }
+        
 		SpriteBatch batch = shader == null ? new SpriteBatch() : new SpriteBatch(1000, shader);
 
 		/*
@@ -306,6 +316,7 @@ public class PlayContext extends Context {
 		 * Use the selected renderer to render objects onto the map
 		 */
 		renderer.render(batch);
+		shader.end();
 
 		// Update and draw the stage
 		stage.act();

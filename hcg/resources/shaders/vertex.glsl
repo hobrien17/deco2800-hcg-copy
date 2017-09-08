@@ -24,16 +24,14 @@ varying vec4 v_color;
 // The texture coordinates for the vertex
 varying vec2 v_texCoords;
 
+uniform vec4 u_globalColor;
 
 void main() {
-  // Send colour information through the pipeline to frag shader
-    v_color = a_color;
-    v_color.r = 0.3*v_color.r;
-    v_color.g = 0.3*v_color.g;
-    v_color.b = 0.8*v_color.b;
+    // Send colour information through the pipeline to frag shader
+    v_color = u_globalColor * a_color;
     v_color.a = v_color.a * (255.0/254.0);
-	// Send texture information through the pipeline to frag shader
-	v_texCoords = a_texCoord0;
+	  // Send texture information through the pipeline to frag shader
+	  v_texCoords = a_texCoord0;
 
 	// Set the screen posiiton of this vertex
 	gl_Position =  u_projTrans * a_position;

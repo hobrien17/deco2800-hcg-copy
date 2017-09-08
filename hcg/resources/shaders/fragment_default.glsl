@@ -11,6 +11,7 @@ varying vec2 v_texCoords;
 // The texture to be sampled
 uniform sampler2D u_texture;
 
+
 void main() {
     // Set the colour of this pixel to its base colour value multiplied
     // by the colour found in the texture at the given texture coordinates
