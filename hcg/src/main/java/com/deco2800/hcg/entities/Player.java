@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
+import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,10 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.multiplayer.InputType;
+import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
@@ -37,6 +41,7 @@ public class Player extends Character implements Tickable {
 
 	private SoundManager soundManager;
 	private ContextManager contextManager;
+	private PlayerInputManager playerInputManager;
 
 	private boolean collided;
 	private int xpThreshold = 200;
@@ -57,10 +62,14 @@ public class Player extends Character implements Tickable {
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
 	// private Weapon equippedWeapon;
+	
+	private int id;
 
 	/**
 	 * Creates a new player at specified position.
 	 * 
+	 * @param peerId
+	 *            peer that controls player
 	 * @param posX
 	 *            beginning player X position
 	 * @param posY
@@ -68,21 +77,30 @@ public class Player extends Character implements Tickable {
 	 * @param posZ
 	 *            beginning player Z position
 	 */
-	public Player(float posX, float posY, float posZ) {
+	public Player(int id, float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
 		// Get necessary managers
 		GameManager gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 
-		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
-
-		input.addKeyDownListener(this::handleKeyDown);
-		input.addKeyUpListener(this::handleKeyUp);
-		input.addTouchDownListener(this::handleTouchDown);
-		input.addTouchDraggedListener(this::handleTouchDragged);
-		input.addTouchUpListener(this::handleTouchUp);
-		input.addMouseMovedListener(this::handleMouseMoved);
+		this.id = id;
+		if (id == 0) {
+			InputManager localInput = (InputManager) GameManager.get().getManager(InputManager.class);
+			localInput.addKeyDownListener(this::handleLocalKeyDown);
+			localInput.addKeyUpListener(this::handleLocalKeyUp);
+			localInput.addTouchDownListener(this::handleLocalTouchDown);
+			localInput.addTouchDraggedListener(this::handleLocalTouchDragged);
+			localInput.addTouchUpListener(this::handleLocalTouchUp);
+			localInput.addMouseMovedListener(this::handleLocalMouseMoved);
+		}
+		playerInputManager = (PlayerInputManager) GameManager.get().getManager(PlayerInputManager.class);
+		playerInputManager.addKeyDownListener(id, this::handleKeyDown);
+		playerInputManager.addKeyUpListener(id, this::handleKeyUp);
+		playerInputManager.addTouchDownListener(id, this::handleTouchDown);
+		playerInputManager.addTouchDraggedListener(id, this::handleTouchDragged);
+		playerInputManager.addTouchUpListener(id, this::handleTouchUp);
+		playerInputManager.addMouseMovedListener(id, this::handleMouseMoved);
 
 		collided = false;
 		sprinting = false;
@@ -117,6 +135,118 @@ public class Player extends Character implements Tickable {
 		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
+	}
+	
+	/**
+	 * Creates a new player at specified position.
+	 * 
+	 * @param posX
+	 *            beginning player X position
+	 * @param posY
+	 *            beginning player Y position
+	 * @param posZ
+	 *            beginning player Z position
+	 */
+	public Player(float posX, float posY, float posZ) {
+		// 0 is local player
+		this(0, posX, posY, posZ);
+	}
+	
+	/**
+	 * Sends input when a touch input is made.
+	 * 
+	 * @param screenX
+	 *            the x position being clicked on the screen
+	 * @param screenY
+	 *            the y position being clicked on the screen
+	 * @param pointer
+	 *            <unknown>
+	 * @param button
+	 *            <unknown>
+	 */
+	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
+		if (NetworkState.isInitialised()) {
+			NetworkState.sendInputMessage(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+		}
+		playerInputManager.touchDown(0, screenX, screenY, pointer, button);
+	}
+
+	/**
+	 * Sends input when a drag input is made.
+	 * 
+	 * @param screenX
+	 *            the x position on the screen that mouse is dragged to
+	 * @param screenY
+	 *            the y position on the screen that mouse is dragged to
+	 * @param pointer
+	 *            <unknown>
+	 */
+	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
+		if (NetworkState.isInitialised()) {
+			NetworkState.sendInputMessage(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
+		}
+		playerInputManager.touchDragged(0, screenX, screenY, pointer);
+	}
+
+	/**
+	 * Sends input when a touch input is released.
+	 * 
+	 * @param screenX
+	 *            the x position mouse is being released on the screen
+	 * @param screenY
+	 *            the y position mouse is being released on the screen
+	 * @param pointer
+	 *            <unknown>
+	 * @param button
+	 *            <unknown>
+	 */
+	private void handleLocalTouchUp(int screenX, int screenY, int pointer, int button) {
+		if (NetworkState.isInitialised()) {
+			NetworkState.sendInputMessage(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+		}
+		playerInputManager.touchUp(0, screenX, screenY, pointer, button);
+	}
+
+	/**
+	 * Sends the processes involved when a mouse movement is made.
+	 * 
+	 * @param screenX
+	 *            the x position of mouse movement on the screen
+	 * @param screenY
+	 *            the y position of mouse movement on the screen
+	 */
+	private void handleLocalMouseMoved(int screenX, int screenY) {
+		// FIXME: mouse inputs currently saturate the server
+//		if (NetworkState.isInitialised() && peerId == -1) {
+//			NetworkState.sendInputMessage(InputType.MOUSE_MOVED.ordinal(), screenX, screenY);
+//		}
+		playerInputManager.mouseMoved(0, screenX, screenY);
+	}
+	
+	/**
+	 * Sends input when keys are pressed.
+	 * 
+	 * @param keycode
+	 *            the keycode of the key pressed
+	 */
+	private void handleLocalKeyDown(int keycode) {
+		if (NetworkState.isInitialised()) {
+			NetworkState.sendInputMessage(InputType.KEY_DOWN.ordinal(), keycode);
+		}
+		playerInputManager.keyDown(0, keycode);
+	}
+
+	/**
+	 * Sends input when keys are released.
+	 * 
+	 * @param keycode
+	 *            the keycode of the key released
+	 */
+	private void handleLocalKeyUp(int keycode) {
+		if (NetworkState.isInitialised()) {
+			NetworkState.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
+		}
+		playerInputManager.keyUp(0, keycode);
 	}
 
 	/**
@@ -181,7 +311,7 @@ public class Player extends Character implements Tickable {
 	 * @param screenY
 	 *            the y position of mouse movement on the screen
 	 */
-	private void handleMouseMoved(int screenX, int screenY) {
+	private void handleMouseMoved(int screenX, int screenY) {	
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().updatePosition(screenX, screenY);
 		}
@@ -640,7 +770,11 @@ public class Player extends Character implements Tickable {
 	 * Updates the game camera so that it is centered on the player
 	 */
 	private void updateCamera() {
-
+		// don't follow co-op players
+		if (id > 0) {
+			return;
+		}
+		
 		int worldLength = GameManager.get().getWorld().getLength();
 		int worldWidth = GameManager.get().getWorld().getWidth();
 		int tileWidth = (int) GameManager.get().getWorld().getMap().getProperties().get("tilewidth");
