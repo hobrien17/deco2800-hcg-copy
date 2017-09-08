@@ -114,7 +114,12 @@ public abstract class NPC extends Character implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
-        if (this.NPCMoveType == movementType.STATIONARY) {
+        this.move();
+
+    }
+    
+    private void move(){
+    	if (this.NPCMoveType == movementType.STATIONARY) {
             //No need to move
             return;
         }
@@ -205,7 +210,6 @@ public abstract class NPC extends Character implements Tickable {
             setPosX(getPosX() + changeX);
             setPosY(getPosY() + changeY);
         }
-
     }
 
     /**
