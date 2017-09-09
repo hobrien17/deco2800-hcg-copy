@@ -302,6 +302,7 @@ public class PlayContext extends Context {
 	    GameManager.get().getCamera().update();
 	    
 	    if(shader == null || postShader == null) {
+	        // Default drawing behaviour. Default to this if any shaders fail to compile.
 	        SpriteBatch batch = new SpriteBatch();
 	        
 	        batch.setProjectionMatrix(GameManager.get().getCamera().combined);
@@ -320,9 +321,11 @@ public class PlayContext extends Context {
             // Uncomment this line to enable the crappy heat distortion
             //state.postEffects |= ShaderState.POST_HEAT;
             
-            Color color = state.getGlobalLightColour();
             int width = Gdx.graphics.getWidth();
             int height = Gdx.graphics.getHeight();
+            
+            // This is our render target. We draw onto this first and then draw this
+            // directly to the screen using a post processing shader
             FrameBuffer renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
             TextureRegion scene = new TextureRegion(renderTarget.getColorBufferTexture());
             scene.flip(false, true);
@@ -330,7 +333,8 @@ public class PlayContext extends Context {
             // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
             shader.begin();
             
-            shader.setUniformf("u_globalColor", color);
+            
+            shader.setUniformf("u_globalColor", state.getGlobalLightColour());
             
             SpriteBatch preBatch = new SpriteBatch(1000, shader);
             preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
@@ -345,7 +349,7 @@ public class PlayContext extends Context {
             renderer.render(preBatch);
             
             renderTarget.end();
-            // Finish render target ///////////////////////////////////////
+            // Finish drawing onto render target //////////////////////////
             
             shader.end();
             preBatch.dispose();
@@ -358,11 +362,13 @@ public class PlayContext extends Context {
             
             SpriteBatch postBatch = new SpriteBatch(1, postShader);
             
+            // Draw onto screen ///////////////////////////////////////////
             postBatch.begin();
             
             postBatch.draw(scene, 0, 0, width, height);
             
             postBatch.end();
+            // Finish drawing onto screen /////////////////////////////////
             
             postShader.end();
             postBatch.dispose();
@@ -399,7 +405,10 @@ public class PlayContext extends Context {
 	public void dispose() {
 	    if(shader != null) {
 	        shader.dispose();
-	        postShader.dispose();
+	    }
+	    
+	    if(postShader != null) {
+            postShader.dispose();
 	    }
 	}
 
