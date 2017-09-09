@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -333,7 +334,6 @@ public class PlayContext extends Context {
             // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
             shader.begin();
             
-            
             shader.setUniformf("u_globalColor", state.getGlobalLightColour());
             
             SpriteBatch preBatch = new SpriteBatch(1000, shader);
@@ -344,6 +344,8 @@ public class PlayContext extends Context {
             
             // Draw onto render target ////////////////////////////////////
             renderTarget.begin();
+            Gdx.gl.glClearColor(0, 0, 0, 0);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             
             tileRenderer.render();
             renderer.render(preBatch);
