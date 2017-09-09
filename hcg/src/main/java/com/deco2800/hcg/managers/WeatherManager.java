@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.deco2800.hcg.entities.Tickable;
+//import com.deco2800.hcg.entities.Tickable;
 import java.util.*;
 
 
@@ -35,8 +35,8 @@ public class WeatherManager extends Manager implements TickableManager {
         rain = new ParticleEffect();
 
         // set-up for rain
-        rain.load(Gdx.files.internal("hcg/resources/particles/2dRain.p"),
-                Gdx.files.internal("hcg/resources/particles/"));
+        rain.load(Gdx.files.internal("resources/particles/2dRain.p"),
+                Gdx.files.internal("resources/particles/"));
         rain.getEmitters().first().setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
     }
 

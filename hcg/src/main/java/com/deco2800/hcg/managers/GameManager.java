@@ -69,7 +69,6 @@ public class GameManager implements TickableManager {
                 return m;
             }
         }
-
 		/* Otherwise create one */
         try {
             Constructor<?> ctor = type.getConstructor();

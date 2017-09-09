@@ -35,6 +35,7 @@ public class PlayContext extends Context {
 	private SoundManager soundManager;
 	private PlayerManager playerManager;
 	private TimeManager timeManager;
+	private WeatherManager weatherManager;
 	private ContextManager contextManager;
 	private PlantManager plantManager;
 	private MessageManager messageManager;
@@ -79,6 +80,7 @@ public class PlayContext extends Context {
 		gameManager = GameManager.get();
 		soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
 		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
+		weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
 		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);

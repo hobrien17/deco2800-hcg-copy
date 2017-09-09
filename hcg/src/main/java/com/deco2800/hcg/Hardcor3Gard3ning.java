@@ -29,6 +29,7 @@ public class Hardcor3Gard3ning extends Game {
     private PlayerManager playerManager;
     private TextureManager textureManager;
     private TimeManager timeManager;
+    private WeatherManager weatherManager;
 	private InputManager inputManager;
 	private PlantManager plantManager;
 	private ItemManager itemManager;
@@ -59,6 +60,9 @@ public class Hardcor3Gard3ning extends Game {
  
 		/* Create a time manager. */
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
+
+        /* Create a weather manager. */
+        weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
 
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
