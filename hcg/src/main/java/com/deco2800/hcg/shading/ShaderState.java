@@ -12,19 +12,24 @@ import com.deco2800.hcg.managers.TimeManager;
 public class ShaderState {
     public static final int FILTER_DEFAULT = 0;
     
+    public static final int POST_HEAT = 1;
+    
     /**
-     * For standard day/night lighting these should both be (1, 1, 1, 1). /* Fiddle
-     * with them for more nuanced day/night lighting /* We'll lerp between these as
-     * the sun rises and sets.
+     * For standard day/night lighting these should be (1, 1, 1, 1) & (0.3, 0.3, 0.8, 1) 
+     * respectively. Fiddle with them for more nuanced day/night lighting
+     * We'll lerp between these as the sun rises and sets.
      */
-    public Color sunColour;
-    public Color moonColour;
+    private Color sunColour;
+    private Color moonColour;
     
     /** How day it is. Determines how much to lerp between sun and moon colour. */
     private float dayAmount;
     
     /** Bitmask of all the colour filters that should be applied. */
     public int filters;
+    
+    /** Bitmask of all the post effects that should be applied. */
+    public int postEffects;
     
     /**
      * Create a new ShaderState with the given sun and moon colours.
@@ -55,7 +60,7 @@ public class ShaderState {
             dayAmount = 0;
         } else {
             dayAmount = (8.0F - distFromMidday) / 2.0F;
-        };
+        }
     }
     
     /**

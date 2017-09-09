@@ -7,8 +7,11 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -89,7 +92,7 @@ public class PlayContext extends Context {
 	
 	// TODO make sure this doesn't stay here.
 	private ShaderProgram shader;
-
+	private ShaderProgram postShader;
 
     /**
      * Create the PlayContext
@@ -262,16 +265,21 @@ public class PlayContext extends Context {
 		
 		/* This won't stay here forever - loading and compiling shaders here is super inefficienct so we should
 		 * do that somewhere else but for testing purposes this is fine. */
-		FileHandle vertexShader;
-        FileHandle fragmentShader;
-        
-        vertexShader = Gdx.files.internal("resources/shaders/vertex.glsl");
-        fragmentShader = Gdx.files.internal("resources/shaders/fragment_default.glsl");
+        FileHandle vertexShader = Gdx.files.internal("resources/shaders/vertex.glsl");
+        FileHandle postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
+        FileHandle fragmentShader = Gdx.files.internal("resources/shaders/fragment_default.glsl");
+        FileHandle heatFragShader = Gdx.files.internal("resources/shaders/fragment_heat.glsl");
         shader = new ShaderProgram(vertexShader, fragmentShader);
+        postShader = new ShaderProgram(postVertexShader, heatFragShader);
         
         if(!shader.isCompiled()) {
-            System.out.println("Shaders failed to compile.");
+            System.out.println("Shader failed to compile.");
             shader = null;
+        }
+        
+        if(!postShader.isCompiled()) {
+            System.out.println("Post shader failed to compile");
+            postShader = null;
         }
 	}
 	
@@ -290,40 +298,80 @@ public class PlayContext extends Context {
 		 * Create a new render batch. At this stage we only want one but perhaps we need
 		 * more for HUDs etc
 		 */
-
-        if(shader != null) {
-            ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
+	    
+	    GameManager.get().getCamera().update();
+	    
+	    if(shader == null || postShader == null) {
+	        SpriteBatch batch = new SpriteBatch();
+	        
+	        batch.setProjectionMatrix(GameManager.get().getCamera().combined);
+	        BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
+	        
+	        tileRenderer.setView(GameManager.get().getCamera());
+	        tileRenderer.render();
+	        
+	        renderer.render(batch);
+	        
+	        batch.dispose();
+	    } else {
+	        ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
             state.setTime(timeManager);
+            
+            // Uncomment this line to enable the crappy heat distortion
+            //state.postEffects |= ShaderState.POST_HEAT;
+            
             Color color = state.getGlobalLightColour();
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+            FrameBuffer renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
+            TextureRegion scene = new TextureRegion(renderTarget.getColorBufferTexture());
+            scene.flip(false, true);
+            
+            // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
             shader.begin();
+            
             shader.setUniformf("u_globalColor", color);
-        }
-        
-		SpriteBatch batch = shader == null ? new SpriteBatch() : new SpriteBatch(1000, shader);
-
-		/*
-		 * Update the camera
-		 */
-		GameManager.get().getCamera().update();
-		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
-
-		/* Render the tiles first */
-		BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
-		tileRenderer.setView(GameManager.get().getCamera());
-		tileRenderer.render();
-
-		/*
-		 * Use the selected renderer to render objects onto the map
-		 */
-		renderer.render(batch);
-		shader.end();
+            
+            SpriteBatch preBatch = new SpriteBatch(1000, shader);
+            preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
+            
+            BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(preBatch);
+            tileRenderer.setView(GameManager.get().getCamera());
+            
+            // Draw onto render target ////////////////////////////////////
+            renderTarget.begin();
+            
+            tileRenderer.render();
+            renderer.render(preBatch);
+            
+            renderTarget.end();
+            // Finish render target ///////////////////////////////////////
+            
+            shader.end();
+            preBatch.dispose();
+            
+            // Begin post-processing ///////////////////////////////////////////////////////////////////////////////////
+            postShader.begin();
+            
+            postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
+            postShader.setUniformi("u_effects", state.postEffects);
+            
+            SpriteBatch postBatch = new SpriteBatch(1, postShader);
+            
+            postBatch.begin();
+            
+            postBatch.draw(scene, 0, 0, width, height);
+            
+            postBatch.end();
+            
+            postShader.end();
+            postBatch.dispose();
+            renderTarget.dispose();
+	    }
 
 		// Update and draw the stage
 		stage.act();
 		stage.draw();
-
-		/* Dispose of the spritebatch to not have memory leaks */
-		batch.dispose();
 	}
 
 	/**
@@ -351,6 +399,7 @@ public class PlayContext extends Context {
 	public void dispose() {
 	    if(shader != null) {
 	        shader.dispose();
+	        postShader.dispose();
 	    }
 	}
 
