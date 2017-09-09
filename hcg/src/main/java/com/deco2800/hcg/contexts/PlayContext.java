@@ -292,7 +292,7 @@ public class PlayContext extends Context {
 		 */
 
         if(shader != null) {
-            ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));   
+            ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
             state.setTime(timeManager);
             Color color = state.getGlobalLightColour();
             shader.begin();

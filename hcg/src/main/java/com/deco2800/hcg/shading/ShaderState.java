@@ -47,14 +47,15 @@ public class ShaderState {
      *            The TimeManager containing the current time.
      */
     public void setTime(TimeManager time) {
-        float distFromMidday = Math.abs(12.0F - (60.0F * time.getHours() + time.getMinutes()) / 60.0F);
+        float distFromMidday = 
+                Math.abs(12.0F - (3600.0F * time.getHours() + 60.0F * time.getMinutes() + time.getSeconds()) / 3600.0F);
         if(distFromMidday < 6) {
             dayAmount = 1;
         } else if(distFromMidday > 8) {
             dayAmount = 0;
         } else {
             dayAmount = (8.0F - distFromMidday) / 2.0F;
-        }
+        };
     }
     
     /**
