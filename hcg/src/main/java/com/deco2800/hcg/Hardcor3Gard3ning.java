@@ -58,7 +58,7 @@ public class Hardcor3Gard3ning extends Game {
 
 		/* Create a sound manager for the whole game */
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
-
+ 
 		/* Create a time manager. */
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
 

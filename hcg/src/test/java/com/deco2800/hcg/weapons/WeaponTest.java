@@ -17,6 +17,9 @@ public class WeaponTest {
             .setWeaponType(WeaponType.MACHINEGUN)
             .setUser(player).setCooldown(5).build();
     
+    private Weapon weapon2 = new WeaponBuilder()
+            .setWeaponType(WeaponType.MACHINEGUN)
+            .setUser(player).setCooldown(5).build();
     
     @Test
     public void valueCheck() {
