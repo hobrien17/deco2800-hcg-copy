@@ -34,9 +34,9 @@ public abstract class NPC extends Character implements Tickable {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
-    public String fName;
-    public String sName;
-    public NPC.Type npcType;
+    private String fName;
+    private String sName;
+    private NPC.Type npcType;
 
     private NPC.movementType npcMoveType;
     private PlayerManager playerManager;
@@ -214,5 +214,21 @@ public abstract class NPC extends Character implements Tickable {
      */
     public NPC.Type getNPCType() {
         return this.npcType;
+    }
+    
+    /**
+     * Returns the NPC's first name
+     * @return NPC's first name
+     */
+    public String getFirstName(){
+    	return this.fName;
+    }
+    
+    /**
+     * Returns the NPC's last name
+     * @return NPC's last name
+     */
+    public String getSurname(){
+    	return this.sName;
     }
 }
