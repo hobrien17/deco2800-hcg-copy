@@ -72,6 +72,11 @@ public class TextureManager extends Manager {
 		textureMap.put("ice_03", new Texture("resources/sprites/plants/Christmas_03.png"));
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
+		textureMap.put("fireball_up", new Texture("resources/sprites/bullets/fireball_up.png"));
+		textureMap.put("fireball_down", new Texture("resources/sprites/bullets/fireball_down.png"));
+		textureMap.put("fireball_left", new Texture("resources/sprites/bullets/fireball_left.png"));
+		textureMap.put("fireball_right", new Texture("resources/sprites/bullets/fireball_right.png"));
+
 
 		// Miscellaneous textures
 		textureMap.put("error", new Texture("resources/misc/error.png"));

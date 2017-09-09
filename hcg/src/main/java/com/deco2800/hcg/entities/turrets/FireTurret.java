@@ -16,7 +16,7 @@ import com.deco2800.hcg.managers.GameManager;
 public class FireTurret extends AbstractTurret {
 
 	private int seconds;
-	private final static int RANGE = 15;
+	private final static int RANGE = 10;
 
 	public FireTurret(Corpse master) {
 		super(master, "Fire");
@@ -25,10 +25,10 @@ public class FireTurret extends AbstractTurret {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		float[][] pos = { { master.getPosX() + RANGE, master.getPosY() }, 
-				{ master.getPosX(), master.getPosY() + RANGE },
-				{ Math.max(0, master.getPosX() - RANGE), master.getPosY() }, 
-				{ master.getPosX(), Math.max(0, master.getPosY() - RANGE) } };
+		float[][] pos = { { master.getPosX() + RANGE, master.getPosY() + RANGE}, 
+				{ master.getPosX() + RANGE, Math.max(0, master.getPosY() - RANGE) },
+				{ Math.max(0, master.getPosX() - RANGE), master.getPosY() + RANGE }, 
+				{ Math.max(0, master.getPosX() - RANGE), Math.max(0, master.getPosY() - RANGE) } };
 		if (seconds == 5) {
 			GameManager.get().getWorld().removeEntity(master);
 		} else if(seconds > 0 && seconds < 5) {

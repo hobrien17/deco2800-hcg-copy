@@ -15,8 +15,6 @@ import java.util.List;
  */
 public class Bullet extends AbstractEntity implements Tickable {
 
-	protected float speed = 0.5f;
-
 	private float goalX;
 	private float goalY;
 
@@ -66,7 +64,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 * 
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
-		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user);
+		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, 0.5f);
 	}
 
 	/**
@@ -94,7 +92,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 * 			the entity using the bullet
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength, float yLength,
-			float zLength, AbstractEntity user) {
+			float zLength, AbstractEntity user, float speed) {
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
 
