@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.deco2800.hcg.contexts.UIContext;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
@@ -65,6 +67,7 @@ public class PlayerEquipmentContext extends UIContext{
         Label itemInfoTitle = new Label("Item Info", skin);
         itemInfoTitle.setColor(Color.BLACK);
         itemInfo.add(itemInfoTitle);
+        itemInfoTitle.setFontScale(1.3f);
         //Generate the view to display the player stats
         Table playerInfo = new Table();
         playerInfo.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
@@ -73,15 +76,24 @@ public class PlayerEquipmentContext extends UIContext{
         int maxRow = 4;
         int currentRow = 0;
         for (int i=0;i<player.getInventory().getNumItems();i++) {
-        //for (int i=0;i<15;i++) {
             //Get the item to be displayed as a button
+            Item item = player.getInventory().getItem(i);
+            System.out.println(item);
             if (currentRow >= maxRow) {
                 innerTable.row();
                 currentRow = 0;
             }
-            //String string = player.getInventory().getItem(i).getTexture();
-            String string = "spacman";
-            ImageButton button = new ImageButton(new Image(textureManager.getTexture(string)).getDrawable());
+            ImageButton button = new ImageButton(new Image(textureManager.getTexture(item.getTexture())).getDrawable());
+            button.setName(player.getInventory().getItem(i).getName());
+            Label label;
+            if (item.isStackable()) {
+                label = new Label(""+item.getStackSize(), skin);
+            } else {
+                //This keeps button size consistent
+                label = new Label("-", skin);
+            }
+            label.setColor(Color.BLACK);
+            button.add(label);
             innerTable.add(button).width(50).height(50).pad(15);
             button.addListener(new ClickListener() {
                                    @Override
@@ -95,11 +107,19 @@ public class PlayerEquipmentContext extends UIContext{
                                        itemInfo.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
                                        Label title = new Label("Item Info", skin);
                                        title.setColor(Color.BLACK);
-                                       Label itemName = new Label((" " + button.getImage().getName()), skin);
+                                       title.setFontScale(1.5f);
+                                       Label itemName = new Label((button.getName()), skin);
                                        itemName.setColor(Color.BLACK);
-                                       itemInfo.add(title);
+                                       itemInfo.add(title).top();
                                        itemInfo.row();
-                                       itemInfo.add(itemName);
+                                       itemInfo.add(itemName).left();
+                                       //If the item is consumable, run the consume method
+                                       if (item instanceof ConsumableItem) {
+                                           ((ConsumableItem) item).consume(player);
+                                           //Remove one instance from the inventory
+                                           player.getInventory().removeItem(item, 1);
+                                           //TODO: Update the stacksize without having to open and close the window
+                                       }
                                    }
                                });
                     currentRow++;
