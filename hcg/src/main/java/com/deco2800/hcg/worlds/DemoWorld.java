@@ -166,10 +166,10 @@ public class DemoWorld extends AbstractWorld {
 		}
 
 		//Add an example quest NPC
-		this.addEntity(new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.Quest, "character_1") {});
+		this.addEntity(new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.QUEST, "character_1") {});
 
 		//Add an example shop NPC
-		this.addEntity(new NPC(30,15,0,0.5f,0.5f,1.0f, false,"John","Jensen", NPC.Type.Shop, "character_shop") {});
+		this.addEntity(new NPC(30,15,0,0.5f,0.5f,1.0f, false,"John","Jensen", NPC.Type.SHOP, "character_shop") {});
 
 
 	}
