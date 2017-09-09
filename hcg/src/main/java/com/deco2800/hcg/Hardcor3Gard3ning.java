@@ -11,6 +11,8 @@ import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worldmapui.MapGenerator;
@@ -69,6 +71,9 @@ public class Hardcor3Gard3ning extends Game {
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
         playerManager.setPlayer(player);
+        //TODO: Change this
+        Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
+        player.addItemToInventory(test);
         
         ArrayList<Level> levelList = new ArrayList<Level>();
         // Creates some test levels

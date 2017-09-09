@@ -72,18 +72,15 @@ public class PlayerEquipmentContext extends UIContext{
         //Populate inventory view
         int maxRow = 4;
         int currentRow = 0;
-        //for (int i=0;i<player.getInventory().getNumItems();i++) {
-        for (int i=0;i<15;i++) {
+        for (int i=0;i<player.getInventory().getNumItems();i++) {
+        //for (int i=0;i<15;i++) {
             //Get the item to be displayed as a button
-            //TODO: add this function player.getInventory().getItem(i).getTexture();
             if (currentRow >= maxRow) {
                 innerTable.row();
                 currentRow = 0;
             }
+            //String string = player.getInventory().getItem(i).getTexture();
             String string = "spacman";
-            if (i%2 == 0) {
-                string = "squirrel";
-            }
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(string)).getDrawable());
             innerTable.add(button).width(50).height(50).pad(15);
             button.addListener(new ClickListener() {
