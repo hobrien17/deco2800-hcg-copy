@@ -21,7 +21,9 @@ import com.deco2800.hcg.managers.TextureManager;
 public class CharacterCreationContext extends UIContext{
 
     private Label strengthLabel, vitalityLabel, agilityLabel, intellectLabel, charismaLabel, meleeSkillLabel,
-            gunsSkillLabel, energyWeaponsSkillLabel, attributePointsLabel, specializedSkillsPointsLabel;
+            gunsSkillLabel, energyWeaponsSkillLabel, attributePointsLabel, specializedSkillsPointsLabel,
+            startingHealthLabel, startingStaminaLabel, healthGainLabel, staminaGainLabel, skillPointsGainLabel,
+            carryWeightLabel;
 
     private CheckBox meleeSkillSpecialise, gunsSkillSpecialise, energyWeaponsSkillSpecialise;
 
@@ -39,7 +41,10 @@ public class CharacterCreationContext extends UIContext{
     private int[] specialisedSkills = new int[3];
 
     private int strength = 5, vitality = 5, agility = 5, intellect = 5, charisma = 5, meleeSkill = 10, gunsSkill = 10,
-            energyWeaponsSkill = 10, attributePoints = 5, specializedSkillsPoints = 2;
+            energyWeaponsSkill = 10, attributePoints = 5, specializedSkillsPoints = 2, skillPointsGain = 14,
+            carryWeight = 180, startingHealth = 1800, startingStamina = 1800, healthGain = 200, staminaGain = 200;
+
+
 
     private Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
@@ -56,6 +61,7 @@ public class CharacterCreationContext extends UIContext{
         setupTopRowInfo();
         setupAttributesWindow();
         setupSkillsWindow();
+        setupStatsWindow();
         addSubtables();
     }
 
@@ -74,11 +80,20 @@ public class CharacterCreationContext extends UIContext{
         this.show();
     }
 
-    //Declaring sub-tables/sub-windows
+    // Declaring sub-tables/sub-windows
     private void initSubTables() {
         topRowInfoTable = new Table(skin);
         attributesWindow = new Window("Attributes", skin);
         skillsWindow = new Window("Skills", skin);
+        statsWindow = new Window("Stats", skin);
+        characterPreviewWindow = new Window("Character Preview", skin);
+
+        // Set windows as non-movable
+        attributesWindow.setMovable(false);
+        skillsWindow.setMovable(false);
+        statsWindow.setMovable(false);
+        characterPreviewWindow.setMovable(false);
+
     }
 
     //Setting up top row info
@@ -149,8 +164,11 @@ public class CharacterCreationContext extends UIContext{
                 if (strength > 1) {
                     strength--;
                     attributePoints++;
+                    carryWeight -= 20;
                     strengthLabel.setText("Strength: " + strength);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    carryWeightLabel.setText("Carry Weight: " + carryWeight);
+
                 }
             }
         });
@@ -161,8 +179,12 @@ public class CharacterCreationContext extends UIContext{
                 if (vitality > 1) {
                     vitality--;
                     attributePoints++;
+                    startingHealth -= 200;
+                    healthGain -= 40;
                     vitalityLabel.setText("Vitality: " + vitality);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    startingHealthLabel.setText("Starting Health: " + startingHealth);
+                    healthGainLabel.setText("Health gained per level up: " + healthGain);
                 }
             }
         });
@@ -173,8 +195,12 @@ public class CharacterCreationContext extends UIContext{
                 if (agility > 1) {
                     agility--;
                     attributePoints++;
+                    startingStamina -= 200;
+                    staminaGain -= 40;
                     agilityLabel.setText("Agility: " + agility);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
+                    staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
                 }
             }
         });
@@ -185,8 +211,10 @@ public class CharacterCreationContext extends UIContext{
                 if (intellect > 1) {
                     intellect--;
                     attributePoints++;
+                    skillPointsGain -= 2;
                     intellectLabel.setText("Intellect: " + intellect);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
                 }
             }
         });
@@ -209,8 +237,10 @@ public class CharacterCreationContext extends UIContext{
                 if (strength < 10 && attributePoints > 0) {
                     strength++;
                     attributePoints--;
+                    carryWeight += 20;
                     strengthLabel.setText("Strength: " + strength);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    carryWeightLabel.setText("Carry Weight: " + carryWeight);
                 }
             }
         });
@@ -221,8 +251,12 @@ public class CharacterCreationContext extends UIContext{
                 if (vitality < 10 && attributePoints > 0) {
                     vitality++;
                     attributePoints--;
+                    startingHealth += 200;
+                    healthGain += 40;
                     vitalityLabel.setText("Vitality: " + vitality);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    startingHealthLabel.setText("Starting Health: " + startingHealth);
+                    healthGainLabel.setText("Health gained per level up: " + healthGain);
                 }
             }
         });
@@ -233,8 +267,12 @@ public class CharacterCreationContext extends UIContext{
                 if (agility < 10 && attributePoints > 0) {
                     agility++;
                     attributePoints--;
+                    startingStamina += 200;
+                    staminaGain += 40;
                     agilityLabel.setText("Agility: " + agility);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
+                    staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
                 }
             }
         });
@@ -245,8 +283,10 @@ public class CharacterCreationContext extends UIContext{
                 if (intellect < 10 && attributePoints > 0) {
                     intellect++;
                     attributePoints--;
+                    skillPointsGain += 2;
                     intellectLabel.setText("Intellect: " + intellect);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
                 }
             }
         });
@@ -298,14 +338,14 @@ public class CharacterCreationContext extends UIContext{
             public void clicked(InputEvent event, float x, float y){
                 if (meleeSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
-                    meleeSkill = meleeSkill - 10;
+                    meleeSkill -= 10;
                     meleeSkillSpecialise.setChecked(false);
                     meleeSkillSpecialiseChecked = false;
                     specialisedSkills[0] = 0;
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
-                        meleeSkill = meleeSkill + 10;
+                        meleeSkill += 10;
                         meleeSkillSpecialise.setChecked(true);
                         meleeSkillSpecialiseChecked = true;
                         specialisedSkills[0] = 1;
@@ -324,14 +364,14 @@ public class CharacterCreationContext extends UIContext{
             public void clicked(InputEvent event, float x, float y){
                 if (gunsSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
-                    gunsSkill = gunsSkill - 10;
+                    gunsSkill -= 10;
                     gunsSkillSpecialise.setChecked(false);
                     gunsSkillSpecialiseChecked = false;
                     specialisedSkills[1] = 0;
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
-                        gunsSkill = gunsSkill + 10;
+                        gunsSkill += 10;
                         gunsSkillSpecialise.setChecked(true);
                         gunsSkillSpecialiseChecked = true;
                         specialisedSkills[1] = 1;
@@ -350,14 +390,14 @@ public class CharacterCreationContext extends UIContext{
             public void clicked(InputEvent event, float x, float y){
                 if (energyWeaponsSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
-                    energyWeaponsSkill = energyWeaponsSkill - 10;
+                    energyWeaponsSkill -= 10;
                     energyWeaponsSkillSpecialise.setChecked(false);
                     energyWeaponsSkillSpecialiseChecked = false;
                     specialisedSkills[2] = 0;
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
-                        energyWeaponsSkill = energyWeaponsSkill + 10;
+                        energyWeaponsSkill += 10;
                         energyWeaponsSkillSpecialise.setChecked(true);
                         energyWeaponsSkillSpecialiseChecked = true;
                         specialisedSkills[2] = 1;
@@ -372,10 +412,34 @@ public class CharacterCreationContext extends UIContext{
         });
     }
 
+    private void setupStatsWindow() {
+        startingHealthLabel = new Label("Starting Health: " + startingHealth, skin);
+        startingStaminaLabel = new Label("Starting stamina: " + startingStamina, skin);
+        healthGainLabel = new Label("Health gained per level up: " + healthGain, skin);
+        staminaGainLabel = new Label("Stamina gained per level up: " + staminaGain, skin);
+        skillPointsGainLabel = new Label("Skill points to spend per level up: " + skillPointsGain, skin);
+        carryWeightLabel = new Label("Carry Weight: " + carryWeight, skin);
+
+        statsWindow.add(startingHealthLabel);
+        statsWindow.row();
+        statsWindow.add(startingStaminaLabel);
+        statsWindow.row();
+        statsWindow.add(healthGainLabel);
+        statsWindow.row();
+        statsWindow.add(staminaGainLabel);
+        statsWindow.row();
+        statsWindow.add(skillPointsGainLabel);
+        statsWindow.row();
+        statsWindow.add(carryWeightLabel);
+    }
+
     private void addSubtables() {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX();
         masterTable.row();
         masterTable.add(attributesWindow).top().left().expandX().fillX();
-        masterTable.add(skillsWindow).top().right().expandX().fillX();
+        masterTable.add(skillsWindow).top().right().expandX().fillX().fillY();
+        masterTable.row();
+        masterTable.add(statsWindow).top().left().expandX().fillX().fillY();
+        masterTable.add(characterPreviewWindow).top().right().expandX().fillX();
     }
 }
