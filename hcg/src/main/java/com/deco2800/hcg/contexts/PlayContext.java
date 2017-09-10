@@ -275,11 +275,13 @@ public class PlayContext extends Context {
         
         if(!shader.isCompiled()) {
             System.out.println("Shader failed to compile.");
+            System.out.println(shader.getLog());
             shader = null;
         }
         
         if(!postShader.isCompiled()) {
             System.out.println("Post shader failed to compile");
+            System.out.println(postShader.getLog());
             postShader = null;
         }
 	}
