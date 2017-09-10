@@ -22,22 +22,39 @@ public class WeatherManager extends Manager implements TickableManager {
 	ParticleEffect rain;
 
 	// effects: a list of effects that is currnetly on in game.
-	ArrayList<ParticleEffect> effects;
+	ArrayList<ParticleEffect> onEffects;
 
 	/**
 	 * Constructor for weather manager
 	 */
 	public WeatherManager() {
-		effects = new ArrayList<ParticleEffect>();
+		onEffects = new ArrayList<ParticleEffect>();
 
-		// maybe does not belong in constructor
-		rain = new ParticleEffect();
+		setUp(rain, "2dRain.p");
+	}
+
+	/**
+	 * sets up each weather effect given, including loading image files
+	 * 
+	 * @param weatherEffect
+	 *            declared weather type
+	 * @param fileName
+	 *            filename of particle file image in "resources/particles/"
+	 * 
+	 * @ensure weatherEffect has been declared and NOT instantiated && each
+	 *         weatherEffect is instantiated && filename is in the
+	 *         path"resources/particles/"
+	 */
+	private void setUp(ParticleEffect weatherEffect, String fileName) {
+		// todo if weather effects in allEffects, return
+		weatherEffect = new ParticleEffect();
 
 		// set-up for rain
-		rain.load(Gdx.files.internal("resources/particles/2dRain.p"),
+		weatherEffect.load(
+				Gdx.files.internal("resources/particles/" + fileName),
 				Gdx.files.internal("resources/particles/"));
-		rain.getEmitters().first().setPosition(Gdx.graphics.getWidth() / 2,
-				Gdx.graphics.getHeight() / 2);
+		weatherEffect.getEmitters().first().setPosition(
+				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 	}
 
 	/**
@@ -53,7 +70,7 @@ public class WeatherManager extends Manager implements TickableManager {
 	 * @ensure this.getOnEffects() contains effect
 	 */
 	public void startEffect(ParticleEffect effect) {
-		effects.add(effect);
+		onEffects.add(effect);
 		effect.start();
 	}
 
@@ -64,8 +81,8 @@ public class WeatherManager extends Manager implements TickableManager {
 	 * @ensure this.getOnEffects() does not contain effect
 	 */
 	public void stopEffect(ParticleEffect effect) {
-		if (effects.contains(effect)) {
-			effects.remove(effect);
+		if (onEffects.contains(effect)) {
+			onEffects.remove(effect);
 		}
 	}
 
@@ -77,7 +94,7 @@ public class WeatherManager extends Manager implements TickableManager {
 	 * @return effects: all current effects turned on in the game
 	 */
 	public ArrayList<ParticleEffect> getOnEffects() {
-		return new ArrayList<ParticleEffect>(effects);
+		return new ArrayList<ParticleEffect>(onEffects);
 	}
 
 	/**
@@ -87,7 +104,7 @@ public class WeatherManager extends Manager implements TickableManager {
 	 *            of all game ticks so far.
 	 */
 	public void onTick(long gameTickCount) {
-		for (ParticleEffect ef : effects) {
+		for (ParticleEffect ef : onEffects) {
 			// this was the sample code for updating the particle effects, Ash
 			// to implement properly
 			// rain.update(Gdx.graphics.getDeltaTime());
