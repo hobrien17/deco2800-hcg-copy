@@ -15,13 +15,23 @@ uniform sampler2D u_texture;
 
 uniform float u_time;
 
-uniform int u_effects;
+uniform float u_heat;
+uniform float u_bloom;
 
-const int POST_HEAT  = 1;
-const int POST_BLOOM = 2;
+float getHeatDistortion(float time, vec2 texCoords) {
+    return sin(texCoords.y * 50 + 2 * time) * 0.005 * u_heat;
+}
 
-float getHeatDistortion(float time) {
-    return sin(v_texCoords.y * 50 + 2 * time) * 0.005;
+vec4 getBloom(vec2 texCoords) {
+    vec4 blur = vec4(0, 0, 0, 0);
+    for(int i = -1; i <= 1; i++) {
+        for(int j = -1; j <= 1; j++) {
+            vec2 offset = vec2(i, j) * 0.001 * u_bloom;
+            blur += texture2D(u_texture, texCoords + offset);
+        }
+    }
+
+    return (blur / 30.0) * u_bloom;
 }
 
 void main() {
@@ -30,23 +40,15 @@ void main() {
     vec2 tex_final = v_texCoords;
 
     // Apply heat distortion
-    if((u_effects & POST_HEAT) == POST_HEAT) {
-        tex_final.x = tex_final.x + getHeatDistortion(u_time);
+    if(u_heat > 0) {
+        tex_final.x = tex_final.x + getHeatDistortion(u_time, tex_final);
     }
 
     vec4 final = v_color * texture2D(u_texture, tex_final);
 
     // Apply bloom
-    if((u_effects & POST_BLOOM) == POST_BLOOM) {
-        vec4 blur = vec4(0, 0, 0, 0);
-        for(int i = -1; i <= 1; i++) {
-            for(int j = -1; j <= 1; j++) {
-                vec2 offset = vec2(i, j) * 0.001;
-                blur += texture2D(u_texture, tex_final + offset);
-            }
-        }
-
-        final += (blur / 30.0);
+    if(u_bloom > 0) {
+        final += getBloom(tex_final);
     }
 
     gl_FragColor = final;

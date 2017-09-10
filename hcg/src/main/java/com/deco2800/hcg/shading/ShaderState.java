@@ -12,8 +12,8 @@ import com.deco2800.hcg.managers.TimeManager;
 public class ShaderState {
     public static final int FILTER_DEFAULT = 0;
     
-    public static final int POST_HEAT  = 1;
-    public static final int POST_BLOOM = 2;
+    private boolean heatEnabled;
+    private boolean bloomEnabled;
     
     /**
      * For standard day/night lighting these should be (1, 1, 1, 1) & (0.3, 0.3, 0.8, 1) 
@@ -23,14 +23,17 @@ public class ShaderState {
     private Color sunColour;
     private Color moonColour;
     
+    private float dayHeat;
+    private float nightHeat;
+    
+    private float dayBloom;
+    private float nightBloom;
+    
     /** How day it is. Determines how much to lerp between sun and moon colour. */
     private float dayAmount;
     
     /** Bitmask of all the colour filters that should be applied. */
     public int filters;
-    
-    /** Bitmask of all the post effects that should be applied. */
-    public int postEffects;
     
     /**
      * Create a new ShaderState with the given sun and moon colours.
@@ -43,6 +46,12 @@ public class ShaderState {
     public ShaderState(Color sunColour, Color moonColour) {
         this.sunColour = sunColour;
         this.moonColour = moonColour;
+        
+        this.dayBloom = 1.0F;
+        this.nightBloom = 0.0F;
+        
+        this.dayHeat = 0.2F;
+        this.nightHeat = 0.0F;
     }
     
     /**
@@ -71,5 +80,51 @@ public class ShaderState {
      */
     public Color getGlobalLightColour() {
         return moonColour.lerp(sunColour, dayAmount);
+    }
+    
+    /**
+     * Get the amount of bloom that should be applied, based on the time of day.
+     * 
+     * @return The current bloom value.
+     */
+    public float getBloom() {
+        if(bloomEnabled) {
+            float scaleValue = (float) Math.pow(dayAmount, 6);
+            return scaleValue * dayBloom + (1 - scaleValue) * nightBloom;
+        }
+        return 0F;
+    }
+    
+    /**
+     * Get the amount of heat distortion that should be applied, based on the time of day.
+     * 
+     * @return The current heat value.
+     */
+    public float getHeat() {
+        if(heatEnabled) {
+            float scaleValue = (float) Math.pow(dayAmount, 6);
+            return scaleValue * dayHeat + (1 - scaleValue) * nightHeat;
+        }
+        return 0F;
+    }
+    
+    /**
+     * Sets whether or not heat distortion should be applied.
+     * 
+     * @param heat
+     *            Whether or not to use heat distortion.
+     */
+    public void setHeat(boolean heat) {
+        this.heatEnabled = heat;
+    }
+    
+    /**
+     * Sets whether or not bloom should be applied.
+     * 
+     * @param heat
+     *            Whether or not to use heat bloom.
+     */
+    public void setBloom(boolean bloom) {
+        this.bloomEnabled = true;
     }
 }

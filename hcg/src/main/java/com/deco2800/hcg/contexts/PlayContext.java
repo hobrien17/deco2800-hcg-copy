@@ -285,7 +285,7 @@ public class PlayContext extends Context {
             postShader = null;
         }
         
-        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
+        timeManager.setDateTime(0, 0, 18, 1, 1, 2047);
 	}
 	
 	
@@ -322,8 +322,8 @@ public class PlayContext extends Context {
 	    } else {
 	        ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
             state.setTime(timeManager);
-
-            state.postEffects = ShaderState.POST_BLOOM;
+            state.setBloom(true);
+            state.setHeat(true);
             
             int width = Gdx.graphics.getWidth();
             int height = Gdx.graphics.getHeight();
@@ -363,7 +363,8 @@ public class PlayContext extends Context {
             postShader.begin();
             
             postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
-            postShader.setUniformi("u_effects", state.postEffects);
+            postShader.setUniformf("u_heat", state.getHeat());
+            postShader.setUniformf("u_bloom", state.getBloom());
             
             SpriteBatch postBatch = new SpriteBatch(1, postShader);
             
