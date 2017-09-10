@@ -1,6 +1,12 @@
-package com.deco2800.hcg.entities.NPC_entities;
+package com.deco2800.hcg.entities.npc_entities;
 
-public class ShopNPC extends NPC{
+
+/**
+ * Concrete implementation of a Shop NPC entity.
+ * @author Blake
+ *
+ */
+public class ShopNPC extends NPC {
 
 	/**
 	 * Constructs a new Shop NPC

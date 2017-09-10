@@ -1,4 +1,4 @@
-package com.deco2800.hcg.entities.NPC_entities;
+package com.deco2800.hcg.entities.npc_entities;
 
 
 import com.deco2800.hcg.entities.Character;
@@ -6,12 +6,8 @@ import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
-
-import java.util.List;
-import java.util.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 
 /**
@@ -19,14 +15,14 @@ import org.slf4j.LoggerFactory;
  *
  * This class extends the character class as the functionality provided there is built upon by the NPCs
  *
- * @author guthers
+ * @author guthers, Blake Bodycote
  */
 public abstract class NPC extends Character implements Tickable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
+    //private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
     private String fName;
     private String sName;
-   
+    private final Box3D INITIAL_POSITION;
     protected PlayerManager playerManager;
 
     
@@ -48,6 +44,7 @@ public abstract class NPC extends Character implements Tickable {
         this.fName = fName;
         this.sName = sName;
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
+        this.INITIAL_POSITION = new Box3D(posX, posY, 0, 0, 0, 0);
         setTexture(texture);
     }
 
@@ -76,4 +73,38 @@ public abstract class NPC extends Character implements Tickable {
     public String getSurname(){
     	return this.sName;
     }
+    
+    /**
+     * Returns the initial position of the NPC when spawned
+     * @return Box3D representation of first spawn location
+     */
+    public Box3D getInitialPosition(){
+    	return this.INITIAL_POSITION;
+    }
+    
+    @Override
+    public boolean equals(Object object){
+    	if(!(object instanceof NPC)){
+    		return false;
+    	}
+    	NPC npc = (NPC) object;
+    	if(!getFirstName().equals(npc.getFirstName())){
+    		return false;
+    	}
+    	if(!getSurname().equals(npc.getSurname())){
+    		return false;
+    	}
+    	return getInitialPosition().equals(npc.getInitialPosition());
+    	}
+    
+    
+    @Override
+    public int hashCode(){
+    	int result = 13;
+    	result = 17*result + this.getFirstName().hashCode();
+    	result = 17*result + this.getSurname().hashCode();
+    	result = 17*result + this.getInitialPosition().hashCode();
+    	return result;
+    }
+    
 }

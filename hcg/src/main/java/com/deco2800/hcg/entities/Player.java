@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.deco2800.hcg.contexts.CharacterCreationContext;
-import com.deco2800.hcg.entities.NPC_entities.NPC;
-import com.deco2800.hcg.entities.NPC_entities.QuestNPC;
-import com.deco2800.hcg.entities.NPC_entities.ShopNPC;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.contexts.PlayerEquipmentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

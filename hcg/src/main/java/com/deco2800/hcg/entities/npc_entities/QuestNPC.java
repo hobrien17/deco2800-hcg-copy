@@ -1,15 +1,18 @@
-package com.deco2800.hcg.entities.NPC_entities;
+package com.deco2800.hcg.entities.npc_entities;
 
 import java.util.List;
-import java.util.Random;
 
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 
+/**
+ * Concrete class of a Quest NPC entity
+ * 
+ * @author Blake Bodycote
+ *
+ */
 public class QuestNPC extends NPC {
-	private final Box3D originalPosition;
 	private float boundaryX; //defaults to 5
 	private float boundaryY; //defaults to 5
 	private int moveDirection; //defaults to 0;
@@ -31,11 +34,6 @@ public class QuestNPC extends NPC {
 		this.boundaryY = 5;
 		moveDirection = 0;
 		speed = 1;
-		
-		//keep track of original position of NPC to calculate boundary 
-		originalPosition = new Box3D(posX, posY, 0, 0, 0, 0);
-		originalPosition.setX(posX);
-		originalPosition.setY(posY);
 	}
 	
 	/**
@@ -73,25 +71,25 @@ public class QuestNPC extends NPC {
 	 */
 	private void checkBoundaryPosition(){
 		if(moveDirection == 0){
-			if( ( getPosition().getY() - originalPosition.getY() ) >  boundaryY){
+			if( ( getPosition().getY() - this.getInitialPosition().getY() ) >  boundaryY){
 				moveDirection = 1;
 			}
 		}
 		
 		if(moveDirection == 1){
-			if( ( getPosition().getY() + originalPosition.getY() ) < boundaryY){
+			if( ( getPosition().getY() + this.getInitialPosition().getY() ) < boundaryY){
 				moveDirection = 0;
 			}
 		}
 		
 		if(moveDirection == 2){
-			if( ( getPosition().getX() - originalPosition.getX() ) > boundaryX){
+			if( ( getPosition().getX() - this.getInitialPosition().getX() ) > boundaryX){
 				moveDirection = 3;
 			}
 		}
 		
 		if(moveDirection == 3){
-			if( ( getPosition().getX() + originalPosition.getX() ) < boundaryX){
+			if( ( getPosition().getX() + this.getInitialPosition().getX() ) < boundaryX){
 				moveDirection = 2;
 			}
 		}

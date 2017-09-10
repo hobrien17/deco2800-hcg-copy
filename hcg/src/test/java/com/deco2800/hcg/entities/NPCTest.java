@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.deco2800.hcg.entities.NPC_entities.NPC;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.DemoWorld;
