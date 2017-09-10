@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.deco2800.hcg.contexts.CharacterCreationContext;
+import com.deco2800.hcg.entities.NPC_entities.NPC;
+import com.deco2800.hcg.entities.NPC_entities.QuestNPC;
+import com.deco2800.hcg.entities.NPC_entities.ShopNPC;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -351,16 +354,16 @@ public class Player extends Character implements Tickable {
 	 *            the NPC (as an entity) that you wish to interact with
 	 */
 	private void NPCInteraction(AbstractEntity npc) {
-		if (((NPC) npc).getNPCType() == NPC.Type.SHOP) {
-
+		
+		if(npc instanceof QuestNPC){
+			LOGGER.info("Quest NPC Interaction Started");
+		}
+		
+		else if(npc instanceof ShopNPC){
 			LOGGER.info("Shop NPC Interaction Started");
 			contextManager.pushContext(new ShopMenuContext());
 			Shop shop = new GeneralShop();
 			shop.open(0, this);
-
-		} else if (((NPC) npc).getNPCType() == NPC.Type.QUEST) {
-			LOGGER.info("Quest NPC Interaction Started");
-
 		} else {
 			LOGGER.info("Other NPC Interaction Started");
 
