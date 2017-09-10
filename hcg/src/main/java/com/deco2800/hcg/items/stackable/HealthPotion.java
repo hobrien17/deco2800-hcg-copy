@@ -12,7 +12,7 @@ public class HealthPotion extends ConsumableItem {
         this.baseValue = 10;
         this.itemWeight = 1;
         this.itemName = "Health Potion";
-        this.texture = String.format("pot");
+        this.texture = String.format("red_potion");
         this.currentStackSize = 1;
         this.maxStackSize = 10;
     }
