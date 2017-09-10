@@ -21,14 +21,18 @@ public class WeatherManager extends Manager implements TickableManager {
 	// rain: the particleEffect (display) for rain in the game
 	ParticleEffect rain;
 
-	// effects: a list of effects that is currnetly on in game.
+	// onEffects: a list of effects that is currently on in game.
 	ArrayList<ParticleEffect> onEffects;
+
+	// allEffects: all effects instantiated and loaded in the game
+	ArrayList<ParticleEffect> allEffects;
 
 	/**
 	 * Constructor for weather manager
 	 */
 	public WeatherManager() {
 		onEffects = new ArrayList<ParticleEffect>();
+		allEffects = new ArrayList<ParticleEffect>();
 
 		setUp(rain, "2dRain.p");
 	}
@@ -41,12 +45,16 @@ public class WeatherManager extends Manager implements TickableManager {
 	 * @param fileName
 	 *            filename of particle file image in "resources/particles/"
 	 * 
-	 * @ensure weatherEffect has been declared and NOT instantiated && each
-	 *         weatherEffect is instantiated && filename is in the
-	 *         path"resources/particles/"
+	 * @require weatherEffect has been declared and NOT instantiated && filename
+	 *          is in the path"resources/particles/"
+	 * 
+	 * @ensure allEffects contains weatherEffect
 	 */
 	private void setUp(ParticleEffect weatherEffect, String fileName) {
-		// todo if weather effects in allEffects, return
+		if (allEffects.contains(weatherEffect)) {
+			return;
+		}
+
 		weatherEffect = new ParticleEffect();
 
 		// set-up for rain
@@ -55,6 +63,8 @@ public class WeatherManager extends Manager implements TickableManager {
 				Gdx.files.internal("resources/particles/"));
 		weatherEffect.getEmitters().first().setPosition(
 				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+		
+		allEffects.add(weatherEffect);
 	}
 
 	/**
