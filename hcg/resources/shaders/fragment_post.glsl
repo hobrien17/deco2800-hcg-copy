@@ -38,7 +38,7 @@ void main() {
     // Set the colour of this pixel to its base colour value multiplied
     // by the colour found in the texture at the given texture coordinates
     vec2 tex_final = v_texCoords;
-
+    
     // Apply heat distortion
     if(u_heat > 0) {
         tex_final.x = tex_final.x + getHeatDistortion(u_time, tex_final);

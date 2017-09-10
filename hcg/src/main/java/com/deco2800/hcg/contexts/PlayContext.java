@@ -1,5 +1,8 @@
 package com.deco2800.hcg.contexts;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -51,6 +54,8 @@ import com.deco2800.hcg.shading.ShaderState;
  * instantiated once.
  */
 public class PlayContext extends Context {
+    
+    Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
     
 	// Managers used by the game
 	private GameManager gameManager;
@@ -266,26 +271,34 @@ public class PlayContext extends Context {
 		
 		/* This won't stay here forever - loading and compiling shaders here is super inefficienct so we should
 		 * do that somewhere else but for testing purposes this is fine. */
-        FileHandle vertexShader = Gdx.files.internal("resources/shaders/vertex.glsl");
+        FileHandle preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
         FileHandle postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
-        FileHandle fragmentShader = Gdx.files.internal("resources/shaders/fragment_default.glsl");
-        FileHandle heatFragShader = Gdx.files.internal("resources/shaders/fragment_heat.glsl");
-        shader = new ShaderProgram(vertexShader, fragmentShader);
-        postShader = new ShaderProgram(postVertexShader, heatFragShader);
+        FileHandle preFragShader = Gdx.files.internal("resources/shaders/fragment_pre.glsl");
+        FileHandle postFragShader = Gdx.files.internal("resources/shaders/fragment_post.glsl");
+        shader = new ShaderProgram(preVertexShader, preFragShader);
+        postShader = new ShaderProgram(postVertexShader, postFragShader);
         
         if(!shader.isCompiled()) {
+            LOGGER.error("Shader failed to compile.");
+            LOGGER.error(shader.getLog());
+            
+            // For the time being
             System.out.println("Shader failed to compile.");
             System.out.println(shader.getLog());
             shader = null;
         }
         
         if(!postShader.isCompiled()) {
+            LOGGER.error("Post shader failed to compile");
+            LOGGER.error(postShader.getLog());
+            
+            // For the time being
             System.out.println("Post shader failed to compile");
             System.out.println(postShader.getLog());
             postShader = null;
         }
         
-        timeManager.setDateTime(0, 0, 18, 1, 1, 2047);
+        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
 	}
 	
 	
@@ -298,12 +311,19 @@ public class PlayContext extends Context {
 	 */
 	@Override
 	public void render(float delta) {
-
-		/*
-		 * Create a new render batch. At this stage we only want one but perhaps we need
-		 * more for HUDs etc
-		 */
-	    
+        /*
+         * All sorts of fun things happen in here. This will likely get its own method
+         * eventually but for now: If any of the shaders fail to compile we default to
+         * default SpriteBatch behaviour; a SpriteBatch is initalised with no parameters
+         * to draw the game directly to the screen. No extra effects at all.
+         * 
+         * If all shaders are go, we draw the game properly. We initialise a SpriteBatch
+         * with our pre-processing shader attached to it, which handles things like
+         * day/night cycle etc and we use that to draw the game to a FrameBuffer. We
+         * then get rid of our first SpriteBatch because we don't need it anymore and
+         * initalise a new one with our post-processing shader attached to it and use it
+         * to draw our FrameBuffer to the screen with nice shiny effects in tow.
+         */
 	    GameManager.get().getCamera().update();
 	    
 	    if(shader == null || postShader == null) {
