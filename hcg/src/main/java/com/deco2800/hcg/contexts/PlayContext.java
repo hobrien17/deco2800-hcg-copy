@@ -284,6 +284,8 @@ public class PlayContext extends Context {
             System.out.println(postShader.getLog());
             postShader = null;
         }
+        
+        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
 	}
 	
 	
@@ -320,9 +322,8 @@ public class PlayContext extends Context {
 	    } else {
 	        ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
             state.setTime(timeManager);
-            
-            // Uncomment this line to enable the crappy heat distortion
-            //state.postEffects |= ShaderState.POST_HEAT;
+
+            state.postEffects = ShaderState.POST_BLOOM;
             
             int width = Gdx.graphics.getWidth();
             int height = Gdx.graphics.getHeight();

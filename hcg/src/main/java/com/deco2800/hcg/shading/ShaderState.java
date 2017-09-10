@@ -12,7 +12,8 @@ import com.deco2800.hcg.managers.TimeManager;
 public class ShaderState {
     public static final int FILTER_DEFAULT = 0;
     
-    public static final int POST_HEAT = 1;
+    public static final int POST_HEAT  = 1;
+    public static final int POST_BLOOM = 2;
     
     /**
      * For standard day/night lighting these should be (1, 1, 1, 1) & (0.3, 0.3, 0.8, 1) 
