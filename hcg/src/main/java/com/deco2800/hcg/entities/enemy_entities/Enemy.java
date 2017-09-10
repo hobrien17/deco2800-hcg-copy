@@ -340,8 +340,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         } else if (this.getPosY() > nextPosY) {
             currPosY -= movementSpeed * 0.25;
         }
-        //this.setPosX(currPosX);
-        //this.setPosY(currPosY);
         Box3D newPos = getBox3D();
         newPos.setX(currPosX);
         newPos.setY(currPosY);
@@ -371,9 +369,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         else if(this.getPosY() > playerManager.getPlayer().getPosY()){
             currPosY -= movementSpeed;
         }
-        //this.setPosX(currPosX);
-        //this.setPosY(currPosY);
-        //Box3D newPos = getBox3D();
         newPos.setX(currPosX);
         newPos.setY(currPosY);
         return newPos;
@@ -398,8 +393,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         else if(this.getPosY() > posY){
             currPosY -= movementSpeed;
         }
-        //this.setPosX(currPosX);
-        //this.setPosY(currPosY);
         if((abs(posX - currPosX) < 1) &&
                 (abs(posY - currPosY) < 1)){
             this.setStatus(1);
@@ -445,6 +438,9 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         }
     }
 
+    /**
+     * Set new position by different situation.
+     */
     public void setNewPos(){
         switch(this.getStatus()){
             case 1://Status: New Born
