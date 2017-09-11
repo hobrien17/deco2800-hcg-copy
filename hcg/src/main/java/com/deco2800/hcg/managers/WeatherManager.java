@@ -18,13 +18,16 @@ public class WeatherManager extends Manager implements TickableManager {
 	// storm (rain, clouds, lightning)
 	// sandstorm
 
-	// rain: the particleEffect (display) for rain in the game
 	ParticleEffect rain;
+	ParticleEffect snow;
+	ParticleEffect wind;
+	ParticleEffect sandstorm;
 
 	// onEffects: a list of effects that is currently on in game.
 	ArrayList<ParticleEffect> onEffects;
 
 	// allEffects: all effects instantiated and loaded in the game
+	// NOTE: REALLY SHITTY TEST THAT CHECKS THERE ARE ALL EFFECTS HAVE 4 
 	ArrayList<ParticleEffect> allEffects;
 
 	/**
@@ -35,6 +38,9 @@ public class WeatherManager extends Manager implements TickableManager {
 		allEffects = new ArrayList<ParticleEffect>();
 
 		setUp(rain, "2dRain.p");
+		setUp(snow, "2dSnow.p");
+		setUp(wind, "2dWind.p");
+		setUp(sandstorm, "2dSandstorm.p");
 	}
 
 	/**
@@ -58,12 +64,12 @@ public class WeatherManager extends Manager implements TickableManager {
 		weatherEffect = new ParticleEffect();
 
 		// set-up for rain
-		weatherEffect.load(
+		/*weatherEffect.load(
 				Gdx.files.internal("resources/particles/" + fileName),
 				Gdx.files.internal("resources/particles/"));
 		weatherEffect.getEmitters().first().setPosition(
-				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-		
+				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);*/
+
 		allEffects.add(weatherEffect);
 	}
 
@@ -105,6 +111,17 @@ public class WeatherManager extends Manager implements TickableManager {
 	 */
 	public ArrayList<ParticleEffect> getOnEffects() {
 		return new ArrayList<ParticleEffect>(onEffects);
+	}
+
+	/**
+	 * getter method for all effects turned instantiated.
+	 * 
+	 * Please note that this is a deep copy of the effects on list
+	 * 
+	 * @return effects: all effects in the game
+	 */
+	public ArrayList<ParticleEffect> getAllEffects() {
+		return new ArrayList<ParticleEffect>(allEffects);
 	}
 
 	/**
