@@ -2,7 +2,6 @@ package com.deco2800.hcg.entities;
 
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.worlds.AbstractWorld;
 import com.deco2800.hcg.worlds.World;
 
 public class ItemEntity extends AbstractEntity implements Tickable {
