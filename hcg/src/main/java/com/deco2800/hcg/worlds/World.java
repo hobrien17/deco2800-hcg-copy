@@ -1,7 +1,6 @@
 package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -9,9 +8,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.NPC;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Selectable;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 
@@ -98,13 +98,23 @@ public class World {
             // spawn in the NPC's from the NPC layer
             if (layerName.equals("NPC")) {
                             
-              // create NPC
+              // create NPC, add new NPC types here
               try {
-              this.addEntity(new NPC(x, y, 0, 0.5f, 0.5f, 1.0f, false, 
-                  (String) obj.getProperties().get("fName"),
-                  (String) obj.getProperties().get("sName"),
-                  NPC.Type.valueOf((String) obj.getProperties().get("Type")),
-                  (String) obj.getProperties().get("texture")) {});
+                switch ((String) obj.getProperties().get("Type")) {
+                  case "Shop":
+                    this.addEntity(new ShopNPC(x, y, 
+                        (String) obj.getProperties().get("fName"),
+                        (String) obj.getProperties().get("sName"),
+                        (String) obj.getProperties().get("texture")));
+                    break;
+                  case "Quest":
+                    this.addEntity(new QuestNPC(x, y, 
+                        (String) obj.getProperties().get("fName"),
+                        (String) obj.getProperties().get("sName"),
+                        (String) obj.getProperties().get("texture")));
+                    break;
+                }
+                
               }
               finally {/*hmm*/}
               
@@ -112,7 +122,7 @@ public class World {
             else {
               
               // otherwise, our entity is definately in our enum! so call in the spawn method
-              this.addEntity(WorldEntities.valueOf(layerName).Spawn(x, y, i+1));
+              this.addEntity(WorldEntities.valueOf(layerName).spawn(x, y, i+1));
 
             }
                                     

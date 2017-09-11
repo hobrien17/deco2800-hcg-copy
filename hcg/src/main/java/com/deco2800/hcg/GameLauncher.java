@@ -9,6 +9,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
  * @author leggy
  */
 public class GameLauncher {
+	
+	private GameLauncher(){
+	}
 
     /**
      * Main function for the game
