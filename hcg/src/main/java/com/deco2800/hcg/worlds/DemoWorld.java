@@ -10,15 +10,19 @@ import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
 import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeState;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
-import com.deco2800.hcg.entities.NPC;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 
@@ -45,6 +49,13 @@ public class DemoWorld extends AbstractWorld {
 		 */
 		this.setWidth(this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(this.getMap().getProperties().get("height", Integer.class));
+
+		// get player
+		Player player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
+		
+		// change player position based on the properties below
+		player.setPosX(Float.parseFloat((String) this.getMap().getProperties().get("PlayerX")));
+	    player.setPosY(Float.parseFloat((String) this.getMap().getProperties().get("PlayerY")));
 
 		Pot[] pots = new Pot[4];
 		for(int i = 0; i < 4; i++) {
@@ -161,10 +172,10 @@ public class DemoWorld extends AbstractWorld {
 		}
 
 		//Add an example quest NPC
-		this.addEntity(new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.Quest, "character_1") {});
+		this.addEntity(new QuestNPC(10,10,"Jane","Jensen", "character_1") {});
 
 		//Add an example shop NPC
-		this.addEntity(new NPC(30,15,0,0.5f,0.5f,1.0f, false,"John","Jensen", NPC.Type.Shop, "character_shop") {});
+		this.addEntity(new ShopNPC(30,15,"John","Jensen", "character_shop") {});
 
 
 	}

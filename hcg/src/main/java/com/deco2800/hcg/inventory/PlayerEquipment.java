@@ -75,4 +75,14 @@ public class PlayerEquipment extends FixedSizeInventory {
         equipment.slotRestrictions[1] = equipmentRestriction;
         return equipment;
     }
+
+    /**
+     * Current Method being tested to display the players inventory. Called within Player when checking for key inputs
+     *
+     * @return true of false depending if the inventory was sucessfully opened
+     */
+    public static boolean displayInventory() {
+
+        return true;
+    }
 }

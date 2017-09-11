@@ -41,6 +41,11 @@ public abstract class GenericItem implements Item {
         // TODO: implement textures
     }
 
+    
+    public String getTexture() {
+        return this.texture;
+    }
+    
     @Override
     public boolean equals(Item item) {
         return this == item;
