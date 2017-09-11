@@ -38,9 +38,6 @@ public class WeatherManager extends Manager implements TickableManager {
 		allEffects = new ArrayList<ParticleEffect>();
 
 		setUp(rain, "2dRain.p");
-		setUp(snow, "2dSnow.p");
-		setUp(wind, "2dWind.p");
-		setUp(sandstorm, "2dSandstorm.p");
 	}
 
 	/**
@@ -63,12 +60,11 @@ public class WeatherManager extends Manager implements TickableManager {
 
 		weatherEffect = new ParticleEffect();
 
-		// set-up for rain
-		/*weatherEffect.load(
+		weatherEffect.load(
 				Gdx.files.internal("resources/particles/" + fileName),
 				Gdx.files.internal("resources/particles/"));
 		weatherEffect.getEmitters().first().setPosition(
-				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);*/
+				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
 		allEffects.add(weatherEffect);
 	}

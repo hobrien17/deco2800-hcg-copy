@@ -20,7 +20,7 @@ public class weatherManagerTests {
 	public void allEffectsTest() {
 
 		ArrayList<ParticleEffect> allEffectsList = allEffects.getAllEffects();
-		Assert.assertEquals("length of allEffects not correct", 4,
+		Assert.assertEquals("length of allEffects not correct", 1,
 				allEffectsList.size());
 	}
 }
