@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
+import com.deco2800.hcg.entities.Bullet;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
@@ -18,22 +19,24 @@ public class MushroomTurret extends Enemy implements Observer {
     int range;
 
     /**
-     * Constructor for the Squirrel class. Creates a new squirrel at the given
+     * Constructor for the MushroomTurret class. Creates a new turret at the given
      * position.
      *
      * @param posX the x position
      * @param posY the y position
      * @param posZ the x position
-     * @param ID the ID of the squirrel
+     * @param ID the ID of the MushroomTurret Enemy
      */
     public MushroomTurret(float posX, float posY, float posZ, int ID) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
-        //this.setTexture();
+        //testing with tower sprite
+        this.setTexture("tower");
         this.level = 1;
         seconds = 0;
-        range = 20 * this.level;
+        range = 15 * this.level;
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
+        // weapon not working
         this.enemyWeapon = new WeaponBuilder()
                 .setWeaponType(WeaponType.MACHINEGUN)
                 .setUser(this)
@@ -43,10 +46,7 @@ public class MushroomTurret extends Enemy implements Observer {
     }
 
     public void update(Observable o, Object arg) {
-        float distance = this.distance(playerManager.getPlayer());
-        this.lastPlayerX = playerManager.getPlayer().getPosX();
-        this.lastPlayerY = playerManager.getPlayer().getPosY();
-        switch (seconds%7){
+        switch (seconds%5){
             case 0: // set turret phase 1 this.setTexture()
                 break;
             case 1: // set turret phase 2 this.setTexture();
@@ -56,17 +56,21 @@ public class MushroomTurret extends Enemy implements Observer {
             case 3: // set turret phase 4 this.setTexture();
                 break;
             case 4: // set turret phase 5 this.setTexture();
+                Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                        this.getPosX() + range, this.getPosY(), this.getPosZ(), this);
+                GameManager.get().getWorld().addEntity(bullet1);
+                Bullet bullet2 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                        Math.max(0,this.getPosX() - range), this.getPosY(), this.getPosZ(), this);
+                GameManager.get().getWorld().addEntity(bullet2);
+                Bullet bullet3 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                        this.getPosX(), this.getPosY() + range, this.getPosZ(), this);
+                GameManager.get().getWorld().addEntity(bullet3);
+                Bullet bullet4 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                        this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this);
+                GameManager.get().getWorld().addEntity(bullet4);
                 break;
-            case 5:
-                if (distance < range){
-                    enemyWeapon.updateAim((int) lastPlayerX, (int) lastPlayerY);
-                    // update to shoot in all directions?
-                    enemyWeapon.openFire();
-                }
-                break;
-            case 6:
-                enemyWeapon.ceaseFire();
-                break;
+
+                // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
         }
         seconds++;
     }

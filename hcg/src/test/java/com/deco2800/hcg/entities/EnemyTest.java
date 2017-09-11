@@ -102,7 +102,7 @@ public class EnemyTest {
     }
     @Test
     public void testMovement() {
-        enemy.move(3,3);
+        enemy.setMove(3,3);
         assertThat("PosX is not the given position", enemy.getPosX(), is(equalTo(3.0f)));
         assertThat("PosY is not the given position", enemy.getPosY(), is(equalTo(3.0f)));
         gameManager.getWorld().addEntity(enemy);

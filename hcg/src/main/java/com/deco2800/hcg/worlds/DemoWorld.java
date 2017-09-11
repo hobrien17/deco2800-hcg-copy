@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
+import com.deco2800.hcg.entities.enemy_entities.MushroomTurret;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
@@ -54,6 +55,9 @@ public class DemoWorld extends AbstractWorld {
 		Corpse corpse = new BasicCorpse(12, 12, 0, "sunflower_01");
 		this.addEntity(corpse);
 		corpse.plantInside(new Seed(Seed.Type.FIRE));
+
+		MushroomTurret mushroom = new MushroomTurret(13,20,0, 1111);
+		this.addEntity(mushroom);
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {
