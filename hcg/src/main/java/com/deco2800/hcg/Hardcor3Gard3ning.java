@@ -14,7 +14,7 @@ import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worldmapui.MapGenerator;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 
 import java.util.ArrayList;
 
@@ -72,10 +72,10 @@ public class Hardcor3Gard3ning extends Game {
         
         ArrayList<Level> levelList = new ArrayList<Level>();
         // Creates some test levels
-        Level testLevel = new Level(new AbstractWorld("resources/maps/initial-map-test.tmx"), 0, 1, 1);
-        Level testLevel2 = new Level(new AbstractWorld("resources/maps/initial-map-test.tmx"), 0, 1, 0);
-        Level testLevel3 = new Level(new AbstractWorld("resources/maps/initial-map-test.tmx"), 0, 1, 1);
-        Level testLevel4 = new Level(new AbstractWorld("resources/maps/initial-map-test.tmx"), 0, 1, 2);
+        Level testLevel = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 1);
+        Level testLevel2 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 0);
+        Level testLevel3 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 1);
+        Level testLevel4 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 2);
 
         // Eventually this will contain all the playable game levels
         levelList.add(testLevel);

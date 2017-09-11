@@ -27,7 +27,7 @@ import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.contexts.ShopMenuContext;
 
 /**
@@ -387,7 +387,7 @@ public class Player extends Character implements Tickable {
 
 		// current world and layer
 		TiledMapTileLayer layer;
-		AbstractWorld world = GameManager.get().getWorld();
+		World world = GameManager.get().getWorld();
 
 		// get speed of current tile. this is done before checking if a tile
 		// exists so a slow down tile next to the edge wouldn't cause problems.

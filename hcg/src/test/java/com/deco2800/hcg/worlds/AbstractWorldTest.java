@@ -14,11 +14,11 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Tower;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 
-class TestWorld extends AbstractWorld{
+class TestWorld extends World{
 
 }
 
-public class AbstractWorldTest extends AbstractWorld{
+public class AbstractWorldTest extends World{
 
   @Test
   public void testAddRemoveEntity() {

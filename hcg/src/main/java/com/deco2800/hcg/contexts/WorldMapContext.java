@@ -9,7 +9,7 @@ import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 
 import java.util.ArrayList;
 
@@ -97,7 +97,7 @@ public class WorldMapContext extends UIContext {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gameManager.setWorld(new AbstractWorld("resources/maps/initial-map-test.tmx"));
+                gameManager.setWorld(new World("resources/maps/initial-map-test.tmx"));
                 playerManager.spawnPlayers();
                 contextManager.pushContext(new PlayContext());
             }

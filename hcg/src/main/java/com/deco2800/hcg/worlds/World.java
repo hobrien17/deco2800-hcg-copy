@@ -1,6 +1,7 @@
 package com.deco2800.hcg.worlds;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -8,7 +9,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.NPC;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 
@@ -22,7 +25,7 @@ import java.util.List;
  * It provides storage for the WorldEntities and other universal world level
  * items.
  */
-public class AbstractWorld {
+public class World {
 
     private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
     protected TiledMap map;
@@ -31,17 +34,16 @@ public class AbstractWorld {
     private int length;
 
     /**
-     * Empty abstract world
+     * Empty abstract world, for testing I think
      */
-    public AbstractWorld() {
+    public World() {
     }
     
     /**
-     * Returns a list of entities in this world
-     *
-     * @return All Entities in the world
+     * Creates a world from a given file. 
+     * 
      */
-    public AbstractWorld(String file) {
+    public World(String file) {
       
       // load the given file
       this.map = new TmxMapLoader()
@@ -62,7 +64,7 @@ public class AbstractWorld {
                       
       // loop over all object layers
       for (MapLayer layer : getObjectLayers()){
-        
+                
           Iterator<MapObject> objects = layer.getObjects().iterator();
 
           int i = 0; // for enemy's because they need unique id's i guess
@@ -80,7 +82,7 @@ public class AbstractWorld {
             }
           }
           
-          while (objects.hasNext() && found) {
+          while (objects.hasNext() && (found || layerName.equals("NPC"))) {
                         
             MapObject obj = objects.next();
                     
@@ -93,7 +95,26 @@ public class AbstractWorld {
             
             y--; // this fixes it for some reason
             
-            this.addEntity(WorldEntities.valueOf(layerName).Spawn(x, y, i+1)); // spawn the entity in (we know it exists)
+            // spawn in the NPC's from the NPC layer
+            if (layerName.equals("NPC")) {
+                            
+              // create NPC
+              try {
+              this.addEntity(new NPC(x, y, 0, 0.5f, 0.5f, 1.0f, false, 
+                  (String) obj.getProperties().get("fName"),
+                  (String) obj.getProperties().get("sName"),
+                  NPC.Type.valueOf((String) obj.getProperties().get("Type")),
+                  (String) obj.getProperties().get("texture")) {});
+              }
+              finally {/*hmm*/}
+              
+            }
+            else {
+              
+              // otherwise, our entity is definately in our enum! so call in the spawn method
+              this.addEntity(WorldEntities.valueOf(layerName).Spawn(x, y, i+1));
+
+            }
                                     
             i++; // add to ensure uniqueness of the id, may be bad if there's multiple enemy types
             
@@ -260,4 +281,15 @@ public class AbstractWorld {
     public int getLength() {
         return length;
     }
+    
+    /**
+     * Deselects all entities.
+     */
+    public void deSelectAll() {
+        for (AbstractEntity r : this.getEntities()) {
+            if (r instanceof Selectable) {
+                ((Selectable) r).deselect();
+            }
+        }
+}
 }

@@ -4,7 +4,7 @@ package com.deco2800.hcg.entities;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 
 /**
  * A AbstractEntity is an item that can exist in both 3D and 2D worlds
@@ -319,7 +319,7 @@ public abstract class AbstractEntity implements Renderable,
      * @return the AbstractWorld related to this world.
      */
     @Deprecated
-    public AbstractWorld getParent() {
+    public World getParent() {
         return GameManager.get().getWorld();
     }
 

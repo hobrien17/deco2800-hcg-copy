@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.World;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 public class EnemyTest {
     Squirrel enemy;
     GameManager gameManager;
-    DemoWorld demoWorld;
+    World AbstractWorld;
 
     @Before
     public void createBasicEnemy() {
@@ -25,8 +25,8 @@ public class EnemyTest {
       enemy = new Squirrel(5.0f,5.0f,0.0f, 0);
       // create mock game
       gameManager = GameManager.get();
-      demoWorld = mock(DemoWorld.class);
-      gameManager.setWorld(demoWorld);
+      AbstractWorld = mock(World.class);
+      gameManager.setWorld(AbstractWorld);
     }
 
     @Test (expected = IllegalArgumentException.class)

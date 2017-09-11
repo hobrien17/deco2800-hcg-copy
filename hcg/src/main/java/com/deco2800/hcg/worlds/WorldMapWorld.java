@@ -11,7 +11,7 @@ import com.deco2800.hcg.renderers.Renderable;
  * @author leggy
  *@deprecated
  */
-public class WorldMapWorld extends AbstractWorld {
+public class WorldMapWorld extends World {
 
     /**
      * Constructor for DemoWorld
