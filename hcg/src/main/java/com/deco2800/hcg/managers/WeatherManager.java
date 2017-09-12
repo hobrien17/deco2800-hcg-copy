@@ -40,18 +40,22 @@ public class WeatherManager extends Manager {
 	 * Constructor for weather manager
 	 */
 	public WeatherManager() {
-		System.out.println("start");
+
+		boolean snow = false;
 
 		onEffects = new ArrayList<ParticleEffect>();
 		allEffects = new ArrayList<ParticleEffect>();
 
-		weather = setUp(weather, "2dRain.p");
+		if (snow) {
+			weather = setUp(weather, "2dSnow.p");
+		} else {
+			weather = setUp(weather, "2dRain.p");
+		}
 		startEffect(weather);
 
 		//batch = new SpriteBatch();
 		weatherActor = new ParticleEffectActor(weather);
 		
-		System.out.println("end");
 	}
 
 	/**

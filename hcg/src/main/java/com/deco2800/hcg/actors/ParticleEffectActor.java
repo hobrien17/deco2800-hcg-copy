@@ -47,4 +47,5 @@ public class ParticleEffectActor extends Actor {
 		}
 		batch.end();
 	}
+
 }
