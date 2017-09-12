@@ -1,12 +1,10 @@
 package com.deco2800.hcg.worlds;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Selectable;
@@ -19,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * AbstractWorld is the Game AbstractWorld
  *
@@ -26,6 +27,8 @@ import java.util.List;
  * items.
  */
 public class World {
+  
+    static final Logger LOGGER = LoggerFactory.getLogger(World.class);
 
     private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
     protected TiledMap map;
@@ -50,6 +53,7 @@ public class World {
         this.map = new TmxMapLoader()
             .load(file);
       }catch (Exception e){
+        LOGGER.error(e.toString());
         return;
       }
       

@@ -23,7 +23,7 @@ public class CottonShirt extends WearableItem{
         this.baseValue = 10;
         this.itemWeight = 3;
         //TODO: Change this texture from defaulting to spacman -> this is for testing
-        this.texture = String.format("spacman");
+        this.texture = "spacman";
     }
 
     /**
