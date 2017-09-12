@@ -4,11 +4,15 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.*;
+import com.deco2800.hcg.entities.enemy_entities.MushroomTurret;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
 import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
@@ -19,7 +23,6 @@ import com.deco2800.hcg.entities.terrain_entities.TreeState;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.renderers.Renderable;
-import com.deco2800.hcg.entities.NPC;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 
@@ -63,6 +66,9 @@ public class DemoWorld extends AbstractWorld {
 		Corpse corpse = new BasicCorpse(12, 12, 0, "sunflower_01");
 		this.addEntity(corpse);
 		corpse.plantInside(new Seed(Seed.Type.FIRE));
+
+		MushroomTurret mushroom = new MushroomTurret(13,20,0, 1111);
+		this.addEntity(mushroom);
 		
 		Random random = new Random();
 		for(int i = 0; i < 20; i++) {
@@ -166,10 +172,10 @@ public class DemoWorld extends AbstractWorld {
 		}
 
 		//Add an example quest NPC
-		this.addEntity(new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", NPC.Type.QUEST, "character_1") {});
+		this.addEntity(new QuestNPC(10,10,"Jane","Jensen", "character_1") {});
 
 		//Add an example shop NPC
-		this.addEntity(new NPC(30,15,0,0.5f,0.5f,1.0f, false,"John","Jensen", NPC.Type.SHOP, "character_shop") {});
+		this.addEntity(new ShopNPC(30,15,"John","Jensen", "character_shop") {});
 
 
 	}
