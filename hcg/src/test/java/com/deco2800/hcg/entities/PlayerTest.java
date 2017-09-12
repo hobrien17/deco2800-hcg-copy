@@ -214,9 +214,9 @@ public class PlayerTest {
 	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
 	    
 	    assertTrue("Player's maximum stamina was not initialised correctly",
-	            player.getStaminaMax() == 20);
+	            player.getStaminaMax() == 250);
         assertTrue("Player's current stamina was not initialised correctly",
-                player.getStaminaCur() == 20);
+                player.getStaminaCur() == 250);
 	}
 	
 	// note - any change to player may break these tests - add more mocking

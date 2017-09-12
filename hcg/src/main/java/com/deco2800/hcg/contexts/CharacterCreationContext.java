@@ -100,7 +100,7 @@ public class CharacterCreationContext extends UIContext{
     private void setupTopRowInfo() {
         TextButton quitButton = new TextButton("Quit", skin);
         TextField characterName = new TextField("Enter Name", skin);
-        SelectBox characterSex = new SelectBox(skin);
+        SelectBox<String> characterSex = new SelectBox<>(skin);
         characterSex.setItems(sexes);
 
         topRowInfoTable.add(characterName);
