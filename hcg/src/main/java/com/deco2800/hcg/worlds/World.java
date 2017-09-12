@@ -106,25 +106,16 @@ public class World {
             // spawn in the NPC's from the NPC layer
             if (layerName.equals("NPC")) {
                             
-              // create NPC, add new NPC types here
+              // create NPC
               try {
-                switch ((String) obj.getProperties().get("Type")) {
-                  case "Shop":
-                    this.addEntity(new ShopNPC(x, y, 
-                        (String) obj.getProperties().get("fName"),
-                        (String) obj.getProperties().get("sName"),
-                        (String) obj.getProperties().get("texture")));
-                    break;
-                  case "Quest":
-                    this.addEntity(new QuestNPC(x, y, 
-                        (String) obj.getProperties().get("fName"),
-                        (String) obj.getProperties().get("sName"),
-                        (String) obj.getProperties().get("texture")));
-                    break;
-                }
+                
+                this.addEntity(NPCs.valueOf(((String) obj.getProperties().get("Type")).toUpperCase()).spawn(x, y,
+                    (String) obj.getProperties().get("fName"),
+                    (String) obj.getProperties().get("sName"),
+                    (String) obj.getProperties().get("texture")));
                 
               }
-              finally {/*hmm*/}
+              finally {/* it didn't work */}
               
             }
             else {
