@@ -190,4 +190,9 @@ public class Seed implements Item {
 		}
 	}
 
+    @Override
+    public String getTexture() {
+        return this.type.getTexture();
+    }
+
 }

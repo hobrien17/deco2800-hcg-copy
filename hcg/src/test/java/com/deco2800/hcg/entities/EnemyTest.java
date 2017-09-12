@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.DemoWorld;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,7 @@ public class EnemyTest {
     Squirrel enemy;
     GameManager gameManager;
     DemoWorld demoWorld;
+    PlayerManager playerManager;
 
     @Before
     public void createBasicEnemy() {
@@ -27,6 +29,7 @@ public class EnemyTest {
       gameManager = GameManager.get();
       demoWorld = mock(DemoWorld.class);
       gameManager.setWorld(demoWorld);
+      playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -99,15 +102,16 @@ public class EnemyTest {
     }
     @Test
     public void testMovement() {
-        enemy.move(3,3);
+        enemy.setMove(3,3);
         assertThat("PosX is not the given position", enemy.getPosX(), is(equalTo(3.0f)));
         assertThat("PosY is not the given position", enemy.getPosY(), is(equalTo(3.0f)));
-        //gameManager.getWorld().addEntity(enemy);
-        //Player player = new Player(0, 0, 0);
-        //gameManager.getWorld().addEntity(player);
-        //enemy.onTick(0);
-        //assertThat("Status was not status given", enemy.getStatus(), is(equalTo(2)));
-        //assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0)));
-        //assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0)));
+        gameManager.getWorld().addEntity(enemy);
+        Player player = new Player(0, 0, 0);
+        gameManager.getWorld().addEntity(player);
+        playerManager.setPlayer(player);
+        enemy.onTick(0);
+        assertThat("Status was not status given", enemy.getStatus(), is(equalTo(2)));
+        assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0.0f)));
+        assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0.0f)));
     }
 }

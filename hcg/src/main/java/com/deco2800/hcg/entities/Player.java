@@ -3,7 +3,12 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
+import com.deco2800.hcg.contexts.CharacterCreationContext;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.contexts.PlayerEquipmentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +34,7 @@ import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
 import com.deco2800.hcg.contexts.ShopMenuContext;
+import com.deco2800.hcg.contexts.PerksSelectionScreen;
 
 /**
  * Entity for the playable character.
@@ -62,7 +68,7 @@ public class Player extends Character implements Tickable {
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
 	// private Weapon equippedWeapon;
-	
+
 	private int id;
 
 	/**
@@ -136,10 +142,10 @@ public class Player extends Character implements Tickable {
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
 	}
-	
+
 	/**
 	 * Creates a new player at specified position.
-	 * 
+	 *
 	 * @param posX
 	 *            beginning player X position
 	 * @param posY
@@ -151,10 +157,10 @@ public class Player extends Character implements Tickable {
 		// 0 is local player
 		this(0, posX, posY, posZ);
 	}
-	
+
 	/**
 	 * Sends input when a touch input is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position being clicked on the screen
 	 * @param screenY
@@ -173,7 +179,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when a drag input is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position on the screen that mouse is dragged to
 	 * @param screenY
@@ -190,7 +196,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when a touch input is released.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position mouse is being released on the screen
 	 * @param screenY
@@ -209,7 +215,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends the processes involved when a mouse movement is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position of mouse movement on the screen
 	 * @param screenY
@@ -222,10 +228,10 @@ public class Player extends Character implements Tickable {
 //		}
 		playerInputManager.mouseMoved(0, screenX, screenY);
 	}
-	
+
 	/**
 	 * Sends input when keys are pressed.
-	 * 
+	 *
 	 * @param keycode
 	 *            the keycode of the key pressed
 	 */
@@ -238,7 +244,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when keys are released.
-	 * 
+	 *
 	 * @param keycode
 	 *            the keycode of the key released
 	 */
@@ -311,7 +317,7 @@ public class Player extends Character implements Tickable {
 	 * @param screenY
 	 *            the y position of mouse movement on the screen
 	 */
-	private void handleMouseMoved(int screenX, int screenY) {	
+	private void handleMouseMoved(int screenX, int screenY) {
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().updatePosition(screenX, screenY);
 		}
@@ -349,16 +355,16 @@ public class Player extends Character implements Tickable {
 	 *            the NPC (as an entity) that you wish to interact with
 	 */
 	private void NPCInteraction(AbstractEntity npc) {
-		if (((NPC) npc).getNPCType() == NPC.Type.SHOP) {
-
+		
+		if(npc instanceof QuestNPC){
+			LOGGER.info("Quest NPC Interaction Started");
+		}
+		
+		else if(npc instanceof ShopNPC){
 			LOGGER.info("Shop NPC Interaction Started");
 			contextManager.pushContext(new ShopMenuContext());
 			Shop shop = new GeneralShop();
 			shop.open(0, this);
-
-		} else if (((NPC) npc).getNPCType() == NPC.Type.QUEST) {
-			LOGGER.info("Quest NPC Interaction Started");
-
 		} else {
 			LOGGER.info("Other NPC Interaction Started");
 
@@ -540,17 +546,17 @@ public class Player extends Character implements Tickable {
 	private void levelUp() {
 		xpThreshold *= 1.3;
 		level++;
-		
+
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");
 		healthMax += vitality;
 		healthCur += vitality;
-		
+
 		// Increase stamina by agility points
 		int agility = attributes.get("agility");
 		staminaMax += agility;
 		staminaCur += agility;
-		
+
 		skillPoints = 4 + attributes.get("intellect");
 		// TODO: enter level up screen
 	}
@@ -583,23 +589,57 @@ public class Player extends Character implements Tickable {
 	}
 
 	/**
+	 * Stamina determines how the player can use additional movement mechanics
+	 * when sprinting or dodge rolling, the player loses stamina that they recover
+	 * over time.
+	 *
+	 */
+	protected void handleStamina() {
+
+
+		//conditionals to handle players sprint
+		if (sprinting) {
+			/* if the player is sprinting they will be exerting themselves and running out of stamina, hence it is
+			 * drained on tick. Otherwise, they will be recovering, gaining stamina back.
+			 */
+			staminaCur -= 5;
+		} else {
+			if (staminaCur < staminaMax) {
+				//recovering
+				staminaCur += 2;
+			}
+			if (staminaCur > staminaMax) {
+				// over recovered, so revert to max.
+				staminaCur = staminaMax;
+			}
+		}
+		if (staminaCur <= 0) {
+			//if the player is out of stamina, return them to the normal movement
+			// speed and set their sprinting conditional to false.
+			sprinting = false;
+			// TODO: I don't think this works as intended
+			movementSpeed = movementSpeedNorm;
+		}
+
+	}
+
+	/**
 	 * Handle movement when wasd keys are pressed down. As well as other
 	 * possible actions on key press. Such as NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
-		if (sprinting) {
-		    // TODO: Should this be in OnTick?
-			this.setStaminaCur(this.getStaminaCur() - 10);
-		} else {
-		    this.setStaminaCur(this.getStaminaCur() + 10);
-		}
+
 		switch (keycode) {
-		// case Input.Keys.P:
-		// this.contextManager.pushContext(new PerksSelectionScreen());
+		case Input.Keys.P:
+				this.contextManager.pushContext(new PerksSelectionScreen());
+				break;
+		case Input.Keys.C:
+			this.contextManager.pushContext(new CharacterCreationContext());
+			break;
 		case Input.Keys.SHIFT_LEFT:
 			if (staminaCur > 0) {
                 sprinting = true;
-				setMovementSpeed(getMovementSpeed() * 3);
+				movementSpeed = movementSpeed * 3;
 			}
 			break;
 		case Input.Keys.W:
@@ -625,14 +665,16 @@ public class Player extends Character implements Tickable {
 			if (this.getEquippedWeapon() != null) {
 				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 			}
+			break;
+        case Input.Keys.I:
+            //Display Inventory
+            System.out.println("Access player inventory");
+            contextManager.pushContext(new PlayerEquipmentContext(this));
+            break;
 		default:
 			break;
 		}
-		if (staminaCur <= 0) {
-			sprinting = false;
-			// TODO: I don't think this works as intended
-			setMovementSpeed(movementSpeedNorm);
-		}
+		handleStamina();
 		handleDirectionInput();
 		handleNoInput();
 	}
@@ -644,7 +686,7 @@ public class Player extends Character implements Tickable {
 		switch (keycode) {
 		case Input.Keys.SHIFT_LEFT:
 			sprinting = false;
-			setMovementSpeed(movementSpeedNorm);
+			movementSpeed = movementSpeedNorm;
 			break;
 		case Input.Keys.W:
 			movementDirection.put("up", false);
@@ -774,7 +816,7 @@ public class Player extends Character implements Tickable {
 		if (id > 0) {
 			return;
 		}
-		
+
 		int worldLength = GameManager.get().getWorld().getLength();
 		int worldWidth = GameManager.get().getWorld().getWidth();
 		int tileWidth = (int) GameManager.get().getWorld().getMap().getProperties().get("tilewidth");
