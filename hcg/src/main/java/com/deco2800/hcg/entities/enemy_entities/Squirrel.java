@@ -21,7 +21,7 @@ public class Squirrel extends Enemy implements Tickable {
 
 
 	// private float speed = 0.03f;
-	private boolean collided;
+	//private boolean collided;
 
 	/**
 	 * Constructor for the Squirrel class. Creates a new squirrel at the given
@@ -66,38 +66,10 @@ public class Squirrel extends Enemy implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		this.detectPlayer();
-		Box3D newPos;
-		if(this.getStatus() == 1) {
-			newPos = this.randomMove();
-		} else if (this.getStatus() == 2){
-			newPos = this.moveToPlayer();
-			enemyWeapon.updatePosition((int)this.getPosX(), (int)this.getPosY());
-			this.shoot();
-		} else if (this.getStatus() == 3){
-			newPos = this.moveTo(this.getLastPlayerX(), this.getLastPlayerY());
-		} else {
-			newPos = getBox3D();
-			newPos.setX(this.getPosX());
-			newPos.setY(this.getPosY());
-		}
-		collided = false;
-		World world = GameManager.get().getWorld();
-		if (world.getTiledMapTileLayerAtPos((int) newPos.getX(), (int) newPos.getY()) == null) {
-			collided = true;
-		}
-		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
-		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
-				if(entity instanceof Player) {
-					this.causeDamage((Player)entity);
-				}
-				collided = true;
-			}
-		}
-		if (!collided) {
-			this.move(newPos.getX(), newPos.getY());
-		}
+		this.detectPlayer();//Change status if player detected.
+        this.setNewPos();//Put new position into Box3D.
+		this.detectCollision();//Detect collision.
+        this.moveAction();//Move enemy to the position in Box3D.
 		// Apply any effects that exist on the entity
 		myEffects.apply();
 	}

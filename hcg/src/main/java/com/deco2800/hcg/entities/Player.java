@@ -45,6 +45,9 @@ public class Player extends Character implements Tickable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
+	//string to contain filepath for character's HUD display
+	private String displayImage;
+
 	private SoundManager soundManager;
 	private ContextManager contextManager;
 	private PlayerInputManager playerInputManager;
@@ -113,6 +116,9 @@ public class Player extends Character implements Tickable {
 		this.setTexture("hcg_character");
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 		this.contextManager = (ContextManager) GameManager.get().getManager(ContextManager.class);
+
+		//HUD display
+		displayImage = "resources/ui/player_status_hud/player_display_one.png";
 
 		// for slippery
 		lastSpeedX = 0;
@@ -255,6 +261,23 @@ public class Player extends Character implements Tickable {
 		playerInputManager.keyUp(0, keycode);
 	}
 
+	/** sets the image to be displayed for the health and stamina display
+	 *
+	 * @param image must be a valid internal file path
+	 */
+
+	public void setDisplayImage(String image){
+		displayImage = image;
+	}
+
+	/**returns the filepath to the image being used for character HUD display
+	 *
+	 * @returns string containing filepath for character image
+	 */
+	public String getDisplayImage() {
+		return displayImage;
+	}
+
 	/**
 	 * Handles the processes involved when a touch input is made.
 	 * 
@@ -386,6 +409,8 @@ public class Player extends Character implements Tickable {
 		// Center the camera on the player
 		updateCamera();
 
+		//update the players stamina
+		handleStamina();
 		// set speed is the multiplier due to the ground
 		float speed = 1.0f;
 		collided = false;
@@ -523,9 +548,9 @@ public class Player extends Character implements Tickable {
 			int meleeSkill) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
 		setSkills(meleeSkill);
-		healthMax = 4 * vitality;
+		healthMax = 50 * vitality;
 		healthCur = healthMax;
-		staminaMax = 4 * agility;
+		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
 	}
 
@@ -606,7 +631,7 @@ public class Player extends Character implements Tickable {
 		} else {
 			if (staminaCur < staminaMax) {
 				//recovering
-				staminaCur += 2;
+				staminaCur += 1;
 			}
 			if (staminaCur > staminaMax) {
 				// over recovered, so revert to max.
@@ -674,7 +699,6 @@ public class Player extends Character implements Tickable {
 		default:
 			break;
 		}
-		handleStamina();
 		handleDirectionInput();
 		handleNoInput();
 	}

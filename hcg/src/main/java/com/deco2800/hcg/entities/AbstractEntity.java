@@ -317,6 +317,7 @@ public abstract class AbstractEntity implements Renderable,
      * Returns the parent of this world
      *
      * @return the AbstractWorld related to this world.
+     * @deprecated
      */
     @Deprecated
     public World getParent() {
