@@ -191,6 +191,9 @@ public class PlayContext extends Context {
 			}
 		});
 
+        /*
+        	Input Listener for Textfield
+         */
         chatTextField.setTextFieldListener(new TextField.TextFieldListener() { //textfield Listener
 			@Override
 			public void keyTyped(TextField textField, char c) {

@@ -126,6 +126,21 @@ public class TextureManager extends Manager {
         textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
         textureMap.put("safe_node", new Texture("resources/worldmap/safe_node.png"));
 
+		//Multiplayer UI Textures
+		//Multiplayer Lobby
+		textureMap.put("multi_menu_background",	new Texture("resources/ui/multiplayer_ui/menu_background.png"));
+		textureMap.put("menu_add_button", new Texture("resources/ui/multiplayer_ui/menu_add_button.png"));
+		textureMap.put("lobby_title", new Texture("resources/ui/multiplayer_ui/lobby_title.png"));
+		textureMap.put("lobby_start_button", new Texture("resources/ui/multiplayer_ui/lobby_start_button.png"));
+		textureMap.put("lobby_send_button", new Texture("resources/ui/multiplayer_ui/lobby_send_button.png"));
+		textureMap.put("lobby_image_frame", new Texture("resources/ui/multiplayer_ui/lobby_image_frame.png"));
+		textureMap.put("lobby_back_button", new Texture("resources/ui/multiplayer_ui/lobby_back_button.png"));
+		textureMap.put("lobby_separator", new Texture("resources/ui/multiplayer_ui/multiplayer_separator.png"));
+		//Server Browser
+		textureMap.put("server_host_button", new Texture("resources/ui/multiplayer_ui/menu_host_button.png"));
+		textureMap.put("server_join_button", new Texture("resources/ui/multiplayer_ui/menu_join_button.png"));
+		textureMap.put("serveru_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
+		textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
 	}
 
 	/**
