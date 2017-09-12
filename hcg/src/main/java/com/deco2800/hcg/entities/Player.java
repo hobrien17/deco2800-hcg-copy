@@ -3,12 +3,11 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
-import com.deco2800.hcg.contexts.CharacterCreationContext;
+import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.contexts.PlayerEquipmentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +32,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.AbstractWorld;
-import com.deco2800.hcg.contexts.ShopMenuContext;
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
 
 /**
  * Entity for the playable character.
@@ -630,49 +627,52 @@ public class Player extends Character implements Tickable {
 	private void handleKeyDown(int keycode) {
 
 		switch (keycode) {
-		case Input.Keys.P:
-				this.contextManager.pushContext(new PerksSelectionScreen());
+			case Input.Keys.P:
+					this.contextManager.pushContext(new PerksSelectionScreen());
+					break;
+			case Input.Keys.C:
+				this.contextManager.pushContext(new CharacterCreationContext());
 				break;
-		case Input.Keys.C:
-			this.contextManager.pushContext(new CharacterCreationContext());
-			break;
-		case Input.Keys.SHIFT_LEFT:
-			if (staminaCur > 0) {
-                sprinting = true;
-				movementSpeed = movementSpeed * 3;
-			}
-			break;
-		case Input.Keys.W:
-			movementDirection.put("up", true);
-			break;
-		case Input.Keys.S:
-			movementDirection.put("down", true);
-			break;
-		case Input.Keys.A:
-			movementDirection.put("left", true);
-			break;
-		case Input.Keys.D:
-			movementDirection.put("right", true);
-			break;
-		case Input.Keys.E:
-			checkForInteraction();
-			break;
-		case Input.Keys.R:
-			if (this.getEquippedWeapon() != null) {
-				GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
-			}
-			this.equippedItems.cycleEquippedSlot();
-			if (this.getEquippedWeapon() != null) {
-				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
-			}
-			break;
-        case Input.Keys.I:
-            //Display Inventory
-            System.out.println("Access player inventory");
-            contextManager.pushContext(new PlayerEquipmentContext(this));
-            break;
-		default:
-			break;
+			case Input.Keys.SHIFT_LEFT:
+				if (staminaCur > 0) {
+					sprinting = true;
+					movementSpeed = movementSpeed * 3;
+				}
+				break;
+			case Input.Keys.W:
+				movementDirection.put("up", true);
+				break;
+			case Input.Keys.S:
+				movementDirection.put("down", true);
+				break;
+			case Input.Keys.A:
+				movementDirection.put("left", true);
+				break;
+			case Input.Keys.D:
+				movementDirection.put("right", true);
+				break;
+			case Input.Keys.E:
+				checkForInteraction();
+				break;
+			case Input.Keys.R:
+				if (this.getEquippedWeapon() != null) {
+					GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
+				}
+				this.equippedItems.cycleEquippedSlot();
+				if (this.getEquippedWeapon() != null) {
+					GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
+				}
+				break;
+			case Input.Keys.ESCAPE:
+				contextManager.popContext();
+				break;
+			case Input.Keys.I:
+				//Display Inventory
+				System.out.println("Access player inventory");
+				contextManager.pushContext(new PlayerEquipmentContext(this));
+				break;
+			default:
+				break;
 		}
 		handleStamina();
 		handleDirectionInput();
