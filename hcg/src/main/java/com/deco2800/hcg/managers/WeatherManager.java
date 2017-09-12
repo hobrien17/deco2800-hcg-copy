@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 //import com.deco2800.hcg.entities.Tickable;
 import java.util.*;
+import com.deco2800.hcg.actors.ParticleEffectActor;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class WeatherManager extends Manager implements TickableManager {
+public class WeatherManager extends Manager {
 
 	// list of effects to be implemented
 	// none
@@ -18,10 +20,14 @@ public class WeatherManager extends Manager implements TickableManager {
 	// storm (rain, clouds, lightning)
 	// sandstorm
 
-	ParticleEffect rain;
-	ParticleEffect snow;
-	ParticleEffect wind;
-	ParticleEffect sandstorm;
+	// ParticleEffect rain;
+	// ParticleEffect snow;
+	// ParticleEffect wind;
+	// ParticleEffect sandstorm;
+
+	ParticleEffect weather;
+	ParticleEffectActor weatherActor;
+	SpriteBatch batch;
 
 	// onEffects: a list of effects that is currently on in game.
 	ArrayList<ParticleEffect> onEffects;
@@ -34,10 +40,18 @@ public class WeatherManager extends Manager implements TickableManager {
 	 * Constructor for weather manager
 	 */
 	public WeatherManager() {
+		System.out.println("start");
+
 		onEffects = new ArrayList<ParticleEffect>();
 		allEffects = new ArrayList<ParticleEffect>();
 
-		setUp(rain, "2dRain.p");
+		weather = setUp(weather, "2dRain.p");
+		startEffect(weather);
+
+		//batch = new SpriteBatch();
+		weatherActor = new ParticleEffectActor(weather);
+		
+		System.out.println("end");
 	}
 
 	/**
@@ -53,10 +67,10 @@ public class WeatherManager extends Manager implements TickableManager {
 	 * 
 	 * @ensure allEffects contains weatherEffect
 	 */
-	private void setUp(ParticleEffect weatherEffect, String fileName) {
-		if (allEffects.contains(weatherEffect)) {
-			return;
-		}
+	private ParticleEffect setUp(ParticleEffect weatherEffect, String fileName) {
+		// if (allEffects.contains(weatherEffect)) {
+		// 	return;
+		// }
 
 		weatherEffect = new ParticleEffect();
 
@@ -65,8 +79,37 @@ public class WeatherManager extends Manager implements TickableManager {
 				Gdx.files.internal("resources/particles/"));
 		weatherEffect.getEmitters().first().setPosition(
 				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+		
+		ParticleEmitter rain = weatherEffect.getEmitters().first();
+
+		int scale = 9;
+
+		float heightHighMax = rain.getSpawnHeight().getHighMax();
+		rain.getSpawnHeight().setHighMax(heightHighMax * scale);
+
+		float heightLowMax = rain.getSpawnHeight().getLowMax();
+		rain.getSpawnHeight().setLowMax(heightLowMax * scale);
+
+		float heightHighMin = rain.getSpawnHeight().getHighMin();
+		rain.getSpawnHeight().setHighMin(heightHighMin * scale);
+
+		float heightLowMin = rain.getSpawnHeight().getLowMin();
+		rain.getSpawnHeight().setLowMin(heightLowMin * scale);
+
+		float widthHighMax = rain.getSpawnWidth().getHighMax();
+		rain.getSpawnWidth().setHighMax(widthHighMax * scale * 2);
+
+		float widthLowMax = rain.getSpawnWidth().getLowMax();
+		rain.getSpawnWidth().setLowMax(widthLowMax * scale * 2);
+
+		float widthHighMin = rain.getSpawnWidth().getHighMin();
+		rain.getSpawnWidth().setHighMin(widthHighMin * scale * 2);
+
+		float widthLowMin = rain.getSpawnWidth().getLowMin();
+		rain.getSpawnWidth().setLowMin(widthLowMin * scale * 2);
 
 		allEffects.add(weatherEffect);
+		return weatherEffect;
 	}
 
 	/**
@@ -120,24 +163,12 @@ public class WeatherManager extends Manager implements TickableManager {
 		return new ArrayList<ParticleEffect>(allEffects);
 	}
 
-	/**
-	 * Handles incrementing time on tick event.
-	 *
-	 * @param gameTickCount
-	 *            of all game ticks so far.
-	 */
-	public void onTick(long gameTickCount) {
-		for (ParticleEffect ef : onEffects) {
-			// this was the sample code for updating the particle effects, Ash
-			// to implement properly
-			// rain.update(Gdx.graphics.getDeltaTime());
-			// rain.draw();
+	public ParticleEffectActor getActor() {
+		return weatherActor;
+	}
 
-			// reset animation if completed
-			if (ef.isComplete()) {
-				ef.reset();
-			}
-		}
+	public enum Weather {
+		NONE, RAIN, SNOW, DROUGHT, STORM, SANDSTORM
 	}
 
 }

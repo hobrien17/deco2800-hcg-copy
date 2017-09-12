@@ -115,7 +115,9 @@ public class PlayContext extends Context {
 				contextManager.popContext();
 			}
 		});
-
+        
+        /* Add ParticleEffectActor that controls weather. */
+        stage.addActor(weatherManager.getActor());
 
 		/* Add all buttons to the menu */
 		window.add(button);
