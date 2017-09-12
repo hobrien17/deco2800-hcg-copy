@@ -61,6 +61,7 @@ public class PlayContext extends Context {
 	private Stage stage;
 	private Window window;
 	private Window plantWindow;
+	private Stack chatBackground;
 	private Table chatWindow;
 	private Label plantInfo;
 	private Label clockLabel;
@@ -68,6 +69,7 @@ public class PlayContext extends Context {
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private  Button chatButton;
+	private Image chatBar;
 	private String chatString = new String("");
 
 
@@ -85,6 +87,7 @@ public class PlayContext extends Context {
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
+		TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -151,22 +154,25 @@ public class PlayContext extends Context {
         stage.addActor(plantWindow);
 
         /* Create window for chat and all components */
+        chatBar = new Image(textureManager.getTexture("chat_background"));
+        chatBackground = new Stack(chatBar);
 		chatWindow = new Table(skin);
-		chatWindow.setPosition(0, 0);
-		chatWindow.setSize(350,250);
         chatTextArea = new TextArea("", skin);
         chatTextField = new TextField("", skin);
         chatTextArea.setDisabled(true);
         chatTextArea.setText("");
         chatButton = new TextButton("Send", skin);
-        chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3);
-        chatWindow.row().height(40);
+        chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3).padBottom(20);
+        chatWindow.row().height(40).padBottom(10);
         chatWindow.add(chatTextField).prefWidth(350);
         chatWindow.add(chatButton);
         chatWindow.setDebug(false);//display lines for debugging
-
-
-        stage.addActor(chatWindow);
+		chatWindow.padTop(35).padLeft(15).padRight(15);
+		chatBackground.setPosition(0,0);
+		chatBackground.add(chatWindow);
+		chatBackground.setSize(380,270);
+		chatBackground.setScale((float)1.2);
+        stage.addActor(chatBackground);
 
 		/*
 		 * Setup inputs for the buttons and the game itself

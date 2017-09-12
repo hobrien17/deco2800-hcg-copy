@@ -128,6 +128,7 @@ public class TextureManager extends Manager {
 
 		//Multiplayer UI Textures
 		//Multiplayer Lobby
+		textureMap.put("chat_background",	new Texture("resources/ui/multiplayer_ui/chatbar.png"));
 		textureMap.put("multi_menu_background",	new Texture("resources/ui/multiplayer_ui/menu_background.png"));
 		textureMap.put("menu_add_button", new Texture("resources/ui/multiplayer_ui/menu_add_button.png"));
 		textureMap.put("lobby_title", new Texture("resources/ui/multiplayer_ui/lobby_title.png"));

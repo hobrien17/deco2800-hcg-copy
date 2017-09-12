@@ -32,12 +32,9 @@ public class LobbyContext extends UIContext{
     public LobbyContext() {
 
         GameManager gameManager = GameManager.get();
-        ContextManager contextManager = (ContextManager)
-                gameManager.getManager(ContextManager.class);
-        PlayerManager playerManager = (PlayerManager)
-                gameManager.getManager(PlayerManager.class);
-        TextureManager textureManager = (TextureManager)
-                gameManager.getManager(TextureManager.class);
+        ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+        PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+        TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
