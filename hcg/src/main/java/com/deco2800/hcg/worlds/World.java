@@ -45,10 +45,14 @@ public class World {
      */
     public World(String file) {
       
-      // load the given file
-      this.map = new TmxMapLoader()
-          .load(file);
-
+      // attempt to load the given file
+      try{
+        this.map = new TmxMapLoader()
+            .load(file);
+      }catch (Exception e){
+        return;
+      }
+      
       /*
        * Grab the width and length values from the map file to use as the world size
        */
@@ -136,6 +140,7 @@ public class World {
       }
 
       // biome testing stuff
+      /*
       Biomes biome = Biomes.GRASS;
       
       TiledMapTileLayer tiled = (TiledMapTileLayer) map.getLayers().get("ground");
@@ -144,7 +149,7 @@ public class World {
           tiled.getCell(i, i).setTile(new StaticTiledMapTile(
               new TextureRegion(biome.getTexture(TileTypes.PATH))));
       }
-
+      */
       
     }
     

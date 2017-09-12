@@ -1,5 +1,6 @@
 package com.deco2800.hcg.worlds;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -9,16 +10,20 @@ import org.mockito.Mockito;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tower;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 
 class TestWorld extends World{
 
 }
 
-public class AbstractWorldTest extends World{
+public class WorldTest extends World{
 
   @Test
   public void testAddRemoveEntity() {
@@ -123,5 +128,44 @@ public class AbstractWorldTest extends World{
     
   }
   
+  @Test
+  public void testBadWorld() {
+
+    World world = new World("This world doesn't exist");
+    
+    assertTrue(world.getTiledMapTileLayerAtPos(0, 0) == null);
+
+    assertTrue(world.getObjectLayers().size() == 0);
+
+    assertTrue(world.getMap() == null);
+
+  }
+
+  @Test
+  public void testChangePlayerPosOnCreation() {
+    
+    // get game manager
+    GameManager gameManager = GameManager.get();
+    
+    // create and add player
+    Player player = new Player(0, 0, 0);
+    
+    // set player
+    ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).setPlayer(player);
+
+    // create world from our good test map
+    World world = new World("resources/maps/test.tmx");
+
+    assertFalse(world.getMap() == null);
+
+    // add world to gamemanager
+    gameManager.setWorld(world);
+
+    // test player x, y was changed as in the map properties
+    assertTrue(player.getPosX() > 4 && player.getPosX() < 6);
+    assertTrue(player.getPosY() > 4 && player.getPosY() < 6);
+        
+  }
+
 }
 
