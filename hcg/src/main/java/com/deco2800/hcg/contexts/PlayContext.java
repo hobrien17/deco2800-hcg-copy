@@ -65,10 +65,10 @@ public class PlayContext extends Context {
 	private Label plantInfo;
 	private Label clockLabel;
 	private Label dateLabel;
-	private Label chatLabel;
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private  Button chatButton;
+	private String chatString = new String("");
 
 
 
@@ -154,8 +154,6 @@ public class PlayContext extends Context {
 		chatWindow = new Table(skin);
 		chatWindow.setPosition(0, 0);
 		chatWindow.setSize(350,250);
-		chatLabel = new Label("Say: ", skin);
-		chatLabel.setColor(new Color().GRAY);
         chatTextArea = new TextArea("", skin);
         chatTextField = new TextField("", skin);
         chatTextArea.setDisabled(true);
@@ -163,7 +161,6 @@ public class PlayContext extends Context {
         chatButton = new TextButton("Send", skin);
         chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3);
         chatWindow.row().height(40);
-        chatWindow.add(chatLabel).left().prefWidth(10);
         chatWindow.add(chatTextField).prefWidth(350);
         chatWindow.add(chatButton);
         chatWindow.setDebug(false);//display lines for debugging
@@ -179,22 +176,41 @@ public class PlayContext extends Context {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (NetworkState.isInitialised()) {
-					String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
-					chatTextField.setText("");
-					chatTextArea.appendText(chatMessage + "\n");
-					stage.setKeyboardFocus(null);
+					if (chatString.trim().length()>0) {
+						String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
+						chatTextField.setText("");
+						chatTextArea.appendText(chatMessage + "\n");
+						stage.setKeyboardFocus(null);
+						chatString = "";
+					} else {
+						chatTextField.setText("");
+						chatTextField.setCursorPosition(0);
+						chatString = "";
+					}
 				}
 			}
 		});
 
-        chatTextField.setTextFieldListener(new TextField.TextFieldListener() {
+        chatTextField.setTextFieldListener(new TextField.TextFieldListener() { //textfield Listener
 			@Override
 			public void keyTyped(TextField textField, char c) {
-				if (c == '\r' && NetworkState.isInitialised()) {
-					String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
-					chatTextField.setText("");
-					chatTextArea.appendText(chatMessage + "\n");
-					stage.setKeyboardFocus(null);
+				if ( c != '\b') {
+					chatString += c;
+				} else if (chatString.length() > 0){
+					chatString = chatString.substring(0, chatString.length() - 1);
+				}
+				if ((c == '\r' && NetworkState.isInitialised())) {
+					if (chatString.trim().length()>0) {
+						String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
+						chatTextField.setText("");
+						chatTextArea.appendText(chatMessage + "\n");
+						stage.setKeyboardFocus(null);
+						chatString = "";
+					} else {
+						chatTextField.setText("");
+						chatTextField.setCursorPosition(0);
+						chatString = "";
+					}
 				}
 			}
 		});
