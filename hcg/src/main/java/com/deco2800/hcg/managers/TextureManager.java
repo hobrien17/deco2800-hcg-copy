@@ -67,6 +67,9 @@ public class TextureManager extends Manager {
 		textureMap.put("inferno_01", new Texture("resources/sprites/plants/inferno_01.png"));
 		textureMap.put("inferno_02", new Texture("resources/sprites/plants/inferno_02.png"));
 		textureMap.put("inferno_03", new Texture("resources/sprites/plants/inferno_03.png"));
+		textureMap.put("ice_01", new Texture("resources/sprites/plants/Christmas_01.png"));
+		textureMap.put("ice_02", new Texture("resources/sprites/plants/Christmas_02.png"));
+		textureMap.put("ice_03", new Texture("resources/sprites/plants/Christmas_03.png"));
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 
@@ -102,11 +105,15 @@ public class TextureManager extends Manager {
 		textureMap.put("menu_go_button", new Texture("resources/ui/main_menu/menu_go_button.png"));
 		textureMap.put("menu_host_button", new Texture("resources/ui/main_menu/menu_host_button.png"));
 		textureMap.put("menu_back_button", new Texture("resources/ui/main_menu/menu_back_button.png"));
+		textureMap.put("menu_instructions_button", new Texture("resources/ui/main_menu/menu_instructions_button.png"));
+		textureMap.put("instructions_back_button", new Texture("resources/ui/main_menu/instructions_back_button.png"));
+		textureMap.put("instructions_text", new Texture("resources/ui/main_menu/instructions_text.png"));
+		textureMap.put("instructions_title",new Texture("resources/ui/main_menu/instructions_title.png"));
 
 		//Perks
 		textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
-		textureMap.put("red_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
-		textureMap.put("purple_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
+		textureMap.put("red_tree_path", new Texture("resources/ui/perks/red_tree_path.png"));
+		textureMap.put("purple_tree_path", new Texture("resources/ui/perks/purple_tree_path.png"));
 		textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
 
 		//Shop textures
@@ -126,6 +133,11 @@ public class TextureManager extends Manager {
         textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
         textureMap.put("safe_node", new Texture("resources/worldmap/safe_node.png"));
 
+        //Item textures
+		textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
+		textureMap.put("green_potion", new Texture("resources/sprites/potions/potion_round_green.png"));
+		textureMap.put("purple_potion", new Texture("resources/sprites/potions/potion_round_purple.png"));
+		textureMap.put("blue_potion", new Texture("resources/sprites/potions/potion_round_blue.png"));
 	}
 
 	/**

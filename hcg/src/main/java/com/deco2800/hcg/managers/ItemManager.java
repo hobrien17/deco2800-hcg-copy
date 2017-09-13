@@ -3,19 +3,21 @@ package com.deco2800.hcg.managers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.garden_entities.plants.*;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.seeds.*;
+import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.items.Item;
 
 /**
- * An class that creates new items based on inputted strings Currently used by
- * plants that drop loot
+ * An class that creates new items based on the inputed parameters
  *
  * @author Henry O'Brien
  */
 public class ItemManager extends Manager {
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(GameManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
     /**
      * Returns a new item, defined by the given name

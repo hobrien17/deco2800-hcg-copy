@@ -1,6 +1,6 @@
 package com.deco2800.hcg.entities.worldmap;
 
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 
 /**
  * Used to hold information about a specific level within a world.
@@ -10,7 +10,7 @@ import com.deco2800.hcg.worlds.AbstractWorld;
  * This should likely be stored in the AbstractWorld class but it is here for now.
  */
 public class Level {
-	private AbstractWorld world;
+	private World world;
 	private int worldType; // <- possibility for biomes in map
 	private int difficulty; // <- levels can become harder as game progresses
 	/* What kind of level?
@@ -39,7 +39,7 @@ public class Level {
 	 *         1 for standard level
 	 *         2 for boss level 
 	 */
-	public Level(AbstractWorld world, int type, int difficulty, int levelType) {
+	public Level(World world, int type, int difficulty, int levelType) {
 		this.world = world;
 		worldType = type;
 		this.difficulty = difficulty;
@@ -53,7 +53,7 @@ public class Level {
 	 * @return
 	 *     Returns the level's world/layout
 	 */
-	public AbstractWorld getWorld() {
+	public World getWorld() {
 		return world;
 	}
 	
@@ -91,7 +91,7 @@ public class Level {
 	 * @param newWorld
 	 *     The world/layout to set the level's world to
 	 */
-	public void setWorld(AbstractWorld newWorld) {
+	public void setWorld(World newWorld) {
 		world = newWorld;
 	}
 	

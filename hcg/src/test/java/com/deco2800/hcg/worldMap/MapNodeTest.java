@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertFalse;
 
-import com.deco2800.hcg.worlds.BlankTestWorld;
+import com.deco2800.hcg.worlds.World;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -16,12 +16,12 @@ import com.deco2800.hcg.entities.worldmap.WorldMap;
 public class MapNodeTest {
 
     WorldMap worldMap;
-    BlankTestWorld world;
+    World world;
     Level tmpLevel;
     MapNode tmpNode;
     @Before
     public void setup() {
-        world = new BlankTestWorld();
+        world = new World();
         tmpLevel = new Level(world, 0, 0, 0);
     }
 

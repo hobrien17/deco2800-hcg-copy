@@ -1,11 +1,9 @@
 package com.deco2800.hcg.entities;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.GameManager;
 
 /**
  * The Character abstract class is to be extended by all Characters, both
@@ -59,6 +57,10 @@ public abstract class Character extends AbstractEntity {
     // TODO: Message weapons team to find out what categories of weapons they will implement
     protected int meleeSkill;
 
+    //Kill Log with worlds
+    //Main level is a mapping between the world ID to Enemies and their amount of kills
+    private HashMap<Integer,HashMap<Integer, Integer>> killLog;
+
     /**
      * Creates a new Character at the given position.
      * @param posX the x position
@@ -91,6 +93,8 @@ public abstract class Character extends AbstractEntity {
         this.healthCur = healthMax;
         this.meleeSkill = 1;
 
+        //Initialize the empty kill log
+        killLog = new HashMap<>();
     }
 
     /**
@@ -208,7 +212,7 @@ public abstract class Character extends AbstractEntity {
     * zero if passed a negative number. Defaults to the character's
     * maximum stamina if passed a value greater than it.
     * 
-    * @param health The value to set current health to
+    * @param stamina The value to set current stamina to
     */
     protected void setStaminaCur(int stamina) {
         if (stamina < 0) {
@@ -323,6 +327,7 @@ public abstract class Character extends AbstractEntity {
      * @param attribute is an attribute in CHARACTER_ATTRIBUTES
      * @return value of attribute
      */
+
     public int getAttribute(String attribute) {
         if (CHARACTER_ATTRIBUTES.contains(attribute)) {
             return new Integer(attributes.get(attribute));
@@ -336,5 +341,132 @@ public abstract class Character extends AbstractEntity {
      */
     public int getMeleeSkill() {
         return meleeSkill;
+    }
+
+    /**
+     * Add a kill for the specified enemy ID. If it has not being killed before, add it to the kill log and
+     * set its kill count to 1.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     */
+    public void killLogAdd(int enemyID) {
+        //Add the node ID if it has not already being added
+        killLog.putIfAbsent(getCurrentNode(),new HashMap<>());
+        //Add the enemy ID to that world if it has not already being added
+        killLog.get(getCurrentNode()).putIfAbsent(enemyID, 0);
+        killLog.get(getCurrentNode()).put(enemyID,1 + killLog.get(getCurrentNode()).get(enemyID));
+        updateQuestLog();
+    }
+
+    /**
+     * Add a kill for the specified enemy ID. If it has not being killed before, add it to the kill log and
+     * set its kill count to 1.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     */
+    public void killLogAdd(int enemyID, int nodeID) {
+        //Add the node ID if it has not already being added
+        killLog.putIfAbsent(nodeID,new HashMap<>());
+        //Add the enemy ID to that world if it has not already being added
+        killLog.get(nodeID).putIfAbsent(enemyID, 0);
+        killLog.get(nodeID).put(enemyID,1 + killLog.get(nodeID).get(enemyID));
+        updateQuestLog();
+    }
+
+
+    /**
+     * Gets the amount of kills logged for the specified enemy ID in the current Node position
+     * If it has not being killed before at the location it returns 0 kills for that enemy.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     * @return The amount of times the specified enemy has being killed in an area.
+     */
+    public int killLogGet(int enemyID) {
+        return killLog.getOrDefault(getCurrentNode(),new HashMap<>()).getOrDefault(enemyID,0);
+    }
+
+    /**
+     * Gets the amount of kills logged for the specified enemy ID for all Node positions
+     * If it has not being killed before at the location it returns 0 kills for that enemy.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     * @return The amount of times the specified enemy has being killed by the character.
+     */
+    public int killLogGetTotal(int enemyID) {
+        int total = 0;
+        for (int NodeID: killLog.keySet()) {
+            total += killLog.get(NodeID).getOrDefault(enemyID,0);
+        }
+        return total;
+    }
+
+    /**
+     * Gets the amount of kills logged for the specified enemy ID in the specified Node position
+     * If it has not being killed before at the location it returns 0 kills for that enemy.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     * @param nodeID the specified node to get from
+     * @return The amount of times the specified enemy has being killed in the kill log.
+     */
+    public int killLogGet(int enemyID,int nodeID) {
+        if (killLog.containsKey(nodeID)) {
+            return killLog.get(nodeID).getOrDefault(enemyID,0);
+        }
+        return 0;
+    }
+
+    /**
+     * Used to determine if a particular enemy type has being killed in any of the nodes.
+     * More useful for determining if bosses or the like have being killed.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     * @return if the specified enemy has being killed before.
+     */
+    public boolean killLogContainsTotal(int enemyID) {
+        for (Integer worldID: killLog.keySet()) {
+            if (killLog.get(worldID).containsKey(enemyID)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Used to determine if a particular enemy type has being killed at the current node.
+     * More useful for determining if bosses or the like have being killed.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     * @return if the specified enemy has being killed before.
+     */
+    public boolean killLogContains(int enemyID) {
+        return killLog.get(getCurrentNode()).containsKey(enemyID);
+    }
+
+    /**
+     * Used to determine if a particular enemy type has being killed at the specified node ID.
+     * More useful for determining if bosses or the like have being killed.
+     *
+     * @param enemyID the unique identifier ID for the enemy.
+     * @return if the specified enemy has being killed before.
+     */
+    public boolean killLogContains(int enemyID, int nodeID) {
+        return killLog.get(nodeID).containsKey(enemyID);
+    }
+
+    /**
+     * Used to tell the quest log that things have changed. Which will be useful if 'notifications'
+     * are enabled to tell the player that they have competed a quest.
+     */
+    public void updateQuestLog() {
+        //Todo: Add the quest log function for updating.
+    }
+
+    /**
+     * @return the position in the nodal map where the character currently is
+     */
+    private int getCurrentNode() {
+        //Todo, Once the world ID is added un comment the below line
+        //return GameManager.get().getWorld(). //Todo add function name here
+        return 0;
     }
 }

@@ -5,8 +5,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
+import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.World;
+import com.deco2800.hcg.managers.PlayerManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,16 +18,19 @@ import java.util.Map;
 public class EnemyTest {
     Squirrel enemy;
     GameManager gameManager;
-    DemoWorld demoWorld;
+    
+    World AbstractWorld;
+    PlayerManager playerManager;
 
     @Before
     public void createBasicEnemy() {
       // create enemy
-      enemy = new Squirrel(5,5,0, 1);
+      enemy = new Squirrel(5.0f,5.0f,0.0f, 0);
       // create mock game
       gameManager = GameManager.get();
-      demoWorld = mock(DemoWorld.class);
-      gameManager.setWorld(demoWorld);
+      AbstractWorld = mock(World.class);
+      gameManager.setWorld(AbstractWorld);
+      playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -35,16 +40,16 @@ public class EnemyTest {
 
     @Test
     public void testHealth() {
-        assertThat("Enemy did not start with health given.", enemy.getHealth(),
+        assertThat("Enemy did not start with health given.", enemy.getHealthCur(),
                 is(equalTo(1000)));
         enemy.changeHealth(-600);
-        assertThat("Enemy did not give expected value when health changed by -600.", enemy.getHealth(),
+        assertThat("Enemy did not give expected value when health changed by -600.", enemy.getHealthCur(),
                 is(equalTo(400)));
         enemy.changeHealth(100);
-        assertThat("Enemy did not give expected value when health changed by 100.", enemy.getHealth(),
+        assertThat("Enemy did not give expected value when health changed by 100.", enemy.getHealthCur(),
                 is(equalTo(500)));
         enemy.changeHealth(-700);
-        assertThat("Enemy did not give expected value when health changed by -700.", enemy.getHealth(),
+        assertThat("Enemy did not give expected value when health changed by -700.", enemy.getHealthCur(),
                 is(equalTo(0)));
     }
 
@@ -69,18 +74,18 @@ public class EnemyTest {
     @Test 
     public void testTakeDamangeNoHealthLeft() {
         enemy.takeDamage(2000);
-        assertThat("Enemy health is not reduced to 0", enemy.getHealth(), is(equalTo(0)));
+        assertThat("Enemy health is not reduced to 0", enemy.getHealthCur(), is(equalTo(0)));
     }
     
     @Test
     public void testTakeDamageNormalCase() {
         enemy.takeDamage(100);
-        assertThat("Enemy health is not 900 after taking the damage", enemy.getHealth(), is(equalTo(900)));
+        assertThat("Enemy health is not 900 after taking the damage", enemy.getHealthCur(), is(equalTo(900)));
     }
     
     @Test
     public void testOtherGetterMethods() {
-        assertThat("Enemy ID is not equal the given ID", enemy.getID(), is(equalTo(1)));
+        assertThat("Enemy ID is not equal the given ID", enemy.getID(), is(equalTo(0)));
         assertThat("Enemy Strength is not what it is given", enemy.getStrength(), is(equalTo(5)));
         assertThat("Enemy level is not what is given", enemy.getLevel(), is(equalTo(1)));
     }
@@ -98,15 +103,16 @@ public class EnemyTest {
     }
     @Test
     public void testMovement() {
-        enemy.move(3,3);
+        enemy.setMove(3,3);
         assertThat("PosX is not the given position", enemy.getPosX(), is(equalTo(3.0f)));
         assertThat("PosY is not the given position", enemy.getPosY(), is(equalTo(3.0f)));
-        //gameManager.getWorld().addEntity(enemy);
-        //Player player = new Player(0, 0, 0);
-        //gameManager.getWorld().addEntity(player);
-        //enemy.onTick(0);
-        //assertThat("Status was not status given", enemy.getStatus(), is(equalTo(2)));
-        //assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0)));
-        //assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0)));
+        gameManager.getWorld().addEntity(enemy);
+        Player player = new Player(0, 0, 0);
+        gameManager.getWorld().addEntity(player);
+        playerManager.setPlayer(player);
+        enemy.onTick(0);
+        assertThat("Status was not status given", enemy.getStatus(), is(equalTo(2)));
+        assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0.0f)));
+        assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0.0f)));
     }
 }

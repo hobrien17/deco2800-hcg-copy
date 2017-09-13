@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
-import com.deco2800.hcg.worlds.BlankTestWorld;
+import com.deco2800.hcg.worlds.World;
 
 public class WorldMapTest {
 
@@ -17,7 +17,7 @@ public class WorldMapTest {
 
     @Before
     public void setup() {
-    	Level newLevel = new Level(new BlankTestWorld(), 0, 0, 0);
+    	Level newLevel = new Level(new World(), 0, 0, 0);
     	MapNode node = new MapNode(0, 0, 0, newLevel, false);
     	List<MapNode> nodeList = new ArrayList<>();
     	nodeList.add(node);
