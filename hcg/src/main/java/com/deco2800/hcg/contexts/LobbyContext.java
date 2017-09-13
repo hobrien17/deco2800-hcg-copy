@@ -11,6 +11,7 @@ import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.worlds.DemoWorld;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  * UI for Multiplayer Lobby. Made by Leon Zheng from Team 9
@@ -18,7 +19,7 @@ import com.deco2800.hcg.worlds.DemoWorld;
 public class LobbyContext extends UIContext{
 
     private ImageButton start, back, send;
-    private Table main;
+    private Table main, playerTable, labelTable, titleTable, chatTable;
     private Label lobbyLabel, members;
     private Image lobbyTitle, separator1, separator2, playerPortrait1, playerPortrait2, playerPortrait3, playerPortrait4;
     private CheckBox readyCheckBox;
@@ -39,9 +40,13 @@ public class LobbyContext extends UIContext{
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
         main = new Table();
+        playerTable = new Table();
+        labelTable = new Table();
+        titleTable = new Table();
+        chatTable = new Table();
         main.setFillParent(true);
         main.setBackground(new Image(textureManager.getTexture("multi_menu_background")).getDrawable());
-        main.setDebug(false); //display lines for debugging
+        main.setDebug(true); //display lines for debugging
         //images set up
         lobbyTitle = new Image(textureManager.getTexture("lobby_title"));
         separator1 = new Image(textureManager.getTexture("lobby_separator"));
@@ -70,28 +75,32 @@ public class LobbyContext extends UIContext{
 
         //body of GUI
         main.row().height(90);
-        main.add(back).expandX().left();
-        main.add(lobbyTitle).expandX().colspan(2);
-        main.add(start).expandX().right();
+        titleTable.add(back).expandX().left();
+        titleTable.add(lobbyTitle).expandX();
+        titleTable.add(start).expandX().right();
+        main.add(titleTable).fill();
         main.row();
         main.add(separator1).colspan(4).fill();
         main.row();
-        main.add(lobbyLabel).left().colspan(3);
-        main.add(readyCheckBox);
+        labelTable.add(lobbyLabel).expandX().left().padLeft(50);
+        labelTable.add(readyCheckBox).expandX().right().padRight(50);
+        main.add(labelTable).fill();
         main.row();
-        main.add(members).left().colspan(4);
+        main.add(members).left();
         main.row().expandX().padBottom(20).padTop(20);
-        main.add(player1).uniform();
-        main.add(player2).uniform();
-        main.add(player3).uniform();
-        main.add(player4).uniform();
+        playerTable.add(player1).expand().uniform();
+        playerTable.add(player2).expand().uniform();
+        playerTable.add(player3).expand().uniform();
+        playerTable.add(player4).expand().uniform();
+        main.add(playerTable).fill();
         main.row();
-        main.add(separator2).colspan(4).fill();
+        main.add(separator2).fill();
         main.row().expand();
-        main.add(chatTextArea).colspan(4).fill();
+        main.add(chatTextArea).fill();
         main.row();
-        main.add(chatTextfield).colspan(3).fill();
-        main.add(send);
+        chatTable.add(chatTextfield).fill().expandX().left();
+        chatTable.add(send).right();
+        main.add(chatTable).fill();
 
         stage.addActor(main);
 
