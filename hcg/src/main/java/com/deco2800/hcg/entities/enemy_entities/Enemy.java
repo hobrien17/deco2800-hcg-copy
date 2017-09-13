@@ -178,7 +178,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      */
     public void causeDamage(Player player) {
         //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
-        player.takeDamage(10);
+        player.takeDamage(1);
     }
 
     @Override
