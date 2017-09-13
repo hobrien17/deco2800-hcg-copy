@@ -1,12 +1,15 @@
-package com.deco2800.hcg.entities;
+package com.deco2800.hcg.entities.bullets;
 
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
+import com.deco2800.hcg.entities.Player;
 
 import java.util.List;
 
@@ -182,6 +185,11 @@ public class Bullet extends AbstractEntity implements Tickable {
 				if (entity instanceof Player && user instanceof Enemy) {
 					//add code to apply effect to player here
 					hitCount--;
+				}
+				//COllision with corpse
+				if (entity instanceof Corpse && user instanceof Player) {
+					//create sunflower turret here
+					hitCount = 0;
 				}
 				if (hitCount == 0) {
 					GameManager.get().getWorld().removeEntity(this);
