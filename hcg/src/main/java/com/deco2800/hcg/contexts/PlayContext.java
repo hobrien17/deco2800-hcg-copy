@@ -1,29 +1,57 @@
 package com.deco2800.hcg.contexts;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+<<<<<<< HEAD
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+=======
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+>>>>>>> 48bbf27a6d34639e218a3286ee897455c3e17053
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.handlers.MouseHandler;
-import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.MessageManager;
+import com.deco2800.hcg.managers.PlantManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.multiplayer.Message;
 import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-import com.badlogic.gdx.graphics.Color;
+import com.deco2800.hcg.shading.ShaderState;
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -31,7 +59,9 @@ import com.badlogic.gdx.graphics.Color;
  * instantiated once.
  */
 public class PlayContext extends Context {
-
+    
+    Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
+    
 	// Managers used by the game
 	private GameManager gameManager;
 	private SoundManager soundManager;
@@ -72,7 +102,10 @@ public class PlayContext extends Context {
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private  Button chatButton;
-
+	
+	// TODO make sure this doesn't stay here.
+	private ShaderProgram shader;
+	private ShaderProgram postShader;
 
     /**
      * Create the PlayContext
@@ -247,6 +280,37 @@ public class PlayContext extends Context {
 				return true;
 			}
 		});
+		
+		/* This won't stay here forever - loading and compiling shaders here is super inefficienct so we should
+		 * do that somewhere else but for testing purposes this is fine. */
+        FileHandle preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
+        FileHandle postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
+        FileHandle preFragShader = Gdx.files.internal("resources/shaders/fragment_pre.glsl");
+        FileHandle postFragShader = Gdx.files.internal("resources/shaders/fragment_post.glsl");
+        shader = new ShaderProgram(preVertexShader, preFragShader);
+        postShader = new ShaderProgram(postVertexShader, postFragShader);
+        
+        if(!shader.isCompiled()) {
+            LOGGER.error("Shader failed to compile.");
+            LOGGER.error(shader.getLog());
+            
+            // For the time being
+            System.out.println("Shader failed to compile.");
+            System.out.println(shader.getLog());
+            shader = null;
+        }
+        
+        if(!postShader.isCompiled()) {
+            LOGGER.error("Post shader failed to compile");
+            LOGGER.error(postShader.getLog());
+            
+            // For the time being
+            System.out.println("Post shader failed to compile");
+            System.out.println(postShader.getLog());
+            postShader = null;
+        }
+        
+        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
 	}
 	
 	
@@ -259,35 +323,99 @@ public class PlayContext extends Context {
 	 */
 	@Override
 	public void render(float delta) {
-
-		/*
-		 * Create a new render batch. At this stage we only want one but perhaps we need
-		 * more for HUDs etc
-		 */
-		SpriteBatch batch = new SpriteBatch();
-
-		/*
-		 * Update the camera
-		 */
-		GameManager.get().getCamera().update();
-		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
-
-		/* Render the tiles first */
-		BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
-		tileRenderer.setView(GameManager.get().getCamera());
-		tileRenderer.render();
-
-		/*
-		 * Use the selected renderer to render objects onto the map
-		 */
-		renderer.render(batch);
+        /*
+         * All sorts of fun things happen in here. This will likely get its own method
+         * eventually but for now: If any of the shaders fail to compile we default to
+         * default SpriteBatch behaviour; a SpriteBatch is initalised with no parameters
+         * to draw the game directly to the screen. No extra effects at all.
+         * 
+         * If all shaders are go, we draw the game properly. We initialise a SpriteBatch
+         * with our pre-processing shader attached to it, which handles things like
+         * day/night cycle etc and we use that to draw the game to a FrameBuffer. We
+         * then get rid of our first SpriteBatch because we don't need it anymore and
+         * initalise a new one with our post-processing shader attached to it and use it
+         * to draw our FrameBuffer to the screen with nice shiny effects in tow.
+         */
+	    GameManager.get().getCamera().update();
+	    
+	    if(shader == null || postShader == null) {
+	        // Default drawing behaviour. Default to this if any shaders fail to compile.
+	        SpriteBatch batch = new SpriteBatch();
+	        
+	        batch.setProjectionMatrix(GameManager.get().getCamera().combined);
+	        BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
+	        
+	        tileRenderer.setView(GameManager.get().getCamera());
+	        tileRenderer.render();
+	        
+	        renderer.render(batch);
+	        
+	        batch.dispose();
+	    } else {
+	        ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
+            state.setTime(timeManager);
+            state.setBloom(true);
+            state.setHeat(true);
+            
+            int width = Gdx.graphics.getWidth();
+            int height = Gdx.graphics.getHeight();
+            
+            // This is our render target. We draw onto this first and then draw this
+            // directly to the screen using a post processing shader
+            FrameBuffer renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
+            TextureRegion scene = new TextureRegion(renderTarget.getColorBufferTexture());
+            scene.flip(false, true);
+            
+            // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
+            shader.begin();
+            
+            shader.setUniformf("u_globalColor", state.getGlobalLightColour());
+            
+            SpriteBatch preBatch = new SpriteBatch(1000, shader);
+            preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
+            
+            BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(preBatch);
+            tileRenderer.setView(GameManager.get().getCamera());
+            
+            // Draw onto render target ////////////////////////////////////
+            renderTarget.begin();
+            Gdx.gl.glClearColor(0, 0, 0, 0);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            
+            tileRenderer.render();
+            renderer.render(preBatch);
+            
+            renderTarget.end();
+            // Finish drawing onto render target //////////////////////////
+            
+            shader.end();
+            preBatch.dispose();
+            
+            // Begin post-processing ///////////////////////////////////////////////////////////////////////////////////
+            postShader.begin();
+            
+            postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
+            postShader.setUniformf("u_heat", state.getHeat());
+            postShader.setUniformf("u_bloom", state.getBloom());
+            
+            SpriteBatch postBatch = new SpriteBatch(1, postShader);
+            
+            // Draw onto screen ///////////////////////////////////////////
+            postBatch.begin();
+            
+            postBatch.draw(scene, 0, 0, width, height);
+            
+            postBatch.end();
+            // Finish drawing onto screen /////////////////////////////////
+            
+            postShader.end();
+            postBatch.dispose();
+            renderTarget.dispose();
+	    }
 
 		// Update and draw the stage
 		stage.act();
 		stage.draw();
-
-		/* Dispose of the spritebatch to not have memory leaks */
-		batch.dispose();
 	}
 
 	/**
@@ -315,7 +443,13 @@ public class PlayContext extends Context {
 	 */
 	@Override
 	public void dispose() {
-		// Don't need this at the moment
+	    if(shader != null) {
+	        shader.dispose();
+	    }
+	    
+	    if(postShader != null) {
+            postShader.dispose();
+	    }
 	}
 
 	@Override

@@ -168,4 +168,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-/C:/Users/stk/Documents/2800/libgdx/particle.png
+sand.png
