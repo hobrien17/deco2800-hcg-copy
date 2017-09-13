@@ -75,7 +75,7 @@ vec4 getVignette(vec2 tc) {
 	//1. VIGNETTE
 
 	//determine center position
-	vec2 position = (gl_FragCoord.xy / vec2(1920,1080)) - vec2(0.5);
+	vec2 position = v_texCoords - vec2(0.5);//(gl_FragCoord.xy / vec2(1920,1080)) - vec2(0.5);
 
 	//determine the vector length of the center position
 	float len = length(position);

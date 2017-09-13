@@ -275,6 +275,7 @@ public class PlayContext extends Context {
         FileHandle postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
         FileHandle preFragShader = Gdx.files.internal("resources/shaders/fragment_pre.glsl");
         FileHandle postFragShader = Gdx.files.internal("resources/shaders/fragment_post.glsl");
+        
         shader = new ShaderProgram(preVertexShader, preFragShader);
         postShader = new ShaderProgram(postVertexShader, postFragShader);
         
