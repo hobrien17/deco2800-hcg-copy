@@ -2,7 +2,7 @@ package com.deco2800.hcg.entities;
 
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 
 public class ItemEntity extends AbstractEntity implements Tickable {
     
@@ -15,7 +15,7 @@ public class ItemEntity extends AbstractEntity implements Tickable {
     
     @Override
     public void onTick(long gameTickCount) {
-        AbstractWorld world = GameManager.get().getWorld();
+        World world = GameManager.get().getWorld();
         
         // Check to see if we're colliding with any other item entities and try and
         // merge with them if we can

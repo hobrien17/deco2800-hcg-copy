@@ -12,7 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.World;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -128,7 +128,7 @@ public class PlayerTest {
 	}
 	
 	GameManager gameManager;
-	DemoWorld demoWorld;
+	World AbstractWorld;
 	TiledMapTileLayer layer;
 	TiledMap tiledMap;
 	MapProperties mapProperties;
@@ -139,15 +139,15 @@ public class PlayerTest {
 		gameManager = GameManager.get();
 		
 		// create all our mock classes
-		demoWorld = mock(DemoWorld.class);
+		AbstractWorld = mock(World.class);
 		layer = mock(TiledMapTileLayer.class);
 
 		// add to non-mocked gamemanager
-		gameManager.setWorld(demoWorld);
+		gameManager.setWorld(AbstractWorld);
 
 		// have a map for our properties to go back to the player class
 		tiledMap = mock(TiledMap.class);
-		when(demoWorld.getMap()).thenReturn(tiledMap);
+		when(AbstractWorld.getMap()).thenReturn(tiledMap);
 
 		// set working properties for the Camera in the player to work.
 		mapProperties = mock(MapProperties.class);
@@ -166,9 +166,9 @@ public class PlayerTest {
 		Player player = new Player(0, 0, 0);
 		
 		// ensure player can move to the squares we're testing
-		when(demoWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
-		when(demoWorld.getTiledMapTileLayerAtPos(1, 1)).thenReturn(layer);
-		when(demoWorld.getTiledMapTileLayerAtPos(2, 2)).thenReturn(layer);
+		when(AbstractWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
+		when(AbstractWorld.getTiledMapTileLayerAtPos(1, 1)).thenReturn(layer);
+		when(AbstractWorld.getTiledMapTileLayerAtPos(2, 2)).thenReturn(layer);
 
 		// add the custom properties of speed and name
 		when(mapProperties.get("speed")).thenReturn("1");
@@ -214,9 +214,9 @@ public class PlayerTest {
 	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
 	    
 	    assertTrue("Player's maximum stamina was not initialised correctly",
-	            player.getStaminaMax() == 20);
+	            player.getStaminaMax() == 250);
         assertTrue("Player's current stamina was not initialised correctly",
-                player.getStaminaCur() == 20);
+                player.getStaminaCur() == 250);
 	}
 	
 	// note - any change to player may break these tests - add more mocking
@@ -226,9 +226,9 @@ public class PlayerTest {
 		Player player = new Player(0, 0, 0);
 		
 		// ensure player can move to the squares we're testing
-		when(demoWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
-		when(demoWorld.getTiledMapTileLayerAtPos(1, 1)).thenReturn(layer);
-		when(demoWorld.getTiledMapTileLayerAtPos(2, 2)).thenReturn(layer);
+		when(AbstractWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
+		when(AbstractWorld.getTiledMapTileLayerAtPos(1, 1)).thenReturn(layer);
+		when(AbstractWorld.getTiledMapTileLayerAtPos(2, 2)).thenReturn(layer);
 		
 		// add the custom properties of speed and name
 		when(mapProperties.get("speed")).thenReturn("1");
@@ -272,7 +272,7 @@ public class PlayerTest {
 		Player player = new Player(0, 0, 0);
 		
 		// ensure player can move to the squares we're testing
-		when(demoWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
+		when(AbstractWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
 		
 		// add the custom properties of speed and name
 		when(mapProperties.get("speed")).thenReturn("1");
@@ -322,8 +322,8 @@ public class PlayerTest {
       Player player = new Player(0, 0, 0);
       
       // ensure player can move to the squares we're testing
-      when(demoWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
-      when(demoWorld.getTiledMapTileLayerAtPos(1, 1)).thenReturn(layer);
+      when(AbstractWorld.getTiledMapTileLayerAtPos(0, 0)).thenReturn(layer);
+      when(AbstractWorld.getTiledMapTileLayerAtPos(1, 1)).thenReturn(layer);
 
       // add the custom properties of speed and name
       when(mapProperties.get("speed")).thenReturn("1");
@@ -338,7 +338,7 @@ public class PlayerTest {
       
       entities.add(tower);
       
-      when(demoWorld.getEntities()).thenReturn(entities);
+      when(AbstractWorld.getEntities()).thenReturn(entities);
       
       // set positive speed
       player.setSpeedX(1.0f);

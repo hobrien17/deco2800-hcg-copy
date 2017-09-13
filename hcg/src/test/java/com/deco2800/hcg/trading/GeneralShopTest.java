@@ -10,7 +10,7 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.TestItem;
 import com.deco2800.hcg.items.single.TestUniqueItem;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.World;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class GeneralShopTest {
 	Item arrayOfThings[] = {item1,item2};
 	int arrayOfAmounts[] = {1,2};
     GameManager gameManager;
-    DemoWorld demoWorld;
+    World AbstractWorld;
     TiledMapTileLayer layer;
     TiledMap tiledMap;
     MapProperties mapProperties;
@@ -44,15 +44,15 @@ public class GeneralShopTest {
         gameManager = GameManager.get();
 
         // create all our mock classes
-        demoWorld = mock(DemoWorld.class);
+        AbstractWorld = mock(World.class);
         layer = mock(TiledMapTileLayer.class);
 
         // add to non-mocked gamemanager
-        gameManager.setWorld(demoWorld);
+        gameManager.setWorld(AbstractWorld);
 
         // have a map for our properties to go back to the player class
         tiledMap = mock(TiledMap.class);
-        when(demoWorld.getMap()).thenReturn(tiledMap);
+        when(AbstractWorld.getMap()).thenReturn(tiledMap);
 
         // set working properties for the Camera in the player to work.
         mapProperties = mock(MapProperties.class);

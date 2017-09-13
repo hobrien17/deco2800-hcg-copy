@@ -14,7 +14,8 @@ import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.weapons.*;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -315,7 +316,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         nextPosY = (float) (currPosY + distance * sin(radius));
         tempX = nextPosX;
         tempY = nextPosY;
-        if(this.randomX == 0 && this.randomY == 0){
+        if(abs(this.randomX) <= 0.005 && abs(this.randomY) <= 0.005){
             this.randomX = tempX;
             this.randomY = tempY;
         }
@@ -423,7 +424,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * Detect collision with entity.
      */
     public void detectCollision(){
-        AbstractWorld world = GameManager.get().getWorld();
+        World world = GameManager.get().getWorld();
         if (world.getTiledMapTileLayerAtPos((int) newPos.getX(), (int) newPos.getY()) == null) {
             this.setCollided(true);
         }

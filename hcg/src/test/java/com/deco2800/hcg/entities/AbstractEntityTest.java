@@ -1,7 +1,7 @@
 package com.deco2800.hcg.entities;
 
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-class TestWorld extends AbstractWorld {
+class TestWorld extends World {
 
 }
 
