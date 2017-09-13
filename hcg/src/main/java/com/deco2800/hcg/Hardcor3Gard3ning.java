@@ -86,8 +86,6 @@ public class Hardcor3Gard3ning extends Game {
         player.addItemToInventory(test2);
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
-
-
         
         ArrayList<Level> levelList = new ArrayList<Level>();
         // Creates some test levels

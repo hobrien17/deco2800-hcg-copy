@@ -170,7 +170,6 @@ public class PlayContext extends Context {
         chatWindow.add(chatButton);
         chatWindow.setDebug(false);//display lines for debugging
 
-
         stage.addActor(chatWindow);
 
 		/*
