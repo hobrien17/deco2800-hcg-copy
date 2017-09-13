@@ -78,7 +78,7 @@ public class CharacterCreationContext extends UIContext{
     private Texture[] charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     private int textureCount;
 
-    private TextField selectedDescriptionText;
+    private TextArea selectedDescriptionText;
 
     private GameManager gameManager;
     private ContextManager contextManager;
@@ -116,6 +116,7 @@ public class CharacterCreationContext extends UIContext{
     private void initSubTables() {
         topRowInfoTable = new Table(skin);
         attributesWindow = new Window("Attributes", skin);
+        //attributesWindow.setBackground();
         skillsWindow = new Window("Skills", skin);
         statsWindow = new Window("Stats", skin);
         characterPreviewWindow = new Window("Character Preview", skin);
@@ -211,13 +212,14 @@ public class CharacterCreationContext extends UIContext{
                 if (strength <= 1) {
                 	return;
                 }
-                
                 strength--;
                 attributePoints++;
                 carryWeight -= 20;
                 strengthLabel.setText("Strength: " + strength);
                 attributePointsLabel.setText("Available Points: " + attributePoints);
                 carryWeightLabel.setText("Carry Weight: " + carryWeight);
+                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
+                        "deal with melee weapons, as well as how much you are able to carry");
             }
         });
 
@@ -227,7 +229,6 @@ public class CharacterCreationContext extends UIContext{
             	if (vitality <= 1) {
                 	return;
                 }
-
             	vitality--;
                 attributePoints++;
                 startingHealth -= 200;
@@ -236,6 +237,8 @@ public class CharacterCreationContext extends UIContext{
                 attributePointsLabel.setText("Available Points: " + attributePoints);
                 startingHealthLabel.setText("Starting Health: " + startingHealth);
                 healthGainLabel.setText("Health gained per level up: " + healthGain);
+                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
+                        "as well as how much health you gain per level");
             }
         });
 
@@ -245,7 +248,6 @@ public class CharacterCreationContext extends UIContext{
             	if (agility <= 1) {
                 	return;
                 }
-            	
             	agility--;
             	attributePoints++;
             	startingStamina -= 200;
@@ -254,6 +256,8 @@ public class CharacterCreationContext extends UIContext{
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
             	staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
+                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
+                        "as well as how much stamina you gain per level");
             }
         });
 
@@ -263,13 +267,14 @@ public class CharacterCreationContext extends UIContext{
             	if (intellect <= 1) {
                 	return;
                 }
-
             	intellect--;
             	attributePoints++;
             	skillPointsGain -= 2;
             	intellectLabel.setText("Intellect: " + intellect);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
+                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
+                        "to distribute to your skills each level");
             }
         });
 
@@ -279,11 +284,13 @@ public class CharacterCreationContext extends UIContext{
             	if (charisma <= 1) {
                 	return;
                 }
-
             	charisma--;
             	attributePoints++;
             	charismaLabel.setText("Charisma: " + charisma);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
+                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
+                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
+                        "influence others to see your point of view, and perhaps even follow you");
             }
         });
 
@@ -297,6 +304,8 @@ public class CharacterCreationContext extends UIContext{
                     strengthLabel.setText("Strength: " + strength);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     carryWeightLabel.setText("Carry Weight: " + carryWeight);
+                    selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
+                            "deal with melee weapons, as well as how much you are able to carry");
                 }
             }
         });
@@ -313,6 +322,8 @@ public class CharacterCreationContext extends UIContext{
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingHealthLabel.setText("Starting Health: " + startingHealth);
                     healthGainLabel.setText("Health gained per level up: " + healthGain);
+                    selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
+                            "as well as how much health you gain per level");
                 }
             }
         });
@@ -329,6 +340,8 @@ public class CharacterCreationContext extends UIContext{
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
                     staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
+                    selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
+                            "as well as how much stamina you gain per level");
                 }
             }
         });
@@ -343,6 +356,8 @@ public class CharacterCreationContext extends UIContext{
                     intellectLabel.setText("Intellect: " + intellect);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
+                    selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
+                            "to distribute to your skills each level");
                 }
             }
         });
@@ -355,6 +370,9 @@ public class CharacterCreationContext extends UIContext{
                     attributePoints--;
                     charismaLabel.setText("Charisma: " + charisma);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
+                            "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
+                            "influence others to see your point of view, and perhaps even follow you");
                 }
             }
         });
@@ -369,7 +387,7 @@ public class CharacterCreationContext extends UIContext{
         strengthLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Strength. Strength determines how much damage you " +
+                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
                         "deal with melee weapons, as well as how much you are able to carry");
             }
         });
@@ -377,7 +395,7 @@ public class CharacterCreationContext extends UIContext{
         vitalityLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Vitality. Vitality determines your starting health," +
+                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
                         "as well as how much health you gain per level");
             }
         });
@@ -385,7 +403,7 @@ public class CharacterCreationContext extends UIContext{
         agilityLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Agility. Agility determines your starting stamina," +
+                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
                         "as well as how much stamina you gain per level");
             }
         });
@@ -393,7 +411,7 @@ public class CharacterCreationContext extends UIContext{
         intellectLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Intellect. Intellect determines how many skill points you have" +
+                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
                         "to distribute to your skills each level");
             }
         });
@@ -402,7 +420,7 @@ public class CharacterCreationContext extends UIContext{
             @Override
             public void clicked(InputEvent event, float x, float y){
                 selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at \n shops and" +
+                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
                         "influence others to see your point of view, and perhaps even follow you");
             }
         });
@@ -548,16 +566,16 @@ public class CharacterCreationContext extends UIContext{
         next.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (characterSex.getSelected() == "Male" && textureCount < 2) {
+                if (characterSex.getSelected().equals("Male") && textureCount < 2) {
                     textureCount++;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected() == "Male" && textureCount == 2) {
+                } else if (characterSex.getSelected().equals("Male") && textureCount == 2) {
                     textureCount = 0;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected() == "Female" && textureCount < 5) {
+                } else if (characterSex.getSelected().equals("Female") && textureCount < 5) {
                     textureCount++;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected() == "Female" && textureCount == 5) {
+                } else if (characterSex.getSelected().equals("Female") && textureCount == 5) {
                     textureCount = 3;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 }
@@ -566,11 +584,8 @@ public class CharacterCreationContext extends UIContext{
     }
 
     private void setupSelectedDescriptionWindow() {
-        selectedDescriptionText = new TextField("JUST CLICK ON SOMETHING ALREADY", skin);
-        selectedDescriptionText.setFillParent(true);
-        //selectedDescriptionLabel = new Label("JUST CLICK ON SOMETHING ALREADY", skin);
-
-        selectedDescriptionWindow.add(selectedDescriptionText).top().left().expandX().expandY().fillY();
+        selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
+        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
     }
 
     private void addSubtables() {
