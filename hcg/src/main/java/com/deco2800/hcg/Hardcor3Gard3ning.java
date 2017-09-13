@@ -155,24 +155,25 @@ public class Hardcor3Gard3ning extends Game {
      */
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
-            if (contextManager.ticksRunning()) {
+        	if (! contextManager.ticksRunning()) {
+        		// Schedule next tick
+        		nextGameTick += gameTickPeriod;
+        		return;
+        	}
 
-                // Tick managers
-                GameManager.get().onTick(gameTickCount);
+        	// Tick managers
+        	GameManager.get().onTick(gameTickCount);
 
-                // Tick entities
-                for (Renderable e : GameManager.get().getWorld().getEntities()) {
-                    if (e instanceof Tickable) {
-                        ((Tickable) e).onTick(gameTickCount);
-                    }
-                }
+        	// Tick entities
+        	for (Renderable e : GameManager.get().getWorld().getEntities()) {
+        		if (e instanceof Tickable) {
+        			((Tickable) e).onTick(gameTickCount);
+        		}
+        	}
 
-                // Increment tick count
-                gameTickCount += 1;
-            }
-
-            // Schedule next tick
-            nextGameTick += gameTickPeriod;
+        	// Increment tick count
+        	gameTickCount ++;
+        	nextGameTick += gameTickPeriod;
         }
     }
 
