@@ -35,6 +35,7 @@ import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.contexts.PerksSelectionScreen;
+import com.deco2800.hcg.entities.bullets.Bullet;
 
 /**
  * Entity for the playable character.
