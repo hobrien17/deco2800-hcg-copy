@@ -78,7 +78,9 @@ public final class NetworkState {
 					receive();
 					try {
 						Thread.sleep(1);
-					} catch (InterruptedException e) {}
+					} catch (InterruptedException e) {
+			            LOGGER.error(e.toString());
+					}
 				}
 			}
 		}).start();

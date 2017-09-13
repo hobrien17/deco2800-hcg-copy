@@ -22,6 +22,7 @@ public class MainMenuContext extends UIContext {
 	private ImageButton newGame;
 	private ImageButton quit;
 	private ImageButton multiplayer;
+	private ImageButton instructions;
 	private Table table;
 
 	public MainMenuContext() {
@@ -43,12 +44,15 @@ public class MainMenuContext extends UIContext {
 		newGame = new ImageButton(new Image(textureManager.getTexture("menu_play_button")).getDrawable());
 		quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
 		multiplayer = new ImageButton(new Image(textureManager.getTexture("menu_multiplayer_button")).getDrawable());
+		instructions = new ImageButton(new Image(textureManager.getTexture("menu_instructions_button")).getDrawable());
 
 		table.add(title);
         table.row();
 		table.add(newGame);
 		table.row();
 		table.add(multiplayer);
+		table.row();
+		table.add(instructions);
 		table.row();
 		table.add(quit);
 		stage.addActor(table);
@@ -64,6 +68,13 @@ public class MainMenuContext extends UIContext {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				contextManager.pushContext(new MultiplayerMenuContext());
+			}
+		});
+		
+		instructions.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				contextManager.pushContext(new InstructionsMenuContext());
 			}
 		});
 

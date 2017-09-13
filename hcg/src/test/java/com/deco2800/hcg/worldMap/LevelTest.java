@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertFalse;
 
-import com.deco2800.hcg.worlds.BlankTestWorld;
+import com.deco2800.hcg.worlds.World;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -16,11 +16,11 @@ import com.deco2800.hcg.entities.worldmap.WorldMap;
 public class LevelTest {
 
     WorldMap worldMap;
-    BlankTestWorld world;
+    World world;
     Level tmpLevel;
     @Before
     public void setup() {
-        world = new BlankTestWorld();
+        world = new World();
 
     }
 
@@ -44,7 +44,7 @@ public class LevelTest {
         tmpLevel.changeWorldType(4);
         assertEquals(4,tmpLevel.getWorldType());
 
-        BlankTestWorld newWorld = new BlankTestWorld();
+        World newWorld = new World();
         tmpLevel.setWorld(newWorld);
         assertEquals(newWorld, tmpLevel.getWorld());
     }

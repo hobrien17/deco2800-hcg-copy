@@ -65,6 +65,7 @@ public class PlayContext extends Context {
 	private ContextManager contextManager;
 	private PlantManager plantManager;
 	private MessageManager messageManager;
+	private PlayerStatusDisplay playerStatus;
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -136,6 +137,9 @@ public class PlayContext extends Context {
 		timeManager.setTimeLabel(clockLabel);
 		timeManager.setDateLabel(dateLabel);
 
+		playerStatus = new PlayerStatusDisplay();
+		stage.addActor(playerStatus);
+
 		/* Add a programmatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
@@ -143,7 +147,6 @@ public class PlayContext extends Context {
 				contextManager.popContext();
 			}
 		});
-
 
 		/* Add all buttons to the menu */
 		window.add(button);
@@ -154,7 +157,7 @@ public class PlayContext extends Context {
 
 		/* Add the window to the stage */
 		stage.addActor(window);
-		
+
 		/* Create clock GUI and add it to the stage */
         Group group = new Group();
         group.setPosition(stage.getWidth() - 220, 20);
@@ -423,6 +426,8 @@ public class PlayContext extends Context {
 
 		stage.getViewport().update(width, height, true);
 		window.setPosition(0, stage.getHeight());
+
+		playerStatus.updatePosition(stage.getHeight());
 	}
 
 	/**
@@ -467,7 +472,8 @@ public class PlayContext extends Context {
 
 	@Override
 	public void onTick(long gameTickCount) {
-		// Do nothing
+		playerStatus.updatePlayerStatus();
+
 	}
 
     @Override

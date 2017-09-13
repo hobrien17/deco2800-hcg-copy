@@ -11,10 +11,13 @@ import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.single.wearable.CottonShirt;
+import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worldmapui.MapGenerator;
-import com.deco2800.hcg.worlds.BlankTestWorld;
+import com.deco2800.hcg.worlds.World;
 
 import java.util.ArrayList;
 
@@ -69,13 +72,25 @@ public class Hardcor3Gard3ning extends Game {
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
         playerManager.setPlayer(player);
+        //TODO: Change this
+        Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
+        Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
+        Item testPotion = new HealthPotion(100);
+        testPotion.setStackSize(4);
+        Item testPotion2 = new HealthPotion(100);
+        player.addItemToInventory(test);
+        player.addItemToInventory(test2);
+        player.addItemToInventory(testPotion);
+        player.addItemToInventory(testPotion2);
+
+
         
         ArrayList<Level> levelList = new ArrayList<Level>();
         // Creates some test levels
-        Level testLevel = new Level(new BlankTestWorld(), 0, 1, 1);
-        Level testLevel2 = new Level(new BlankTestWorld(), 0, 1, 0);
-        Level testLevel3 = new Level(new BlankTestWorld(), 0, 1, 1);
-        Level testLevel4 = new Level(new BlankTestWorld(), 0, 1, 2);
+        Level testLevel = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 1);
+        Level testLevel2 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 0);
+        Level testLevel3 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 1);
+        Level testLevel4 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 2);
 
         // Eventually this will contain all the playable game levels
         levelList.add(testLevel);
@@ -138,24 +153,25 @@ public class Hardcor3Gard3ning extends Game {
      */
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
-            if (contextManager.ticksRunning()) {
+        	if (! contextManager.ticksRunning()) {
+        		// Schedule next tick
+        		nextGameTick += gameTickPeriod;
+        		return;
+        	}
 
-                // Tick managers
-                GameManager.get().onTick(gameTickCount);
+        	// Tick managers
+        	GameManager.get().onTick(gameTickCount);
 
-                // Tick entities
-                for (Renderable e : GameManager.get().getWorld().getEntities()) {
-                    if (e instanceof Tickable) {
-                        ((Tickable) e).onTick(gameTickCount);
-                    }
-                }
+        	// Tick entities
+        	for (Renderable e : GameManager.get().getWorld().getEntities()) {
+        		if (e instanceof Tickable) {
+        			((Tickable) e).onTick(gameTickCount);
+        		}
+        	}
 
-                // Increment tick count
-                gameTickCount += 1;
-            }
-
-            // Schedule next tick
-            nextGameTick += gameTickPeriod;
+        	// Increment tick count
+        	gameTickCount ++;
+        	nextGameTick += gameTickPeriod;
         }
     }
 

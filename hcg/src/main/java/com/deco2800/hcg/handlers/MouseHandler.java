@@ -2,8 +2,7 @@ package com.deco2800.hcg.handlers;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.worlds.AbstractWorld;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.entities.Clickable;
 import com.deco2800.hcg.util.WorldUtil;
 
@@ -38,9 +37,9 @@ public class MouseHandler {
         if (closest.isPresent() && closest.get() instanceof Clickable) {
             ((Clickable) closest.get()).onClick();
         } else {
-            AbstractWorld world = GameManager.get().getWorld();
-            if (world instanceof DemoWorld) {
-                ((DemoWorld) (world)).deSelectAll();
+            World world = GameManager.get().getWorld();
+            if (world instanceof World) {
+                ((World) (world)).deSelectAll();
             }
         }
     }

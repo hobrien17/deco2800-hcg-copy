@@ -82,6 +82,12 @@ public interface Item {
      * @throws IllegalArgumentException if texture is an invalid file name
      */
     void setTexture(String texture) throws IllegalArgumentException;
+    
+    /**
+     * Function for getting the icon of an item
+     * @return A string identifying this item's texture
+     */
+    String getTexture();
 
     /**
      * Function for adding a number of an item to the stack of the current item.

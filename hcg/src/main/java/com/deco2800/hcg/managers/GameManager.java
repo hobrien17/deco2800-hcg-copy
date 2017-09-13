@@ -2,7 +2,7 @@ package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class GameManager implements TickableManager {
 
     private List<Manager> managers = new ArrayList<>();
 
-    private AbstractWorld gameWorld;
+    private World gameWorld;
 
     private OrthographicCamera camera;
 
@@ -93,14 +93,14 @@ public class GameManager implements TickableManager {
     /**
      * Sets the current game world
      */
-    public void setWorld(AbstractWorld world) {
+    public void setWorld(World world) {
         this.gameWorld = world;
     }
 
     /**
      * Gets the current game world
      */
-    public AbstractWorld getWorld() {
+    public World getWorld() {
         return gameWorld;
     }
 

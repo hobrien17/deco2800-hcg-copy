@@ -5,6 +5,10 @@ import java.util.List;
 
 import com.deco2800.hcg.contexts.CharacterCreationContext;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.contexts.PlayerEquipmentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +32,7 @@ import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.contexts.PerksSelectionScreen;
 
@@ -40,6 +44,9 @@ import com.deco2800.hcg.contexts.PerksSelectionScreen;
 public class Player extends Character implements Tickable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
+
+	//string to contain filepath for character's HUD display
+	private String displayImage;
 
 	private SoundManager soundManager;
 	private ContextManager contextManager;
@@ -64,7 +71,7 @@ public class Player extends Character implements Tickable {
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
 	// private Weapon equippedWeapon;
-	
+
 	private int id;
 
 	/**
@@ -110,6 +117,9 @@ public class Player extends Character implements Tickable {
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 		this.contextManager = (ContextManager) GameManager.get().getManager(ContextManager.class);
 
+		//HUD display
+		displayImage = "resources/ui/player_status_hud/player_display_one.png";
+
 		// for slippery
 		lastSpeedX = 0;
 		lastSpeedY = 0;
@@ -138,10 +148,10 @@ public class Player extends Character implements Tickable {
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
 	}
-	
+
 	/**
 	 * Creates a new player at specified position.
-	 * 
+	 *
 	 * @param posX
 	 *            beginning player X position
 	 * @param posY
@@ -153,10 +163,10 @@ public class Player extends Character implements Tickable {
 		// 0 is local player
 		this(0, posX, posY, posZ);
 	}
-	
+
 	/**
 	 * Sends input when a touch input is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position being clicked on the screen
 	 * @param screenY
@@ -175,7 +185,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when a drag input is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position on the screen that mouse is dragged to
 	 * @param screenY
@@ -192,7 +202,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when a touch input is released.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position mouse is being released on the screen
 	 * @param screenY
@@ -211,7 +221,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends the processes involved when a mouse movement is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position of mouse movement on the screen
 	 * @param screenY
@@ -224,10 +234,10 @@ public class Player extends Character implements Tickable {
 //		}
 		playerInputManager.mouseMoved(0, screenX, screenY);
 	}
-	
+
 	/**
 	 * Sends input when keys are pressed.
-	 * 
+	 *
 	 * @param keycode
 	 *            the keycode of the key pressed
 	 */
@@ -240,7 +250,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when keys are released.
-	 * 
+	 *
 	 * @param keycode
 	 *            the keycode of the key released
 	 */
@@ -249,6 +259,23 @@ public class Player extends Character implements Tickable {
 			NetworkState.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
 		}
 		playerInputManager.keyUp(0, keycode);
+	}
+
+	/** sets the image to be displayed for the health and stamina display
+	 *
+	 * @param image must be a valid internal file path
+	 */
+
+	public void setDisplayImage(String image){
+		displayImage = image;
+	}
+
+	/**returns the filepath to the image being used for character HUD display
+	 *
+	 * @returns string containing filepath for character image
+	 */
+	public String getDisplayImage() {
+		return displayImage;
 	}
 
 	/**
@@ -313,7 +340,7 @@ public class Player extends Character implements Tickable {
 	 * @param screenY
 	 *            the y position of mouse movement on the screen
 	 */
-	private void handleMouseMoved(int screenX, int screenY) {	
+	private void handleMouseMoved(int screenX, int screenY) {
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().updatePosition(screenX, screenY);
 		}
@@ -351,16 +378,16 @@ public class Player extends Character implements Tickable {
 	 *            the NPC (as an entity) that you wish to interact with
 	 */
 	private void NPCInteraction(AbstractEntity npc) {
-		if (((NPC) npc).getNPCType() == NPC.Type.SHOP) {
-
+		
+		if(npc instanceof QuestNPC){
+			LOGGER.info("Quest NPC Interaction Started");
+		}
+		
+		else if(npc instanceof ShopNPC){
 			LOGGER.info("Shop NPC Interaction Started");
 			contextManager.pushContext(new ShopMenuContext());
 			Shop shop = new GeneralShop();
 			shop.open(0, this);
-
-		} else if (((NPC) npc).getNPCType() == NPC.Type.QUEST) {
-			LOGGER.info("Quest NPC Interaction Started");
-
 		} else {
 			LOGGER.info("Other NPC Interaction Started");
 
@@ -382,6 +409,8 @@ public class Player extends Character implements Tickable {
 		// Center the camera on the player
 		updateCamera();
 
+		//update the players stamina
+		handleStamina();
 		// set speed is the multiplier due to the ground
 		float speed = 1.0f;
 		collided = false;
@@ -389,7 +418,7 @@ public class Player extends Character implements Tickable {
 
 		// current world and layer
 		TiledMapTileLayer layer;
-		AbstractWorld world = GameManager.get().getWorld();
+		World world = GameManager.get().getWorld();
 
 		// get speed of current tile. this is done before checking if a tile
 		// exists so a slow down tile next to the edge wouldn't cause problems.
@@ -519,9 +548,9 @@ public class Player extends Character implements Tickable {
 			int meleeSkill) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
 		setSkills(meleeSkill);
-		healthMax = 4 * vitality;
+		healthMax = 50 * vitality;
 		healthCur = healthMax;
-		staminaMax = 4 * agility;
+		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
 	}
 
@@ -542,17 +571,17 @@ public class Player extends Character implements Tickable {
 	private void levelUp() {
 		xpThreshold *= 1.3;
 		level++;
-		
+
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");
 		healthMax += vitality;
 		healthCur += vitality;
-		
+
 		// Increase stamina by agility points
 		int agility = attributes.get("agility");
 		staminaMax += agility;
 		staminaCur += agility;
-		
+
 		skillPoints = 4 + attributes.get("intellect");
 		// TODO: enter level up screen
 	}
@@ -602,7 +631,7 @@ public class Player extends Character implements Tickable {
 		} else {
 			if (staminaCur < staminaMax) {
 				//recovering
-				staminaCur += 2;
+				staminaCur += 1;
 			}
 			if (staminaCur > staminaMax) {
 				// over recovered, so revert to max.
@@ -661,10 +690,15 @@ public class Player extends Character implements Tickable {
 			if (this.getEquippedWeapon() != null) {
 				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 			}
+			break;
+        case Input.Keys.I:
+            //Display Inventory
+            System.out.println("Access player inventory");
+            contextManager.pushContext(new PlayerEquipmentContext(this));
+            break;
 		default:
 			break;
 		}
-		handleStamina();
 		handleDirectionInput();
 		handleNoInput();
 	}
@@ -806,7 +840,7 @@ public class Player extends Character implements Tickable {
 		if (id > 0) {
 			return;
 		}
-		
+
 		int worldLength = GameManager.get().getWorld().getLength();
 		int worldWidth = GameManager.get().getWorld().getWidth();
 		int tileWidth = (int) GameManager.get().getWorld().getMap().getProperties().get("tilewidth");
