@@ -30,7 +30,7 @@ public class CharacterCreationContext extends UIContext{
 
     private CheckBox meleeSkillSpecialise, gunsSkillSpecialise, energyWeaponsSkillSpecialise;
 
-    private SelectBox characterSex;
+    private SelectBox<String> characterSex;
 
     // For some reason the checkBox isChecked method isn't working properly so this is a temporary fix
     private Boolean meleeSkillSpecialiseChecked = false, gunsSkillSpecialiseChecked = false,
@@ -96,9 +96,7 @@ public class CharacterCreationContext extends UIContext{
         masterTable = new Table(skin);
         masterTable.setFillParent(true);
         masterTable.setBackground("white");
-        masterTable.top().left();
         stage.addActor(masterTable);
-        this.show();
     }
 
     // Declaring sub-tables/sub-windows
@@ -123,7 +121,7 @@ public class CharacterCreationContext extends UIContext{
         TextButton quitButton = new TextButton("Quit", skin);
         TextField characterName = new TextField("Enter Name", skin);
 
-        SelectBox<String> characterSex = new SelectBox<>(skin);
+        characterSex = new SelectBox<>(skin);
         characterSex.setItems(sexes);
 
         topRowInfoTable.add(characterName);
@@ -381,8 +379,8 @@ public class CharacterCreationContext extends UIContext{
         charismaLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Charisma. Charisma determines how well your interactions with" +
-                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
+                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
+                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at \n shops and" +
                         "influence others to see your point of view, and perhaps even follow you");
             }
         });
@@ -550,7 +548,7 @@ public class CharacterCreationContext extends UIContext{
         selectedDescriptionText.setFillParent(true);
         //selectedDescriptionLabel = new Label("JUST CLICK ON SOMETHING ALREADY", skin);
 
-        selectedDescriptionWindow.add(selectedDescriptionText).top().left().expandX().expandY().fillX().fillY();
+        selectedDescriptionWindow.add(selectedDescriptionText).top().left().expandX().expandY().fillY();
     }
 
     private void addSubtables() {
@@ -562,6 +560,6 @@ public class CharacterCreationContext extends UIContext{
         masterTable.add(statsWindow).top().left().expandX().fillX().fillY();
         masterTable.add(characterPreviewWindow).top().right().expandX().fillX().fillY();
         masterTable.row();
-        masterTable.add(selectedDescriptionWindow).top().left().expandX().expandY().fillX().fillY().colspan(2);
+        masterTable.add(selectedDescriptionWindow).top().left().fillX().fillY().expandY().expandX().colspan(2);
     }
 }
