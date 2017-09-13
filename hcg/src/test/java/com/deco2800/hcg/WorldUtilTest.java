@@ -4,7 +4,7 @@ import com.deco2800.hcg.entities.Tree;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.WorldUtil;
 
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +22,7 @@ public class WorldUtilTest {
 		assertEquals(t1, WorldUtil.closestEntityToPosition(0, 0, 2).get());
 	}
 	
-	private class TestWorld extends AbstractWorld {
+	private class TestWorld extends World {
 		
 	}
 }
