@@ -25,17 +25,11 @@ public class ParticleEffectActor extends Actor {
 		effect.update(delta);
 	}
 
-	// public void start() {
-	// 	effect.start();
-	// }
-
 	public void allowCompletion() {
 		effect.allowCompletion();
 	}
 
 	public void render() {
-		// this was the sample code for updating the particle effects, Ash
-		// to implement properly
 		batch = new SpriteBatch();
 		batch.begin();
 		effect.update(Gdx.graphics.getDeltaTime());
