@@ -5,13 +5,13 @@ active: false
 lowMin: 1000.0
 lowMax: 1000.0
 - Count - 
-min: 5
-max: 10
+min: 500
+max: 600
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 10.0
-highMax: 10.0
+highMin: 550.0
+highMax: 550.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -164,4 +164,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-/C:/Users/stk/Documents/2800/libgdx/particle.png
+sand.png
