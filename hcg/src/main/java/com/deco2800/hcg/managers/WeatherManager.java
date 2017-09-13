@@ -3,10 +3,7 @@ package com.deco2800.hcg.managers;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import java.util.*;
-import static java.util.Arrays.*;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.deco2800.hcg.types.Weathers;
@@ -44,24 +41,22 @@ public class WeatherManager extends Manager {
 	 */
 	public WeatherManager() {
 
-		//boolean snow = false;
+		// boolean snow = false;
 
 		onEffects = new ArrayList<Integer>();
 		weather = new ParticleEffect();
 		weather.start();
 
 		addWeather(RAIN);
-		//addWeather(SNOW);
+		// addWeather(SNOW);
 
 		weatherActor = new ParticleEffectActor(weather);
 
 	}
 
 	/**
-	 * sets up each weather effect given, including loading image files
+	 * setups visuals including loading image files
 	 * 
-	 * @param weatherEffect
-	 *            declared weather type
 	 * @param fileName
 	 *            filename of particle file image in "resources/particles/"
 	 * 
@@ -71,23 +66,21 @@ public class WeatherManager extends Manager {
 	 * @ensure allEffects contains weatherEffect
 	 */
 	private void setUp(String fileName) {
-		// CHECK FOR WHETHER THIS WEATHER IS ALREADY ON; LATER WHEN MULTIPLE 
+		// CHECK FOR WHETHER THIS WEATHER IS ALREADY ON; LATER WHEN MULTIPLE
 		// CONDITIONS ALLOWED (NOT NECESSARY YET)
 
-
-		weather.load(
-				Gdx.files.internal("resources/particles/" + fileName),
+		weather.load(Gdx.files.internal("resources/particles/" + fileName),
 				Gdx.files.internal("resources/particles/"));
 
-		ParticleEmitter newEmitter = weather.getEmitters().get(weather.getEmitters().size - 1);
-		newEmitter.setPosition(Gdx.graphics.getWidth() / 2, 
+		ParticleEmitter newEmitter = weather.getEmitters()
+				.get(weather.getEmitters().size - 1);
+		newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
 				Gdx.graphics.getHeight() / 2);
-		
 
-
-
-		/* CURRENTLY HARDCODED SCALE; CHANGE TO JUST COVER SCREEN (NEEDS TO 
-		UPDATE WITH RESIZE). */
+		/*
+		 * CURRENTLY HARDCODED SCALE; CHANGE TO JUST COVER SCREEN (NEEDS TO
+		 * UPDATE WITH RESIZE).
+		 */
 		int scale = 9;
 
 		float heightHighMax = newEmitter.getSpawnHeight().getHighMax();
@@ -116,12 +109,10 @@ public class WeatherManager extends Manager {
 	}
 
 	/**
-	 * sets up each weather effect given, including loading image files
+	 * Turns on weather effect given.
 	 * 
-	 * @param weatherEffect
-	 *            declared weather type
-	 * @param fileName
-	 *            filename of particle file image in "resources/particles/"
+	 * @param weatherEffect:
+	 *            int representation of declared weather type
 	 * 
 	 * @require weatherEffect has been declared and NOT instantiated && filename
 	 *          is in the path"resources/particles/"
@@ -134,22 +125,28 @@ public class WeatherManager extends Manager {
 		}
 		ParticleEmitter emitter = new ParticleEmitter();
 		switch (weatherType) {
-			case (NONE):
-				// Turn off all weather conditions
-				weather.dispose();
-				break;
-			case (RAIN):
-				setUp("2dRain.p");
-				break;
-			case (SNOW):
-				setUp("2dSnow.p");
-				break;
-			default:
-				// Do nothing if weatherType is not an implemented weather type
-				return;
+		case (NONE):
+			// Turn off all weather conditions
+			weather.dispose();
+			break;
+		case (RAIN):
+			setUp("2dRain.p");
+			break;
+		case (SNOW):
+			setUp("2dSnow.p");
+			break;
+		default:
+			// Do nothing if weatherType is not an implemented weather type
+			return;
 		}
 	}
 
+	/**
+	 * Setter method to set weather to given type.
+	 * 
+	 * @param weatherType:
+	 *            int representation of the weather to set to
+	 */
 	public void setWeather(int weatherType) {
 		addWeather(NONE);
 		addWeather(weatherType);
@@ -167,42 +164,29 @@ public class WeatherManager extends Manager {
 		int index = onEffects.indexOf(weatherType);
 		if (index != -1) {
 			onEffects.remove(index);
-			//weather.getEmitters().get(index).dispose();
-			//weather.getEmitters().remove(index);
+			// weather.getEmitters().get(index).dispose();
+			// weather.getEmitters().remove(index);
 		}
 	}
 
 	/**
 	 * getter method for all current effects turned on.
 	 * 
-	 * Please note that this is a deep copy of the effects on list
-	 * 
-	 * @return effects: a list of integers representing the emitters currently 
-	 * 					off and on in the game. E.g. index RAIN would be 1 if
-	 * 					rain is currently on, 0 otherwise.
+	 * @return effects: a list of integers representing the emitters currently
+	 *         off and on in the game. E.g. index RAIN would be 1 if rain is
+	 *         currently on, 0 otherwise.
 	 */
 	public ArrayList<Integer> getOnEffects() {
 		return onEffects;
 	}
 
-
-
-	//////////// THIS METHOD IS REDUNDANT; ONLY HERE TO SATISFY ALLEFFECTS TEST //////////
 	/**
-	 * getter method for all effects turned instantiated.
+	 * Getter method for the particle effect actor that handles the front end
+	 * weather gui.
 	 * 
-	 * Please note that this is a deep copy of the effects on list
-	 * 
-	 * @return effects: all effects in the game
+	 * @return particle effect actor that handles the front end weather gui
 	 */
-	public ArrayList<ParticleEffect> getAllEffects() {
-		ArrayList<ParticleEffect> temp = new ArrayList<ParticleEffect>();
-		temp.add(weather);
-		return temp;
-	}
-
 	public ParticleEffectActor getActor() {
 		return weatherActor;
 	}
-
 }
