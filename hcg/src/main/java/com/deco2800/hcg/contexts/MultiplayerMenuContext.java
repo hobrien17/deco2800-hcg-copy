@@ -77,6 +77,10 @@ public class MultiplayerMenuContext extends UIContext {
 				NetworkState.join(name.getText());
 				// TODO: there should probably be a lobby screen
 				gameManager.setWorld(new DemoWorld());
+				Player otherPlayer = new Player(1, 5, 10, 0);
+				otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+				playerManager.addPlayer(otherPlayer);
+				playerManager.spawnPlayers();
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}

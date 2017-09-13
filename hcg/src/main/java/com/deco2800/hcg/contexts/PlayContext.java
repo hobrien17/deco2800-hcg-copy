@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.multiplayer.Message;
 import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
@@ -280,8 +279,8 @@ public class PlayContext extends Context {
 	}
 	
 	
-	private void handleChatMessage(Message message) {
-		chatTextArea.appendText(message.getPayloadString() + "\n");
+	private void handleChatMessage(String message) {
+		chatTextArea.appendText(message + "\n");
 	}
 
 	/**

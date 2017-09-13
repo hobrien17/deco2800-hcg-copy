@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -31,7 +33,7 @@ public final class NetworkState {
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
 	static ConcurrentHashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
-	static ConcurrentHashMap<Integer, Message> sendQueue;
+	static ConcurrentHashMap<Integer, byte[]> sendQueue;
 	private static ArrayList<Integer> processedIds; // TODO: should be a ring buffer
 	private static boolean initialised = false;
 	
@@ -40,6 +42,14 @@ public final class NetworkState {
 	private static MessageManager messageManager;
 	private static PlayerInputManager playerInputManager;
 	private static PlayerManager playerManager;
+	
+	private static ByteBuffer messageBuffer;
+	private static ByteBuffer sendBuffer;
+	private static ByteBuffer receiveBuffer;
+	
+	private static Random messageIdGenerator;
+	
+	private static final byte[] MESSAGE_HEADER = "H4RDC0R3".getBytes();
 
 	private NetworkState() {}
 
@@ -82,6 +92,14 @@ public final class NetworkState {
 				}
 			}
 		}).start();
+		
+		// allocate buffers
+		messageBuffer = ByteBuffer.allocateDirect(1024).order(ByteOrder.LITTLE_ENDIAN);
+		sendBuffer = ByteBuffer.allocateDirect(1024).order(ByteOrder.LITTLE_ENDIAN);
+		receiveBuffer = ByteBuffer.allocateDirect(1024).order(ByteOrder.LITTLE_ENDIAN);
+		
+		// initialise id generator
+		messageIdGenerator = new Random();
 
 		initialised = true;
 	}
@@ -93,23 +111,35 @@ public final class NetworkState {
 	public static boolean isInitialised() {
 		return initialised;
 	}
-
-	/**
-	 * Add message to queue
-	 * @param message Message to be sent
-	 */
-	public static void sendMessage(Message message) {
-		Integer id = new Integer((int) message.getId());
-		sendQueue.put(id, message);
+	
+	private static Integer startNewMessage(MessageType type, int numberOfEntries) {
+		// clear buffer
+		messageBuffer.clear();
+		// put header
+		messageBuffer.put(MESSAGE_HEADER);
+		// put id
+		int id = messageIdGenerator.nextInt();
+		messageBuffer.putInt(id);
+		// put type
+		messageBuffer.put((byte) type.ordinal());
+		// put number of entries
+		messageBuffer.put((byte) numberOfEntries);
+		// return the buffer with header
+		return id;
 	}
 	
 	/**
 	 * Add input message to queue
 	 */
 	public static void sendInputMessage(int... args) {
-		Message inputMessage = new Message(MessageType.INPUT, args);
+		Integer id = startNewMessage(MessageType.INPUT, args.length);
+		messageBuffer.asIntBuffer().put(args);
+		messageBuffer.position(messageBuffer.position() + args.length * 4);
 		// send message to peers
-		sendMessage(inputMessage);
+		messageBuffer.flip();
+		byte[] bytes = new byte[messageBuffer.remaining()];
+		messageBuffer.get(bytes);
+		sendQueue.put(id, bytes);
 	}
 
 	/**
@@ -117,12 +147,17 @@ public final class NetworkState {
 	 * @param chatMessage String to be sent
 	 * @return String sent to other peers
 	 */
-	public static String sendChatMessage(String chatMessage) {
-		String printString = channel.socket().getLocalAddress().getHostName() + ": " + chatMessage;
-		Message printMessage = new Message(MessageType.CHAT, printString.getBytes());
+	public static String sendChatMessage(String message) {
+		String string = channel.socket().getLocalAddress().getHostName() + ": " + message;
+		Integer id = startNewMessage(MessageType.CHAT, string.getBytes().length);
+		// create chat string
+		messageBuffer.put(string.getBytes());
 		// send message to peers
-		sendMessage(printMessage);
-		return printString;
+		messageBuffer.flip();
+		byte[] bytes = new byte[messageBuffer.remaining()];
+		messageBuffer.get(bytes);
+		sendQueue.put(id, bytes);
+		return string;
 	}
 
 	/**
@@ -134,20 +169,33 @@ public final class NetworkState {
 		// add host to peers
 		sockets.put(0, socketAddress);
 		// try to connect
-		sendMessage(new Message(MessageType.JOINING, new byte[0]));
+		Integer id = startNewMessage(MessageType.JOINING, 0);
+		// send message to peers
+		messageBuffer.flip();
+		byte[] bytes = new byte[messageBuffer.remaining()];
+		messageBuffer.get(bytes);
+		sendQueue.put(id, bytes);
+	}
+	
+	public static void sendJoinedMessage() {
+		Integer id = startNewMessage(MessageType.JOINED, 0);
+		// send message to peers
+		messageBuffer.flip();
+		byte[] bytes = new byte[messageBuffer.remaining()];
+		messageBuffer.get(bytes);
+		sendQueue.put(id, bytes);
 	}
 	
 	public static void send() {
 		// on the server peers contains all connected clients
 		// for a regular peer it only contains the server
 		for (SocketAddress peer : sockets.values()) {
-			for (Message message : sendQueue.values()) {
-				ByteBuffer buffer = ByteBuffer.allocate(1024);
-				buffer.clear();
-				buffer.put(message.toByteArray());
-				buffer.flip();
+			for (byte[] bytes : sendQueue.values()) {
 				try {
-					channel.send(buffer, peer);
+					sendBuffer.clear();
+					sendBuffer.put(bytes);
+					sendBuffer.flip();
+					channel.send(sendBuffer, peer);
 				} catch (IOException e) {
 					LOGGER.error("Failed to send message", e);
 				}
@@ -157,87 +205,94 @@ public final class NetworkState {
 	
 	public static void receive() {
 		try {
-			ByteBuffer buffer = ByteBuffer.allocate(1024);
-			buffer.clear();
-			SocketAddress address = channel.receive(buffer);
+			// acquire buffer from channel
+			receiveBuffer.clear();
+			SocketAddress address = channel.receive(receiveBuffer);
 			if (address == null) {
+				// no message received
 				return;
 			}
-			buffer.flip();
-			byte[] bytes = new byte[1024];
-			buffer.get(bytes, 0, buffer.remaining());
-			Message message = new Message(bytes);
-			Integer messageId = new Integer((int) message.getId());
-			if (message.getType() != MessageType.CONFIRMATION && !processedIds.contains(messageId)) {
+			receiveBuffer.flip();
+			
+			// get header
+			byte[] header = new byte[8];
+			receiveBuffer.get(header);
+			// get id
+			Integer messageId = receiveBuffer.getInt();
+			// get type
+			byte typeByte = receiveBuffer.get();
+			MessageType messageType = MessageType.values()[typeByte];
+			// get number of entries
+			byte numberOfEntries = receiveBuffer.get();
+			
+			// handle message
+			if (messageType != MessageType.ACK && !processedIds.contains(messageId)) {
 				// TODO: this should end up somewhere else
-				switch (message.getType()) {
+				switch (messageType) {
 					case JOINING:
 						// add peer to lobby
 						NetworkState.sockets.put(
 								NetworkState.sockets.size() - 1, address);
 						// send joined message
-						Message joinedMessage = new Message(MessageType.JOINED, message.getIdInBytes());
-						ByteBuffer joinedBuffer = ByteBuffer.allocate(1024);
-						joinedBuffer.clear();
-						joinedBuffer.put(joinedMessage.toByteArray());
-						joinedBuffer.flip();
-						channel.send(joinedBuffer, address);
+						sendJoinedMessage();
 						// fall through to spawn other player
 						// TODO: we need to support more (4?) players
-					case JOINED:
-						// TODO: we need to communicate how many other players are already in the
-						//       game as well as their state, unless we only finalise that after
-						//       the host starts the game from the lobby
 						Player otherPlayer = new Player(1, 5, 10, 0);
 						otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
 						playerManager.addPlayer(otherPlayer);
 						playerManager.spawnPlayers();
+					case JOINED:
+						// TODO: we need to communicate how many other players are already in the
+						//       game as well as their state, unless we only finalise that after
+						//       the host starts the game from the lobby
 						break;
 					case INPUT:
-						InputType inputType = InputType.values()[message.getPayloadInt(0)];
+						InputType inputType = InputType.values()[receiveBuffer.getInt()];
 						// TODO: handle input for more than one player
 						switch (inputType) {
 							case KEY_DOWN:
-								playerInputManager.keyDown(1, message.getPayloadInt(1));
+								playerInputManager.keyDown(1, receiveBuffer.getInt());
 								break;
 							case KEY_UP:
-								playerInputManager.keyUp(1, message.getPayloadInt(1));
+								playerInputManager.keyUp(1, receiveBuffer.getInt());
 								break;
 							case MOUSE_MOVED:
 								playerInputManager.mouseMoved(
 										1,
-										message.getPayloadInt(1),
-										message.getPayloadInt(2));
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt());
 								break;
 							case TOUCH_DOWN:
 								playerInputManager.touchDown(
 										1,
-										message.getPayloadInt(1),
-										message.getPayloadInt(2),
-										message.getPayloadInt(3),
-										message.getPayloadInt(4));
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt());
 								break;
 							case TOUCH_DRAGGED:
 								playerInputManager.touchDragged(
 										1,
-										message.getPayloadInt(1),
-										message.getPayloadInt(2),
-										message.getPayloadInt(3));
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt());
 								break;
 							case TOUCH_UP:
 								playerInputManager.touchUp(
 										1,
-										message.getPayloadInt(1),
-										message.getPayloadInt(2),
-										message.getPayloadInt(3),
-										message.getPayloadInt(4));
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt(),
+										receiveBuffer.getInt());
 								break;
 							default:
 								break;
 						}
 						break;
 					case CHAT:
-						messageManager.chatMessageReceieved(message);
+						byte[] byteArray = new byte[receiveBuffer.remaining()];
+						receiveBuffer.get(byteArray);
+						messageManager.chatMessageReceieved(new String(byteArray));
 						break;
 					default:
 						break;
@@ -245,25 +300,27 @@ public final class NetworkState {
 				// make sure we don't process this again
 				processedIds.add(messageId);
 				// log
-				LOGGER.debug("RECEIVED: " + message.getType().toString());
-			} else if (message.getType() == MessageType.CONFIRMATION) {
-				// get id for logging
-				Message removed = NetworkState.sendQueue.get(message.getPayloadInteger());
-				// remove message from send queue
-				if (NetworkState.sendQueue.remove(message.getPayloadInteger()) != null) {
-					LOGGER.debug("REMOVED: " + removed.getType().toString());
-					// log ping
-					Integer ping = (int) ((System.currentTimeMillis() % Integer.MAX_VALUE)
-							- message.getPayloadInteger());
-					LOGGER.debug("PING: " + ping.toString());
-				}
+				LOGGER.debug("RECEIVED: " + messageType.toString());
+			} else if (messageType == MessageType.ACK) {
+				// remove message from queue
+				int removeId = receiveBuffer.getInt();
+				sendQueue.remove(removeId);
 			} else {
-				Message confirmMessage = new Message(MessageType.CONFIRMATION, message.getIdInBytes());
-				ByteBuffer confirmBuffer = ByteBuffer.allocate(1024);
-				confirmBuffer.clear();
-				confirmBuffer.put(confirmMessage.toByteArray());
-				confirmBuffer.flip();
-				channel.send(confirmBuffer, address);
+				// acknowledge that we've already received this
+				receiveBuffer.clear();
+				// put header
+				receiveBuffer.put(MESSAGE_HEADER);
+				// put null id
+				receiveBuffer.putInt(0);
+				// put type
+				receiveBuffer.put((byte) MessageType.ACK.ordinal());
+				// put number of fields
+				receiveBuffer.put((byte) 1);
+				// put ACK id
+				receiveBuffer.putInt(messageId);
+				// send ACK to peer
+				receiveBuffer.flip();
+				channel.send(receiveBuffer, address);
 			}
 		} catch (Exception e) {
 			LOGGER.error("Failed to receive message", e);

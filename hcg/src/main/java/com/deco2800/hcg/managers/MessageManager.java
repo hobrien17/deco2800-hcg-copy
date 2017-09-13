@@ -2,7 +2,6 @@ package com.deco2800.hcg.managers;
 
 import java.util.ArrayList;
 
-import com.deco2800.hcg.multiplayer.Message;
 import com.deco2800.hcg.observers.MessageObserver;
 
 public class MessageManager extends Manager {
@@ -34,7 +33,7 @@ public class MessageManager extends Manager {
 	 * Called when a chat message is received
 	 * @param message The Message that was received
 	 */
-	public void chatMessageReceieved(Message message) {
+	public void chatMessageReceieved(String message) {
 		for (MessageObserver observer : chatMessageListeners) {
 			observer.notifyChatMessage(message);
 		}

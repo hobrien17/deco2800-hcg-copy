@@ -8,7 +8,7 @@ package com.deco2800.hcg.multiplayer;
  *
  */
 public enum MessageType {
-	CONFIRMATION,	// sent after receiving message
+	ACK,				// sent after receiving message
 	JOINING,			// sent from client when joining
 	JOINED,			// sent from server after client has joined
 	INPUT,			// sent after input
