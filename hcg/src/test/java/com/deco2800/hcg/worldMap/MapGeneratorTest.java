@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertFalse;
 
-import com.deco2800.hcg.worlds.BlankTestWorld;
+import com.deco2800.hcg.worlds.World;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -16,7 +16,7 @@ import com.deco2800.hcg.worldmapui.MapGenerator;
 import java.util.*;
 public class MapGeneratorTest {
     WorldMap worldMap;
-    BlankTestWorld world;
+    World world;
     MapGenerator mg;
 
     /* What kind of level?
@@ -30,7 +30,7 @@ public class MapGeneratorTest {
     int numBossZones = 2; // <- can change;
     @Before
     public void setup() {
-        world = new BlankTestWorld();
+        world = new World();
         // adding numSaveZones*2 safe zone levels
         for (int i = 0; i < numSaveZones; i++){
             levels.add(new Level(world, 0,0,0));

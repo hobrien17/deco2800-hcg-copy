@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="77">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="154">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
@@ -503,12 +503,33 @@
   <object id="26" gid="37" x="32" y="1408" width="55" height="32"/>
   <object id="27" gid="37" x="32" y="1376" width="55" height="32"/>
  </objectgroup>
+ <objectgroup name="NPC">
+  <properties>
+   <property name="name" value="NPC"/>
+  </properties>
+  <object id="77" gid="36" x="198.455" y="899.545" width="55" height="32">
+   <properties>
+    <property name="Type" value="Quest"/>
+    <property name="fName" value="Jane"/>
+    <property name="sName" value="Jensen"/>
+    <property name="texture" value="character_1"/>
+   </properties>
+  </object>
+  <object id="80" gid="36" x="305.027" y="657.473" width="55" height="32">
+   <properties>
+    <property name="Type" value="Shop"/>
+    <property name="fName" value="Jane"/>
+    <property name="sName" value="Jensen"/>
+    <property name="texture" value="character_shop"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup name="tree">
   <properties>
    <property name="name" value="tree"/>
   </properties>
   <object id="29" gid="37" x="917.927" y="1246.07" width="55" height="32"/>
-  <object id="30" gid="37" x="936.636" y="1297.36" width="55" height="32"/>
+  <object id="30" gid="37" x="977.636" y="1402.36" width="55" height="32"/>
   <object id="31" gid="37" x="1064.98" y="1371.02" width="55" height="32"/>
   <object id="32" gid="37" x="1152.22" y="1383.78" width="55" height="32"/>
   <object id="33" gid="37" x="1096.8" y="1199.2" width="55" height="32"/>
@@ -517,7 +538,7 @@
   <object id="36" gid="37" x="1296.89" y="1405.11" width="55" height="32"/>
   <object id="37" gid="37" x="1338.25" y="1469.75" width="55" height="32"/>
   <object id="38" gid="37" x="1165.25" y="1424.75" width="55" height="32"/>
-  <object id="39" gid="37" x="991.636" y="1416.36" width="55" height="32"/>
+  <object id="39" gid="37" x="1066.69" y="1469.31" width="55" height="32"/>
   <object id="40" gid="37" x="992.836" y="1315.16" width="55" height="32"/>
   <object id="41" gid="37" x="1132.09" y="1265.91" width="55" height="32"/>
   <object id="42" gid="37" x="1193.07" y="1312.93" width="55" height="32"/>
@@ -525,6 +546,17 @@
   <object id="44" gid="37" x="1166.09" y="1555.91" width="55" height="32"/>
   <object id="45" gid="37" x="971.436" y="1242.56" width="55" height="32"/>
   <object id="46" gid="37" x="1236.44" y="1507.56" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="pot">
+  <properties>
+   <property name="name" value="pot"/>
+  </properties>
+  <object id="153" x="544" y="896" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="hedgehog">
+  <properties>
+   <property name="name" value="hedgehog"/>
+  </properties>
  </objectgroup>
  <objectgroup name="squirrel">
   <properties>
@@ -555,5 +587,35 @@
   <object id="74" gid="37" x="1248" y="672" width="55" height="32"/>
   <object id="75" gid="37" x="1152" y="576" width="55" height="32"/>
   <object id="76" gid="37" x="1120" y="512" width="55" height="32"/>
+  <object id="81" gid="37" x="1335.84" y="826.164" width="55" height="32"/>
+  <object id="82" gid="37" x="1050.76" y="741.236" width="55" height="32"/>
+  <object id="83" gid="37" x="1084.95" y="915.055" width="55" height="32"/>
+  <object id="84" gid="37" x="873.182" y="820.818" width="55" height="32"/>
+  <object id="87" gid="37" x="991.273" y="816.727" width="55" height="32"/>
+  <object id="88" gid="37" x="952.6" y="709.4" width="55" height="32"/>
+  <object id="92" gid="37" x="1152.4" y="755.6" width="55" height="32"/>
+  <object id="93" gid="37" x="896" y="128" width="55" height="32"/>
+  <object id="94" gid="37" x="896" y="160" width="55" height="32"/>
+  <object id="95" gid="37" x="896" y="192" width="55" height="32"/>
+  <object id="96" gid="37" x="896" y="224" width="55" height="32"/>
+  <object id="97" gid="37" x="896" y="256" width="55" height="32"/>
+  <object id="98" gid="37" x="896" y="320" width="55" height="32"/>
+  <object id="99" gid="37" x="928" y="320" width="55" height="32"/>
+  <object id="100" gid="37" x="896" y="288" width="55" height="32"/>
+  <object id="101" gid="37" x="928" y="288" width="55" height="32"/>
+  <object id="102" gid="37" x="928" y="256" width="55" height="32"/>
+  <object id="103" gid="37" x="928" y="224" width="55" height="32"/>
+  <object id="104" gid="37" x="928" y="192" width="55" height="32"/>
+  <object id="105" gid="37" x="928" y="192" width="55" height="32"/>
+  <object id="106" gid="37" x="928" y="128" width="55" height="32"/>
+  <object id="107" gid="37" x="928" y="160" width="55" height="32"/>
+  <object id="108" gid="37" x="960" y="128" width="55" height="32"/>
+  <object id="109" gid="37" x="960" y="192" width="55" height="32"/>
+  <object id="110" gid="37" x="960" y="192" width="55" height="32"/>
+  <object id="111" gid="37" x="960" y="160" width="55" height="32"/>
+  <object id="112" gid="37" x="960" y="224" width="55" height="32"/>
+  <object id="113" gid="37" x="960" y="256" width="55" height="32"/>
+  <object id="114" gid="37" x="960" y="288" width="55" height="32"/>
+  <object id="115" gid="37" x="960" y="320" width="55" height="32"/>
  </objectgroup>
 </map>

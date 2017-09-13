@@ -14,10 +14,13 @@ import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.weapons.*;
+import com.deco2800.hcg.worlds.World;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -41,6 +44,9 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected float lastPlayerY;
     protected float normalSpeed;
     protected float movementSpeed;
+    protected Random random;
+    protected boolean collided;
+    protected Box3D newPos;
 
 	// Effects container
 	protected Effects myEffects;
@@ -77,10 +83,16 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.attributes.put("charisma", 1);
         this.attributes.put("intellect", 1);
         this.healthMax = 1000;
+        this.randomX = 0;
+        this.randomY = 0;
         this.speedX = 0;
         this.speedY = 0;
         this.level = 1;
         this.movementSpeed = (float)(this.level * 0.03);
+        this.random = new Random();
+        this.random.setSeed(this.getID());
+        this.setCollided(false);
+        this.newPos = getBox3D();
 
 		// Effects container 
 		myEffects = new Effects(this);
@@ -135,8 +147,22 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public int getStrength() {
         return this.getAttribute("strength");
     }
-    
 
+    /**
+     * Set collision status.
+     * @param status
+     */
+    public void setCollided(boolean status){
+        this.collided = status;
+    }
+
+    /**
+     * Return collision status.
+     * @return
+     */
+    public boolean getCollided(){
+        return this.collided;
+    }
     /**
      * Change the health level of the enemy i.e can increase or decrease the health level (depending on whether the amount is positive or negative)
      * 
@@ -251,7 +277,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      */
     public void detectPlayer(){
         float distance = this.distance(playerManager.getPlayer());
-        if(distance <= 10 * this.level){
+        if(distance <= 5 * this.level){
             //Annoyed by player.
             this.setStatus(2);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
@@ -272,7 +298,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * Go to the player's position if detected player during moving.
      *
      */
-    public Box3D randomMove() {
+    public Box3D getRandomPos() {
         float radius;
         float distance;
         float currPosX = this.getPosX();
@@ -283,34 +309,38 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         float tempX;
         float tempY;
         //Get direction of next position. Randomly be chosen between 0 and 360.
-        radius = Math.abs(new Random().nextFloat()) * 400 % 360;
+        radius = Math.abs(random.nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
-        distance = Math.abs(new Random().nextFloat()) * this.level + 5;
+        distance = Math.abs(random.nextFloat()) * this.level * 3;
         nextPosX = (float) (currPosX + distance * cos(radius));
         nextPosY = (float) (currPosY + distance * sin(radius));
         tempX = nextPosX;
         tempY = nextPosY;
+        if(abs(this.randomX) <= 0.005 && abs(this.randomY) <= 0.005){
+            this.randomX = tempX;
+            this.randomY = tempY;
+        }
         //Keep enemy continue to next position.
         if((abs(this.randomX - currPosX) > 1) &&
-                (abs(this.randomY - currPosY) > 1)){
+                (abs(this.randomY - currPosY) > 1) &&
+                !this.getCollided()){
             nextPosX = this.randomX;
             nextPosY = this.randomY;
         } else {
+            this.setCollided(false);
             this.randomX = tempX;
             this.randomY = tempY;
         }
         if (currPosX < nextPosX) {
-            currPosX += movementSpeed;
+            currPosX += movementSpeed * 0.25;
         } else if (currPosX > nextPosX) {
-            currPosX -= movementSpeed;
+            currPosX -= movementSpeed * 0.25;
         }
         if (this.getPosY() < nextPosY) {
-            currPosY += movementSpeed;
+            currPosY += movementSpeed * 0.25;
         } else if (this.getPosY() > nextPosY) {
-            currPosY -= movementSpeed;
+            currPosY -= movementSpeed * 0.25;
         }
-        //this.setPosX(currPosX);
-        //this.setPosY(currPosY);
         Box3D newPos = getBox3D();
         newPos.setX(currPosX);
         newPos.setY(currPosY);
@@ -321,9 +351,13 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * Move enemy to player.
      *
      */
-    public Box3D moveToPlayer(){
+    public Box3D getToPlayerPos(){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
+        if((abs(this.getPosX() - playerManager.getPlayer().getPosX()) > 1)||
+                (abs(this.getPosY() - playerManager.getPlayer().getPosY()) > 1)){
+            this.setCollided(false);
+        }
         if(this.getPosX() < playerManager.getPlayer().getPosX()){
             currPosX += movementSpeed;
         }
@@ -336,9 +370,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         else if(this.getPosY() > playerManager.getPlayer().getPosY()){
             currPosY -= movementSpeed;
         }
-        //this.setPosX(currPosX);
-        //this.setPosY(currPosY);
-        Box3D newPos = getBox3D();
         newPos.setX(currPosX);
         newPos.setY(currPosY);
         return newPos;
@@ -348,7 +379,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * Move enemy to pointed position. Use for going to the player's last position.
      *
      */
-    public Box3D moveTo(float posX, float posY){
+    public Box3D getMoveToPos(float posX, float posY){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
         if(this.getPosX() < posX){
@@ -363,8 +394,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         else if(this.getPosY() > posY){
             currPosY -= movementSpeed;
         }
-        //this.setPosX(currPosX);
-        //this.setPosY(currPosY);
         if((abs(posX - currPosX) < 1) &&
                 (abs(posY - currPosY) < 1)){
             this.setStatus(1);
@@ -379,9 +408,55 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * Move enemy by different situation.
      *
      */
-    public void move(float currPosX, float currPosY){
+    public void setMove(float currPosX, float currPosY){
         this.setPosX(currPosX);
         this.setPosY(currPosY);
+    }
+
+    public void moveAction(){
+        if (!this.getCollided()) {
+            this.setMove(newPos.getX(), newPos.getY());
+            enemyWeapon.updatePosition((int)this.getPosX(), (int)this.getPosY());
+        }
+    }
+
+    /**
+     * Detect collision with entity.
+     */
+    public void detectCollision(){
+        World world = GameManager.get().getWorld();
+        if (world.getTiledMapTileLayerAtPos((int) newPos.getX(), (int) newPos.getY()) == null) {
+            this.setCollided(true);
+        }
+        List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
+        for (AbstractEntity entity : entities) {
+            if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
+                if(entity instanceof Player) {
+                    this.causeDamage((Player)entity);
+                }
+                this.setCollided(true);
+            }
+        }
+    }
+
+    /**
+     * Set new position by different situation.
+     */
+    public void setNewPos(){
+        switch(this.getStatus()){
+            case 1://Status: New Born
+                newPos = this.getRandomPos();
+                break;
+            case 2://Status: Chasing player
+                newPos = this.getToPlayerPos();
+                this.shoot();
+                break;
+            case 3://Status: Annoyed/Lost player
+                newPos = this.getMoveToPos(this.getLastPlayerX(), this.getLastPlayerY());
+                break;
+            default:
+                newPos = this.getRandomPos();
+        }
     }
 
     /**

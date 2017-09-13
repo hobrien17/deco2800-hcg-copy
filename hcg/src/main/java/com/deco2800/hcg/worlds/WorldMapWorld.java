@@ -9,9 +9,9 @@ import com.deco2800.hcg.renderers.Renderable;
  * Initial world using preset world file.
  *
  * @author leggy
- *
+ *@deprecated
  */
-public class WorldMapWorld extends AbstractWorld {
+public class WorldMapWorld extends World {
 
     /**
      * Constructor for DemoWorld
