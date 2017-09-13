@@ -351,10 +351,10 @@ public abstract class Character extends AbstractEntity {
      */
     public void killLogAdd(int enemyID) {
         //Add the node ID if it has not already being added
-        killLog.putIfAbsent(getCurrentNode(),new HashMap<>());
+        killLog.putIfAbsent(getCurrentNodeID(),new HashMap<>());
         //Add the enemy ID to that world if it has not already being added
-        killLog.get(getCurrentNode()).putIfAbsent(enemyID, 0);
-        killLog.get(getCurrentNode()).put(enemyID,1 + killLog.get(getCurrentNode()).get(enemyID));
+        killLog.get(getCurrentNodeID()).putIfAbsent(enemyID, 0);
+        killLog.get(getCurrentNodeID()).put(enemyID,1 + killLog.get(getCurrentNodeID()).get(enemyID));
         updateQuestLog();
     }
 
@@ -382,7 +382,7 @@ public abstract class Character extends AbstractEntity {
      * @return The amount of times the specified enemy has being killed in an area.
      */
     public int killLogGet(int enemyID) {
-        return killLog.getOrDefault(getCurrentNode(),new HashMap<>()).getOrDefault(enemyID,0);
+        return killLog.getOrDefault(getCurrentNodeID(),new HashMap<>()).getOrDefault(enemyID,0);
     }
 
     /**
@@ -439,7 +439,7 @@ public abstract class Character extends AbstractEntity {
      * @return if the specified enemy has being killed before.
      */
     public boolean killLogContains(int enemyID) {
-        return killLog.get(getCurrentNode()).containsKey(enemyID);
+        return killLog.get(getCurrentNodeID()).containsKey(enemyID);
     }
 
     /**
@@ -464,9 +464,7 @@ public abstract class Character extends AbstractEntity {
     /**
      * @return the position in the nodal map where the character currently is
      */
-    private int getCurrentNode() {
-        //Todo, Once the world ID is added un comment the below line
-        //return GameManager.get().getWorld(). //Todo add function name here
-        return 0;
+    private int getCurrentNodeID() {
+        return GameManager.get().getCurrentNode().getNodeID();
     }
 }
