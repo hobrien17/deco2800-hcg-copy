@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Color;
@@ -38,6 +37,8 @@ public class PlayContext extends Context {
 	private ContextManager contextManager;
 	private PlantManager plantManager;
 	private MessageManager messageManager;
+	private TextureManager textureManager;
+	private NetworkManager networkManager;
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -86,7 +87,8 @@ public class PlayContext extends Context {
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
-		TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -180,9 +182,9 @@ public class PlayContext extends Context {
         chatButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (NetworkState.isInitialised()) {
+				if (networkManager.isInitialised()) {
 					if (chatString.trim().length()>0) {
-						String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
+						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
 						chatTextField.setText("");
 						chatTextArea.appendText(chatMessage + "\n");
 						stage.setKeyboardFocus(null);
@@ -207,9 +209,9 @@ public class PlayContext extends Context {
 				} else if (chatString.length() > 0){
 					chatString = chatString.substring(0, chatString.length() - 1);
 				}
-				if ((c == '\r' && NetworkState.isInitialised())) {
+				if ((c == '\r' && networkManager.isInitialised())) {
 					if (chatString.trim().length()>0) {
-						String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
+						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
 						chatTextField.setText("");
 						chatTextArea.appendText(chatMessage + "\n");
 						stage.setKeyboardFocus(null);
@@ -359,14 +361,14 @@ public class PlayContext extends Context {
 
 	@Override
 	public void pause() {
-		if (!NetworkState.isInitialised()) {
+		if (!networkManager.isInitialised()) {
 			unpaused = false;
 		}
 	}
 
 	@Override
 	public void resume() {
-		if (!NetworkState.isInitialised()) {
+		if (!networkManager.isInitialised()) {
 			unpaused = true;
 		}
 	}

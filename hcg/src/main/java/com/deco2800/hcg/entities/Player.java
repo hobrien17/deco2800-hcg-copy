@@ -15,10 +15,10 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
-import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
@@ -40,6 +40,7 @@ public class Player extends Character implements Tickable {
 
 	private SoundManager soundManager;
 	private ContextManager contextManager;
+	private NetworkManager networkManager;
 	private PlayerInputManager playerInputManager;
 
 	private boolean collided;
@@ -82,6 +83,7 @@ public class Player extends Character implements Tickable {
 		// Get necessary managers
 		GameManager gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+		this.networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 
 		this.id = id;
 		if (id == 0) {
@@ -164,8 +166,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
-		if (NetworkState.isInitialised()) {
-			NetworkState.sendInputMessage(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+		if (networkManager.isInitialised()) {
+			networkManager.sendInputMessage(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
 		}
 		playerInputManager.touchDown(0, screenX, screenY, pointer, button);
 	}
@@ -181,8 +183,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
-		if (NetworkState.isInitialised()) {
-			NetworkState.sendInputMessage(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
+		if (networkManager.isInitialised()) {
+			networkManager.sendInputMessage(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
 		}
 		playerInputManager.touchDragged(0, screenX, screenY, pointer);
 	}
@@ -200,8 +202,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchUp(int screenX, int screenY, int pointer, int button) {
-		if (NetworkState.isInitialised()) {
-			NetworkState.sendInputMessage(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+		if (networkManager.isInitialised()) {
+			networkManager.sendInputMessage(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
 		}
 		playerInputManager.touchUp(0, screenX, screenY, pointer, button);
 	}
@@ -229,8 +231,8 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key pressed
 	 */
 	private void handleLocalKeyDown(int keycode) {
-		if (NetworkState.isInitialised()) {
-			NetworkState.sendInputMessage(InputType.KEY_DOWN.ordinal(), keycode);
+		if (networkManager.isInitialised()) {
+			networkManager.sendInputMessage(InputType.KEY_DOWN.ordinal(), keycode);
 		}
 		playerInputManager.keyDown(0, keycode);
 	}
@@ -242,8 +244,8 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key released
 	 */
 	private void handleLocalKeyUp(int keycode) {
-		if (NetworkState.isInitialised()) {
-			NetworkState.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
+		if (networkManager.isInitialised()) {
+			networkManager.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
 		}
 		playerInputManager.keyUp(0, keycode);
 	}

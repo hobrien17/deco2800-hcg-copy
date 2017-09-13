@@ -1,4 +1,4 @@
-package com.deco2800.hcg.multiplayer;
+package com.deco2800.hcg.managers;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -14,11 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.managers.ContextManager;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.MessageManager;
-import com.deco2800.hcg.managers.PlayerInputManager;
-import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.multiplayer.InputType;
+import com.deco2800.hcg.multiplayer.MessageType;
 
 /**
  * Asynchronous UDP networking
@@ -26,38 +23,35 @@ import com.deco2800.hcg.managers.PlayerManager;
  * @author Max Crofts
  *
  */
-public final class NetworkState {
-	static final Logger LOGGER = LoggerFactory.getLogger(NetworkState.class);
-
-	static DatagramChannel channel;
-	// TODO: a HashMap is probably not the best collection for the lobby
-	//       shouldn't be a big issue for the moment
-	static ConcurrentHashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
-	static ConcurrentHashMap<Integer, byte[]> sendQueue;
-	private static ArrayList<Integer> processedIds; // TODO: should be a ring buffer
-	private static boolean initialised = false;
-	
-	private static GameManager gameManager;
-	private static ContextManager contextManager;
-	private static MessageManager messageManager;
-	private static PlayerInputManager playerInputManager;
-	private static PlayerManager playerManager;
-	
-	private static ByteBuffer messageBuffer;
-	private static ByteBuffer sendBuffer;
-	private static ByteBuffer receiveBuffer;
-	
-	private static Random messageIdGenerator;
-	
+public final class NetworkManager extends Manager implements TickableManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(NetworkManager.class);
 	private static final byte[] MESSAGE_HEADER = "H4RDC0R3".getBytes();
 
-	private NetworkState() {}
+	DatagramChannel channel;
+	// TODO: a HashMap is probably not the best collection for the lobby
+	//       shouldn't be a big issue for the moment
+	ConcurrentHashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
+	ConcurrentHashMap<Integer, byte[]> sendQueue;
+	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
+	private boolean initialised = false;
+	
+	private GameManager gameManager;
+	private ContextManager contextManager;
+	private MessageManager messageManager;
+	private PlayerInputManager playerInputManager;
+	private PlayerManager playerManager;
+	
+	private ByteBuffer messageBuffer;
+	private ByteBuffer sendBuffer;
+	private ByteBuffer receiveBuffer;
+	
+	private Random messageIdGenerator;
 
 	/**
 	 * Initialises NetworkState
 	 * @param hostGame
 	 */
-	public static void init(boolean hostGame) {
+	public void init(boolean hostGame) {
 		sockets = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
 		processedIds = new ArrayList<>();
@@ -108,11 +102,11 @@ public final class NetworkState {
 	 * Check if network state is initialised
 	 * @return Boolean indicating if network state has been initialised
 	 */
-	public static boolean isInitialised() {
+	public boolean isInitialised() {
 		return initialised;
 	}
 	
-	private static Integer startNewMessage(MessageType type, int numberOfEntries) {
+	private Integer startNewMessage(MessageType type, int numberOfEntries) {
 		// clear buffer
 		messageBuffer.clear();
 		// put header
@@ -131,7 +125,7 @@ public final class NetworkState {
 	/**
 	 * Add input message to queue
 	 */
-	public static void sendInputMessage(int... args) {
+	public void sendInputMessage(int... args) {
 		Integer id = startNewMessage(MessageType.INPUT, args.length);
 		messageBuffer.asIntBuffer().put(args);
 		messageBuffer.position(messageBuffer.position() + args.length * 4);
@@ -147,7 +141,7 @@ public final class NetworkState {
 	 * @param chatMessage String to be sent
 	 * @return String sent to other peers
 	 */
-	public static String sendChatMessage(String message) {
+	public String sendChatMessage(String message) {
 		String string = channel.socket().getLocalAddress().getHostName() + ": " + message;
 		Integer id = startNewMessage(MessageType.CHAT, string.getBytes().length);
 		// create chat string
@@ -164,7 +158,7 @@ public final class NetworkState {
 	 * Join server
 	 * @param hostname Hostname of server
 	 */
-	public static void join(String hostname) {
+	public void join(String hostname) {
 		SocketAddress socketAddress = new InetSocketAddress(hostname, 1337);
 		// add host to peers
 		sockets.put(0, socketAddress);
@@ -177,7 +171,7 @@ public final class NetworkState {
 		sendQueue.put(id, bytes);
 	}
 	
-	public static void sendJoinedMessage() {
+	public void sendJoinedMessage() {
 		Integer id = startNewMessage(MessageType.JOINED, 0);
 		// send message to peers
 		messageBuffer.flip();
@@ -186,7 +180,7 @@ public final class NetworkState {
 		sendQueue.put(id, bytes);
 	}
 	
-	public static void send() {
+	public void send() {
 		// on the server peers contains all connected clients
 		// for a regular peer it only contains the server
 		for (SocketAddress peer : sockets.values()) {
@@ -203,7 +197,7 @@ public final class NetworkState {
 		}
 	}
 	
-	public static void receive() {
+	public void receive() {
 		try {
 			// acquire buffer from channel
 			receiveBuffer.clear();
@@ -231,8 +225,7 @@ public final class NetworkState {
 				switch (messageType) {
 					case JOINING:
 						// add peer to lobby
-						NetworkState.sockets.put(
-								NetworkState.sockets.size() - 1, address);
+						sockets.put(sockets.size() - 1, address);
 						// send joined message
 						sendJoinedMessage();
 						// fall through to spawn other player
@@ -325,5 +318,11 @@ public final class NetworkState {
 		} catch (Exception e) {
 			LOGGER.error("Failed to receive message", e);
 		}
+	}
+
+	@Override
+	public void onTick(long gameTickCount) {
+		// TODO Auto-generated method stub
+		
 	}
 }

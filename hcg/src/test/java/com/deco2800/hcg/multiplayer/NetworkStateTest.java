@@ -10,10 +10,12 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
+import com.deco2800.hcg.managers.NetworkManager;
+
 
 
 public class NetworkStateTest {
-	private static NetworkState network;
+	private static NetworkManager network;
 	private byte[] payload = "123456789ABC".getBytes();
 	private byte[] payload1 = "123456789ABCD".getBytes();
 	//Message message1 = new Message(MessageType.CHAT, payload);
