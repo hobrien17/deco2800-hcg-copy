@@ -69,16 +69,16 @@ public class MushroomTurret extends Enemy implements Observer {
                         this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet4);
                 Bullet bullet5 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX() + range, this.getPosY() + range, this.getPosZ(), this);
+                        this.getPosX() + range, this.getPosY() + range, this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet5);
                 Bullet bullet6 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        Math.max(0,this.getPosX() - range), this.getPosY() + range , this.getPosZ(), this);
+                        Math.max(0,this.getPosX() - range), this.getPosY() + range , this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet6);
                 Bullet bullet7 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX() + range, Math.max(0,this.getPosY() - range), this.getPosZ(), this);
+                        this.getPosX() + range, Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet7);
                 Bullet bullet8 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this);
+                        Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet8);
                 break;
 
