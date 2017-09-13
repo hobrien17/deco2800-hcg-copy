@@ -11,8 +11,8 @@ public class ConversationOption {
     private ConversationNode target;    // null if this option will end the Conversation
     private List<AbstractConversationAction> actions;
 
-    public ConversationOption(ConversationNode parent, String optionText, ConversationNode target,
-                              List<AbstractConversationAction> actions) {
+    public ConversationOption(ConversationNode parent, String optionText,
+                ConversationNode target, List<AbstractConversationAction> actions) {
         this.parent = parent;
         this.grandparent = parent.getParent();
         this.optionText = optionText;

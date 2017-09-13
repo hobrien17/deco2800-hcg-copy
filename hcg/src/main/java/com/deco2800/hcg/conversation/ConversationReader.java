@@ -1,9 +1,6 @@
 package com.deco2800.hcg.conversation;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -65,7 +62,7 @@ public class ConversationReader {
 			iNode.node.setup(options);
 		}
 
-		String initialNodeID = jConversation.get("intialNode").getAsString();
+		String initialNodeID = jConversation.get("initialNode").getAsString();
 		ConversationNode initialNode = nodes.get(initialNodeID);
 		conversation.setup(new ArrayList<>(nodes.values()), initialNode);
 		return conversation;
@@ -89,8 +86,14 @@ public class ConversationReader {
 
 	private static ConversationOption deserialiseOption(JsonObject jOption, ConversationNode parent, Map<String, ConversationNode> nodes) {
 		String optionText = jOption.get("optionText").getAsString();
-		String targetID = jOption.get("target").getAsString();
-		ConversationNode target = nodes.get(targetID);
+		ConversationNode target;
+		JsonElement jTarget = jOption.get("target");
+		if (jTarget instanceof JsonNull) {
+			target = null;
+		} else {
+			String targetID = jTarget.getAsString();
+			target = nodes.get(targetID);
+		}
 		return new ConversationOption(parent, optionText, target, new ArrayList<>()); //TODO actions
 	}
 

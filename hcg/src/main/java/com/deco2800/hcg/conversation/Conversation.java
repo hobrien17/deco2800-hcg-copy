@@ -15,6 +15,7 @@ import java.util.List;
 public class Conversation {
 
 	private List<ConversationNode> conversationNodes;  // this must not contain duplicates
+	private ConversationNode initialNode;
 	private ConversationNode currentNode;
 	private ConversationContext conversationContext;
 	private ContextManager contextManager;
@@ -33,41 +34,52 @@ public class Conversation {
 
 	/**
 	 * Full constructor
-	 * initalNode MUST be in conversationNodes
+	 * initialNode MUST be in conversationNodes
 	 * @param conversationNodes list of all nodes in this conversation
-	 * @param initalNode reference to the first node to display
+	 * @param initialNode reference to the first node to display
 	 */
 	public Conversation(List<ConversationNode> conversationNodes,
-			ConversationNode initalNode) {
+			ConversationNode initialNode) {
 		this();
-		setup(conversationNodes, initalNode);
+		setup(conversationNodes, initialNode);
 	}
 
 	/**
 	 * Initialise references to conversationNodes
 	 * This should be called once after using the no-argument constructor
 	 * @param conversationNodes list of all nodes in this conversation
-	 * @param initalNode reference to the first node to display
+	 * @param initialNode reference to the first node to display
 	 */
 	public void setup(List<ConversationNode> conversationNodes,
-			ConversationNode initalNode) {
+			ConversationNode initialNode) {
 		this.conversationNodes = new ArrayList<>(conversationNodes);
-		currentNode = initalNode;
+		this.initialNode = initialNode;
 	}
 
+	/**
+	 * Begin presenting the conversation to the player
+	 */
 	public void initiateConversation() {
+		currentNode = initialNode;
 		conversationContext = new ConversationContext();
 		conversationContext.displayNode(currentNode);
 		contextManager.pushContext(conversationContext);
 	}
 
+	// Called by ConversationNodes
 	void changeNode(ConversationNode target) {
 		currentNode = target;
 		conversationContext.displayNode(currentNode);
 	}
 
+	// Called by ConversationNodes
 	void endConversation() {
 		contextManager.popContext();
+	}
+	
+	// Needed for serialisation
+	ConversationNode getInitialNode() {
+		return initialNode;
 	}
 	
 	// Needed for serialisation

@@ -1,7 +1,6 @@
 package com.deco2800.hcg.conversation;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,30 +10,26 @@ public class ConversationWriter {
 
 	// Save a Conversation to a file
 	public static void writeConversation(Conversation conversation,
-			ConversationNode initalConversationNode,
 			String filename) throws IOException {
-		String text = exportConversation(conversation, initalConversationNode);
+		String text = exportConversation(conversation);
 		FileWriter fw = new FileWriter(filename);
 		fw.write(text);
 		fw.close();
 	}
 
 	// Export a Conversation as a String
-	public static String exportConversation(Conversation conversation,
-			ConversationNode initalConversationNode) {
-		JsonObject jConversation = serialiseConversation(conversation, initalConversationNode);
+	public static String exportConversation(Conversation conversation) {
+		JsonObject jConversation = serialiseConversation(conversation);
 		return jConversation.toString();
 	}
 		
 	// Serialise a Conversation as a JsonObject
-	public static JsonObject serialiseConversation(Conversation conversation,
-			ConversationNode initalConversationNode) {
+	public static JsonObject serialiseConversation(Conversation conversation) {
 		
 		List<ConversationNode> nodes = conversation.getConversationNodes();
 		
 		JsonObject jConversation = new JsonObject();
-		//TODO check if -1
-		jConversation.addProperty("initalNode", nodes.indexOf(initalConversationNode));
+		jConversation.add("initialNode", getID(conversation.getInitialNode(), nodes));
 		
 		JsonArray jNodes = new JsonArray();
 		for (ConversationNode node : nodes) {
@@ -49,7 +44,7 @@ public class ConversationWriter {
 			List<ConversationNode> nodes) {
 		
 		JsonObject jNode = new JsonObject();
-		jNode.addProperty("id", nodes.indexOf(node));
+		jNode.add("id", getID(node, nodes));
 		jNode.addProperty("nodeText", node.getNodeText());
 		
 		JsonArray jOptions = new JsonArray();
@@ -66,9 +61,18 @@ public class ConversationWriter {
 		
 		JsonObject jOption = new JsonObject();
 		jOption.addProperty("optionText", option.getOptionText());
-		jOption.addProperty("target", nodes.indexOf(option.getTarget()));
+		jOption.add("target", getID(option.getTarget(), nodes));
 		//TODO add actions
 		
 		return jOption;
+	}
+	
+	private static JsonElement getID(ConversationNode node, List<ConversationNode> nodes) {
+		int index = nodes.indexOf(node);
+		if (index == -1) {
+			return new JsonNull();
+		} else {
+			return new JsonPrimitive(""+index);
+		}
 	}
 }

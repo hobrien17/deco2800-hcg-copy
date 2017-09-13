@@ -18,7 +18,7 @@ public class ConversationNode {
     public ConversationNode(Conversation parent, String nodeText) {
         this.parent = parent;
         this.nodeText = nodeText;
-        this.options = new ArrayList<>(options);
+        this.options = new ArrayList<>();
     }
 
     /**
