@@ -8,13 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.multiplayer.NetworkState;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.World;
 
 /**
  * Multiplayer Menu
@@ -74,7 +73,7 @@ public class MultiplayerMenuContext extends UIContext {
 				NetworkState.init(false);
 				NetworkState.join(name.getText());
 				// TODO: there should probably be a lobby screen
-				gameManager.setWorld(new DemoWorld());
+				gameManager.setWorld(new World("resources/maps/initial-map-test.tmx"));
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}

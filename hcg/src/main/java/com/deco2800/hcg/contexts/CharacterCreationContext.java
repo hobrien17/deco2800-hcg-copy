@@ -45,9 +45,22 @@ public class CharacterCreationContext extends UIContext{
     // Placeholder for setting what skills are specialised because I'm a data structures n00b
     private int[] specialisedSkills = new int[3];
 
-    private int strength = 5, vitality = 5, agility = 5, intellect = 5, charisma = 5, meleeSkill = 10, gunsSkill = 10,
-            energyWeaponsSkill = 10, attributePoints = 5, specializedSkillsPoints = 2, skillPointsGain = 14,
-            carryWeight = 180, startingHealth = 1800, startingStamina = 1800, healthGain = 200, staminaGain = 200;
+    private int strength = 5; 
+    private int vitality = 5;
+    private int agility = 5;
+    private int intellect = 5;
+    private int charisma = 5; 
+    private int meleeSkill = 10;
+    private int gunsSkill = 10;
+    private int energyWeaponsSkill = 10;
+    private int attributePoints = 5;
+    private int specializedSkillsPoints = 2;
+    private int skillPointsGain = 14;
+    private int carryWeight = 180;
+    private int startingHealth = 1800;
+    private int startingStamina = 1800;
+    private int healthGain = 200;
+    private int staminaGain = 200;
 
     private Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
@@ -122,7 +135,8 @@ public class CharacterCreationContext extends UIContext{
     private void setupTopRowInfo() {
         TextButton quitButton = new TextButton("Quit", skin);
         TextField characterName = new TextField("Enter Name", skin);
-        characterSex = new SelectBox(skin);
+
+        SelectBox<String> characterSex = new SelectBox<>(skin);
         characterSex.setItems(sexes);
 
         topRowInfoTable.add(characterName);
@@ -196,73 +210,82 @@ public class CharacterCreationContext extends UIContext{
         strengthDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (strength > 1) {
-                    strength--;
-                    attributePoints++;
-                    carryWeight -= 20;
-                    strengthLabel.setText("Strength: " + strength);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
-                    carryWeightLabel.setText("Carry Weight: " + carryWeight);
-
+                if (strength <= 1) {
+                	return;
                 }
+                
+                strength--;
+                attributePoints++;
+                carryWeight -= 20;
+                strengthLabel.setText("Strength: " + strength);
+                attributePointsLabel.setText("Available Points: " + attributePoints);
+                carryWeightLabel.setText("Carry Weight: " + carryWeight);
             }
         });
 
         vitalityDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (vitality > 1) {
-                    vitality--;
-                    attributePoints++;
-                    startingHealth -= 200;
-                    healthGain -= 40;
-                    vitalityLabel.setText("Vitality: " + vitality);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
-                    startingHealthLabel.setText("Starting Health: " + startingHealth);
-                    healthGainLabel.setText("Health gained per level up: " + healthGain);
+            	if (vitality <= 1) {
+                	return;
                 }
+
+            	vitality--;
+                attributePoints++;
+                startingHealth -= 200;
+                healthGain -= 40;
+                vitalityLabel.setText("Vitality: " + vitality);
+                attributePointsLabel.setText("Available Points: " + attributePoints);
+                startingHealthLabel.setText("Starting Health: " + startingHealth);
+                healthGainLabel.setText("Health gained per level up: " + healthGain);
             }
         });
 
         agilityDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (agility > 1) {
-                    agility--;
-                    attributePoints++;
-                    startingStamina -= 200;
-                    staminaGain -= 40;
-                    agilityLabel.setText("Agility: " + agility);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
-                    startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
-                    staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
+            	if (agility <= 1) {
+                	return;
                 }
+            	
+            	agility--;
+            	attributePoints++;
+            	startingStamina -= 200;
+            	staminaGain -= 40;
+            	agilityLabel.setText("Agility: " + agility);
+            	attributePointsLabel.setText("Available Points: " + attributePoints);
+            	startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
+            	staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
             }
         });
 
         intellectDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (intellect > 1) {
-                    intellect--;
-                    attributePoints++;
-                    skillPointsGain -= 2;
-                    intellectLabel.setText("Intellect: " + intellect);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
-                    skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
+            	if (intellect <= 1) {
+                	return;
                 }
+
+            	intellect--;
+            	attributePoints++;
+            	skillPointsGain -= 2;
+            	intellectLabel.setText("Intellect: " + intellect);
+            	attributePointsLabel.setText("Available Points: " + attributePoints);
+            	skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
             }
         });
 
         charismaDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (charisma > 1) {
-                    charisma--;
-                    attributePoints++;
-                    charismaLabel.setText("Charisma: " + charisma);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
+            	if (charisma <= 1) {
+                	return;
                 }
+
+            	charisma--;
+            	attributePoints++;
+            	charismaLabel.setText("Charisma: " + charisma);
+            	attributePointsLabel.setText("Available Points: " + attributePoints);
             }
         });
 

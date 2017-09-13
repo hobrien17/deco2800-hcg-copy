@@ -4,7 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 
 /**
  * PlayerManager for managing the Player instance.
@@ -29,7 +29,7 @@ public class PlayerManager extends Manager {
      * Spawns players in current world.
      */
     public void spawnPlayers() {
-    		AbstractWorld world = GameManager.get().getWorld();
+    		World world = GameManager.get().getWorld();
     		for (Player player : players) {
     			world.addEntity(player);
     			world.addEntity(player.getEquippedWeapon());
