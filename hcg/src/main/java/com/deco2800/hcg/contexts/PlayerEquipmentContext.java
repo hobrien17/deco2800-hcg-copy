@@ -106,6 +106,15 @@ public class PlayerEquipmentContext extends UIContext{
 
     }
 
+    /** Function used for populating the inventory.
+     *
+     * @param itemDisplay a table for displaying the actual item clicked on
+     * @param itemInfo a table for displaying the info about the item clicked
+     * @param textureManager the games default texture manager
+     * @param player the current player whos inventory is being displayed
+     * @param skin game skin
+     * @param innerTable the actual inventory table where all items are loaded into.
+     */
     private void populateInventory(Table itemDisplay, Table itemInfo, TextureManager textureManager, Player player,
                                    Skin skin, Table innerTable) {
         int maxRow = 4;
@@ -169,6 +178,8 @@ public class PlayerEquipmentContext extends UIContext{
                                 }
                                 //TODO: This remove gets stuck when one item is left, this is because the redraw doesnt work for 0 case (i.e no item)
                                 //We could completely redisplay the inventory, but seems a bit inefficient.
+                                innerTable.clear();
+                                populateInventory(itemDisplay, itemInfo, textureManager, player, skin, innerTable);
 
                             }
                         });
@@ -184,11 +195,11 @@ public class PlayerEquipmentContext extends UIContext{
     private void populatePlayerInfo(Table playerInfo, Skin skin, Player player) {
         Label title = new Label("Player Stats", skin);
         title.setColor(Color.BLACK);
-        Label text1 = new Label(("Health  " + player.getAttribute("health")), skin);
+        Label text1 = new Label(("Health  " + player.getHealthCur()), skin);
         text1.setColor(Color.BLACK);
-        Label text2 = new Label(("Level " + player.getAttribute("xp")), skin);
+        Label text2 = new Label(("Level " + player.getXp()), skin);
         text2.setColor(Color.BLACK);
-        Label text3 = new Label(("Stamina " + player.getAttribute("stamina")), skin);
+        Label text3 = new Label(("Stamina " + player.getStaminaCur()), skin);
         text3.setColor(Color.BLACK);
         playerInfo.add(title).top();
         playerInfo.row();
