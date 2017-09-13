@@ -22,7 +22,8 @@ public class CottonShirt extends WearableItem{
         this.type = WearableType.CHEST;
         this.baseValue = 10;
         this.itemWeight = 3;
-        this.texture = String.format("%s_cottonshirt.png", this.colour);
+        //TODO: Change this texture from defaulting to spacman -> this is for testing
+        this.texture = "spacman";
     }
 
     /**
@@ -49,6 +50,7 @@ public class CottonShirt extends WearableItem{
      */
     @Override
     public String getName() {
-        return String.format("%s %s", this.type, this.itemName);
+        return String.format("Name: %s\nType: %s\nDetails: %s\n", this.itemName, this.type + " " + this.colour,
+                "A simple shirt. Doesnt really do much...");
     }
 }

@@ -30,14 +30,14 @@ public class BuffTest {
     public void buffGetEffectsTest() {
         Buff buff = new Buff("Test Buff", "Buff description", 100);
 
-        ArrayList<String> expectedEffects = new ArrayList<>();
+        List<String> expectedEffects = new ArrayList<>();
         expectedEffects.add("effect1");
         expectedEffects.add("effect2");
 
         buff.addEffect("effect1", 1.2f);
         buff.addEffect("effect2", 1.4f);
 
-        ArrayList<String> buffEffects = buff.getEffects();
+        List<String> buffEffects = buff.getEffects();
 
         Assert.assertTrue("Effects list is incorrect", expectedEffects.equals(buffEffects));
     }
