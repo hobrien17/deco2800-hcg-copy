@@ -57,20 +57,20 @@ public class MushroomTurret extends Enemy implements Observer {
                 break;
             case 4: // set turret phase 5 this.setTexture();
                 Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX() + range, this.getPosY(), this.getPosZ(), this);
+                        this.getPosX() + range, this.getPosY(), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet1);
                 Bullet bullet2 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        Math.max(0,this.getPosX() - range), this.getPosY(), this.getPosZ(), this);
+                        Math.max(0,this.getPosX() - range), this.getPosY(), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet2);
                 Bullet bullet3 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX(), this.getPosY() + range, this.getPosZ(), this);
+                        this.getPosX(), this.getPosY() + range, this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet3);
                 Bullet bullet4 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this);
+                        this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet4);
                 break;
 
-                // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
+            // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
         }
         seconds++;
     }
@@ -91,3 +91,4 @@ public class MushroomTurret extends Enemy implements Observer {
         return arr;
     }
 }
+
