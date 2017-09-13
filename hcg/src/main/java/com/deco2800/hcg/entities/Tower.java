@@ -1,5 +1,8 @@
 package com.deco2800.hcg.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -14,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
  */
 public class Tower extends AbstractEntity implements Clickable, Tickable,
         Selectable {
+  
+    private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
     boolean selected = false;
 
@@ -34,7 +39,7 @@ public class Tower extends AbstractEntity implements Clickable, Tickable,
      */
     @Override
     public void onClick() {
-        System.out.println("Base got clicked");
+        LOGGER.info("Base got clicked");
 
         if (!selected) {
             selected = true;
@@ -81,7 +86,7 @@ public class Tower extends AbstractEntity implements Clickable, Tickable,
 
     @Override
     public void buttonWasPressed() {
-        System.out.println("Button was pressed for " + this);
+        LOGGER.info("Button was pressed for " + this);
         /* We probably don't want these in random spots */
         //currentAction = Optional.of(new GenerateAction(new Peon(this.getParent(), rand.nextInt(24), rand.nextInt(24), 0), this.getParent()));
     }

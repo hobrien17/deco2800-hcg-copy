@@ -71,8 +71,6 @@ public class Player extends Character implements Tickable {
 	private int skillPoints;
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
-	// private Weapon equippedWeapon;
-
 	private int id;
 
 	/**
@@ -124,10 +122,6 @@ public class Player extends Character implements Tickable {
 		// for slippery
 		lastSpeedX = 0;
 		lastSpeedY = 0;
-
-		// Set equipped weapon and enter game world
-		// GameManager.get().getWorld().addEntity(weaponToEquip);
-		// GameManager.get().getWorld().removeEntity(weaponToEquip);
 
 		// for direction of movement
 		movementDirection.put("left", false);
@@ -694,7 +688,7 @@ public class Player extends Character implements Tickable {
 			break;
         case Input.Keys.I:
             //Display Inventory
-            System.out.println("Access player inventory");
+            LOGGER.info("Access player inventory");
             contextManager.pushContext(new PlayerEquipmentContext(this));
             break;
 		default:
