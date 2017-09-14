@@ -59,6 +59,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	public void init(boolean hostGame) {
 		sockets = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
+		localTickCount = new AtomicLong();
 		peerTickCounts = new AtomicLongArray(MAX_PLAYERS);
 		processedIds = new ArrayList<>();
 		
