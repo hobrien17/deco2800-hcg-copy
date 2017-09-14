@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
@@ -22,6 +23,9 @@ public abstract class InventoryDisplayContext extends UIContext{
     private int maxRow = 4;
     private int currentRow;
     int i;
+
+    protected Item selectedItem;
+    protected Image selectedImage;
 
     public void inventoryDisplay(Table itemDisplay, Table itemInfo, TextureManager textureManager, Player player,
                      Skin skin, Table playerInventory) {
@@ -111,16 +115,16 @@ public abstract class InventoryDisplayContext extends UIContext{
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (clickedImage.isVisible()) {
-                        clickedImage.setVisible(false);
-                    } else {
-                        clickedImage.setVisible(true);
+                    if (selectedImage != null) {
+                        selectedImage.setVisible(false);
                     }
+                    selectedImage = clickedImage;
+                    selectedItem = currentItem;
+                    selectedImage.setVisible(true);
                 }
             });
             currentRow++;
         }
-
     }
 
     private void commonSetup(Item currentItem, ImageButton button, Stack stack, Label itemLabel, Image clickedImage) {
@@ -138,10 +142,13 @@ public abstract class InventoryDisplayContext extends UIContext{
             itemLabel = new Label("-", skin);
         }
         itemLabel.setColor(Color.BLACK);
-        button.add(itemLabel);
-        stack.add(button);
-        clickedImage.setVisible(false);
         stack.add(clickedImage);
-        playerInventory.add(stack).width(50).height(50).pad(15);
+        stack.add(button);
+        Table newTable = new Table();
+        newTable.add(stack).height(50).width(50);
+        newTable.row();
+        newTable.add(itemLabel);
+        clickedImage.setVisible(false);
+        playerInventory.add(newTable).width(50).height(60).pad(15);
     }
 }

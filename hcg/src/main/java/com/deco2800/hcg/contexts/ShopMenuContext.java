@@ -2,11 +2,13 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -15,7 +17,7 @@ import com.deco2800.hcg.managers.TimeManager;
 
 /**
  * Shop Menu
- * Extention of UIContext that initialises the shop menu when the context is pushed.
+ * Extention of InventoryDisplayContext that initialises the shop menu when the context is pushed.
  * @author willc138
  * @author georgesburt97
  */
