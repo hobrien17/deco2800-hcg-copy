@@ -80,7 +80,6 @@ public class GameManager implements TickableManager {
         } catch (Exception e) {
             // Gotta catch 'em all
             LOGGER.error(e.toString());
-            // e.printStackTrace();
         }
 
 		/* And then return it */

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="139">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="149">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
@@ -509,6 +509,20 @@
   <object id="24" gid="37" x="32" y="1440" width="55" height="32"/>
   <object id="26" gid="37" x="32" y="1408" width="55" height="32"/>
   <object id="27" gid="37" x="32" y="1376" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="pot">
+  <properties>
+   <property name="name" value="pot"/>
+  </properties>
+  <object id="139" x="545.164" y="926.836" width="32" height="32"/>
+  <object id="140" x="480.164" y="925.836" width="32" height="32"/>
+  <object id="142" x="414" y="926" width="32" height="32"/>
+  <object id="143" x="416.418" y="865.582" width="32" height="32"/>
+  <object id="144" x="478.164" y="859.836" width="32" height="32"/>
+  <object id="145" x="544.745" y="861.255" width="32" height="32"/>
+  <object id="146" x="543" y="799" width="32" height="32"/>
+  <object id="147" x="480.164" y="797.836" width="32" height="32"/>
+  <object id="148" x="412.836" y="799.164" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="NPC">
   <properties>

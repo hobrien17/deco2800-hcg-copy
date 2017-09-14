@@ -25,9 +25,6 @@ public class Render3D implements Renderer {
 
     BitmapFont font;
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(Render3D.class);
-
     /**
      * Renders onto a batch, given a renderables with entities It is expected
      * that AbstractWorld contains some entities and a Map to read tiles from
