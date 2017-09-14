@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.managers.TextureManager;
+import org.lwjgl.Sys;
 
 public abstract class InventoryDisplayContext extends UIContext{
 
@@ -48,8 +49,8 @@ public abstract class InventoryDisplayContext extends UIContext{
                     //Show item when clicked
                     Label itemName = new Label((button.getName()), skin);
                     Image image = new Image(button.getImage().getDrawable());
-                    itemDisplay.add(image).height(50).width(50);
-                    itemDisplay.add(itemName).left();
+                    itemDisplay.add(image).height(50).width(50).center();
+                    itemDisplay.add(itemName).center();
                     itemDisplay.row();
                     //Populate item info when clicked
                     itemInfo.clear();
@@ -58,6 +59,8 @@ public abstract class InventoryDisplayContext extends UIContext{
                     title.setColor(Color.BLACK);
                     title.setFontScale(1.5f);
                     itemName.setColor(Color.BLACK);
+                    //itemDisplay.add(itemName).center();
+                    //itemDisplay.row();
                     itemInfo.add(title).top();
                     itemInfo.row();
                     itemInfo.add(itemName).left();
@@ -72,14 +75,13 @@ public abstract class InventoryDisplayContext extends UIContext{
                                 if (currentItem instanceof ConsumableItem) {
                                     ((ConsumableItem) currentItem).consume(player);
                                     player.getInventory().removeItem(currentItem, 1);
-                                    itemLabel.setText(""+ currentItem.getStackSize());
+                                    playerInventory.clear();
+                                    inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, playerInventory);
                                 } else if (currentItem.isEquippable()) {
                                     //TODO: Equip the item
                                 } else if (currentItem.isWearable()) {
                                     //TODO: Wear item
                                 }
-                                //TODO: This remove gets stuck when one item is left, this is because the redraw doesnt work for 0 case (i.e no item)
-                                //We could completely redisplay the inventory, but seems a bit inefficient.
 
                             }
                         });
@@ -130,7 +132,9 @@ public abstract class InventoryDisplayContext extends UIContext{
             playerInventory.row();
             currentRow = 0;
         }
+        System.out.println(i);
         button.setName(player.getInventory().getItem(i).getName());
+        //System.out.println("setName failed");
         if (currentItem.isStackable()) {
             itemLabel = new Label(""+ currentItem.getStackSize(), skin);
         } else {

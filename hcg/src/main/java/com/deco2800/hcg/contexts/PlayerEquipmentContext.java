@@ -81,13 +81,13 @@ public class PlayerEquipmentContext extends InventoryDisplayContext{
 
         //Add all these elements to the main table view (centreTable)
         centreTable.row();
-        centreTable.add(itemDisplay).center();
-        centreTable.add(playerInfo).center();
-        centreTable.row();
-        centreTable.add(innerTable).center();
+        centreTable.add(itemDisplay);
         centreTable.add(itemInfo).center();
         centreTable.row();
-        centreTable.add(shopExit).center().bottom();
+        centreTable.add(innerTable);
+        centreTable.add(playerInfo);
+        centreTable.row();
+        centreTable.add(shopExit);
 
         //add table to stage
         stage.addActor(centreTable);

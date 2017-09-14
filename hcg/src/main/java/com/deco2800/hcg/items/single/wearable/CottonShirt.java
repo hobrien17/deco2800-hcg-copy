@@ -50,7 +50,6 @@ public class CottonShirt extends WearableItem{
      */
     @Override
     public String getName() {
-        return String.format("Name: %s\nType: %s\nDetails: %s\n", this.itemName, this.type + " " + this.colour,
-                "A simple shirt. Doesnt really do much...");
+        return String.format("%s (%s)", this.itemName, this.type + " " + this.colour);
     }
 }

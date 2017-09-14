@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
-import com.deco2800.hcg.entities.NPC_entities.*;
+import com.deco2800.hcg.entities.npc_entities.*;
 //import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 //import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import org.slf4j.Logger;
