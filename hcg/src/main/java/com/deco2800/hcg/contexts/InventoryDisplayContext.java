@@ -5,10 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.managers.TextureManager;
+
+import java.util.Iterator;
 
 public abstract class InventoryDisplayContext extends UIContext{
 
@@ -16,13 +20,11 @@ public abstract class InventoryDisplayContext extends UIContext{
     private Table itemDisplay;
     private Table itemInfo;
     private TextureManager textureManager;
-    private Player player;
     private Skin skin;
     private Table playerInventory;
 
     private int maxRow = 4;
     private int currentRow;
-    int i;
 
     protected Item selectedItem;
     protected Image selectedImage;
@@ -32,12 +34,11 @@ public abstract class InventoryDisplayContext extends UIContext{
         this.itemDisplay = itemDisplay;
         this.itemInfo = itemInfo;
         this.textureManager = textureManager;
-        this.player = player;
         this.skin = skin;
         this.playerInventory = playerInventory;
         currentRow = 0;
 
-        for (i=0; i<player.getInventory().getNumItems(); i++) {
+        for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
                     .getDrawable());
@@ -97,15 +98,22 @@ public abstract class InventoryDisplayContext extends UIContext{
 
     }
 
-    public void inventoryDisplay(TextureManager textureManager, Player player, Skin skin, Table playerInventory) {
+    public void inventoryDisplay(TextureManager textureManager, Character character, Skin skin, Table playerInventory) {
         this.textureManager = textureManager;
-        this.player = player;
         this.skin = skin;
         this.playerInventory = playerInventory;
         currentRow = 0;
+        Iterator inventory = null;
 
-        for (i=0; i<player.getInventory().getNumItems(); i++) {
-            Item currentItem = player.getInventory().getItem(i);
+        if (character instanceof Player) {
+            Player player = (Player) character;
+            inventory = player.getInventory().iterator();
+        } else if (character instanceof ShopNPC) {
+            inventory = ((ShopNPC) character).getShop().getStock().keySet().iterator();
+        }
+
+        while (inventory.hasNext()) {
+            Item currentItem = (Item) inventory.next();
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
                     .getDrawable());
             Stack stack = new Stack();
@@ -134,7 +142,7 @@ public abstract class InventoryDisplayContext extends UIContext{
             playerInventory.row();
             currentRow = 0;
         }
-        button.setName(player.getInventory().getItem(i).getName());
+        button.setName(currentItem.getName());
         if (currentItem.isStackable()) {
             itemLabel = new Label(""+ currentItem.getStackSize(), skin);
         } else {
