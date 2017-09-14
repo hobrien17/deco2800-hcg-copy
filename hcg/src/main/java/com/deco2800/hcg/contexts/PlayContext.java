@@ -100,6 +100,7 @@ public class PlayContext extends Context {
 	// TODO make sure this doesn't stay here.
 	private ShaderProgram shader;
 	private ShaderProgram postShader;
+	private boolean useShaders = true;
 
     /**
      * Create the PlayContext
@@ -330,7 +331,7 @@ public class PlayContext extends Context {
          */
 	    GameManager.get().getCamera().update();
 	    
-	    if(shader == null || postShader == null) {
+	    if(shader == null || postShader == null || !useShaders) {
 	        // Default drawing behaviour. Default to this if any shaders fail to compile.
 	        SpriteBatch batch = new SpriteBatch();
 	        
@@ -409,7 +410,7 @@ public class PlayContext extends Context {
 		stage.act();
 		stage.draw();
 	}
-
+	
 	/**
 	 * Resizes the viewport
 	 *
@@ -485,6 +486,8 @@ public class PlayContext extends Context {
     private void handleKeyDown(int keycode) {
         if (keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
+        } if(keycode == Input.Keys.N) {
+            useShaders = !useShaders;
         }
     }
 }
