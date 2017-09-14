@@ -138,6 +138,7 @@ public class TextureManager extends Manager {
 		textureMap.put("green_potion", new Texture("resources/sprites/potions/potion_round_green.png"));
 		textureMap.put("purple_potion", new Texture("resources/sprites/potions/potion_round_purple.png"));
 		textureMap.put("blue_potion", new Texture("resources/sprites/potions/potion_round_blue.png"));
+		textureMap.put("seed", new Texture("resources/placeholderassets/placeholderseed.png"));
 	}
 
 	/**

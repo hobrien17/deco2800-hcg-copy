@@ -384,7 +384,7 @@ public class Player extends Character implements Tickable {
 		
 		else if(npc instanceof ShopNPC){
 			LOGGER.info("Shop NPC Interaction Started");
-			contextManager.pushContext(new ShopMenuContext());
+			contextManager.pushContext(new ShopMenuContext(this));
 			Shop shop = new GeneralShop();
 			shop.open(0, this);
 		} else {
