@@ -9,6 +9,8 @@ import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicLongArray;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +28,15 @@ import com.deco2800.hcg.multiplayer.MessageType;
 public final class NetworkManager extends Manager implements TickableManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NetworkManager.class);
 	private static final byte[] MESSAGE_HEADER = "H4RDC0R3".getBytes();
+	private static int MAX_PLAYERS = 4; // maybe 5?
 
-	DatagramChannel channel;
+	private DatagramChannel channel;
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
-	ConcurrentHashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
-	ConcurrentHashMap<Integer, byte[]> sendQueue;
+	private ConcurrentHashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
+	private ConcurrentHashMap<Integer, byte[]> sendQueue;
+	private AtomicLong localTickCount;
+	private AtomicLongArray peerTickCounts;
 	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
 	private boolean initialised = false;
 	
@@ -54,6 +59,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	public void init(boolean hostGame) {
 		sockets = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
+		peerTickCounts = new AtomicLongArray(MAX_PLAYERS);
 		processedIds = new ArrayList<>();
 		
 		gameManager = GameManager.get();
@@ -323,6 +329,6 @@ public final class NetworkManager extends Manager implements TickableManager {
 	@Override
 	public void onTick(long gameTickCount) {
 		// TODO Auto-generated method stub
-		
+		localTickCount.getAndIncrement();
 	}
 }
