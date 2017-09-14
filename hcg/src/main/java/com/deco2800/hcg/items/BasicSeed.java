@@ -15,7 +15,7 @@ public class BasicSeed extends StackableItem {
         this.itemName = "Basic Seed";
         this.currentStackSize = 1;
         this.maxStackSize = 256;
-        this.texture = "generic.png";
+        this.texture = "seed";
         this.itemWeight = 0;
     }
 

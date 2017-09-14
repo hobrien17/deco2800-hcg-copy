@@ -1,12 +1,15 @@
-package com.deco2800.hcg.entities;
+package com.deco2800.hcg.entities.bullets;
 
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
+import com.deco2800.hcg.entities.Player;
 
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	private float changeY;
 
 	private AbstractEntity user;
+	private int hitCount;
 
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
@@ -38,61 +42,77 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 * @param yd
 	 *            the x direction for the bullet
 	 * @param user
-	 * 			  the entity using the bullet
+	 *             the entity using the bullet
+	 * @param hitCount
+	 *           the total number of enemies that can be hit
 	 */
-	public Bullet(float posX, float posY, float posZ, float xd, float yd, AbstractEntity user) {
-		this(posX, posY, posZ, getProj(xd, yd)[0], getProj(xd, yd)[1], posZ, user);
+	public Bullet(float posX, float posY, float posZ, float xd, float yd,
+				  AbstractEntity user, int hitCount) {
+		this(posX, posY, posZ, getProj(xd, yd)[0], getProj(xd, yd)[1], posZ, user, hitCount);
 	}
 
 	/**
 	 * Creates a new bullet moving towards the given co-ordinates
-	 * 
+	 *
 	 * @param posX
-	 * 			the x position of the bullet
+	 *           the x position of the bullet
 	 * @param posY
-	 * 			the x position of the bullet
+	 *           the x position of the bullet
 	 * @param posZ
-	 * 			the x position of the bullet
+	 *           the x position of the bullet
 	 * @param newX
-	 * 			the x goal of the bullet
+	 *           the x goal of the bullet
 	 * @param newY
-	 * 			the y goal of the bullet
+	 *           the y goal of the bullet
 	 * @param newZ
-	 * 			the z goal of the bullet
+	 *           the z goal of the bullet
 	 * @param user
-	 * 			the entity using the bullet
-	 * 
+	 *           the entity using the bullet
+	 * @param hitCount
+	 *           the total number of enemies that can be hit
 	 */
+<<<<<<< HEAD:hcg/src/main/java/com/deco2800/hcg/entities/Bullet.java
 	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, 0.5f);
+=======
+	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ,
+				  AbstractEntity user, int hitCount) {
+		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount);
+>>>>>>> origin/master:hcg/src/main/java/com/deco2800/hcg/entities/bullets/Bullet.java
 	}
 
 	/**
 	 * Creates a new bullet of specified dimensions moving towards the given co-ordinates
-	 * 
+	 *
 	 * @param posX
-	 * 			the x position of the bullet
+	 *           the x position of the bullet
 	 * @param posY
-	 * 			the x position of the bullet
+	 *           the x position of the bullet
 	 * @param posZ
-	 * 			the x position of the bullet
+	 *           the x position of the bullet
 	 * @param newX
-	 * 			the x goal of the bullet
+	 *           the x goal of the bullet
 	 * @param newY
-	 * 			the y goal of the bullet
+	 *           the y goal of the bullet
 	 * @param newZ
-	 * 			the z goal of the bullet
+	 *           the z goal of the bullet
 	 * @param xLength
-	 * 			the size of the bullet in the x-direction
+	 *           the size of the bullet in the x-direction
 	 * @param yLength
-	 * 			the size of the bullet in the y-direction
+	 *           the size of the bullet in the y-direction
 	 * @param zLength
-	 * 			the size of the bullet in the z-direction
+	 *           the size of the bullet in the z-direction
 	 * @param user
-	 * 			the entity using the bullet
+	 *           the entity using the bullet
+	 * @param hitCount
+	 *           the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength, float yLength,
+<<<<<<< HEAD:hcg/src/main/java/com/deco2800/hcg/entities/Bullet.java
 			float zLength, AbstractEntity user, float speed) {
+=======
+				  float zLength, AbstractEntity user, int hitCount) {
+>>>>>>> origin/master:hcg/src/main/java/com/deco2800/hcg/entities/bullets/Bullet.java
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
 
@@ -108,15 +128,16 @@ public class Bullet extends AbstractEntity implements Tickable {
 		this.changeY = (float) (speed * Math.sin(angle));
 
 		this.user = user;
+		this.hitCount = hitCount;
 	}
 
 	/**
 	 * Returns the projection of the bullet
-	 * 
+	 *
 	 * @param xd
-	 * 			the bullet's x direction
+	 *           the bullet's x direction
 	 * @param yd
-	 * 			the bullet's y direction
+	 *           the bullet's y direction
 	 * @return a pair of x and y co-ordinates
 	 */
 	private static float[] getProj(float xd, float yd) {
@@ -146,40 +167,55 @@ public class Bullet extends AbstractEntity implements Tickable {
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
 
-		enemyHit();
+		entityHit();
 	}
 
 	/**
 	 * Detects collision with entity and if enemy, apply effect of bullet. After
 	 * applying effect, bullet is removed from the world.
 	 */
-	private void enemyHit() {
+	private void entityHit() {
 		Box3D pos = getBox3D();
 		pos.setX(getPosX());
 		pos.setY(getPosY());
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
-			if (entity instanceof Enemy && this.collidesWith(entity) && (user instanceof Player || 
-					user instanceof Corpse)) {
-				Enemy target = (Enemy) entity;
-				removeEnemy(target);
-				break;
+			if (this.collidesWith(entity)) {
+				//Collision with enemy
+				if (entity instanceof Enemy && (user instanceof Player ||
+						user instanceof Corpse)) {
+					Enemy target = (Enemy) entity;
+					applyEffect(target);
+					hitCount--;
+				}
+				//Collision with player
+				if (entity instanceof Player && user instanceof Enemy) {
+					//add code to apply effect to player here
+					hitCount--;
+				}
+				//COllision with corpse
+				if (entity instanceof Corpse && user instanceof Player) {
+					//create sunflower turret here
+					hitCount = 0;
+				}
+				if (hitCount == 0) {
+					GameManager.get().getWorld().removeEntity(this);
+					break;
+				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Performs the action to be performed when an enemy is hit by a bullet
-	 * 
+	 *
 	 * @param target
-	 * 			the hit enemy
+	 *           the hit enemy
 	 */
-	protected void removeEnemy(Enemy target) {
+	protected void applyEffect(Enemy target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
 		target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
-		// Remove this bullet from the world to ensure no other
-		// squirrels are killed
-		GameManager.get().getWorld().removeEntity(this);
 	}
 }
+

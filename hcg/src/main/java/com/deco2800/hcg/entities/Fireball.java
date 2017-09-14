@@ -2,18 +2,20 @@ package com.deco2800.hcg.entities;
 
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.entities.bullets.Bullet;
 
 /**
  * Fireball class
  * Extends bullet
  * Used by the FireTurret
  * Currently is just a larger bullet, but this will probably change
- * 
+ *
  * @author Henry O'Brien
  *
  */
 public class Fireball extends Bullet {
 
+<<<<<<< HEAD
 	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(getPosChange(posX, posY, newX, newY)[0], getPosChange(posX, posY, newX, newY)[1], posZ, newX, newY, newZ, 
 				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, 0.2f);
@@ -79,11 +81,18 @@ public class Fireball extends Bullet {
 			ret[1] = 1f;
 		}
 		return ret;
+=======
+	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ,
+					AbstractEntity user, int hitCount) {
+		super(posX-2.5f, posY, posZ, newX, newY, newZ, 3f, 3f, 1f, user, hitCount);
+		this.speed = 0.2f;
+>>>>>>> origin/master
 	}
-	
+
 	@Override
-	protected void removeEnemy(Enemy target) {
+	protected void applyEffect(Enemy target) {
 		target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
 	}
 
 }
+
