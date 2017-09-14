@@ -65,21 +65,14 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
 
-        PlayerEquipmentContext cheat = new PlayerEquipmentContext(player);
-
-        Table itemDisplay = new Table();
-        itemDisplay.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
-        Table innerTable = new Table();
-        innerTable.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
-
-        inventoryDisplay(itemDisplay, playerInventory, textureManager, player, skin, innerTable);
+        inventoryDisplay(textureManager, player, skin, playerInventory);
 
         //add elements to table
         centreTable.add(title);
         centreTable.add(shopFunds);
         centreTable.row();
         centreTable.add(shopInventory);
-        centreTable.add(innerTable);
+        centreTable.add(playerInventory);
         centreTable.row();
         centreTable.add(shopBuy);
         centreTable.add(shopSell);
