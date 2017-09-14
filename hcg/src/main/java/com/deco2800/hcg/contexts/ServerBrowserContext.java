@@ -46,7 +46,7 @@ public class ServerBrowserContext extends UIContext {
 
         main.setFillParent(true);
         main.setBackground(new Image(textureManager.getTexture("multi_menu_background")).getDrawable());
-        main.setDebug(true); //display lines for debugging
+        main.setDebug(false); //display lines for debugging
 
         title = new Image(textureManager.getTexture("multiplayer_title"));
         separator1 = new Image(textureManager.getTexture("lobby_separator"));
@@ -64,7 +64,7 @@ public class ServerBrowserContext extends UIContext {
         add = new TextButton("add", skin);
         exit = new TextButton("close", skin);
         serverStatus = new Label("", skin);
-        enterServer.setDebug(true);
+        enterServer.setDebug(false);  //debug for dialog box
         enterServer.add(serverIP).expandX();
         enterServer.add(add);
         enterServer.row();
