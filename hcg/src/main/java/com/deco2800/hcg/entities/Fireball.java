@@ -15,10 +15,9 @@ import com.deco2800.hcg.entities.bullets.Bullet;
  */
 public class Fireball extends Bullet {
 
-<<<<<<< HEAD
 	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(getPosChange(posX, posY, newX, newY)[0], getPosChange(posX, posY, newX, newY)[1], posZ, newX, newY, newZ, 
-				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, 0.2f);
+				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, -1);
 		if(newX > posX && newY > posY) {
 			this.setTexture("fireball_right");
 		} else if(newX > posX && newY < posY) {
@@ -81,11 +80,6 @@ public class Fireball extends Bullet {
 			ret[1] = 1f;
 		}
 		return ret;
-		
-	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ,
-					AbstractEntity user, int hitCount) {
-		super(posX-2.5f, posY, posZ, newX, newY, newZ, 3f, 3f, 1f, user, hitCount);
-		this.speed = 0.2f;
 	}
 
 	@Override

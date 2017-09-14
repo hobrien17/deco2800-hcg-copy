@@ -31,10 +31,7 @@ public class SunflowerTurret extends AbstractTurret {
 	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
 	private static final int RANGE = 5;
-<<<<<<< HEAD
 	private int ammo;
-=======
->>>>>>> origin/master
 
 	public SunflowerTurret(Corpse master) {
 		super(master, "Sunflower");
@@ -43,31 +40,19 @@ public class SunflowerTurret extends AbstractTurret {
 
 	@Override
 	public void update(Observable o, Object arg) {
-<<<<<<< HEAD
 		if (ammo > 0) {
 			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(master.getPosX(), master.getPosY(),
 					RANGE, Enemy.class);
 			if (closest.isPresent()) {
 				Enemy enemy = (Enemy) closest.get();
 				Bullet bullet = new Bullet(master.getPosX(), master.getPosY(), master.getPosZ(), enemy.getPosX(),
-						enemy.getPosY(), enemy.getPosZ(), master);
+						enemy.getPosY(), enemy.getPosZ(), master, 1);
 				GameManager.get().getWorld().addEntity(bullet);
 				ammo--;
 			}
 		} else {
 			GameManager.get().getWorld().removeEntity(master);
 		}
-=======
-		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(master.getPosX(),
-				master.getPosY(), RANGE, Enemy.class);
-		if (closest.isPresent()) {
-			Enemy enemy = (Enemy)closest.get();
-			Bullet bullet = new Bullet(master.getPosX(), master.getPosY(),
-					master.getPosZ(), enemy.getPosX(), enemy.getPosY(), enemy.getPosZ(), master, 1);
-			GameManager.get().getWorld().addEntity(bullet);
-		}
-
->>>>>>> origin/master
 	}
 
 	@Override
@@ -75,11 +60,6 @@ public class SunflowerTurret extends AbstractTurret {
 		// TODO Auto-generated method stub
 		return "tree";
 	}
-<<<<<<< HEAD
-=======
-
-
->>>>>>> origin/master
 
 }
 
