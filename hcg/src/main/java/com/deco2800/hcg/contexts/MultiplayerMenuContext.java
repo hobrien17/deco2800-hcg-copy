@@ -26,7 +26,7 @@ public class MultiplayerMenuContext extends UIContext {
 	private ImageButton go;
 	private ImageButton host;
 	private ImageButton back;
-	private TextButton lobbyTest;
+	private TextButton lobbyTest, serverTest;
 
 	/**
 	 * Constructor for the MultiplayerMenuContext
@@ -57,7 +57,7 @@ public class MultiplayerMenuContext extends UIContext {
 		name = new TextField(null, skin);
 
 		lobbyTest = new TextButton("Lobby", skin); //button used for bringing up the lobby screen
-		
+		serverTest = new TextButton("Server Browser", skin); //test button for server browser
 		table.add(title);
 		table.row();
 		table.add(name);
@@ -70,6 +70,8 @@ public class MultiplayerMenuContext extends UIContext {
 
 		table.row();
 		table.add(lobbyTest);
+		table.row();
+		table.add(serverTest);
 		stage.addActor(table);
 		
 		go.addListener(new ChangeListener() {
@@ -102,7 +104,13 @@ public class MultiplayerMenuContext extends UIContext {
 				contextManager.pushContext(new LobbyContext());
 			}
 		});
-		
+
+		serverTest.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				contextManager.pushContext(new ServerBrowserContext());
+			}
+		});
 		back.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {

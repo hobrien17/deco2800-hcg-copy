@@ -10,7 +10,6 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
-import com.deco2800.hcg.worlds.DemoWorld;
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -46,7 +45,7 @@ public class LobbyContext extends UIContext{
         chatTable = new Table();
         main.setFillParent(true);
         main.setBackground(new Image(textureManager.getTexture("multi_menu_background")).getDrawable());
-        main.setDebug(true); //display lines for debugging
+        main.setDebug(false); //display lines for debugging
         //images set up
         lobbyTitle = new Image(textureManager.getTexture("lobby_title"));
         separator1 = new Image(textureManager.getTexture("lobby_separator"));

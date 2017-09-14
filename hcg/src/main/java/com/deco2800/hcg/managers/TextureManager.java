@@ -140,7 +140,7 @@ public class TextureManager extends Manager {
 		//Server Browser
 		textureMap.put("server_host_button", new Texture("resources/ui/multiplayer_ui/menu_host_button.png"));
 		textureMap.put("server_join_button", new Texture("resources/ui/multiplayer_ui/menu_join_button.png"));
-		textureMap.put("serveru_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
+		textureMap.put("server_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
 		textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
 	}
 
