@@ -5,8 +5,6 @@ import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.turrets.AbstractTurret;
-import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 
 import java.util.List;
 
