@@ -34,7 +34,7 @@ public class SunflowerTurret extends AbstractTurret {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (--ammo > 0) {
+		if (ammo > 0) {
 			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(master.getPosX(), master.getPosY(),
 					RANGE, Enemy.class);
 			if (closest.isPresent()) {
@@ -42,6 +42,7 @@ public class SunflowerTurret extends AbstractTurret {
 				Bullet bullet = new Bullet(master.getPosX(), master.getPosY(), master.getPosZ(), enemy.getPosX(),
 						enemy.getPosY(), enemy.getPosZ(), master);
 				GameManager.get().getWorld().addEntity(bullet);
+				ammo--;
 			}
 		} else {
 			GameManager.get().getWorld().removeEntity(master);
