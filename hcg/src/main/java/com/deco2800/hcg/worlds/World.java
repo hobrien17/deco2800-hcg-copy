@@ -37,9 +37,10 @@ public class World {
     private int length;
 
     /**
-     * Empty abstract world, for testing I think
+     * Empty abstract world, for testing
      */
     public World() {
+      // Purposefully empty for test code
     }
     
     /**
@@ -90,7 +91,7 @@ public class World {
             }
           }
           
-          while (objects.hasNext() && (found || layerName.equals("NPC"))) {
+          while (objects.hasNext() && (found || "NPC".equals(layerName))) {
                         
             MapObject obj = objects.next();
                     
@@ -104,7 +105,7 @@ public class World {
             y--; // this fixes it for some reason
             
             // spawn in the NPC's from the NPC layer
-            if (layerName.equals("NPC")) {
+            if ("NPC".equals(layerName)) {
                             
               // create NPC
               try {
@@ -134,18 +135,6 @@ public class World {
 
       }
 
-      // biome testing stuff
-      /*
-      Biomes biome = Biomes.GRASS;
-      
-      TiledMapTileLayer tiled = (TiledMapTileLayer) map.getLayers().get("ground");
-      
-      for (int i = 0; i < 10; i++){
-          tiled.getCell(i, i).setTile(new StaticTiledMapTile(
-              new TextureRegion(biome.getTexture(TileTypes.PATH))));
-      }
-      */
-      
     }
     
     /**

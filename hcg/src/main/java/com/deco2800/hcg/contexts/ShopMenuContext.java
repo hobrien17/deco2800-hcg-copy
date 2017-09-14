@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
@@ -18,11 +19,12 @@ import com.deco2800.hcg.managers.TimeManager;
  * @author willc138
  * @author georgesburt97
  */
-public class ShopMenuContext extends UIContext {
+public class ShopMenuContext extends InventoryDisplayContext {
 
     private Image title;
     private Image shopFunds;
     private Image shopInventory;
+    private Table playerInventory;
     private ImageButton shopBuy;
     private ImageButton shopSell;
     private ImageButton shopExit;
@@ -31,7 +33,7 @@ public class ShopMenuContext extends UIContext {
     /**
      * Constructor for the ShopMenuContext
      */
-    public ShopMenuContext() {
+    public ShopMenuContext(Player player) {
 
         // Get necessary managers
         GameManager gameManager = GameManager.get();
@@ -53,16 +55,31 @@ public class ShopMenuContext extends UIContext {
 
         title = new Image(textureManager.getTexture("shop_title"));
         shopFunds = new Image(textureManager.getTexture("shop_funds"));
+
         shopInventory = new Image(textureManager.getTexture("shop_inventory"));
+
+        playerInventory = new Table();
+        playerInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+
         shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy_button")).getDrawable());
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
+
+        PlayerEquipmentContext cheat = new PlayerEquipmentContext(player);
+
+        Table itemDisplay = new Table();
+        itemDisplay.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+        Table innerTable = new Table();
+        innerTable.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+
+        inventoryDisplay(itemDisplay, playerInventory, textureManager, player, skin, innerTable);
 
         //add elements to table
         centreTable.add(title);
         centreTable.add(shopFunds);
         centreTable.row();
         centreTable.add(shopInventory);
+        centreTable.add(innerTable);
         centreTable.row();
         centreTable.add(shopBuy);
         centreTable.add(shopSell);

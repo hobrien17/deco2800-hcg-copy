@@ -54,7 +54,7 @@ public class WorldUtil {
 	public static List<AbstractEntity> allEntitiesToPosition(float x, float y, float delta,
 			Class<? extends AbstractEntity> type) {
 		List<AbstractEntity> ret = new ArrayList<>();
-		AbstractEntity entity = null;
+		AbstractEntity entity;
 		double distance = Double.MAX_VALUE;
 		for (Renderable r : GameManager.get().getWorld().getEntities()) {
 			if (type.isInstance(r)) {
@@ -70,6 +70,6 @@ public class WorldUtil {
 	}
 
 	private static double getDistance(AbstractEntity entity, float x, float y) {
-		return Math.sqrt(Math.pow((entity.getPosX() - x), 2) + Math.pow((entity.getPosY() - y), 2));
+		return Math.sqrt(Math.pow(entity.getPosX() - x, 2) + Math.pow(entity.getPosY() - y, 2));
 	}
 }
