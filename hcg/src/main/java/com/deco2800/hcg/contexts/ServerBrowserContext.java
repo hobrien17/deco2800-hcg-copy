@@ -23,7 +23,7 @@ public class ServerBrowserContext extends UIContext {
     private Table main, buttonTable, titleTable;
     private Image title, separator1, separator2;
     private ScrollPane serverListPane;
-    private List serverList;
+    private List<String> serverList;
     private String servers[];
     private Dialog enterServer;
     private TextButton add, exit;
@@ -42,7 +42,6 @@ public class ServerBrowserContext extends UIContext {
         main= new Table();
         buttonTable = new Table();
         titleTable = new Table();
-        serverListPane = new ScrollPane(serverList);
 
         main.setFillParent(true);
         main.setBackground(new Image(textureManager.getTexture("multi_menu_background")).getDrawable());
@@ -56,9 +55,17 @@ public class ServerBrowserContext extends UIContext {
         refresh = new ImageButton(new Image(textureManager.getTexture("server_refresh_button")).getDrawable());
         addServer = new ImageButton(new Image(textureManager.getTexture("menu_add_button")).getDrawable());
         back = new ImageButton(new Image(textureManager.getTexture("lobby_back_button")).getDrawable());
-        servers = new String[] {"1.0.0.123", "2.3.1.198"};
-        serverList = new List(skin);
+        servers = new String[20];
+        for (int i = 0, k = 0; i < 20; i++) {
+            servers[k++] = "Server: " + i;
+
+        }
+        serverList = new List<String>(skin);
         serverList.setItems(servers);
+        serverListPane = new ScrollPane(serverList);
+        serverListPane.setSmoothScrolling(false);
+        serverListPane.setDebug(true);
+
         enterServer = new Dialog("Enter Host IP", skin);
         serverIP = new TextField("", skin);
         add = new TextButton("add", skin);
@@ -75,7 +82,7 @@ public class ServerBrowserContext extends UIContext {
         main.row();
         titleTable.add(back).left();
         titleTable.add(title).center().expandX();
-        main.add(titleTable).fill();
+        main.add(titleTable).fill().padRight(50);
         main.row();
         main.add(separator1).fill();
         main.row();
