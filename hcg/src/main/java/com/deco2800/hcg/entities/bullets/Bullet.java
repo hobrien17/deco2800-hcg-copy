@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class Bullet extends AbstractEntity implements Tickable {
 
+	protected float speed = 0.5f;
+
 	private float goalX;
 	private float goalY;
 
@@ -71,14 +73,9 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 * @param hitCount
 	 *           the total number of enemies that can be hit
 	 */
-<<<<<<< HEAD:hcg/src/main/java/com/deco2800/hcg/entities/Bullet.java
-	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
-		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, 0.5f);
-=======
 	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ,
 				  AbstractEntity user, int hitCount) {
 		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount);
->>>>>>> origin/master:hcg/src/main/java/com/deco2800/hcg/entities/bullets/Bullet.java
 	}
 
 	/**
@@ -108,11 +105,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 *           the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength, float yLength,
-<<<<<<< HEAD:hcg/src/main/java/com/deco2800/hcg/entities/Bullet.java
-			float zLength, AbstractEntity user, float speed) {
-=======
 				  float zLength, AbstractEntity user, int hitCount) {
->>>>>>> origin/master:hcg/src/main/java/com/deco2800/hcg/entities/bullets/Bullet.java
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
 

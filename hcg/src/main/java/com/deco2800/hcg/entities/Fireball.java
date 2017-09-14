@@ -81,12 +81,11 @@ public class Fireball extends Bullet {
 			ret[1] = 1f;
 		}
 		return ret;
-=======
+		
 	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ,
 					AbstractEntity user, int hitCount) {
 		super(posX-2.5f, posY, posZ, newX, newY, newZ, 3f, 3f, 1f, user, hitCount);
 		this.speed = 0.2f;
->>>>>>> origin/master
 	}
 
 	@Override
