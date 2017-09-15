@@ -142,7 +142,7 @@ public abstract class InventoryDisplayContext extends UIContext{
         }
 
         //Iterate over all the items that need to be displayed and display them
-        while (items.hasNext()) {
+        while ((items != null) && items.hasNext()) {
             //Setup variables for this iteration
             Item currentItem = (Item) items.next();
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
