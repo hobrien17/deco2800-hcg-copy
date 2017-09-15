@@ -15,8 +15,6 @@ import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.TimeManager;
-import org.lwjgl.Sys;
-
 
 /**
  * class for displaying the player inventory context
