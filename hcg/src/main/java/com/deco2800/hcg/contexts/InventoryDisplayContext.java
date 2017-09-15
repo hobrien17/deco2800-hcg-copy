@@ -156,7 +156,7 @@ public abstract class InventoryDisplayContext extends UIContext{
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (selectedImage != null) {
+                    if (selectedItem != null) {
                         selectedImage.setVisible(false);
                     }
                     selectedImage = clickedImage;
@@ -209,8 +209,9 @@ public abstract class InventoryDisplayContext extends UIContext{
         newTable.row();
         newTable.add(itemLabel);
 
-        //Make the item not clicked by default
-        clickedImage.setVisible(false);
+        if (!currentItem.equals(selectedItem)) {
+            clickedImage.setVisible(false);
+        }
 
         inventory.add(newTable).width(50).height(60).pad(15);
     }
