@@ -23,22 +23,42 @@ import com.deco2800.hcg.managers.TextureManager;
  */
 public class CharacterCreationContext extends UIContext{
 
-    private Label strengthLabel, vitalityLabel, agilityLabel, intellectLabel, charismaLabel, meleeSkillLabel,
-            gunsSkillLabel, energyWeaponsSkillLabel, attributePointsLabel, specializedSkillsPointsLabel,
-            startingHealthLabel, startingStaminaLabel, healthGainLabel, staminaGainLabel, skillPointsGainLabel,
-            carryWeightLabel, selectedDescriptionLabel;
+    private Label strengthLabel;
+    private Label vitalityLabel;
+    private Label agilityLabel;
+    private Label intellectLabel;
+    private Label charismaLabel;
+    private Label meleeSkillLabel;
+    private Label gunsSkillLabel;
+    private Label energyWeaponsSkillLabel;
+    private Label attributePointsLabel;
+    private Label specializedSkillsPointsLabel;
+    private Label startingHealthLabel;
+    private Label startingStaminaLabel;
+    private Label healthGainLabel;
+    private Label staminaGainLabel;
+    private Label skillPointsGainLabel;
+    private Label carryWeightLabel;
+    private Label selectedDescriptionLabel;
 
-    private CheckBox meleeSkillSpecialise, gunsSkillSpecialise, energyWeaponsSkillSpecialise;
+    private CheckBox meleeSkillSpecialise;
+    private CheckBox gunsSkillSpecialise;
+    private CheckBox energyWeaponsSkillSpecialise;
 
     private SelectBox<String> characterSex;
 
     // For some reason the checkBox isChecked method isn't working properly so this is a temporary fix
-    private Boolean meleeSkillSpecialiseChecked = false, gunsSkillSpecialiseChecked = false,
-            energyWeaponsSkillSpecialiseChecked = false;
+    private Boolean meleeSkillSpecialiseChecked = false;
+    private Boolean gunsSkillSpecialiseChecked = false;
+    private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
     private Table masterTable, topRowInfoTable;
 
-    private Window attributesWindow, skillsWindow, statsWindow, characterPreviewWindow, selectedDescriptionWindow;
+    private Window attributesWindow;
+    private Window skillsWindow;
+    private Window statsWindow;
+    private Window characterPreviewWindow;
+    private Window selectedDescriptionWindow;
 
     private String[] sexes = new String[]{"Male", "Female"};
 
@@ -67,12 +87,12 @@ public class CharacterCreationContext extends UIContext{
     private Image characterPreviewImage;
 
     // Different placeholder textures for the character preview screen
-    private Texture male1 = new Texture("resources/sprites/player/m2_360.png"),
-            male2 = new Texture("resources/sprites/player/m2_3602.png"),
-            male3 = new Texture("resources/sprites/player/m2_3603.png"),
-            female1 = new Texture("resources/sprites/player/f2_360.png"),
-            female2 = new Texture("resources/sprites/player/f2_3602.png"),
-            female3 = new Texture("resources/sprites/player/f2_3603.png");
+    private Texture male1 = new Texture("resources/sprites/player/m2_360.png");
+    private Texture male2 = new Texture("resources/sprites/player/m2_3602.png");
+    private Texture male3 = new Texture("resources/sprites/player/m2_3603.png");
+    private Texture female1 = new Texture("resources/sprites/player/f2_360.png");
+    private Texture female2 = new Texture("resources/sprites/player/f2_3602.png");
+    private Texture female3 = new Texture("resources/sprites/player/f2_3603.png");
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
