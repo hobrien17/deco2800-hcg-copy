@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
@@ -14,14 +13,18 @@ import com.deco2800.hcg.managers.TextureManager;
 
 import java.util.Iterator;
 
+/**
+ * Class for displaying items in a player or shopkeeper's inventory. This class holds the methods that are common in the
+ * ShopMenuContext and PlayerEquipmentContext to cut down on duplicated code.
+ *
+ * @author Taari Meiners (@tmein) / Group 1
+ * @author Group 2
+ */
 public abstract class InventoryDisplayContext extends UIContext{
 
     //Input arguments
-    private Table itemDisplay;
-    private Table itemInfo;
-    private TextureManager textureManager;
     private Skin skin;
-    private Table playerInventory;
+    private Table inventory;
 
     private int maxRow = 4;
     private int currentRow;
@@ -29,13 +32,27 @@ public abstract class InventoryDisplayContext extends UIContext{
     protected Item selectedItem;
     protected Image selectedImage;
 
+    /**
+     * Inventory display method when called by the PlayerEquipmentContext. It has more input arguments because more tables
+     * need to be updated in that screen.
+     *
+     * @param itemDisplay
+     *          The item display table
+     * @param itemInfo
+     *          The item info table
+     * @param textureManager
+     *          The texture manager
+     * @param player
+     *          The player
+     * @param skin
+     *          The UI skin
+     * @param inventory
+     *          The player inventory table
+     */
     public void inventoryDisplay(Table itemDisplay, Table itemInfo, TextureManager textureManager, Player player,
-                     Skin skin, Table playerInventory) {
-        this.itemDisplay = itemDisplay;
-        this.itemInfo = itemInfo;
-        this.textureManager = textureManager;
+                     Skin skin, Table inventory) {
         this.skin = skin;
-        this.playerInventory = playerInventory;
+        this.inventory = inventory;
         currentRow = 0;
 
         for (int i=0; i<player.getInventory().getNumItems(); i++) {
@@ -98,28 +115,44 @@ public abstract class InventoryDisplayContext extends UIContext{
 
     }
 
-    public void inventoryDisplay(TextureManager textureManager, Character character, Skin skin, Table playerInventory) {
-        this.textureManager = textureManager;
+    /**
+     * The inventory display method when called by the shop
+     *
+     * @param textureManager
+     *          The texture manager
+     * @param character
+     *          The character - either a player or a shopkeeper depending on the required inventory
+     * @param skin
+     *          The UI skin
+     * @param inventory
+     *          The inventory table
+     */
+    public void inventoryDisplay(TextureManager textureManager, Character character, Skin skin, Table inventory) {
         this.skin = skin;
-        this.playerInventory = playerInventory;
+        this.inventory = inventory;
         currentRow = 0;
-        Iterator inventory = null;
+        Iterator items = null;
 
+        //Determine the input mode and get an iterator of the items that need to be displayed
         if (character instanceof Player) {
             Player player = (Player) character;
-            inventory = player.getInventory().iterator();
+            items = player.getInventory().iterator();
         } else if (character instanceof ShopNPC) {
-            inventory = ((ShopNPC) character).getShop().getStock().iterator();
+            items = ((ShopNPC) character).getShop().getStock().iterator();
         }
 
-        while (inventory.hasNext()) {
-            Item currentItem = (Item) inventory.next();
+        //Iterate over all the items that need to be displayed and display them
+        while (items.hasNext()) {
+            //Setup variables for this iteration
+            Item currentItem = (Item) items.next();
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
                     .getDrawable());
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
             commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+
+            //Add listener for this item button
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -135,14 +168,29 @@ public abstract class InventoryDisplayContext extends UIContext{
         }
     }
 
+    /**
+     * Method containing all the common setup between the two instances of inventoryDisplay
+     *
+     * @param currentItem
+     *          The item being worked on at the moment
+     * @param button
+     *          The button for the item
+     * @param stack
+     *          The stack for the item
+     * @param itemLabel
+     *          The label for the item
+     * @param clickedImage
+     *          The clicked image for the item
+     */
     private void commonSetup(Item currentItem, ImageButton button, Stack stack, Label itemLabel, Image clickedImage) {
         //Get the item to be displayed as a button
-        System.out.println(currentItem);
         if (currentRow >= maxRow) {
-            playerInventory.row();
+            inventory.row();
             currentRow = 0;
         }
         button.setName(currentItem.getName());
+
+        //Setup the label
         if (currentItem.isStackable()) {
             itemLabel = new Label(""+ currentItem.getStackSize(), skin);
         } else {
@@ -150,13 +198,20 @@ public abstract class InventoryDisplayContext extends UIContext{
             itemLabel = new Label("-", skin);
         }
         itemLabel.setColor(Color.BLACK);
+
+        //Stack containing the item image and the on click overlay
         stack.add(clickedImage);
         stack.add(button);
+
+        //Wrapping table for the label and image
         Table newTable = new Table();
         newTable.add(stack).height(50).width(50);
         newTable.row();
         newTable.add(itemLabel);
+
+        //Make the item not clicked by default
         clickedImage.setVisible(false);
-        playerInventory.add(newTable).width(50).height(60).pad(15);
+
+        inventory.add(newTable).width(50).height(60).pad(15);
     }
 }

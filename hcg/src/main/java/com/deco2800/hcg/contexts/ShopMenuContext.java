@@ -19,6 +19,7 @@ import com.deco2800.hcg.managers.TimeManager;
  * Extention of InventoryDisplayContext that initialises the shop menu when the context is pushed.
  * @author willc138
  * @author georgesburt97
+ * @author tmein
  */
 public class ShopMenuContext extends InventoryDisplayContext {
 

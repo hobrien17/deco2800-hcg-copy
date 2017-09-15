@@ -19,7 +19,6 @@ public abstract class Shop {
     int modifier = 0;
     Player player;
     BasicSeed seed = new BasicSeed();
-    //Map<Item, Integer> shopStock = new HashMap<>();
     ArrayList<Item> shopStock = new ArrayList<Item>();
 
     /**Open the shop so it can be interacted with.
@@ -42,12 +41,6 @@ public abstract class Shop {
      * @return number in stock, 0 if none
      */
     public int inStock(Item item){
-        /*
-        if (shopStock.containsKey(item)) {
-            return shopStock.get(item).intValue();
-        } else {
-            return 0;
-        }*/
         if (shopStock.contains(item) && (item instanceof StackableItem)) {
             return shopStock.get(shopStock.indexOf(item)).getStackSize();
         } else if (item instanceof SingleItem) {
@@ -63,19 +56,14 @@ public abstract class Shop {
         }
     }
 
-    /**Add a new stock item to the shop with a corresponding number of this item the shop should have in stock
+    /**Add a new stock item to the shop taking the current stack size of the item as the number the shop should have in
+     * stock
      *
      * @param item
      *          An instance of the stock class, e.g. a weapon or food item
      *
      */
-
     public void addStock(Item item) {
-        /*if (shopStock.containsKey(item)) {
-            shopStock.put(item, new Integer(shopStock.get(item) + available));
-        } else {
-            shopStock.put(item, new Integer(available));
-        }*/
         if (!shopStock.contains(item) || (item instanceof SingleItem)) {
             shopStock.add(item);
         } else {
@@ -83,12 +71,10 @@ public abstract class Shop {
         }
     }
 
-    /**Add many new stock items to the shop, useful during initialisation of the shop. Care needs to be taken that the
-     * indexes of both arrays match up, position 0 in the stock array will be assigned the availability number of
-     * position 0 of the availability array.
+    /**Add many new stock items to the shop, useful during initialisation of the shop.
      *
      * @param items
-     *          Array of stock items to be added
+     *          Array of items to be added
      *
      */
     public void addStock(Item[] items) {
@@ -100,7 +86,7 @@ public abstract class Shop {
     /**Method to get access to the items a shop currently has in stock for displaying to the user what options they
      * have to buy
      *
-     * @return the items the shop currently has in stock and the number of that item present
+     * @return the items the shop currently has in stock
      */
     public ArrayList<Item> getStock() {
         return shopStock;
