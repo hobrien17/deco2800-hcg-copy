@@ -1,12 +1,5 @@
 package com.deco2800.hcg.trading;
 
-import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.items.BasicSeed;
-import com.deco2800.hcg.items.Item;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * General Shop class that implements all the methods of the shop
  *
