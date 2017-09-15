@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 public class World {
   
     static final Logger LOGGER = LoggerFactory.getLogger(World.class);
+    
+    private String loadedFile;
 
     private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
     protected TiledMap map;
@@ -53,6 +55,7 @@ public class World {
       try{
         this.map = new TmxMapLoader()
             .load(file);
+        	loadedFile = file;
       }catch (Exception e){
         LOGGER.error(e.toString());
         return;
@@ -279,6 +282,14 @@ public class World {
      */
     public int getLength() {
         return length;
+    }
+    
+    /**
+     * Returns the string of the loaded file used to create the world.
+     * @return loadedFile
+     */
+    public String getLoadedFile() {
+    	return loadedFile;
     }
     
     /**
