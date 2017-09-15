@@ -109,7 +109,7 @@ public abstract class InventoryDisplayContext extends UIContext{
             Player player = (Player) character;
             inventory = player.getInventory().iterator();
         } else if (character instanceof ShopNPC) {
-            inventory = ((ShopNPC) character).getShop().getStock().keySet().iterator();
+            inventory = ((ShopNPC) character).getShop().getStock().iterator();
         }
 
         while (inventory.hasNext()) {

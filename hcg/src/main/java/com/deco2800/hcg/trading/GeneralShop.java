@@ -16,7 +16,8 @@ import java.util.Map;
 public class GeneralShop extends Shop{
     public GeneralShop() {
         Item testPotion = new HealthPotion(100);
-        addStock(testPotion, 3);
+        testPotion.addToStack(9);
+        addStock(testPotion);
     }
 
 }
