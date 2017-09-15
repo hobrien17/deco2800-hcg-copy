@@ -1,6 +1,7 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.deco2800.hcg.contexts.WorldMapContext;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.worlds.World;
@@ -31,6 +32,8 @@ public class GameManager implements TickableManager {
     private WorldMap worldMap;
     
     private MapNode occupiedNode;
+    
+    private WorldMapContext mapContext;
 
     /**
      * Returns an instance of the GM
@@ -157,5 +160,13 @@ public class GameManager implements TickableManager {
     
     public void setOccupiedNode(MapNode node) {
     	occupiedNode = node;
+    }
+    
+    public void setMapContext(WorldMapContext context) {
+    	mapContext = context;
+    }
+    
+    public WorldMapContext getMapContext() {
+    	return mapContext;
     }
 }

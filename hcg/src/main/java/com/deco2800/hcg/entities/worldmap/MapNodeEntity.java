@@ -81,4 +81,19 @@ public class MapNodeEntity extends Actor {
         return node;
     }
 
+	public float getXPos() {
+		return xPos;
+	}
+	
+	public float getYPos() {
+		return yPos;
+	}
+	
+	public float getWidth() {
+		return spriteWidth;
+	}
+	
+	public float getHeight() {
+		return spriteHeight;
+	}
 }
