@@ -134,6 +134,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	 */
 	public void sendInputMessage(int... args) {
 		Integer id = startNewMessage(MessageType.INPUT, args.length);
+		messageBuffer.putLong(localTickCount.get() + 3);
 		messageBuffer.asIntBuffer().put(args);
 		messageBuffer.position(messageBuffer.position() + args.length * 4);
 		// send message to peers
@@ -247,39 +248,56 @@ public final class NetworkManager extends Manager implements TickableManager {
 						//       the host starts the game from the lobby
 						break;
 					case INPUT:
+						long inputTick = receiveBuffer.getLong();
 						InputType inputType = InputType.values()[receiveBuffer.getInt()];
 						// TODO: handle input for more than one player
 						switch (inputType) {
 							case KEY_DOWN:
-								playerInputManager.keyDown(1, receiveBuffer.getInt());
+								playerInputManager.queueAction(
+										inputTick,
+										1,
+										inputType.ordinal(),
+										receiveBuffer.getInt());
 								break;
 							case KEY_UP:
-								playerInputManager.keyUp(1, receiveBuffer.getInt());
+								playerInputManager.queueAction(
+										inputTick,
+										1,
+										inputType.ordinal(),
+										receiveBuffer.getInt());
 								break;
 							case MOUSE_MOVED:
-								playerInputManager.mouseMoved(
+								playerInputManager.queueAction(
+										inputTick, 
 										1,
+										inputType.ordinal(),
 										receiveBuffer.getInt(),
 										receiveBuffer.getInt());
 								break;
 							case TOUCH_DOWN:
-								playerInputManager.touchDown(
+								playerInputManager.queueAction(
+										inputTick,
 										1,
+										inputType.ordinal(),
 										receiveBuffer.getInt(),
 										receiveBuffer.getInt(),
 										receiveBuffer.getInt(),
 										receiveBuffer.getInt());
 								break;
 							case TOUCH_DRAGGED:
-								playerInputManager.touchDragged(
+								playerInputManager.queueAction(
+										inputTick,
 										1,
+										inputType.ordinal(),
 										receiveBuffer.getInt(),
 										receiveBuffer.getInt(),
 										receiveBuffer.getInt());
 								break;
 							case TOUCH_UP:
-								playerInputManager.touchUp(
+								playerInputManager.queueAction(
+										inputTick,
 										1,
+										inputType.ordinal(),
 										receiveBuffer.getInt(),
 										receiveBuffer.getInt(),
 										receiveBuffer.getInt(),
@@ -329,7 +347,8 @@ public final class NetworkManager extends Manager implements TickableManager {
 
 	@Override
 	public void onTick(long gameTickCount) {
-		// TODO Auto-generated method stub
-		localTickCount.getAndIncrement();
+		if (initialised) {
+			localTickCount.getAndIncrement();
+		}
 	}
 }

@@ -166,10 +166,7 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
-		if (networkManager.isInitialised()) {
-			networkManager.sendInputMessage(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
-		}
-		playerInputManager.touchDown(0, screenX, screenY, pointer, button);
+		playerInputManager.queueLocalAction(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
 	}
 
 	/**
@@ -183,10 +180,7 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
-		if (networkManager.isInitialised()) {
-			networkManager.sendInputMessage(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
-		}
-		playerInputManager.touchDragged(0, screenX, screenY, pointer);
+		playerInputManager.queueLocalAction(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
 	}
 
 	/**
@@ -202,10 +196,7 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchUp(int screenX, int screenY, int pointer, int button) {
-		if (networkManager.isInitialised()) {
-			networkManager.sendInputMessage(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
-		}
-		playerInputManager.touchUp(0, screenX, screenY, pointer, button);
+		playerInputManager.queueLocalAction(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
 	}
 
 	/**
@@ -218,10 +209,7 @@ public class Player extends Character implements Tickable {
 	 */
 	private void handleLocalMouseMoved(int screenX, int screenY) {
 		// FIXME: mouse inputs currently saturate the server
-//		if (NetworkState.isInitialised() && peerId == -1) {
-//			NetworkState.sendInputMessage(InputType.MOUSE_MOVED.ordinal(), screenX, screenY);
-//		}
-		playerInputManager.mouseMoved(0, screenX, screenY);
+		handleMouseMoved(screenX, screenY);
 	}
 	
 	/**
@@ -231,10 +219,7 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key pressed
 	 */
 	private void handleLocalKeyDown(int keycode) {
-		if (networkManager.isInitialised()) {
-			networkManager.sendInputMessage(InputType.KEY_DOWN.ordinal(), keycode);
-		}
-		playerInputManager.keyDown(0, keycode);
+		playerInputManager.queueLocalAction(InputType.KEY_DOWN.ordinal(), keycode);
 	}
 
 	/**
@@ -244,10 +229,7 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key released
 	 */
 	private void handleLocalKeyUp(int keycode) {
-		if (networkManager.isInitialised()) {
-			networkManager.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
-		}
-		playerInputManager.keyUp(0, keycode);
+		playerInputManager.queueLocalAction(InputType.KEY_UP.ordinal(), keycode);
 	}
 
 	/**
