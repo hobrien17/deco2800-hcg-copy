@@ -52,4 +52,9 @@ public class WeaponItem extends SingleItem {
                item.getName() == this.itemName && 
                this.weapon.equals(((WeaponItem)item).getWeapon());
     }
+
+    @Override
+    public Item copy() {
+        return new WeaponItem(weapon, itemName, itemWeight);
+    }
 }
