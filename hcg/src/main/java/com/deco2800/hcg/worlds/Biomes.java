@@ -13,6 +13,8 @@ public enum Biomes {
             return new Texture("resources/maps/environment/grass.png");
           case PATH:
             return new Texture("resources/maps/environment/spikes.png");
+          default:
+            return null;
         }
     }
     return null;

@@ -66,12 +66,14 @@ public abstract class AbstractEntity implements Renderable,
         this.xRenderLength = xRenderLength;
         this.yRenderLength = yRenderLength;
         this.centered = centered;
+        float newX = posX;
+        float newY = posY;
 
         if (centered) {
-            posX += (1 - xLength / 2);
-            posY += (1 - yLength / 2);
+            newX += (1 - xLength / 2);
+            newY += (1 - yLength / 2);
         }
-        this.position = new Box3D(posX, posY, posZ, xLength, yLength, zLength);
+        this.position = new Box3D(newX, newY, posZ, xLength, yLength, zLength);
     }
 
     /**
