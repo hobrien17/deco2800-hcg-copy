@@ -2,6 +2,7 @@ package com.deco2800.hcg.shading;
 
 import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.util.MathHelper;
 
 /**
  * Container class to pass world / time / weather information down to the draw
@@ -55,22 +56,15 @@ public class ShaderState {
     }
     
     /**
-     * Sets the current dayAmount from the time in TimeManager. Currently works off
-     * a static 5am to 7pm day, may be modified eventually for seasons.
+     * Sets the current dayAmount from the time in TimeManager.
+     * Uses a nice sine wave.
      * 
      * @param time
      *            The TimeManager containing the current time.
      */
     public void setTime(TimeManager time) {
-        float distFromMidday = 
-                Math.abs(12.0F - (3600.0F * time.getHours() + 60.0F * time.getMinutes() + time.getSeconds()) / 3600.0F);
-        if(distFromMidday < 6) {
-            dayAmount = 1;
-        } else if(distFromMidday > 8) {
-            dayAmount = 0;
-        } else {
-            dayAmount = (8.0F - distFromMidday) / 2.0F;
-        }
+        float normalTime = ((3600.0F * time.getHours() + 60.0F * time.getMinutes() + time.getSeconds()) / 3600.0F) / 24.0F;
+        dayAmount = 0.5F * (float) Math.cos(MathHelper.TWO_PI * normalTime + Math.PI) + 0.5F;
     }
     
     /**
@@ -89,7 +83,7 @@ public class ShaderState {
      */
     public float getBloom() {
         if(bloomEnabled) {
-            float scaleValue = (float) Math.pow(dayAmount, 6);
+            float scaleValue = dayAmount * dayAmount;
             return scaleValue * dayBloom + (1 - scaleValue) * nightBloom;
         }
         return 0F;
@@ -102,7 +96,7 @@ public class ShaderState {
      */
     public float getHeat() {
         if(heatEnabled) {
-            float scaleValue = (float) Math.pow(dayAmount, 6);
+            float scaleValue = dayAmount * dayAmount;
             return scaleValue * dayHeat + (1 - scaleValue) * nightHeat;
         }
         return 0F;

@@ -3,29 +3,35 @@ package com.deco2800.hcg.entities;
 import java.util.HashMap;
 import java.util.List;
 
-import com.deco2800.hcg.contexts.CharacterCreationContext;
-import com.deco2800.hcg.entities.enemy_entities.Squirrel;
-import com.deco2800.hcg.entities.npc_entities.NPC;
-import com.deco2800.hcg.entities.npc_entities.QuestNPC;
-import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.contexts.PlayerEquipmentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.deco2800.hcg.contexts.CharacterCreationContext;
+import com.deco2800.hcg.contexts.PerksSelectionScreen;
+import com.deco2800.hcg.contexts.PlayerEquipmentContext;
+import com.deco2800.hcg.contexts.ShopMenuContext;
+import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
+import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.multiplayer.NetworkState;
-import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.renderers.CustomRenderable;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
@@ -33,15 +39,13 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import com.deco2800.hcg.contexts.ShopMenuContext;
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
 
 /**
  * Entity for the playable character.
  *
  * @author leggy
  */
-public class Player extends Character implements Tickable {
+public class Player extends Character implements Tickable, CustomRenderable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
@@ -911,4 +915,13 @@ public class Player extends Character implements Tickable {
 
 		return null;
 	}
+
+    @Override
+    public void customDraw(SpriteBatch batch, float posX, float posY, float tileWidth, float tileHeight, float aspect,
+            TextureManager reg) {
+        Texture texture = reg.getTexture(getTexture());
+        
+        batch.draw(texture, posX, posY, tileWidth * getXRenderLength(),
+                (texture.getHeight() / aspect) * getYRenderLength());
+    }
 }

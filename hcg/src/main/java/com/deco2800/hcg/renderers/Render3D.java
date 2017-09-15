@@ -87,9 +87,13 @@ public class Render3D implements Renderer {
 
             // We want to keep the aspect ratio of the image so...
             float aspect = (float) (tex.getWidth()) / (float) (tileWidth);
-
-            batch.draw(tex, isoX, isoY, tileWidth * entity.getXRenderLength(),
-                    (tex.getHeight() / aspect) * entity.getYRenderLength());
+            
+            if(entity instanceof CustomRenderable) {
+                ((CustomRenderable) entity).customDraw(batch, isoX, isoY, tileWidth, tileHeight, aspect, reg);
+            } else {
+                batch.draw(tex, isoX, isoY, tileWidth * entity.getXRenderLength(),
+                        (tex.getHeight() / aspect) * entity.getYRenderLength());
+            }
         }
 
         for (int index = 0; index < entities.size(); index++) {
