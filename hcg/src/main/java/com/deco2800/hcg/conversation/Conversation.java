@@ -75,15 +75,17 @@ public class Conversation {
 	 * @return the next sentence of the conversation
 	 */
 	public String nextSentence(boolean answer) {
-		if (answer == false) {
+		if (! answer) {
 			deactivateConversation();
 			return goodbye;
 		}
+		
 		if (iterator == conversation.size() - 1) {
 			deactivateConversation();
 			iterator = -1;
 			return goodbye;
 		}
+		
 		iterator++;
 		return conversation.get(iterator);
 	}
