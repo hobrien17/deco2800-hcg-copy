@@ -4,8 +4,12 @@ package com.deco2800.hcg.trading;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.SingleItem;
+import com.deco2800.hcg.items.StackableItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /** Generic shop interfece that has basic shop commands necessary for any shop such as the ability to buy, sell
@@ -15,7 +19,7 @@ public abstract class Shop {
     int modifier = 0;
     Player player;
     BasicSeed seed = new BasicSeed();
-    Map<Item, Integer> shopStock = new HashMap<>();
+    ArrayList<Item> shopStock = new ArrayList<Item>();
 
     /**Open the shop so it can be interacted with.
      *
@@ -37,53 +41,54 @@ public abstract class Shop {
      * @return number in stock, 0 if none
      */
     public int inStock(Item item){
-        if (shopStock.containsKey(item)) {
-            return shopStock.get(item).intValue();
+        if (shopStock.contains(item) && (item instanceof StackableItem)) {
+            return shopStock.get(shopStock.indexOf(item)).getStackSize();
+        } else if (item instanceof SingleItem) {
+            int number = 0;
+            for (Item stock: shopStock) {
+                if (stock.sameItem(item)) {
+                    number++;
+                }
+            }
+            return number;
         } else {
             return 0;
         }
     }
 
-    /**Add a new stock item to the shop with a corresponding number of this item the shop should have in stock
+    /**Add a new stock item to the shop taking the current stack size of the item as the number the shop should have in
+     * stock
      *
      * @param item
      *          An instance of the stock class, e.g. a weapon or food item
-     * @param available
-     *          The number of this item that should be made available in the shop
+     *
      */
-    public void addStock(Item item, int available) {
-        if (shopStock.containsKey(item)) {
-            shopStock.put(item, new Integer(shopStock.get(item) + available));
+    public void addStock(Item item) {
+        if (!shopStock.contains(item) || (item instanceof SingleItem)) {
+            shopStock.add(item);
         } else {
-            shopStock.put(item, new Integer(available));
+            shopStock.get(shopStock.indexOf(item)).addToStack(item.getStackSize());
         }
     }
 
-    /**Add many new stock items to the shop, useful during initialisation of the shop. Care needs to be taken that the
-     * indexes of both arrays match up, position 0 in the stock array will be assigned the availability number of
-     * position 0 of the availability array.
+    /**Add many new stock items to the shop, useful during initialisation of the shop.
      *
-     * @param item
-     *          Array of stock items to be added
-     * @param available
-     *          Array of numbers corresponding to the number of stock that should be made available
+     * @param items
+     *          Array of items to be added
+     *
      */
-    public void addStock(Item[] items, int[] available) {
+    public void addStock(Item[] items) {
         for (int i = 0; i < items.length; i++) {
-            if (shopStock.containsKey(items[i])) {
-                shopStock.put(items[i], new Integer(shopStock.get(items[i]) + available[i]));
-            } else {
-                shopStock.put(items[i], new Integer(available[i]));
-            }
+            addStock(items[i]);
         }
     }
 
     /**Method to get access to the items a shop currently has in stock for displaying to the user what options they
      * have to buy
      *
-     * @return the items the shop currently has in stock and the number of that item present
+     * @return the items the shop currently has in stock
      */
-    public Map<Item, Integer> getStock() {
+    public ArrayList<Item> getStock() {
         return shopStock;
     }
 
@@ -96,15 +101,30 @@ public abstract class Shop {
      * enough currency in player's inventory
      */
     public int buyStock(Item item) {
-        if (!shopStock.containsKey(item) || (shopStock.get(item) == 0)) {
+        if (!shopStock.contains(item) || (shopStock.get(shopStock.indexOf(item)).getStackSize() == 0)) {
             return 1;
-        } else if (!player.addItemToInventory(item)) {
+        } else if (!player.getInventory().canInsert(item)) {
             return 2;
-        } else if (!player.getInventory().containsItem(seed) || (!player.getInventory().removeItem(seed, item
+        } else if (item instanceof StackableItem) {
+            int temp = item.getStackSize();
+            item.setStackSize(1);
+            player.getInventory().addItem(item);
+            item.setStackSize(temp);
+        } else if (item instanceof SingleItem) {
+            player.getInventory().addItem(item);
+        }
+        if (!player.getInventory().containsSingleItem(seed) || (!player.getInventory().removeItem(seed, item
                 .getBaseValue()+modifier))) {
             return 3;
         }
-        shopStock.put(item, new Integer(shopStock.get(item) - 1));
+
+        if (item instanceof SingleItem) {
+            shopStock.remove(item);
+        } else if (shopStock.get(shopStock.indexOf(item)).getStackSize() == 1) {
+            shopStock.remove(item);
+        } else {
+            shopStock.get(shopStock.indexOf(item)).addToStack(-1);
+        }
         return 0;
     }
 
@@ -141,10 +161,10 @@ public abstract class Shop {
             player.getInventory().addItem(item);
             return 1;
         }
-        if (shopStock.containsKey(item)) {
-            shopStock.put(item, new Integer(shopStock.get(item) + 1));
+        if (shopStock.contains(item)) {
+            shopStock.get(shopStock.indexOf(item)).addToStack(item.getStackSize());
         } else {
-            shopStock.put(item, new Integer(1));
+            shopStock.add(item);
         }
         return 0;
     }
