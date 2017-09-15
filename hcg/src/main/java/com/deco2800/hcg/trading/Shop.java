@@ -103,12 +103,21 @@ public abstract class Shop {
     public int buyStock(Item item) {
         if (!shopStock.contains(item) || (shopStock.get(shopStock.indexOf(item)).getStackSize() == 0)) {
             return 1;
-        } else if (!player.addItemToInventory(item)) {
+        } else if (!player.getInventory().canInsert(item)) {
             return 2;
-        } else if (!player.getInventory().containsItem(seed) || (!player.getInventory().removeItem(seed, item
+        } else if (item instanceof StackableItem) {
+            int temp = item.getStackSize();
+            item.setStackSize(1);
+            player.getInventory().addItem(item);
+            item.setStackSize(temp);
+        } else if (item instanceof SingleItem) {
+            player.getInventory().addItem(item);
+        }
+        if (!player.getInventory().containsSingleItem(seed) || (!player.getInventory().removeItem(seed, item
                 .getBaseValue()+modifier))) {
             return 3;
         }
+
         if (item instanceof SingleItem) {
             shopStock.remove(item);
         } else if (shopStock.get(shopStock.indexOf(item)).getStackSize() == 1) {

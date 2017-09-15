@@ -88,4 +88,11 @@ public class TestUniqueItem extends SingleItem {
         
         return false;
     }
+
+    @Override
+    public Item copy() {
+        TestUniqueItem newUnique = new TestUniqueItem(itemName, itemWeight);
+        newUnique.setUniqueData(this.getUniqueData());
+        return newUnique;
+    }
 }
