@@ -52,7 +52,8 @@ public class CharacterCreationContext extends UIContext{
     private Boolean gunsSkillSpecialiseChecked = false;
     private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
-    private Table masterTable, topRowInfoTable;
+    private Table masterTable;
+    private Table topRowInfoTable;
 
     private Window attributesWindow;
     private Window skillsWindow;
