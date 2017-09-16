@@ -100,11 +100,11 @@ public class PlayerEquipmentContext extends InventoryDisplayContext{
     private void populatePlayerInfo(Table playerInfo, Skin skin, Player player) {
         Label title = new Label("Player Stats", skin);
         title.setColor(Color.BLACK);
-        Label text1 = new Label(("Health  " + player.getAttribute("health")), skin);
+        Label text1 = new Label("Health  " + player.getAttribute("health"), skin);
         text1.setColor(Color.BLACK);
-        Label text2 = new Label(("Level " + player.getAttribute("xp")), skin);
+        Label text2 = new Label("Level " + player.getAttribute("xp"), skin);
         text2.setColor(Color.BLACK);
-        Label text3 = new Label(("Stamina " + player.getAttribute("stamina")), skin);
+        Label text3 = new Label("Stamina " + player.getAttribute("stamina"), skin);
         text3.setColor(Color.BLACK);
         playerInfo.add(title).top();
         playerInfo.row();
