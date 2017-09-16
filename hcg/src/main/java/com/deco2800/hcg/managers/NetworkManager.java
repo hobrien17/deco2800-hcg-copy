@@ -81,7 +81,6 @@ public final class NetworkManager extends Manager implements TickableManager {
 		}
 		
 		// start networking thread
-		// TODO: try to not use a thread
 		(new Thread() {
 			public void run() {
 				while (!Thread.interrupted()) {
@@ -89,7 +88,10 @@ public final class NetworkManager extends Manager implements TickableManager {
 					receive();
 					try {
 						Thread.sleep(1);
-					} catch (InterruptedException e) {}
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
+
 				}
 			}
 		}).start();
