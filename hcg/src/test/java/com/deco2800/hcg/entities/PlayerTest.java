@@ -10,6 +10,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.deco2800.hcg.entities.worldmap.Level;
+import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.worlds.World;
@@ -138,6 +140,7 @@ public class PlayerTest {
 		// cannot mock game manager
 		gameManager = GameManager.get();
 		
+		
 		// create all our mock classes
 		AbstractWorld = mock(World.class);
 		layer = mock(TiledMapTileLayer.class);
@@ -156,6 +159,11 @@ public class PlayerTest {
 		when(mapProperties.get("tileheight")).thenReturn(32);
 
 		when(layer.getProperties()).thenReturn(mapProperties);
+		
+		// add node to gamemanager
+		Level testLevel = new Level(new World(), 0, 0, 0);
+		MapNode testNode0 = new MapNode(0, 9, 1, testLevel, false);
+		gameManager.setOccupiedNode(testNode0);
 
 	}
 	
@@ -364,13 +372,42 @@ public class PlayerTest {
 		assertEquals(0,player.killLogGet(exampleID1));
 		player.killLogAdd(exampleID1);
 		assertEquals(1,player.killLogGet(exampleID1));
+		assertEquals(1,player.killLogGetTotal(exampleID1));
 		assertEquals(true,player.killLogContains(exampleID1));
 		for (int i=0; i<10; i++) {
 			player.killLogAdd(exampleID2);
 		}
 		assertEquals(10,player.killLogGet(exampleID2));
 		assertEquals(1,player.killLogGet(exampleID1));
+		assertEquals(10,player.killLogGetTotal(exampleID2));
+		assertEquals(1,player.killLogGetTotal(exampleID1));
 		assertEquals(false,player.killLogContains(exampleID3));
 		assertEquals(0,player.killLogGet(exampleID3));
+		assertEquals(0,player.killLogGetTotal(exampleID3));
+
+		//The above all assumes only one world, extra world tests below
+		int exampleNode1 = 0;
+		int exampleNode2 = 1;
+		int exampleNode3 = 2;
+
+		assertEquals(0,player.killLogGet(exampleID1,exampleNode1));
+		player.killLogAdd(exampleID1,exampleNode1);
+		assertEquals(1,player.killLogGet(exampleID1,exampleNode1));
+		assertEquals(2,player.killLogGetTotal(exampleID1));
+		assertEquals(true,player.killLogContains(exampleID1,exampleNode1));
+		for (int i=0; i<10; i++) {
+			player.killLogAdd(exampleID2,exampleNode2);
+		}
+		assertEquals(10,player.killLogGet(exampleID2,exampleNode2));
+		assertEquals(1,player.killLogGet(exampleID1,exampleNode1));
+		assertEquals(20,player.killLogGetTotal(exampleID2));
+		assertEquals(2,player.killLogGetTotal(exampleID1));
+		assertEquals(false,player.killLogContains(exampleID3,exampleNode1));
+		player.killLogAdd(exampleID3,exampleNode3);
+		assertEquals(false,player.killLogContains(exampleID3,exampleNode1));
+		assertEquals(true,player.killLogContains(exampleID3,exampleNode3));
+		assertEquals(0,player.killLogGet(exampleID3,exampleNode1));
+		assertEquals(1,player.killLogGet(exampleID3,exampleNode3));
+		assertEquals(1,player.killLogGetTotal(exampleID3));
 	}
 }

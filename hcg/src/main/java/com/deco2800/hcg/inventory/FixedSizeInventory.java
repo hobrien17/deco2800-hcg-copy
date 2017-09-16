@@ -46,7 +46,7 @@ public class FixedSizeInventory implements Inventory {
     public Item getItem(int index) {
         return this.items[index];
     }
-    
+
     @Override
     public Item removeItem(int index) {
         Item item = this.items[index];
@@ -214,6 +214,16 @@ public class FixedSizeInventory implements Inventory {
 
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean containsSingleItem(Item item) {
+        for(int i = 0; i < this.getMaxSize(); i++) {
+            if(this.items[i] != null && this.items[i].sameItem(item)) {
+                return true;
             }
         }
         return false;

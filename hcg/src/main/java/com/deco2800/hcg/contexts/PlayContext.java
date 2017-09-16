@@ -98,11 +98,12 @@ public class PlayContext extends Context {
 	private Label chatLabel;
 	private TextField chatTextField;
 	private TextArea chatTextArea;
-	private  Button chatButton;
+	//private  Button chatButton;
 	
 	// TODO make sure this doesn't stay here.
 	private ShaderProgram shader;
 	private ShaderProgram postShader;
+	private Button chatButton;
 
     /**
      * Create the PlayContext
@@ -131,6 +132,9 @@ public class PlayContext extends Context {
 
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
+		
+		/* Add temporary complete level button */
+		Button completeLevelButton = new TextButton("Complete Level", skin);
 
 		/* Add clock. */
 		Image clockImage = new Image(new
@@ -144,7 +148,7 @@ public class PlayContext extends Context {
 		playerStatus = new PlayerStatusDisplay();
 		stage.addActor(playerStatus);
 
-		/* Add a programmatic listener to the quit button */
+		/* Add a programmatic listener to the quit and complete buttons */
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -154,9 +158,19 @@ public class PlayContext extends Context {
         
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
+		
+		completeLevelButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				gameManager.getCurrentNode().changeNodeType(2);
+				gameManager.getMapContext().updateMapDisplay();
+				contextManager.popContext();
+			}
+		});
 
 		/* Add all buttons to the menu */
 		window.add(button);
+		window.add(completeLevelButton);
 		window.add(clockLabel);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
