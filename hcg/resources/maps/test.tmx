@@ -11,22 +11,44 @@
  <tileset firstgid="27" source="spikes.tsx"/>
  <tileset firstgid="28" source="sludgebubbling.tsx"/>
  <tileset firstgid="36" source="placeholder.tsx"/>
+ <tileset firstgid="38" source="invisible.tsx"/>
  <layer name="tile" width="10" height="10">
   <properties>
    <property name="name" value="tile"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,2,2
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0,
+2,2,2,2,2,2,2,2,2,0
+</data>
+ </layer>
+ <layer name="pavement-test" width="10" height="10">
+  <properties>
+   <property name="PlayerX" value="18"/>
+   <property name="PlayerY" value="1"/>
+   <property name="name" value="pavement"/>
+   <property name="newMap" value="resources/maps/initial-map-test.tmx"/>
+   <property name="speed" value="1.0"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38,
+0,0,0,0,0,0,0,0,0,38
 </data>
  </layer>
  <objectgroup name="object">

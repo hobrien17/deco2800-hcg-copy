@@ -21,6 +21,7 @@ import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.multiplayer.NetworkState;
@@ -51,6 +52,7 @@ public class Player extends Character implements Tickable {
     private SoundManager soundManager;
     private ContextManager contextManager;
     private PlayerInputManager playerInputManager;
+    private PlayerManager playerManager;
 
     private boolean collided;
     private int xpThreshold = 200;
@@ -91,6 +93,9 @@ public class Player extends Character implements Tickable {
 	GameManager gameManager = GameManager.get();
 	this.contextManager = (ContextManager) gameManager
 		.getManager(ContextManager.class);
+
+	playerManager = (PlayerManager) gameManager
+		.getManager(PlayerManager.class);
 
 	this.id = id;
 	if (id == 0) {
@@ -450,147 +455,169 @@ public class Player extends Character implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
-    	float oldPosX = this.getPosX();
-    	float oldPosY = this.getPosY();
-    
-    	// Center the camera on the player
-    	updateCamera();
-    
-    	// update the players stamina
-    	handleStamina();
-    	
-    	// set speed is the multiplier due to the ground
-    	float speed = 1.0f;
-    	collided = false;
-    	float slippery = 0;
-    
-    	// current world and layer
-    	TiledMapTileLayer layer;
-    	World world = GameManager.get().getWorld();
-            
-        Box3D newPos = getBox3D();
-	
-    	// get speed of current tile. this is done before checking if a tile
-    	// exists so a slow down tile next to the edge wouldn't cause problems.
-    	if (world.getTiledMapTileLayerAtPos((int) oldPosY,
-    		(int) oldPosX) == null) {
-    	    collided = true;
-    	} else {
-    	    // set the layer, and get the speed of the tile on the layer. Also
-    	    // name for logging.
-    	    layer = world.getTiledMapTileLayerAtPos((int) oldPosY,
-    		    (int) oldPosX);
-    	    speed = Float
-    		    .parseFloat((String) layer.getProperties().get("speed"));
-    	    if (layer.getProperties().get("name", String.class) != null) {
-        		String newname = layer.getProperties().get("name",
-        			String.class);
-        
-        		// handle sound effects
-        		handleSound(newname);
-        
-        		// handle terrain effect
-        		handleTerrain(newname);
-        
-    	    }
-    	    // see if current tile is slippery. Save the slippery value if it is
-    	    if (layer.getProperties().get("slippery") != null) {
-        		slippery = Float.parseFloat(
-        			(String) layer.getProperties().get("slippery"));
-    	    }
-    
-    	    // -1 for none, 0 for enemy, 1 for both, 2 for player
-    	    int damagetype = -1;
-    
-    	    if (layer.getProperties().get("damagetype") != null) {
-        		damagetype = Integer.parseInt(
-        			(String) layer.getProperties().get("damagetype"));
-    	    }
-    
-    	    // damage player
-    	    if (layer.getProperties().get("damage") != null && damagetype > 0) {
-        		this.takeDamage(Integer.parseInt(
-        			(String) layer.getProperties().get("damage")));
-    
-    	    }
-    
-    	    // log
-    	    LOGGER.info(this + " moving on terrain" + name
-    		    + " withspeed multiplier of " + speed);
-    
-    	}
-   
-    	// get our updated position based on the speed and slippery of the tile
-    	handleMovement(newPos, speed, slippery);
-    
-    	// now check if a tile exists at this new position
-    	if (world.getTiledMapTileLayerAtPos((int) (newPos.getY()),
-    		(int) (newPos.getX())) == null) {
-    	    collided = true;
-    	}
-    
-    	List<AbstractEntity> entities = GameManager.get().getWorld()
-    		.getEntities();
-    	for (AbstractEntity entity : entities) {
-    
-    	    if (!this.equals(entity) && !(entity instanceof Squirrel)
-    		    && newPos.overlaps(entity.getBox3D())
-    		    && !(entity instanceof Bullet)
-    		    && !(entity instanceof Weapon)) {
-    		LOGGER.info(this + " colliding with " + entity);
-    		collided = true;
-    
-    	    }
-    	}
-    
-    	if (!collided) {
-    	    this.setPosition(newPos.getX(), newPos.getY(), 1);
-    	}
+	float oldPosX = this.getPosX();
+	float oldPosY = this.getPosY();
+
+	// Center the camera on the player
+	updateCamera();
+
+	// update the players stamina
+	handleStamina();
+
+	// set speed is the multiplier due to the ground
+	float speed = 1.0f;
+	collided = false;
+	float slippery = 0;
+
+	// current world and layer
+	TiledMapTileLayer layer;
+	World world = GameManager.get().getWorld();
+
+	Box3D newPos = getBox3D();
+
+	// get speed of current tile. this is done before checking if a tile
+	// exists so a slow down tile next to the edge wouldn't cause problems.
+	if (world.getTiledMapTileLayerAtPos((int) oldPosY,
+		(int) oldPosX) == null) {
+	    collided = true;
+	} else {
+	    // set the layer, and get the speed of the tile on the layer. Also
+	    // name for logging.
+	    layer = world.getTiledMapTileLayerAtPos((int) oldPosY,
+		    (int) oldPosX);
+	    speed = Float
+		    .parseFloat((String) layer.getProperties().get("speed"));
+
+	    // see of current tile is a switch point
+	    if (layer.getProperties().get("PlayerX") != null
+		    && layer.getProperties().get("PlayerY") != null) {
+		oldPosX = Float.parseFloat(
+			(String) layer.getProperties().get("PlayerX"));
+		oldPosY = Float.parseFloat(
+			(String) layer.getProperties().get("PlayerY"));
+	    }
+
+	    if (layer.getProperties().get("name", String.class) != null) {
+		String newname = layer.getProperties().get("name",
+			String.class);
+
+		// handle sound effects
+		handleSound(newname);
+
+		// handle terrain effect
+		handleTerrain(newname);
+
+	    }
+
+	    // see if current tile is a pavement lead to another map
+	    if (layer.getProperties().get("newMap") != null) {
+		GameManager.get().setWorld(new World(
+			(String) layer.getProperties().get("newMap")));
+		playerManager.spawnPlayers();
+		this.setPosition(oldPosX, oldPosY, 1);
+	    }
+
+	    // see if current tile is slippery. Save the slippery value if it is
+	    if (layer.getProperties().get("slippery") != null) {
+		slippery = Float.parseFloat(
+			(String) layer.getProperties().get("slippery"));
+	    }
+
+	    // -1 for none, 0 for enemy, 1 for both, 2 for player
+	    int damagetype = -1;
+
+	    if (layer.getProperties().get("damagetype") != null) {
+		damagetype = Integer.parseInt(
+			(String) layer.getProperties().get("damagetype"));
+	    }
+
+	    // damage player
+	    if (layer.getProperties().get("damage") != null && damagetype > 0) {
+		this.takeDamage(Integer.parseInt(
+			(String) layer.getProperties().get("damage")));
+
+	    }
+
+	    // log
+	    LOGGER.info(this + " moving on terrain" + name
+		    + " withspeed multiplier of " + speed);
+
+	}
+
+	// get our updated position based on the speed and slippery of the tile
+	handleMovement(newPos, speed, slippery);
+
+	// now check if a tile exists at this new position
+	if (world.getTiledMapTileLayerAtPos((int) (newPos.getY()),
+		(int) (newPos.getX())) == null) {
+	    collided = true;
+	}
+
+	List<AbstractEntity> entities = GameManager.get().getWorld()
+		.getEntities();
+	for (AbstractEntity entity : entities) {
+
+	    if (!this.equals(entity) && !(entity instanceof Squirrel)
+		    && newPos.overlaps(entity.getBox3D())
+		    && !(entity instanceof Bullet)
+		    && !(entity instanceof Weapon)) {
+		LOGGER.info(this + " colliding with " + entity);
+		collided = true;
+
+	    }
+	}
+
+	if (!collided) {
+	    this.setPosition(newPos.getX(), newPos.getY(), 1);
+	}
 
     }
 
     /**
-     * Handles the movement of the player in the onTick method based
-     * on the slippery and speed factors of the tiles.
+     * Handles the movement of the player in the onTick method based on the
+     * slippery and speed factors of the tiles.
      * 
-     * @param newPos position player will move to if it is empty
-     * @param speed speed factor of the current tile
-     * @param slippery slippery factor of the current tile
+     * @param newPos
+     *            position player will move to if it is empty
+     * @param speed
+     *            speed factor of the current tile
+     * @param slippery
+     *            slippery factor of the current tile
      */
     private void handleMovement(Box3D newPos, float speed, float slippery) {
-      
-      // handle slippery movement 
-      if (Math.abs(slippery) > 0.05f) {
-          // first factor is for slowing down, second is for speeding up
-          float slipperyFactor = slippery * 0.005f;
-          float slipperyFactor2 = slippery * 0.06f;
-  
-          // created helper function to avoid duplicate code
-          lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed,
-              slipperyFactor, slipperyFactor2);
-          lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed,
-              slipperyFactor, slipperyFactor2);
-      } else {
-          // non slippery movement
-          lastSpeedX = 0;
-          lastSpeedY = 0;
-  
-          // store our last speed
-          if (speedX != 0) {
-            lastSpeedX = speedX * speed;
-          }
-          if (speedY != 0) {
-            lastSpeedY = speedY * speed;
-          }
-  
-      }
-  
-      // change box coords
-      newPos.setX(this.getPosX() + lastSpeedX);
-      newPos.setY(this.getPosY() + lastSpeedY);
 
-    }    
-    
+	// handle slippery movement
+	if (Math.abs(slippery) > 0.05f) {
+	    // first factor is for slowing down, second is for speeding up
+	    float slipperyFactor = slippery * 0.005f;
+	    float slipperyFactor2 = slippery * 0.06f;
+
+	    // created helper function to avoid duplicate code
+	    lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed,
+		    slipperyFactor, slipperyFactor2);
+	    lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed,
+		    slipperyFactor, slipperyFactor2);
+	} else {
+	    // non slippery movement
+	    lastSpeedX = 0;
+	    lastSpeedY = 0;
+
+	    // store our last speed
+	    if (speedX != 0) {
+		lastSpeedX = speedX * speed;
+	    }
+	    if (speedY != 0) {
+		lastSpeedY = speedY * speed;
+	    }
+
+	}
+
+	// change box coords
+	newPos.setX(this.getPosX() + lastSpeedX);
+	newPos.setY(this.getPosY() + lastSpeedY);
+
+    }
+
     /**
      * handle terrain effects on player
      */
