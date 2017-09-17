@@ -66,7 +66,15 @@ public class Quest {
 	public String getInstruction(){
 		return instruction;
 	}
-	
+
+	/**
+	 * Returns the name of the quest.
+	 *
+	 * @return Returns a string containing the name of the quest.
+	 */
+	public String getName(){
+		return name;
+	}
 	
 	@Override
 	/**
