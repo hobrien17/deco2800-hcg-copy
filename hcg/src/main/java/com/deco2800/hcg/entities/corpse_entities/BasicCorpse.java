@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.corpse_entities;
 
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
-import com.deco2800.hcg.entities.turrets.AbstractTurret;
 
 public class BasicCorpse extends Corpse {
 

@@ -163,7 +163,7 @@ public class Message {
 	 */
 	public int getPayloadInt(int index) {
 		final ByteBuffer byteBuffer = ByteBuffer.wrap(payload);
-		return (int) byteBuffer.getInt(index * 4);
+		return byteBuffer.getInt(index * 4);
 	}
 	
 	/**

@@ -50,4 +50,5 @@ public abstract class GenericItem implements Item {
     public boolean equals(Item item) {
         return this == item;
     }
+
 }
