@@ -12,7 +12,7 @@ public class HealthPotion extends ConsumableItem {
         this.baseValue = 10;
         this.itemWeight = 1;
         this.itemName = "Health Potion";
-        this.texture = String.format("red_potion");
+        this.texture = "red_potion";
         this.currentStackSize = 1;
         this.maxStackSize = 10;
     }
@@ -45,5 +45,10 @@ public class HealthPotion extends ConsumableItem {
         return item instanceof HealthPotion && this.itemName == ((HealthPotion) item).itemName;
     }
 
-
+    @Override
+    public Item copy() {
+        HealthPotion newPotion = new HealthPotion(healthAmount);
+        newPotion.setStackSize(this.getStackSize());
+        return newPotion;
+    }
 }

@@ -43,12 +43,12 @@ public class FixedSizeInventory implements Inventory {
     }
     
     @Override
-    public Item getItem(int index) throws IndexOutOfBoundsException {
+    public Item getItem(int index) {
         return this.items[index];
     }
-    
+
     @Override
-    public Item removeItem(int index) throws IndexOutOfBoundsException {
+    public Item removeItem(int index) {
         Item item = this.items[index];
         this.items[index] = null;
         return item;
@@ -124,7 +124,7 @@ public class FixedSizeInventory implements Inventory {
     }
     
     @Override
-    public boolean canFitItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
+    public boolean canFitItemInSlot(Item item, int index) {
         if(this.items[index] == null) {
             return true;
         } else if(this.items[index].sameItem(item)) {
@@ -135,7 +135,7 @@ public class FixedSizeInventory implements Inventory {
     }
     
     @Override
-    public boolean insertItem(Item item, int index) throws IndexOutOfBoundsException {
+    public boolean insertItem(Item item, int index) {
         if(this.allowItemInSlot(item, index) && canFitItemInSlot(item, index)) {
             if(this.items[index] == null) {
                 this.items[index] = item;
@@ -214,6 +214,16 @@ public class FixedSizeInventory implements Inventory {
 
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean containsSingleItem(Item item) {
+        for(int i = 0; i < this.getMaxSize(); i++) {
+            if(this.items[i] != null && this.items[i].sameItem(item)) {
+                return true;
             }
         }
         return false;
