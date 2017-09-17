@@ -45,5 +45,10 @@ public class HealthPotion extends ConsumableItem {
         return item instanceof HealthPotion && this.itemName == ((HealthPotion) item).itemName;
     }
 
-
+    @Override
+    public Item copy() {
+        HealthPotion newPotion = new HealthPotion(healthAmount);
+        newPotion.setStackSize(this.getStackSize());
+        return newPotion;
+    }
 }

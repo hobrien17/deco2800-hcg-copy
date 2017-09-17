@@ -136,16 +136,17 @@ public class PlayerStatusDisplay extends Group {
 
 
         //colour polynomials
-        float G, R;
+        float g;
+        float r;
         if (healthBarWidth > (330f/2f)) {
-            G = 255f;
-            R = -1.37838f * healthBarWidth  + 454.865f;
+            g = 255f;
+            r = -1.37838f * healthBarWidth  + 454.865f;
         } else {
-            G = 1.5454f * healthBarWidth;
-            R = 255f;
+            g = 1.5454f * healthBarWidth;
+            r = 255f;
 
         }
         //setting colour
-        healthBar.setColor(R/255f, G/255f, 0f, 1f);
+        healthBar.setColor(r/255f, g/255f, 0f, 1f);
     }
 }

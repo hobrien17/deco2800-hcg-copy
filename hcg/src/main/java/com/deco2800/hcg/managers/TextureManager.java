@@ -35,10 +35,9 @@ public class TextureManager extends Manager {
 	public TextureManager() {
 		textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
 		textureMap.put("ground", new Texture("resources/maps/environment/ground.png"));
-		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
-		textureMap.put("spacman_swim", new Texture("resources/sprites/player/spacman_swim.png"));
 		textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
 		textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
+		textureMap.put("hcg_character_sink", new Texture("resources/sprites/player/hcg_character_hat_sink.png"));
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
@@ -133,7 +132,9 @@ public class TextureManager extends Manager {
 
 		//World map textures
 		textureMap.put("wm_blue_bg", new Texture("resources/worldmap/blue_background.png"));
-        textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
+		textureMap.put("wm_green_bg", new Texture("resources/worldmap/temporary_background.png"));
+		// Uncomment once temp message can be removed
+        //textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
         textureMap.put("completed_node", new Texture("resources/worldmap/completed_node.png"));
         textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node.png"));
         textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));

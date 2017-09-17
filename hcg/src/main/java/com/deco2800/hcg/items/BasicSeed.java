@@ -28,4 +28,11 @@ public class BasicSeed extends StackableItem {
     public boolean isTradable() {
         return true;
     }
+
+    @Override
+    public Item copy() {
+        BasicSeed newSeed = new BasicSeed();
+        newSeed.setStackSize(this.getStackSize());
+        return newSeed;
+    }
 }

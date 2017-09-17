@@ -1,5 +1,6 @@
 package com.deco2800.hcg.items.single.wearable;
 
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.WearableItem;
 
 /**
@@ -51,5 +52,10 @@ public class CottonShirt extends WearableItem{
     @Override
     public String getName() {
         return String.format("%s (%s)", this.itemName, this.type + " " + this.colour);
+    }
+
+    @Override
+    public Item copy() {
+        return new CottonShirt(colour);
     }
 }
