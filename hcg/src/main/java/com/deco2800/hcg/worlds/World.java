@@ -288,7 +288,7 @@ public class World {
 	/**
 	 * Changes world length to a specified new width, provided new height is > 0
 	 * 
-	 * @param width
+	 * @param length
 	 *            New length
 	 */
 	public void setLength(int length) {

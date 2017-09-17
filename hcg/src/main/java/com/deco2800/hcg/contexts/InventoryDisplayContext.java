@@ -60,6 +60,7 @@ public abstract class InventoryDisplayContext extends UIContext{
             Item currentItem = player.getInventory().getItem(i);
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
                     .getDrawable());
+            //ImageButton button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
@@ -95,8 +96,8 @@ public abstract class InventoryDisplayContext extends UIContext{
                                 if (currentItem instanceof ConsumableItem) {
                                     ((ConsumableItem) currentItem).consume(player);
                                     player.getInventory().removeItem(currentItem, 1);
-                                    playerInventory.clear();
-                                    inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, playerInventory);
+                                    inventory.clear();
+                                    inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
                                     //TODO: Equip the item
                                 } else if (currentItem.isWearable()) {
@@ -217,20 +218,25 @@ public abstract class InventoryDisplayContext extends UIContext{
         inventory.add(newTable).width(50).height(60).pad(15);
     }
 
-    public void equipmentDisplay(TextureManager textureManager, Player player, Skin skin, Table playerEquipment) {
-        this.textureManager = textureManager;
-        this.player = player;
-        this.skin = skin;
-        this.playerInventory = playerEquipment;
-        currentRow = 0;
 
-        for (i=0; i<player.getEquippedItems().getNumItems(); i++) {
+    /** Method for updating table view to display the players current equipped items. Used within the equipment tab
+     * of the inventory
+     * @param textureManager the main texture manager
+     * @param player the current player whos equipment will be displayed
+     * @param skin default skin
+     * @param playerEquipment table to display the equipment
+     */
+    public void equipmentDisplay(TextureManager textureManager, Player player, Skin skin, Table playerEquipment) {
+        this.skin = skin;
+        currentRow = 0;
+        this.inventory = playerEquipment;
+        for (int i=0; i<player.getEquippedItems().getNumItems(); i++) {
             Item currentItem = player.getEquippedItems().getItem(i);
             System.out.println(textureManager.getTexture(currentItem.getTexture()));
             //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
             //ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
             //.getDrawable());
-            ImageButton button = new ImageButton(new Image(textureManager.getTexture("spacman")).getDrawable());
+            ImageButton button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;

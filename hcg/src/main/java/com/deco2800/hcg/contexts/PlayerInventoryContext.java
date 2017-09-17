@@ -102,7 +102,7 @@ public class PlayerInventoryContext extends InventoryDisplayContext{
         centreTable.add(itemDisplay);
         centreTable.add(itemInfo);
         centreTable.row();
-        centreTable.add(innerTable);//.colspan(2).center().fillX();
+        centreTable.add(innerTable);
         centreTable.add(playerInfo);
         centreTable.row();
         centreTable.add(shopExit);

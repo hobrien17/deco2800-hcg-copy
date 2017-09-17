@@ -768,7 +768,7 @@ public class Player extends Character implements Tickable {
 	case Input.Keys.I:
 	    // Display Inventory
 	    System.out.println("Access player inventory");
-	    contextManager.pushContext(new PlayerEquipmentContext(this));
+	    contextManager.pushContext(new PlayerInventoryContext(this));
 	    break;
 	default:
 	    break;
@@ -976,6 +976,10 @@ public class Player extends Character implements Tickable {
     public Inventory getInventory() {
 	return inventory;
     }
+
+    public PlayerEquipment getEquippedItems() {
+    	return equippedItems;
+	}
 
     public boolean addItemToInventory(Item item) {
 	return inventory.addItem(item);
