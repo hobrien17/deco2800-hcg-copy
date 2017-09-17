@@ -23,49 +23,83 @@ import com.deco2800.hcg.managers.TextureManager;
  */
 public class CharacterCreationContext extends UIContext{
 
-    private Label strengthLabel, vitalityLabel, agilityLabel, intellectLabel, charismaLabel, meleeSkillLabel,
-            gunsSkillLabel, energyWeaponsSkillLabel, attributePointsLabel, specializedSkillsPointsLabel,
-            startingHealthLabel, startingStaminaLabel, healthGainLabel, staminaGainLabel, skillPointsGainLabel,
-            carryWeightLabel, selectedDescriptionLabel;
+    private Label strengthLabel;
+    private Label vitalityLabel;
+    private Label agilityLabel;
+    private Label intellectLabel;
+    private Label charismaLabel;
+    private Label meleeSkillLabel;
+    private Label gunsSkillLabel;
+    private Label energyWeaponsSkillLabel;
+    private Label attributePointsLabel;
+    private Label specializedSkillsPointsLabel;
+    private Label startingHealthLabel;
+    private Label startingStaminaLabel;
+    private Label healthGainLabel;
+    private Label staminaGainLabel;
+    private Label skillPointsGainLabel;
+    private Label carryWeightLabel;
+    private Label selectedDescriptionLabel;
 
-    private CheckBox meleeSkillSpecialise, gunsSkillSpecialise, energyWeaponsSkillSpecialise;
+    private CheckBox meleeSkillSpecialise;
+    private CheckBox gunsSkillSpecialise;
+    private CheckBox energyWeaponsSkillSpecialise;
 
-    private SelectBox characterSex;
+    private SelectBox<String> characterSex;
 
     // For some reason the checkBox isChecked method isn't working properly so this is a temporary fix
-    private Boolean meleeSkillSpecialiseChecked = false, gunsSkillSpecialiseChecked = false,
-            energyWeaponsSkillSpecialiseChecked = false;
+    private Boolean meleeSkillSpecialiseChecked = false;
+    private Boolean gunsSkillSpecialiseChecked = false;
+    private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
-    private Table masterTable, topRowInfoTable;
+    private Table masterTable;
+    private Table topRowInfoTable;
 
-    private Window attributesWindow, skillsWindow, statsWindow, characterPreviewWindow, selectedDescriptionWindow;
+    private Window attributesWindow;
+    private Window skillsWindow;
+    private Window statsWindow;
+    private Window characterPreviewWindow;
+    private Window selectedDescriptionWindow;
 
     private String[] sexes = new String[]{"Male", "Female"};
 
     // Placeholder for setting what skills are specialised because I'm a data structures n00b
     private int[] specialisedSkills = new int[3];
 
-    private int strength = 5, vitality = 5, agility = 5, intellect = 5, charisma = 5, meleeSkill = 10, gunsSkill = 10,
-            energyWeaponsSkill = 10, attributePoints = 5, specializedSkillsPoints = 2, skillPointsGain = 14,
-            carryWeight = 180, startingHealth = 1800, startingStamina = 1800, healthGain = 200, staminaGain = 200;
+    private int strength = 5; 
+    private int vitality = 5;
+    private int agility = 5;
+    private int intellect = 5;
+    private int charisma = 5; 
+    private int meleeSkill = 10;
+    private int gunsSkill = 10;
+    private int energyWeaponsSkill = 10;
+    private int attributePoints = 5;
+    private int specializedSkillsPoints = 2;
+    private int skillPointsGain = 14;
+    private int carryWeight = 180;
+    private int startingHealth = 1800;
+    private int startingStamina = 1800;
+    private int healthGain = 200;
+    private int staminaGain = 200;
 
     private Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
     private Image characterPreviewImage;
 
     // Different placeholder textures for the character preview screen
-    private Texture male1 = new Texture("resources/sprites/player/m2_360.png"),
-            male2 = new Texture("resources/sprites/player/m2_3602.png"),
-            male3 = new Texture("resources/sprites/player/m2_3603.png"),
-            female1 = new Texture("resources/sprites/player/f2_360.png"),
-            female2 = new Texture("resources/sprites/player/f2_3602.png"),
-            female3 = new Texture("resources/sprites/player/f2_3603.png");
+    private Texture male1 = new Texture("resources/sprites/player/m2_360.png");
+    private Texture male2 = new Texture("resources/sprites/player/m2_3602.png");
+    private Texture male3 = new Texture("resources/sprites/player/m2_3603.png");
+    private Texture female1 = new Texture("resources/sprites/player/f2_360.png");
+    private Texture female2 = new Texture("resources/sprites/player/f2_3602.png");
+    private Texture female3 = new Texture("resources/sprites/player/f2_3603.png");
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     private int textureCount;
 
-    private TextField selectedDescriptionText;
+    private TextArea selectedDescriptionText;
 
     private GameManager gameManager;
     private ContextManager contextManager;
@@ -96,15 +130,14 @@ public class CharacterCreationContext extends UIContext{
         masterTable = new Table(skin);
         masterTable.setFillParent(true);
         masterTable.setBackground("white");
-        masterTable.top().left();
         stage.addActor(masterTable);
-        this.show();
     }
 
     // Declaring sub-tables/sub-windows
     private void initSubTables() {
         topRowInfoTable = new Table(skin);
         attributesWindow = new Window("Attributes", skin);
+        //attributesWindow.setBackground();
         skillsWindow = new Window("Skills", skin);
         statsWindow = new Window("Stats", skin);
         characterPreviewWindow = new Window("Character Preview", skin);
@@ -123,7 +156,7 @@ public class CharacterCreationContext extends UIContext{
         TextButton quitButton = new TextButton("Quit", skin);
         TextField characterName = new TextField("Enter Name", skin);
 
-        SelectBox<String> characterSex = new SelectBox<>(skin);
+        characterSex = new SelectBox<>(skin);
         characterSex.setItems(sexes);
 
         topRowInfoTable.add(characterName);
@@ -197,73 +230,88 @@ public class CharacterCreationContext extends UIContext{
         strengthDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (strength > 1) {
-                    strength--;
-                    attributePoints++;
-                    carryWeight -= 20;
-                    strengthLabel.setText("Strength: " + strength);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
-                    carryWeightLabel.setText("Carry Weight: " + carryWeight);
-
+                if (strength <= 1) {
+                	return;
                 }
+                strength--;
+                attributePoints++;
+                carryWeight -= 20;
+                strengthLabel.setText("Strength: " + strength);
+                attributePointsLabel.setText("Available Points: " + attributePoints);
+                carryWeightLabel.setText("Carry Weight: " + carryWeight);
+                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
+                        "deal with melee weapons, as well as how much you are able to carry");
             }
         });
 
         vitalityDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (vitality > 1) {
-                    vitality--;
-                    attributePoints++;
-                    startingHealth -= 200;
-                    healthGain -= 40;
-                    vitalityLabel.setText("Vitality: " + vitality);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
-                    startingHealthLabel.setText("Starting Health: " + startingHealth);
-                    healthGainLabel.setText("Health gained per level up: " + healthGain);
+            	if (vitality <= 1) {
+                	return;
                 }
+            	vitality--;
+                attributePoints++;
+                startingHealth -= 200;
+                healthGain -= 40;
+                vitalityLabel.setText("Vitality: " + vitality);
+                attributePointsLabel.setText("Available Points: " + attributePoints);
+                startingHealthLabel.setText("Starting Health: " + startingHealth);
+                healthGainLabel.setText("Health gained per level up: " + healthGain);
+                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
+                        "as well as how much health you gain per level");
             }
         });
 
         agilityDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (agility > 1) {
-                    agility--;
-                    attributePoints++;
-                    startingStamina -= 200;
-                    staminaGain -= 40;
-                    agilityLabel.setText("Agility: " + agility);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
-                    startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
-                    staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
+            	if (agility <= 1) {
+                	return;
                 }
+            	agility--;
+            	attributePoints++;
+            	startingStamina -= 200;
+            	staminaGain -= 40;
+            	agilityLabel.setText("Agility: " + agility);
+            	attributePointsLabel.setText("Available Points: " + attributePoints);
+            	startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
+            	staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
+                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
+                        "as well as how much stamina you gain per level");
             }
         });
 
         intellectDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (intellect > 1) {
-                    intellect--;
-                    attributePoints++;
-                    skillPointsGain -= 2;
-                    intellectLabel.setText("Intellect: " + intellect);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
-                    skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
+            	if (intellect <= 1) {
+                	return;
                 }
+            	intellect--;
+            	attributePoints++;
+            	skillPointsGain -= 2;
+            	intellectLabel.setText("Intellect: " + intellect);
+            	attributePointsLabel.setText("Available Points: " + attributePoints);
+            	skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
+                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
+                        "to distribute to your skills each level");
             }
         });
 
         charismaDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (charisma > 1) {
-                    charisma--;
-                    attributePoints++;
-                    charismaLabel.setText("Charisma: " + charisma);
-                    attributePointsLabel.setText("Available Points: " + attributePoints);
+            	if (charisma <= 1) {
+                	return;
                 }
+            	charisma--;
+            	attributePoints++;
+            	charismaLabel.setText("Charisma: " + charisma);
+            	attributePointsLabel.setText("Available Points: " + attributePoints);
+                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
+                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
+                        "influence others to see your point of view, and perhaps even follow you");
             }
         });
 
@@ -277,6 +325,8 @@ public class CharacterCreationContext extends UIContext{
                     strengthLabel.setText("Strength: " + strength);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     carryWeightLabel.setText("Carry Weight: " + carryWeight);
+                    selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
+                            "deal with melee weapons, as well as how much you are able to carry");
                 }
             }
         });
@@ -293,6 +343,8 @@ public class CharacterCreationContext extends UIContext{
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingHealthLabel.setText("Starting Health: " + startingHealth);
                     healthGainLabel.setText("Health gained per level up: " + healthGain);
+                    selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
+                            "as well as how much health you gain per level");
                 }
             }
         });
@@ -309,6 +361,8 @@ public class CharacterCreationContext extends UIContext{
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
                     staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
+                    selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
+                            "as well as how much stamina you gain per level");
                 }
             }
         });
@@ -323,6 +377,8 @@ public class CharacterCreationContext extends UIContext{
                     intellectLabel.setText("Intellect: " + intellect);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
+                    selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
+                            "to distribute to your skills each level");
                 }
             }
         });
@@ -335,6 +391,9 @@ public class CharacterCreationContext extends UIContext{
                     attributePoints--;
                     charismaLabel.setText("Charisma: " + charisma);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
+                    selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
+                            "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
+                            "influence others to see your point of view, and perhaps even follow you");
                 }
             }
         });
@@ -349,7 +408,7 @@ public class CharacterCreationContext extends UIContext{
         strengthLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Strength. Strength determines how much damage you " +
+                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
                         "deal with melee weapons, as well as how much you are able to carry");
             }
         });
@@ -357,7 +416,7 @@ public class CharacterCreationContext extends UIContext{
         vitalityLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Vitality. Vitality determines your starting health," +
+                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
                         "as well as how much health you gain per level");
             }
         });
@@ -365,7 +424,7 @@ public class CharacterCreationContext extends UIContext{
         agilityLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Agility. Agility determines your starting stamina," +
+                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
                         "as well as how much stamina you gain per level");
             }
         });
@@ -373,7 +432,7 @@ public class CharacterCreationContext extends UIContext{
         intellectLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Intellect. Intellect determines how many skill points you have" +
+                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
                         "to distribute to your skills each level");
             }
         });
@@ -381,7 +440,7 @@ public class CharacterCreationContext extends UIContext{
         charismaLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Charisma. Charisma determines how well your interactions with" +
+                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
                         "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
                         "influence others to see your point of view, and perhaps even follow you");
             }
@@ -528,16 +587,16 @@ public class CharacterCreationContext extends UIContext{
         next.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (characterSex.getSelected() == "Male" && textureCount < 2) {
+                if (characterSex.getSelected().equals("Male") && textureCount < 2) {
                     textureCount++;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected() == "Male" && textureCount == 2) {
+                } else if (characterSex.getSelected().equals("Male") && textureCount == 2) {
                     textureCount = 0;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected() == "Female" && textureCount < 5) {
+                } else if (characterSex.getSelected().equals("Female") && textureCount < 5) {
                     textureCount++;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected() == "Female" && textureCount == 5) {
+                } else if (characterSex.getSelected().equals("Female") && textureCount == 5) {
                     textureCount = 3;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 }
@@ -546,11 +605,8 @@ public class CharacterCreationContext extends UIContext{
     }
 
     private void setupSelectedDescriptionWindow() {
-        selectedDescriptionText = new TextField("JUST CLICK ON SOMETHING ALREADY", skin);
-        selectedDescriptionText.setFillParent(true);
-        //selectedDescriptionLabel = new Label("JUST CLICK ON SOMETHING ALREADY", skin);
-
-        selectedDescriptionWindow.add(selectedDescriptionText).top().left().expandX().expandY().fillX().fillY();
+        selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
+        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
     }
 
     private void addSubtables() {
@@ -562,6 +618,6 @@ public class CharacterCreationContext extends UIContext{
         masterTable.add(statsWindow).top().left().expandX().fillX().fillY();
         masterTable.add(characterPreviewWindow).top().right().expandX().fillX().fillY();
         masterTable.row();
-        masterTable.add(selectedDescriptionWindow).top().left().expandX().expandY().fillX().fillY().colspan(2);
+        masterTable.add(selectedDescriptionWindow).top().left().fillX().fillY().expandY().expandX().colspan(2);
     }
 }

@@ -1,8 +1,6 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
-import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Bullet;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;
@@ -14,7 +12,8 @@ import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.weapons.*;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -177,7 +176,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      */
     public void causeDamage(Player player) {
         //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
-        player.takeDamage(10);
+        player.takeDamage(1);
     }
 
     @Override
@@ -315,7 +314,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         nextPosY = (float) (currPosY + distance * sin(radius));
         tempX = nextPosX;
         tempY = nextPosY;
-        if(this.randomX == 0 && this.randomY == 0){
+        if(abs(this.randomX) <= 0.005 && abs(this.randomY) <= 0.005){
             this.randomX = tempX;
             this.randomY = tempY;
         }
@@ -423,7 +422,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * Detect collision with entity.
      */
     public void detectCollision(){
-        AbstractWorld world = GameManager.get().getWorld();
+        World world = GameManager.get().getWorld();
         if (world.getTiledMapTileLayerAtPos((int) newPos.getX(), (int) newPos.getY()) == null) {
             this.setCollided(true);
         }

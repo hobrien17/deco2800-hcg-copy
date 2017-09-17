@@ -4,7 +4,7 @@ package com.deco2800.hcg.entities;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.worlds.AbstractWorld;
+import com.deco2800.hcg.worlds.World;
 
 /**
  * A AbstractEntity is an item that can exist in both 3D and 2D worlds
@@ -66,12 +66,14 @@ public abstract class AbstractEntity implements Renderable,
         this.xRenderLength = xRenderLength;
         this.yRenderLength = yRenderLength;
         this.centered = centered;
+        float newX = posX;
+        float newY = posY;
 
         if (centered) {
-            posX += (1 - xLength / 2);
-            posY += (1 - yLength / 2);
+            newX += (1 - xLength / 2);
+            newY += (1 - yLength / 2);
         }
-        this.position = new Box3D(posX, posY, posZ, xLength, yLength, zLength);
+        this.position = new Box3D(newX, newY, posZ, xLength, yLength, zLength);
     }
 
     /**
@@ -320,7 +322,7 @@ public abstract class AbstractEntity implements Renderable,
      * @deprecated
      */
     @Deprecated
-    public AbstractWorld getParent() {
+    public World getParent() {
         return GameManager.get().getWorld();
     }
 

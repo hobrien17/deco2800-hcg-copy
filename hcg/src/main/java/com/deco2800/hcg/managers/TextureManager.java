@@ -35,10 +35,9 @@ public class TextureManager extends Manager {
 	public TextureManager() {
 		textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
 		textureMap.put("ground", new Texture("resources/maps/environment/ground.png"));
-		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
-		textureMap.put("spacman_swim", new Texture("resources/sprites/player/spacman_swim.png"));
 		textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
 		textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
+		textureMap.put("hcg_character_sink", new Texture("resources/sprites/player/hcg_character_hat_sink.png"));
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
@@ -72,6 +71,11 @@ public class TextureManager extends Manager {
 		textureMap.put("ice_03", new Texture("resources/sprites/plants/Christmas_03.png"));
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
+		textureMap.put("fireball_up", new Texture("resources/sprites/bullets/fireball_up.png"));
+		textureMap.put("fireball_down", new Texture("resources/sprites/bullets/fireball_down.png"));
+		textureMap.put("fireball_left", new Texture("resources/sprites/bullets/fireball_left.png"));
+		textureMap.put("fireball_right", new Texture("resources/sprites/bullets/fireball_right.png"));
+
 
 		// Miscellaneous textures
 		textureMap.put("error", new Texture("resources/misc/error.png"));
@@ -105,6 +109,10 @@ public class TextureManager extends Manager {
 		textureMap.put("menu_go_button", new Texture("resources/ui/main_menu/menu_go_button.png"));
 		textureMap.put("menu_host_button", new Texture("resources/ui/main_menu/menu_host_button.png"));
 		textureMap.put("menu_back_button", new Texture("resources/ui/main_menu/menu_back_button.png"));
+		textureMap.put("menu_instructions_button", new Texture("resources/ui/main_menu/menu_instructions_button.png"));
+		textureMap.put("instructions_back_button", new Texture("resources/ui/main_menu/instructions_back_button.png"));
+		textureMap.put("instructions_text", new Texture("resources/ui/main_menu/instructions_text.png"));
+		textureMap.put("instructions_title",new Texture("resources/ui/main_menu/instructions_title.png"));
 
 		//Perks
 		textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
@@ -120,10 +128,13 @@ public class TextureManager extends Manager {
 		textureMap.put("shop_inventory", new Texture("resources/ui/shop_ui/shop_inventory.png"));
 		textureMap.put("wooden_background", new Texture("resources/ui/shop_ui/wooden_background.png"));
 		textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
+        textureMap.put("selected", new Texture("resources/ui/shop_ui/selected.png"));
 
 		//World map textures
 		textureMap.put("wm_blue_bg", new Texture("resources/worldmap/blue_background.png"));
-        textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
+		textureMap.put("wm_green_bg", new Texture("resources/worldmap/temporary_background.png"));
+		// Uncomment once temp message can be removed
+        //textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
         textureMap.put("completed_node", new Texture("resources/worldmap/completed_node.png"));
         textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node.png"));
         textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
@@ -134,6 +145,7 @@ public class TextureManager extends Manager {
 		textureMap.put("green_potion", new Texture("resources/sprites/potions/potion_round_green.png"));
 		textureMap.put("purple_potion", new Texture("resources/sprites/potions/potion_round_purple.png"));
 		textureMap.put("blue_potion", new Texture("resources/sprites/potions/potion_round_blue.png"));
+		textureMap.put("seed", new Texture("resources/placeholderassets/placeholderseed.png"));
 	}
 
 	/**

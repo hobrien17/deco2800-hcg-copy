@@ -34,6 +34,7 @@ public class Hedgehog extends Enemy implements Observer {
 
     }
 
+    @Override
     public void update(Observable o, Object arg) {
         float distance = this.distance(playerManager.getPlayer());
         if (seconds == 5 && distance < range){

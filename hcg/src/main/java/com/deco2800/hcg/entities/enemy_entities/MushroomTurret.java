@@ -1,6 +1,6 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
-import com.deco2800.hcg.entities.Bullet;
+import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
@@ -46,7 +46,7 @@ public class MushroomTurret extends Enemy implements Observer {
     }
 
     public void update(Observable o, Object arg) {
-        switch (seconds%5){
+        switch (seconds%6){
             case 0: // set turret phase 1 this.setTexture()
                 break;
             case 1: // set turret phase 2 this.setTexture();
@@ -57,20 +57,32 @@ public class MushroomTurret extends Enemy implements Observer {
                 break;
             case 4: // set turret phase 5 this.setTexture();
                 Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX() + range, this.getPosY(), this.getPosZ(), this);
+                        this.getPosX() + range, this.getPosY(), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet1);
                 Bullet bullet2 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        Math.max(0,this.getPosX() - range), this.getPosY(), this.getPosZ(), this);
+                        Math.max(0,this.getPosX() - range), this.getPosY(), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet2);
                 Bullet bullet3 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX(), this.getPosY() + range, this.getPosZ(), this);
+                        this.getPosX(), this.getPosY() + range, this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet3);
                 Bullet bullet4 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this);
+                        this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet4);
+                Bullet bullet5 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                        this.getPosX() + range, this.getPosY() + range, this.getPosZ(), this, 1);
+                GameManager.get().getWorld().addEntity(bullet5);
+                Bullet bullet6 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                        Math.max(0,this.getPosX() - range), this.getPosY() + range , this.getPosZ(), this, 1);
+                GameManager.get().getWorld().addEntity(bullet6);
+                Bullet bullet7 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                        this.getPosX() + range, Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
+                GameManager.get().getWorld().addEntity(bullet7);
+                Bullet bullet8 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                        Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
+                GameManager.get().getWorld().addEntity(bullet8);
                 break;
 
-                // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
+            // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
         }
         seconds++;
     }
@@ -91,3 +103,4 @@ public class MushroomTurret extends Enemy implements Observer {
         return arr;
     }
 }
+

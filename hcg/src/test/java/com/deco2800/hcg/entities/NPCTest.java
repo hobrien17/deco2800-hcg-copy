@@ -10,14 +10,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.worlds.DemoWorld;
+import com.deco2800.hcg.worlds.World;
 import org.junit.Before;
 import org.junit.Test;
 
 public class NPCTest {
     private GameManager gameManager;
     private PlayerManager playerManager;
-    private DemoWorld demoWorld;
+    private World AbstractWorld;
     private TiledMapTileLayer layer;
     private TiledMap tiledMap;
     private MapProperties mapProperties;
@@ -29,15 +29,15 @@ public class NPCTest {
         playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 
         // create all our mock classes
-        demoWorld = mock(DemoWorld.class);
+        AbstractWorld = mock(World.class);
         layer = mock(TiledMapTileLayer.class);
 
         // add to non-mocked gamemanager
-        gameManager.setWorld(demoWorld);
+        gameManager.setWorld(AbstractWorld);
 
         // have a map for our properties to go back to the player class
         tiledMap = mock(TiledMap.class);
-        when(demoWorld.getMap()).thenReturn(tiledMap);
+        when(AbstractWorld.getMap()).thenReturn(tiledMap);
 
         // set working properties for the Camera in the player to work.
         mapProperties = mock(MapProperties.class);
@@ -63,7 +63,7 @@ public class NPCTest {
         float shortWanderGridY = 5.0f;
 
         //Create NPC
-        NPC testNPC = new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", com.deco2800.hcg.entities.NPC_entities.Type.QUEST, "character_1") {};
+        NPC testNPC = new NPC(10,10,0,0.5f,0.5f,1.0f, false,"Jane","Jensen", com.deco2800.hcg.entities.npc_entities.Type.QUEST, "character_1") {};
         gameManager.getWorld().addEntity(testNPC);
 
         //Check for movement outside of 5x5 grid
