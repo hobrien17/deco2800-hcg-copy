@@ -125,6 +125,37 @@ public abstract class InventoryDisplayContext extends UIContext{
 
     }
 
+    public void equipmentDisplay(TextureManager textureManager, Player player, Skin skin, Table playerEquipment) {
+        this.textureManager = textureManager;
+        this.player = player;
+        this.skin = skin;
+        this.playerInventory = playerEquipment;
+        currentRow = 0;
+
+        for (i=0; i<player.getEquippedItems().getNumItems(); i++) {
+            Item currentItem = player.getEquippedItems().getItem(i);
+            System.out.println(textureManager.getTexture(currentItem.getTexture()));
+            //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
+            //ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
+                    //.getDrawable());
+            ImageButton button = new ImageButton(new Image(textureManager.getTexture("spacman")).getDrawable());
+            Stack stack = new Stack();
+            Image clickedImage = new Image(textureManager.getTexture("selected"));
+            Label itemLabel = null;
+            commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+            stack.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (clickedImage.isVisible()) {
+                        clickedImage.setVisible(false);
+                    } else {
+                        clickedImage.setVisible(true);
+                    }
+                }
+            });
+            currentRow++;
+        }
+    }
     private void commonSetup(Item currentItem, ImageButton button, Stack stack, Label itemLabel, Image clickedImage) {
         //Get the item to be displayed as a button
         System.out.println(currentItem);
