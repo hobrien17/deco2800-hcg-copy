@@ -53,7 +53,7 @@ public class PlayerStatusDisplay extends Group {
         this.addActor(staminaBar);
 
         /*setting bar dimensions*/
-        float healthBarWidth = (float) player.getHealthCur() / player.getHealthMax() * 330;
+        float healthBarWidth = (float) player.getHealthCur() / player.getHealthMax() * 325;
         float healthBarHeight = 29;
         float staminaBarWidth = (float) player.getStaminaCur() / player.getStaminaMax() * 260;
         float staminaBarHeight = 23;
@@ -70,8 +70,8 @@ public class PlayerStatusDisplay extends Group {
         staminaBar.setColor(Color.GOLD);
 
         /* positioning and scaling images bars and labels*/
-        healthBar.setPosition(120, 48);
-        healthBarShadow.setPosition(120, 48);
+        healthBar.setPosition(125, 48);
+        healthBarShadow.setPosition(125, 48);
         staminaBar.setPosition(120, 20);
         playerImage.setPosition(25, 8);
         playerHealth.setPosition(125, 85);
@@ -83,13 +83,15 @@ public class PlayerStatusDisplay extends Group {
 
     public void updatePlayerStatus() {
         float healthBarWidth = (float) player.getHealthCur() /
-                player.getHealthMax() * 330;
-        healthBar.setColor(255 - (healthBarWidth * 200 / 157), healthBarWidth * 200 / 157, 0, 1);
+                player.getHealthMax() * 325;
+
+        setHealthBarColours();
         healthBar.setWidth(healthBarWidth);
         playerHealth.setText(player.getHealthCur() + " / " + player.getHealthMax());
 
+        /* shadow that displays when alot of damage is taken in one hit */
         if (healthBarShadow.getImageWidth() > healthBarWidth) {
-            healthBarShadow.setWidth(healthBarShadow.getImageWidth() - 4);
+            healthBarShadow.setWidth(healthBarShadow.getImageWidth() - 2);
         }
         float staminaBarWidth = (float) player.getStaminaCur() /
                 player.getStaminaMax() * 260;
@@ -101,4 +103,25 @@ public class PlayerStatusDisplay extends Group {
         posX = 30;
         this.setPosition(posX, posY);
     }
+    /**
+     * method to change the colour value of the players health bar so its a gradient from green to red
+     * as health drops from full to 0
+     *
+     */
+    void setHealthBarColours() {
+        float healthBarWidth = ((float) player.getHealthCur()) /
+                ((float) player.getHealthMax()) * 330f;
+        /* colour functions*/
+        float G, R;
+        if (healthBarWidth > (330f/2f)) {
+            G = 1f;
+            R = 2f - (2f * healthBarWidth / 325f);
+        } else {
+            G = 2f * healthBarWidth / 325f;
+            R = 1f;
+        }
+        //setting colour
+        healthBar.setColor(R, G, 0f, 1f);
+    }
 }
+

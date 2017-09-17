@@ -662,9 +662,9 @@ public class Player extends Character implements Tickable {
 			this.contextManager.pushContext(new CharacterCreationContext());
 			break;
 		case Input.Keys.SHIFT_LEFT:
-			if (staminaCur > 0) {
+			if (staminaCur > 5) {
                 sprinting = true;
-				movementSpeed = movementSpeed * 3;
+				movementSpeed = movementSpeed * 2;
 			}
 			break;
 		case Input.Keys.W:
@@ -737,7 +737,6 @@ public class Player extends Character implements Tickable {
 	 * pressed, and Set move to true
 	 */
 	private void handleDirectionInput() {
-
 		float diagonalSpeed = (float) Math.sqrt(2 * (movementSpeed * movementSpeed)) / 2;
 
 		if (movementDirection.get("up") && movementDirection.get("right")) {
@@ -793,6 +792,7 @@ public class Player extends Character implements Tickable {
 			speedX = 0;
 			speedY = 0;
 			move = 0;
+			sprinting = false;
 		}
 	}
 
