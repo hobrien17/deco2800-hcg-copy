@@ -25,7 +25,6 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.managers.ContextManager;
-import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.Weapon;
