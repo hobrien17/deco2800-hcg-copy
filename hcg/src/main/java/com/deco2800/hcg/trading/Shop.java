@@ -8,9 +8,6 @@ import com.deco2800.hcg.items.SingleItem;
 import com.deco2800.hcg.items.StackableItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /** Generic shop interfece that has basic shop commands necessary for any shop such as the ability to buy, sell
  * and hold stock.
