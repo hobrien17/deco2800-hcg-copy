@@ -9,6 +9,12 @@ public class ParticleEffectActor extends Actor {
 	ParticleEffect effect;
 	SpriteBatch batch;
 
+	/**
+	 * Constructor for ParticleEffect Actor
+	 * 
+	 * @param effect:
+	 *            Particle effect displayed on screen
+	 */
 	public ParticleEffectActor(ParticleEffect effect) {
 		super();
 		this.effect = effect;
@@ -25,10 +31,19 @@ public class ParticleEffectActor extends Actor {
 		effect.update(delta);
 	}
 
+	/**
+	 * Allow completion and ignores continuous setting until emitter is started
+	 * again
+	 * 
+	 */
 	public void allowCompletion() {
 		effect.allowCompletion();
 	}
 
+	/**
+	 * Draws and renders particle effect
+	 * 
+	 */
 	public void render() {
 		batch = new SpriteBatch();
 		batch.begin();
@@ -41,5 +56,4 @@ public class ParticleEffectActor extends Actor {
 		}
 		batch.end();
 	}
-
 }
