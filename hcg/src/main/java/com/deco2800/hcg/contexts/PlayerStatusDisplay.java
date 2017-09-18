@@ -129,7 +129,7 @@ public class PlayerStatusDisplay extends Group {
      * method to change the colour value of the players health bar so its a gradient from green to red
      * as health drops from full to 0
      */
-    void setHealthBarColours() {
+    private void setHealthBarColours() {
         float healthBarWidth = ((float) player.getHealthCur()) /
                 ((float) player.getHealthMax()) * 330f;
         /* colour functions*/
