@@ -545,7 +545,8 @@ public class Player extends Character implements Tickable {
     	if (!collided) {
     	    this.setPosition(newPos.getX(), newPos.getY(), 1);
     	}
-
+    	
+    	this.checkDeath();
     }
 
     /**
@@ -620,15 +621,24 @@ public class Player extends Character implements Tickable {
 	staminaMax = 50 * agility;
 	staminaCur = staminaMax;
     }
+    
+    /**
+     * Checks if the player is dead and ends the game if true.
+     */
+    private void checkDeath() {
+        if (healthCur <= 0) {
+            this.contextManager.pushContext(new DeathContext());
+        }
+    }
 
     /**
      * Checks if the player's xp has reached the amount of xp required for
      * levelling up
      */
     private void checkXp() {
-	if (xp >= xpThreshold) {
-	    levelUp();
-	}
+        if (xp >= xpThreshold) {
+            levelUp();
+        }
     }
 
     /**
