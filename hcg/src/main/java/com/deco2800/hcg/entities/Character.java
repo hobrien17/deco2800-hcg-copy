@@ -43,6 +43,10 @@ public abstract class Character extends AbstractEntity {
     protected float movementSpeedNorm;
     protected float speedX;
     protected float speedY;
+    
+    // Direction that the character is facing. Direction starts at 0 representing ↖ and successive values
+    // incrementing 45 degrees clockwise.
+    protected int direction;
 
     protected int level;
     protected int xp;
@@ -95,6 +99,8 @@ public abstract class Character extends AbstractEntity {
 
         //Initialize the empty kill log
         killLog = new HashMap<>();
+        
+        this.direction = 0;
     }
 
     /**

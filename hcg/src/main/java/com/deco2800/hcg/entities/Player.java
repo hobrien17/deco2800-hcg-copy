@@ -827,21 +827,25 @@ public class Player extends Character implements Tickable {
 	    speedX = movementSpeed;
 	    speedY = 0;
 	    move = 1;
+	    this.direction = 2;
 	} else if (movementDirection.get("up")
 		&& movementDirection.get("left")) {
 	    speedY = -movementSpeed;
 	    speedX = 0;
 	    move = 1;
+        this.direction = 0;
 	} else if (movementDirection.get("down")
 		&& movementDirection.get("right")) {
 	    speedY = movementSpeed;
 	    speedX = 0;
 	    move = 1;
+        this.direction = 4;
 	} else if (movementDirection.get("down")
 		&& movementDirection.get("left")) {
 	    speedX = -movementSpeed;
 	    speedY = 0;
 	    move = 1;
+        this.direction = 6;
 	} else if (movementDirection.get("up")
 		&& movementDirection.get("down")) {
 	    speedX = 0;
@@ -856,18 +860,22 @@ public class Player extends Character implements Tickable {
 	    speedY = -diagonalSpeed;
 	    speedX = diagonalSpeed;
 	    move = 1;
+        this.direction = 1;
 	} else if (movementDirection.get("down")) {
 	    speedY = diagonalSpeed;
 	    speedX = -diagonalSpeed;
 	    move = 1;
+        this.direction = 5;
 	} else if (movementDirection.get("left")) {
 	    speedX = -diagonalSpeed;
 	    speedY = -diagonalSpeed;
 	    move = 1;
+        this.direction = 7;
 	} else if (movementDirection.get("right")) {
 	    speedX = diagonalSpeed;
 	    speedY = diagonalSpeed;
 	    move = 1;
+        this.direction = 3;
 	}
     }
 
