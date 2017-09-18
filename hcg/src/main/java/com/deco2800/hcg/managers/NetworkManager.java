@@ -115,7 +115,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 		return initialised;
 	}
 	
-	private Integer startNewMessage(MessageType type) {
+	private Integer startNewMessage(MessageType type, int numberOfEntries) {
 		// clear buffer
 		messageBuffer.clear();
 		// put header
@@ -125,6 +125,8 @@ public final class NetworkManager extends Manager implements TickableManager {
 		messageBuffer.putInt(id);
 		// put type
 		messageBuffer.put((byte) type.ordinal());
+		// put number of entries
+		messageBuffer.put((byte) numberOfEntries);
 		// return the buffer with header
 		return id;
 	}
@@ -133,7 +135,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	 * Add input message to queue
 	 */
 	public void sendInputMessage(int... args) {
-		Integer id = startNewMessage(MessageType.INPUT);
+		Integer id = startNewMessage(MessageType.INPUT, args.length);
 		messageBuffer.putLong(localTickCount.get() + 3);
 		messageBuffer.asIntBuffer().put(args);
 		messageBuffer.position(messageBuffer.position() + args.length * 4);
@@ -151,7 +153,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	 */
 	public String sendChatMessage(String message) {
 		String string = channel.socket().getLocalAddress().getHostName() + ": " + message;
-		Integer id = startNewMessage(MessageType.CHAT);
+		Integer id = startNewMessage(MessageType.CHAT, string.getBytes().length);
 		// create chat string
 		messageBuffer.put(string.getBytes());
 		// send message to peers
@@ -171,7 +173,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 		// add host to peers
 		sockets.put(0, socketAddress);
 		// try to connect
-		Integer id = startNewMessage(MessageType.JOINING);
+		Integer id = startNewMessage(MessageType.JOINING, 0);
 		// send message to peers
 		messageBuffer.flip();
 		byte[] bytes = new byte[messageBuffer.remaining()];
@@ -180,7 +182,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	}
 	
 	public void sendJoinedMessage() {
-		Integer id = startNewMessage(MessageType.JOINED);
+		Integer id = startNewMessage(MessageType.JOINED, 0);
 		// send message to peers
 		messageBuffer.flip();
 		byte[] bytes = new byte[messageBuffer.remaining()];
@@ -224,6 +226,8 @@ public final class NetworkManager extends Manager implements TickableManager {
 			// get type
 			byte typeByte = receiveBuffer.get();
 			MessageType messageType = MessageType.values()[typeByte];
+			// get number of entries
+			byte numberOfEntries = receiveBuffer.get();
 			
 			// handle message
 			if (messageType != MessageType.ACK && !processedIds.contains(messageId)) {
