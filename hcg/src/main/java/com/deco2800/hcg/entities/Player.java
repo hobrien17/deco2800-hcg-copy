@@ -689,13 +689,13 @@ public class Player extends Character implements Tickable {
     protected void handleStamina() {
 
 	// conditionals to handle players sprint
-	if (sprinting) {
+	if (sprinting && move == 1) {
 	    /*
 	     * if the player is sprinting they will be exerting themselves and
 	     * running out of stamina, hence it is drained on tick. Otherwise,
 	     * they will be recovering, gaining stamina back.
 	     */
-	    staminaCur -= 5;
+		staminaCur -= 5;
 	} else {
 	    if (staminaCur < staminaMax) {
 		// recovering
@@ -706,13 +706,11 @@ public class Player extends Character implements Tickable {
 		staminaCur = staminaMax;
 	    }
 	}
-	if (staminaCur <= 0) {
+	if (staminaCur <= 1 && sprinting) {
 	    // if the player is out of stamina, return them to the normal
 	    // movement
 	    // speed and set their sprinting conditional to false.
 	    sprinting = false;
-	    // TODO: I don't think this works as intended
-	    movementSpeed = movementSpeedNorm;
 	}
 
     }
@@ -733,7 +731,7 @@ public class Player extends Character implements Tickable {
 	case Input.Keys.SHIFT_LEFT:
 	    if (staminaCur > 0) {
 		sprinting = true;
-		movementSpeed = movementSpeed * 3;
+		movementSpeed = movementSpeed * 2f;
 	    }
 	    break;
 	case Input.Keys.W:
