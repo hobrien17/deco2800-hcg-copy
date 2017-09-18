@@ -1,93 +1,90 @@
 package com.deco2800.hcg.conversation;
 
+import com.deco2800.hcg.contexts.ConversationContext;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Basic data structure to hold conversations that will be utilised by the NPC class and the UI
  * @author Blake Bodycote
+ * @author Richy McGregor
  */
 public class Conversation {
-	private List<String> conversation; // The sequence of questions asked by NPC if player chooses yes
-	private String greeting; // what the NPC says when the conversation is started
-	private String goodbye; // what the NPC says when the conversation is ended
-	private boolean active; // condition to check whether conversation is active
-	private int iterator; // used to iterate over the conversation
+
+	private List<ConversationNode> conversationNodes;  // this must not contain duplicates
+	private ConversationNode initialNode;
+	private ConversationNode currentNode;
+	private ConversationContext conversationContext;
+	private ContextManager contextManager;
 
 	/**
-	 * Constructs a new conversation with the specified sentences/phrases. 
-	 * 
-	 * @param greeting - the generic greeting when conversation starts
-	 * @param goodbye - the generic goodbye when conversation stops
-	 * @param conversation - the collection of questions/sentences that will be iterated over when user answers yes
-	 */
-	public Conversation(String greeting, String goodbye, List<String> conversation) {
-		this.conversation = new ArrayList<String>();
-		for (String string : conversation) {
-			this.conversation.add(string);
-		}
-		this.greeting = greeting;
-		this.goodbye = goodbye;
-		active = false;
-		iterator = -1;
-		this.greeting = greeting;
+	 * No-Argument constructor
+	 * If this constructor is used, setup must be called before using
+	 * any other method.
+	 */ 
+	public Conversation() {
+		// Get necessary managers
+		GameManager gameManager = GameManager.get();
+		contextManager = (ContextManager)
+				gameManager.getManager(ContextManager.class);
 	}
 
 	/**
-	 * Used to evaluate whether or not the UI has to display the current
-	 * sentence
-	 * 
-	 * @return whether or not the conversation is active
+	 * Full constructor
+	 * initialNode MUST be in conversationNodes
+	 * @param conversationNodes list of all nodes in this conversation
+	 * @param initialNode reference to the first node to display
 	 */
-	public boolean conversationActive() {
-		return this.active;
+	public Conversation(List<ConversationNode> conversationNodes,
+			ConversationNode initialNode) {
+		this();
+		setup(conversationNodes, initialNode);
 	}
 
 	/**
-	 * Used to activate the conversation
+	 * Initialise references to conversationNodes
+	 * This should be called once after using the no-argument constructor
+	 * @param conversationNodes list of all nodes in this conversation
+	 * @param initialNode reference to the first node to display
 	 */
-	public void activateConversation() {
-		this.active = true;
+	public void setup(List<ConversationNode> conversationNodes,
+			ConversationNode initialNode) {
+		this.conversationNodes = new ArrayList<>(conversationNodes);
+		this.initialNode = initialNode;
 	}
 
 	/**
-	 * Used to activate the conversation
+	 * Begin presenting the conversation to the player
 	 */
-	public void deactivateConversation() {
-		this.active = false;
+	public void initiateConversation() {
+		currentNode = initialNode;
+		conversationContext = new ConversationContext();
+		conversationContext.displayNode(currentNode);
+		contextManager.pushContext(conversationContext);
 	}
 
-	/**
-	 * Return the specific greeting associated with the conversation
-	 * 
-	 * @return the greeting stored
-	 */
-	public String greet() {
-		return this.greeting;
+	// Called by ConversationNodes
+	void changeNode(ConversationNode target) {
+		currentNode = target;
+		conversationContext.displayNode(currentNode);
 	}
 
-	/**
-	 * Move the conversation along to the next sentence/phrase and return it
-	 * 
-	 * @param answer
-	 *            the input given by the user on the UI. If user selects yes on
-	 *            the UI, answer == true. answer == false if user selects no.
-	 * @return the next sentence of the conversation
-	 */
-	public String nextSentence(boolean answer) {
-		if (! answer) {
-			deactivateConversation();
-			return goodbye;
-		}
-		
-		if (iterator == conversation.size() - 1) {
-			deactivateConversation();
-			iterator = -1;
-			return goodbye;
-		}
-		
-		iterator++;
-		return conversation.get(iterator);
+	// Called by ConversationNodes
+	void endConversation() {
+		contextManager.popContext();
+	}
+	
+	// Needed for serialisation
+	ConversationNode getInitialNode() {
+		return initialNode;
+	}
+	
+	// Needed for serialisation
+	List<ConversationNode> getConversationNodes() {
+		return new ArrayList<>(conversationNodes);
 	}
 
 }
