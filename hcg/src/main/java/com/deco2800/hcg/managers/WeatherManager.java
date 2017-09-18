@@ -1,11 +1,7 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.deco2800.hcg.entities.Tickable;
 import java.util.*;
 
 

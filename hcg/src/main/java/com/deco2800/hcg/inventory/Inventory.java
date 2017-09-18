@@ -143,4 +143,13 @@ public interface Inventory extends Iterable<Item> {
      * @return Whether or not the item was found in the inventory.
      */
     boolean containsItem(Item item);
+
+    /**
+     * Tests whether the inventory contains any of this item regardless of stack size
+     *
+     * @param item
+     *          The item to search for
+     * @return Whether or not it was found in the inventory
+     */
+    boolean containsSingleItem(Item item);
 }

@@ -195,4 +195,8 @@ public class Seed implements Item {
         return this.type.getTexture();
     }
 
+    @Override
+	public Item copy() {
+	    return new Seed(type);
+    }
 }

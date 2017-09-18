@@ -1,5 +1,6 @@
 package com.deco2800.hcg.items.stackable;
 
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.StackableItem;
 
 /**
@@ -37,5 +38,12 @@ public class TestItem extends StackableItem {
     @Override
     public boolean isTradable() {
         return true;
+    }
+
+    @Override
+    public Item copy() {
+        TestItem newItem = new TestItem();
+        newItem.setStackSize(this.getStackSize());
+        return newItem;
     }
 }

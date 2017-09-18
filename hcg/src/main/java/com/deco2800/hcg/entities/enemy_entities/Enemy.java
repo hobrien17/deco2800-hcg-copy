@@ -1,8 +1,6 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
-import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;

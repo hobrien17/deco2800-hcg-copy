@@ -73,7 +73,7 @@ public class Hardcor3Gard3ning extends Game {
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
         playerManager.setPlayer(player);
-        //TODO: Change this
+        //TODO: Change this, currently these are just testing items
         Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);

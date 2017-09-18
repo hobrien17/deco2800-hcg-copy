@@ -1,5 +1,6 @@
 package com.deco2800.hcg.items.single.wearable;
 
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.WearableItem;
 
 /**
@@ -23,7 +24,7 @@ public class CottonShirt extends WearableItem{
         this.baseValue = 10;
         this.itemWeight = 3;
         //TODO: Change this texture from defaulting to spacman -> this is for testing
-        this.texture = "spacman";
+        this.texture = "error";
     }
 
     /**
@@ -50,7 +51,11 @@ public class CottonShirt extends WearableItem{
      */
     @Override
     public String getName() {
-        return String.format("Name: %s\nType: %s\nDetails: %s\n", this.itemName, this.type + " " + this.colour,
-                "A simple shirt. Doesnt really do much...");
+        return String.format("%s (%s)", this.itemName, this.type + " " + this.colour);
+    }
+
+    @Override
+    public Item copy() {
+        return new CottonShirt(colour);
     }
 }
