@@ -61,7 +61,7 @@ public class Conversation {
 	 */
 	public void initiateConversation() {
 		currentNode = initialNode;
-		conversationContext = new ConversationContext();
+		conversationContext = new ConversationContext(this);
 		conversationContext.displayNode(currentNode);
 		contextManager.pushContext(conversationContext);
 	}
@@ -69,6 +69,9 @@ public class Conversation {
 	// Called by ConversationNodes
 	void changeNode(ConversationNode target) {
 		currentNode = target;
+		if(currentNode == null){
+			contextManager.popContext();
+		}
 		conversationContext.displayNode(currentNode);
 	}
 
