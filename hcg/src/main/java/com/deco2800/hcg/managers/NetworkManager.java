@@ -60,8 +60,8 @@ public final class NetworkManager extends Manager implements TickableManager {
 	private String lobbyName;
 
 	/**
-	 * Initialises NetworkState
-	 * @param hostGame
+	 * Initialises the network manager
+	 * @param hostGame Boolean indicating if we are hosting a game
 	 */
 	public void init(boolean hostGame) {
 		sockets = new ConcurrentHashMap<>();
@@ -117,17 +117,27 @@ public final class NetworkManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Check if network state is initialised
+	 * Checks if network state is initialised
 	 * @return Boolean indicating if network state has been initialised
 	 */
 	public boolean isInitialised() {
 		return initialised;
 	}
 	
+	/**
+	 * Checks if we are hosting a game
+	 * @return Boolean indicating whether network state is hosting a game
+	 */
 	public boolean isHost() {
 		return host;
 	}
 	
+	/**
+	 * Adds message header to messageBuffer
+	 * @param type Type of message
+	 * @param numberOfEntries Number of entries that the message will contain
+	 * @return Message ID
+	 */
 	private Integer startNewMessage(MessageType type, int numberOfEntries) {
 		// clear buffer
 		messageBuffer.clear();
@@ -146,6 +156,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	
 	/**
 	 * Add input message to queue
+	 * @param args Input arguments
 	 */
 	public void sendInputMessage(int... args) {
 		Integer id = startNewMessage(MessageType.INPUT, args.length);
@@ -194,6 +205,9 @@ public final class NetworkManager extends Manager implements TickableManager {
 		sendQueue.put(id, bytes);
 	}
 	
+	/**
+	 * Sends message indicating that a peer has joined the game
+	 */
 	public void sendJoinedMessage() {
 		Integer id = startNewMessage(MessageType.JOINED, 0);
 		// send message to peers
@@ -204,7 +218,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 *
+	 * Starts a co-op game
 	 */
 	public void startGame() {
 		Integer id = startNewMessage(MessageType.START, 0);
@@ -223,7 +237,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 *
+	 * Sends all messages that are currently queued
 	 */
 	public void send() {
 		// on the server peers contains all connected clients
@@ -243,7 +257,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 *
+	 * Receives a message if one is available
 	 */
 	public void receive() {
 		try {
@@ -304,7 +318,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 *
+	 * Processes all received messages that are queued
 	 */
 	public void processReceivedMessages() {
 		byte[] bytes;
@@ -421,16 +435,16 @@ public final class NetworkManager extends Manager implements TickableManager {
 	}
 
 	/**
-	 * Updates the name of the lobby for game hosting.
-	 * @param name
+	 * Updates the name of the lobby for game hosting
+	 * @param name Lobby name
 	 */
 	public void setLobbyName(String name) {
 		lobbyName = name;
 	}
 
 	/**
-	 * Returns the name of the game lobby.
-	 * @return
+	 * Returns the name of the game lobby
+	 * @return Lobby name
 	 */
 	public String getLobbyName() {
 		return lobbyName;
