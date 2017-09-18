@@ -53,6 +53,9 @@ public class TurretTest {
 	private static void setupTextures() {
 		textures = new HashMap<>();
 		textures.put(SunflowerTurret.class, "tree");
+		textures.put(ExplosiveTurret.class, "tree");
+		textures.put(IceTurret.class, "tree");
+		textures.put(FireTurret.class, "tree");
 	}
 	
 	private void setupSunflowerFullTest() {
@@ -90,6 +93,8 @@ public class TurretTest {
 		while(bullet.getPosX() < ENEMY_X[0] || bullet.getPosY() < ENEMY_Y[0] ) {
 			bullet.onTick(0);
 		}
+		
+		checkTexture(SunflowerTurret.class);
 	}
 	
 	@Test
@@ -151,6 +156,9 @@ public class TurretTest {
 			turret.update(sw, i);
 		}
 		assertFalse(gm.getWorld().containsEntity(corpse));
+		
+		checkTexture(FireTurret.class);
+
 	}
 	
 	private void setupIceTest() {
@@ -179,6 +187,8 @@ public class TurretTest {
 			turret.update(sw, i);
 		}
 		assertFalse(gm.getWorld().containsEntity(corpse));
+		
+		checkTexture(IceTurret.class);
 	}
 	
 	private void setupExplosiveTest() {
@@ -202,12 +212,12 @@ public class TurretTest {
 			turret.update(sw, i);
 		}
 		assertFalse(gm.getWorld().containsEntity(enemy));
+		
+		checkTexture(ExplosiveTurret.class);
 	}
 	
-	@Test
-	public void checkTextures() {
-		setupSunflowerTest();
-		assertEquals(corpse.getTexture(), textures.get(turret.getClass()));
+	private void checkTexture(Class<? extends AbstractTurret> turretClass) {
+		assertEquals(corpse.getTexture(), textures.get(turretClass));
 	}
 	
 	
