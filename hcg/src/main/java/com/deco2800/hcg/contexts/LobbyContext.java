@@ -33,6 +33,7 @@ public class LobbyContext extends UIContext{
 
         GameManager gameManager = GameManager.get();
         ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+        NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
         PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
@@ -76,7 +77,12 @@ public class LobbyContext extends UIContext{
         main.row().height(90);
         titleTable.add(back).expandX().left();
         titleTable.add(lobbyTitle).expandX();
-        titleTable.add(start).expandX().right();
+        
+        // FIXME
+        if (networkManager.isHost()) {
+            titleTable.add(start).expandX().right();
+        }
+        
         main.add(titleTable).fill();
         main.row();
         main.add(separator1).colspan(4).fill();
@@ -102,6 +108,13 @@ public class LobbyContext extends UIContext{
         main.add(chatTable).fill();
 
         stage.addActor(main);
+        
+        start.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                networkManager.startGame();
+            }
+        });
 
         back.addListener(new ChangeListener() {
             @Override
@@ -109,8 +122,6 @@ public class LobbyContext extends UIContext{
                 contextManager.popContext();
             }
         });
-
-
     }
 
     /**

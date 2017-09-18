@@ -63,7 +63,7 @@ public class MainMenuContext extends UIContext {
 		multiplayer.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				contextManager.pushContext(new MultiplayerMenuContext());
+				contextManager.pushContext(new ServerBrowserContext());
 			}
 		});
 

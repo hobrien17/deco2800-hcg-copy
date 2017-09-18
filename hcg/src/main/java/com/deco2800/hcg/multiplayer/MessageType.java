@@ -8,9 +8,10 @@ package com.deco2800.hcg.multiplayer;
  *
  */
 public enum MessageType {
-	ACK,				// sent after receiving message
-	JOINING,			// sent from client when joining
-	JOINED,			// sent from server after client has joined
-	INPUT,			// sent after input
-	CHAT				// sent when a peer enters a chat message
+	ACK,	            // sent after receiving message
+	JOINING,	        // sent from peer when joining host
+	JOINED,         // sent from host when a peer has joined
+	START,          // sent from host when starting game
+	INPUT,          // sent after input
+	CHAT	            // sent when a peer enters a chat message
 }

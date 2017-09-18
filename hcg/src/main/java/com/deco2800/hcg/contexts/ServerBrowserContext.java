@@ -34,6 +34,7 @@ public class ServerBrowserContext extends UIContext {
 
         GameManager gameManager = GameManager.get();
         ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+        NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
         PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
@@ -103,6 +104,14 @@ public class ServerBrowserContext extends UIContext {
                 contextManager.popContext();
             }
         });
+        
+        host.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                networkManager.init(true);
+                contextManager.pushContext(new LobbyContext());
+            }
+        });
 
         addServer.addListener(new ChangeListener() {
             @Override
@@ -124,9 +133,9 @@ public class ServerBrowserContext extends UIContext {
             public void changed(ChangeEvent event, Actor actor) {
                 String address;
                 address = serverIP.getText();
+                networkManager.init(false);
+                networkManager.join(serverIP.getText());
                 serverIP.setText("");
-                System.out.printf("%s\n",address);
-                serverStatus.setText("printed");
             }
         });
     }

@@ -16,9 +16,11 @@ import java.util.concurrent.atomic.AtomicLongArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.multiplayer.MessageType;
+import com.deco2800.hcg.worlds.DemoWorld;
 
 /**
  * Asynchronous UDP networking
@@ -40,6 +42,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	private AtomicLong localTickCount;
 	private AtomicLongArray peerTickCounts;
 	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
+	private boolean host = false;
 	private boolean initialised = false;
 	
 	private GameManager gameManager;
@@ -107,6 +110,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 		// initialise id generator
 		messageIdGenerator = new Random();
 
+		host = hostGame;
 		initialised = true;
 	}
 
@@ -116,6 +120,10 @@ public final class NetworkManager extends Manager implements TickableManager {
 	 */
 	public boolean isInitialised() {
 		return initialised;
+	}
+	
+	public boolean isHost() {
+		return host;
 	}
 	
 	private Integer startNewMessage(MessageType type, int numberOfEntries) {
@@ -191,6 +199,22 @@ public final class NetworkManager extends Manager implements TickableManager {
 		byte[] bytes = new byte[messageBuffer.remaining()];
 		messageBuffer.get(bytes);
 		sendQueue.put(id, bytes);
+	}
+	
+	public void startGame() {
+		Integer id = startNewMessage(MessageType.START, 0);
+		// send message to peers
+		messageBuffer.flip();
+		byte[] bytes = new byte[messageBuffer.remaining()];
+		messageBuffer.get(bytes);
+		sendQueue.put(id, bytes);
+		
+		gameManager.setWorld(new DemoWorld());
+		Player otherPlayer = new Player(1, 5, 10, 0);
+		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+		playerManager.addPlayer(otherPlayer);
+		playerManager.spawnPlayers();
+		contextManager.pushContext(new PlayContext());
 	}
 	
 	public void send() {
@@ -292,16 +316,19 @@ public final class NetworkManager extends Manager implements TickableManager {
 					case JOINING:
 						// send joined message
 						sendJoinedMessage();
-						// fall through to spawn other player
+					case JOINED:
+						// TODO: we need to communicate how many other players are already in the
+						//       game as well as their state
+						contextManager.pushContext(new LobbyContext());
+						break;
+					case START:
 						// TODO: we need to support more (4?) players
+						gameManager.setWorld(new DemoWorld());
 						Player otherPlayer = new Player(1, 5, 10, 0);
 						otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
 						playerManager.addPlayer(otherPlayer);
 						playerManager.spawnPlayers();
-					case JOINED:
-						// TODO: we need to communicate how many other players are already in the
-						//       game as well as their state, unless we only finalise that after
-						//       the host starts the game from the lobby
+						contextManager.pushContext(new PlayContext());
 						break;
 					case INPUT:
 						long inputTick = messageBuffer.getLong();
