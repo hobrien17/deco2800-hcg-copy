@@ -1,18 +1,12 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
-import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
-import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.weapons.*;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * A generic player instance for the game
