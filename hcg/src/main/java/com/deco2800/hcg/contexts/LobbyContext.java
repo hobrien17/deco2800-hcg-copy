@@ -61,7 +61,7 @@ public class LobbyContext extends UIContext{
         send = new ImageButton(new Image(textureManager.getTexture("lobby_send_button")).getDrawable());
         readyCheckBox = new CheckBox("Ready", skin);
         //label initialize
-        lobbyLabel = new Label("Lobby Name: LOCAL", skin);
+        lobbyLabel = new Label("Lobby Name: " + networkManager.getLobbyName(), skin);
         members = new Label("Members: ", skin);
         //player portrait stack set up
         player1 = new Stack(playerPortrait1);

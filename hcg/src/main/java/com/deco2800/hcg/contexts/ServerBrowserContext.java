@@ -4,15 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
-import com.badlogic.gdx.graphics.Color;
-
-import java.lang.reflect.Array;
 
 /**
  * UI for server browser, used for joining a server.
@@ -25,9 +21,9 @@ public class ServerBrowserContext extends UIContext {
     private ScrollPane serverListPane;
     private List<String> serverList;
     private String servers[];
-    private Dialog enterServer;
-    private TextButton add, exit;
-    private TextField serverIP;
+    private Dialog enterServer, hostName;
+    private TextButton enterServerAdd, enterServerExit, hostNameAdd, hostNameExit;
+    private TextField serverIPTextfield, lobbyNameTextfield;
     private Label serverStatus;
 
     public ServerBrowserContext() {
@@ -68,17 +64,25 @@ public class ServerBrowserContext extends UIContext {
         serverListPane.setDebug(true);
 
         enterServer = new Dialog("Enter Host IP", skin);
-        serverIP = new TextField("", skin);
-        add = new TextButton("add", skin);
-        exit = new TextButton("close", skin);
+        serverIPTextfield = new TextField("", skin);
+        enterServerAdd = new TextButton("enterServerAdd", skin);
+        enterServerExit = new TextButton("close", skin);
         serverStatus = new Label("", skin);
         enterServer.setDebug(false);  //debug for dialog box
-        enterServer.add(serverIP).expandX();
-        enterServer.add(add);
+        enterServer.add(serverIPTextfield).expandX();
+        enterServer.add(enterServerAdd);
         enterServer.row();
-        enterServer.add(exit).center().expand();
+        enterServer.add(enterServerExit).center().expand();
         enterServer.add(serverStatus);
 
+        hostName = new Dialog("Enter Lobby Name", skin);
+        lobbyNameTextfield = new TextField("", skin);
+        hostNameAdd = new TextButton("Enter", skin);
+        hostNameExit = new TextButton("Close", skin);
+        hostName.add(lobbyNameTextfield).expandX();
+        hostName.add(hostNameAdd);
+        hostName.row();
+        hostName.add(hostNameExit);
         //GUI body
         main.row();
         titleTable.add(back).left();
@@ -108,8 +112,26 @@ public class ServerBrowserContext extends UIContext {
         host.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                hostName.show(stage);
+            }
+        });
+
+        hostNameAdd.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                hostName.hide();
+                lobbyNameTextfield.setText("");
                 networkManager.init(true);
+                networkManager.setLobbyName(lobbyNameTextfield.getText());
                 contextManager.pushContext(new LobbyContext());
+            }
+        });
+
+        hostNameExit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                hostName.hide();
+                lobbyNameTextfield.setText("");
             }
         });
 
@@ -121,21 +143,28 @@ public class ServerBrowserContext extends UIContext {
             }
         });
 
-        exit.addListener(new ChangeListener() {
+        enterServerExit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 enterServer.hide();
+                serverIPTextfield.setText("");
             }
         });
 
-        add.addListener(new ChangeListener() {
+        enterServerAdd.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 String address;
-                address = serverIP.getText();
-                networkManager.init(false);
-                networkManager.join(serverIP.getText());
-                serverIP.setText("");
+                address = serverIPTextfield.getText(); //recommended set up public method in networkManager
+                serverIPTextfield.setText("");
+                if(address.trim().length() == 0 || address == "") {
+                    serverStatus.setText("Invalid Server IP");
+                } else {
+                    enterServer.hide();
+                    networkManager.init(false);
+                    networkManager.join(serverIPTextfield.getText());
+                }
+
             }
         });
     }

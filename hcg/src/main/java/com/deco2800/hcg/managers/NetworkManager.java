@@ -57,6 +57,8 @@ public final class NetworkManager extends Manager implements TickableManager {
 	
 	private Random messageIdGenerator;
 
+	private String lobbyName;
+
 	/**
 	 * Initialises NetworkState
 	 * @param hostGame
@@ -404,6 +406,14 @@ public final class NetworkManager extends Manager implements TickableManager {
 				LOGGER.debug("RECEIVED: " + messageType.toString());
 			}
 		}
+	}
+
+	public void setLobbyName(String name) {
+		lobbyName = name;
+	}
+
+	public String getLobbyName() {
+		return lobbyName;
 	}
 
 	@Override
