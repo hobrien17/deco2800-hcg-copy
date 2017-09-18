@@ -23,7 +23,6 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
-import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
@@ -168,110 +167,84 @@ public class Player extends Character implements Tickable {
     	this(0, posX, posY, posZ);
     }
 
-    /**
-     * Sends input when a touch input is made.
-     *
-     * @param screenX
-     *            the x position being clicked on the screen
-     * @param screenY
-     *            the y position being clicked on the screen
-     * @param pointer
-     *            <unknown>
-     * @param button
-     *            <unknown>
-     */
-    private void handleLocalTouchDown(int screenX, int screenY, int pointer,
-    		int button) {
-    	if (NetworkState.isInitialised()) {
-    		NetworkState.sendInputMessage(InputType.TOUCH_DOWN.ordinal(),
-    				screenX, screenY, pointer, button);
-    	}
-    	playerInputManager.touchDown(0, screenX, screenY, pointer, button);
-    }
+	/**
+	 * Sends input when a touch input is made.
+	 * 
+	 * @param screenX
+	 *            the x position being clicked on the screen
+	 * @param screenY
+	 *            the y position being clicked on the screen
+	 * @param pointer
+	 *            <unknown>
+	 * @param button
+	 *            <unknown>
+	 */
+	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
+		playerInputManager.queueLocalAction(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+	}
 
-    /**
-     * Sends input when a drag input is made.
-     *
-     * @param screenX
-     *            the x position on the screen that mouse is dragged to
-     * @param screenY
-     *            the y position on the screen that mouse is dragged to
-     * @param pointer
-     *            <unknown>
-     */
-    private void handleLocalTouchDragged(int screenX, int screenY,
-    		int pointer) {
-    	if (NetworkState.isInitialised()) {
-    		NetworkState.sendInputMessage(InputType.TOUCH_DRAGGED.ordinal(),
-    				screenX, screenY, pointer);
-    	}
-    	playerInputManager.touchDragged(0, screenX, screenY, pointer);
-    }
+	/**
+	 * Sends input when a drag input is made.
+	 * 
+	 * @param screenX
+	 *            the x position on the screen that mouse is dragged to
+	 * @param screenY
+	 *            the y position on the screen that mouse is dragged to
+	 * @param pointer
+	 *            <unknown>
+	 */
+	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
+		playerInputManager.queueLocalAction(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
+	}
 
-    /**
-     * Sends input when a touch input is released.
-     *
-     * @param screenX
-     *            the x position mouse is being released on the screen
-     * @param screenY
-     *            the y position mouse is being released on the screen
-     * @param pointer
-     *            <unknown>
-     * @param button
-     *            <unknown>
-     */
-    private void handleLocalTouchUp(int screenX, int screenY, int pointer,
-    		int button) {
-    	if (NetworkState.isInitialised()) {
-    		NetworkState.sendInputMessage(InputType.TOUCH_UP.ordinal(), screenX,
-    				screenY, pointer, button);
-    	}
-    	playerInputManager.touchUp(0, screenX, screenY, pointer, button);
-    }
+	/**
+	 * Sends input when a touch input is released.
+	 * 
+	 * @param screenX
+	 *            the x position mouse is being released on the screen
+	 * @param screenY
+	 *            the y position mouse is being released on the screen
+	 * @param pointer
+	 *            <unknown>
+	 * @param button
+	 *            <unknown>
+	 */
+	private void handleLocalTouchUp(int screenX, int screenY, int pointer, int button) {
+		playerInputManager.queueLocalAction(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+	}
 
-    /**
-     * Sends the processes involved when a mouse movement is made.
-     *
-     * @param screenX
-     *            the x position of mouse movement on the screen
-     * @param screenY
-     *            the y position of mouse movement on the screen
-     */
-    private void handleLocalMouseMoved(int screenX, int screenY) {
-    	// FIXME: mouse inputs currently saturate the server
-    	// if (NetworkState.isInitialised() && peerId == -1) {
-    	// NetworkState.sendInputMessage(InputType.MOUSE_MOVED.ordinal(),
-    	// screenX, screenY);
-    	// }
-    	playerInputManager.mouseMoved(0, screenX, screenY);
-    }
+	/**
+	 * Sends the processes involved when a mouse movement is made.
+	 * 
+	 * @param screenX
+	 *            the x position of mouse movement on the screen
+	 * @param screenY
+	 *            the y position of mouse movement on the screen
+	 */
+	private void handleLocalMouseMoved(int screenX, int screenY) {
+		// FIXME: mouse inputs currently saturate the server
+		handleMouseMoved(screenX, screenY);
+	}
+	
+	/**
+	 * Sends input when keys are pressed.
+	 * 
+	 * @param keycode
+	 *            the keycode of the key pressed
+	 */
+	private void handleLocalKeyDown(int keycode) {
+		playerInputManager.queueLocalAction(InputType.KEY_DOWN.ordinal(), keycode);
+	}
 
-    /**
-     * Sends input when keys are pressed.
-     *
-     * @param keycode
-     *            the keycode of the key pressed
-     */
-    private void handleLocalKeyDown(int keycode) {
-    	if (NetworkState.isInitialised()) {
-    		NetworkState.sendInputMessage(InputType.KEY_DOWN.ordinal(),
-    				keycode);
-    	}
-    	playerInputManager.keyDown(0, keycode);
-    }
-
-    /**
-     * Sends input when keys are released.
-     *
-     * @param keycode
-     *            the keycode of the key released
-     */
-    private void handleLocalKeyUp(int keycode) {
-    	if (NetworkState.isInitialised()) {
-    		NetworkState.sendInputMessage(InputType.KEY_UP.ordinal(), keycode);
-    	}
-    	playerInputManager.keyUp(0, keycode);
-    }
+	/**
+	 * Sends input when keys are released.
+	 * 
+	 * @param keycode
+	 *            the keycode of the key released
+	 */
+	private void handleLocalKeyUp(int keycode) {
+		playerInputManager.queueLocalAction(InputType.KEY_UP.ordinal(), keycode);
+	}
 
     /**
      * sets the image to be displayed for the health and stamina display

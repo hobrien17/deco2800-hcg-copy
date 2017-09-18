@@ -9,19 +9,22 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.multiplayer.Message;
-import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Color;
+
+
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -40,6 +43,8 @@ public class PlayContext extends Context {
 	private MessageManager messageManager;
 	private PlayerStatusDisplay playerStatus;
 	private Group ClockDisplay;
+	private TextureManager textureManager;
+	private NetworkManager networkManager;
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -63,20 +68,22 @@ public class PlayContext extends Context {
 	private Window window;
 	private Window plantWindow;
 	private Window exitWindow;
+	private Stack chatBackground;
 	private Table chatWindow;
 	private Label plantInfo;
 	private Label clockLabel;
 	private Label dateLabel;
-	private Label chatLabel;
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private Button chatButton;
 	private Skin skin;
+	private Image chatBar;
+	private String chatString = new String("");
 
-    /**
-     * Create the PlayContext
-     */
-    public PlayContext() {
+	/**
+	 * Create the PlayContext
+	 */
+	public PlayContext() {
 
 		// Set up managers for this game
 		gameManager = GameManager.get();
@@ -86,6 +93,8 @@ public class PlayContext extends Context {
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
+		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -132,66 +141,103 @@ public class PlayContext extends Context {
 		stage.addActor(window);
 
 		/* Create clock GUI and add it to the stage */
-        Group group = new Group();
-        group.setPosition(stage.getWidth() - 220, 20);
-        group.addActor(clockImage);
-        clockLabel.setPosition(58, 95);
-        clockLabel.setFontScale((float)2.1);
-        dateLabel.setPosition(65, 60);
-        dateLabel.setFontScale((float)0.9);
-        group.addActor(clockLabel);
-        group.addActor(dateLabel);
-        stage.addActor(group);
+		Group group = new Group();
+		group.setPosition(stage.getWidth() - 220, 20);
+		group.addActor(clockImage);
+		clockLabel.setPosition(58, 95);
+		clockLabel.setFontScale((float) 2.1);
+		dateLabel.setPosition(65, 60);
+		dateLabel.setFontScale((float) 0.9);
+		group.addActor(clockLabel);
+		group.addActor(dateLabel);
+		stage.addActor(group);
 
         /* Create the window for plant. */
-        plantInfo = new Label("null",skin);
-        plantManager.setPlantLabel(plantInfo);
-        plantManager.setPlantWindow(plantWindow);
-        plantWindow.add(plantInfo);
-        plantManager.updateLabel();
-        plantWindow.pack();
-        plantWindow.setMovable(false);
-        plantWindow.setPosition(stage.getWidth(), stage.getHeight());
-        stage.addActor(plantWindow);
+		plantInfo = new Label("null", skin);
+		plantManager.setPlantLabel(plantInfo);
+		plantManager.setPlantWindow(plantWindow);
+		plantWindow.add(plantInfo);
+		plantManager.updateLabel();
+		plantWindow.pack();
+		plantWindow.setMovable(false);
+		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+		stage.addActor(plantWindow);
 
         /* Create window for chat and all components */
+		chatBar = new Image(textureManager.getTexture("chat_background"));
+		chatBackground = new Stack(chatBar);
 		chatWindow = new Table(skin);
-		chatWindow.setPosition(0, 0);
-		chatWindow.setSize(350,250);
-		chatLabel = new Label("Say: ", skin);
-		chatLabel.setColor(new Color().GRAY);
-        chatTextArea = new TextArea("", skin);
-        chatTextField = new TextField("", skin);
-        chatTextArea.setDisabled(true);
-        chatTextArea.setText("");
-        chatButton = new TextButton("Send", skin);
-        chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3);
-        chatWindow.row().height(40);
-        chatWindow.add(chatLabel).left().prefWidth(10);
-        chatWindow.add(chatTextField).prefWidth(350);
-        chatWindow.add(chatButton);
-        chatWindow.setDebug(false);//display lines for debugging
-
-
-        stage.addActor(chatWindow);
+		chatTextArea = new TextArea("", skin);
+		chatTextField = new TextField("", skin);
+		chatTextArea.setDisabled(true);
+		chatTextArea.setText("");
+		chatButton = new TextButton("Send", skin);
+		chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3).padBottom(20);
+		chatWindow.row().height(40).padBottom(10);
+		chatWindow.add(chatTextField).prefWidth(350);
+		chatWindow.add(chatButton);
+		chatWindow.setDebug(false);//display lines for debugging
+		chatWindow.padTop(35).padLeft(15).padRight(15);
+		chatBackground.setPosition(0, 0);
+		chatBackground.add(chatWindow);
+		chatBackground.setSize(380, 270);
+		chatBackground.setScale((float) 1.2);
+		if (networkManager.isInitialised()) {
+			stage.addActor(chatBackground);
+		}
 
 		/*
 		 * Setup inputs for the buttons and the game itself
 		 */
-        
-        chatButton.addListener(new ChangeListener() {
+
+		chatButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (NetworkState.isInitialised()) {
-					String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
-					chatTextField.setText("");
-					chatTextArea.appendText(chatMessage + "\n");
-					stage.setKeyboardFocus(null);
+				if (networkManager.isInitialised()) {
+					if (chatString.trim().length()>0) {
+						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
+
+						chatTextField.setText("");
+						chatTextArea.appendText(chatMessage + "\n");
+						stage.setKeyboardFocus(null);
+						chatString = "";
+					} else {
+						chatTextField.setText("");
+						chatTextField.setCursorPosition(0);
+						chatString = "";
+					}
 				}
 			}
 		});
-        
-        messageManager.addChatMessageListener(this::handleChatMessage);
+
+        /*
+        	Input Listener for Textfield
+         */
+		chatTextField.setTextFieldListener(new TextField.TextFieldListener() { //textfield Listener
+			@Override
+			public void keyTyped(TextField textField, char c) {
+				if (c != '\b') {
+					chatString += c;
+				} else if (chatString.length() > 0) {
+					chatString = chatString.substring(0, chatString.length() - 1);
+				}
+				if ((c == '\r' && networkManager.isInitialised())) {
+					if (chatString.trim().length()>0) {
+						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
+						chatTextField.setText("");
+						chatTextArea.appendText(chatMessage + "\n");
+						stage.setKeyboardFocus(null);
+						chatString = "";
+					} else {
+						chatTextField.setText("");
+						chatTextField.setCursorPosition(0);
+						chatString = "";
+					}
+				}
+			}
+		});
+
+		messageManager.addChatMessageListener(this::handleChatMessage);
         
 		/*
 		 * Setup an Input Multiplexer so that input can be handled by both the UI and
@@ -245,10 +291,9 @@ public class PlayContext extends Context {
 			}
 		});
 	}
-	
-	
-	private void handleChatMessage(Message message) {
-		chatTextArea.appendText(message.getPayloadString() + "\n");
+
+	private void handleChatMessage(String message) {
+		chatTextArea.appendText(message + "\n");
 	}
 
 	/**
@@ -329,14 +374,14 @@ public class PlayContext extends Context {
 
 	@Override
 	public void pause() {
-		if (!NetworkState.isInitialised()) {
+		if (!networkManager.isInitialised()) {
 			unpaused = false;
 		}
 	}
 
 	@Override
 	public void resume() {
-		if (!NetworkState.isInitialised()) {
+		if (!networkManager.isInitialised()) {
 			unpaused = true;
 		}
 	}
