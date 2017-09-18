@@ -33,7 +33,7 @@ public class Hardcor3Gard3ning extends Game {
 	private PlantManager plantManager;
 	private ItemManager itemManager;
 	private StopwatchManager stopwatchManager;
-	private MessageManager messageManager;
+	private NetworkManager networkManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -93,8 +93,8 @@ public class Hardcor3Gard3ning extends Game {
         stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
         stopwatchManager.startTimer(1);
         
-        /* Create a message manager */
-        messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
+        /* Create a network manager */
+        networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 
         // Procedurally generate the world map and store it.
         MapGenerator mapGenerator = new MapGenerator(levelList);
@@ -110,6 +110,9 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
+		if (networkManager.isInitialised()) {
+			networkManager.processReceivedMessages();
+		}
         fireTicks();
         clearScreen();
         super.render(); // Will render current context

@@ -9,6 +9,7 @@ import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicLongArray;
 
@@ -35,6 +36,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	//       shouldn't be a big issue for the moment
 	private ConcurrentHashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
 	private ConcurrentHashMap<Integer, byte[]> sendQueue;
+	private ConcurrentLinkedQueue<byte[]> receiveQueue;
 	private AtomicLong localTickCount;
 	private AtomicLongArray peerTickCounts;
 	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
@@ -59,6 +61,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 	public void init(boolean hostGame) {
 		sockets = new ConcurrentHashMap<>();
 		sendQueue = new ConcurrentHashMap<>();
+		receiveQueue = new ConcurrentLinkedQueue<>();
 		localTickCount = new AtomicLong();
 		peerTickCounts = new AtomicLongArray(MAX_PLAYERS);
 		processedIds = new ArrayList<>();
@@ -87,7 +90,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 					send();
 					receive();
 					try {
-						Thread.sleep(1);
+						Thread.sleep(8);
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt();
 					}
@@ -217,6 +220,9 @@ public final class NetworkManager extends Manager implements TickableManager {
 				return;
 			}
 			receiveBuffer.flip();
+			byte[] messageBytes = new byte[receiveBuffer.remaining()];
+			receiveBuffer.get(messageBytes);
+			receiveBuffer.flip();
 			
 			// get header
 			byte[] header = new byte[8];
@@ -231,96 +237,11 @@ public final class NetworkManager extends Manager implements TickableManager {
 			
 			// handle message
 			if (messageType != MessageType.ACK && !processedIds.contains(messageId)) {
-				// TODO: this should end up somewhere else
-				switch (messageType) {
-					case JOINING:
-						// add peer to lobby
-						sockets.put(sockets.size() - 1, address);
-						// send joined message
-						sendJoinedMessage();
-						// fall through to spawn other player
-						// TODO: we need to support more (4?) players
-						Player otherPlayer = new Player(1, 5, 10, 0);
-						otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
-						playerManager.addPlayer(otherPlayer);
-						playerManager.spawnPlayers();
-					case JOINED:
-						// TODO: we need to communicate how many other players are already in the
-						//       game as well as their state, unless we only finalise that after
-						//       the host starts the game from the lobby
-						break;
-					case INPUT:
-						long inputTick = receiveBuffer.getLong();
-						InputType inputType = InputType.values()[receiveBuffer.getInt()];
-						// TODO: handle input for more than one player
-						switch (inputType) {
-							case KEY_DOWN:
-								playerInputManager.queueAction(
-										inputTick,
-										1,
-										inputType.ordinal(),
-										receiveBuffer.getInt());
-								break;
-							case KEY_UP:
-								playerInputManager.queueAction(
-										inputTick,
-										1,
-										inputType.ordinal(),
-										receiveBuffer.getInt());
-								break;
-							case MOUSE_MOVED:
-								playerInputManager.queueAction(
-										inputTick, 
-										1,
-										inputType.ordinal(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt());
-								break;
-							case TOUCH_DOWN:
-								playerInputManager.queueAction(
-										inputTick,
-										1,
-										inputType.ordinal(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt());
-								break;
-							case TOUCH_DRAGGED:
-								playerInputManager.queueAction(
-										inputTick,
-										1,
-										inputType.ordinal(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt());
-								break;
-							case TOUCH_UP:
-								playerInputManager.queueAction(
-										inputTick,
-										1,
-										inputType.ordinal(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt(),
-										receiveBuffer.getInt());
-								break;
-							default:
-								break;
-						}
-						break;
-					case CHAT:
-						byte[] byteArray = new byte[receiveBuffer.remaining()];
-						receiveBuffer.get(byteArray);
-						messageManager.chatMessageReceieved(new String(byteArray));
-						break;
-					default:
-						break;
+				if (messageType == MessageType.JOINING) {
+					// add peer to lobby
+					sockets.put(sockets.size() - 1, address);
 				}
-				// make sure we don't process this again
-				processedIds.add(messageId);
-				// log
-				LOGGER.debug("RECEIVED: " + messageType.toString());
+				receiveQueue.add(messageBytes);
 			} else if (messageType == MessageType.ACK) {
 				// remove message from queue
 				int removeId = receiveBuffer.getInt();
@@ -344,6 +265,117 @@ public final class NetworkManager extends Manager implements TickableManager {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Failed to receive message", e);
+		}
+	}
+	
+	public void processReceivedMessages() {
+		byte[] bytes;
+		while ((bytes = receiveQueue.poll()) != null) {
+			messageBuffer.clear();
+			messageBuffer.put(bytes);
+			messageBuffer.flip();
+			
+			// get header
+			byte[] header = new byte[8];
+			messageBuffer.get(header);
+			// get id
+			Integer messageId = messageBuffer.getInt();
+			// get type
+			byte typeByte = messageBuffer.get();
+			MessageType messageType = MessageType.values()[typeByte];
+			// get number of entries
+			byte numberOfEntries = messageBuffer.get();
+			
+			if (!processedIds.contains(messageId)) {
+				// TODO: this should end up somewhere else
+				switch (messageType) {
+					case JOINING:
+						// send joined message
+						sendJoinedMessage();
+						// fall through to spawn other player
+						// TODO: we need to support more (4?) players
+						Player otherPlayer = new Player(1, 5, 10, 0);
+						otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+						playerManager.addPlayer(otherPlayer);
+						playerManager.spawnPlayers();
+					case JOINED:
+						// TODO: we need to communicate how many other players are already in the
+						//       game as well as their state, unless we only finalise that after
+						//       the host starts the game from the lobby
+						break;
+					case INPUT:
+						long inputTick = messageBuffer.getLong();
+						InputType inputType = InputType.values()[messageBuffer.getInt()];
+						// TODO: handle input for more than one player
+						switch (inputType) {
+							case KEY_DOWN:
+								playerInputManager.queueAction(
+										inputTick,
+										1,
+										inputType.ordinal(),
+										messageBuffer.getInt());
+								break;
+							case KEY_UP:
+								playerInputManager.queueAction(
+										inputTick,
+										1,
+										inputType.ordinal(),
+										messageBuffer.getInt());
+								break;
+							case MOUSE_MOVED:
+								playerInputManager.queueAction(
+										inputTick, 
+										1,
+										inputType.ordinal(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt());
+								break;
+							case TOUCH_DOWN:
+								playerInputManager.queueAction(
+										inputTick,
+										1,
+										inputType.ordinal(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt());
+								break;
+							case TOUCH_DRAGGED:
+								playerInputManager.queueAction(
+										inputTick,
+										1,
+										inputType.ordinal(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt());
+								break;
+							case TOUCH_UP:
+								playerInputManager.queueAction(
+										inputTick,
+										1,
+										inputType.ordinal(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt(),
+										messageBuffer.getInt());
+								break;
+							default:
+								break;
+						}
+						break;
+					case CHAT:
+						byte[] byteArray = new byte[messageBuffer.remaining()];
+						messageBuffer.get(byteArray);
+						messageManager.chatMessageReceieved(new String(byteArray));
+						break;
+					default:
+						break;
+				}
+				// make sure we don't process this again
+				processedIds.add(messageId);
+				// log
+				LOGGER.debug("RECEIVED: " + messageType.toString());
+			}
 		}
 	}
 
