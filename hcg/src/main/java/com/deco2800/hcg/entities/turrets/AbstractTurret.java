@@ -2,7 +2,6 @@ package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observer;
 
-import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;

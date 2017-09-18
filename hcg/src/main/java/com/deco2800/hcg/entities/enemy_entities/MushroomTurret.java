@@ -1,6 +1,6 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
-import com.deco2800.hcg.entities.Bullet;
+import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;

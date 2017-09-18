@@ -18,7 +18,7 @@ public class WorldMapTest {
     @Before
     public void setup() {
     	Level newLevel = new Level(new World(), 0, 0, 0);
-    	MapNode node = new MapNode(0, 0, "", 0, newLevel, false);
+    	MapNode node = new MapNode(0, 0, 0, newLevel, false);
     	List<MapNode> nodeList = new ArrayList<>();
     	nodeList.add(node);
         worldMap = new WorldMap(0, "sand", 1, 5, 3, nodeList);

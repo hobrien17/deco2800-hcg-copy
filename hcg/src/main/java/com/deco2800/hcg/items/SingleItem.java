@@ -1,7 +1,5 @@
 package com.deco2800.hcg.items;
 
-import com.deco2800.hcg.items.single.TestUniqueItem;
-
 /**
  * The SingleItem class represents items that cannot be stacked.
  * (i.e weapons, armor etc.)
@@ -83,7 +81,7 @@ public abstract class SingleItem extends GenericItem {
      */
     @Override
     public boolean sameItem(Item item) throws IllegalArgumentException {
-        return (item instanceof SingleItem && item.getName().equals(this.getName()));
+        return item instanceof SingleItem && item.getName().equals(this.getName());
     }
     
     @Override

@@ -87,7 +87,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.speedX = 0;
         this.speedY = 0;
         this.level = 1;
-        this.movementSpeed = (float)(this.level * 0.03);
+        this.normalSpeed = this.movementSpeed = (float)(this.level * 0.03);
         this.random = new Random();
         this.random.setSeed(this.getID());
         this.setCollided(false);

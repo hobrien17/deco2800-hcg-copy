@@ -1,6 +1,8 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.deco2800.hcg.contexts.WorldMapContext;
+import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.worlds.World;
 import org.slf4j.Logger;
@@ -28,6 +30,10 @@ public class GameManager implements TickableManager {
     private OrthographicCamera camera;
 
     private WorldMap worldMap;
+    
+    private MapNode occupiedNode;
+    
+    private WorldMapContext mapContext;
 
     /**
      * Returns an instance of the GM
@@ -77,7 +83,6 @@ public class GameManager implements TickableManager {
         } catch (Exception e) {
             // Gotta catch 'em all
             LOGGER.error(e.toString());
-            // e.printStackTrace();
         }
 
 		/* And then return it */
@@ -136,12 +141,31 @@ public class GameManager implements TickableManager {
      * Gets the worldMap
      * @return the stored WorldMap structure
      */
-    public WorldMap getWorldMap() { return worldMap; }
+    public WorldMap getWorldMap() {
+    	return worldMap;
+    }
 
     /**
      * Sets the worldMap
      * @param worldMap the generated map to store
      */
-    public void setWorldMap(WorldMap worldMap) { this.worldMap = worldMap; }
-
+    public void setWorldMap(WorldMap worldMap) {
+    	this.worldMap = worldMap;
+    }
+    
+    public MapNode getCurrentNode() {
+    	return occupiedNode;
+    }
+    
+    public void setOccupiedNode(MapNode node) {
+    	occupiedNode = node;
+    }
+    
+    public void setMapContext(WorldMapContext context) {
+    	mapContext = context;
+    }
+    
+    public WorldMapContext getMapContext() {
+    	return mapContext;
+    }
 }

@@ -18,7 +18,6 @@ public class Sunflower extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Sunflower(Pot master) {
-
         super(master, "sunflower", 10);
     }
 
