@@ -22,7 +22,7 @@ public class Seed implements Item {
 		SUNFLOWER("gardening_seed", Sunflower.class, SunflowerTurret.class), 
 		EXPLOSIVE("explosive_seed", Cactus.class, ExplosiveTurret.class), 
 		FIRE("fire_seed", Inferno.class, FireTurret.class), 
-		GRASS("grass_seed",	Grass.class, null), 
+		GRASS("grass_seed",	Grass.class, GrassTurret.class), 
 		ICE("ice_seed", Ice.class, IceTurret.class), 
 		WATER("water_seed", Water.class, null);
 
@@ -195,4 +195,8 @@ public class Seed implements Item {
         return this.type.getTexture();
     }
 
+    @Override
+	public Item copy() {
+	    return new Seed(type);
+    }
 }

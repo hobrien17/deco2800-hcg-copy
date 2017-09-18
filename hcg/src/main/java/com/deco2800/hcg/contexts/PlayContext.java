@@ -39,6 +39,7 @@ public class PlayContext extends Context {
 	private PlantManager plantManager;
 	private MessageManager messageManager;
 	private PlayerStatusDisplay playerStatus;
+	private Group ClockDisplay;
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;

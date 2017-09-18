@@ -183,7 +183,7 @@ public abstract class Character extends AbstractEntity {
     * 
     * @param health The value to set current health to
     */
-    protected void setHealthCur(int health) {
+     public void setHealthCur(int health) {
         if (health < 0) {
             this.healthCur = 0;
         } else if (health > this.healthMax) {

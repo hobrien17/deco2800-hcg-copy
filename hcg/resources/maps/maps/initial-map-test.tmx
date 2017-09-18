@@ -583,6 +583,12 @@
   <object id="147" x="480.164" y="797.836" width="32" height="32"/>
   <object id="148" x="412.836" y="799.164" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="corpse">
+  <properties>
+   <property name="name" value="corpse"/>
+  </properties>
+  <object id="152" x="705.745" y="894.255" width="32" height="32"/>
+ </objectgroup>
  <objectgroup name="NPC">
   <properties>
    <property name="name" value="NPC"/>

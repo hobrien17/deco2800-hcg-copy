@@ -35,10 +35,9 @@ public class TextureManager extends Manager {
 	public TextureManager() {
 		textureMap.put("grass", new Texture("resources/maps/textures/grass.png"));
 		textureMap.put("ground", new Texture("resources/maps/textures/ground.png"));
-		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
-		textureMap.put("spacman_swim", new Texture("resources/sprites/player/spacman_swim.png"));
 		textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
 		textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
+		textureMap.put("hcg_character_sink", new Texture("resources/sprites/player/hcg_character_hat_sink.png"));
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
@@ -71,6 +70,7 @@ public class TextureManager extends Manager {
 		textureMap.put("ice_02", new Texture("resources/sprites/plants/Christmas_02.png"));
 		textureMap.put("ice_03", new Texture("resources/sprites/plants/Christmas_03.png"));
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
+		textureMap.put("pot_locked", new Texture("resources/sprites/plants/locked_pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 		textureMap.put("fireball_up", new Texture("resources/sprites/bullets/fireball_up.png"));
 		textureMap.put("fireball_down", new Texture("resources/sprites/bullets/fireball_down.png"));
