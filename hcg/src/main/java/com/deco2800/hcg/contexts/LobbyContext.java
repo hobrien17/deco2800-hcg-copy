@@ -23,8 +23,10 @@ public class LobbyContext extends UIContext{
     private Image lobbyTitle, separator1, separator2, playerPortrait1, playerPortrait2, playerPortrait3, playerPortrait4;
     private CheckBox readyCheckBox;
     private Stack player1, player2, player3, player4;
-    private TextField chatTextfield;
+    private TextField chatTextfield, lobbyNameTextfield;
     private TextArea chatTextArea;
+    private Dialog hostName;
+    private TextButton changeLobbyName, hostNameAdd, hostNameExit;
 
     /**
      * Lobby UI constructor, initializes the entire UI
@@ -72,6 +74,16 @@ public class LobbyContext extends UIContext{
         chatTextfield = new TextField("", skin);
         chatTextArea = new TextArea("", skin);
         chatTextArea.setDisabled(true);
+        //LobbyName Change
+        changeLobbyName = new TextButton("Change", skin);
+        hostName = new Dialog("Enter new lobby name", skin);
+        hostNameAdd = new TextButton("Change", skin);
+        hostNameExit = new TextButton("Back", skin);
+        lobbyNameTextfield = new TextField("", skin);
+        hostName.add(lobbyNameTextfield).expandX();
+        hostName.add(hostNameAdd);
+        hostName.row();
+        hostName.add(hostNameExit);
 
         //body of GUI
         main.row().height(90);
@@ -87,7 +99,8 @@ public class LobbyContext extends UIContext{
         main.row();
         main.add(separator1).colspan(4).fill();
         main.row();
-        labelTable.add(lobbyLabel).expandX().left().padLeft(50);
+        labelTable.add(lobbyLabel).left().padLeft(50);
+        labelTable.add(changeLobbyName).expandX();
         labelTable.add(readyCheckBox).expandX().right().padRight(50);
         main.add(labelTable).fill();
         main.row();
@@ -122,6 +135,33 @@ public class LobbyContext extends UIContext{
                 contextManager.popContext();
             }
         });
+
+        changeLobbyName.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                hostName.show(stage);
+            }
+        });
+
+        hostNameAdd.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                networkManager.setLobbyName(lobbyNameTextfield.getText());
+                lobbyNameTextfield.setText("");
+                lobbyLabel.setText("Lobby Name: " + networkManager.getLobbyName());
+                hostName.hide();
+            }
+        });
+
+        hostNameExit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                lobbyNameTextfield.setText("");
+                hostName.hide();
+            }
+        });
+
+
     }
 
     /**

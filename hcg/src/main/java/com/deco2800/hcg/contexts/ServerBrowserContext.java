@@ -21,9 +21,9 @@ public class ServerBrowserContext extends UIContext {
     private ScrollPane serverListPane;
     private List<String> serverList;
     private String servers[];
-    private Dialog enterServer, hostName;
-    private TextButton enterServerAdd, enterServerExit, hostNameAdd, hostNameExit;
-    private TextField serverIPTextfield, lobbyNameTextfield;
+    private Dialog enterServer;
+    private TextButton enterServerAdd, enterServerExit;
+    private TextField serverIPTextfield;
     private Label serverStatus;
 
     public ServerBrowserContext() {
@@ -75,14 +75,6 @@ public class ServerBrowserContext extends UIContext {
         enterServer.add(enterServerExit).center().expand();
         enterServer.add(serverStatus);
 
-        hostName = new Dialog("Enter Lobby Name", skin);
-        lobbyNameTextfield = new TextField("", skin);
-        hostNameAdd = new TextButton("Enter", skin);
-        hostNameExit = new TextButton("Close", skin);
-        hostName.add(lobbyNameTextfield).expandX();
-        hostName.add(hostNameAdd);
-        hostName.row();
-        hostName.add(hostNameExit);
         //GUI body
         main.row();
         titleTable.add(back).left();
@@ -112,26 +104,9 @@ public class ServerBrowserContext extends UIContext {
         host.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                hostName.show(stage);
-            }
-        });
-
-        hostNameAdd.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                hostName.hide();
-                lobbyNameTextfield.setText("");
                 networkManager.init(true);
-                networkManager.setLobbyName(lobbyNameTextfield.getText());
+                networkManager.setLobbyName("Player's Lobby");
                 contextManager.pushContext(new LobbyContext());
-            }
-        });
-
-        hostNameExit.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                hostName.hide();
-                lobbyNameTextfield.setText("");
             }
         });
 
