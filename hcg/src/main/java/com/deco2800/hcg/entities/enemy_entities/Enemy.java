@@ -524,13 +524,11 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
 	@Override
     public void giveEffect(Effect effect) {
-        soundManager.playSound("hit");        
         myEffects.addEffect(effect);
     }
 
     @Override
     public void giveEffect(Collection<Effect> effects) {
-        soundManager.playSound("hit");        
         myEffects.addAllEffects(effects);
     }
 }
