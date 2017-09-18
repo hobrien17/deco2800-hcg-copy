@@ -52,8 +52,12 @@ public class World {
 
 		// attempt to load the given file
 		try {
-			this.map = new TmxMapLoader().load(file);
-			loadedFile = file;
+		  if ("test".equals(file)){ // for WorldTest
+		    file = "resources/maps/initial-map-test.tmx";
+		  }
+          this.map = new TmxMapLoader().load(file);
+		  loadedFile = file;
+			
 		} catch (Exception e) {
 			LOGGER.error(e.toString());
 			return;
