@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -50,7 +51,10 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 	// Effects container
 	protected Effects myEffects;
 
-	protected Weapon enemyWeapon;
+    protected Weapon enemyWeapon;
+    
+    // Sound manager
+    private SoundManager soundManager;
 
     /**
      * Creates a new enemy at the given position
@@ -95,7 +99,9 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.newPos = getBox3D();
 
 		// Effects container 
-		myEffects = new Effects(this);
+        myEffects = new Effects(this);
+        
+        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);        
     }
 
     /**
@@ -518,11 +524,13 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
 	@Override
     public void giveEffect(Effect effect) {
+        soundManager.playSound("hit");        
         myEffects.addEffect(effect);
     }
 
     @Override
     public void giveEffect(Collection<Effect> effects) {
+        soundManager.playSound("hit");        
         myEffects.addAllEffects(effects);
     }
 }

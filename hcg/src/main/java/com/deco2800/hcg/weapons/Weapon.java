@@ -5,6 +5,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
 
 /**
  * Weapon class containing all values and methods required for
@@ -38,6 +39,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected AbstractEntity user;
     protected int bulletType;
 
+    private SoundManager soundManager;    
+
     /**
      * Constructor for Weapon objects.
      * Extends AbstractEntity for rendering
@@ -69,6 +72,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         // TODO: Get proper weapon textures
         this.setTexture(texture);
         this.cooldown = cooldown;
+        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);        
     }
 
     /**
@@ -99,6 +103,25 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      */
     public void ceaseFire() {
         this.shoot = false;
+    }
+
+    protected void playFireSound() {
+        String soundName;
+        switch (weaponType) {
+            case MACHINEGUN:
+                soundName = "gun-rifle-shoot";
+                break;
+            case SHOTGUN:
+                soundName = "gun-shotgun-shoot";
+                break;
+            case STARFALL:
+                soundName = "gun-stargun-shoot";
+                break;
+            default:
+                soundName = "gun-rifle-shoot";
+        }
+        soundManager.stopSound(soundName);
+        soundManager.playSound(soundName);
     }
 
     /**

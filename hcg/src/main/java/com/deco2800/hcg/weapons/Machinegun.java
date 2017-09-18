@@ -39,6 +39,7 @@ public class Machinegun extends Weapon implements Tickable {
         System.out.println(worldCoords.x);
         shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 worldCoords.x, worldCoords.y);
+        playFireSound();
     }
     
 }
