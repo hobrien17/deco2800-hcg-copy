@@ -61,6 +61,7 @@ public class PlayContext extends Context {
 	private Stage stage;
 	private Window window;
 	private Window plantWindow;
+	private Window exitWindow;
 	private Table chatWindow;
 	private Label plantInfo;
 	private Label clockLabel;
@@ -69,7 +70,7 @@ public class PlayContext extends Context {
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private Button chatButton;
-
+	private Skin skin;
 
     /**
      * Create the PlayContext
@@ -88,19 +89,17 @@ public class PlayContext extends Context {
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
-
+				
 		// Setup GUI
 		stage = new Stage(new ScreenViewport());
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
         plantWindow = new Window("Plants", skin);
+        createExitWindow();
 
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
 		
-		/* Add temporary complete level button */
-		Button completeLevelButton = new TextButton("Complete Level", skin);
-
 		/* Add clock. */
 		Image clockImage = new Image(new
 				Texture(Gdx.files.internal("resources/ui/clock_outline.png")));
@@ -113,26 +112,16 @@ public class PlayContext extends Context {
 		playerStatus = new PlayerStatusDisplay();
 		stage.addActor(playerStatus);
 
-		/* Add a programmatic listener to the quit and complete buttons */
+		/* Add a programmatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				contextManager.popContext();
 			}
 		});
-		
-		completeLevelButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				gameManager.getCurrentNode().changeNodeType(2);
-				gameManager.getMapContext().updateMapDisplay();
-				contextManager.popContext();
-			}
-		});
 
 		/* Add all buttons to the menu */
 		window.add(button);
-		window.add(completeLevelButton);
 		window.add(clockLabel);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
@@ -367,5 +356,44 @@ public class PlayContext extends Context {
         if (keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
         }
+    }
+    
+    private void createExitWindow() {
+    	exitWindow = new Window("Exit Level?", skin);
+    	Button yesButton = new TextButton("Yes", skin);
+    	yesButton.pad(5, 10, 5, 10);
+    	Button noButton = new TextButton("No", skin);
+    	noButton.pad(5, 10, 5, 10);
+    	
+    	/* Add a programmatic listener to the buttons */
+		yesButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				gameManager.getCurrentNode().changeNodeType(2);
+				gameManager.getMapContext().updateMapDisplay();
+				contextManager.popContext();
+			}
+		});
+
+		noButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				exitWindow.remove();
+			}
+		});
+    	
+    	exitWindow.add(yesButton);
+    	exitWindow.add(noButton);
+    	exitWindow.pack();
+		exitWindow.setMovable(false); // So it doesn't fly around the screen
+		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+		exitWindow.setWidth(150);
+    }
+    
+    public void addExitWindow() {
+    	if(exitWindow.getStage() == null) {
+    		/* Add the window to the stage */
+    		stage.addActor(exitWindow);
+    	}
     }
 }

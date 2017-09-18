@@ -1,5 +1,6 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -53,12 +54,13 @@ public class World {
       
       // attempt to load the given file
       try{
-        this.map = new TmxMapLoader()
-            .load(file);
-        	loadedFile = file;
-      }catch (Exception e){
-        LOGGER.error(e.toString());
-        return;
+          this.map = new TmxMapLoader()
+              .load(file);
+              loadedFile = file;
+      } catch (Exception e) {
+    	  System.out.println(e);
+    	  LOGGER.error(e.toString());
+    	  return;
       }
       
       /*

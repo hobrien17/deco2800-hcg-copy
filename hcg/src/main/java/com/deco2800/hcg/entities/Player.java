@@ -48,11 +48,13 @@ public class Player extends Character implements Tickable {
 	//string to contain filepath for character's HUD display
 	private String displayImage;
 
+	private GameManager gameManager;
 	private SoundManager soundManager;
 	private ContextManager contextManager;
 	private PlayerInputManager playerInputManager;
 
 	private boolean collided;
+	boolean onExit = false;
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
@@ -88,7 +90,7 @@ public class Player extends Character implements Tickable {
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
 		// Get necessary managers
-		GameManager gameManager = GameManager.get();
+		gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 
 		this.id = id;
@@ -423,21 +425,31 @@ public class Player extends Character implements Tickable {
 			// name for logging.
 			layer = world.getTiledMapTileLayerAtPos((int) newPosY, (int) newPosX);
 			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
-			String newname = layer.getProperties().get("name", String.class);
+			String newName = layer.getProperties().get("name", String.class);
 
 			// if player is moving
-			if (newname != null && move == 1) {
+			if (newName != null && move == 1) {
 
 				// if moved to a different tile and not a first move, switch
 				// sound effect
-				if (!newname.equals(name) && !name.equals("")) {
+				if (!newName.equals(name) && !name.equals("")) {
 					soundStop(name);
-					soundPlay(newname);
+					soundPlay(newName);
 				} else if (name.equals("")) {
 					// if it is a first move, play sound effect
-					soundPlay(newname);
+					soundPlay(newName);
 				}
-				name = newname;
+				name = newName;
+				// if player is at end of level, end level
+				if(name.equals("exit")) {
+					if(!onExit) {
+						PlayContext play = (PlayContext) contextManager.currentContext();
+						play.addExitWindow();
+						onExit = true;
+					}					
+				} else {
+					onExit = false;
+				}
 				// if player in deep water, set it swim
 				if (name.equals("water-deep")) {
 					this.setTexture("hcg_character_swim");

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="25" height="25" tilewidth="55" tileheight="32" nextobjectid="1">
- <tileset firstgid="1" source="dirt.tsx"/>
- <tileset firstgid="4" source="water1.tsx"/>
- <tileset firstgid="5" source="water2.tsx"/>
- <tileset firstgid="6" source="ice.tsx"/>
- <tileset firstgid="7" source="grass.tsx"/>
+ <tileset firstgid="1" source="../tiles/dirt.tsx"/>
+ <tileset firstgid="4" source="../tiles/water1.tsx"/>
+ <tileset firstgid="5" source="../tiles/water2.tsx"/>
+ <tileset firstgid="6" source="../tiles/ice.tsx"/>
+ <tileset firstgid="7" source="./tiles/grass.tsx"/>
  <layer name="Ground" width="25" height="25" offsetx="10" offsety="18">
   <properties>
    <property name="name" value="Ground"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset name="lava-animated" tilewidth="55" tileheight="32" spacing="2" tilecount="8" columns="1">
- <image source="environment/lava-animated.png" width="55" height="270"/>
+ <image source="../textures/lava-animated.png" width="55" height="270"/>
  <tile id="0">
   <animation>
    <frame tileid="1" duration="600"/>

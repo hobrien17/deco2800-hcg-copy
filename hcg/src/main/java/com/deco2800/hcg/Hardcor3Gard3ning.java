@@ -17,6 +17,7 @@ import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
+import com.deco2800.hcg.worldmapui.LevelStore;
 import com.deco2800.hcg.worldmapui.MapGenerator;
 import com.deco2800.hcg.worlds.World;
 
@@ -87,19 +88,8 @@ public class Hardcor3Gard3ning extends Game {
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
 
-        
-        ArrayList<Level> levelList = new ArrayList<Level>();
-        // Creates some test levels
-        Level testLevel = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 1);
-        Level testLevel2 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 0);
-        Level testLevel3 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 1);
-        Level testLevel4 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 2);
-
-        // Eventually this will contain all the playable game levels
-        levelList.add(testLevel);
-        levelList.add(testLevel2);
-        levelList.add(testLevel3);
-        levelList.add(testLevel4);
+        LevelStore levels = new LevelStore();
+        ArrayList<Level> levelList = levels.getLevels();
         
         /* Create a plant manager. */
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
