@@ -27,7 +27,7 @@ public class WeatherManager extends Manager implements TickableManager {
     /**
      * Constructor
      */
-    public WeatherManager() {
+    public WeatherManager() {    	
         effects = new ArrayList<ParticleEffect>();
 
 
@@ -37,7 +37,9 @@ public class WeatherManager extends Manager implements TickableManager {
         // set-up for rain
         rain.load(Gdx.files.internal("hcg/resources/particles/2dRain.p"),
                 Gdx.files.internal("hcg/resources/particles/"));
+
         rain.getEmitters().first().setPosition(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+        
     }
 
     /**
