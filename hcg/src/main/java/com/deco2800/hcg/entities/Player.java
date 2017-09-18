@@ -760,6 +760,9 @@ public class Player extends Character implements Tickable {
 			.addEntity(this.getEquippedWeapon());
 	    }
 	    break;
+	case Input.Keys.T:
+		this.getEquippedWeapon().switchBullet();
+		break;
 	case Input.Keys.ESCAPE:
 	    contextManager.popContext();
 	    break;

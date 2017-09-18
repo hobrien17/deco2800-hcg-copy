@@ -36,6 +36,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected int cooldown;
     protected WeaponType weaponType;
     protected AbstractEntity user;
+    protected int bulletType;
 
     /**
      * Constructor for Weapon objects.
@@ -60,6 +61,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.followY = 0;
         this.aimX = 0;
         this.aimY = 0;
+        this.bulletType = 0;
 
         this.weaponType = weaponType;
         this.user = user;
@@ -145,8 +147,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      */
     protected void shootBullet(float posX, float posY, float posZ,
                                float goalX, float goalY) {
-        Bullet bullet = new Bullet(posX, posY, posZ,
-                goalX, goalY, this.user, 1);
+        Bullet bullet = this.createBullet(posX, posY, posZ,
+                goalX, goalY);
         GameManager.get().getWorld().addEntity(bullet);
     }
 
@@ -171,6 +173,36 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                 (float) (this.radius * Math.cos(angle)));
         setPosY(this.user.getPosY() +
                 (float) (this.radius * Math.sin(angle)));
+    }
+
+    public void switchBullet() {
+        bulletType++;
+        if(bulletType > 2) {
+            bulletType = 0;
+        }
+    }
+
+    public Bullet createBullet(float posX, float posY, float posZ,
+                        float goalX, float goalY) {
+        Bullet bullet;
+        switch (bulletType) {
+            case 0:
+                System.out.println("Test 0");
+                bullet = new Bullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            case 1:
+                System.out.println("Test 1");
+                bullet = new Bullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            default:
+                System.out.println("Test Default");
+                bullet = new Bullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+        }
+        return bullet;
     }
 
     /**
