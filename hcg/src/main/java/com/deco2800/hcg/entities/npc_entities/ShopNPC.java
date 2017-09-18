@@ -1,12 +1,17 @@
 package com.deco2800.hcg.entities.npc_entities;
 
 
+import com.deco2800.hcg.trading.GeneralShop;
+import com.deco2800.hcg.trading.Shop;
+
 /**
  * Concrete implementation of a Shop NPC entity.
  * @author Blake
  *
  */
 public class ShopNPC extends NPC {
+
+    private Shop shop;
 
 	/**
 	 * Constructs a new Shop NPC
@@ -19,6 +24,7 @@ public class ShopNPC extends NPC {
 	 */
 	public ShopNPC(float posX, float posY, String fName, String sName, String texture) {
 		super(posX, posY, fName, sName, texture);
+		shop = new GeneralShop();
 	}
 
 	@Override
@@ -30,5 +36,14 @@ public class ShopNPC extends NPC {
 	protected void move() {
 		
 	}
+
+    /**
+     * Method to access the shop associated with this shopkeeper
+     *
+     * @return this shopkeeper's shop
+     */
+	public Shop getShop() {
+	    return shop;
+    }
 
 }

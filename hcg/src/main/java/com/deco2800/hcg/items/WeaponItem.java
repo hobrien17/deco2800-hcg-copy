@@ -48,8 +48,13 @@ public class WeaponItem extends SingleItem {
     
     @Override
     public boolean sameItem(Item item) throws IllegalArgumentException {
-        return (item instanceof WeaponItem && 
-                item.getName() == this.itemName && 
-                this.weapon.equals(((WeaponItem)item).getWeapon()));
+        return item instanceof WeaponItem && 
+               item.getName() == this.itemName && 
+               this.weapon.equals(((WeaponItem)item).getWeapon());
+    }
+
+    @Override
+    public Item copy() {
+        return new WeaponItem(weapon, itemName, itemWeight);
     }
 }

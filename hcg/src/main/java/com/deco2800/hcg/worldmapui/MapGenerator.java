@@ -188,8 +188,7 @@ public class MapGenerator {
 	private List<MapNode> generateNodes(int rowNumber, int columnNumber, int worldType) {
 		Random rand = new Random();
 		
-		MapNode initialNode = new MapNode(0, rowNumber/2, "", 1, getLevel(worldType), true); //ENTER NODE TEXTURE!!!
-		MapNode finalNode = new MapNode(columnNumber - 1, rowNumber/2, "", 3, getBossLevel(), false); //AS ABOVE!!!
+		MapNode initialNode = new MapNode(0, rowNumber/2, 1, getLevel(worldType), true);
 		
 		int columnsSinceSafeNode = 0;
 		List<MapNode> nodeList = new ArrayList<>();
@@ -216,9 +215,9 @@ public class MapGenerator {
 					safeNodeInColumn = true;
 					columnsSinceSafeNode = 0;
 				} else {
-					nodeType = 1;  // in the future, will add diffrent node types in here
+					nodeType = 1;  // in the future, will add different node types in here
 				}
-				MapNode basicNode = new MapNode(i, nodeRow, "", nodeType, getLevel(worldType), false);
+				MapNode basicNode = new MapNode(i, nodeRow, nodeType, getLevel(worldType), false);
 				currentOccupiedRows.add(nodeRow);
 				nodeList.add(basicNode);
 				if(!safeNodeInColumn) {
@@ -226,6 +225,7 @@ public class MapGenerator {
 				}
 			}
 		}
+		MapNode finalNode = new MapNode(columnNumber - 1, rowNumber/2, 3, getBossLevel(), false);
 		nodeList.add(finalNode); //add the boss node to the end of the list
 		nodeList = createMapTree(nodeList, columnNumber); //create link mapping of nodes for use in world map
 		return nodeList;

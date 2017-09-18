@@ -122,4 +122,10 @@ public interface Item {
      * @return whether or not this item and the given item are equivalent.
      */
     boolean equals(Item item) throws IllegalArgumentException;
+
+    /**
+     * Make a deep copy of this item
+     * @return the copy of the item
+     */
+    Item copy();
 }

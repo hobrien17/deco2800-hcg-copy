@@ -3,11 +3,7 @@ package com.deco2800.hcg.managers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.garden_entities.plants.*;
-import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.seeds.*;
-import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.items.Item;
 
 /**
