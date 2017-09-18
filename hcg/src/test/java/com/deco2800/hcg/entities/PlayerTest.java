@@ -89,42 +89,7 @@ public class PlayerTest {
 		
 	@Test
 	public void testPlayerInput() {
-/*
-	  Player player = new Player(0, 0, 0);
-	  
-      InputManager input = (InputManager) GameManager.get()
-          .getManager(InputManager.class);
-
-	  input.keyDown(Input.Keys.S);
-	  
-	  assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.S);
-      
-      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
-
-      input.keyDown(Input.Keys.A);
-      
-      assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.A);
-      
-      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
-      
-      input.keyDown(Input.Keys.D);
-      
-      assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.D);
-      
-      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
-*/
+		// TODO This must be performed by a PlayerInputManager test as inputs are now queued
 	}
 	
 	GameManager gameManager;
