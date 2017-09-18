@@ -476,13 +476,22 @@ public class Player extends Character implements Tickable {
     	    if (layer.getProperties().get("name", String.class) != null) {
         		String newName = layer.getProperties().get("name",
         			String.class);
-        
+        		if(move == 1) {
+        			if(newName.equals("exit")) {
+        	    		if(!onExit) {
+        					PlayContext play = (PlayContext) contextManager.currentContext();
+        					play.addExitWindow();
+        					onExit = true;
+        	    		}
+        			} else {
+        				onExit = false;
+        			}
+        		}   	    
         		// handle sound effects
         		handleSound(newName);
         
         		// handle terrain effect
         		handleTerrain(newName);
-        
     	    }
     	    // see if current tile is slippery. Save the slippery value if it is
     	    if (layer.getProperties().get("slippery") != null) {
@@ -575,15 +584,6 @@ public class Player extends Character implements Tickable {
      */
     private void handleTerrain(String terrain) {
     	switch (terrain) {
-			case "exit":
-				if(!onExit) {
-					PlayContext play = (PlayContext) contextManager.currentContext();
-					play.addExitWindow();
-					onExit = true;
-				} else {
-					onExit = false;
-				}
-				break;
 			case "water-deep":
 				this.setTexture("hcg_character_swim");
 				break;
