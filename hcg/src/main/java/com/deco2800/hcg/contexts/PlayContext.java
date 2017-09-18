@@ -359,7 +359,7 @@ public class PlayContext extends Context {
     }
     
     private void createExitWindow() {
-    	exitWindow = new Window("Exit Level?", skin);
+    	exitWindow = new Window("Complete Level?", skin);
     	Button yesButton = new TextButton("Yes", skin);
     	yesButton.pad(5, 10, 5, 10);
     	Button noButton = new TextButton("No", skin);
