@@ -660,11 +660,14 @@ public class Player extends Character implements Tickable {
      *            the amount of health to lose
      */
     public void takeDamage(int amount) {
-    	if (amount < this.healthCur) {
-    		this.healthCur -= amount;
-    	} else {
-    		this.healthCur = 0;
-    	}
+      // if user is taking damage
+      if (amount > 0) {
+        this.healthCur = Math.max(this.healthCur - amount, 0);
+        return;
+      }
+      // otherwise user is being healed
+      this.healthCur = Math.min(this.healthCur - amount, this.healthMax);
+
     }
 
     /**
