@@ -202,7 +202,10 @@ public final class NetworkManager extends Manager implements TickableManager {
 		messageBuffer.get(bytes);
 		sendQueue.put(id, bytes);
 	}
-	
+
+	/**
+	 *
+	 */
 	public void startGame() {
 		Integer id = startNewMessage(MessageType.START, 0);
 		// send message to peers
@@ -218,7 +221,10 @@ public final class NetworkManager extends Manager implements TickableManager {
 		playerManager.spawnPlayers();
 		contextManager.pushContext(new PlayContext());
 	}
-	
+
+	/**
+	 *
+	 */
 	public void send() {
 		// on the server peers contains all connected clients
 		// for a regular peer it only contains the server
@@ -235,7 +241,10 @@ public final class NetworkManager extends Manager implements TickableManager {
 			}
 		}
 	}
-	
+
+	/**
+	 *
+	 */
 	public void receive() {
 		try {
 			// acquire buffer from channel
@@ -293,7 +302,10 @@ public final class NetworkManager extends Manager implements TickableManager {
 			LOGGER.error("Failed to receive message", e);
 		}
 	}
-	
+
+	/**
+	 *
+	 */
 	public void processReceivedMessages() {
 		byte[] bytes;
 		while ((bytes = receiveQueue.poll()) != null) {
@@ -408,10 +420,18 @@ public final class NetworkManager extends Manager implements TickableManager {
 		}
 	}
 
+	/**
+	 * Updates the name of the lobby for game hosting.
+	 * @param name
+	 */
 	public void setLobbyName(String name) {
 		lobbyName = name;
 	}
 
+	/**
+	 * Returns the name of the game lobby.
+	 * @return
+	 */
 	public String getLobbyName() {
 		return lobbyName;
 	}
