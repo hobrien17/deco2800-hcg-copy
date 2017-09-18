@@ -525,6 +525,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 	@Override
     public void giveEffect(Effect effect) {
         myEffects.addEffect(effect);
+        soundManager.playSound("hit");
     }
 
     @Override
