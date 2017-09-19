@@ -26,8 +26,8 @@ import com.deco2800.hcg.managers.TimeManager;
  */
 public class ShopMenuContext extends InventoryDisplayContext {
 
-    private Image title;
-    private Image shopFunds;
+    private Image shop_title;
+    private Image player_title;
     private Table shopInventory;
     private Table playerInventory;
     private ImageButton shopBuy;
@@ -60,8 +60,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
         centreTable.setFillParent(true);
         centreTable.setBackground(new Image(textureManager.getTexture("wooden_background")).getDrawable());
 
-        title = new Image(textureManager.getTexture("shop_title"));
-        shopFunds = new Image(textureManager.getTexture("shop_funds"));
+        shop_title = new Image(textureManager.getTexture("shop_title"));
+        player_title = new Image(textureManager.getTexture("player_title"));
 
         shopInventory = new Table();
         shopInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
@@ -77,8 +77,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
         inventoryDisplay(textureManager, shopKeeper, skin, shopInventory);
 
         //add elements to table
-        centreTable.add(title);
-        centreTable.add(shopFunds);
+        centreTable.add(shop_title);
+        centreTable.add(player_title);
         centreTable.row();
         centreTable.add(shopInventory);
         centreTable.add(playerInventory);
@@ -107,6 +107,17 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 playerInventory.reset();
                 shopInventory.reset();
                 shopKeeper.getShop().buyStock(selectedItem);
+                inventoryDisplay(textureManager, player, skin, playerInventory);
+                inventoryDisplay(textureManager, shopKeeper, skin, shopInventory);
+            }
+        });
+
+        shopSell.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                playerInventory.reset();
+                shopInventory.reset();
+                shopKeeper.getShop().sellStock(selectedItem);
                 inventoryDisplay(textureManager, player, skin, playerInventory);
                 inventoryDisplay(textureManager, shopKeeper, skin, shopInventory);
             }
