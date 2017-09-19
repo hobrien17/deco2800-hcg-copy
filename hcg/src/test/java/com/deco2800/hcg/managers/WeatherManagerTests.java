@@ -8,13 +8,15 @@ import com.deco2800.hcg.types.Weathers;
 public class WeatherManagerTests {
 	private WeatherManager wmInstantiateTests;
 	private WeatherManager wmTurnOnTests;
-	private WeatherManager wmTurnOffTests;
+	private WeatherManager wmStopEffectTests;
+	private WeatherManager wmStopAllEffectsTests;
 
 	@Before
 	public void setUp() {
 		wmInstantiateTests = new WeatherManager();
 		wmTurnOnTests = new WeatherManager();
-		wmTurnOffTests = new WeatherManager();
+		wmStopEffectTests = new WeatherManager();
+		wmStopAllEffectsTests = new WeatherManager();
 	}
 
 	// Instantiate State Tests
@@ -49,25 +51,40 @@ public class WeatherManagerTests {
 	}
 
 	@Test
-	public void turningOffWeather() {
+	public void stopEffectTests() {
 		ArrayList<Weathers> testOffEffects = new ArrayList<Weathers>();
 
 		// turning on weather
 		for (Weathers weatherType : Weathers.values()) {
 			testOffEffects.add(weatherType);
-			wmTurnOffTests.setWeather(weatherType);
+			wmStopEffectTests.setWeather(weatherType);
 		}
 
 		// testing turning off
 		for (Weathers weatherType : Weathers.values()) {
 			testOffEffects.remove(weatherType);
 
-			wmTurnOffTests.stopEffect(weatherType);
+			wmStopEffectTests.stopEffect(weatherType);
 
-			Assert.assertEquals(
-					"weather type not turned off correctly",
-					testOffEffects, wmTurnOffTests.getOnEffects());
+			Assert.assertEquals("weather type not turned off correctly",
+					testOffEffects, wmStopEffectTests.getOnEffects());
 		}
+
+		Assert.assertTrue("No effects should be turned on",
+				wmStopEffectTests.getOnEffects().isEmpty());
+	}
+
+	@Test
+	public void stopAllEffectTest() {
+		// turning on weather
+		for (Weathers weatherType : Weathers.values()) {
+			wmStopAllEffectsTests.setWeather(weatherType);
+		}
+
+		wmStopAllEffectsTests.stopAllEffect();
+		
+		Assert.assertTrue("duplicate weather have been turned on",
+				wmStopAllEffectsTests.getOnEffects().isEmpty());
 	}
 
 }
