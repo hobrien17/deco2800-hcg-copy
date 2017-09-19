@@ -177,7 +177,7 @@ public abstract class Shop {
      */
     public int sellStock(Item item) {
         seed = new BasicSeed();
-        seed.addToStack(item.getBaseValue()+modifier);
+        seed.setStackSize(item.getBaseValue()+modifier);
         if ((item instanceof SingleItem) || (item.getStackSize() == 1)) {
             player.getInventory().removeItem(item);
         } else {

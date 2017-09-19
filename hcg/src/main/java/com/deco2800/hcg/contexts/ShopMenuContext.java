@@ -67,26 +67,33 @@ public class ShopMenuContext extends InventoryDisplayContext {
         playerInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
 
         shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy_button")).getDrawable());
+
+        Table buySell = new Table();
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
+        buySell.add(shopBuy);
+        buySell.row();
+        buySell.add(shopSell);
+        shopExit.setPosition(0, stage.getHeight()-shopExit.getHeight());
 
         inventoryDisplay(textureManager, player, skin, playerInventory);
         inventoryDisplay(textureManager, shopKeeper, skin, shopInventory);
 
         //add elements to table
-        centreTable.add(shop_title).height(100).width(500);
-        centreTable.add(player_title).height(100).width(200);
+        centreTable.add(shop_title);
+        centreTable.add();
+        centreTable.add(player_title);
         centreTable.row();
         centreTable.add(shopInventory);
+        centreTable.add(buySell);
         centreTable.add(playerInventory);
         centreTable.row();
-        centreTable.add(shopBuy);
-        centreTable.add(shopSell);
-        centreTable.row();
-        centreTable.add(shopExit);
+        //centreTable.add(shopBuy);
+        //centreTable.add(shopSell);
 
         //add table to stage
         stage.addActor(centreTable);
+        stage.addActor(shopExit);
 
         //Listeners
         shopExit.addListener(new ChangeListener() {
