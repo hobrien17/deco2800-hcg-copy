@@ -19,6 +19,9 @@ import com.deco2800.hcg.managers.TextureManager;
  *
  * It can currently be accessed by pressing 'C' whilst in the game.
  *
+ * TODO: Actually create a new character using this context, add descriptions on click for the attributes, skills,
+ * and stats window. Make it look purty
+ *
  * @author avryn
  */
 public class CharacterCreationContext extends UIContext{
@@ -104,6 +107,7 @@ public class CharacterCreationContext extends UIContext{
     private GameManager gameManager;
     private ContextManager contextManager;
     private TextureManager textureManager;
+
     /**
      * Creates a new character creation screen
      */
@@ -499,6 +503,8 @@ public class CharacterCreationContext extends UIContext{
                 }
                 meleeSkillLabel.setText("Melee Skill: " + meleeSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
+                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
+                        "Melee Weapons");
             }
         });
 
@@ -525,6 +531,8 @@ public class CharacterCreationContext extends UIContext{
                 }
                 gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
+                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
+                        "Guns");
             }
         });
 
@@ -551,6 +559,32 @@ public class CharacterCreationContext extends UIContext{
                 }
                 energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
+                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
+                        "Energy Weapons");
+            }
+        });
+
+        meleeSkillLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
+                        "Melee Weapons");
+            }
+        });
+
+        gunsSkillLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
+                        "Guns");
+            }
+        });
+
+        energyWeaponsSkillLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
+                        "Energy Weapons");
             }
         });
     }
