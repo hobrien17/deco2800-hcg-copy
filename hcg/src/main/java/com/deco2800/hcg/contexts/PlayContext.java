@@ -113,10 +113,7 @@ public class PlayContext extends Context {
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
 
-		/* Add temporary complete level button */
-		Button completeLevelButton = new TextButton("Complete Level", skin);
-
-		/* Add a programmatic listener to the quit and complete buttons */
+		/* Add a programmatic listener to the quit button */
 
 		button.addListener(new ChangeListener() {
 			@Override
@@ -127,7 +124,6 @@ public class PlayContext extends Context {
 
 		/* Add all buttons to the menu */
 		window.add(button);
-		window.add(completeLevelButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
