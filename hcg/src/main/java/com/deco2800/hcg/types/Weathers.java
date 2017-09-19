@@ -7,6 +7,5 @@ package com.deco2800.hcg.types;
  */
 
 public enum Weathers{
-	NONE, RAIN, SNOW, DROUGHT, STORM, SANDSTORM;
-
+	NONE, RAIN, SNOW, DROUGHT, STORM, SANDSTORM, WIND;
 }

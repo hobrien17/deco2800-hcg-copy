@@ -25,111 +25,92 @@ public class WeatherManager extends Manager {
 	// storm (rain, clouds, lightning)
 	// sandstorm
 
-	// ParticleEffect rain;
-	// ParticleEffect snow;
-	// ParticleEffect wind;
-	// ParticleEffect sandstorm;
-
-
 	ParticleEffect weather;
 	ParticleEffectActor weatherActor;
 
-	// onEffects: a list of effects that is currently on in game.
+	// onEffects: a list of effects that are currently on in the game.
 	ArrayList<Weathers> onEffects;
 
 	/**
 	 * Constructor for weather manager
 	 */
 	public WeatherManager() {
-
-		// boolean snow = false;
-
 		onEffects = new ArrayList<Weathers>();
 		weather = new ParticleEffect();
 		weather.start();
 
-
-		addWeather(Weathers.RAIN);
-		// addWeather(SNOW);
+		// setWeather(Weathers.RAIN);
+		// setWeather(Weathers.SNOW);
+		// setWeather(Weathers.SANDSTORM);
+		// setWeather(Weathers.WIND);
+		// stopEffect();
 
 		weatherActor = new ParticleEffectActor(weather);
-
 	}
 
 	/**
-	 * setups visuals including loading image files
+	 * Sets up visuals given a valid .p file for a weather effect.
 	 * 
 	 * @param fileName
 	 *            filename of particle file image in "resources/particles/"
 	 * 
-	 * @require weatherEffect has been declared and NOT instantiated && filename
-	 *          is in the path"resources/particles/"
-	 * 
-	 * @ensure allEffects contains weatherEffect
+	 * @require fileName refers to a .p file && weather has been declared && 
+	 * 			filename is in the path"resources/particles/"
 	 */
 	private void setUp(String fileName) {
-		// CHECK FOR WHETHER THIS WEATHER IS ALREADY ON; LATER WHEN MULTIPLE
-		// CONDITIONS ALLOWED (NOT NECESSARY YET)
-
 		weather.load(Gdx.files.internal("resources/particles/" + fileName),
 				Gdx.files.internal("resources/particles/"));
-
-		ParticleEmitter newEmitter = weather.getEmitters()
-				.get(weather.getEmitters().size - 1);
+		ParticleEmitter newEmitter = 
+				weather.getEmitters().get(weather.getEmitters().size - 1);
 		newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
 				Gdx.graphics.getHeight() / 2);
 
-		/*
-		 * CURRENTLY HARDCODED SCALE; CHANGE TO JUST COVER SCREEN (NEEDS TO
-		 * UPDATE WITH RESIZE).
-		 */
+		// Scale is currently hardcoded; TO DO
 		int scale = 9;
-
-		float heightHighMax = newEmitter.getSpawnHeight().getHighMax();
+		float heightHighMax, heightLowMax, heightHighMin, heightLowMin, 
+				widthHighMax, widthLowMax, widthHighMin, widthLowMin;
+		heightHighMax = newEmitter.getSpawnHeight().getHighMax();
 		newEmitter.getSpawnHeight().setHighMax(heightHighMax * scale);
-
-		float heightLowMax = newEmitter.getSpawnHeight().getLowMax();
+		
+		heightLowMax = newEmitter.getSpawnHeight().getLowMax();
 		newEmitter.getSpawnHeight().setLowMax(heightLowMax * scale);
-
-		float heightHighMin = newEmitter.getSpawnHeight().getHighMin();
+		
+		heightHighMin = newEmitter.getSpawnHeight().getHighMin();
 		newEmitter.getSpawnHeight().setHighMin(heightHighMin * scale);
-
-		float heightLowMin = newEmitter.getSpawnHeight().getLowMin();
+		
+		heightLowMin = newEmitter.getSpawnHeight().getLowMin();
 		newEmitter.getSpawnHeight().setLowMin(heightLowMin * scale);
 
-		float widthHighMax = newEmitter.getSpawnWidth().getHighMax();
+		widthHighMax = newEmitter.getSpawnWidth().getHighMax();
 		newEmitter.getSpawnWidth().setHighMax(widthHighMax * scale * 2);
 
-		float widthLowMax = newEmitter.getSpawnWidth().getLowMax();
+		widthLowMax = newEmitter.getSpawnWidth().getLowMax();
 		newEmitter.getSpawnWidth().setLowMax(widthLowMax * scale * 2);
 
-		float widthHighMin = newEmitter.getSpawnWidth().getHighMin();
+		widthHighMin = newEmitter.getSpawnWidth().getHighMin();
 		newEmitter.getSpawnWidth().setHighMin(widthHighMin * scale * 2);
 
-		float widthLowMin = newEmitter.getSpawnWidth().getLowMin();
+		widthLowMin = newEmitter.getSpawnWidth().getLowMin();
 		newEmitter.getSpawnWidth().setLowMin(widthLowMin * scale * 2);
 	}
 
 	/**
-	 * Turns on weather effect given.
+	 * Changes weather to given weather effect. If the provided error type is
+	 * not valid, nothing happens.
 	 * 
-	 * @param weatherEffect:
-	 *            int representation of declared weather type
-	 * 
-	 * @require weatherEffect has been declared and NOT instantiated && filename
-	 *          is in the path"resources/particles/"
-	 * 
-	 * @ensure allEffects contains weatherEffect
+	 * @param weatherType:
+	 *            int representation of desired weather type
 	 */
-	public void addWeather(Weathers weatherType) {
+	public void setWeather(Weathers weatherType) {
 		if (onEffects.contains(weatherType)) {
 			return;
 		}
 		ParticleEmitter emitter = new ParticleEmitter();
+		//weather.getEmitters
 		switch (weatherType) {
 			case NONE:
 				// Turn off all weather conditions
-				weather.dispose();
+				stopEffect();
 				break;
 			case RAIN:
 				setUp("2dRain.p");
@@ -137,37 +118,20 @@ public class WeatherManager extends Manager {
 			case SNOW:
 				setUp("2dSnow.p");
 				break;
-			default:
-				// Do nothing if weatherType is not an implemented weather type
+			case SANDSTORM:
+				setUp("2dSandstorm.p");
+				break;
+			case WIND:
+				setUp("2dWind.p");
+				break;
 		}
 	}
 
 	/**
-	 * Setter method to set weather to given type.
-	 * 
-	 * @param weatherType:
-	 *            int representation of the weather to set to
+	 * Turns off weather effects.
 	 */
-	public void setWeather(Weathers weatherType) {
-		addWeather(Weathers.NONE);
-		addWeather(weatherType);
-	}
-
-	/**
-	 * Turns off a particle effect, if getOnEffects() does not contain effect,
-	 * nothing will happen
-	 * 
-	 * @ensure this.getOnEffects() does not contain effect
-	 */
-	public void stopEffect(Weathers weatherType) {
-		// THIS IS NOT WORKING AT THE MOMENT; DO NOT TEST (SOZ)
-
-		int index = onEffects.indexOf(weatherType);
-		if (index != -1) {
-			onEffects.remove(index);
-			// weather.getEmitters().get(index).dispose();
-			// weather.getEmitters().remove(index);
-		}
+	public void stopEffect() {
+		weather.dispose();
 	}
 
 	/**
