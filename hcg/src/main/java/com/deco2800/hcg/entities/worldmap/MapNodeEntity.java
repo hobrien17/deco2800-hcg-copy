@@ -71,11 +71,6 @@ public class MapNodeEntity extends Actor {
 		node.setYPos(yPos + spriteHeight/2);
     }
 
-    @Override
-    public void draw(Batch batch, float alpha){
-        batch.draw(nodeTexture, xPos, yPos, spriteWidth, spriteHeight);
-    }
-
 	/**
 	 * Gets the node stored in this actor object
 	 *
@@ -116,4 +111,14 @@ public class MapNodeEntity extends Actor {
 	public float getHeight() {
 		return spriteHeight;
 	}
+
+	/**
+	 * Get the node's texture
+	 * @return the node's texture
+	 */
+	public Texture getNodeTexture() {
+		return nodeTexture;
+	}
+
+
 }

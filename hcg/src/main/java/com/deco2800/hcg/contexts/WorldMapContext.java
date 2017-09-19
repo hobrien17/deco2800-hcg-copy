@@ -3,6 +3,7 @@ package com.deco2800.hcg.contexts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -99,7 +100,7 @@ public class WorldMapContext extends UIContext {
 				nodeEntry.setVisible(false);
 			}
 			allNodes.add(nodeEntry);
-			stage.addActor(nodeEntry);
+			//stage.addActor(nodeEntry);
 		}
 
 		stage.addActor(window);
@@ -172,7 +173,7 @@ public class WorldMapContext extends UIContext {
 				hiddenNodes.add(nodeEntry);
 				nodeEntry.setVisible(false);
 			}
-			stage.addActor(nodeEntry);
+			//stage.addActor(nodeEntry);
 		}
 		stage.addActor(window);
 	}
@@ -217,11 +218,15 @@ public class WorldMapContext extends UIContext {
 		batch.draw(lineTexture, x1, y1, 2, 2, length, thickness, 1, 1, rotation);
 	}
 
+	private void drawPot(SpriteBatch batch, MapNodeEntity node) {
+		batch.draw(node.getNodeTexture(), node.getXPos(), node.getYPos(), node.getWidth(), node.getHeight());
+	}
 
 	@Override
 	public void render(float delta) {
 		super.render(delta);
-		Batch lineBatch = stage.getBatch();
+		Batch lineBatch = new SpriteBatch();
+		SpriteBatch potBatch = new SpriteBatch();
 
 		lineBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
@@ -235,5 +240,16 @@ public class WorldMapContext extends UIContext {
 			}
 		}
 		lineBatch.end();
+
+		potBatch.begin();
+		for (MapNodeEntity nodeEntity : allNodes) {
+			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
+				drawPot(potBatch, nodeEntity);
+			}
+		}
+		potBatch.end();
+
+		lineBatch.dispose();
+		potBatch.dispose();
 	}
 }
