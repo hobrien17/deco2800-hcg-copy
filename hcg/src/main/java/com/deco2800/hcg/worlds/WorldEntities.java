@@ -36,7 +36,7 @@ public enum WorldEntities {
         case MUSHROOMTURRET:
             return new MushroomTurret(x, y, 0f, index);
         case CORPSE:
-        	return new BasicCorpse(x, y, 0f, "tree");
+        	return new BasicCorpse(x, y, 0f);
         default:
         	return null;
       }

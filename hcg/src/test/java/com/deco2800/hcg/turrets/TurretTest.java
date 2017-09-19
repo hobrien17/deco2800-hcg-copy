@@ -69,7 +69,7 @@ public class TurretTest {
 		setupGM();
 		sw = (StopwatchManager)gm.getManager(StopwatchManager.class);
 		tm = (TimeManager)gm.getManager(TimeManager.class);
-		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0, "tree");
+		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new SunflowerTurret(corpse);
 	}
@@ -125,7 +125,7 @@ public class TurretTest {
 		
 		sw = (StopwatchManager)gm.getManager(StopwatchManager.class);
 		tm = (TimeManager)gm.getManager(TimeManager.class);
-		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0, "tree");
+		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new FireTurret(corpse);
 	}
@@ -166,7 +166,7 @@ public class TurretTest {
 		
 		sw = (StopwatchManager)gm.getManager(StopwatchManager.class);
 		tm = (TimeManager)gm.getManager(TimeManager.class);
-		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0, "tree");
+		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new IceTurret(corpse);
 		
@@ -196,7 +196,7 @@ public class TurretTest {
 		
 		sw = (StopwatchManager)gm.getManager(StopwatchManager.class);
 		tm = (TimeManager)gm.getManager(TimeManager.class);
-		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0, "tree");
+		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new ExplosiveTurret(corpse);
 		

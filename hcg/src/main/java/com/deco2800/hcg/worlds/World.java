@@ -73,16 +73,6 @@ public class World {
 		this.setLength(
 				this.getMap().getProperties().get("height", Integer.class));
 
-		// get player
-		Player player = ((PlayerManager) GameManager.get()
-				.getManager(PlayerManager.class)).getPlayer();
-
-		// change player position based on the properties below
-		player.setPosX(Float.parseFloat(
-				(String) this.getMap().getProperties().get("PlayerX")));
-		player.setPosY(Float.parseFloat(
-				(String) this.getMap().getProperties().get("PlayerY")));
-
 		// loop over all object layers
 		for (MapLayer layer : getObjectLayers()) {
 
