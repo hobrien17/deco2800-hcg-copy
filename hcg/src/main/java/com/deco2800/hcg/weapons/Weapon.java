@@ -2,7 +2,7 @@ package com.deco2800.hcg.weapons;
 
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.bullets.*;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
@@ -210,17 +210,14 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         Bullet bullet;
         switch (bulletType) {
             case 0:
-                System.out.println("Test 0");
                 bullet = new Bullet(posX, posY, posZ,
                         goalX, goalY, this.user, 1);
                 break;
             case 1:
-                System.out.println("Test 1");
-                bullet = new Bullet(posX, posY, posZ,
+                bullet = new SunflowerSeed(posX, posY, posZ,
                         goalX, goalY, this.user, 1);
                 break;
             default:
-                System.out.println("Test Default");
                 bullet = new Bullet(posX, posY, posZ,
                         goalX, goalY, this.user, 1);
                 break;
