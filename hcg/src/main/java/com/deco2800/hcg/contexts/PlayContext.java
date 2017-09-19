@@ -9,19 +9,22 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.multiplayer.Message;
-import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Color;
+
+
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -39,6 +42,9 @@ public class PlayContext extends Context {
 	private PlantManager plantManager;
 	private MessageManager messageManager;
 	private PlayerStatusDisplay playerStatus;
+	private Group ClockDisplay;
+	private TextureManager textureManager;
+	private NetworkManager networkManager;
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -61,20 +67,23 @@ public class PlayContext extends Context {
 	private Stage stage;
 	private Window window;
 	private Window plantWindow;
+	private Window exitWindow;
+	private Stack chatBackground;
 	private Table chatWindow;
 	private Label plantInfo;
 	private Label clockLabel;
 	private Label dateLabel;
-	private Label chatLabel;
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private Button chatButton;
+	private Skin skin;
+	private Image chatBar;
+	private String chatString = new String("");
 
-
-    /**
-     * Create the PlayContext
-     */
-    public PlayContext() {
+	/**
+	 * Create the PlayContext
+	 */
+	public PlayContext() {
 
 		// Set up managers for this game
 		gameManager = GameManager.get();
@@ -84,23 +93,23 @@ public class PlayContext extends Context {
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
+		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
-
+				
 		// Setup GUI
 		stage = new Stage(new ScreenViewport());
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
         plantWindow = new Window("Plants", skin);
+        createExitWindow();
 
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
 		
-		/* Add temporary complete level button */
-		Button completeLevelButton = new TextButton("Complete Level", skin);
-
 		/* Add clock. */
 		Image clockImage = new Image(new
 				Texture(Gdx.files.internal("resources/ui/clock_outline.png")));
@@ -113,26 +122,16 @@ public class PlayContext extends Context {
 		playerStatus = new PlayerStatusDisplay();
 		stage.addActor(playerStatus);
 
-		/* Add a programmatic listener to the quit and complete buttons */
+		/* Add a programmatic listener to the quit button */
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				contextManager.popContext();
 			}
 		});
-		
-		completeLevelButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				gameManager.getCurrentNode().changeNodeType(2);
-				gameManager.getMapContext().updateMapDisplay();
-				contextManager.popContext();
-			}
-		});
 
 		/* Add all buttons to the menu */
 		window.add(button);
-		window.add(completeLevelButton);
 		window.add(clockLabel);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
@@ -142,66 +141,103 @@ public class PlayContext extends Context {
 		stage.addActor(window);
 
 		/* Create clock GUI and add it to the stage */
-        Group group = new Group();
-        group.setPosition(stage.getWidth() - 220, 20);
-        group.addActor(clockImage);
-        clockLabel.setPosition(58, 95);
-        clockLabel.setFontScale((float)2.1);
-        dateLabel.setPosition(65, 60);
-        dateLabel.setFontScale((float)0.9);
-        group.addActor(clockLabel);
-        group.addActor(dateLabel);
-        stage.addActor(group);
+		Group group = new Group();
+		group.setPosition(stage.getWidth() - 220, 20);
+		group.addActor(clockImage);
+		clockLabel.setPosition(58, 95);
+		clockLabel.setFontScale((float) 2.1);
+		dateLabel.setPosition(65, 60);
+		dateLabel.setFontScale((float) 0.9);
+		group.addActor(clockLabel);
+		group.addActor(dateLabel);
+		stage.addActor(group);
 
         /* Create the window for plant. */
-        plantInfo = new Label("null",skin);
-        plantManager.setPlantLabel(plantInfo);
-        plantManager.setPlantWindow(plantWindow);
-        plantWindow.add(plantInfo);
-        plantManager.updateLabel();
-        plantWindow.pack();
-        plantWindow.setMovable(false);
-        plantWindow.setPosition(stage.getWidth(), stage.getHeight());
-        stage.addActor(plantWindow);
+		plantInfo = new Label("null", skin);
+		plantManager.setPlantLabel(plantInfo);
+		plantManager.setPlantWindow(plantWindow);
+		plantWindow.add(plantInfo);
+		plantManager.updateLabel();
+		plantWindow.pack();
+		plantWindow.setMovable(false);
+		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+		stage.addActor(plantWindow);
 
         /* Create window for chat and all components */
+		chatBar = new Image(textureManager.getTexture("chat_background"));
+		chatBackground = new Stack(chatBar);
 		chatWindow = new Table(skin);
-		chatWindow.setPosition(0, 0);
-		chatWindow.setSize(350,250);
-		chatLabel = new Label("Say: ", skin);
-		chatLabel.setColor(new Color().GRAY);
-        chatTextArea = new TextArea("", skin);
-        chatTextField = new TextField("", skin);
-        chatTextArea.setDisabled(true);
-        chatTextArea.setText("");
-        chatButton = new TextButton("Send", skin);
-        chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3);
-        chatWindow.row().height(40);
-        chatWindow.add(chatLabel).left().prefWidth(10);
-        chatWindow.add(chatTextField).prefWidth(350);
-        chatWindow.add(chatButton);
-        chatWindow.setDebug(false);//display lines for debugging
-
-
-        stage.addActor(chatWindow);
+		chatTextArea = new TextArea("", skin);
+		chatTextField = new TextField("", skin);
+		chatTextArea.setDisabled(true);
+		chatTextArea.setText("");
+		chatButton = new TextButton("Send", skin);
+		chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3).padBottom(20);
+		chatWindow.row().height(40).padBottom(10);
+		chatWindow.add(chatTextField).prefWidth(350);
+		chatWindow.add(chatButton);
+		chatWindow.setDebug(false);//display lines for debugging
+		chatWindow.padTop(35).padLeft(15).padRight(15);
+		chatBackground.setPosition(0, 0);
+		chatBackground.add(chatWindow);
+		chatBackground.setSize(380, 270);
+		chatBackground.setScale((float) 1.2);
+		if (networkManager.isInitialised()) {
+			stage.addActor(chatBackground);
+		}
 
 		/*
 		 * Setup inputs for the buttons and the game itself
 		 */
-        
-        chatButton.addListener(new ChangeListener() {
+
+		chatButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (NetworkState.isInitialised()) {
-					String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
-					chatTextField.setText("");
-					chatTextArea.appendText(chatMessage + "\n");
-					stage.setKeyboardFocus(null);
+				if (networkManager.isInitialised()) {
+					if (chatString.trim().length()>0) {
+						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
+
+						chatTextField.setText("");
+						chatTextArea.appendText(chatMessage + "\n");
+						stage.setKeyboardFocus(null);
+						chatString = "";
+					} else {
+						chatTextField.setText("");
+						chatTextField.setCursorPosition(0);
+						chatString = "";
+					}
 				}
 			}
 		});
-        
-        messageManager.addChatMessageListener(this::handleChatMessage);
+
+        /*
+        	Input Listener for Textfield
+         */
+		chatTextField.setTextFieldListener(new TextField.TextFieldListener() { //textfield Listener
+			@Override
+			public void keyTyped(TextField textField, char c) {
+				if (c != '\b') {
+					chatString += c;
+				} else if (chatString.length() > 0) {
+					chatString = chatString.substring(0, chatString.length() - 1);
+				}
+				if ((c == '\r' && networkManager.isInitialised())) {
+					if (chatString.trim().length()>0) {
+						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
+						chatTextField.setText("");
+						chatTextArea.appendText(chatMessage + "\n");
+						stage.setKeyboardFocus(null);
+						chatString = "";
+					} else {
+						chatTextField.setText("");
+						chatTextField.setCursorPosition(0);
+						chatString = "";
+					}
+				}
+			}
+		});
+
+		messageManager.addChatMessageListener(this::handleChatMessage);
         
 		/*
 		 * Setup an Input Multiplexer so that input can be handled by both the UI and
@@ -255,10 +291,9 @@ public class PlayContext extends Context {
 			}
 		});
 	}
-	
-	
-	private void handleChatMessage(Message message) {
-		chatTextArea.appendText(message.getPayloadString() + "\n");
+
+	private void handleChatMessage(String message) {
+		chatTextArea.appendText(message + "\n");
 	}
 
 	/**
@@ -339,14 +374,14 @@ public class PlayContext extends Context {
 
 	@Override
 	public void pause() {
-		if (!NetworkState.isInitialised()) {
+		if (!networkManager.isInitialised()) {
 			unpaused = false;
 		}
 	}
 
 	@Override
 	public void resume() {
-		if (!NetworkState.isInitialised()) {
+		if (!networkManager.isInitialised()) {
 			unpaused = true;
 		}
 	}
@@ -367,5 +402,44 @@ public class PlayContext extends Context {
         if (keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
         }
+    }
+    
+    private void createExitWindow() {
+    	exitWindow = new Window("Complete Level?", skin);
+    	Button yesButton = new TextButton("Yes", skin);
+    	yesButton.pad(5, 10, 5, 10);
+    	Button noButton = new TextButton("No", skin);
+    	noButton.pad(5, 10, 5, 10);
+    	
+    	/* Add a programmatic listener to the buttons */
+		yesButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				gameManager.getCurrentNode().changeNodeType(2);
+				gameManager.getMapContext().updateMapDisplay();
+				contextManager.popContext();
+			}
+		});
+
+		noButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				exitWindow.remove();
+			}
+		});
+    	
+    	exitWindow.add(yesButton);
+    	exitWindow.add(noButton);
+    	exitWindow.pack();
+		exitWindow.setMovable(false); // So it doesn't fly around the screen
+		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+		exitWindow.setWidth(150);
+    }
+    
+    public void addExitWindow() {
+    	if(exitWindow.getStage() == null) {
+    		/* Add the window to the stage */
+    		stage.addActor(exitWindow);
+    	}
     }
 }

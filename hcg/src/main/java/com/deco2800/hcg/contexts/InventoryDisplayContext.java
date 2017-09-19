@@ -10,6 +10,7 @@ import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.managers.TextureManager;
+import org.lwjgl.Sys;
 
 import java.util.Iterator;
 
@@ -59,6 +60,7 @@ public abstract class InventoryDisplayContext extends UIContext{
             Item currentItem = player.getInventory().getItem(i);
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
                     .getDrawable());
+            //ImageButton button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
@@ -94,14 +96,13 @@ public abstract class InventoryDisplayContext extends UIContext{
                                 if (currentItem instanceof ConsumableItem) {
                                     ((ConsumableItem) currentItem).consume(player);
                                     player.getInventory().removeItem(currentItem, 1);
-                                    itemLabel.setText(""+ currentItem.getStackSize());
+                                    inventory.clear();
+                                    inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
                                     //TODO: Equip the item
                                 } else if (currentItem.isWearable()) {
                                     //TODO: Wear item
                                 }
-                                //TODO: This remove gets stuck when one item is left, this is because the redraw doesnt work for 0 case (i.e no item)
-                                //We could completely redisplay the inventory, but seems a bit inefficient.
 
                             }
                         });
@@ -182,6 +183,7 @@ public abstract class InventoryDisplayContext extends UIContext{
      * @param clickedImage
      *          The clicked image for the item
      */
+
     private void commonSetup(Item currentItem, ImageButton button, Stack stack, Label itemLabel, Image clickedImage) {
         //Get the item to be displayed as a button
         if (currentRow >= maxRow) {
@@ -214,5 +216,42 @@ public abstract class InventoryDisplayContext extends UIContext{
         }
 
         inventory.add(newTable).width(50).height(60).pad(15);
+    }
+
+
+    /** Method for updating table view to display the players current equipped items. Used within the equipment tab
+     * of the inventory
+     * @param textureManager the main texture manager
+     * @param player the current player whos equipment will be displayed
+     * @param skin default skin
+     * @param playerEquipment table to display the equipment
+     */
+    public void equipmentDisplay(TextureManager textureManager, Player player, Skin skin, Table playerEquipment) {
+        this.skin = skin;
+        currentRow = 0;
+        this.inventory = playerEquipment;
+        for (int i=0; i<player.getEquippedItems().getNumItems(); i++) {
+            Item currentItem = player.getEquippedItems().getItem(i);
+            System.out.println(textureManager.getTexture(currentItem.getTexture()));
+            //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
+            //ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
+            //.getDrawable());
+            ImageButton button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            Stack stack = new Stack();
+            Image clickedImage = new Image(textureManager.getTexture("selected"));
+            Label itemLabel = null;
+            commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+            stack.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (clickedImage.isVisible()) {
+                        clickedImage.setVisible(false);
+                    } else {
+                        clickedImage.setVisible(true);
+                    }
+                }
+            });
+            currentRow++;
+        }
     }
 }

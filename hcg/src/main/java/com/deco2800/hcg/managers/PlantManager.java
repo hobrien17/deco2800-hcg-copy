@@ -85,7 +85,7 @@ public class PlantManager extends Manager {
 	 */
 	private String labelContent() {
 		StringBuilder result = new StringBuilder("No plants planted");
-		if (plantList.size() == 0) {
+		if (plantList.isEmpty()) {
 			plantInfo.setColor(Color.GRAY);
 
 		} else {
