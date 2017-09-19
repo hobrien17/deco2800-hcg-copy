@@ -527,9 +527,9 @@ public class Player extends Character implements Tickable {
 			float slipperyFactor2 = slippery * 0.06f;
 
 			// created helper function to avoid duplicate code
-			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed,
+			lastSpeedX = slipperySpeedHelper(speedX * sprintMultiplier, lastSpeedX, speed,
 					slipperyFactor, slipperyFactor2);
-			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed,
+			lastSpeedY = slipperySpeedHelper(speedY * sprintMultiplier, lastSpeedY, speed,
 					slipperyFactor, slipperyFactor2);
 		} else {
 			// non slippery movement
@@ -894,9 +894,9 @@ public class Player extends Character implements Tickable {
     	float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
 
     	if (GameManager.get().getCamera() != null) {
-    		GameManager.get().getCamera().position.x = isoX;
-    		GameManager.get().getCamera().position.y = isoY;
-    		GameManager.get().getCamera().update();
+			GameManager.get().getCamera().position.x += (isoX - GameManager.get().getCamera().position.x) * .09f;
+			GameManager.get().getCamera().position.y += (isoY - GameManager.get().getCamera().position.y) * .09f;
+			GameManager.get().getCamera().update();
     	}
     }
 

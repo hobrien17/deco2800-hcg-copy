@@ -84,6 +84,10 @@ public class TextureManager extends Manager {
 
 		//Terrain objects
 		textureMap.put("wallblock", new Texture("resources/terrain_objects/wallblock.png"));
+	    textureMap.put("boulder", new Texture("resources/terrain_objects/boulder.png"));
+	    textureMap.put("rock", new Texture("resources/terrain_objects/rock.png"));
+	    textureMap.put("iceboulder", new Texture("resources/terrain_objects/iceboulder.png"));
+
 		//trees
 		textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
 		textureMap.put("tree_leafless", new Texture("resources/terrain_objects/tree_dead_01.png"));
@@ -123,11 +127,12 @@ public class TextureManager extends Manager {
 		textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
 
 		//Shop textures
-		textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_name.png"));
+		textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
 		textureMap.put("shop_buy_button", new Texture("resources/ui/shop_ui/shop_buy.png"));
 		textureMap.put("shop_sell_button", new Texture("resources/ui/shop_ui/shop_sell.png"));
-		textureMap.put("shop_funds", new Texture("resources/ui/shop_ui/shop_funds.png"));
+		textureMap.put("player_title", new Texture("resources/ui/shop_ui/player_title.png"));
 		textureMap.put("shop_inventory", new Texture("resources/ui/shop_ui/shop_inventory.png"));
+		textureMap.put("item_background", new Texture("resources/ui/shop_ui/square.png"));
 		textureMap.put("wooden_background", new Texture("resources/ui/shop_ui/wooden_background.png"));
 		textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
         textureMap.put("selected", new Texture("resources/ui/shop_ui/selected.png"));

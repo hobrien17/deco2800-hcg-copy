@@ -75,7 +75,6 @@ public class GameManager implements TickableManager {
                 return m;
             }
         }
-
 		/* Otherwise create one */
         try {
             Constructor<?> ctor = type.getConstructor();
@@ -117,7 +116,7 @@ public class GameManager implements TickableManager {
     }
 
     /**
-     * @deprecated
+     * Gets the current camera
      */
     public OrthographicCamera getCamera() {
         return camera;

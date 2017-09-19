@@ -29,6 +29,7 @@ public abstract class InventoryDisplayContext extends UIContext{
 
     private int maxRow = 4;
     private int currentRow;
+    private TextureManager textureManager;
 
     protected Item selectedItem;
     protected Image selectedImage;
@@ -54,6 +55,7 @@ public abstract class InventoryDisplayContext extends UIContext{
                      Skin skin, Table inventory) {
         this.skin = skin;
         this.inventory = inventory;
+        this.textureManager = textureManager;
         currentRow = 0;
 
         for (int i=0; i<player.getInventory().getNumItems(); i++) {
@@ -128,9 +130,10 @@ public abstract class InventoryDisplayContext extends UIContext{
      * @param inventory
      *          The inventory table
      */
-    public void inventoryDisplay(TextureManager textureManager, Character character, Skin skin, Table inventory) {
+    public void inventoryDisplay(TextureManager textureManager, Character character, Skin skin, Table inventory, ShopMenuContext shopMenuContext) {
         this.skin = skin;
         this.inventory = inventory;
+        this.textureManager = textureManager;
         currentRow = 0;
         Iterator items = null;
 
@@ -157,12 +160,9 @@ public abstract class InventoryDisplayContext extends UIContext{
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (selectedItem != null) {
-                        selectedImage.setVisible(false);
-                    }
                     selectedImage = clickedImage;
                     selectedItem = currentItem;
-                    selectedImage.setVisible(true);
+                    shopMenuContext.draw();
                 }
             });
             currentRow++;
@@ -201,13 +201,20 @@ public abstract class InventoryDisplayContext extends UIContext{
         }
         itemLabel.setColor(Color.BLACK);
 
-        //Stack containing the item image and the on click overlay
-        stack.add(clickedImage);
-        stack.add(button);
+        Table buttonTable = new Table();
+        buttonTable.add(button).width(50).height(50);
+
+        Table clickedImageTable = new Table();
+        clickedImageTable.add(clickedImage).width(50).height(50);
+
+        //Stack containing the item image, background and the on click overlay
+        stack.add(new Image(textureManager.getTexture("item_background")));
+        stack.add(buttonTable);
+        stack.add(clickedImageTable);
 
         //Wrapping table for the label and image
         Table newTable = new Table();
-        newTable.add(stack).height(50).width(50);
+        newTable.add(stack).height(60).width(60);
         newTable.row();
         newTable.add(itemLabel);
 
@@ -215,7 +222,7 @@ public abstract class InventoryDisplayContext extends UIContext{
             clickedImage.setVisible(false);
         }
 
-        inventory.add(newTable).width(50).height(60).pad(15);
+        inventory.add(newTable).width(60).height(70).pad(5);
     }
 
 

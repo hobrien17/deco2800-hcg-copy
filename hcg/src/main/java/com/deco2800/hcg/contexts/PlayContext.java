@@ -34,6 +34,10 @@ public class PlayContext extends Context {
 	// Managers used by the game
 	private GameManager gameManager;
 	private SoundManager soundManager;
+
+	private TimeManager timeManager;
+	private WeatherManager weatherManager;
+
 	private ContextManager contextManager;
 	private PlantManager plantManager;
 	private MessageManager messageManager;
@@ -72,6 +76,7 @@ public class PlayContext extends Context {
 	private Label plantInfo;
 	private TextField chatTextField;
 	private TextArea chatTextArea;
+
 	private Button chatButton;
 	private Skin skin;
 	private Image chatBar;
@@ -86,6 +91,8 @@ public class PlayContext extends Context {
 		// Set up managers for this game
 		gameManager = GameManager.get();
 		soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
+		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
+		weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
@@ -121,6 +128,9 @@ public class PlayContext extends Context {
 				contextManager.popContext();
 			}
 		});
+        
+        /* Add ParticleEffectActor that controls weather. */
+        stage.addActor(weatherManager.getActor());
 
 		/* Add all buttons to the menu */
 		window.add(button);
@@ -142,6 +152,7 @@ public class PlayContext extends Context {
 		chatBar = new Image(textureManager.getTexture("chat_background"));
 		chatBackground = new Stack(chatBar);
 		chatWindow = new Table(skin);
+
 		chatTextArea = new TextArea("", skin);
 		chatTextField = new TextField("", skin);
 		chatTextArea.setDisabled(true);
@@ -160,7 +171,6 @@ public class PlayContext extends Context {
 		if (networkManager.isInitialised()) {
 			stage.addActor(chatBackground);
 		}
-
 		/*
 		 * Setup inputs for the buttons and the game itself
 		 */
