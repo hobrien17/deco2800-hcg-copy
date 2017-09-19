@@ -15,7 +15,6 @@ import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.worlds.World;
-
 import java.util.ArrayList;
 
 /**
@@ -196,6 +195,7 @@ public class WorldMapContext extends UIContext {
 		// Capture user input
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
+
 	/**
 	 * Adds a new line to be drawn to the rendering batch. The line is drawn between the two given (x, y) pairs
 	 * @param batch the instance of the sprite batch to add the lines to.
@@ -216,6 +216,7 @@ public class WorldMapContext extends UIContext {
 		rotation = rotation * 180/(float)Math.PI;
 		batch.draw(lineTexture, x1, y1, 2, 2, length, thickness, 1, 1, rotation);
 	}
+
 
 	@Override
 	public void render(float delta) {

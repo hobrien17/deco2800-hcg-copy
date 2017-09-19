@@ -30,8 +30,12 @@ public class MapNode {
 	
 	private static int nodeCount = 0;
 
+	/* These are the screen positions of the nodes on the world map screen.
+	 * Note: The engine uses all sprite co-ordinates from the bottom left corner of the sprite, however when these are
+	 * set from MapNodeEntity, they are actually calculated to be the center point of the sprite since we are using them
+	 * to draw lines between the nodes.
+	 */
 	private int xPos;
-
 	private int yPos;
 	
 	/**
@@ -124,22 +128,39 @@ public class MapNode {
 		return linkedLevel;
 	}
 
+	/**
+	 * Gets the nodes sprite center point screen x position
+	 * @return
+	 * 		Returns the x co-ordinate
+	 */
 	public int getXPos() {
 		return xPos;
 	}
 
+	/**
+	 * Sets the nodes sprite center point screen x position
+	 * @param xPos the new center point screen x position
+	 */
 	public void setXPos(int xPos) {
 		this.xPos = xPos;
 	}
 
+	/**
+	 * Gets the nodes sprite center point screen y position
+	 * @return
+	 * 		Returns the y co-ordinate
+	 */
 	public int getYPos() {
 		return yPos;
 	}
 
+	/**
+	 * Sets the nodes sprite center point screen y position
+	 * @param yPos the new center point screen y position
+	 */
 	public void setYPos(int yPos) {
 		this.yPos = yPos;
 	}
-
 
 	/**
 	 * Gets the node's selection status.

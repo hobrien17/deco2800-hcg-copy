@@ -66,6 +66,7 @@ public class MapNodeEntity extends Actor {
         // Calculate the scaling required on the sprite height.
         spriteHeight = nodeTexture.getHeight() / (nodeTexture.getWidth() / spriteWidth);
 
+        // Pass the center point of the sprite back the the MapNode
 		node.setXPos(xPos + spriteWidth/2);
 		node.setYPos(yPos + spriteHeight/2);
     }
@@ -84,18 +85,34 @@ public class MapNodeEntity extends Actor {
         return node;
     }
 
+	/**
+	 * Gets the MapNodeEntity's screen x position
+	 * @return the x co ordinate
+	 */
 	public float getXPos() {
 		return xPos;
 	}
-	
+
+	/**
+	 * Gets the MapNodeEntity's screen y position
+	 * @return the y co ordinate
+	 */
 	public float getYPos() {
 		return yPos;
 	}
-	
+
+	/**
+	 * Gets the sprite's width
+	 * @return the width
+	 */
 	public float getWidth() {
 		return spriteWidth;
 	}
-	
+
+	/**
+	 * Gets the sprite's height
+	 * @return the height
+	 */
 	public float getHeight() {
 		return spriteHeight;
 	}
