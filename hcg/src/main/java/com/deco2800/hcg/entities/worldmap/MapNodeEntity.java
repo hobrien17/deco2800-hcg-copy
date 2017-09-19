@@ -65,6 +65,9 @@ public class MapNodeEntity extends Actor {
 
         // Calculate the scaling required on the sprite height.
         spriteHeight = nodeTexture.getHeight() / (nodeTexture.getWidth() / spriteWidth);
+
+		node.setXPos(xPos + spriteWidth/2);
+		node.setYPos(yPos + spriteHeight/2);
     }
 
     @Override

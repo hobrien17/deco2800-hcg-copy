@@ -29,6 +29,10 @@ public class MapNode {
 	private boolean isDiscovered;
 	
 	private static int nodeCount = 0;
+
+	private int xPos;
+
+	private int yPos;
 	
 	/**
 	 * Initialises a new MapNode object based on the specified parameters.
@@ -119,7 +123,24 @@ public class MapNode {
 	public Level getNodeLinkedLevel() {
 		return linkedLevel;
 	}
-	
+
+	public int getXPos() {
+		return xPos;
+	}
+
+	public void setXPos(int xPos) {
+		this.xPos = xPos;
+	}
+
+	public int getYPos() {
+		return yPos;
+	}
+
+	public void setYPos(int yPos) {
+		this.yPos = yPos;
+	}
+
+
 	/**
 	 * Gets the node's selection status.
 	 * @return
