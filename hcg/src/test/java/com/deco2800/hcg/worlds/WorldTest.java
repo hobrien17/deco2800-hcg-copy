@@ -6,16 +6,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tower;
-import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 
@@ -154,17 +149,54 @@ public class WorldTest extends World{
     ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).setPlayer(player);
 
     // create world from our good test map
-    World world = new World("resources/maps/test.tmx");
+    World world = new World("test");
 
 
     // add world to gamemanager
     gameManager.setWorld(world);
     
-    // if it's crashed, that's bad
-
-    //assertFalse(world.getMap() == null);
-        
+    // I don't trust jenkins
+    if (world.getMap() != null) {
+      // make sure player moved
+      assertTrue("Player X didn't change.", player.getPosX() != 0);
+      assertTrue("Player Y didn't change.", player.getPosY() != 0);
+      
+      // make sure all object layers are deleted after the world is initiated
+      assertTrue("Object layers were not deleted", world.getObjectLayers().size() == 0);
+      
+      // ensure a few entities exist 
+      assertTrue("Entites were not spawned", world.getEntities().size() >= 5);
+      
+      assertTrue("World length was not modified", world.getLength() != 0);
+      assertTrue("World width was not modified", world.getWidth() != 0);
+      
+    }
+    
   }
+  
+  @Test
+  public void testLoadedFile() {
 
+    World world = new World("test");
+
+    if (world.getMap() != null) {
+      assertTrue("resources/maps/initial-map-test.tmx".equals(world.getLoadedFile()));
+    }
+    
+  }
+  
+  @Test
+  public void testDeselectAll() {
+    
+    World world = new World(null);
+    Tower tower = new Tower(0, 0, 0);
+
+    world.addEntity(tower);
+    
+    world.deSelectAll();
+    
+    assertTrue("Tower was selected", tower.isSelected() == false);
+  }
+  
 }
 

@@ -1,27 +1,16 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
-import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
-import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.weapons.*;
-
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * A generic player instance for the game
  */
 public class Squirrel extends Enemy implements Tickable {
-
-
-	// private float speed = 0.03f;
-	//private boolean collided;
 
 	/**
 	 * Constructor for the Squirrel class. Creates a new squirrel at the given
@@ -30,10 +19,10 @@ public class Squirrel extends Enemy implements Tickable {
 	 * @param posX the x position
 	 * @param posY the y position
 	 * @param posZ the x position
-	 * @param ID the ID of the squirrel
+	 * @param Id the ID of the squirrel
 	 */
-	public Squirrel(float posX, float posY, float posZ, int ID) {
-		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
+	public Squirrel(float posX, float posY, float posZ, int Id) {
+		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, Id);
 		this.setTexture("squirrel");
 		this.level = 1;
 		this.enemyWeapon = new WeaponBuilder()

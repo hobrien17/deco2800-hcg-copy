@@ -24,7 +24,6 @@ public class Tree extends TerrainEntity {
     public Tree(float posX, float posY, float posZ, boolean random) {
 
         super(posX, posY, posZ, 1.0f, 1.0f, 1.0f);
-//        this.setCentered();
 
         treeTypes = treeTypes();
         treeStates = treeStates();
@@ -95,8 +94,8 @@ public class Tree extends TerrainEntity {
      */
     private ArrayList<TreeState> treeStates() {
         ArrayList<TreeState> states = new ArrayList<>();
-        for (TreeState state : TreeState.values()) {
-            states.add(state);
+        for (TreeState treeState : TreeState.values()) {
+            states.add(treeState);
         }
         return states;
     }
@@ -107,8 +106,8 @@ public class Tree extends TerrainEntity {
      */
     private ArrayList<TreeType> treeTypes() {
         ArrayList<TreeType> types = new ArrayList<>();
-        for (TreeType type : TreeType.values()) {
-            types.add(type);
+        for (TreeType treeType : TreeType.values()) {
+            types.add(treeType);
         }
         return types;
     }
