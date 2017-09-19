@@ -84,6 +84,10 @@ public class TextureManager extends Manager {
 
 		//Terrain objects
 		textureMap.put("wallblock", new Texture("resources/terrain_objects/wallblock.png"));
+	    textureMap.put("boulder", new Texture("resources/terrain_objects/boulder.png"));
+	    textureMap.put("rock", new Texture("resources/terrain_objects/rock.png"));
+	    textureMap.put("iceboulder", new Texture("resources/terrain_objects/iceboulder.png"));
+
 		//trees
 		textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
 		textureMap.put("tree_leafless", new Texture("resources/terrain_objects/tree_dead_01.png"));
