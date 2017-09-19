@@ -74,7 +74,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Creates a new player at specified position.
-     * 
+     *
      * @param id
      *            peer that controls player
      * @param posX
@@ -86,7 +86,7 @@ public class Player extends Character implements Tickable {
      */
     public Player(int id, float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
-	
+
 		// Get necessary managers
 		gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager
@@ -169,7 +169,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when a touch input is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position being clicked on the screen
 	 * @param screenY
@@ -185,7 +185,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when a drag input is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position on the screen that mouse is dragged to
 	 * @param screenY
@@ -199,7 +199,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when a touch input is released.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position mouse is being released on the screen
 	 * @param screenY
@@ -215,7 +215,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends the processes involved when a mouse movement is made.
-	 * 
+	 *
 	 * @param screenX
 	 *            the x position of mouse movement on the screen
 	 * @param screenY
@@ -225,10 +225,10 @@ public class Player extends Character implements Tickable {
 		// FIXME: mouse inputs currently saturate the server
 		handleMouseMoved(screenX, screenY);
 	}
-	
+
 	/**
 	 * Sends input when keys are pressed.
-	 * 
+	 *
 	 * @param keycode
 	 *            the keycode of the key pressed
 	 */
@@ -238,7 +238,7 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Sends input when keys are released.
-	 * 
+	 *
 	 * @param keycode
 	 *            the keycode of the key released
 	 */
@@ -268,7 +268,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Handles the processes involved when a touch input is made.
-     * 
+     *
      * @param screenX
      *            the x position being clicked on the screen
      * @param screenY
@@ -288,7 +288,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Handles the processes involved when a drag input is made.
-     * 
+     *
      * @param screenX
      *            the x position on the screen that mouse is dragged to
      * @param screenY
@@ -305,7 +305,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Handles the processes involved when a touch input is released.
-     * 
+     *
      * @param screenX
      *            the x position mouse is being released on the screen
      * @param screenY
@@ -324,7 +324,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Handles the processes involved when a mouse movement is made.
-     * 
+     *
      * @param screenX
      *            the x position of mouse movement on the screen
      * @param screenY
@@ -338,7 +338,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Handles sound effect based on terrain type
-     * 
+     *
      * @param terrain
      *            name of current tile
      */
@@ -383,13 +383,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Handles the interaction between player and a NPC
-     * 
-     * @param npc
-     *            the NPC (as an entity) that you wish to interact with
-     */
-    /**
-     * Handles the interaction between player and a NPC
-     * 
+     *
      * @param npc
      *            the NPC (as an entity) that you wish to interact with
      */
@@ -416,24 +410,24 @@ public class Player extends Character implements Tickable {
     public void onTick(long gameTickCount) {
     	float oldPosX = this.getPosX();
     	float oldPosY = this.getPosY();
-    
+
     	// Center the camera on the player
     	updateCamera();
-    
+
     	// update the players stamina
     	handleStamina();
-    	
+
     	// set speed is the multiplier due to the ground
     	float speed = 1.0f;
     	collided = false;
     	float slippery = 0;
-    
+
     	// current world and layer
     	TiledMapTileLayer layer;
     	World world = GameManager.get().getWorld();
-            
+
         Box3D newPos = getBox3D();
-	
+
     	// get speed of current tile. this is done before checking if a tile
     	// exists so a slow down tile next to the edge wouldn't cause problems.
     	if (world.getTiledMapTileLayerAtPos((int) oldPosY,
@@ -459,10 +453,10 @@ public class Player extends Character implements Tickable {
         			} else {
         				onExit = false;
         			}
-        		}   	    
+        		}
         		// handle sound effects
         		handleSound(newName);
-        
+
         		// handle terrain effect
         		handleTerrain(newName);
     	    }
@@ -471,15 +465,15 @@ public class Player extends Character implements Tickable {
         		slippery = Float.parseFloat(
         			(String) layer.getProperties().get("slippery"));
     	    }
-    
+
     	    // -1 for none, 0 for enemy, 1 for both, 2 for player
     	    int damagetype = -1;
-    
+
     	    if (layer.getProperties().get("damagetype") != null) {
         		damagetype = Integer.parseInt(
         			(String) layer.getProperties().get("damagetype"));
     	    }
-    
+
     	    // damage player
     	    if (layer.getProperties().get("damage") != null && damagetype > 0) {
         		this.takeDamage(Integer.parseInt(
@@ -491,7 +485,7 @@ public class Player extends Character implements Tickable {
     	}
     	// get our updated position based on the speed and slippery of the tile
     	handleMovement(newPos, speed, slippery);
-    
+
     	// now check if a tile exists at this new position
     	if (world.getTiledMapTileLayerAtPos((int) (newPos.getY()),
     		(int) (newPos.getX())) == null) {
@@ -513,46 +507,50 @@ public class Player extends Character implements Tickable {
     	}
     }
 
-    /**
-     * Handles the movement of the player in the onTick method based
-     * on the slippery and speed factors of the tiles.
-     * 
-     * @param newPos position player will move to if it is empty
-     * @param speed speed factor of the current tile
-     * @param slippery slippery factor of the current tile
-     */
-    private void handleMovement(Box3D newPos, float speed, float slippery) {
-      // handle slippery movement 
-      if (Math.abs(slippery) > 0.05f) {
-          // first factor is for slowing down, second is for speeding up
-          float slipperyFactor = slippery * 0.005f;
-          float slipperyFactor2 = slippery * 0.06f;
-  
-          // created helper function to avoid duplicate code
-          lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed,
-              slipperyFactor, slipperyFactor2);
-          lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed,
-              slipperyFactor, slipperyFactor2);
-      } else {
-          // non slippery movement
-          lastSpeedX = 0;
-          lastSpeedY = 0;
-  
-          // store our last speed
-          if (speedX != 0) {
-            lastSpeedX = speedX * speed;
-          }
-          if (speedY != 0) {
-            lastSpeedY = speedY * speed;
-          }
-  
-      }
-      // change box coords
-      newPos.setX(this.getPosX() + lastSpeedX);
-      newPos.setY(this.getPosY() + lastSpeedY);
-    }    
-    
-    /**
+	/**
+	 * Handles the movement of the player in the onTick method based
+	 * on the slippery and speed factors of the tiles.
+	 *
+	 * @param newPos position player will move to if it is empty
+	 * @param speed speed factor of the current tile
+	 * @param slippery slippery factor of the current tile
+	 */
+	private void handleMovement(Box3D newPos, float speed, float slippery) {
+		// handle slippery movement
+		float sprintMultiplier = 1;
+		if (sprinting) {
+			sprintMultiplier = 2f;
+		}
+		if (Math.abs(slippery) > 0.05f) {
+			// first factor is for slowing down, second is for speeding up
+			float slipperyFactor = slippery * 0.005f;
+			float slipperyFactor2 = slippery * 0.06f;
+
+			// created helper function to avoid duplicate code
+			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed,
+					slipperyFactor, slipperyFactor2);
+			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed,
+					slipperyFactor, slipperyFactor2);
+		} else {
+			// non slippery movement
+			lastSpeedX = 0;
+			lastSpeedY = 0;
+
+			// store our last speed
+			if (speedX != 0) {
+				lastSpeedX = speedX * speed * sprintMultiplier;
+			}
+			if (speedY != 0) {
+				lastSpeedY = speedY * speed * sprintMultiplier;
+			}
+
+		}
+		// change box coords
+		newPos.setX(this.getPosX() + lastSpeedX);
+		newPos.setY(this.getPosY() + lastSpeedY);
+	}
+
+	/**
      * handle terrain effects on player
      */
     private void handleTerrain(String terrain) {
@@ -617,7 +615,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Increases the xp of the player by the given amount
-     * 
+     *
      * @param amount
      *            the amount of xp to gain
      */
@@ -628,7 +626,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Decrease the current health of the player by the given amount
-     * 
+     *
      * @param amount
      *            the amount of health to lose
      */
@@ -683,61 +681,9 @@ public class Player extends Character implements Tickable {
     private void handleKeyDown(int keycode) {
 
     	switch (keycode) {
-    	case Input.Keys.P:
-    		this.contextManager.pushContext(new PerksSelectionScreen());
-    		break;
-    	case Input.Keys.C:
-    		this.contextManager.pushContext(new CharacterCreationContext());
-    		break;
-    	case Input.Keys.SHIFT_LEFT:
-    		if (staminaCur > 0) {
-    			sprinting = true;
-    			movementSpeed = movementSpeed * 2f;
-    		}
-    		break;
-    	case Input.Keys.W:
-    		movementDirection.put("up", true);
-    		break;
-    	case Input.Keys.S:
-    		movementDirection.put("down", true);
-    		break;
-    	case Input.Keys.A:
-    		movementDirection.put("left", true);
-    		break;
-    	case Input.Keys.D:
-    		movementDirection.put("right", true);
-    		break;
-    	case Input.Keys.E:
-    		checkForInteraction();
-    		break;
-    	case Input.Keys.R:
-    		if (this.getEquippedWeapon() != null) {
-    			GameManager.get().getWorld()
-    			.removeEntity(this.getEquippedWeapon());
-    		}
-    		this.equippedItems.cycleEquippedSlot();
-    		if (this.getEquippedWeapon() != null) {
-    			GameManager.get().getWorld()
-    			.addEntity(this.getEquippedWeapon());
-    		}
-    		break;
     	case Input.Keys.T:
     		this.getEquippedWeapon().switchBullet();
     		break;
-    	case Input.Keys.ESCAPE:
-    		contextManager.popContext();
-    		break;
-    	case Input.Keys.I:
-    		// Display Inventory
-    		System.out.println("Access player inventory");
-    		contextManager.pushContext(new PlayerInventoryContext(this));
-    		break;
-    	default:
-    		break;
-    	}
-    	handleDirectionInput();
-    	handleNoInput();
-    	switch (keycode) {
     	case Input.Keys.P:
     		this.contextManager.pushContext(new PerksSelectionScreen());
     		break;
@@ -747,7 +693,6 @@ public class Player extends Character implements Tickable {
     	case Input.Keys.SHIFT_LEFT:
     		if (staminaCur > 0) {
     			sprinting = true;
-    			movementSpeed = movementSpeed * 2f;
     		}
     		break;
     	case Input.Keys.W:
@@ -941,7 +886,7 @@ public class Player extends Character implements Tickable {
     			.getProperties().get("tileheight");
     	float baseX = tileWidth * (worldWidth / 2.0f - 0.5f);
     	float baseY = -tileHeight / 2 * worldLength + tileHeight / 2f;
-    	
+
     	float cartX = this.getPosX();
     	float cartY = (worldWidth - 1) - this.getPosY();
 
@@ -997,7 +942,7 @@ public class Player extends Character implements Tickable {
 
     /**
      * Returns the player's currently equipped weapon
-     * 
+     *
      * @return the player's currently equipped weapon
      */
     public Weapon getEquippedWeapon() {
