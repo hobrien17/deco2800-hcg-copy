@@ -8,6 +8,13 @@ import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.deco2800.hcg.types.Weathers;
 
+/**
+ * A class to manage the game's internal system of weather. Weather can be set using the methods in this class
+ * Import com.deco2800.hcg.types.Weathers as well as this one to use the weather system.
+ *
+ * @author Team 7 (Organic Java)
+ */
+
 public class WeatherManager extends Manager {
 
 	// list of effects to be implemented
@@ -23,15 +30,9 @@ public class WeatherManager extends Manager {
 	// ParticleEffect wind;
 	// ParticleEffect sandstorm;
 
-	// Eventually move this to a public enum
-	private final int NONE = 0;
-	private final int RAIN = 1;
-	private final int SNOW = 2;
 
-	private Weathers weathers;
 	ParticleEffect weather;
 	ParticleEffectActor weatherActor;
-	SpriteBatch batch;
 
 	// onEffects: a list of effects that is currently on in game.
 	ArrayList<Weathers> onEffects;
