@@ -4,16 +4,18 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.Player;
 
 import java.util.List;
 
+/**
+ * An extension of the bullet class which will check for collision with
+ * a corpse and spawn a sunflower turret
+ */
 public class SunflowerSeed extends Bullet {
 
-	private int damage = 1;
 	private int hitCount;
 	private AbstractEntity user;
 
@@ -33,32 +35,23 @@ public class SunflowerSeed extends Bullet {
 		List<AbstractEntity> entities = GameManager.get().getWorld()
 				.getEntities();
 		for (AbstractEntity entity : entities) {
-			if (!this.collidesWith(entity)) {
-				continue;
-			}
-
-			// Collision with enemy
-			if (entity instanceof Enemy
-					&& (user instanceof Player || user instanceof Corpse)) {
-				Enemy target = (Enemy) entity;
-				applyEffect(target);
-				hitCount--;
-			}
-			// Collision with player
-			if (entity instanceof Player && user instanceof Enemy) {
-				// add code to apply effect to player here
-				Enemy enemyUser = (Enemy) user;
-				enemyUser.causeDamage((Player)entity);
-				hitCount--;
-			}
-			// COllision with corpse
-			if (entity instanceof Corpse && user instanceof Player) {
-				// create sunflower turret here
-				hitCount = 0;
-			}
-			if (hitCount == 0) {
-				GameManager.get().getWorld().removeEntity(this);
-				break;
+			if (this.collidesWith(entity)) {
+				// Collision with enemy
+				if (entity instanceof Enemy
+						&& (user instanceof Player || user instanceof Corpse)) {
+					Enemy target = (Enemy) entity;
+					applyEffect(target);
+					hitCount--;
+				}
+				// Collision with corpse
+				if (entity instanceof Corpse && user instanceof Player) {
+					// TODO add sunflower turret here
+					hitCount = 0;
+				}
+				if (hitCount == 0) {
+					GameManager.get().getWorld().removeEntity(this);
+					break;
+				}
 			}
 		}
 
@@ -66,7 +59,7 @@ public class SunflowerSeed extends Bullet {
 
 	@Override
 	protected void applyEffect(Enemy target) {
-		target.giveEffect(new Effect("Shot", 1, damage, 0, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0));
 	}
 }
 
