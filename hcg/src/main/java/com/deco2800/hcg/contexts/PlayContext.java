@@ -1,54 +1,28 @@
 package com.deco2800.hcg.contexts;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.deco2800.hcg.contexts.playContextClasses.*;
 import com.deco2800.hcg.handlers.MouseHandler;
-import com.deco2800.hcg.managers.ContextManager;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.MessageManager;
-import com.deco2800.hcg.managers.PlantManager;
-import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.SoundManager;
-import com.deco2800.hcg.managers.TimeManager;
-import com.deco2800.hcg.managers.WeatherManager;
-import com.deco2800.hcg.multiplayer.Message;
-import com.deco2800.hcg.multiplayer.NetworkState;
+import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-import com.deco2800.hcg.shading.ShaderState;
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -56,19 +30,24 @@ import com.deco2800.hcg.shading.ShaderState;
  * instantiated once.
  */
 public class PlayContext extends Context {
-    
-    Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
-    
+
 	// Managers used by the game
 	private GameManager gameManager;
 	private SoundManager soundManager;
-	private PlayerManager playerManager;
+
 	private TimeManager timeManager;
 	private WeatherManager weatherManager;
+
 	private ContextManager contextManager;
 	private PlantManager plantManager;
 	private MessageManager messageManager;
+
+	//HUDs
 	private PlayerStatusDisplay playerStatus;
+	private TextureManager textureManager;
+	private NetworkManager networkManager;
+	private ClockDisplay clockDisplay;
+
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -91,64 +70,58 @@ public class PlayContext extends Context {
 	private Stage stage;
 	private Window window;
 	private Window plantWindow;
+	private Window exitWindow;
+	private Stack chatBackground;
 	private Table chatWindow;
 	private Label plantInfo;
-	private Label clockLabel;
-	private Label dateLabel;
-	private Label chatLabel;
 	private TextField chatTextField;
 	private TextArea chatTextArea;
-	//private  Button chatButton;
-	
-	// TODO make sure this doesn't stay here.
-	private ShaderProgram shader;
-	private ShaderProgram postShader;
-	private Button chatButton;
 
-    /**
-     * Create the PlayContext
-     */
-    public PlayContext() {
+	private Button chatButton;
+	private Skin skin;
+	private Image chatBar;
+	private String chatString = new String("");
+
+
+	/**
+	 * Create the PlayContext
+	 */
+	public PlayContext() {
 
 		// Set up managers for this game
 		gameManager = GameManager.get();
 		soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
 		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
 		weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
-		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
+		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
 		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
-
+				
 		// Setup GUI
 		stage = new Stage(new ScreenViewport());
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+
+		clockDisplay = new ClockDisplay();
+		playerStatus = new PlayerStatusDisplay();
+
+		stage.addActor(clockDisplay);
+		stage.addActor(playerStatus);
+
 		window = new Window("Menu", skin);
         plantWindow = new Window("Plants", skin);
+        createExitWindow();
 
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
-		
-		/* Add temporary complete level button */
-		Button completeLevelButton = new TextButton("Complete Level", skin);
 
-		/* Add clock. */
-		Image clockImage = new Image(new
-				Texture(Gdx.files.internal("resources/ui/clock_outline.png")));
-		// clockImage.setPosition(stage.getWidth() - 215, 10);
-		clockLabel = new Label(timeManager.getTime(), skin);
-		dateLabel = new Label(timeManager.getDate(), skin);
-		timeManager.setTimeLabel(clockLabel);
-		timeManager.setDateLabel(dateLabel);
+		/* Add a programmatic listener to the quit button */
 
-		playerStatus = new PlayerStatusDisplay();
-		stage.addActor(playerStatus);
-
-		/* Add a programmatic listener to the quit and complete buttons */
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -158,20 +131,9 @@ public class PlayContext extends Context {
         
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
-		
-		completeLevelButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				gameManager.getCurrentNode().changeNodeType(2);
-				gameManager.getMapContext().updateMapDisplay();
-				contextManager.popContext();
-			}
-		});
 
 		/* Add all buttons to the menu */
 		window.add(button);
-		window.add(completeLevelButton);
-		window.add(clockLabel);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
@@ -179,66 +141,88 @@ public class PlayContext extends Context {
 		/* Add the window to the stage */
 		stage.addActor(window);
 
-		/* Create clock GUI and add it to the stage */
-        Group group = new Group();
-        group.setPosition(stage.getWidth() - 220, 20);
-        group.addActor(clockImage);
-        clockLabel.setPosition(58, 95);
-        clockLabel.setFontScale((float)2.1);
-        dateLabel.setPosition(65, 60);
-        dateLabel.setFontScale((float)0.9);
-        group.addActor(clockLabel);
-        group.addActor(dateLabel);
-        stage.addActor(group);
-
         /* Create the window for plant. */
-        plantInfo = new Label("null",skin);
-        plantManager.setPlantLabel(plantInfo);
-        plantManager.setPlantWindow(plantWindow);
-        plantWindow.add(plantInfo);
-        plantManager.updateLabel();
-        plantWindow.pack();
-        plantWindow.setMovable(false);
-        plantWindow.setPosition(stage.getWidth(), stage.getHeight());
-        stage.addActor(plantWindow);
+		plantManager.setPlantWindow(plantWindow, skin);
+		plantManager.updateLabel();
+		plantWindow.setMovable(false);
+		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+		stage.addActor(plantWindow);
 
         /* Create window for chat and all components */
+		chatBar = new Image(textureManager.getTexture("chat_background"));
+		chatBackground = new Stack(chatBar);
 		chatWindow = new Table(skin);
-		chatWindow.setPosition(0, 0);
-		chatWindow.setSize(350,250);
-		chatLabel = new Label("Say: ", skin);
-		chatLabel.setColor(new Color().GRAY);
-        chatTextArea = new TextArea("", skin);
-        chatTextField = new TextField("", skin);
-        chatTextArea.setDisabled(true);
-        chatTextArea.setText("");
-        chatButton = new TextButton("Send", skin);
-        chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3);
-        chatWindow.row().height(40);
-        chatWindow.add(chatLabel).left().prefWidth(10);
-        chatWindow.add(chatTextField).prefWidth(350);
-        chatWindow.add(chatButton);
-        chatWindow.setDebug(false);//display lines for debugging
 
-        stage.addActor(chatWindow);
-
+		chatTextArea = new TextArea("", skin);
+		chatTextField = new TextField("", skin);
+		chatTextArea.setDisabled(true);
+		chatTextArea.setText("");
+		chatButton = new TextButton("Send", skin);
+		chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3).padBottom(20);
+		chatWindow.row().height(40).padBottom(10);
+		chatWindow.add(chatTextField).prefWidth(350);
+		chatWindow.add(chatButton);
+		chatWindow.setDebug(false);//display lines for debugging
+		chatWindow.padTop(35).padLeft(15).padRight(15);
+		chatBackground.setPosition(0, 0);
+		chatBackground.add(chatWindow);
+		chatBackground.setSize(380, 270);
+		chatBackground.setScale((float) 1.2);
+		if (networkManager.isInitialised()) {
+			stage.addActor(chatBackground);
+		}
 		/*
 		 * Setup inputs for the buttons and the game itself
 		 */
-        
-        chatButton.addListener(new ChangeListener() {
+
+		chatButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (NetworkState.isInitialised()) {
-					String chatMessage = NetworkState.sendChatMessage(chatTextField.getText());
-					chatTextField.setText("");
-					chatTextArea.appendText(chatMessage + "\n");
-					stage.setKeyboardFocus(null);
+				if (networkManager.isInitialised()) {
+					if (chatString.trim().length()>0) {
+						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
+
+						chatTextField.setText("");
+						chatTextArea.appendText(chatMessage + "\n");
+						stage.setKeyboardFocus(null);
+						chatString = "";
+					} else {
+						chatTextField.setText("");
+						chatTextField.setCursorPosition(0);
+						chatString = "";
+					}
 				}
 			}
 		});
-        
-        messageManager.addChatMessageListener(this::handleChatMessage);
+
+        /*
+        	Input Listener for Textfield
+         */
+		chatTextField.setTextFieldListener(new TextField.TextFieldListener() { //textfield Listener
+			@Override
+			public void keyTyped(TextField textField, char c) {
+				if (c != '\b') {
+					chatString += c;
+				} else if (chatString.length() > 0) {
+					chatString = chatString.substring(0, chatString.length() - 1);
+				}
+				if ((c == '\r' && networkManager.isInitialised())) {
+					if (chatString.trim().length()>0) {
+						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
+						chatTextField.setText("");
+						chatTextArea.appendText(chatMessage + "\n");
+						stage.setKeyboardFocus(null);
+						chatString = "";
+					} else {
+						chatTextField.setText("");
+						chatTextField.setCursorPosition(0);
+						chatString = "";
+					}
+				}
+			}
+		});
+
+		messageManager.addChatMessageListener(this::handleChatMessage);
         
 		/*
 		 * Setup an Input Multiplexer so that input can be handled by both the UI and
@@ -291,42 +275,10 @@ public class PlayContext extends Context {
 				return true;
 			}
 		});
-		
-		/* This won't stay here forever - loading and compiling shaders here is super inefficienct so we should
-		 * do that somewhere else but for testing purposes this is fine. */
-        FileHandle preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
-        FileHandle postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
-        FileHandle preFragShader = Gdx.files.internal("resources/shaders/fragment_pre.glsl");
-        FileHandle postFragShader = Gdx.files.internal("resources/shaders/fragment_post.glsl");
-        shader = new ShaderProgram(preVertexShader, preFragShader);
-        postShader = new ShaderProgram(postVertexShader, postFragShader);
-        
-        if(!shader.isCompiled()) {
-            LOGGER.error("Shader failed to compile.");
-            LOGGER.error(shader.getLog());
-            
-            // For the time being
-            System.out.println("Shader failed to compile.");
-            System.out.println(shader.getLog());
-            shader = null;
-        }
-        
-        if(!postShader.isCompiled()) {
-            LOGGER.error("Post shader failed to compile");
-            LOGGER.error(postShader.getLog());
-            
-            // For the time being
-            System.out.println("Post shader failed to compile");
-            System.out.println(postShader.getLog());
-            postShader = null;
-        }
-        
-        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
 	}
-	
-	
-	private void handleChatMessage(Message message) {
-		chatTextArea.appendText(message.getPayloadString() + "\n");
+
+	private void handleChatMessage(String message) {
+		chatTextArea.appendText(message + "\n");
 	}
 
 	/**
@@ -334,99 +286,35 @@ public class PlayContext extends Context {
 	 */
 	@Override
 	public void render(float delta) {
-        /*
-         * All sorts of fun things happen in here. This will likely get its own method
-         * eventually but for now: If any of the shaders fail to compile we default to
-         * default SpriteBatch behaviour; a SpriteBatch is initalised with no parameters
-         * to draw the game directly to the screen. No extra effects at all.
-         * 
-         * If all shaders are go, we draw the game properly. We initialise a SpriteBatch
-         * with our pre-processing shader attached to it, which handles things like
-         * day/night cycle etc and we use that to draw the game to a FrameBuffer. We
-         * then get rid of our first SpriteBatch because we don't need it anymore and
-         * initalise a new one with our post-processing shader attached to it and use it
-         * to draw our FrameBuffer to the screen with nice shiny effects in tow.
-         */
-	    GameManager.get().getCamera().update();
-	    
-	    if(shader == null || postShader == null) {
-	        // Default drawing behaviour. Default to this if any shaders fail to compile.
-	        SpriteBatch batch = new SpriteBatch();
-	        
-	        batch.setProjectionMatrix(GameManager.get().getCamera().combined);
-	        BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
-	        
-	        tileRenderer.setView(GameManager.get().getCamera());
-	        tileRenderer.render();
-	        
-	        renderer.render(batch);
-	        
-	        batch.dispose();
-	    } else {
-	        ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
-            state.setTime(timeManager);
-            state.setBloom(true);
-            state.setHeat(true);
-            
-            int width = Gdx.graphics.getWidth();
-            int height = Gdx.graphics.getHeight();
-            
-            // This is our render target. We draw onto this first and then draw this
-            // directly to the screen using a post processing shader
-            FrameBuffer renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
-            TextureRegion scene = new TextureRegion(renderTarget.getColorBufferTexture());
-            scene.flip(false, true);
-            
-            // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
-            shader.begin();
-            
-            shader.setUniformf("u_globalColor", state.getGlobalLightColour());
-            
-            SpriteBatch preBatch = new SpriteBatch(1000, shader);
-            preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
-            
-            BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(preBatch);
-            tileRenderer.setView(GameManager.get().getCamera());
-            
-            // Draw onto render target ////////////////////////////////////
-            renderTarget.begin();
-            Gdx.gl.glClearColor(0, 0, 0, 0);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-            
-            tileRenderer.render();
-            renderer.render(preBatch);
-            
-            renderTarget.end();
-            // Finish drawing onto render target //////////////////////////
-            
-            shader.end();
-            preBatch.dispose();
-            
-            // Begin post-processing ///////////////////////////////////////////////////////////////////////////////////
-            postShader.begin();
-            
-            postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
-            postShader.setUniformf("u_heat", state.getHeat());
-            postShader.setUniformf("u_bloom", state.getBloom());
-            
-            SpriteBatch postBatch = new SpriteBatch(1, postShader);
-            
-            // Draw onto screen ///////////////////////////////////////////
-            postBatch.begin();
-            
-            postBatch.draw(scene, 0, 0, width, height);
-            
-            postBatch.end();
-            // Finish drawing onto screen /////////////////////////////////
-            
-            postShader.end();
-            postBatch.dispose();
-            renderTarget.dispose();
-	    }
+
+		/*
+		 * Create a new render batch. At this stage we only want one but perhaps we need
+		 * more for HUDs etc
+		 */
+		SpriteBatch batch = new SpriteBatch();
+
+		/*
+		 * Update the camera
+		 */
+		GameManager.get().getCamera().update();
+		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
+
+		/* Render the tiles first */
+		BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
+		tileRenderer.setView(GameManager.get().getCamera());
+		tileRenderer.render();
+
+		/*
+		 * Use the selected renderer to render objects onto the map
+		 */
+		renderer.render(batch);
 
 		// Update and draw the stage
 		stage.act();
 		stage.draw();
+
+		/* Dispose of the spritebatch to not have memory leaks */
+		batch.dispose();
 	}
 
 	/**
@@ -445,8 +333,8 @@ public class PlayContext extends Context {
 
 		stage.getViewport().update(width, height, true);
 		window.setPosition(0, stage.getHeight());
-
-		playerStatus.updatePosition(stage.getHeight());
+		playerStatus.setPosition(30f, stage.getHeight()-200f);
+		clockDisplay.setPosition(stage.getWidth()-220f, 20f);
 	}
 
 	/**
@@ -454,13 +342,7 @@ public class PlayContext extends Context {
 	 */
 	@Override
 	public void dispose() {
-	    if(shader != null) {
-	        shader.dispose();
-	    }
-	    
-	    if(postShader != null) {
-            postShader.dispose();
-	    }
+		// Don't need this at the moment
 	}
 
 	@Override
@@ -477,14 +359,14 @@ public class PlayContext extends Context {
 
 	@Override
 	public void pause() {
-		if (!NetworkState.isInitialised()) {
+		if (!networkManager.isInitialised()) {
 			unpaused = false;
 		}
 	}
 
 	@Override
 	public void resume() {
-		if (!NetworkState.isInitialised()) {
+		if (!networkManager.isInitialised()) {
 			unpaused = true;
 		}
 	}
@@ -505,5 +387,44 @@ public class PlayContext extends Context {
         if (keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
         }
+    }
+    
+    private void createExitWindow() {
+    	exitWindow = new Window("Complete Level?", skin);
+    	Button yesButton = new TextButton("Yes", skin);
+    	yesButton.pad(5, 10, 5, 10);
+    	Button noButton = new TextButton("No", skin);
+    	noButton.pad(5, 10, 5, 10);
+    	
+    	/* Add a programmatic listener to the buttons */
+		yesButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				gameManager.getCurrentNode().changeNodeType(2);
+				gameManager.getMapContext().updateMapDisplay();
+				contextManager.popContext();
+			}
+		});
+
+		noButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				exitWindow.remove();
+			}
+		});
+    	
+    	exitWindow.add(yesButton);
+    	exitWindow.add(noButton);
+    	exitWindow.pack();
+		exitWindow.setMovable(false); // So it doesn't fly around the screen
+		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+		exitWindow.setWidth(150);
+    }
+    
+    public void addExitWindow() {
+    	if(exitWindow.getStage() == null) {
+    		/* Add the window to the stage */
+    		stage.addActor(exitWindow);
+    	}
     }
 }

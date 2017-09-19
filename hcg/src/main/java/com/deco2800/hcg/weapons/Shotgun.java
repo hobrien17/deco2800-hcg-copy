@@ -53,6 +53,7 @@ public class Shotgun extends Weapon implements Tickable {
                     worldCoords.y + 20 *
                     (float) random.nextGaussian()); 
         }
+        playFireSound();
     }
     
 }
