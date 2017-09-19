@@ -146,7 +146,7 @@ public class TextureManager extends Manager {
         textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node.png"));
         textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
         textureMap.put("safe_node", new Texture("resources/worldmap/safe_node.png"));
-
+		textureMap.put("black_px", new Texture("resources/worldmap/black_px.png"));
         //Item textures
 		textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
 		textureMap.put("green_potion", new Texture("resources/sprites/potions/potion_round_green.png"));
