@@ -184,7 +184,9 @@ public class Bullet extends AbstractEntity implements Tickable {
 			if (entity instanceof Enemy
 					&& (user instanceof Player || user instanceof Corpse)) {
 				Enemy target = (Enemy) entity;
-				applyEffect(target);
+				if (target.getHealthCur() <= 0) {
+				    applyEffect(target);
+				}
 				hitCount--;
 			}
 			// Collision with player

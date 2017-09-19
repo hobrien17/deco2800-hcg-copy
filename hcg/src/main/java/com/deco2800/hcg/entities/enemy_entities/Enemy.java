@@ -4,6 +4,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
@@ -191,7 +192,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      *
      */
     public void causeDamage(Player player) {
-        //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
         player.takeDamage(1);
     }
 
@@ -451,7 +451,12 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
                     this.causeDamage((Player)entity);
                     this.setCollidedPlayer(true);
                 }
-                this.setCollided(true);
+                else if (entity instanceof Bullet) {
+                    this.takeDamage(500);
+                }
+                else {
+                    this.setCollided(true);
+                }
             }
         }
     }
