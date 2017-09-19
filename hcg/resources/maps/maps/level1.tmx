@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="75" height="75" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="366">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="75" height="75" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="415">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="15"/>
@@ -411,6 +411,37 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="boulder">
+  <properties>
+   <property name="name" value="boulder"/>
+  </properties>
+  <object id="369" gid="7" x="112.582" y="1647.42" width="55" height="32"/>
+  <object id="385" gid="7" x="282.982" y="1101.02" width="55" height="32"/>
+  <object id="386" gid="7" x="60.5818" y="827.418" width="55" height="32"/>
+  <object id="387" gid="7" x="335.491" y="648.509" width="55" height="32"/>
+  <object id="388" gid="7" x="197.745" y="450.255" width="55" height="32"/>
+  <object id="389" gid="7" x="853.382" y="1850.62" width="55" height="32"/>
+  <object id="390" gid="7" x="612.255" y="2151.75" width="55" height="32">
+   <properties>
+    <property name="name" value="rock"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="rock">
+  <properties>
+   <property name="name" value="rock"/>
+  </properties>
+  <object id="391" gid="10" x="271.127" y="646.206" width="55" height="32"/>
+  <object id="392" gid="10" x="305.697" y="691.636" width="55" height="32"/>
+  <object id="395" gid="10" x="342.812" y="561.188" width="55" height="32"/>
+  <object id="396" gid="10" x="95.2242" y="800.776" width="55" height="32"/>
+  <object id="405" gid="10" x="82.9818" y="901.018" width="55" height="32"/>
+  <object id="406" gid="10" x="301.867" y="1159.47" width="55" height="32"/>
+  <object id="409" gid="10" x="307.248" y="1031.42" width="55" height="32"/>
+  <object id="410" gid="10" x="416" y="1568" width="55" height="32"/>
+  <object id="411" gid="10" x="448" y="1632" width="55" height="32"/>
+  <object id="414" gid="10" x="440.145" y="1597.19" width="55" height="32"/>
+ </objectgroup>
  <layer name="exit" width="75" height="75">
   <properties>
    <property name="name" value="exit"/>

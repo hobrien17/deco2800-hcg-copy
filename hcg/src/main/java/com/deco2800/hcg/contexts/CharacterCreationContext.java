@@ -177,7 +177,7 @@ public class CharacterCreationContext extends UIContext{
                     textureCount = 0;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 } else {
-                    textureCount = 5;
+                    textureCount = 3;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 }
             }
@@ -451,7 +451,7 @@ public class CharacterCreationContext extends UIContext{
         specializedSkillsPointsLabel = new Label("Available Specialities: " + specializedSkillsPoints, skin);
         meleeSkillLabel = new Label("Melee Skill: " + meleeSkill, skin);
         gunsSkillLabel = new Label("Guns Skill: " + gunsSkill, skin);
-        energyWeaponsSkillLabel = new Label("Energy Weapons: " + energyWeaponsSkill, skin);
+        energyWeaponsSkillLabel = new Label("Energy Weapons Skill: " + energyWeaponsSkill, skin);
 
         meleeSkillSpecialise = new CheckBox("Specialise", skin);
         meleeSkillSpecialise.setChecked(false);

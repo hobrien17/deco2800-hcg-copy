@@ -1,4 +1,4 @@
-package com.deco2800.hcg.contexts;
+package com.deco2800.hcg.contexts.playContextClasses;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -32,13 +32,9 @@ public class PlayerStatusDisplay extends Group {
         gameManager = GameManager.get();
         PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         player = playerManager.getPlayer();
-
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
         /*position of Status Display*/
-        posY = 500;
-        posX = 30;
-
 
         /* Add the player's health and stamina display*/
         playerImage = new Image(new Texture(player.getDisplayImage()));
@@ -49,10 +45,7 @@ public class PlayerStatusDisplay extends Group {
         playerHealth = new Label(player.getHealthCur() + " / " + player.getHealthMax(), skin);
         playerLevel = new Label("Lv: " + player.getLevel(), skin);
 
-
-
 		/* create player display GUI and add it to the stage */
-        this.setPosition(posX, posY);
         this.addActor(playerImage);
         this.addActor(playerBorder);
         this.addActor(playerLevel);
@@ -66,7 +59,6 @@ public class PlayerStatusDisplay extends Group {
         float healthBarHeight = 29;
         float staminaBarWidth = (float) player.getStaminaCur() / player.getStaminaMax() * 260;
         float staminaBarHeight = 23;
-
         healthBar.setSize(healthBarWidth, healthBarHeight);
         healthBarShadow.setSize(healthBarWidth, healthBarHeight);
         staminaBar.setSize(staminaBarWidth, staminaBarHeight);
@@ -74,7 +66,7 @@ public class PlayerStatusDisplay extends Group {
         /* Setting bar colours, health changes from green to red as health drops
          * 200/157 multiplier so function ranges from 0 to 255; the range of RGB colours.
          */
-        healthBar.setColor(255 - (healthBarWidth * 200 / 157), healthBarWidth * 200 / 157, 0, 1);
+        setHealthBarColours();
         healthBarShadow.setColor(Color.BLACK);
         staminaBar.setColor(Color.GOLD);
 
@@ -112,17 +104,6 @@ public class PlayerStatusDisplay extends Group {
         float staminaBarWidth = (float) player.getStaminaCur() /
                 player.getStaminaMax() * 260;
         staminaBar.setWidth(staminaBarWidth);
-    }
-
-    /**
-     * moves the playerStatusDisplay if the window is resized
-     *
-     * @param stageHeight
-     */
-    public void updatePosition(float stageHeight) {
-        posY = stageHeight - 200;
-        posX = 30;
-        this.setPosition(posX, posY);
     }
 
     /**

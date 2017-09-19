@@ -76,6 +76,7 @@ public class TextureManager extends Manager {
 		textureMap.put("fireball_down", new Texture("resources/sprites/bullets/fireball_down.png"));
 		textureMap.put("fireball_left", new Texture("resources/sprites/bullets/fireball_left.png"));
 		textureMap.put("fireball_right", new Texture("resources/sprites/bullets/fireball_right.png"));
+		textureMap.put("sunflower_alt", new Texture("resources/sprites/plants/sunflower_alt.png"));
 
 
 		// Miscellaneous textures
@@ -83,6 +84,10 @@ public class TextureManager extends Manager {
 
 		//Terrain objects
 		textureMap.put("wallblock", new Texture("resources/terrain_objects/wallblock.png"));
+	    textureMap.put("boulder", new Texture("resources/terrain_objects/boulder.png"));
+	    textureMap.put("rock", new Texture("resources/terrain_objects/rock.png"));
+	    textureMap.put("iceboulder", new Texture("resources/terrain_objects/iceboulder.png"));
+
 		//trees
 		textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
 		textureMap.put("tree_leafless", new Texture("resources/terrain_objects/tree_dead_01.png"));

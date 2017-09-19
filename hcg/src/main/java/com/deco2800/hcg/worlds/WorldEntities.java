@@ -8,11 +8,16 @@ import com.deco2800.hcg.entities.enemy_entities.MushroomTurret;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.entities.terrain_entities.Boulder;
+import com.deco2800.hcg.entities.terrain_entities.IceBoulder;
+import com.deco2800.hcg.entities.terrain_entities.Rock;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
+import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 
 public enum WorldEntities {
-    WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE;
+    WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER,
+    ROCK, ICEBOULDER;
   
     /**
      * Return an instance of the entity at the given position and the selected index.
@@ -36,7 +41,15 @@ public enum WorldEntities {
         case MUSHROOMTURRET:
             return new MushroomTurret(x, y, 0f, index);
         case CORPSE:
-        	return new BasicCorpse(x, y, 0f, "tree");
+        	return new BasicCorpse(x, y, 0f);
+        case ICETREE:
+            return new Tree(x, y, 0f, TreeType.SNOWY);
+        case BOULDER:
+            return new Boulder(x, y, 0f);
+        case ROCK:
+            return new Rock(x, y, 0f);
+        case ICEBOULDER:
+            return new IceBoulder(x, y, 0f);
         default:
         	return null;
       }
