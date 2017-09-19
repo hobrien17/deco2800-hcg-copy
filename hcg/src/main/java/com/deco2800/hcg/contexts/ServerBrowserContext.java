@@ -65,7 +65,7 @@ public class ServerBrowserContext extends UIContext {
 
         enterServer = new Dialog("Enter Host IP", skin);
         serverIPTextfield = new TextField("", skin);
-        enterServerAdd = new TextButton("enterServerAdd", skin);
+        enterServerAdd = new TextButton("Add", skin);
         enterServerExit = new TextButton("close", skin);
         serverStatus = new Label("", skin);
         enterServer.setDebug(false);  //debug for dialog box
