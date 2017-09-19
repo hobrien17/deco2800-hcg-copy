@@ -85,70 +85,70 @@ public class Player extends Character implements Tickable {
      *            beginning player Z position
      */
     public Player(int id, float posX, float posY, float posZ) {
-	super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
+		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
+	
+		// Get necessary managers
+		gameManager = GameManager.get();
+		this.contextManager = (ContextManager) gameManager
+				.getManager(ContextManager.class);
 
-	// Get necessary managers
-	gameManager = GameManager.get();
-	this.contextManager = (ContextManager) gameManager
-		.getManager(ContextManager.class);
+		this.id = id;
+		if (id == 0) {
+			InputManager localInput = (InputManager) GameManager.get()
+					.getManager(InputManager.class);
+			localInput.addKeyDownListener(this::handleLocalKeyDown);
+			localInput.addKeyUpListener(this::handleLocalKeyUp);
+			localInput.addTouchDownListener(this::handleLocalTouchDown);
+			localInput.addTouchDraggedListener(this::handleLocalTouchDragged);
+			localInput.addTouchUpListener(this::handleLocalTouchUp);
+			localInput.addMouseMovedListener(this::handleLocalMouseMoved);
+		}
+		playerInputManager = (PlayerInputManager) GameManager.get()
+				.getManager(PlayerInputManager.class);
+		playerInputManager.addKeyDownListener(id, this::handleKeyDown);
+		playerInputManager.addKeyUpListener(id, this::handleKeyUp);
+		playerInputManager.addTouchDownListener(id, this::handleTouchDown);
+		playerInputManager.addTouchDraggedListener(id,
+				this::handleTouchDragged);
+		playerInputManager.addTouchUpListener(id, this::handleTouchUp);
+		playerInputManager.addMouseMovedListener(id, this::handleMouseMoved);
 
-	this.id = id;
-	if (id == 0) {
-	    InputManager localInput = (InputManager) GameManager.get()
-		    .getManager(InputManager.class);
-	    localInput.addKeyDownListener(this::handleLocalKeyDown);
-	    localInput.addKeyUpListener(this::handleLocalKeyUp);
-	    localInput.addTouchDownListener(this::handleLocalTouchDown);
-	    localInput.addTouchDraggedListener(this::handleLocalTouchDragged);
-	    localInput.addTouchUpListener(this::handleLocalTouchUp);
-	    localInput.addMouseMovedListener(this::handleLocalMouseMoved);
-	}
-	playerInputManager = (PlayerInputManager) GameManager.get()
-		.getManager(PlayerInputManager.class);
-	playerInputManager.addKeyDownListener(id, this::handleKeyDown);
-	playerInputManager.addKeyUpListener(id, this::handleKeyUp);
-	playerInputManager.addTouchDownListener(id, this::handleTouchDown);
-	playerInputManager.addTouchDraggedListener(id,
-		this::handleTouchDragged);
-	playerInputManager.addTouchUpListener(id, this::handleTouchUp);
-	playerInputManager.addMouseMovedListener(id, this::handleMouseMoved);
+		collided = false;
+		sprinting = false;
+		this.setTexture("hcg_character");
+		this.soundManager = (SoundManager) GameManager.get()
+				.getManager(SoundManager.class);
+		this.contextManager = (ContextManager) GameManager.get()
+				.getManager(ContextManager.class);
 
-	collided = false;
-	sprinting = false;
-	this.setTexture("hcg_character");
-	this.soundManager = (SoundManager) GameManager.get()
-		.getManager(SoundManager.class);
-	this.contextManager = (ContextManager) GameManager.get()
-		.getManager(ContextManager.class);
+		// HUD display
+		displayImage = "resources/ui/player_status_hud/player_display_one.png";
 
-	// HUD display
-	displayImage = "resources/ui/player_status_hud/player_display_one.png";
+		// for slippery
+		lastSpeedX = 0;
+		lastSpeedY = 0;
 
-	// for slippery
-	lastSpeedX = 0;
-	lastSpeedY = 0;
+		// for direction of movement
+		movementDirection.put("left", false);
+		movementDirection.put("right", false);
+		movementDirection.put("up", false);
+		movementDirection.put("down", false);
 
-	// for direction of movement
-	movementDirection.put("left", false);
-	movementDirection.put("right", false);
-	movementDirection.put("up", false);
-	movementDirection.put("down", false);
+		// inventory
+		inventory = new WeightedInventory(100);
+		equippedItems = PlayerEquipment.getPlayerEquipment();
 
-	// inventory
-	inventory = new WeightedInventory(100);
-	equippedItems = PlayerEquipment.getPlayerEquipment();
-
-	// Add weapons to inventory
-	Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN)
-		.setUser(this).setRadius(0.7).build();
-	Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL)
-		.setUser(this).setRadius(0.7).build();
-	Weapon machinegun = new WeaponBuilder()
-		.setWeaponType(WeaponType.MACHINEGUN).setUser(this)
-		.setRadius(0.7).build();
-	equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
-	equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
-	equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
+		// Add weapons to inventory
+		Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN)
+				.setUser(this).setRadius(0.7).build();
+		Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL)
+				.setUser(this).setRadius(0.7).build();
+		Weapon machinegun = new WeaponBuilder()
+				.setWeaponType(WeaponType.MACHINEGUN).setUser(this)
+				.setRadius(0.7).build();
+		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
+		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 
     }
 
@@ -682,108 +682,108 @@ public class Player extends Character implements Tickable {
      */
     private void handleKeyDown(int keycode) {
 
-	switch (keycode) {
-	case Input.Keys.P:
-	    this.contextManager.pushContext(new PerksSelectionScreen());
-	    break;
-	case Input.Keys.C:
-	    this.contextManager.pushContext(new CharacterCreationContext());
-	    break;
-	case Input.Keys.SHIFT_LEFT:
-	    if (staminaCur > 0) {
-		sprinting = true;
-		movementSpeed = movementSpeed * 2f;
-	    }
-	    break;
-	case Input.Keys.W:
-	    movementDirection.put("up", true);
-	    break;
-	case Input.Keys.S:
-	    movementDirection.put("down", true);
-	    break;
-	case Input.Keys.A:
-	    movementDirection.put("left", true);
-	    break;
-	case Input.Keys.D:
-	    movementDirection.put("right", true);
-	    break;
-	case Input.Keys.E:
-	    checkForInteraction();
-	    break;
-	case Input.Keys.R:
-	    if (this.getEquippedWeapon() != null) {
-		GameManager.get().getWorld()
-			.removeEntity(this.getEquippedWeapon());
-	    }
-	    this.equippedItems.cycleEquippedSlot();
-	    if (this.getEquippedWeapon() != null) {
-		GameManager.get().getWorld()
-			.addEntity(this.getEquippedWeapon());
-	    }
-	    break;
-	case Input.Keys.T:
-		this.getEquippedWeapon().switchBullet();
-		break;
-	case Input.Keys.ESCAPE:
-	    contextManager.popContext();
-	    break;
-	case Input.Keys.I:
-	    // Display Inventory
-	    System.out.println("Access player inventory");
-	    contextManager.pushContext(new PlayerInventoryContext(this));
-	    break;
-	default:
-	    break;
-	}
-	handleDirectionInput();
-	handleNoInput();
     	switch (keycode) {
-    		case Input.Keys.P:
-    			this.contextManager.pushContext(new PerksSelectionScreen());
-    			break;
-    		case Input.Keys.C:
-    			this.contextManager.pushContext(new CharacterCreationContext());
-    			break;
-    		case Input.Keys.SHIFT_LEFT:
-    			if (staminaCur > 0) {
-    				sprinting = true;
-    				movementSpeed = movementSpeed * 2f;
-    			}
-    			break;
-    		case Input.Keys.W:
-    			movementDirection.put("up", true);
-    			break;
-    		case Input.Keys.S:
-    			movementDirection.put("down", true);
-    			break;
-    		case Input.Keys.A:
-    			movementDirection.put("left", true);
-    			break;
-    		case Input.Keys.D:
-    			movementDirection.put("right", true);
-    			break;
-    		case Input.Keys.E:
-    			checkForInteraction();
-    			break;
-    		case Input.Keys.R:
-    			if (this.getEquippedWeapon() != null) {
-    				GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
-    			}
-    			this.equippedItems.cycleEquippedSlot();
-    			if (this.getEquippedWeapon() != null) {
-    				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
-    			}
-    			break;
-    		case Input.Keys.ESCAPE:
-    			contextManager.popContext();
-    			break;
-    		case Input.Keys.I:
-    			// Display Inventory
-    			System.out.println("Access player inventory");
-    			contextManager.pushContext(new PlayerInventoryContext(this));
-    			break;
-    		default:
-    			break;
+    	case Input.Keys.P:
+    		this.contextManager.pushContext(new PerksSelectionScreen());
+    		break;
+    	case Input.Keys.C:
+    		this.contextManager.pushContext(new CharacterCreationContext());
+    		break;
+    	case Input.Keys.SHIFT_LEFT:
+    		if (staminaCur > 0) {
+    			sprinting = true;
+    			movementSpeed = movementSpeed * 2f;
+    		}
+    		break;
+    	case Input.Keys.W:
+    		movementDirection.put("up", true);
+    		break;
+    	case Input.Keys.S:
+    		movementDirection.put("down", true);
+    		break;
+    	case Input.Keys.A:
+    		movementDirection.put("left", true);
+    		break;
+    	case Input.Keys.D:
+    		movementDirection.put("right", true);
+    		break;
+    	case Input.Keys.E:
+    		checkForInteraction();
+    		break;
+    	case Input.Keys.R:
+    		if (this.getEquippedWeapon() != null) {
+    			GameManager.get().getWorld()
+    			.removeEntity(this.getEquippedWeapon());
+    		}
+    		this.equippedItems.cycleEquippedSlot();
+    		if (this.getEquippedWeapon() != null) {
+    			GameManager.get().getWorld()
+    			.addEntity(this.getEquippedWeapon());
+    		}
+    		break;
+    	case Input.Keys.T:
+    		this.getEquippedWeapon().switchBullet();
+    		break;
+    	case Input.Keys.ESCAPE:
+    		contextManager.popContext();
+    		break;
+    	case Input.Keys.I:
+    		// Display Inventory
+    		System.out.println("Access player inventory");
+    		contextManager.pushContext(new PlayerInventoryContext(this));
+    		break;
+    	default:
+    		break;
+    	}
+    	handleDirectionInput();
+    	handleNoInput();
+    	switch (keycode) {
+    	case Input.Keys.P:
+    		this.contextManager.pushContext(new PerksSelectionScreen());
+    		break;
+    	case Input.Keys.C:
+    		this.contextManager.pushContext(new CharacterCreationContext());
+    		break;
+    	case Input.Keys.SHIFT_LEFT:
+    		if (staminaCur > 0) {
+    			sprinting = true;
+    			movementSpeed = movementSpeed * 2f;
+    		}
+    		break;
+    	case Input.Keys.W:
+    		movementDirection.put("up", true);
+    		break;
+    	case Input.Keys.S:
+    		movementDirection.put("down", true);
+    		break;
+    	case Input.Keys.A:
+    		movementDirection.put("left", true);
+    		break;
+    	case Input.Keys.D:
+    		movementDirection.put("right", true);
+    		break;
+    	case Input.Keys.E:
+    		checkForInteraction();
+    		break;
+    	case Input.Keys.R:
+    		if (this.getEquippedWeapon() != null) {
+    			GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
+    		}
+    		this.equippedItems.cycleEquippedSlot();
+    		if (this.getEquippedWeapon() != null) {
+    			GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
+    		}
+    		break;
+    	case Input.Keys.ESCAPE:
+    		contextManager.popContext();
+    		break;
+    	case Input.Keys.I:
+    		// Display Inventory
+    		System.out.println("Access player inventory");
+    		contextManager.pushContext(new PlayerInventoryContext(this));
+    		break;
+    	default:
+    		break;
     	}
     	handleDirectionInput();
     	handleNoInput();
