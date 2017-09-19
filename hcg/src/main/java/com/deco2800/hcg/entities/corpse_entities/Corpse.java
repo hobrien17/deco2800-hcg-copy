@@ -14,10 +14,10 @@ public abstract class Corpse extends AbstractEntity {
      * @param posY the y position
      * @param posZ the z position
      */
-    public Corpse(float posX, float posY, float posZ, String texture) {
+    public Corpse(float posX, float posY, float posZ) {
         super(posX, posY, posZ, 0.7f, 0.7f, 1, 1f, 1f, false);
         turret = null;
-        this.setTexture(texture);
+        this.setThisTexture();
     }
 
     /**

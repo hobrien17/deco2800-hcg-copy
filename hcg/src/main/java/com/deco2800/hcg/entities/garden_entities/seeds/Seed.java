@@ -24,7 +24,7 @@ public class Seed implements Item {
 		FIRE("fire_seed", Inferno.class, FireTurret.class), 
 		GRASS("grass_seed",	Grass.class, GrassTurret.class), 
 		ICE("ice_seed", Ice.class, IceTurret.class), 
-		WATER("water_seed", Water.class, null);
+		WATER("water_seed", Water.class, WaterTurret.class);
 
 		private String texture;
 		private Class<? extends AbstractGardenPlant> plant;
