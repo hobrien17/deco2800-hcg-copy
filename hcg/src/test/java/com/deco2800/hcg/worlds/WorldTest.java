@@ -180,7 +180,7 @@ public class WorldTest extends World{
     World world = new World("test");
 
     if (world.getMap() != null) {
-      assertTrue("resources/maps/initial-map-test.tmx".equals(world.getLoadedFile()));
+      assertTrue("resources/maps/maps/initial-map-test.tmx".equals(world.getLoadedFile()));
     }
     
   }

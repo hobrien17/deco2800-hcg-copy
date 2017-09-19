@@ -33,8 +33,8 @@ public class TextureManager extends Manager {
 	 * need to.
 	 */
 	public TextureManager() {
-		textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
-		textureMap.put("ground", new Texture("resources/maps/environment/ground.png"));
+		textureMap.put("grass", new Texture("resources/maps/textures/grass.png"));
+		textureMap.put("ground", new Texture("resources/maps/textures/ground.png"));
 		textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
 		textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
 		textureMap.put("hcg_character_sink", new Texture("resources/sprites/player/hcg_character_hat_sink.png"));
@@ -148,6 +148,22 @@ public class TextureManager extends Manager {
 		textureMap.put("purple_potion", new Texture("resources/sprites/potions/potion_round_purple.png"));
 		textureMap.put("blue_potion", new Texture("resources/sprites/potions/potion_round_blue.png"));
 		textureMap.put("seed", new Texture("resources/placeholderassets/placeholderseed.png"));
+		//Multiplayer UI Textures
+		//Multiplayer Lobby
+		textureMap.put("chat_background",	new Texture("resources/ui/multiplayer_ui/chatbar.png"));
+		textureMap.put("multi_menu_background",	new Texture("resources/ui/multiplayer_ui/menu_background.png"));
+		textureMap.put("menu_add_button", new Texture("resources/ui/multiplayer_ui/menu_add_button.png"));
+		textureMap.put("lobby_title", new Texture("resources/ui/multiplayer_ui/lobby_title.png"));
+		textureMap.put("lobby_start_button", new Texture("resources/ui/multiplayer_ui/lobby_start_button.png"));
+		textureMap.put("lobby_send_button", new Texture("resources/ui/multiplayer_ui/lobby_send_button.png"));
+		textureMap.put("lobby_image_frame", new Texture("resources/ui/multiplayer_ui/lobby_image_frame.png"));
+		textureMap.put("lobby_back_button", new Texture("resources/ui/multiplayer_ui/lobby_back_button.png"));
+		textureMap.put("lobby_separator", new Texture("resources/ui/multiplayer_ui/multiplayer_separator.png"));
+		//Server Browser
+		textureMap.put("server_host_button", new Texture("resources/ui/multiplayer_ui/menu_host_button.png"));
+		textureMap.put("server_join_button", new Texture("resources/ui/multiplayer_ui/menu_join_button.png"));
+		textureMap.put("server_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
+		textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
 	}
 
 	/**

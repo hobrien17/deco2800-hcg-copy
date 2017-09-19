@@ -30,7 +30,7 @@ public class PlayerManager extends Manager {
      */
     public void spawnPlayers() {
     		World world = GameManager.get().getWorld();
-    		for (Player player : players) {
+    		for (Player player : players.toArray(new Player[0])) {
     			world.addEntity(player);
     			world.addEntity(player.getEquippedWeapon());
     		}
