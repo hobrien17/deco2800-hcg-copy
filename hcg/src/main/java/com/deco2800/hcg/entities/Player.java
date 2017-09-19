@@ -894,9 +894,9 @@ public class Player extends Character implements Tickable {
     	float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
 
     	if (GameManager.get().getCamera() != null) {
-    		GameManager.get().getCamera().position.x = isoX;
-    		GameManager.get().getCamera().position.y = isoY;
-    		GameManager.get().getCamera().update();
+			GameManager.get().getCamera().position.x += (isoX - GameManager.get().getCamera().position.x) * .09f;
+			GameManager.get().getCamera().position.y += (isoY - GameManager.get().getCamera().position.y) * .09f;
+			GameManager.get().getCamera().update();
     	}
     }
 

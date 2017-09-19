@@ -117,7 +117,7 @@ public class GameManager implements TickableManager {
     }
 
     /**
-     * @deprecated
+     * Gets the current camera
      */
     public OrthographicCamera getCamera() {
         return camera;
