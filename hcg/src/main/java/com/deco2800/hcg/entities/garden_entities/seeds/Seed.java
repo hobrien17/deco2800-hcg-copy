@@ -131,4 +131,9 @@ public class Seed extends StackableItem {
 	public Item copy() {
 		return new Seed(type);
 	}
+	
+	@Override
+	public String getName() {
+		return type.toString().toLowerCase();
+	}
 }
