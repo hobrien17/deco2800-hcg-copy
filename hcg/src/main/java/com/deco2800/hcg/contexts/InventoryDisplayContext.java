@@ -130,7 +130,7 @@ public abstract class InventoryDisplayContext extends UIContext{
      * @param inventory
      *          The inventory table
      */
-    public void inventoryDisplay(TextureManager textureManager, Character character, Skin skin, Table inventory) {
+    public void inventoryDisplay(TextureManager textureManager, Character character, Skin skin, Table inventory, ShopMenuContext shopMenuContext) {
         this.skin = skin;
         this.inventory = inventory;
         this.textureManager = textureManager;
@@ -160,12 +160,9 @@ public abstract class InventoryDisplayContext extends UIContext{
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (selectedImage != null) {
-                        selectedImage.setVisible(false);
-                    }
                     selectedImage = clickedImage;
                     selectedItem = currentItem;
-                    selectedImage.setVisible(true);
+                    shopMenuContext.draw();
                 }
             });
             currentRow++;

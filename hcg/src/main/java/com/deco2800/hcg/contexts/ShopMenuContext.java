@@ -23,6 +23,12 @@ import com.deco2800.hcg.managers.TimeManager;
  */
 public class ShopMenuContext extends InventoryDisplayContext {
 
+    private GameManager gameManager;
+    private ContextManager contextManager;
+    private TextureManager textureManager;
+    private TimeManager timeManager;
+
+    private Skin skin;
     private Image shop_title;
     private Image player_title;
     private Table shopInventory;
@@ -31,27 +37,40 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private ImageButton shopSell;
     private ImageButton shopExit;
     private Table centreTable;
+    private Table buySell;
+
+    private Player player;
+    private ShopNPC shopKeeper;
+
+    private ShopMenuContext thisContext = this;
 
     /**
      * Constructor for the ShopMenuContext
      */
     public ShopMenuContext(Player player, ShopNPC shopKeeper) {
-
         shopKeeper.getShop().open(0, player);
+        this.player = player;
+        this.shopKeeper = shopKeeper;
 
+        draw();
+
+
+    }
+
+    public void draw() {
         // Get necessary managers
-        GameManager gameManager = GameManager.get();
-        ContextManager contextManager = (ContextManager)
+        gameManager = GameManager.get();
+        contextManager = (ContextManager)
                 gameManager.getManager(ContextManager.class);
-        TextureManager textureManager = (TextureManager)
+        textureManager = (TextureManager)
                 gameManager.getManager(TextureManager.class);
-        TimeManager timeManager = (TimeManager)
+        timeManager = (TimeManager)
                 gameManager.getManager(TimeManager.class);
 
         //stop in-game time while in shop
         timeManager.pauseTime();
 
-        Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
         centreTable = new Table();
         centreTable.setFillParent(true);
@@ -68,7 +87,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 
         shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy_button")).getDrawable());
 
-        Table buySell = new Table();
+        buySell = new Table();
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
         buySell.add(shopBuy);
@@ -76,8 +95,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
         buySell.add(shopSell);
         shopExit.setPosition(0, stage.getHeight()-shopExit.getHeight());
 
-        inventoryDisplay(textureManager, player, skin, playerInventory);
-        inventoryDisplay(textureManager, shopKeeper, skin, shopInventory);
+        inventoryDisplay(textureManager, player, skin, playerInventory, this);
+        inventoryDisplay(textureManager, shopKeeper, skin, shopInventory, this);
 
         //add elements to table
         centreTable.add(shop_title);
@@ -88,17 +107,16 @@ public class ShopMenuContext extends InventoryDisplayContext {
         centreTable.add(buySell);
         centreTable.add(playerInventory);
         centreTable.row();
-        //centreTable.add(shopBuy);
-        //centreTable.add(shopSell);
 
         //add table to stage
         stage.addActor(centreTable);
         stage.addActor(shopExit);
 
         //Listeners
-        shopExit.addListener(new ChangeListener() {
+        shopExit.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
+                draw();
                 //unpause in-game time
                 timeManager.unpauseTime();
                 contextManager.popContext();
@@ -108,22 +126,16 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopBuy.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                playerInventory.reset();
-                shopInventory.reset();
                 shopKeeper.getShop().buyStock(selectedItem);
-                inventoryDisplay(textureManager, player, skin, playerInventory);
-                inventoryDisplay(textureManager, shopKeeper, skin, shopInventory);
+                draw();
             }
         });
 
         shopSell.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                playerInventory.reset();
-                shopInventory.reset();
                 shopKeeper.getShop().sellStock(selectedItem);
-                inventoryDisplay(textureManager, player, skin, playerInventory);
-                inventoryDisplay(textureManager, shopKeeper, skin, shopInventory);
+                draw();
             }
         });
     }
