@@ -527,9 +527,9 @@ public class Player extends Character implements Tickable {
 			float slipperyFactor2 = slippery * 0.06f;
 
 			// created helper function to avoid duplicate code
-			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed,
+			lastSpeedX = slipperySpeedHelper(speedX * sprintMultiplier, lastSpeedX, speed,
 					slipperyFactor, slipperyFactor2);
-			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed,
+			lastSpeedY = slipperySpeedHelper(speedY * sprintMultiplier, lastSpeedY, speed,
 					slipperyFactor, slipperyFactor2);
 		} else {
 			// non slippery movement
