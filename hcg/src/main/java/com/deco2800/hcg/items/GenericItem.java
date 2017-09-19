@@ -28,20 +28,8 @@ public abstract class GenericItem implements Item {
     public int getBaseValue() {
         return this.baseValue;
     }
-
-    /**
-     * Function for setting the icon of an item
-     * Implemented similar to the AbstractEntitry texture. Be sure to register texture with
-     * TextureRegister before assigning the texture to a item
-     *
-     * @param texture : filename of texture
-     * @throws IllegalArgumentException if texture is an invalid file name
-     */
-    public void setTexture(String texture) throws IllegalArgumentException {
-        // TODO: implement textures
-    }
-
     
+    @Override
     public String getTexture() {
         return this.texture;
     }
@@ -50,5 +38,9 @@ public abstract class GenericItem implements Item {
     public boolean equals(Item item) {
         return this == item;
     }
-
+    
+    @Override
+    public ItemRarity getRarity() {
+        return ItemRarity.COMMON;
+    }
 }

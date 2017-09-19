@@ -6,9 +6,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.garden_entities.plants.*;
-import com.deco2800.hcg.entities.turrets.*;
+import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
+import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
+import com.deco2800.hcg.entities.garden_entities.plants.Grass;
+import com.deco2800.hcg.entities.garden_entities.plants.Ice;
+import com.deco2800.hcg.entities.garden_entities.plants.Inferno;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
+import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
+import com.deco2800.hcg.entities.garden_entities.plants.Water;
+import com.deco2800.hcg.entities.turrets.AbstractTurret;
+import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
+import com.deco2800.hcg.entities.turrets.FireTurret;
+import com.deco2800.hcg.entities.turrets.IceTurret;
+import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
 
 public class Seed implements Item {
@@ -121,11 +133,6 @@ public class Seed implements Item {
 	}
 
 	@Override
-	public void setTexture(String texture) throws IllegalArgumentException {
-		// to implement
-	}
-
-	@Override
 	public boolean addToStack(int number) {
 		return false;
 	}
@@ -198,5 +205,10 @@ public class Seed implements Item {
     @Override
 	public Item copy() {
 	    return new Seed(type);
+    }
+
+    @Override
+    public ItemRarity getRarity() {
+        return ItemRarity.COMMON;
     }
 }

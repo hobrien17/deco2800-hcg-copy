@@ -21,7 +21,7 @@ import java.util.Iterator;
  * @author Taari Meiners (@tmein) / Group 1
  * @author Group 2
  */
-public abstract class InventoryDisplayContext extends UIContext{
+public abstract class InventoryDisplayContext extends UIContext {
 
     //Input arguments
     private Skin skin;
@@ -81,7 +81,7 @@ public abstract class InventoryDisplayContext extends UIContext{
                     Label title = new Label("Item Info", skin);
                     title.setColor(Color.BLACK);
                     title.setFontScale(1.5f);
-                    itemName.setColor(Color.BLACK);
+                    itemName.setColor(currentItem.getRarity().colour);
                     itemInfo.add(title).top();
                     itemInfo.row();
                     itemInfo.add(itemName).left();
