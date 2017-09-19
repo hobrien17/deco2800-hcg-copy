@@ -3,10 +3,7 @@ package com.deco2800.hcg.contexts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.deco2800.hcg.entities.Player;
@@ -77,8 +74,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
         inventoryDisplay(textureManager, shopKeeper, skin, shopInventory);
 
         //add elements to table
-        centreTable.add(shop_title);
-        centreTable.add(player_title);
+        centreTable.add(shop_title).height(100).width(500);
+        centreTable.add(player_title).height(100).width(200);
         centreTable.row();
         centreTable.add(shopInventory);
         centreTable.add(playerInventory);
