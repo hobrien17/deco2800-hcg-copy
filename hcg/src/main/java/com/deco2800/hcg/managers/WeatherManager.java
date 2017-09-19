@@ -125,6 +125,8 @@ public class WeatherManager extends Manager {
 				setUp("2dWind.p");
 				break;
 		}
+		
+		onEffects.add(weatherType);
 	}
 
 	/**
