@@ -2,6 +2,7 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -131,6 +132,37 @@ public class WorldMapContext extends UIContext {
 		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
+		inputManager.addMouseMovedListener(this::handleMouseMoved);
+	}
+
+	// when hovering the node, change the mouse cursor, delete if not needed
+	private void handleMouseMoved(int screenX, int screenY){
+
+		Vector2 mouseScreen = new Vector2(screenX, screenY);
+		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
+		for (MapNodeEntity nodeEntity : allNodes) {
+			float nodeStartX = nodeEntity.getXPos();
+			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
+			float nodeStartY = nodeEntity.getYPos();
+			float nodeEndY = nodeEntity.getYPos() + nodeEntity.getHeight();
+			if (mouseStage.x >= nodeStartX && mouseStage.x <= nodeEndX
+					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
+					&& nodeEntity.getNode().isDiscovered()
+					&& !(nodeEntity.getNode().getNodeType() == 2)) {
+
+				// online free png https://dribbble.com/shots/815059-Basic-Cursor-PNG-Pack
+				// for design team: create a 'cursor' png file with:
+				//        a "power of 2" width px (256, 512,...)
+				//        a "RGBA8888" format
+				// otherwise, the code below will break
+
+				Pixmap pixmap = new Pixmap(Gdx.files.internal("resources/cursor-hand.png"));
+				Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0));
+//				Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
+			} else {
+				// this line should set the current cursor back to normal. but I don't know how to do
+			}
+		}
 	}
 
 	private void handleTouchUp(int screenX, int screenY, int pointer,
