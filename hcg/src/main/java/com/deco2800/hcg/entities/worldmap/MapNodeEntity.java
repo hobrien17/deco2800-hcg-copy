@@ -15,6 +15,7 @@ import com.deco2800.hcg.managers.TextureManager;
  */
 public class MapNodeEntity extends Actor {
     private Texture nodeTexture;
+	private TextureManager textureManager;
     private int xPos;
     private int yPos;
 
@@ -32,21 +33,11 @@ public class MapNodeEntity extends Actor {
 
         this.node = node;
         GameManager gameManager = GameManager.get();
-        TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         // Assigns the correct texture based on node type
-        switch (node.getNodeType()) {
-            case 0: nodeTexture = textureManager.getTexture("safe_node");
-                break;
-            case 1: nodeTexture = textureManager.getTexture("discovered_node");
-                break;
-            case 2: nodeTexture = textureManager.getTexture("completed_node");
-                break;
-            case 3: nodeTexture = textureManager.getTexture("fungi_node");
-                break;
-            default: // This shouldn't happen, but catch all if it does.
-                nodeTexture = textureManager.getTexture("discovered_node");
-        }
+
+		updateTexture();
 
 		// pixels padding around each direction of the map
 		int mapPadding = 50;
@@ -71,6 +62,23 @@ public class MapNodeEntity extends Actor {
 		node.setYPos(yPos + spriteHeight/2);
     }
 
+	/**
+	 * Checks the current nodeType in the parent node of this MapNodeEntity, and updates the stored texture to reflect.
+	 */
+	public void updateTexture(){
+		switch (node.getNodeType()) {
+			case 0: nodeTexture = textureManager.getTexture("safe_node");
+				break;
+			case 1: nodeTexture = textureManager.getTexture("discovered_node");
+				break;
+			case 2: nodeTexture = textureManager.getTexture("completed_node");
+				break;
+			case 3: nodeTexture = textureManager.getTexture("fungi_node");
+				break;
+			default: // This shouldn't happen, but catch all if it does.
+				nodeTexture = textureManager.getTexture("discovered_node");
+		}
+	}
 	/**
 	 * Gets the node stored in this actor object
 	 *
@@ -119,6 +127,4 @@ public class MapNodeEntity extends Actor {
 	public Texture getNodeTexture() {
 		return nodeTexture;
 	}
-
-
 }

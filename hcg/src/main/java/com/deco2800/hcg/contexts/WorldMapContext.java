@@ -100,7 +100,6 @@ public class WorldMapContext extends UIContext {
 				nodeEntry.setVisible(false);
 			}
 			allNodes.add(nodeEntry);
-			//stage.addActor(nodeEntry);
 		}
 
 		stage.addActor(window);
@@ -173,7 +172,6 @@ public class WorldMapContext extends UIContext {
 				hiddenNodes.add(nodeEntry);
 				nodeEntry.setVisible(false);
 			}
-			//stage.addActor(nodeEntry);
 		}
 		stage.addActor(window);
 	}
@@ -222,12 +220,17 @@ public class WorldMapContext extends UIContext {
 		batch.draw(node.getNodeTexture(), node.getXPos(), node.getYPos(), node.getWidth(), node.getHeight());
 	}
 
+	/**
+	 * Creates separate render batches for the lines and pots, in order to get the layering done correctly.
+	 * @param delta the time step in between stage.act() calls.
+	 */
 	@Override
 	public void render(float delta) {
 		super.render(delta);
 		Batch lineBatch = new SpriteBatch();
 		SpriteBatch potBatch = new SpriteBatch();
 
+		// Render all the lines first
 		lineBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
 			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
@@ -241,9 +244,11 @@ public class WorldMapContext extends UIContext {
 		}
 		lineBatch.end();
 
+		// Render all the pots second, in order to ensure they are rendered on top of the lines.
 		potBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
 			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
+				nodeEntity.updateTexture();
 				drawPot(potBatch, nodeEntity);
 			}
 		}
