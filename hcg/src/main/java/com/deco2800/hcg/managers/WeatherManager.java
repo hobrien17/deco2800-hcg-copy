@@ -34,7 +34,7 @@ public class WeatherManager extends Manager {
 	SpriteBatch batch;
 
 	// onEffects: a list of effects that is currently on in game.
-	ArrayList<Integer> onEffects;
+	ArrayList<Weathers> onEffects;
 
 	/**
 	 * Constructor for weather manager
@@ -43,11 +43,12 @@ public class WeatherManager extends Manager {
 
 		// boolean snow = false;
 
-		onEffects = new ArrayList<Integer>();
+		onEffects = new ArrayList<Weathers>();
 		weather = new ParticleEffect();
 		weather.start();
 
-		addWeather(RAIN);
+
+		addWeather(Weathers.RAIN);
 		// addWeather(SNOW);
 
 		weatherActor = new ParticleEffectActor(weather);
@@ -119,25 +120,24 @@ public class WeatherManager extends Manager {
 	 * 
 	 * @ensure allEffects contains weatherEffect
 	 */
-	public void addWeather(int weatherType) {
+	public void addWeather(Weathers weatherType) {
 		if (onEffects.contains(weatherType)) {
 			return;
 		}
 		ParticleEmitter emitter = new ParticleEmitter();
 		switch (weatherType) {
-		case (NONE):
-			// Turn off all weather conditions
-			weather.dispose();
-			break;
-		case (RAIN):
-			setUp("2dRain.p");
-			break;
-		case (SNOW):
-			setUp("2dSnow.p");
-			break;
-		default:
-			// Do nothing if weatherType is not an implemented weather type
-			return;
+			case NONE:
+				// Turn off all weather conditions
+				weather.dispose();
+				break;
+			case RAIN:
+				setUp("2dRain.p");
+				break;
+			case SNOW:
+				setUp("2dSnow.p");
+				break;
+			default:
+				// Do nothing if weatherType is not an implemented weather type
 		}
 	}
 
@@ -147,8 +147,8 @@ public class WeatherManager extends Manager {
 	 * @param weatherType:
 	 *            int representation of the weather to set to
 	 */
-	public void setWeather(int weatherType) {
-		addWeather(NONE);
+	public void setWeather(Weathers weatherType) {
+		addWeather(Weathers.NONE);
 		addWeather(weatherType);
 	}
 
@@ -158,7 +158,7 @@ public class WeatherManager extends Manager {
 	 * 
 	 * @ensure this.getOnEffects() does not contain effect
 	 */
-	public void stopEffect(int weatherType) {
+	public void stopEffect(Weathers weatherType) {
 		// THIS IS NOT WORKING AT THE MOMENT; DO NOT TEST (SOZ)
 
 		int index = onEffects.indexOf(weatherType);
@@ -176,7 +176,7 @@ public class WeatherManager extends Manager {
 	 *         off and on in the game. E.g. index RAIN would be 1 if rain is
 	 *         currently on, 0 otherwise.
 	 */
-	public ArrayList<Integer> getOnEffects() {
+	public ArrayList<Weathers> getOnEffects() {
 		return onEffects;
 	}
 
