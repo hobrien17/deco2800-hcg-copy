@@ -9,8 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.deco2800.hcg.types.Weathers;
 
 /**
- * A class to manage the game's internal system of weather. Weather can be set using the methods in this class
- * Import com.deco2800.hcg.types.Weathers as well as this one to use the weather system.
+ * A class to manage the game's internal system of weather. Weather can be set
+ * using the methods in this class Import com.deco2800.hcg.types.Weathers as
+ * well as this one to use the weather system.
  *
  * @author Team 7 (Organic Java)
  */
@@ -54,30 +55,30 @@ public class WeatherManager extends Manager {
 	 * @param fileName
 	 *            filename of particle file image in "resources/particles/"
 	 * 
-	 * @require fileName refers to a .p file && weather has been declared && 
-	 * 			filename is in the path"resources/particles/"
+	 * @require fileName refers to a .p file && weather has been declared &&
+	 *          filename is in the path"resources/particles/"
 	 */
 	private void setUp(String fileName) {
 		weather.load(Gdx.files.internal("resources/particles/" + fileName),
 				Gdx.files.internal("resources/particles/"));
-		ParticleEmitter newEmitter = 
-				weather.getEmitters().get(weather.getEmitters().size - 1);
+		ParticleEmitter newEmitter = weather.getEmitters()
+				.get(weather.getEmitters().size - 1);
 		newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
 				Gdx.graphics.getHeight() / 2);
 
 		// Scale is currently hardcoded; TO DO
 		int scale = 9;
-		float heightHighMax, heightLowMax, heightHighMin, heightLowMin, 
+		float heightHighMax, heightLowMax, heightHighMin, heightLowMin,
 				widthHighMax, widthLowMax, widthHighMin, widthLowMin;
 		heightHighMax = newEmitter.getSpawnHeight().getHighMax();
 		newEmitter.getSpawnHeight().setHighMax(heightHighMax * scale);
-		
+
 		heightLowMax = newEmitter.getSpawnHeight().getLowMax();
 		newEmitter.getSpawnHeight().setLowMax(heightLowMax * scale);
-		
+
 		heightHighMin = newEmitter.getSpawnHeight().getHighMin();
 		newEmitter.getSpawnHeight().setHighMin(heightHighMin * scale);
-		
+
 		heightLowMin = newEmitter.getSpawnHeight().getLowMin();
 		newEmitter.getSpawnHeight().setLowMin(heightLowMin * scale);
 
@@ -106,33 +107,47 @@ public class WeatherManager extends Manager {
 			return;
 		}
 		ParticleEmitter emitter = new ParticleEmitter();
-		//weather.getEmitters
+		// weather.getEmitters
 		switch (weatherType) {
-			case NONE:
-				// Turn off all weather conditions
-				stopEffect();
-				break;
-			case RAIN:
-				setUp("2dRain.p");
-				break;
-			case SNOW:
-				setUp("2dSnow.p");
-				break;
-			case SANDSTORM:
-				setUp("2dSandstorm.p");
-				break;
-			case WIND:
-				setUp("2dWind.p");
-				break;
+		case NONE:
+			// Turn off all weather conditions
+			stopAllEffect();
+			break;
+		case RAIN:
+			setUp("2dRain.p");
+			break;
+		case SNOW:
+			setUp("2dSnow.p");
+			break;
+		case SANDSTORM:
+			setUp("2dSandstorm.p");
+			break;
+		case WIND:
+			setUp("2dWind.p");
+			break;
 		}
-		
+
 		onEffects.add(weatherType);
 	}
 
 	/**
-	 * Turns off weather effects.
+	 * Turns off all weather effects.
 	 */
-	public void stopEffect() {
+	public void stopAllEffect() {
+		weather.dispose();
+		onEffects.clear();
+	}
+
+	/**
+	 * Turns off specific weather effect if turned on, else do nothing
+	 * 
+	 * @param Weathers:
+	 *            weather type you would like to turn off
+	 *            
+	 * @ensure weatherManager.getOnEffects() does not contain weathers
+	 */
+	public void stopEffect(Weathers weatherType) {
+		onEffects.remove(weatherType);
 		weather.dispose();
 	}
 
