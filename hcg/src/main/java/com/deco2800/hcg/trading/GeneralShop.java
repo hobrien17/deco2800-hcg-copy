@@ -1,11 +1,7 @@
 package com.deco2800.hcg.trading;
 
-import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.deco2800.hcg.items.stackable.HealthPotion;
 
 /**
  * General Shop class that implements all the methods of the shop
@@ -13,6 +9,10 @@ import java.util.Map;
  * @author Taari Meiners / Team 1
  */
 public class GeneralShop extends Shop{
-    
+    public GeneralShop() {
+        Item testPotion = new HealthPotion(100);
+        testPotion.addToStack(9);
+        addStock(testPotion);
+    }
 
 }

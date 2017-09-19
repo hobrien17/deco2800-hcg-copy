@@ -99,9 +99,7 @@ public class WeightedInventory implements Inventory {
                     item.setStackSize(toAdd);
                 }
             }
-
-            this.items.add(item);
-            
+            this.items.add(item.copy());
             return true;
         }
         
@@ -210,6 +208,16 @@ public class WeightedInventory implements Inventory {
                 if(numFound >= item.getStackSize()) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean containsSingleItem(Item item) {
+        for(Item currentItem : this.items) {
+            if (currentItem.sameItem(item)) {
+                return true;
             }
         }
         return false;

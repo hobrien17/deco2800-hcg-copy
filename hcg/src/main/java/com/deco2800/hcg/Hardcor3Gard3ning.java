@@ -11,11 +11,13 @@ import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
+import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
+import com.deco2800.hcg.worldmapui.LevelStore;
 import com.deco2800.hcg.worldmapui.MapGenerator;
 import com.deco2800.hcg.worlds.World;
 
@@ -36,7 +38,7 @@ public class Hardcor3Gard3ning extends Game {
 	private PlantManager plantManager;
 	private ItemManager itemManager;
 	private StopwatchManager stopwatchManager;
-	private MessageManager messageManager;
+	private NetworkManager networkManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -72,31 +74,22 @@ public class Hardcor3Gard3ning extends Game {
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
         playerManager.setPlayer(player);
-        //TODO: Change this
+        //TODO: Change this, currently these are just testing items
         Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
+        Item startingSeeds = new BasicSeed();
+        startingSeeds.addToStack(100);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);
         player.addItemToInventory(test2);
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
+        player.addItemToInventory(startingSeeds);
 
-
-        
-        ArrayList<Level> levelList = new ArrayList<Level>();
-        // Creates some test levels
-        Level testLevel = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 1);
-        Level testLevel2 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 0);
-        Level testLevel3 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 1);
-        Level testLevel4 = new Level(new World("resources/maps/initial-map-test.tmx"), 0, 1, 2);
-
-        // Eventually this will contain all the playable game levels
-        levelList.add(testLevel);
-        levelList.add(testLevel2);
-        levelList.add(testLevel3);
-        levelList.add(testLevel4);
+        LevelStore levels = new LevelStore();
+        ArrayList<Level> levelList = levels.getLevels();
         
         /* Create a plant manager. */
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
@@ -108,8 +101,8 @@ public class Hardcor3Gard3ning extends Game {
         stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
         stopwatchManager.startTimer(1);
         
-        /* Create a message manager */
-        messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
+        /* Create a network manager */
+        networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 
         // Procedurally generate the world map and store it.
         MapGenerator mapGenerator = new MapGenerator(levelList);
@@ -125,6 +118,9 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
+		if (networkManager.isInitialised()) {
+			networkManager.processReceivedMessages();
+		}
         fireTicks();
         clearScreen();
         super.render(); // Will render current context

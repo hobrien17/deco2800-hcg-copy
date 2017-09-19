@@ -33,6 +33,10 @@ public class SoundManager extends Manager {
 		soundMap.put("sludge", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/sludge.wav")));
 		soundMap.put("spikes", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/spikes.wav")));
 		soundMap.put("ground", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ground.wav")));
+		soundMap.put("hit", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/hit.wav")));
+		soundMap.put("gun-rifle-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-rifle-shoot.wav")));
+		soundMap.put("gun-shotgun-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-shotgun-shoot.wav")));
+		soundMap.put("gun-stargun-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-stargun-shoot.wav")));
 	}
 
 	/**

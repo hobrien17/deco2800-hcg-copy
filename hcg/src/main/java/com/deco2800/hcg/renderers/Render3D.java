@@ -9,8 +9,6 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.HasProgress;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,9 +22,6 @@ import java.util.List;
 public class Render3D implements Renderer {
 
     BitmapFont font;
-
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(Render3D.class);
 
     /**
      * Renders onto a batch, given a renderables with entities It is expected

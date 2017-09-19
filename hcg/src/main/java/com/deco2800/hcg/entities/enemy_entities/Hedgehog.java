@@ -1,18 +1,17 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
+import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
-import com.deco2800.hcg.managers.StopwatchManager;
 
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 
-public class Hedgehog extends Enemy implements Observer {
+public class Hedgehog extends Enemy implements Tickable {
 
-    int seconds;
-    int range;
+    int walkingRange;
+    int chargingRange;
+    boolean chargedAtPlayer;
 
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
@@ -27,29 +26,41 @@ public class Hedgehog extends Enemy implements Observer {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
         //this.setTexture();
         this.level = 1;
-        seconds = 0;
-        range = 20 * this.level;
-        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-        manager.addObserver(this);
+        walkingRange = 30 * this.level;
+        chargingRange = 15 * this.level;
+        chargedAtPlayer = false;
 
     }
 
-    public void update(Observable o, Object arg) {
+    /**
+     * On Tick handler
+     * @param gameTickCount Current game tick
+     */
+    @Override
+    public void onTick(long gameTickCount) {
         float distance = this.distance(playerManager.getPlayer());
-        if (seconds == 5 && distance < range){
-            // roll at player
-            seconds = 0;
-        } else {
-            newPos = this.getRandomPos();
-            this.detectCollision();//Detect collision.
-            this.moveAction();//Move enemy to the position in Box3D.
-            
-            if (seconds == 5){
-                seconds = 0;
-            } else {
-                seconds++;
-            }
+        if (chargedAtPlayer == true && distance > walkingRange){
+            chargedAtPlayer = false;
         }
+        if (chargedAtPlayer == false && distance < walkingRange && distance > chargingRange){
+            // move_slowly to player
+            setSpeed((this.level * 0.01f));
+            newPos = this.getToPlayerPos();
+        } else if (chargedAtPlayer == false && distance < chargingRange) {
+            // charge at player
+            setSpeed(this.level * 0.05f);
+            newPos = getToPlayerPos();
+        } else {
+            // move randomly
+            setSpeed(this.level * 0.03f);
+            newPos = this.getRandomPos();
+        }
+        this.detectCollision();//Detect collision.
+        if (this.collidedPlayer == true) {
+            chargedAtPlayer = true;
+        }
+        this.moveAction();//Move enemy to the position in Box3D.
+
     }
 
     @Override

@@ -1,25 +1,28 @@
 package com.deco2800.hcg.managers;
 
+import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.observers.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class PlayerInputManager extends Manager {
+public class PlayerInputManager extends Manager implements TickableManager {
+	
+	private NetworkManager networkManager = (NetworkManager) GameManager.get().getManager(NetworkManager.class);
 
     private HashMap<Integer, KeyDownObserver> keyDownListeners = new HashMap<>();
-
     private HashMap<Integer, KeyUpObserver> keyUpListeners = new HashMap<>();
-
     private HashMap<Integer, TouchDownObserver> touchDownListeners = new HashMap<>();
-
     private HashMap<Integer, TouchUpObserver> touchUpListeners = new HashMap<>();
-
     private HashMap<Integer, TouchDraggedObserver> touchDragegdListeners = new HashMap<>();
-    
 	private HashMap<Integer, MouseMovedObserver> mouseMovedListeners = new HashMap<>();
-
 	private HashMap<Integer, ScrollObserver> scrollListeners = new HashMap<>();
-
+	
+	private ConcurrentHashMap<Long, ArrayList<int[]>> actionQueue = new ConcurrentHashMap<>();
+	
+	private long gameTickCount = 0;
+	
 	/**
 	 * Adds a key down listener to the list of key down listeners
 	 * @param observer the key down observer to add
@@ -158,5 +161,66 @@ public class PlayerInputManager extends Manager {
 
 	public void scrolled(Integer peer, int amount) {
 		scrollListeners.get(peer).notifyScrolled(amount);
+	}
+	
+	public void queueLocalAction(int... args) {
+		if (networkManager.isInitialised()) {
+			networkManager.sendInputMessage(args);
+		}
+		
+		long tick = gameTickCount + (networkManager.isInitialised() ? 3 : 1);
+		if (!actionQueue.containsKey(tick)) {
+			actionQueue.put(tick, new ArrayList<>());
+		}
+		int[] localArgs = new int[args.length + 1];
+		localArgs[0] = 0;
+		System.arraycopy(args, 0, localArgs, 1, args.length);
+		actionQueue.get(tick).add(localArgs);
+	}
+	
+	public void queueAction(long tick, int... args) {
+		if (!actionQueue.containsKey(tick)) {
+			actionQueue.put(tick, new ArrayList<>());
+		}
+		actionQueue.get(tick).add(args);
+	}
+
+	@Override
+	public void onTick(long totalTickCount) {
+		this.gameTickCount++;
+		ArrayList<int[]> actions = actionQueue.get(gameTickCount);
+		if (actions == null) {
+			return;
+		}
+		for (int[] action : actions) {
+			InputType inputType = InputType.values()[action[1]];
+			switch (inputType) {
+			case KEY_DOWN:
+				keyDown(action[0], action[2]);
+				break;
+			case KEY_UP:
+				keyUp(action[0], action[2]);
+				break;
+			case MOUSE_MOVED:
+				mouseMoved(action[0], action[2], action[3]);
+				break;
+			case SCROLL:
+				scrolled(action[0], action[2]);
+				break;
+			case TOUCH_DOWN:
+				touchDown(action[0], action[2], action[3], action[4], action[5]);
+				break;
+			case TOUCH_DRAGGED:
+				touchDragged(action[0], action[2], action[3], action[4]);
+				break;
+			case TOUCH_UP:
+				touchUp(action[0], action[2], action[3], action[4], action[5]);
+				break;
+			default:
+				break;
+				
+			}
+		}
+		actionQueue.remove(gameTickCount);
 	}
 }
