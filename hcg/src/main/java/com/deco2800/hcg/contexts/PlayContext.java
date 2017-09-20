@@ -12,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -61,18 +59,13 @@ public class PlayContext extends Context {
 	private NetworkManager networkManager;
 	private ClockDisplay clockDisplay;
 	private PlantWindow plantWindow;
+	private ChatStack chatStack;
 
 	private Stage stage;
 	private Skin skin;
 	private Window window;
 	private Window exitWindow;
-	private Stack chatBackground;
-	private Table chatWindow;
-	private TextField chatTextField;
-	private TextArea chatTextArea;
-	private Button chatButton;
-	private Image chatBar;
-	private String chatString = new String("");
+
 
 	/**
 	 * Create the PlayContext
@@ -99,7 +92,11 @@ public class PlayContext extends Context {
 		clockDisplay = new ClockDisplay();
 		playerStatus = new PlayerStatusDisplay();
 		plantWindow = new PlantWindow(skin);
+		chatStack = new ChatStack(stage);
 
+		if (networkManager.isInitialised()) {
+			stage.addActor(chatStack);
+		}
 		stage.addActor(clockDisplay);
 		stage.addActor(playerStatus);
 		stage.addActor(plantWindow);
@@ -127,81 +124,6 @@ public class PlayContext extends Context {
 
 		/* Add the window to the stage */
 		stage.addActor(window);
-
-        /* Create window for chat and all components */
-		chatBar = new Image(textureManager.getTexture("chat_background"));
-		chatBackground = new Stack(chatBar);
-		chatWindow = new Table(skin);
-		chatTextArea = new TextArea("", skin);
-		chatTextField = new TextField("", skin);
-		chatTextArea.setDisabled(true);
-		chatTextArea.setText("");
-		chatButton = new TextButton("Send", skin);
-		chatWindow.add(chatTextArea).expand().fill().height(210).colspan(3).padBottom(20);
-		chatWindow.row().height(40).padBottom(10);
-		chatWindow.add(chatTextField).prefWidth(350);
-		chatWindow.add(chatButton);
-		chatWindow.setDebug(false);//display lines for debugging
-		chatWindow.padTop(35).padLeft(15).padRight(15);
-		chatBackground.setPosition(0, 0);
-		chatBackground.add(chatWindow);
-		chatBackground.setSize(380, 270);
-		chatBackground.setScale((float) 1.2);
-		if (networkManager.isInitialised()) {
-			stage.addActor(chatBackground);
-		}
-
-		/*
-		 * Setup inputs for the buttons and the game itself
-		 */
-		chatButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (networkManager.isInitialised()) {
-					if (chatString.trim().length()>0) {
-						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
-
-						chatTextField.setText("");
-						chatTextArea.appendText(chatMessage + "\n");
-						stage.setKeyboardFocus(null);
-						chatString = "";
-					} else {
-						chatTextField.setText("");
-						chatTextField.setCursorPosition(0);
-						chatString = "";
-					}
-				}
-			}
-		});
-
-        /*
-        	Input Listener for Textfield
-         */
-		chatTextField.setTextFieldListener(new TextField.TextFieldListener() { //textfield Listener
-			@Override
-			public void keyTyped(TextField textField, char c) {
-				if (c != '\b') {
-					chatString += c;
-				} else if (chatString.length() > 0) {
-					chatString = chatString.substring(0, chatString.length() - 1);
-				}
-				if ((c == '\r' && networkManager.isInitialised())) {
-					if (chatString.trim().length()>0) {
-						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
-						chatTextField.setText("");
-						chatTextArea.appendText(chatMessage + "\n");
-						stage.setKeyboardFocus(null);
-						chatString = "";
-					} else {
-						chatTextField.setText("");
-						chatTextField.setCursorPosition(0);
-						chatString = "";
-					}
-				}
-			}
-		});
-
-		messageManager.addChatMessageListener(this::handleChatMessage);
         
 		/*
 		 * Setup an Input Multiplexer so that input can be handled by both the UI and
@@ -254,10 +176,6 @@ public class PlayContext extends Context {
 				return true;
 			}
 		});
-	}
-
-	private void handleChatMessage(String message) {
-		chatTextArea.appendText(message + "\n");
 	}
 
 	/**
@@ -315,6 +233,7 @@ public class PlayContext extends Context {
 		playerStatus.setPosition(30f, stage.getHeight()-200f);
 		clockDisplay.setPosition(stage.getWidth()-220f, 20f);
 		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
 	}
 
 	/**
@@ -405,7 +324,6 @@ public class PlayContext extends Context {
     	exitWindow.add(noButton);
     	exitWindow.pack();
 		exitWindow.setMovable(false); // So it doesn't fly around the screen
-		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
 		exitWindow.setWidth(150);
     }
     
