@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
 import java.util.*;
 import com.deco2800.hcg.actors.ParticleEffectActor;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
