@@ -10,16 +10,31 @@ import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.deco2800.hcg.contexts.playContextClasses.*;
+import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
+import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
+import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
+import com.deco2800.hcg.entities.ItemEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.handlers.MouseHandler;
-import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.MessageManager;
+import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 
@@ -366,6 +381,9 @@ public class PlayContext extends Context {
     private void handleKeyDown(int keycode) {
         if (keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
+        } else if(keycode == Input.Keys.EQUALS) {
+            ItemEntity item = new ItemEntity(0, 0, 0, new HealthPotion(2));
+            gameManager.getWorld().addEntity(item);
         }
     }
     
