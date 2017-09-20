@@ -15,14 +15,23 @@ import com.deco2800.hcg.managers.TextureManager;
  */
 public class ServerBrowserContext extends UIContext {
 
-    private ImageButton host, refresh, join, addServer, back;
-    private Table main, buttonTable, titleTable;
-    private Image title, separator1, separator2;
+    private ImageButton host;
+    private ImageButton refresh;
+    private ImageButton join;
+    private ImageButton addServer;
+    private ImageButton back;
+    private Table main;
+    private Table buttonTable;
+    private Table titleTable;
+    private Image title;
+    private Image separator1;
+    private Image separator2;
     private ScrollPane serverListPane;
     private List<String> serverList;
     private String servers[];
     private Dialog enterServer;
-    private TextButton enterServerAdd, enterServerExit;
+    private TextButton enterServerAdd;
+    private TextButton enterServerExit;
     private TextField serverIPTextfield;
     private Label serverStatus;
 
@@ -61,7 +70,7 @@ public class ServerBrowserContext extends UIContext {
         serverList.setItems(servers);
         serverListPane = new ScrollPane(serverList);
         serverListPane.setSmoothScrolling(false);
-        serverListPane.setDebug(true);
+        serverListPane.setDebug(false);
 
         enterServer = new Dialog("Enter Host IP", skin);
         serverIPTextfield = new TextField("", skin);
