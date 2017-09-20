@@ -1,10 +1,14 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.types.Weathers;
@@ -239,6 +243,36 @@ public class World {
 
 		return null;
 
+	}
+	
+	/**
+	 *  Changes the texture of the tile at a given position.
+	 *  
+	 * @param posX X position of tile to change
+	 * @param posY Y position of tile to change
+	 * @param texture texture to change tile to
+	 * @return true if success, false if failure
+	 */
+	public boolean changeTileAtPos(int posX, int posY, Texture texture) {
+	  	  	  
+	  TiledMapTileLayer layer = getTiledMapTileLayerAtPos(posY, posX);
+	  	  
+	  if (layer != null) {
+	    
+	    // make new texture region
+	    TextureRegion textureRegion = new TextureRegion(texture);
+	    StaticTiledMapTile tile = new StaticTiledMapTile(textureRegion);
+	    
+	    // change cell texture
+	    if (layer.getCell(posY, posX) != null) {
+    	    layer.getCell(posY, posX).setTile(tile);	      
+    	    return true;
+	    }
+	    else {
+	      return false;
+	    }
+	  }
+	  return false;
 	}
 
 	/**
