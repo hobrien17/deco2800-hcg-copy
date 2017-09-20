@@ -169,7 +169,15 @@ public final class NetworkManager extends Manager implements TickableManager {
 		messageBuffer.get(bytes);
 		sendQueue.put(id, bytes);
 	}
-
+	
+	/**
+	 * Return the size of queue
+	 * @return: Int size of queue
+	 */
+	public Integer getSendQueueSize(){
+		return sendQueue.size();
+	}
+	
 	/**
 	 * Add chat message to queue
 	 * @param chatMessage String to be sent
