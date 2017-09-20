@@ -8,7 +8,6 @@ import com.deco2800.hcg.contexts.MainMenuContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.worldmap.Level;
-import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStack;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
@@ -19,9 +18,7 @@ import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worldmapui.LevelStore;
-import com.deco2800.hcg.worldmapui.MapGenerator;
 import com.deco2800.hcg.worldmapui.WorldStackGenerator;
-import com.deco2800.hcg.worlds.World;
 
 import java.util.ArrayList;
 

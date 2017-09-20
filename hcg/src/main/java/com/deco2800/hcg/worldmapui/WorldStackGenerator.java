@@ -10,7 +10,7 @@ import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStack;
 
 public class WorldStackGenerator {
-	private final int NUMBER_OF_WORLDS = 5;
+	private static final int NUMBER_OF_WORLDS = 5;
 	
 	private List<Integer> biomeList;
 	private MapGenerator mapGenerator;

@@ -21,11 +21,11 @@ import org.slf4j.LoggerFactory;
 public class MapGenerator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MapGenerator.class);
 	
-	private final int DEFAULT_COLUMN_COUNT = 10; // <- default number of columns in a world (can be changed later)
-	private final int DEFAULT_ROW_COUNT = 10; // <- default number of rows in a world (can be changed later)
-	private final int MAX_COLUMNS_BEFORE_SAFENODE = 5; // <- change as needed
-	private final int MIN_NODES_PER_COLUMN = 2; // <- be very careful with this value. Should never exceed rowNumber/2
-	private final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
+	private static final int DEFAULT_COLUMN_COUNT = 10; // <- default number of columns in a world (can be changed later)
+	private static final int DEFAULT_ROW_COUNT = 10; // <- default number of rows in a world (can be changed later)
+	private static final int MAX_COLUMNS_BEFORE_SAFENODE = 5; // <- change as needed
+	private static final int MIN_NODES_PER_COLUMN = 2; // <- be very careful with this value. Should never exceed rowNumber/2
+	private static final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
 	
 	private List<Level> levelsMaster;
 	private List<Level> levelsOfType;
