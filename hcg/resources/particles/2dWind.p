@@ -2,8 +2,8 @@ Wind
 - Delay -
 active: false
 - Duration - 
-lowMin: 1000.0
-lowMax: 1000.0
+lowMin: 100.0
+lowMax: 100.0
 - Count - 
 min: 600
 max: 700
@@ -137,9 +137,9 @@ timelineCount: 1
 timeline0: 0.0
 - Tint - 
 colorsCount: 3
-colors0: 1.0
+colors0: 0.40784314
 colors1: 1.0
-colors2: 1.0
+colors2: 0.34117648
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
