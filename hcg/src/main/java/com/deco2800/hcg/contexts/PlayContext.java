@@ -5,11 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -18,13 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.deco2800.hcg.contexts.playContextClasses.*;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-import com.badlogic.gdx.graphics.Color;
-
-
 
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -36,15 +34,16 @@ public class PlayContext extends Context {
 	// Managers used by the game
 	private GameManager gameManager;
 	private SoundManager soundManager;
-	private PlayerManager playerManager;
-	private TimeManager timeManager;
 	private ContextManager contextManager;
 	private PlantManager plantManager;
 	private MessageManager messageManager;
+
+	//HUDs
 	private PlayerStatusDisplay playerStatus;
-	private Group ClockDisplay;
 	private TextureManager textureManager;
 	private NetworkManager networkManager;
+	private ClockDisplay clockDisplay;
+
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -71,14 +70,13 @@ public class PlayContext extends Context {
 	private Stack chatBackground;
 	private Table chatWindow;
 	private Label plantInfo;
-	private Label clockLabel;
-	private Label dateLabel;
 	private TextField chatTextField;
 	private TextArea chatTextArea;
 	private Button chatButton;
 	private Skin skin;
 	private Image chatBar;
 	private String chatString = new String("");
+
 
 	/**
 	 * Create the PlayContext
@@ -88,8 +86,6 @@ public class PlayContext extends Context {
 		// Set up managers for this game
 		gameManager = GameManager.get();
 		soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
-		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
-		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
@@ -103,26 +99,22 @@ public class PlayContext extends Context {
 		// Setup GUI
 		stage = new Stage(new ScreenViewport());
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+
+		clockDisplay = new ClockDisplay();
+		playerStatus = new PlayerStatusDisplay();
+
+		stage.addActor(clockDisplay);
+		stage.addActor(playerStatus);
+
 		window = new Window("Menu", skin);
         plantWindow = new Window("Plants", skin);
         createExitWindow();
 
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
-		
-		/* Add clock. */
-		Image clockImage = new Image(new
-				Texture(Gdx.files.internal("resources/ui/clock_outline.png")));
-		// clockImage.setPosition(stage.getWidth() - 215, 10);
-		clockLabel = new Label(timeManager.getTime(), skin);
-		dateLabel = new Label(timeManager.getDate(), skin);
-		timeManager.setTimeLabel(clockLabel);
-		timeManager.setDateLabel(dateLabel);
-
-		playerStatus = new PlayerStatusDisplay();
-		stage.addActor(playerStatus);
 
 		/* Add a programmatic listener to the quit button */
+
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -132,25 +124,12 @@ public class PlayContext extends Context {
 
 		/* Add all buttons to the menu */
 		window.add(button);
-		window.add(clockLabel);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
 
 		/* Add the window to the stage */
 		stage.addActor(window);
-
-		/* Create clock GUI and add it to the stage */
-		Group group = new Group();
-		group.setPosition(stage.getWidth() - 220, 20);
-		group.addActor(clockImage);
-		clockLabel.setPosition(58, 95);
-		clockLabel.setFontScale((float) 2.1);
-		dateLabel.setPosition(65, 60);
-		dateLabel.setFontScale((float) 0.9);
-		group.addActor(clockLabel);
-		group.addActor(dateLabel);
-		stage.addActor(group);
 
         /* Create the window for plant. */
 		plantInfo = new Label("null", skin);
@@ -348,8 +327,8 @@ public class PlayContext extends Context {
 
 		stage.getViewport().update(width, height, true);
 		window.setPosition(0, stage.getHeight());
-
-		playerStatus.updatePosition(stage.getHeight());
+		playerStatus.setPosition(30f, stage.getHeight()-200f);
+		clockDisplay.setPosition(stage.getWidth()-220f, 20f);
 	}
 
 	/**

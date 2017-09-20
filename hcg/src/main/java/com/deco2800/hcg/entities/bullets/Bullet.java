@@ -7,7 +7,6 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-
 import com.deco2800.hcg.entities.Player;
 
 import java.util.List;
@@ -135,7 +134,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 *            the bullet's y direction
 	 * @return a pair of x and y co-ordinates
 	 */
-	private static float[] getProj(float xd, float yd) {
+	protected static float[] getProj(float xd, float yd) {
 		float[] proj = new float[2];
 
 		proj[0] = xd / 55f;
@@ -156,8 +155,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 		if (Math.abs(Math.abs(this.getPosX()) - Math.abs(goalX)) < 1
 				&& Math.abs(Math.abs(this.getPosY()) - Math.abs(goalY)) < 1) {
 			GameManager.get().getWorld().removeEntity(this);
-			// GameManager.get().getWorld()
-			// .addEntity(new Plant(this.goalX, this.goalY, 0));
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
@@ -169,7 +166,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 * Detects collision with entity and if enemy, apply effect of bullet. After
 	 * applying effect, bullet is removed from the world.
 	 */
-	private void entityHit() {
+	protected void entityHit() {
 		Box3D pos = getBox3D();
 		pos.setX(getPosX());
 		pos.setY(getPosY());
@@ -206,7 +203,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 				break;
 			}
 		}
-
 	}
 
 	/**
@@ -218,6 +214,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected void applyEffect(Enemy target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0));
 	}
 }
