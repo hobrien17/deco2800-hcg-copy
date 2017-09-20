@@ -21,6 +21,8 @@ public class WorldMap {
 	private String worldSeed;
 	private int worldRowNumber;
 	private int worldColumnNumber;
+	private boolean unlocked;
+	private boolean completed;
 	
 	/**
 	 * Initialises the WorldMap object using the specified parameters.	
@@ -37,15 +39,16 @@ public class WorldMap {
 	 * @param nodeList
 	 *     The nodes which make up the WorldMap's playable game areas
 	 */
-	public WorldMap(int type, String texture, int position, int rows, int columns, List<MapNode> nodeList) {
+	public WorldMap(int type, String texture, int rows, int columns, List<MapNode> nodeList) {
 		worldType = type;
 		worldBackgroundTexture = texture;
-		worldPosition = position;
 		// blank initial seed
 		worldSeed = "";
 		worldRowNumber = rows;
 		worldColumnNumber = columns;
 		containedNodes = nodeList;
+		completed = false;
+		unlocked = false;
 	}
 	
 	//TEMPORARY CONSTRUCTOR! REMOVE ONCE IMPLEMENTATION IS FINISHED!
@@ -160,5 +163,25 @@ public class WorldMap {
 	 */
 	public void addSeed(String seed) {
 		worldSeed = seed;
+	}
+	
+	public void toggleCompleted() {
+		completed = !completed;
+	}
+	
+	public boolean isCompleted() {
+		return completed;
+	}
+	
+	public void toggleUnlocked() {
+		unlocked = !unlocked;
+	}
+	
+	public boolean isUnlocked() {
+		return unlocked;
+	}
+	
+	public void setPosition(int position) {
+		worldPosition = position;
 	}
 }

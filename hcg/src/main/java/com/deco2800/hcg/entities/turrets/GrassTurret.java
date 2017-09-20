@@ -36,7 +36,7 @@ public class GrassTurret extends AbstractTurret {
 
 	@Override
 	public String getThisTexture() {
-		return "tree";
+		return "grass_corpse";
 	}
 
 }

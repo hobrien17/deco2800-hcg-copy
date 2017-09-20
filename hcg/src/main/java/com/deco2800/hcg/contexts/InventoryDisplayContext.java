@@ -10,7 +10,6 @@ import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.managers.TextureManager;
-import org.lwjgl.Sys;
 
 import java.util.Iterator;
 

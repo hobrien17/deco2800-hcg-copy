@@ -78,7 +78,19 @@ public class TextureManager extends Manager {
 		textureMap.put("fireball_right", new Texture("resources/sprites/bullets/fireball_right.png"));
 		textureMap.put("sunflower_alt", new Texture("resources/sprites/plants/sunflower_alt.png"));
 
-
+		// Corpse textures
+		textureMap.put("corpse", new Texture("resources/sprites/dead_enemies/deadant.png"));
+		textureMap.put("sunflower_corpse", new Texture("resources/sprites/dead_enemies/sunflower_big.png"));
+		textureMap.put("cactus_corpse_01", new Texture("resources/sprites/dead_enemies/cactus01.png"));
+		textureMap.put("cactus_corpse_02", new Texture("resources/sprites/dead_enemies/cactus02.png"));
+		textureMap.put("cactus_corpse_03", new Texture("resources/sprites/dead_enemies/cactus03.png"));
+		textureMap.put("ice_corpse_01", new Texture("resources/sprites/dead_enemies/ice01.png"));
+		textureMap.put("ice_corpse_02", new Texture("resources/sprites/dead_enemies/ice02.png"));
+		textureMap.put("ice_corpse_03", new Texture("resources/sprites/dead_enemies/ice03.png"));
+		textureMap.put("water_corpse", new Texture("resources/sprites/dead_enemies/waterlily.png"));
+		textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass_alt.png"));
+		textureMap.put("fire_corpse", new Texture("resources/sprites/dead_enemies/inferno.png"));
+		
 		// Miscellaneous textures
 		textureMap.put("error", new Texture("resources/misc/error.png"));
 
@@ -171,7 +183,7 @@ public class TextureManager extends Manager {
         textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node.png"));
         textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
         textureMap.put("safe_node", new Texture("resources/worldmap/safe_node.png"));
-
+		textureMap.put("black_px", new Texture("resources/worldmap/black_px.png"));
         //Item textures
 		textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
 		textureMap.put("green_potion", new Texture("resources/sprites/potions/potion_round_green.png"));
