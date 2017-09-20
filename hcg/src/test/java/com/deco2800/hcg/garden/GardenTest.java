@@ -51,12 +51,12 @@ public class GardenTest {
 		seedNames = new HashMap<>();
 		seedPlants = new HashMap<>();
 
-		seedNames.put(Seed.Type.EXPLOSIVE, "EXPLOSIVE");
-		seedNames.put(Seed.Type.FIRE, "FIRE");
-		seedNames.put(Seed.Type.GRASS, "GRASS");
-		seedNames.put(Seed.Type.ICE, "ICE");
-		seedNames.put(Seed.Type.SUNFLOWER, "SUNFLOWER");
-		seedNames.put(Seed.Type.WATER, "WATER");
+		seedNames.put(Seed.Type.EXPLOSIVE, "explosive");
+		seedNames.put(Seed.Type.FIRE, "fire");
+		seedNames.put(Seed.Type.GRASS, "grass");
+		seedNames.put(Seed.Type.ICE, "ice");
+		seedNames.put(Seed.Type.SUNFLOWER, "sunflower");
+		seedNames.put(Seed.Type.WATER, "water");
 		
 		seedPlants.put(Seed.Type.EXPLOSIVE, Cactus.class);
 		seedPlants.put(Seed.Type.FIRE, Inferno.class);

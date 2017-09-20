@@ -31,7 +31,7 @@ public class SunflowerTurret extends AbstractTurret {
 	static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
 	private static final int RANGE = 5;
-	private int ammo;
+	protected int ammo;
 
 	public SunflowerTurret(Corpse master) {
 		super(master, "Sunflower");
@@ -58,7 +58,7 @@ public class SunflowerTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		// TODO Auto-generated method stub
-		return "tree";
+		return "sunflower_corpse";
 	}
 
 }

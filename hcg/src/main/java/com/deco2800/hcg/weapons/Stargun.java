@@ -10,8 +10,6 @@ import com.deco2800.hcg.managers.GameManager;
  * Stargun represents the a weapon that shoots stars as bullets
  */
 public class Stargun extends Weapon implements Tickable {
-    protected int pellets;
-
     /**
      * Creates a new Stargun at the given position
      * @param posX the x position
@@ -38,20 +36,13 @@ public class Stargun extends Weapon implements Tickable {
     
     @Override
     protected void fireWeapon() {
-        Vector3 worldCoords = GameManager.get().getCamera()
-                .unproject(new Vector3(this.aimX, this.aimY, 0));
         Random random = new Random();
-        float projX;
-        float projY;
-        projX = worldCoords.x / 55f;
-        projY = -(worldCoords.y - 32f / 2f) / 32f + projX;
-        projX -= projY - projX;
-        // Spawn bullets at random locations around cursor
         for(int i = 0; i < this.pellets; i++) {
-            shootBullet(projX + 5 * (float) random.nextGaussian(),
-                    projY + 5 * (float) random.nextGaussian(),
-                    this.getPosZ(), worldCoords.x, worldCoords.y);
+            shootBullet(this.aim.x + 5 * (float) random.nextGaussian(),
+                    this.aim.y + 5 * (float) random.nextGaussian(),
+                    this.getPosZ(), this.aim.x, this.aim.y);
         }
+        playFireSound();
     }
     
 }

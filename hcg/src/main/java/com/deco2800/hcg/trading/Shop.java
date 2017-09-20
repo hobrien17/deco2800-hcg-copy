@@ -8,6 +8,7 @@ import com.deco2800.hcg.items.SingleItem;
 import com.deco2800.hcg.items.StackableItem;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 /** Generic shop interfece that has basic shop commands necessary for any shop such as the ability to buy, sell
  * and hold stock.
@@ -144,6 +145,30 @@ public abstract class Shop {
         return 0;
     }
 
+    /**
+     * Helper method to find an item in the shop stock. If there is a copy that does not have max stack size it returns
+     * this one, else it returns any of the others.
+     *
+     * @param item
+     * @return the item that was found
+     */
+    private Item containsItem(Item item) {
+        int maxStack = item.getMaxStackSize();
+        Item prelim = null;
+        for (Item i: shopStock) {
+            if (i.sameItem(item)) {
+                if (prelim == null) {
+                    prelim = i;
+                } else {
+                    if ((prelim.getStackSize() == maxStack) && (i.getStackSize() != maxStack)) {
+                        prelim = i;
+                    }
+                }
+            }
+        }
+        return prelim;
+    }
+
     /**Method to sell an item of stock to the shop
      *
      * @param item
@@ -152,16 +177,27 @@ public abstract class Shop {
      */
     public int sellStock(Item item) {
         seed = new BasicSeed();
-        seed.addToStack(item.getBaseValue()+modifier);
-        player.getInventory().removeItem(item);
+        seed.setStackSize(item.getBaseValue()+modifier);
+        if ((item instanceof SingleItem) || (item.getStackSize() == 1)) {
+            player.getInventory().removeItem(item);
+        } else {
+            item.addToStack(-1);
+        }
         if (!player.getInventory().addItem(seed)) {
-            player.getInventory().addItem(item);
+            player.getInventory().addItem(item.copy());
             return 1;
         }
-        if (shopStock.contains(item)) {
-            shopStock.get(shopStock.indexOf(item)).addToStack(item.getStackSize());
-        } else {
-            shopStock.add(item);
+        if (item instanceof StackableItem) {
+            Item shopCopy = containsItem(item);
+            if ((shopCopy != null) && shopCopy.addToStack(1)) {
+                //it worked, do nothing
+            } else {
+                Item newItem = item.copy();
+                newItem.setStackSize(1);
+                shopStock.add(newItem);
+            }
+        }  else {
+            shopStock.add(item.copy());
         }
         return 0;
     }

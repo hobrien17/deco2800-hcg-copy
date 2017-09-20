@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Harmable;
@@ -8,6 +9,7 @@ import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -44,12 +46,16 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected float movementSpeed;
     protected Random random;
     protected boolean collided;
+    protected boolean collidedPlayer;
     protected Box3D newPos;
 
 	// Effects container
 	protected Effects myEffects;
 
-	protected Weapon enemyWeapon;
+    protected Weapon enemyWeapon;
+    
+    // Sound manager
+    private SoundManager soundManager;
 
     /**
      * Creates a new enemy at the given position
@@ -86,14 +92,17 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.speedX = 0;
         this.speedY = 0;
         this.level = 1;
-        this.movementSpeed = (float)(this.level * 0.03);
+        this.normalSpeed = this.movementSpeed = (float)(this.level * 0.03);
         this.random = new Random();
         this.random.setSeed(this.getID());
         this.setCollided(false);
+        this.setCollidedPlayer(false);
         this.newPos = getBox3D();
 
 		// Effects container 
-		myEffects = new Effects(this);
+        myEffects = new Effects(this);
+        
+        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);        
     }
 
     /**
@@ -152,6 +161,14 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      */
     public void setCollided(boolean status){
         this.collided = status;
+    }
+
+    /**
+     * Set player collision status.
+     * @param status
+     */
+    public void setCollidedPlayer(boolean status){
+        this.collidedPlayer = status;
     }
 
     /**
@@ -326,6 +343,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
             nextPosY = this.randomY;
         } else {
             this.setCollided(false);
+            this.setCollidedPlayer(false);
             this.randomX = tempX;
             this.randomY = tempY;
         }
@@ -355,6 +373,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         if((abs(this.getPosX() - playerManager.getPlayer().getPosX()) > 1)||
                 (abs(this.getPosY() - playerManager.getPlayer().getPosY()) > 1)){
             this.setCollided(false);
+            this.setCollidedPlayer(false);
         }
         if(this.getPosX() < playerManager.getPlayer().getPosX()){
             currPosX += movementSpeed;
@@ -431,11 +450,13 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
             if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
                 if(entity instanceof Player) {
                     this.causeDamage((Player)entity);
+                    this.setCollidedPlayer(true);
                 }
                 this.setCollided(true);
             }
         }
     }
+
 
     /**
      * Set new position by different situation.
@@ -457,6 +478,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         }
     }
 
+
     /**
      * Shoot the entity
      *
@@ -467,7 +489,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y, thisEnemy);
         GameManager.get().getWorld().addEntity(bullet);
     */
-        enemyWeapon.updateAim((int)playerManager.getPlayer().getPosX(), (int)playerManager.getPlayer().getPosY());
+        enemyWeapon.updateAim(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
         //System.out.println("123   " + playerManager.getPlayer().getPosX());
         enemyWeapon.openFire();
     }

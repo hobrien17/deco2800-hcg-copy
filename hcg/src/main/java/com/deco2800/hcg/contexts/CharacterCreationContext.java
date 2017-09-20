@@ -19,6 +19,9 @@ import com.deco2800.hcg.managers.TextureManager;
  *
  * It can currently be accessed by pressing 'C' whilst in the game.
  *
+ * TODO: Actually create a new character using this context, add descriptions on click for the attributes, skills,
+ * and stats window. Make it look purty
+ *
  * @author avryn
  */
 public class CharacterCreationContext extends UIContext{
@@ -104,6 +107,7 @@ public class CharacterCreationContext extends UIContext{
     private GameManager gameManager;
     private ContextManager contextManager;
     private TextureManager textureManager;
+
     /**
      * Creates a new character creation screen
      */
@@ -149,24 +153,54 @@ public class CharacterCreationContext extends UIContext{
         statsWindow.setMovable(false);
         characterPreviewWindow.setMovable(false);
         selectedDescriptionWindow.setMovable(false);
+
+        /* Need to find a way to do this without overwriting the button and label listeners.
+        attributesWindow.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                selectedDescriptionText.setText("Your Attributes:\n Attributes are set at the start of the game and" +
+                        "may only be modified through special perks, items, or consumables. Since your attributes can" +
+                        "not be changed easily, be sure to choose wisely. Click on an attribute to" +
+                        " find out what it does.");
+            }
+        });*/
+
+
     }
 
     //Setting up top row info
     private void setupTopRowInfo() {
         TextButton quitButton = new TextButton("Quit", skin);
+        TextButton doneButton = new TextButton("Done!", skin);
         TextField characterName = new TextField("Enter Name", skin);
 
         characterSex = new SelectBox<>(skin);
         characterSex.setItems(sexes);
 
         topRowInfoTable.add(characterName);
-        topRowInfoTable.add(characterSex).expandX().left();
-        topRowInfoTable.add(quitButton).right();
+        topRowInfoTable.add(characterSex).left().expandX();
+        topRowInfoTable.add(quitButton).center();
+        topRowInfoTable.add(doneButton).right();
 
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 contextManager.popContext();
+            }
+        });
+
+        // If all points have been distributed, all specialities have been chosen,
+        // create the character from the given specification and pop contect.
+        doneButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (attributePoints == 0 && specializedSkillsPoints == 0) {
+                    //TODO: actually create the character with given specifications
+                    contextManager.popContext();
+                } else {
+                    selectedDescriptionText.setText("Please distribute all skill points and choose your specialised" +
+                            " skills");
+                }
             }
         });
 
@@ -177,7 +211,7 @@ public class CharacterCreationContext extends UIContext{
                     textureCount = 0;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 } else {
-                    textureCount = 5;
+                    textureCount = 3;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 }
             }
@@ -451,7 +485,7 @@ public class CharacterCreationContext extends UIContext{
         specializedSkillsPointsLabel = new Label("Available Specialities: " + specializedSkillsPoints, skin);
         meleeSkillLabel = new Label("Melee Skill: " + meleeSkill, skin);
         gunsSkillLabel = new Label("Guns Skill: " + gunsSkill, skin);
-        energyWeaponsSkillLabel = new Label("Energy Weapons: " + energyWeaponsSkill, skin);
+        energyWeaponsSkillLabel = new Label("Energy Weapons Skill: " + energyWeaponsSkill, skin);
 
         meleeSkillSpecialise = new CheckBox("Specialise", skin);
         meleeSkillSpecialise.setChecked(false);
@@ -499,6 +533,8 @@ public class CharacterCreationContext extends UIContext{
                 }
                 meleeSkillLabel.setText("Melee Skill: " + meleeSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
+                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
+                        " Melee Weapons");
             }
         });
 
@@ -525,6 +561,8 @@ public class CharacterCreationContext extends UIContext{
                 }
                 gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
+                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
+                        " Guns");
             }
         });
 
@@ -551,6 +589,32 @@ public class CharacterCreationContext extends UIContext{
                 }
                 energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
+                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
+                        " Energy Weapons");
+            }
+        });
+
+        meleeSkillLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
+                        " Melee Weapons");
+            }
+        });
+
+        gunsSkillLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
+                        " Guns");
+            }
+        });
+
+        energyWeaponsSkillLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
+                        " Energy Weapons");
             }
         });
     }
@@ -610,7 +674,7 @@ public class CharacterCreationContext extends UIContext{
     }
 
     private void addSubtables() {
-        masterTable.add(topRowInfoTable).top().left().expandX().fillX();
+        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2);
         masterTable.row();
         masterTable.add(attributesWindow).top().left().expandX().fillX();
         masterTable.add(skillsWindow).top().right().expandX().fillX().fillY();

@@ -2,9 +2,10 @@ package com.deco2800.hcg.weapons;
 
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.bullets.*;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
 
 /**
  * Weapon class containing all values and methods required for
@@ -28,14 +29,17 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
 
     protected float followX;
     protected float followY;
-    protected int aimX;
-    protected int aimY;
+    protected Vector3 aim;
     protected double radius;
     protected boolean shoot;
     protected int counter;
     protected int cooldown;
     protected WeaponType weaponType;
     protected AbstractEntity user;
+    protected int bulletType;
+    protected int pellets;
+
+    private SoundManager soundManager;    
 
     /**
      * Constructor for Weapon objects.
@@ -58,8 +62,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.counter = 0;
         this.followX = 0;
         this.followY = 0;
-        this.aimX = 0;
-        this.aimY = 0;
+        this.aim = new Vector3(0, 0, 0);
+        this.bulletType = 0;
 
         this.weaponType = weaponType;
         this.user = user;
@@ -67,6 +71,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         // TODO: Get proper weapon textures
         this.setTexture(texture);
         this.cooldown = cooldown;
+        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);        
     }
 
     /**
@@ -99,15 +104,33 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.shoot = false;
     }
 
+    protected void playFireSound() {
+        String soundName;
+        switch (weaponType) {
+            case MACHINEGUN:
+                soundName = "gun-rifle-shoot";
+                break;
+            case SHOTGUN:
+                soundName = "gun-shotgun-shoot";
+                break;
+            case STARFALL:
+                soundName = "gun-stargun-shoot";
+                break;
+            default:
+                soundName = "gun-rifle-shoot";
+        }
+        soundManager.stopSound(soundName);
+        soundManager.playSound(soundName);
+    }
+
     /**
      * Updates the weapon's coordinates for bullets to be fired to
      *
      * @param screenX int x coordinate for aim location
      * @param screenY int y coordinate for aim location
      */
-    public void updateAim(int screenX, int screenY) {
-        this.aimX = screenX;
-        this.aimY = screenY;
+    public void updateAim(Vector3 aim) {
+        this.aim = new Vector3(aim);
     }
 
     /**
@@ -117,21 +140,12 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * @param screenX int x coordinate for weapon location
      * @param screenY int y coordinate for weapon location
      */
-    public void updatePosition(int screenX, int screenY) {
-        // Convert screen coordinates into game world coordinates
-        Vector3 worldCoords = GameManager.get().getCamera()
-                .unproject(new Vector3(screenX, screenY, 0));
-
-        float projX;
-        float projY;
-
-        projX = worldCoords.x / 55f;
-        projY = -(worldCoords.y - 32f / 2f) / 32f + projX;
-        projX -= projY - projX;
-
-        this.followX = projX;
-        this.followY = projY;
+    //TODO: Remove
+    public void updatePosition(float worldX, float worldY) {
+        this.followX = worldX;
+        this.followY = worldY;
     }
+    
 
     /**
      * Creates a new bullet at given position
@@ -145,8 +159,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      */
     protected void shootBullet(float posX, float posY, float posZ,
                                float goalX, float goalY) {
-        Bullet bullet = new Bullet(posX, posY, posZ,
-                goalX, goalY, this.user, 1);
+        Bullet bullet = this.createBullet(posX, posY, posZ,
+                goalX, goalY);
         GameManager.get().getWorld().addEntity(bullet);
     }
 
@@ -160,6 +174,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * Changes the position of the weapon in the gameworld
      * sets at certain distance from player character facing cursor
      */
+    //TODO: remove
     protected void setPosition() {
         // Calculate the angle between the cursor and player
         float deltaX = this.user.getPosX() - this.followX;
@@ -173,6 +188,34 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                 (float) (this.radius * Math.sin(angle)));
     }
 
+    public void switchBullet() {
+        bulletType++;
+        if(bulletType > 2) {
+            bulletType = 0;
+        }
+    }
+
+    //TODO: incorporate into Bullet constructor
+    public Bullet createBullet(float posX, float posY, float posZ,
+                        float goalX, float goalY) {
+        Bullet bullet;
+        switch (bulletType) {
+            case 0:
+                bullet = new Bullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            case 1:
+                bullet = new SunflowerSeed(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            default:
+                bullet = new Bullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+        }
+        return bullet;
+    }
+
     /**
      * Updates position of the weapon in the game world and
      * shoots weapon if weapon cooldown is reached and
@@ -180,6 +223,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
+        //TODO: remove
         setPosition();
 
         if(this.counter < this.cooldown) {
@@ -202,7 +246,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         if(cooldown!=weapon.cooldown){
             return false;
         }
-        if((int)Double.doubleToLongBits(radius)!=(int)Double.doubleToLongBits(weapon.radius)){
+        if(pellets != weapon.pellets) {
             return false;
         }
 
@@ -214,7 +258,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         int result = 11;
         result = 31 * result + weaponType.hashCode();
         result = 31 * result + cooldown;
-        result = 31 * result + (int)Double.doubleToLongBits(radius);
+        result = 31 * result + pellets;
         result = 31 * result + super.hashCode();
         return result;
     }

@@ -6,24 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
-import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
-import com.deco2800.hcg.entities.garden_entities.plants.Grass;
-import com.deco2800.hcg.entities.garden_entities.plants.Ice;
-import com.deco2800.hcg.entities.garden_entities.plants.Inferno;
-import com.deco2800.hcg.entities.garden_entities.plants.Pot;
-import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
-import com.deco2800.hcg.entities.garden_entities.plants.Water;
-import com.deco2800.hcg.entities.turrets.AbstractTurret;
-import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
-import com.deco2800.hcg.entities.turrets.FireTurret;
-import com.deco2800.hcg.entities.turrets.IceTurret;
-import com.deco2800.hcg.entities.turrets.SunflowerTurret;
+import com.deco2800.hcg.entities.garden_entities.plants.*;
+import com.deco2800.hcg.entities.turrets.*;
 import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.items.ItemRarity;
+import com.deco2800.hcg.items.StackableItem;
 import com.deco2800.hcg.managers.GameManager;
 
-public class Seed implements Item {
+public class Seed extends StackableItem {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
@@ -34,9 +23,9 @@ public class Seed implements Item {
 		SUNFLOWER("gardening_seed", Sunflower.class, SunflowerTurret.class), 
 		EXPLOSIVE("explosive_seed", Cactus.class, ExplosiveTurret.class), 
 		FIRE("fire_seed", Inferno.class, FireTurret.class), 
-		GRASS("grass_seed",	Grass.class, null), 
+		GRASS("grass_seed",	Grass.class, GrassTurret.class), 
 		ICE("ice_seed", Ice.class, IceTurret.class), 
-		WATER("water_seed", Water.class, null);
+		WATER("water_seed", Water.class, WaterTurret.class);
 
 		private String texture;
 		private Class<? extends AbstractGardenPlant> plant;
@@ -87,75 +76,6 @@ public class Seed implements Item {
 		this.type = type;
 	}
 
-	@Override
-	public boolean isStackable() {
-		return false;
-	}
-
-	@Override
-	public String getName() {
-		return type.toString();
-	}
-
-	@Override
-	public int getStackSize() {
-		return 1;
-	}
-
-	@Override
-	public int getMaxStackSize() {
-		return 0;
-	}
-
-	@Override
-	public boolean isWearable() {
-		return false;
-	}
-
-	@Override
-	public boolean isEquippable() {
-		return false;
-	}
-
-	@Override
-	public int getWeight() {
-		return 0;
-	}
-
-	@Override
-	public int getBaseValue() {
-		return 0;
-	}
-
-	@Override
-	public boolean isTradable() {
-		return true;
-	}
-
-	@Override
-	public boolean addToStack(int number) {
-		return false;
-	}
-
-	@Override
-	public void setStackSize(int number) throws IllegalArgumentException {
-
-	}
-
-	@Override
-	public boolean sameItem(Item item) throws IllegalArgumentException {
-		return false;
-	}
-
-	@Override
-	public boolean equals(Item item) throws IllegalArgumentException {
-		if (item instanceof Seed) {
-			Seed other = (Seed) item;
-			return type.toString().equals(other.getType().toString());
-		}
-		return false;
-	}
-
 	/**
 	 * Returns the type of seed
 	 * 
@@ -197,18 +117,23 @@ public class Seed implements Item {
 		}
 	}
 
-    @Override
-    public String getTexture() {
-        return this.type.getTexture();
-    }
+	@Override
+	public boolean isEquippable() {
+		return false;
+	}
 
-    @Override
+	@Override
+	public boolean isTradable() {
+		return true;
+	}
+
+	@Override
 	public Item copy() {
-	    return new Seed(type);
-    }
-
-    @Override
-    public ItemRarity getRarity() {
-        return ItemRarity.COMMON;
-    }
+		return new Seed(type);
+	}
+	
+	@Override
+	public String getName() {
+		return type.toString().toLowerCase();
+	}
 }
