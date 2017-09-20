@@ -415,4 +415,8 @@ public class PlayContext extends Context {
     		stage.addActor(exitWindow);
     	}
     }
+    
+    public void removeExitWindow() {
+    	exitWindow.remove();
+    }
 }

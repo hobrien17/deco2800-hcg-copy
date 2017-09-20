@@ -16,14 +16,9 @@ public class WorldStackMapEntity extends Actor {
 
     private WorldMap worldMap;
 
-    private int spriteWidth = 125; // Used to scale the drawing of the mapNodes. (pixels)
-    private int spriteHeight; // Will be calculated based on the above width
-
-
-	// Constants
-	private static final String SAFE_NODE = "safe_node";
-	private static final String DISCOVERED_NODE = "discovered_node";
-
+    private float spriteWidth = 175; // Used to scale the drawing of the mapNodes. (pixels)
+    private float spriteHeight; // Will be calculated based on the above width
+    
     public WorldStackMapEntity(WorldMap worldMap) {
     	this.worldMap = worldMap;
 		GameManager gameManager = GameManager.get();
@@ -33,7 +28,7 @@ public class WorldStackMapEntity extends Actor {
         updateTexture();
         
         // pixels padding around each direction of the map
-     	int mapPadding = 100;
+     	int mapPadding = 175;
 
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
@@ -58,30 +53,22 @@ public class WorldStackMapEntity extends Actor {
 		switch (worldMap.getWorldType()) {
 			case 0: 
 				//no set biome
-				worldStackMapTexture = textureManager.getTexture(SAFE_NODE);
+				worldStackMapTexture = textureManager.getTexture("safe_node");
 				break;
 			case 1:
-				//desert biome
-				worldStackMapTexture = textureManager.getTexture(DISCOVERED_NODE);
+				//suburbs biome
+				worldStackMapTexture = textureManager.getTexture("discovered_node");
 				break;
 			case 2:
-				//snow biome
-				worldStackMapTexture = textureManager.getTexture(DISCOVERED_NODE);
+				//desolate forest biome
+				worldStackMapTexture = textureManager.getTexture("discovered_node");
 				break;
 			case 3:
-				//jungle biome
-				worldStackMapTexture = textureManager.getTexture(SAFE_NODE);
-				break;
-			case 4:
-				//urban biome
-				worldStackMapTexture = textureManager.getTexture(DISCOVERED_NODE);
-				break;
-			case 5:
-				//fungus biome
-				worldStackMapTexture = textureManager.getTexture(SAFE_NODE);
+				//fungal wasteland biome
+				worldStackMapTexture = textureManager.getTexture("safe_node");
 				break;
 			default: // This shouldn't happen, but catch all if it does.
-				worldStackMapTexture = textureManager.getTexture(DISCOVERED_NODE);
+				worldStackMapTexture = textureManager.getTexture("discovered_node");
 		}
 	}
 	
@@ -91,7 +78,9 @@ public class WorldStackMapEntity extends Actor {
 	 * @return the stored world map
 	 */
 	public WorldMap getWorldMap() {
-        return worldMap; }
+        return worldMap;
+    }
+	
 	/**
 	 * Gets the MapNodeEntity's screen x position
 	 * @return the x co ordinate

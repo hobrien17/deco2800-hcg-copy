@@ -33,7 +33,7 @@ public class WorldStackContext extends UIContext {
 	private Window window;
 
 	/**
-	 * Constructor to create a new WorldMapContext
+	 * Constructor to create a new WorldStackContext
 	 */
 	public WorldStackContext() {
 		gameManager = GameManager.get();
@@ -43,8 +43,7 @@ public class WorldStackContext extends UIContext {
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		StackInputManager inputManager = (StackInputManager) gameManager
-				.getManager(StackInputManager.class);
+		StackInputManager inputManager = new StackInputManager();
 
 		// Setup UI + Buttons
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -63,7 +62,7 @@ public class WorldStackContext extends UIContext {
 		for (WorldMap map : gameManager.getWorldStack().getWorldStack()) {
 			WorldStackMapEntity worldEntry = new WorldStackMapEntity(map);
 			if (map.getWorldPosition() == 0) {
-				map.toggleUnlocked();
+				map.setUnlocked();
 			} else {
 				hiddenWorldMaps.add(worldEntry);
 			}
@@ -134,7 +133,7 @@ public class WorldStackContext extends UIContext {
 			if (world.isCompleted()) {
 				for(WorldMap otherWorld : gameManager.getWorldStack().getWorldStack()) {
 					if(otherWorld.getWorldPosition() == (world.getWorldPosition() + 1) && !otherWorld.isUnlocked()) {
-						otherWorld.toggleUnlocked();
+						otherWorld.setUnlocked();
 						hiddenWorldMaps.remove(otherWorld);
 					}
 				}

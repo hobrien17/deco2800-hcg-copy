@@ -67,8 +67,15 @@ public class WeatherManager extends Manager {
 
 		// Scale is currently hardcoded; TO DO
 		int scale = 9;
-		float heightHighMax, heightLowMax, heightHighMin, heightLowMin,
-				widthHighMax, widthLowMax, widthHighMin, widthLowMin;
+		float heightHighMax;
+		float heightLowMax;
+		float heightHighMin;
+		float heightLowMin;
+		float widthHighMax;
+		float widthLowMax;
+		float widthHighMin;
+		float widthLowMin;
+		
 		heightHighMax = newEmitter.getSpawnHeight().getHighMax();
 		newEmitter.getSpawnHeight().setHighMax(heightHighMax * scale);
 
@@ -142,7 +149,7 @@ public class WeatherManager extends Manager {
 	 * 
 	 * @param Weathers:
 	 *            weather type you would like to turn off
-	 *            
+	 * 
 	 * @ensure weatherManager.getOnEffects() does not contain weathers
 	 */
 	public void stopEffect(Weathers weatherType) {

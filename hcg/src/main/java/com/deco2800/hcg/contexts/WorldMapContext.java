@@ -64,18 +64,17 @@ public class WorldMapContext extends UIContext {
 	/**
 	 * Constructor to create a new WorldMapContext
 	 */
-	WorldMapContext() {
+	public WorldMapContext() {
 		gameManager = GameManager.get();
 		gameManager.setMapContext(this);
-
+		
 		TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		lineTexture = new TextureRegion(textureManager.getTexture("black_px"));
 		playerManager = (PlayerManager) gameManager
 				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		MapInputManager inputManager = (MapInputManager) gameManager
-				.getManager(MapInputManager.class);
+		MapInputManager inputManager = new MapInputManager();
 
 		showAllNodes = false;
 
@@ -98,7 +97,7 @@ public class WorldMapContext extends UIContext {
 
 		allNodes = new ArrayList<>();
 		hiddenNodes = new ArrayList<>();
-
+		
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			MapNodeEntity nodeEntry = new MapNodeEntity(node);
 			if (!node.isDiscovered()) {
@@ -107,7 +106,7 @@ public class WorldMapContext extends UIContext {
 			}
 			allNodes.add(nodeEntry);
 		}
-
+		
 		stage.addActor(window);
 
 		quitButton.addListener(new ChangeListener() {
@@ -356,7 +355,7 @@ public class WorldMapContext extends UIContext {
     private void endWorld() {
     	for(WorldMap map : gameManager.getWorldStack().getWorldStack()) {
     		if(map.getWorldPosition() == gameManager.getWorldMap().getWorldPosition() + 1) {
-    			map.toggleUnlocked();
+    			map.setUnlocked();
     		}
     	}
     	gameManager.getWorldMap().toggleCompleted();
