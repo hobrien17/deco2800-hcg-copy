@@ -8,9 +8,13 @@ package com.deco2800.hcg.util;
  */
 public class Box3D {
 
-    private float x, y, z;
+    private float x;
+    private float y;
+    private float z;
 
-    private float xLength, yLength, zLength;
+    private float xLength;
+    private float yLength;
+    private float zLength;
 
     /**
      * Constructs a new Box3D with the given corner point and dimensions.

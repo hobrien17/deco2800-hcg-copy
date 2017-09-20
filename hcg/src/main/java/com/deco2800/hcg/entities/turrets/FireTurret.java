@@ -1,11 +1,6 @@
 package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observable;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.bullets.Fireball;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
@@ -19,7 +14,7 @@ import com.deco2800.hcg.managers.GameManager;
 public class FireTurret extends AbstractTurret {
 
 	private int seconds;
-	private final static int RANGE = 10;
+	private static final int RANGE = 10;
 
 	public FireTurret(Corpse master) {
 		super(master, "Fire");
@@ -46,7 +41,7 @@ public class FireTurret extends AbstractTurret {
 
 	@Override
 	public String getThisTexture() {
-		return "tree";
+		return "fire_corpse";
 	}
 
 }

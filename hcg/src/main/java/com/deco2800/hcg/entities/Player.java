@@ -284,7 +284,7 @@ public class Player extends Character implements Tickable {
     		int button) {
     	if (this.getEquippedWeapon() != null) {
             Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
-            System.out.println(position);
+            LOGGER.info("Position: " + position);
             this.getEquippedWeapon().updateAim(position);
     		this.getEquippedWeapon().openFire();
     	}

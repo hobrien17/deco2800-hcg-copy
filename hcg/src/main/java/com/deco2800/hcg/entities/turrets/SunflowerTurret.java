@@ -58,7 +58,7 @@ public class SunflowerTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		// TODO Auto-generated method stub
-		return "tree";
+		return "sunflower_corpse";
 	}
 
 }

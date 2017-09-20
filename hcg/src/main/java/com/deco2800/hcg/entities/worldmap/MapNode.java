@@ -37,8 +37,6 @@ public class MapNode {
 	 */
 	private int xPos;
 	private int yPos;
-	private int xPosScreen;
-	private int yPosScreen;
 	
 	/**
 	 * Initialises a new MapNode object based on the specified parameters.
@@ -295,7 +293,7 @@ public class MapNode {
 	 */
 	@Override
 	public String toString() {
-		String nodeTypeString = "";
+		String nodeTypeString;
 		String newline = System.getProperty("line.separator");
 		switch (nodeType) {
 			case 0:

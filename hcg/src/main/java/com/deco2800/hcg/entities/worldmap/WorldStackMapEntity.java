@@ -11,18 +11,17 @@ public class WorldStackMapEntity extends Actor {
 	private Texture worldStackMapTexture;
     private int xPos;
     private int yPos;
-    
-    private GameManager gameManager;
-    private TextureManager textureManager;
+
+	private TextureManager textureManager;
 
     private WorldMap worldMap;
 
     private float spriteWidth = 175; // Used to scale the drawing of the mapNodes. (pixels)
-    private float spriteHeight = 0; // Will be calculated based on the above width
+    private float spriteHeight; // Will be calculated based on the above width
     
     public WorldStackMapEntity(WorldMap worldMap) {
     	this.worldMap = worldMap;
-    	gameManager = GameManager.get();
+		GameManager gameManager = GameManager.get();
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         
         //Assign texture
@@ -81,7 +80,7 @@ public class WorldStackMapEntity extends Actor {
 	public WorldMap getWorldMap() {
         return worldMap;
     }
-
+	
 	/**
 	 * Gets the MapNodeEntity's screen x position
 	 * @return the x co ordinate
