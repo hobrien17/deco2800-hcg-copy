@@ -3,8 +3,6 @@ package com.deco2800.hcg.entities.worldmap;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.deco2800.hcg.entities.AbstractEntity;
-
 /**
  * Holds information on a world map node.
  * Contains nodes which connect to the node (both towards the node and away from the node), the node's texture, the
@@ -12,17 +10,11 @@ import com.deco2800.hcg.entities.AbstractEntity;
  * standard node, cleared node or boss node), the node's linked level and whether the node is selected on the map (for
  * node selection using the keyboard) or has been discovered by the player.
  */
-public class MapNode extends AbstractEntity {
-	// used to calculate nodePositionX based on nodeColumn
-	private static final float COLUMN_OFFSET = 1; // <- placeholder value
-	// used to calculate nodePositionY based on nodeRow
-	private static final float ROW_OFFSET = 1; // <- placeholder value
+public class MapNode {
 	
 	private List<MapNode> previousNodes;
 	private List<MapNode> proceedingNodes;
-	private String nodeTexture;
-	private float nodePositionX;
-	private float nodePositionY;
+	private int nodeID;
 	private int nodeColumn;
 	private int nodeRow;
 	/* Type of node to display
@@ -36,14 +28,22 @@ public class MapNode extends AbstractEntity {
 	private boolean selected;
 	private boolean isDiscovered;
 	
+	private static int nodeCount = 0;
+
+	/* These are the screen positions of the nodes on the world map screen.
+	 * Note: The engine uses all sprite co-ordinates from the bottom left corner of the sprite, however when these are
+	 * set from MapNodeEntity, they are actually calculated to be the center point of the sprite since we are using them
+	 * to draw lines between the nodes.
+	 */
+	private int xPos;
+	private int yPos;
+	
 	/**
 	 * Initialises a new MapNode object based on the specified parameters.
 	 * @param column
 	 *     The map column that the node is to be situated in
 	 * @param row
 	 *     The map row that the node is to be situated in
-	 * @param texture
-	 *     The node's texture to display
 	 * @param type
 	 *     The type of the node:
 	 *         0 for safe node
@@ -55,20 +55,21 @@ public class MapNode extends AbstractEntity {
 	 * @param discovered
 	 *     Whether the node has been discovered by the player
 	 */
-	public MapNode(int column, int row, String texture, int type, Level level, boolean discovered) {
-		super(column * COLUMN_OFFSET, row * ROW_OFFSET, 0.0f, 1, 1, 1);
-		nodeTexture = texture;
-		this.setTexture(nodeTexture); // to render the node on the world
+	public MapNode(int column, int row, int type, Level level, boolean discovered) {
 		nodeColumn = column;
 		nodeRow = row;
 		nodeType = type;
-		nodePositionX = nodeColumn * COLUMN_OFFSET;
-		nodePositionY = nodeRow * ROW_OFFSET;
 		linkedLevel = level;
 		previousNodes = new ArrayList<>();
 		proceedingNodes = new ArrayList<>();
 		selected = false;
 		isDiscovered = discovered;
+		if(nodeType == 0) {
+			this.nodeID = -1;
+		} else {
+			this.nodeID = MapNode.nodeCount;
+			MapNode.nodeCount++;
+		}
 	}
 	
 	// ACCESSOR METHODS
@@ -89,33 +90,6 @@ public class MapNode extends AbstractEntity {
 	 */
 	public List<MapNode> getProceedingNodes() {
 		return new ArrayList<MapNode>(proceedingNodes);
-	}
-	
-	/**
-	 * Gets the node's current texture.
-	 * @return
-	 *     Returns a string which contains the node's current image file
-	 */
-	public String getNodeTexture() {
-		return nodeTexture;
-	}
-	
-	/**
-	 * Gets the node's X position on the screen.
-	 * @return
-	 *     Returns the node's current X position
-	 */
-	public float getNodeX() {
-		return nodePositionX;
-	}
-	
-	/**
-	 * Gets the node's Y position on the screen.
-	 * @return
-	 *     Returns the node's current Y position
-	 */
-	public float getNodeY() {
-		return nodePositionY;		
 	}
 	
 	/**
@@ -153,7 +127,41 @@ public class MapNode extends AbstractEntity {
 	public Level getNodeLinkedLevel() {
 		return linkedLevel;
 	}
-	
+
+	/**
+	 * Gets the nodes sprite center point screen x position
+	 * @return
+	 * 		Returns the x co-ordinate
+	 */
+	public int getXPos() {
+		return xPos;
+	}
+
+	/**
+	 * Sets the nodes sprite center point screen x position
+	 * @param xPos the new center point screen x position
+	 */
+	public void setXPos(int xPos) {
+		this.xPos = xPos;
+	}
+
+	/**
+	 * Gets the nodes sprite center point screen y position
+	 * @return
+	 * 		Returns the y co-ordinate
+	 */
+	public int getYPos() {
+		return yPos;
+	}
+
+	/**
+	 * Sets the nodes sprite center point screen y position
+	 * @param yPos the new center point screen y position
+	 */
+	public void setYPos(int yPos) {
+		this.yPos = yPos;
+	}
+
 	/**
 	 * Gets the node's selection status.
 	 * @return
@@ -171,6 +179,10 @@ public class MapNode extends AbstractEntity {
 	 */
 	public boolean isDiscovered() {
 		return isDiscovered;
+	}
+	
+	public int getNodeID() {
+		return nodeID;
 	}
 	
 	// MANIPULATING METHODS
@@ -223,17 +235,6 @@ public class MapNode extends AbstractEntity {
 		}
 	}
 	
-	// possibly need ability to remove nodes from these lists?
-	
-	/**
-	 * Changes the nodes texture to a new texture.
-	 * @param newTexture
-	 *     The texture path to change to
-	 */
-	public void changeTexture(String newTexture) {
-		nodeTexture = newTexture;
-	}
-	
 	/**
 	 * Changes the node type to a new type.
 	 * @param newType
@@ -283,6 +284,10 @@ public class MapNode extends AbstractEntity {
 		isDiscovered = false;
 	}
 	
+	public void setNodeID(int newID) {
+		nodeID = newID;
+	}
+	
 	/**
 	 * To string method. Helps with determining information about the node.
 	 */
@@ -305,7 +310,7 @@ public class MapNode extends AbstractEntity {
 				break;			
 		}
 		String nodeString = "nodeType: " + nodeTypeString + " | nodeRow: " + nodeRow + " | nodeColumn: " + 
-				nodeColumn + " | nodeTexture: " + nodeTexture + " | nodeLevel: " + linkedLevel + newline +
+				nodeColumn + " | nodeLevel: " + linkedLevel + newline +
 				"Previous Nodes:" + newline;
 		for(MapNode node : previousNodes) {
 			nodeString += "nodeType: " + node.getNodeType() + " | nodeRow: " + node.getNodeRow() + " | nodeColumn: " +

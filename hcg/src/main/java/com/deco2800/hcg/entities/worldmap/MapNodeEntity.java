@@ -15,6 +15,7 @@ import com.deco2800.hcg.managers.TextureManager;
  */
 public class MapNodeEntity extends Actor {
     private Texture nodeTexture;
+	private TextureManager textureManager;
     private int xPos;
     private int yPos;
 
@@ -32,21 +33,11 @@ public class MapNodeEntity extends Actor {
 
         this.node = node;
         GameManager gameManager = GameManager.get();
-        TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         // Assigns the correct texture based on node type
-        switch (node.getNodeType()) {
-            case 0: nodeTexture = textureManager.getTexture("safe_node");
-                break;
-            case 1: nodeTexture = textureManager.getTexture("discovered_node");
-                break;
-            case 2: nodeTexture = textureManager.getTexture("completed_node");
-                break;
-            case 3: nodeTexture = textureManager.getTexture("fungi_node");
-                break;
-            default: // This shouldn't happen, but catch all if it does.
-                nodeTexture = textureManager.getTexture("discovered_node");
-        }
+
+		updateTexture();
 
 		// pixels padding around each direction of the map
 		int mapPadding = 50;
@@ -64,14 +55,30 @@ public class MapNodeEntity extends Actor {
         yPos = renderableRowWidth * node.getNodeRow() + mapPadding;
 
         // Calculate the scaling required on the sprite height.
-        spriteHeight = (nodeTexture.getHeight() / nodeTexture.getWidth()) * spriteWidth;
+        spriteHeight = nodeTexture.getHeight() / (nodeTexture.getWidth() / spriteWidth);
+
+        // Pass the center point of the sprite back the the MapNode
+		node.setXPos(xPos + spriteWidth/2);
+		node.setYPos(yPos + spriteHeight/2);
     }
 
-    @Override
-    public void draw(Batch batch, float alpha){
-        batch.draw(nodeTexture, xPos, yPos, spriteWidth, spriteHeight);
-    }
-
+	/**
+	 * Checks the current nodeType in the parent node of this MapNodeEntity, and updates the stored texture to reflect.
+	 */
+	public void updateTexture(){
+		switch (node.getNodeType()) {
+			case 0: nodeTexture = textureManager.getTexture("safe_node");
+				break;
+			case 1: nodeTexture = textureManager.getTexture("discovered_node");
+				break;
+			case 2: nodeTexture = textureManager.getTexture("completed_node");
+				break;
+			case 3: nodeTexture = textureManager.getTexture("fungi_node");
+				break;
+			default: // This shouldn't happen, but catch all if it does.
+				nodeTexture = textureManager.getTexture("discovered_node");
+		}
+	}
 	/**
 	 * Gets the node stored in this actor object
 	 *
@@ -81,4 +88,43 @@ public class MapNodeEntity extends Actor {
         return node;
     }
 
+	/**
+	 * Gets the MapNodeEntity's screen x position
+	 * @return the x co ordinate
+	 */
+	public float getXPos() {
+		return xPos;
+	}
+
+	/**
+	 * Gets the MapNodeEntity's screen y position
+	 * @return the y co ordinate
+	 */
+	public float getYPos() {
+		return yPos;
+	}
+
+	/**
+	 * Gets the sprite's width
+	 * @return the width
+	 */
+	public float getWidth() {
+		return spriteWidth;
+	}
+
+	/**
+	 * Gets the sprite's height
+	 * @return the height
+	 */
+	public float getHeight() {
+		return spriteHeight;
+	}
+
+	/**
+	 * Get the node's texture
+	 * @return the node's texture
+	 */
+	public Texture getNodeTexture() {
+		return nodeTexture;
+	}
 }

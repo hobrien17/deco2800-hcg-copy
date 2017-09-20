@@ -8,6 +8,8 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     
+    compile 'com.google.code.gson:gson:2.2.4'
+    
     compile "uk.org.lidalia:slf4j-test:1.1.0"
     compile "org.hamcrest:hamcrest-all:1.3"
     compile "com.google.guava:guava:23.0"

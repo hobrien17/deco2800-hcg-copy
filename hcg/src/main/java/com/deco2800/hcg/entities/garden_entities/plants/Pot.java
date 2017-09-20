@@ -65,7 +65,7 @@ public class Pot extends AbstractEntity  {
 	public void setThisTexture() {
 		if(plant == null) {
 			if(locked) {
-				this.setTexture("pot");
+				this.setTexture("pot_locked");
 			} else {
 				this.setTexture("pot");
 			}

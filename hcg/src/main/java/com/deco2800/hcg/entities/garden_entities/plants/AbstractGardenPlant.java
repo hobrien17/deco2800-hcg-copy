@@ -122,8 +122,8 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
             case SMALL:
                 stage = Stage.LARGE;
                 break;
-            case LARGE:
-                //Plant is at maximum growth, do nothing
+            default:
+                // if large or otherwise, do nothing
                 break;
         }
 

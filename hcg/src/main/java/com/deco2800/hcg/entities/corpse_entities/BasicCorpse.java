@@ -1,13 +1,12 @@
 package com.deco2800.hcg.entities.corpse_entities;
 
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
-import com.deco2800.hcg.entities.turrets.AbstractTurret;
 
 public class BasicCorpse extends Corpse {
 
 
-    public BasicCorpse(float posX, float posY, float posZ, String texture) {
-        super(posX, posY, posZ,texture);
+    public BasicCorpse(float posX, float posY, float posZ) {
+        super(posX, posY, posZ);
         this.setThisTexture();
     }
     

@@ -52,6 +52,7 @@ public class Stargun extends Weapon implements Tickable {
                     projY + 5 * (float) random.nextGaussian(),
                     this.getPosZ(), worldCoords.x, worldCoords.y);
         }
+        playFireSound();
     }
     
 }
