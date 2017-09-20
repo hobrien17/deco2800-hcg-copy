@@ -38,6 +38,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private ImageButton shopExit;
     private Table centreTable;
     private Table buySell;
+    
+    private TextField amount;
 
     private Player player;
     private ShopNPC shopKeeper;
@@ -86,6 +88,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
         playerInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
 
         shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy_button")).getDrawable());
+        
+        //adding the textfield
+        amount = new TextField("Amount to Buy/Sell", skin);
 
         buySell = new Table();
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
@@ -111,6 +116,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
         //add table to stage
         stage.addActor(centreTable);
         stage.addActor(shopExit);
+        
+        //add textfield to stage
+        stage.addActor(amount);
 
         //Listeners
         shopExit.addListener(new ClickListener() {
@@ -126,15 +134,23 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopBuy.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                shopKeeper.getShop().buyStock(selectedItem);
-                draw();
+            	int number = Integer.parseInt(amount.getMessageText());
+            	
+            	for(int i=0; i < number; i++) {
+            		shopKeeper.getShop().buyStock(selectedItem);
+            	}
+            	
+            	draw();
             }
         });
 
         shopSell.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                shopKeeper.getShop().sellStock(selectedItem);
+            	int number = Integer.parseInt(amount.getMessageText());
+            	for(int i = 0; i < number; i++){
+            		shopKeeper.getShop().sellStock(selectedItem);
+            	}
                 draw();
             }
         });
