@@ -1,18 +1,13 @@
 package com.deco2800.hcg.worlds;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Selectable;
-import com.deco2800.hcg.entities.npc_entities.QuestNPC;
-import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.types.Weathers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,13 +26,17 @@ public class World {
 	static final Logger LOGGER = LoggerFactory.getLogger(World.class);
 
 	private String loadedFile;
+	private Weathers weather;
 
 	private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
 	protected TiledMap map;
 
 	private int width;
 	private int length;
-
+	
+	private float startingPlayerX;
+	private float startingPlayerY;
+	
 	/**
 	 * Empty abstract world, for testing
 	 */
@@ -72,7 +71,20 @@ public class World {
 				this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(
 				this.getMap().getProperties().get("height", Integer.class));
+		
+        // check for weather
+        if (this.map.getProperties().get("weather") != null) {
+          // make string of weather for enum
+          this.weather = Weathers.valueOf(((String) this.map.getProperties().get("weather")).toUpperCase());
 
+        } else {
+          this.weather = Weathers.NONE;
+        }
+        
+        // load starting player X and Y
+        startingPlayerX = Float.parseFloat((String) this.getMap().getProperties().get("PlayerX"));
+        startingPlayerY = Float.parseFloat((String) this.getMap().getProperties().get("PlayerY"));
+        
 		// loop over all object layers
 		for (MapLayer layer : getObjectLayers()) {
 
@@ -330,4 +342,28 @@ public class World {
 		}
 	}
 
+	/**
+	 * Returns the type of weather specified in the Tiled map.
+	 * @return The weather type of this map
+	 */
+	public Weathers getWeatherType() {
+	  return weather;
+	}
+	
+	/**
+	 * Returns the starting X for the player
+	 * @return the starting X for the player
+	 */
+	public float getStartingPlayerX() {
+	  return startingPlayerX;
+	  
+	} 
+	
+    /**
+     * Returns the starting Y for the player
+     * @return the starting Y for the player
+     */
+	public float getStartingPlayerY() {
+	  return startingPlayerY;
+    } 
 }

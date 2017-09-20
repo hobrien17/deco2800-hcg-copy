@@ -11,10 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
 
@@ -153,8 +156,23 @@ public class WorldMapContext extends UIContext {
 				 * to fix that problem.
 				 */
 				gameManager.setOccupiedNode(nodeEntity.getNode());
-				gameManager.setWorld(new World(nodeEntity.getNode()
-						.getNodeLinkedLevel().getWorld().getLoadedFile()));
+
+				// clear old observers (mushroom turret for example)
+                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+                manager.deleteObservers();
+				
+                // stop the old weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                
+                // create new world
+				World newWorld = new World(nodeEntity.getNode()
+                    .getNodeLinkedLevel().getWorld().getLoadedFile());
+				
+                // add the new weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                  setWeather(newWorld.getWeatherType());
+                
+				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}
