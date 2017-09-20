@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import com.deco2800.hcg.entities.AbstractEntity;
