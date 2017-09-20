@@ -49,7 +49,7 @@ public class WeatherManager extends Manager {
 
 		// setWeather(Weathers.RAIN);
 		// setWeather(Weathers.SNOW);
-		 setWeather(Weathers.SANDSTORM);
+		// setWeather(Weathers.SANDSTORM);
 		// setWeather(Weathers.WIND);
 		// stopEffect();
 
