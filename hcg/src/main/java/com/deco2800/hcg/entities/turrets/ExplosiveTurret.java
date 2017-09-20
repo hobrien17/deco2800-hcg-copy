@@ -44,12 +44,16 @@ public class ExplosiveTurret extends AbstractTurret {
 				GameManager.get().getWorld().removeEntity(entity);
 			}
 			//GameManager.get().getWorld().removeEntity(master);
-		}	
+		} else if(seconds == BLOW - 1) {
+			master.setTexture("cactus_corpse_03");
+		} else if(seconds == BLOW - 2) {
+			master.setTexture("cactus_corpse_02");
+		}
 	}
 	
 	@Override
 	public String getThisTexture() {
-		return "tree";
+		return "cactus_corpse_01";
 	}
 
 }

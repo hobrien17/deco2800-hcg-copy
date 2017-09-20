@@ -71,7 +71,7 @@ public class Planter implements KeyUpObserver {
 			if (closest.isPresent() &&  closest.get() instanceof Corpse) {
 				Corpse corpse = (Corpse)closest.get();
 				if(keycode == 14) {
-					corpse.plantInside(new Seed(Seed.Type.GRASS));
+					corpse.plantInside(new Seed(Seed.Type.ICE));
 				}
 			}
 		}
