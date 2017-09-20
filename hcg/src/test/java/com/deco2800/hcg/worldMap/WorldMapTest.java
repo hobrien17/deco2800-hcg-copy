@@ -21,7 +21,7 @@ public class WorldMapTest {
     	MapNode node = new MapNode(0, 0, 0, newLevel, false);
     	List<MapNode> nodeList = new ArrayList<>();
     	nodeList.add(node);
-        worldMap = new WorldMap(0, "sand", 1, 5, 3, nodeList);
+        worldMap = new WorldMap(0, "sand", 5, 3, nodeList);
     }
 
     @Test

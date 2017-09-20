@@ -33,7 +33,7 @@ public class MapNodeEntity extends Actor {
 
         this.node = node;
         GameManager gameManager = GameManager.get();
-         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         // Assigns the correct texture based on node type
 
@@ -79,6 +79,7 @@ public class MapNodeEntity extends Actor {
 				nodeTexture = textureManager.getTexture("discovered_node");
 		}
 	}
+	
 	/**
 	 * Gets the node stored in this actor object
 	 *

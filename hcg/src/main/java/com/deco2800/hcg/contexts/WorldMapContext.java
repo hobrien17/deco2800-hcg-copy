@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
+import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.worlds.World;
@@ -53,6 +53,9 @@ public class WorldMapContext extends UIContext {
 	private ArrayList<MapNodeEntity> hiddenNodes;
 
 	private Window window;
+	private Window exitWindow;
+	
+	private Skin skin;
 
 	private TextureRegion lineTexture;
 
@@ -76,7 +79,7 @@ public class WorldMapContext extends UIContext {
 		showAllNodes = false;
 
 		// Setup UI + Buttons
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
 
 		Button quitButton = new TextButton("Quit", skin);
@@ -89,6 +92,8 @@ public class WorldMapContext extends UIContext {
 		window.setPosition(0, stage.getHeight());
 
 		stage.addActor(new WorldMapEntity());
+		
+		createExitWindow();
 
 		allNodes = new ArrayList<>();
 		hiddenNodes = new ArrayList<>();
@@ -257,4 +262,64 @@ public class WorldMapContext extends UIContext {
 		lineBatch.dispose();
 		potBatch.dispose();
 	}
+	
+	private void createExitWindow() {
+    	exitWindow = new Window("Complete World?", skin);
+    	Button yesButton = new TextButton("Yes", skin);
+    	yesButton.pad(5, 10, 5, 10);
+    	Button noButton = new TextButton("No", skin);
+    	noButton.pad(5, 10, 5, 10);
+    	
+    	/* Add a programmatic listener to the buttons */
+		yesButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				endWorld();
+			}
+		});
+
+		noButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Button completeWorldButton = new TextButton("Complete World", skin);
+				window.remove();
+				window.add(completeWorldButton);
+				window.pack();
+				stage.addActor(window);
+				exitWindow.remove();
+				
+				completeWorldButton.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+						endWorld();
+					}
+				});
+			}
+		});
+    	
+    	exitWindow.add(yesButton);
+    	exitWindow.add(noButton);
+    	exitWindow.pack();
+		exitWindow.setMovable(false); // So it doesn't fly around the screen
+		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+    }
+    
+    public void addEndOfContext() {
+    	if(exitWindow.getStage() == null) {
+    		/* Add the window to the stage */
+    		stage.addActor(exitWindow);
+    	}
+    }
+    
+    private void endWorld() {
+    	for(WorldMap map : gameManager.getWorldStack().getWorldStack()) {
+    		if(map.getWorldPosition() == gameManager.getWorldMap().getWorldPosition() + 1) {
+    			map.toggleUnlocked();
+    		}
+    	}
+    	gameManager.getWorldMap().toggleCompleted();
+    	WorldStackContext context = gameManager.getStackContext();
+    	context.updateWorldDisplay();
+    	contextManager.popContext();
+    }
 }
