@@ -22,6 +22,7 @@ public class WorldMapTest {
     	nodeList = new ArrayList<>();
     	nodeList.add(node);
         worldMap = new WorldMap(0, "sand", 5, 3, nodeList);
+        worldMap.setPosition(1);
     }
 
     @Test
