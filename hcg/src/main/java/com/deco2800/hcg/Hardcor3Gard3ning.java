@@ -19,7 +19,6 @@ import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worldmapui.LevelStore;
 import com.deco2800.hcg.worldmapui.MapGenerator;
-import com.deco2800.hcg.worlds.World;
 
 import java.util.ArrayList;
 
