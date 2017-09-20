@@ -46,7 +46,7 @@ public class FireTurret extends AbstractTurret {
 
 	@Override
 	public String getThisTexture() {
-		return "inferno_corpse";
+		return "fire_corpse";
 	}
 
 }
