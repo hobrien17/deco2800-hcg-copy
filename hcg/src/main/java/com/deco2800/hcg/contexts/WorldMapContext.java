@@ -48,14 +48,14 @@ public class WorldMapContext extends UIContext {
 
 	private InputMultiplexer inputMultiplexer;
 
-	private boolean showAllNodes;
-
+	// Lists of the nodes in the map, the hidden nodes is there for demo purposes
 	private ArrayList<MapNodeEntity> allNodes;
 	private ArrayList<MapNodeEntity> hiddenNodes;
 
 	private Window window;
-
 	private TextureRegion lineTexture;
+	// used for demo purposes
+	private boolean showAllNodes;
 
 
 	/**
@@ -159,6 +159,7 @@ public class WorldMapContext extends UIContext {
 				Pixmap pixmap = new Pixmap(Gdx.files.internal("resources/cursor-hand.png"));
 				Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0));
 //				Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
+				pixmap.dispose();
 			} else {
 				// this line should set the current cursor back to normal. but I don't know how to do
 			}
@@ -239,7 +240,7 @@ public class WorldMapContext extends UIContext {
 		int dx = x2 - x1;
 		int dy = y2 - y1;
 		// Length of line segment between two points
-		float length = (float)Math.sqrt(dx*dx + dy*dy);
+		float length = (float)Math.sqrt((double)dx*dx + dy*dy);
 		// Theta (rads)
 		float rotation = (float) Math.asin(dy/length);
 		float thickness = 4;
@@ -248,6 +249,11 @@ public class WorldMapContext extends UIContext {
 		batch.draw(lineTexture, x1, y1, 2, 2, length, thickness, 1, 1, rotation);
 	}
 
+	/**
+	 * Adds a new pot to be drawn to the rendering batch.
+	 * @param batch the sprite batch instance to group pots into
+	 * @param node the node which needs to be drawn
+	 */
 	private void drawPot(SpriteBatch batch, MapNodeEntity node) {
 		batch.draw(node.getNodeTexture(), node.getXPos(), node.getYPos(), node.getWidth(), node.getHeight());
 	}
@@ -265,12 +271,10 @@ public class WorldMapContext extends UIContext {
 		// Render all the lines first
 		lineBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
-			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
-				for (MapNode proceedingNode : nodeEntity.getNode().getProceedingNodes()) {
-					if (proceedingNode.isDiscovered() || showAllNodes) {
-						drawLine(lineBatch, nodeEntity.getNode().getXPos(), nodeEntity.getNode().getYPos(),
-								proceedingNode.getXPos(), proceedingNode.getYPos());
-					}
+			for (MapNode proceedingNode : nodeEntity.getNode().getProceedingNodes()) {
+				if (nodeEntity.getNode().isDiscovered() && proceedingNode.isDiscovered() || showAllNodes) {
+					drawLine(lineBatch, nodeEntity.getNode().getXPos(), nodeEntity.getNode().getYPos(),
+							proceedingNode.getXPos(), proceedingNode.getYPos());
 				}
 			}
 		}
@@ -286,6 +290,7 @@ public class WorldMapContext extends UIContext {
 		}
 		potBatch.end();
 
+		// dispose of the batches to prevent memory leaks
 		lineBatch.dispose();
 		potBatch.dispose();
 	}
