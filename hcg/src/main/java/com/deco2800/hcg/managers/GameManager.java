@@ -1,6 +1,7 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.contexts.WorldMapContext;
 import com.deco2800.hcg.contexts.WorldStackContext;
 import com.deco2800.hcg.entities.worldmap.MapNode;
@@ -65,6 +66,20 @@ public class GameManager implements TickableManager {
      */
     public void addManager(Manager manager) {
         managers.add(manager);
+    }
+    
+    public Vector3 screenToWorld(int screenX, int screenY) {
+        Vector3 worldCoords = GameManager.get().getCamera()
+                .unproject(new Vector3(screenX, screenY, 0));
+        
+        float projX;
+        float projY;
+
+        projX = worldCoords.x / 55f;
+        projY = -(worldCoords.y - 32f / 2f) / 32f + projX;
+        projX -= projY - projX;
+        
+        return new Vector3(projX, projY, 0);
     }
 
     /**

@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -33,21 +32,10 @@ public class PlayContext extends Context {
 
 	// Managers used by the game
 	private GameManager gameManager;
-	private SoundManager soundManager;
-
-	private TimeManager timeManager;
 	private WeatherManager weatherManager;
-
 	private ContextManager contextManager;
-	private PlantManager plantManager;
 	private MessageManager messageManager;
-
-	//HUDs
-	private PlayerStatusDisplay playerStatus;
 	private TextureManager textureManager;
-	private NetworkManager networkManager;
-	private ClockDisplay clockDisplay;
-
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -67,21 +55,24 @@ public class PlayContext extends Context {
 
 	// Stage and actors for game UI
 	// TODO Game UI should probably be moved to a separate file
+
+	//HUDs
+	private PlayerStatusDisplay playerStatus;
+	private NetworkManager networkManager;
+	private ClockDisplay clockDisplay;
+	private PlantWindow plantWindow;
+
 	private Stage stage;
+	private Skin skin;
 	private Window window;
-	private Window plantWindow;
 	private Window exitWindow;
 	private Stack chatBackground;
 	private Table chatWindow;
-	private Label plantInfo;
 	private TextField chatTextField;
 	private TextArea chatTextArea;
-
 	private Button chatButton;
-	private Skin skin;
 	private Image chatBar;
 	private String chatString = new String("");
-
 
 	/**
 	 * Create the PlayContext
@@ -90,11 +81,8 @@ public class PlayContext extends Context {
 
 		// Set up managers for this game
 		gameManager = GameManager.get();
-		soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
-		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
 		weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
-        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
@@ -107,21 +95,21 @@ public class PlayContext extends Context {
 		stage = new Stage(new ScreenViewport());
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
+		createExitWindow();
 		clockDisplay = new ClockDisplay();
 		playerStatus = new PlayerStatusDisplay();
+		plantWindow = new PlantWindow(skin);
 
 		stage.addActor(clockDisplay);
 		stage.addActor(playerStatus);
+		stage.addActor(plantWindow);
 
 		window = new Window("Menu", skin);
-        plantWindow = new Window("Plants", skin);
-        createExitWindow();
 
 		/* Add a quit button to the menu */
 		Button button = new TextButton("Quit", skin);
 
 		/* Add a programmatic listener to the quit button */
-
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -136,23 +124,14 @@ public class PlayContext extends Context {
 		window.add(button);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
-		window.setPosition(0, stage.getHeight()); // Place it in the top left of the screen
 
 		/* Add the window to the stage */
 		stage.addActor(window);
-
-        /* Create the window for plant. */
-		plantManager.setPlantWindow(plantWindow, skin);
-		plantManager.updateLabel();
-		plantWindow.setMovable(false);
-		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
-		stage.addActor(plantWindow);
 
         /* Create window for chat and all components */
 		chatBar = new Image(textureManager.getTexture("chat_background"));
 		chatBackground = new Stack(chatBar);
 		chatWindow = new Table(skin);
-
 		chatTextArea = new TextArea("", skin);
 		chatTextField = new TextField("", skin);
 		chatTextArea.setDisabled(true);
@@ -171,10 +150,10 @@ public class PlayContext extends Context {
 		if (networkManager.isInitialised()) {
 			stage.addActor(chatBackground);
 		}
+
 		/*
 		 * Setup inputs for the buttons and the game itself
 		 */
-
 		chatButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -335,6 +314,7 @@ public class PlayContext extends Context {
 		window.setPosition(0, stage.getHeight());
 		playerStatus.setPosition(30f, stage.getHeight()-200f);
 		clockDisplay.setPosition(stage.getWidth()-220f, 20f);
+		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
 	}
 
 	/**
