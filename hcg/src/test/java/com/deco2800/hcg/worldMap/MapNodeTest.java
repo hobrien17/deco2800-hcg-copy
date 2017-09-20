@@ -13,6 +13,9 @@ import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapNodeTest {
 
     WorldMap worldMap;
@@ -34,6 +37,8 @@ public class MapNodeTest {
         assertEquals(0, tmpNode.getPreviousNodes().size());
         assertEquals(0, tmpNode.getProceedingNodes().size());
         assertEquals(tmpLevel, tmpNode.getNodeLinkedLevel());
+        assertEquals(false, tmpNode.isSelected());
+
     }
 
     @Test
@@ -42,8 +47,18 @@ public class MapNodeTest {
         for (int i = 0; i < 100; i++){
             tmpNode.addPreviousNode(new MapNode(0, 9, 0, tmpLevel, false));
         }
+
         assertEquals(100, tmpNode.getPreviousNodes().size());
         assertEquals(0, tmpNode.getProceedingNodes().size());
+
+        List<MapNode> nodeList = new ArrayList<MapNode>();
+        for (int i = 0; i < 100; i++){
+            nodeList.add(new MapNode(0, 9, 0, tmpLevel, false));
+        }
+        tmpNode.addPreviousNodeCollection(nodeList);
+        assertEquals(200, tmpNode.getPreviousNodes().size());
+
+
     }
 
     @Test
@@ -54,6 +69,13 @@ public class MapNodeTest {
         }
         assertEquals(0, tmpNode.getPreviousNodes().size());
         assertEquals(100, tmpNode.getProceedingNodes().size());
+
+        List<MapNode> nodeList = new ArrayList<MapNode>();
+        for (int i = 0; i < 100; i++){
+            nodeList.add(new MapNode(0, 9, 0, tmpLevel, false));
+        }
+        tmpNode.addProceedingNodeCollection(nodeList);
+        assertEquals(200, tmpNode.getProceedingNodes().size());
     }
     
     @Test
@@ -70,5 +92,31 @@ public class MapNodeTest {
     	assertEquals(++initialID, tmpNode2.getNodeID());
     	assertEquals(++initialID, tmpNode3.getNodeID());
     	assertEquals(++initialID, tmpNode4.getNodeID());
+    }
+
+    @Test
+    public void testBasicMethods() {
+        tmpNode = new MapNode(0, 9, 1, tmpLevel, false);
+
+        tmpNode.selectNode();
+        assertEquals(true, tmpNode.isSelected());
+
+        tmpNode.unselectNode();
+        assertEquals(false, tmpNode.isSelected());
+
+        tmpNode.discoverNode();
+        assertEquals(true, tmpNode.isDiscovered());
+
+        tmpNode.hideNode();
+        assertEquals(false, tmpNode.isDiscovered());
+
+        tmpNode.setNodeID(123);
+        assertEquals(123, tmpNode.getNodeID());
+
+        Level newLevel = new Level(world, 0, 0, 0);
+        tmpNode.changeLinkedLevel(newLevel);
+        assertEquals(newLevel, tmpNode.getNodeLinkedLevel());
+
+
     }
 }

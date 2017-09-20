@@ -37,6 +37,8 @@ public class MapNode {
 	 */
 	private int xPos;
 	private int yPos;
+	private int xPosScreen;
+	private int yPosScreen;
 	
 	/**
 	 * Initialises a new MapNode object based on the specified parameters.
@@ -307,7 +309,9 @@ public class MapNode {
 				break;
 			case 3:
 				nodeTypeString = "Boss Node";
-				break;			
+				break;
+			default:
+				nodeTypeString = "Default Node";
 		}
 		String nodeString = "nodeType: " + nodeTypeString + " | nodeRow: " + nodeRow + " | nodeColumn: " + 
 				nodeColumn + " | nodeLevel: " + linkedLevel + newline +

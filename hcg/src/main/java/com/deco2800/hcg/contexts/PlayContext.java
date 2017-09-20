@@ -380,9 +380,17 @@ public class PlayContext extends Context {
 		yesButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				gameManager.getCurrentNode().changeNodeType(2);
-				gameManager.getMapContext().updateMapDisplay();
-				contextManager.popContext();
+				if(gameManager.getCurrentNode().getNodeType() != 3) {
+					gameManager.getCurrentNode().changeNodeType(2);
+					gameManager.getMapContext().updateMapDisplay();
+					contextManager.popContext();
+				} else {
+					gameManager.getCurrentNode().changeNodeType(2);
+					gameManager.getMapContext().updateMapDisplay();
+					gameManager.getMapContext().addEndOfContext();
+					contextManager.popContext();
+				}
+				
 			}
 		});
 

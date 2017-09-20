@@ -21,11 +21,11 @@ import org.slf4j.LoggerFactory;
 public class MapGenerator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MapGenerator.class);
 	
-	private static final int DEFAULT_COLUMN_COUNT = 10; // <- default number of columns in a world (can be changed later)
-	private static final int DEFAULT_ROW_COUNT = 10; // <- default number of rows in a world (can be changed later)
-	private static final int MAX_COLUMNS_BEFORE_SAFENODE = 5; // <- change as needed
-	private static final int MIN_NODES_PER_COLUMN = 2; // <- be very careful with this value. Should never exceed rowNumber/2
-	private static final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
+	private final int DEFAULT_COLUMN_COUNT = 10; // <- default number of columns in a world (can be changed later)
+	private final int DEFAULT_ROW_COUNT = 10; // <- default number of rows in a world (can be changed later)
+	private final int MAX_COLUMNS_BEFORE_SAFENODE = 5; // <- change as needed
+	private final int MIN_NODES_PER_COLUMN = 2; // <- be very careful with this value. Should never exceed rowNumber/2
+	private final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
 	
 	private List<Level> levelsMaster;
 	private List<Level> levelsOfType;
@@ -143,10 +143,8 @@ public class MapGenerator {
 		for(MapNode node : worldNodes) {
 			LOGGER.info(node.toString());
 		}
-		/* If a multi-world/WorldStack is introduced, the world position of 0 will need to be changed to a function 
-		 * which returns the world's position in the stack/collection of worlds. 
-		 */
-		WorldMap generatedWorld = new WorldMap(worldType, "", 0, rowCount, columnCount, worldNodes);
+
+		WorldMap generatedWorld = new WorldMap(worldType, "", rowCount, columnCount, worldNodes);
 		generatedWorld.addSeed(generateMapSeed(generatedWorld));
 		return generatedWorld;
 	}
