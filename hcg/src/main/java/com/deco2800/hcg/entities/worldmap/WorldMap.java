@@ -173,8 +173,8 @@ public class WorldMap {
 		return completed;
 	}
 	
-	public void toggleUnlocked() {
-		unlocked = !unlocked;
+	public void setUnlocked() {
+		unlocked = true;
 	}
 	
 	public boolean isUnlocked() {

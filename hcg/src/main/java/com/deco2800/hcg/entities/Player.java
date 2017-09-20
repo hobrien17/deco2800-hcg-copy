@@ -54,6 +54,7 @@ public class Player extends Character implements Tickable {
 
     private boolean collided;
     private boolean onExit = false;
+    private boolean exitMessageDisplayed = false;
     private int xpThreshold = 200;
     private float lastSpeedX;
     private float lastSpeedY;
@@ -434,7 +435,14 @@ public class Player extends Character implements Tickable {
     	World world = GameManager.get().getWorld();
 
         Box3D newPos = getBox3D();
-
+        
+        // removes the exit message if the player exits the exit zone
+        if(!onExit && exitMessageDisplayed) {
+        	PlayContext play = (PlayContext) contextManager.currentContext();
+			play.removeExitWindow();
+			exitMessageDisplayed = false;
+        }
+        
     	// get speed of current tile. this is done before checking if a tile
     	// exists so a slow down tile next to the edge wouldn't cause problems.
     	if (world.getTiledMapTileLayerAtPos((int) oldPosY,
@@ -456,6 +464,7 @@ public class Player extends Character implements Tickable {
         					PlayContext play = (PlayContext) contextManager.currentContext();
         					play.addExitWindow();
         					onExit = true;
+        					exitMessageDisplayed = true;
         	    		}
         			} else {
         				onExit = false;
