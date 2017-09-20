@@ -137,9 +137,10 @@ public class WorldMapContext extends UIContext {
 		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
-		inputManager.addMouseMovedListener(this::handleMouseMoved);
+		//inputManager.addMouseMovedListener(this::handleMouseMoved);
 	}
 
+	/*
 	// when hovering the node, change the mouse cursor, delete if not needed
 	private void handleMouseMoved(int screenX, int screenY){
 
@@ -167,13 +168,13 @@ public class WorldMapContext extends UIContext {
 				//Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
 			} else {
 				// this line should set the current cursor back to normal. but I don't know how to do. will look into this
-				// ath the momment it's kind of automatically change back to normal when you no longer hovering
+				// at the moment it's kind of automatically change back to normal when you no longer hovering
 
 				//Gdx.graphics.setSystemCursor(SystemCursor.Arrow);  // according to the library, this only works in LWJG3
 
 			}
 		}
-	}
+	}*/
 
 	private void handleTouchUp(int screenX, int screenY, int pointer,
 			int button) {
