@@ -7,6 +7,8 @@ import java.util.*;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.deco2800.hcg.types.Weathers;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
 
 /**
  * A class to manage the game's internal system of weather. Weather can be set
@@ -17,6 +19,8 @@ import com.deco2800.hcg.types.Weathers;
  */
 
 public class WeatherManager extends Manager {
+
+	SoundManager soundManager;
 
 	// list of effects to be implemented
 	// none
@@ -36,13 +40,16 @@ public class WeatherManager extends Manager {
 	 * Constructor for weather manager
 	 */
 	public WeatherManager() {
+		soundManager = (SoundManager) GameManager.get()
+				.getManager(SoundManager.class);
+
 		onEffects = new ArrayList<Weathers>();
 		weather = new ParticleEffect();
 		weather.start();
 
 		// setWeather(Weathers.RAIN);
 		// setWeather(Weathers.SNOW);
-		// setWeather(Weathers.SANDSTORM);
+		 setWeather(Weathers.SANDSTORM);
 		// setWeather(Weathers.WIND);
 		// stopEffect();
 
@@ -108,11 +115,11 @@ public class WeatherManager extends Manager {
 		}
 		ParticleEmitter emitter = new ParticleEmitter();
 		// weather.getEmitters
-		switch (weatherType) {
-		case NONE:
-			// Turn off all weather conditions
+		if (weatherType == Weathers.NONE){
 			stopAllEffect();
-			break;
+			return;
+		}
+		switch (weatherType) {
 		case RAIN:
 			setUp("2dRain.p");
 			break;
@@ -126,7 +133,8 @@ public class WeatherManager extends Manager {
 			setUp("2dWind.p");
 			break;
 		}
-
+		
+		soundManager.loopSound(enumToSoundFile(weatherType));
 		onEffects.add(weatherType);
 	}
 
@@ -134,6 +142,10 @@ public class WeatherManager extends Manager {
 	 * Turns off all weather effects.
 	 */
 	public void stopAllEffect() {
+		for (Weathers weatherType : onEffects) {
+			soundManager.stopSound(enumToSoundFile(weatherType));
+		}
+
 		weather.dispose();
 		onEffects.clear();
 	}
@@ -143,10 +155,15 @@ public class WeatherManager extends Manager {
 	 * 
 	 * @param Weathers:
 	 *            weather type you would like to turn off
-	 *            
+	 * 
 	 * @ensure weatherManager.getOnEffects() does not contain weathers
 	 */
 	public void stopEffect(Weathers weatherType) {
+		if (!onEffects.contains(weatherType)) {
+			return;
+		}
+
+		soundManager.stopSound(enumToSoundFile(weatherType));
 		onEffects.remove(weatherType);
 		weather.dispose();
 	}
@@ -170,5 +187,34 @@ public class WeatherManager extends Manager {
 	 */
 	public ParticleEffectActor getActor() {
 		return weatherActor;
+	}
+
+	/**
+	 * Helper method to get the sound file name relating to the weatherType
+	 * 
+	 * @param weatherType:
+	 *            type of weather
+	 * @return string format of the sound file corresponding to the weatherType
+	 * 
+	 * @require weatherType != None
+	 * 
+	 */
+	private String enumToSoundFile(Weathers weatherType) {
+		switch (weatherType) {
+		case RAIN:
+			return "weatherRain";
+		case SNOW:
+			return "weatherSnow";
+		case SANDSTORM:
+			return "weatherSandStorm";
+		case WIND:
+			return "weatherWind";
+		case DROUGHT:
+			return "weatherDrought";
+		case STORM:
+			return "weatherStorm";
+		default:
+			return "";
+		}
 	}
 }
