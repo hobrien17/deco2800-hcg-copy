@@ -1,20 +1,20 @@
 package com.deco2800.hcg.entities.terrain_entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
+/**
+ * @author Ken
+ */
 public class Tree extends TerrainEntity {
 
-    private TreeState state;
     private TreeType type;
-
     private Random random = new Random();
-
     private ArrayList<TreeType> treeTypes;
-    private ArrayList<TreeState> treeStates;
 
     /**
-     * constructs a new tree. if not random defaults to basic leafy tree
+     * constructs a new tree. if not random, defaults to basic leafy tree
      *
      * @param posX x position of the tree
      * @param posY y position of the tree
@@ -26,13 +26,10 @@ public class Tree extends TerrainEntity {
         super(posX, posY, posZ, 1.0f, 1.0f, 1.0f);
 
         treeTypes = treeTypes();
-        treeStates = treeStates();
-
         if (random) {
-            randomiseTree();
+            randomiseType();
         } else {
-            type = TreeType.BASIC;
-            state = TreeState.LEAFY;
+            type = TreeType.LEAFY;
         }
         this.setTexture();
     }
@@ -45,16 +42,12 @@ public class Tree extends TerrainEntity {
      * @param posZ z position of the tree
      * @param type type of tree
      */
+    @SuppressWarnings("unused")
     public Tree(float posX, float posY, float posZ, TreeType type) {
-
         super(posX, posY, posZ, 1.0f, 1.0f, 1.0f);
 
         treeTypes = treeTypes();
-        treeStates = treeStates();
         this.type = type;
-        if (type == TreeType.BASIC) {
-            state = TreeState.LEAFY;
-        }
         this.setTexture();
     }
 
@@ -62,42 +55,28 @@ public class Tree extends TerrainEntity {
      * set texture based on tree type and state
      */
     public void setTexture() {
-        if (type == TreeType.FLAMING) {
-            this.setTexture("tree_flaming");
+        switch (type){
+            case LEAFY:
+                this.setTexture("tree_leafy");
+                break;
+            case BUDDING:
+                this.setTexture("tree_budding");
+                break;
+            case LEAFLESS:
+                this.setTexture("tree_leafless");
+                break;
+            case FRUITING:
+                this.setTexture("tree_fruiting");
+                break;
+            case SNOWY:
+                this.setTexture("tree_snowy");
+                break;
+            case FLAMING:
+                this.setTexture("tree_flaming");
+                break;
+            default:
+                break;
         }
-        else if (type == TreeType.SNOWY) {
-            this.setTexture("tree_snowy");
-        }
-        else if (type == TreeType.BASIC){
-            switch (state){
-                case LEAFY:
-                    this.setTexture("tree_leafy");
-                    break;
-                case BUDDING:
-                    this.setTexture("tree_budding");
-                    break;
-                case LEAFLESS:
-                    this.setTexture("tree_leafless");
-                    break;
-                case FRUITING:
-                    this.setTexture("tree_fruiting");
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    /**
-     * generates a list of tree states
-     * @return list of tree states
-     */
-    private ArrayList<TreeState> treeStates() {
-        ArrayList<TreeState> states = new ArrayList<>();
-        for (TreeState treeState : TreeState.values()) {
-            states.add(treeState);
-        }
-        return states;
     }
 
     /**
@@ -106,46 +85,29 @@ public class Tree extends TerrainEntity {
      */
     private ArrayList<TreeType> treeTypes() {
         ArrayList<TreeType> types = new ArrayList<>();
-        for (TreeType treeType : TreeType.values()) {
-            types.add(treeType);
-        }
+        Collections.addAll(types, TreeType.values());
         return types;
     }
 
     /**
-     * randomises the tree type, and state if applicable
+     * randomises the tree type
      */
-    private void randomiseTree(){
-        int index = random.nextInt(treeStates.size() + treeTypes.size() - 1);
-        if (index < treeStates.size()){
-            type = TreeType.BASIC;
-            randomiseState();
-        } else {
-            type = index == 4 ? TreeType.SNOWY : TreeType.FLAMING;
-        }
+    private void randomiseType(){
+        int index = random.nextInt(treeTypes.size());
+        this.setType(treeTypes().get(index));
     }
 
     /**
-     * randomises the tree state (currently only the BASIC tree type can be in different states)
+     * @return the type of this tree
      */
-    public void randomiseState(){
-        int index = random.nextInt(treeStates.size());
-        this.setState(treeStates.get(index));
-    }
-
     public TreeType getType() {
         return type;
     }
 
-    public TreeState getState() {
-        return state;
-    }
-
-    public void setState(TreeState s) {
-        state = s;
-        setTexture();
-    }
-
+    /**
+     * set the type of this tree
+     * @param t the type to set the tree to
+     */
     public void setType(TreeType t) {
         this.type = t;
         setTexture();
