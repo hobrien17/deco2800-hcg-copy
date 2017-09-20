@@ -142,6 +142,30 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
+	 * Returns a string of the current day.
+	 */
+	public String getWeekDay() {
+
+		String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+		int k = getDay();
+		int m = (getMonth() + 10) % 12;
+		int d = getYear() % 100;
+
+		if (m == 11 || m == 12) {
+			d--;
+		}
+		int c = getYear() / 100;
+
+		int floor1 = (13 * m - 1)/5;
+		int floor2 = d/4;
+		int floor3 = c/4;
+		int dayInt = k + floor1 + d + floor2 + floor3 - 2*c;
+		dayInt = dayInt % 7;
+
+		return days[dayInt];
+	}
+
+	/**
 	 * Increments the number of days by 1.
 	 */
 	public void nextDay() {
