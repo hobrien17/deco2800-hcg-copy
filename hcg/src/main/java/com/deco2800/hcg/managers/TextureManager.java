@@ -33,12 +33,11 @@ public class TextureManager extends Manager {
 	 * need to.
 	 */
 	public TextureManager() {
-		textureMap.put("grass", new Texture("resources/maps/environment/grass.png"));
-		textureMap.put("ground", new Texture("resources/maps/environment/ground.png"));
-		textureMap.put("spacman", new Texture("resources/sprites/player/spacman.png"));
-		textureMap.put("spacman_swim", new Texture("resources/sprites/player/spacman_swim.png"));
+		textureMap.put("grass", new Texture("resources/maps/textures/grass.png"));
+		textureMap.put("ground", new Texture("resources/maps/textures/ground.png"));
 		textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
 		textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
+		textureMap.put("hcg_character_sink", new Texture("resources/sprites/player/hcg_character_hat_sink.png"));
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
@@ -71,11 +70,13 @@ public class TextureManager extends Manager {
 		textureMap.put("ice_02", new Texture("resources/sprites/plants/Christmas_02.png"));
 		textureMap.put("ice_03", new Texture("resources/sprites/plants/Christmas_03.png"));
 		textureMap.put("pot", new Texture("resources/sprites/plants/pot.png"));
+		textureMap.put("pot_locked", new Texture("resources/sprites/plants/locked_pot.png"));
 		textureMap.put("tree", new Texture("resources/sprites/plants/tree.png"));
 		textureMap.put("fireball_up", new Texture("resources/sprites/bullets/fireball_up.png"));
 		textureMap.put("fireball_down", new Texture("resources/sprites/bullets/fireball_down.png"));
 		textureMap.put("fireball_left", new Texture("resources/sprites/bullets/fireball_left.png"));
 		textureMap.put("fireball_right", new Texture("resources/sprites/bullets/fireball_right.png"));
+		textureMap.put("sunflower_alt", new Texture("resources/sprites/plants/sunflower_alt.png"));
 
 
 		// Miscellaneous textures
@@ -83,6 +84,10 @@ public class TextureManager extends Manager {
 
 		//Terrain objects
 		textureMap.put("wallblock", new Texture("resources/terrain_objects/wallblock.png"));
+	    textureMap.put("boulder", new Texture("resources/terrain_objects/boulder.png"));
+	    textureMap.put("rock", new Texture("resources/terrain_objects/rock.png"));
+	    textureMap.put("iceboulder", new Texture("resources/terrain_objects/iceboulder.png"));
+
 		//trees
 		textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
 		textureMap.put("tree_leafless", new Texture("resources/terrain_objects/tree_dead_01.png"));
@@ -122,11 +127,12 @@ public class TextureManager extends Manager {
 		textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
 
 		//Shop textures
-		textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_name.png"));
+		textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
 		textureMap.put("shop_buy_button", new Texture("resources/ui/shop_ui/shop_buy.png"));
 		textureMap.put("shop_sell_button", new Texture("resources/ui/shop_ui/shop_sell.png"));
-		textureMap.put("shop_funds", new Texture("resources/ui/shop_ui/shop_funds.png"));
+		textureMap.put("player_title", new Texture("resources/ui/shop_ui/player_title.png"));
 		textureMap.put("shop_inventory", new Texture("resources/ui/shop_ui/shop_inventory.png"));
+		textureMap.put("item_background", new Texture("resources/ui/shop_ui/square.png"));
 		textureMap.put("wooden_background", new Texture("resources/ui/shop_ui/wooden_background.png"));
 		textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
         textureMap.put("selected", new Texture("resources/ui/shop_ui/selected.png"));
@@ -147,6 +153,22 @@ public class TextureManager extends Manager {
 		textureMap.put("purple_potion", new Texture("resources/sprites/potions/potion_round_purple.png"));
 		textureMap.put("blue_potion", new Texture("resources/sprites/potions/potion_round_blue.png"));
 		textureMap.put("seed", new Texture("resources/placeholderassets/placeholderseed.png"));
+		//Multiplayer UI Textures
+		//Multiplayer Lobby
+		textureMap.put("chat_background",	new Texture("resources/ui/multiplayer_ui/chatbar.png"));
+		textureMap.put("multi_menu_background",	new Texture("resources/ui/multiplayer_ui/menu_background.png"));
+		textureMap.put("menu_add_button", new Texture("resources/ui/multiplayer_ui/menu_add_button.png"));
+		textureMap.put("lobby_title", new Texture("resources/ui/multiplayer_ui/lobby_title.png"));
+		textureMap.put("lobby_start_button", new Texture("resources/ui/multiplayer_ui/lobby_start_button.png"));
+		textureMap.put("lobby_send_button", new Texture("resources/ui/multiplayer_ui/lobby_send_button.png"));
+		textureMap.put("lobby_image_frame", new Texture("resources/ui/multiplayer_ui/lobby_image_frame.png"));
+		textureMap.put("lobby_back_button", new Texture("resources/ui/multiplayer_ui/lobby_back_button.png"));
+		textureMap.put("lobby_separator", new Texture("resources/ui/multiplayer_ui/multiplayer_separator.png"));
+		//Server Browser
+		textureMap.put("server_host_button", new Texture("resources/ui/multiplayer_ui/menu_host_button.png"));
+		textureMap.put("server_join_button", new Texture("resources/ui/multiplayer_ui/menu_join_button.png"));
+		textureMap.put("server_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
+		textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
 	}
 
 	/**

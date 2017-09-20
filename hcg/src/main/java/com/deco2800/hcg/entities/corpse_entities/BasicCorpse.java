@@ -5,8 +5,8 @@ import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 public class BasicCorpse extends Corpse {
 
 
-    public BasicCorpse(float posX, float posY, float posZ, String texture) {
-        super(posX, posY, posZ,texture);
+    public BasicCorpse(float posX, float posY, float posZ) {
+        super(posX, posY, posZ);
         this.setThisTexture();
     }
     

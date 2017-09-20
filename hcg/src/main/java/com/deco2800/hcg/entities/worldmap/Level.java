@@ -39,9 +39,9 @@ public class Level {
 	 *         1 for standard level
 	 *         2 for boss level 
 	 */
-	public Level(World world, int type, int difficulty, int levelType) {
+	public Level(World world, int worldType, int difficulty, int levelType) {
 		this.world = world;
-		worldType = type;
+		this.worldType = worldType;
 		this.difficulty = difficulty;
 		this.levelType = levelType;
 	}
