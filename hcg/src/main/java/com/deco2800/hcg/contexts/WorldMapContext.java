@@ -2,6 +2,7 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -47,17 +48,17 @@ public class WorldMapContext extends UIContext {
 
 	private InputMultiplexer inputMultiplexer;
 
-	private boolean showAllNodes;
-
+	// Lists of the nodes in the map, the hidden nodes is there for demo purposes
 	private ArrayList<MapNodeEntity> allNodes;
 	private ArrayList<MapNodeEntity> hiddenNodes;
 
 	private Window window;
 	private Window exitWindow;
-	
 	private Skin skin;
 
 	private TextureRegion lineTexture;
+	// used for demo purposes
+	private boolean showAllNodes;
 
 
 	/**
@@ -136,6 +137,42 @@ public class WorldMapContext extends UIContext {
 		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
+		inputManager.addMouseMovedListener(this::handleMouseMoved);
+	}
+
+	// when hovering the node, change the mouse cursor, delete if not needed
+	private void handleMouseMoved(int screenX, int screenY){
+
+		Vector2 mouseScreen = new Vector2(screenX, screenY);
+		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
+		for (MapNodeEntity nodeEntity : allNodes) {
+			float nodeStartX = nodeEntity.getXPos();
+			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
+			float nodeStartY = nodeEntity.getYPos();
+			float nodeEndY = nodeEntity.getYPos() + nodeEntity.getHeight();
+			if (mouseStage.x >= nodeStartX && mouseStage.x <= nodeEndX
+					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
+					&& nodeEntity.getNode().isDiscovered()
+					&& !(nodeEntity.getNode().getNodeType() == 2)) {
+
+				// online free png https://dribbble.com/shots/815059-Basic-Cursor-PNG-Pack
+				// for design team: create a 'cursor' png file with:
+				//        a "power of 2" width px (256, 512,...)
+				//        a "RGBA8888" format
+				// otherwise, the code below will break
+
+				Pixmap pixmap = new Pixmap(Gdx.files.internal("resources/cursor-hand.png"));
+				Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0));
+				pixmap.dispose();
+				//Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
+			} else {
+				// this line should set the current cursor back to normal. but I don't know how to do. will look into this
+				// ath the momment it's kind of automatically change back to normal when you no longer hovering
+
+				//Gdx.graphics.setSystemCursor(SystemCursor.Arrow);  // according to the library, this only works in LWJG3
+
+			}
+		}
 	}
 
 	private void handleTouchUp(int screenX, int screenY, int pointer,
@@ -212,7 +249,7 @@ public class WorldMapContext extends UIContext {
 		int dx = x2 - x1;
 		int dy = y2 - y1;
 		// Length of line segment between two points
-		float length = (float)Math.sqrt(dx*dx + dy*dy);
+		float length = (float)Math.sqrt((double)dx*dx + dy*dy);
 		// Theta (rads)
 		float rotation = (float) Math.asin(dy/length);
 		float thickness = 4;
@@ -221,6 +258,11 @@ public class WorldMapContext extends UIContext {
 		batch.draw(lineTexture, x1, y1, 2, 2, length, thickness, 1, 1, rotation);
 	}
 
+	/**
+	 * Adds a new pot to be drawn to the rendering batch.
+	 * @param batch the sprite batch instance to group pots into
+	 * @param node the node which needs to be drawn
+	 */
 	private void drawPot(SpriteBatch batch, MapNodeEntity node) {
 		batch.draw(node.getNodeTexture(), node.getXPos(), node.getYPos(), node.getWidth(), node.getHeight());
 	}
@@ -238,12 +280,10 @@ public class WorldMapContext extends UIContext {
 		// Render all the lines first
 		lineBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
-			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
-				for (MapNode proceedingNode : nodeEntity.getNode().getProceedingNodes()) {
-					if (proceedingNode.isDiscovered() || showAllNodes) {
-						drawLine(lineBatch, nodeEntity.getNode().getXPos(), nodeEntity.getNode().getYPos(),
-								proceedingNode.getXPos(), proceedingNode.getYPos());
-					}
+			for (MapNode proceedingNode : nodeEntity.getNode().getProceedingNodes()) {
+				if (nodeEntity.getNode().isDiscovered() && proceedingNode.isDiscovered() || showAllNodes) {
+					drawLine(lineBatch, nodeEntity.getNode().getXPos(), nodeEntity.getNode().getYPos(),
+							proceedingNode.getXPos(), proceedingNode.getYPos());
 				}
 			}
 		}
@@ -259,6 +299,7 @@ public class WorldMapContext extends UIContext {
 		}
 		potBatch.end();
 
+		// dispose of the batches to prevent memory leaks
 		lineBatch.dispose();
 		potBatch.dispose();
 	}
