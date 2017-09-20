@@ -14,10 +14,9 @@ public class LevelStore {
 		 */
 		levelList = new ArrayList<>();
         // Test levels for now. Eventually this will contain all the playable game levels
+        levelList.add(new Level(new World("resources/maps/maps/level1.tmx"), 0, 1, 1));
         levelList.add(new Level(new World("resources/maps/maps/initial-map-test.tmx"), 0, 1, 1));
-        levelList.add(new Level(new World("resources/maps/maps/initial-map-test.tmx"), 0, 1, 0));
-        levelList.add(new Level(new World("resources/maps/maps/initial-map-test.tmx"), 0, 1, 1));
-        levelList.add(new Level(new World("resources/maps/maps/initial-map-test.tmx"), 0, 1, 2));
+        levelList.add(new Level(new World("resources/maps/maps/snow.tmx"), 0, 1, 1));
 	}
 	
 	public ArrayList<Level> getLevels() {
