@@ -35,6 +35,10 @@ public class WeatherManagerTests {
 		ArrayList<Weathers> testOnEffects = new ArrayList<Weathers>();
 
 		for (Weathers weatherType : Weathers.values()) {
+			if (weatherType == Weathers.NONE){
+				continue;
+			}
+			
 			testOnEffects.add(weatherType);
 
 			wmTurnOnTests.setWeather(weatherType);
