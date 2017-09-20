@@ -159,10 +159,9 @@ public class InputManager extends Manager implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		System.out.printf("%d, %d", screenX, screenY);
 		for (TouchDownObserver observer : touchDownListeners) {
 			observer.notifyTouchDown(screenX, screenY, pointer, button);
-		}
+		}	
 		return true;
 	}
 

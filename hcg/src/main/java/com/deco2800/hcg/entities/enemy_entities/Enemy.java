@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.enemy_entities;
 
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Harmable;
@@ -488,7 +489,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y, thisEnemy);
         GameManager.get().getWorld().addEntity(bullet);
     */
-        enemyWeapon.updateAim((int)playerManager.getPlayer().getPosX(), (int)playerManager.getPlayer().getPosY());
+        enemyWeapon.updateAim(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
         //System.out.println("123   " + playerManager.getPlayer().getPosX());
         enemyWeapon.openFire();
     }

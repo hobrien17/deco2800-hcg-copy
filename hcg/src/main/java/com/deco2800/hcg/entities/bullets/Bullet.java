@@ -48,7 +48,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	public Bullet(float posX, float posY, float posZ, float xd, float yd,
 			AbstractEntity user, int hitCount) {
-		this(posX, posY, posZ, getProj(xd, yd)[0], getProj(xd, yd)[1], posZ,
+		this(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
 	}
 
@@ -140,7 +140,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 		proj[0] = xd / 55f;
 		proj[1] = -(yd - 32f / 2f) / 32f + proj[0];
 		proj[0] -= proj[1] - proj[0];
-
+		
 		return proj;
 	}
 
