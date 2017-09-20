@@ -158,10 +158,14 @@ public class WorldMapContext extends UIContext {
 
 				Pixmap pixmap = new Pixmap(Gdx.files.internal("resources/cursor-hand.png"));
 				Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0));
-//				Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
 				pixmap.dispose();
+				//Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
 			} else {
-				// this line should set the current cursor back to normal. but I don't know how to do
+				// this line should set the current cursor back to normal. but I don't know how to do. will look into this
+				// ath the momment it's kind of automatically change back to normal when you no longer hovering
+
+				//Gdx.graphics.setSystemCursor(SystemCursor.Arrow);  // according to the library, this only works in LWJG3
+
 			}
 		}
 	}
