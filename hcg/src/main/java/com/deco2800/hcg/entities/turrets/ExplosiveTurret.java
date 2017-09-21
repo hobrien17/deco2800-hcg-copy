@@ -3,14 +3,11 @@ package com.deco2800.hcg.entities.turrets;
 import java.util.List;
 import java.util.Observable;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.util.WorldUtil;
 
 /**
@@ -44,12 +41,16 @@ public class ExplosiveTurret extends AbstractTurret {
 				GameManager.get().getWorld().removeEntity(entity);
 			}
 			//GameManager.get().getWorld().removeEntity(master);
-		}	
+		} else if(seconds == BLOW - 1) {
+			master.setTexture("cactus_corpse_03");
+		} else if(seconds == BLOW - 2) {
+			master.setTexture("cactus_corpse_02");
+		}
 	}
 	
 	@Override
 	public String getThisTexture() {
-		return "tree";
+		return "cactus_corpse_01";
 	}
 
 }

@@ -32,8 +32,9 @@ public class PlayerManager extends Manager {
     		World world = GameManager.get().getWorld();
     		for (Player player : players) {
     			// FIXME Players shouldn't spawn in the same place
-    			player.setPosX(Float.parseFloat((String) world.getMap().getProperties().get("PlayerX")));
-    			player.setPosY(Float.parseFloat((String) world.getMap().getProperties().get("PlayerY")));
+    		    player.setPosX(world.getStartingPlayerX());
+                player.setPosY(world.getStartingPlayerY());
+
     			world.addEntity(player);
     			world.addEntity(player.getEquippedWeapon());
     		}
