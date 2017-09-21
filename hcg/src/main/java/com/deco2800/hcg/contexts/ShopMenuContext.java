@@ -143,6 +143,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
             	for(int i=0; i < number; i++) {
                     shopKeeper.getShop().buyStock(selectedItem);
                 }
+            	selectedItem = null;
             	draw();
             }
         });
@@ -154,6 +155,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
             	for(int i = 0; i < number; i++){
             		shopKeeper.getShop().sellStock(selectedItem);
             	}
+            	selectedItem = null;
                 draw();
             }
         });
