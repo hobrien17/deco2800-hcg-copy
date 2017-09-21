@@ -293,7 +293,7 @@ public class MapNode {
 	 */
 	@Override
 	public String toString() {
-		String nodeTypeString = "";
+		String nodeTypeString;
 		String newline = System.getProperty("line.separator");
 		switch (nodeType) {
 			case 0:
@@ -307,7 +307,9 @@ public class MapNode {
 				break;
 			case 3:
 				nodeTypeString = "Boss Node";
-				break;			
+				break;
+			default:
+				nodeTypeString = "Default Node";
 		}
 		String nodeString = "nodeType: " + nodeTypeString + " | nodeRow: " + nodeRow + " | nodeColumn: " + 
 				nodeColumn + " | nodeLevel: " + linkedLevel + newline +

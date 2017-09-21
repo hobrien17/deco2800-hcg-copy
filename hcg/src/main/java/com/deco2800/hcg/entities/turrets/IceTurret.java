@@ -34,7 +34,7 @@ public class IceTurret extends AbstractTurret {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if(++seconds == BLOW) {
+		if(++seconds == BLOW) {			
 			near = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 					master.getPosY(), CLOSE_RANGE, Enemy.class);
 			far = WorldUtil.allEntitiesToPosition(master.getPosX(), 
@@ -61,11 +61,16 @@ public class IceTurret extends AbstractTurret {
 			}
 			GameManager.get().getWorld().removeEntity(master);
 		}
+		if(seconds == BLOW - 1) {
+			master.setTexture("ice_corpse_03");
+		} else if(seconds == BLOW - 2) {
+			master.setTexture("ice_corpse_02");
+		}
 	}
 
 	@Override
 	public String getThisTexture() {
-		return "tree";
+		return "ice_corpse_01";
 	}
 
 }

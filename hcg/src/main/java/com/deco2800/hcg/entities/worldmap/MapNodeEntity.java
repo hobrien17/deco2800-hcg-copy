@@ -2,7 +2,6 @@ package com.deco2800.hcg.entities.worldmap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
@@ -33,7 +32,7 @@ public class MapNodeEntity extends Actor {
 
         this.node = node;
         GameManager gameManager = GameManager.get();
-         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         // Assigns the correct texture based on node type
 
@@ -79,6 +78,7 @@ public class MapNodeEntity extends Actor {
 				nodeTexture = textureManager.getTexture("discovered_node");
 		}
 	}
+	
 	/**
 	 * Gets the node stored in this actor object
 	 *

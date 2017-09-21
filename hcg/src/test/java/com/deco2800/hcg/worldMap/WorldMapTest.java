@@ -14,14 +14,15 @@ import com.deco2800.hcg.worlds.World;
 public class WorldMapTest {
 
     WorldMap worldMap;
-
+    List<MapNode> nodeList;
     @Before
     public void setup() {
     	Level newLevel = new Level(new World(), 0, 0, 0);
     	MapNode node = new MapNode(0, 0, 0, newLevel, false);
-    	List<MapNode> nodeList = new ArrayList<>();
+    	nodeList = new ArrayList<>();
     	nodeList.add(node);
-        worldMap = new WorldMap(0, "sand", 1, 5, 3, nodeList);
+        worldMap = new WorldMap(0, "sand", 5, 3, nodeList);
+        worldMap.setPosition(1);
     }
 
     @Test
@@ -33,4 +34,59 @@ public class WorldMapTest {
         assertEquals(5, worldMap.getWorldRows());
         assertEquals(3, worldMap.getWorldColumns());
     }
+
+    @Test
+    public void testGetContainedNodes(){
+        assertEquals(1, worldMap.getContainedNodes().size());
+    }
+
+    @Test
+    public void testGetContainedNodesDeepCopy(){
+//        System.out.println(nodeList == worldMap.getContainedNodes());
+        assertEquals(false, worldMap.getContainedNodes() == nodeList);
+    }
+
+    @Test
+    public void testAddContainedNode(){
+        assertEquals(1, worldMap.getContainedNodes().size());
+        Level newLevel = new Level(new World(), 0, 0, 0);
+        MapNode newNode = new MapNode(0, 0, 0, newLevel, false);
+        worldMap.addContainedNode(newNode);
+        assertEquals(2, worldMap.getContainedNodes().size());
+
+        // adding existing Node. should not be added to the contained node
+        worldMap.addContainedNode(newNode);
+        assertEquals(2, worldMap.getContainedNodes().size());
+
+        newNode = new MapNode(0, 0, 0, newLevel, false);
+        worldMap.addContainedNode(newNode);
+        assertEquals(3, worldMap.getContainedNodes().size());
+
+    }
+
+    @Test
+    public void testAddContainedNodeCollection() {
+        List<MapNode> nodeList = new ArrayList<MapNode>();
+        Level newLevel = new Level(new World(), 0, 0, 0);
+        int numTest = 4;
+        for (int i = 0; i < 4; i++) {
+            nodeList.add(new MapNode(0, 0, 0, newLevel, false));
+        }
+        worldMap.addContainedNodeCollection(nodeList);
+        assertEquals(1 + numTest, worldMap.getContainedNodes().size());
+
+    }
+
+    @Test
+    public void testChangeWorldTexture() {
+        worldMap.changeWorldTexture("yolo");
+        assertEquals("yolo", worldMap.getWorldTexture());
+        worldMap.changeWorldTexture("");
+        assertEquals("", worldMap.getWorldTexture());
+
+    }
+
+
+
+
 }

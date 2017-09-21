@@ -1,18 +1,12 @@
 package com.deco2800.hcg.worlds;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Selectable;
-import com.deco2800.hcg.entities.npc_entities.QuestNPC;
-import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;

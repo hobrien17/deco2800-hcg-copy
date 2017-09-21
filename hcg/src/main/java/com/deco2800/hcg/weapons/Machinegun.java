@@ -1,9 +1,7 @@
 package com.deco2800.hcg.weapons;
 
-import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.managers.GameManager;
 
 /**
  * The Machinegun class represents a machine gun type weapon
@@ -33,12 +31,8 @@ public class Machinegun extends Weapon implements Tickable {
     
     @Override
     protected void fireWeapon() {
-        Vector3 worldCoords = GameManager.get().getCamera()
-                .unproject(new Vector3(this.aimX, this.aimY, 0));
-
-        System.out.println(worldCoords.x);
         shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                worldCoords.x, worldCoords.y);
+                this.aim.x, this.aim.y);
         playFireSound();
     }
     

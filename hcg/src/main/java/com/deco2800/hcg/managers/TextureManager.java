@@ -78,7 +78,19 @@ public class TextureManager extends Manager {
 		textureMap.put("fireball_right", new Texture("resources/sprites/bullets/fireball_right.png"));
 		textureMap.put("sunflower_alt", new Texture("resources/sprites/plants/sunflower_alt.png"));
 
-
+		// Corpse textures
+		textureMap.put("corpse", new Texture("resources/sprites/dead_enemies/deadant.png"));
+		textureMap.put("sunflower_corpse", new Texture("resources/sprites/dead_enemies/sunflower_big.png"));
+		textureMap.put("cactus_corpse_01", new Texture("resources/sprites/dead_enemies/cactus01.png"));
+		textureMap.put("cactus_corpse_02", new Texture("resources/sprites/dead_enemies/cactus02.png"));
+		textureMap.put("cactus_corpse_03", new Texture("resources/sprites/dead_enemies/cactus03.png"));
+		textureMap.put("ice_corpse_01", new Texture("resources/sprites/dead_enemies/ice01.png"));
+		textureMap.put("ice_corpse_02", new Texture("resources/sprites/dead_enemies/ice02.png"));
+		textureMap.put("ice_corpse_03", new Texture("resources/sprites/dead_enemies/ice03.png"));
+		textureMap.put("water_corpse", new Texture("resources/sprites/dead_enemies/waterlily.png"));
+		textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass_alt.png"));
+		textureMap.put("fire_corpse", new Texture("resources/sprites/dead_enemies/inferno.png"));
+		
 		// Miscellaneous textures
 		textureMap.put("error", new Texture("resources/misc/error.png"));
 
@@ -100,7 +112,32 @@ public class TextureManager extends Manager {
 		textureMap.put("character_1", new Texture("resources/sprites/npc/basic_character.png"));
 		textureMap.put("character_shop", new Texture("resources/sprites/npc/shop_keeper.png"));
 
-		
+		//Players
+		textureMap.put("player_back_stand", new Texture("resources/sprites/player/player_back_stand.png"));
+		textureMap.put("player_back_move", new Texture("resources/sprites/player/player_back_move1.png"));
+		textureMap.put("player_back_move2", new Texture("resources/sprites/player/player_back_move2.png"));
+		textureMap.put("player_front_stand", new Texture("resources/sprites/player/player_front_stand.png"));
+		textureMap.put("player_front_move1", new Texture("resources/sprites/player/player_front_move1.png"));
+		textureMap.put("player_front_move2", new Texture("resources/sprites/player/player_front_move2.png"));
+		textureMap.put("player_left_stand", new Texture("resources/sprites/player/player_left_stand.png"));
+		textureMap.put("player_left_move1", new Texture("resources/sprites/player/player_left_move1.png"));
+		textureMap.put("player_left_move2", new Texture("resources/sprites/player/player_left_move2.png"));
+		textureMap.put("player_leftBack_stand", new Texture("resources/sprites/player/player_leftBack_stand.png"));
+		textureMap.put("player_leftBack_move1", new Texture("resources/sprites/player/player_leftBack_move1.png"));
+		textureMap.put("player_leftBack_move2", new Texture("resources/sprites/player/player_leftBack_move2.png"));
+		textureMap.put("player_leftFront_stand", new Texture("resources/sprites/player/player_leftFront_stand.png"));
+		textureMap.put("player_leftFront_move1", new Texture("resources/sprites/player/player_leftFront_move1.png"));
+		textureMap.put("player_leftFront_move2", new Texture("resources/sprites/player/player_leftFront_move2.png"));
+		textureMap.put("player_right_stand", new Texture("resources/sprites/player/player_right_stand.png"));
+		textureMap.put("player_right_move1", new Texture("resources/sprites/player/player_right_move1.png"));
+		textureMap.put("player_right_move2", new Texture("resources/sprites/player/player_right_move2.png"));
+		textureMap.put("player_rightBack_stand", new Texture("resources/sprites/player/player_rightBack_stand.png"));
+		textureMap.put("player_rightBack_move1", new Texture("resources/sprites/player/player_rightBack_move1.png"));
+		textureMap.put("player_rightBack_move2", new Texture("resources/sprites/player/player_rightBack_move2.png"));
+		textureMap.put("player_rightFront_stand", new Texture("resources/sprites/player/player_rightFront_stand.png"));
+		textureMap.put("player_rightFront_move1", new Texture("resources/sprites/player/player_rightFront_move1.png"));
+		textureMap.put("player_rightFront_move2", new Texture("resources/sprites/player/player_rightFront_move2.png"));
+
 		// Textures for the Main Menu and In-Game Menu
 		textureMap.put("menu_title", new Texture("resources/ui/main_menu/menu_title.png"));
 		textureMap.put("menu_no_button", new Texture("resources/ui/main_menu/menu_no_button.png"));
@@ -133,7 +170,6 @@ public class TextureManager extends Manager {
 		textureMap.put("player_title", new Texture("resources/ui/shop_ui/player_title.png"));
 		textureMap.put("shop_inventory", new Texture("resources/ui/shop_ui/shop_inventory.png"));
 		textureMap.put("item_background", new Texture("resources/ui/shop_ui/square.png"));
-		textureMap.put("wooden_background", new Texture("resources/ui/shop_ui/wooden_background.png"));
 		textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
         textureMap.put("selected", new Texture("resources/ui/shop_ui/selected.png"));
 
