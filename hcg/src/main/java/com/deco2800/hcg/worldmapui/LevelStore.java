@@ -7,7 +7,8 @@ import com.deco2800.hcg.worlds.World;
 
 public class LevelStore {
 	private ArrayList<Level> levelList;
-	
+
+	private static final String DEMO_WORLD = "resources/maps/maps/initial-map-test.tmx";
 	public LevelStore() {
 		/* See the wiki for the correct way to create and add levels!
 		 * https://github.com/UQdeco2800/deco2800-2017-hardcor3gard3ning/wiki/Creating-Maps

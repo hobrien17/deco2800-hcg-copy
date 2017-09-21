@@ -1,6 +1,5 @@
 package com.deco2800.hcg.contexts;
 
-import com.badlogic.gdx.Gdx;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;

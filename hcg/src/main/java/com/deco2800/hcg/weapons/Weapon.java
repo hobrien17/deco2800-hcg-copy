@@ -29,8 +29,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
 
     protected float followX;
     protected float followY;
-    protected int aimX;
-    protected int aimY;
+    protected Vector3 aim;
     protected double radius;
     protected boolean shoot;
     protected int counter;
@@ -38,6 +37,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected WeaponType weaponType;
     protected AbstractEntity user;
     protected int bulletType;
+    protected int pellets;
 
     private SoundManager soundManager;    
 
@@ -62,8 +62,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.counter = 0;
         this.followX = 0;
         this.followY = 0;
-        this.aimX = 0;
-        this.aimY = 0;
+        this.aim = new Vector3(0, 0, 0);
         this.bulletType = 0;
 
         this.weaponType = weaponType;
@@ -130,9 +129,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * @param screenX int x coordinate for aim location
      * @param screenY int y coordinate for aim location
      */
-    public void updateAim(int screenX, int screenY) {
-        this.aimX = screenX;
-        this.aimY = screenY;
+    public void updateAim(Vector3 aim) {
+        this.aim = new Vector3(aim);
     }
 
     /**
@@ -142,21 +140,12 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * @param screenX int x coordinate for weapon location
      * @param screenY int y coordinate for weapon location
      */
-    public void updatePosition(int screenX, int screenY) {
-        // Convert screen coordinates into game world coordinates
-        Vector3 worldCoords = GameManager.get().getCamera()
-                .unproject(new Vector3(screenX, screenY, 0));
-
-        float projX;
-        float projY;
-
-        projX = worldCoords.x / 55f;
-        projY = -(worldCoords.y - 32f / 2f) / 32f + projX;
-        projX -= projY - projX;
-
-        this.followX = projX;
-        this.followY = projY;
+    //TODO: Remove
+    public void updatePosition(float worldX, float worldY) {
+        this.followX = worldX;
+        this.followY = worldY;
     }
+    
 
     /**
      * Creates a new bullet at given position
@@ -185,6 +174,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * Changes the position of the weapon in the gameworld
      * sets at certain distance from player character facing cursor
      */
+    //TODO: remove
     protected void setPosition() {
         // Calculate the angle between the cursor and player
         float deltaX = this.user.getPosX() - this.followX;
@@ -205,6 +195,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         }
     }
 
+    //TODO: incorporate into Bullet constructor
     public Bullet createBullet(float posX, float posY, float posZ,
                         float goalX, float goalY) {
         Bullet bullet;
@@ -232,6 +223,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
+        //TODO: remove
         setPosition();
 
         if(this.counter < this.cooldown) {
@@ -254,7 +246,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         if(cooldown!=weapon.cooldown){
             return false;
         }
-        if((int)Double.doubleToLongBits(radius)!=(int)Double.doubleToLongBits(weapon.radius)){
+        if(pellets != weapon.pellets) {
             return false;
         }
 
@@ -266,7 +258,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         int result = 11;
         result = 31 * result + weaponType.hashCode();
         result = 31 * result + cooldown;
-        result = 31 * result + (int)Double.doubleToLongBits(radius);
+        result = 31 * result + pellets;
         result = 31 * result + super.hashCode();
         return result;
     }

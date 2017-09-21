@@ -12,7 +12,7 @@ public class BasicCorpse extends Corpse {
     
     public void setThisTexture() {
     	if(turret == null) {
-    		this.setTexture("tree");
+    		this.setTexture("corpse");
     	} else {
     		this.setTexture(turret.getThisTexture());
     	}

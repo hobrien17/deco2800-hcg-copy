@@ -1,14 +1,11 @@
 package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
@@ -74,7 +71,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 
         centreTable = new Table();
         centreTable.setFillParent(true);
-        centreTable.setBackground(new Image(textureManager.getTexture("wooden_background")).getDrawable());
+        centreTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 
         shop_title = new Image(textureManager.getTexture("shop_title"));
         player_title = new Image(textureManager.getTexture("player_title"));
