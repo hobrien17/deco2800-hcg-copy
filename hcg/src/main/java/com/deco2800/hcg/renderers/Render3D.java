@@ -1,5 +1,9 @@
 package com.deco2800.hcg.renderers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,10 +13,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.HasProgress;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.deco2800.hcg.shading.LightEmitter;
 
 /**
  * A simple isometric renderer for DECO2800 games
@@ -82,6 +83,10 @@ public class Render3D implements Renderer {
 
             // We want to keep the aspect ratio of the image so...
             float aspect = (float) (tex.getWidth()) / (float) (tileWidth);
+            
+            if(entity instanceof LightEmitter) {
+                //Do your lighting stuff here.
+            }
             
             if(entity instanceof CustomRenderable) {
                 ((CustomRenderable) entity).customDraw(batch, isoX, isoY, tileWidth, tileHeight, aspect, reg);
