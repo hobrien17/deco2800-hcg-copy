@@ -1,6 +1,11 @@
 package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observable;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.bullets.Fireball;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
@@ -24,6 +29,7 @@ public class FireTurret extends AbstractTurret {
 
 	@Override
 	public void update(Observable o, Object arg) {
+		
 		float[][] pos = { { master.getPosX() + RANGE, master.getPosY() + RANGE },
 				{ master.getPosX() + RANGE, Math.max(0, master.getPosY() - RANGE) },
 				{ Math.max(0, master.getPosX() - RANGE), master.getPosY() + RANGE },

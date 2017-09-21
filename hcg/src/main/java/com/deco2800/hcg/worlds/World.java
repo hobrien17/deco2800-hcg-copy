@@ -1,5 +1,6 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -53,7 +54,7 @@ public class World {
 		// attempt to load the given file
 		try {
 		  if ("test".equals(file)){ // for WorldTest
-		    file = "resources/maps/initial-map-test.tmx";
+		    file = "resources/maps/maps/initial-map-test.tmx";
 		  }
           this.map = new TmxMapLoader().load(file);
 		  loadedFile = file;
@@ -71,16 +72,6 @@ public class World {
 				this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(
 				this.getMap().getProperties().get("height", Integer.class));
-
-		// get player
-		Player player = ((PlayerManager) GameManager.get()
-				.getManager(PlayerManager.class)).getPlayer();
-
-		// change player position based on the properties below
-		player.setPosX(Float.parseFloat(
-				(String) this.getMap().getProperties().get("PlayerX")));
-		player.setPosY(Float.parseFloat(
-				(String) this.getMap().getProperties().get("PlayerY")));
 
 		// loop over all object layers
 		for (MapLayer layer : getObjectLayers()) {
