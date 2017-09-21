@@ -173,9 +173,13 @@ public abstract class Shop {
      *
      * @param item
      *          Item that is to be sold
-     * @return 0 if sold successfully, 1 if player cannot accept more currency
+     * @return 0 if sold successfully, 1 if player cannot accept more currency,
+     * 			2 if item is null
      */
     public int sellStock(Item item) {
+    	if(item == null){
+    		return 2;
+    	}
         seed = new BasicSeed();
         seed.setStackSize(item.getBaseValue()+modifier);
         if ((item instanceof SingleItem) || (item.getStackSize() == 1)) {
