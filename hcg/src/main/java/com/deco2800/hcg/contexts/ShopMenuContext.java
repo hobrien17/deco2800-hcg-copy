@@ -52,8 +52,11 @@ public class ShopMenuContext extends InventoryDisplayContext {
         this.player = player;
         this.shopKeeper = shopKeeper;
         amountString = "1";
-
+        amount = new TextField(amountString, 
+        		new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
+        
         draw();
+        
 
 
     }
@@ -89,12 +92,15 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy_button")).getDrawable());
         
         //adding the textfield
+        amountString = amount.getText();
         amount = new TextField(amountString, skin);
-
+        amount.setWidth(100);
+        
         buySell = new Table();
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
         buySell.add(shopBuy);
+        buySell.row();
         buySell.row();
         buySell.add(shopSell);
         shopExit.setPosition(0, stage.getHeight()-shopExit.getHeight());
