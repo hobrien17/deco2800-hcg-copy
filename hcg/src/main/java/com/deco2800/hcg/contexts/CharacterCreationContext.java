@@ -1,6 +1,7 @@
 package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -91,12 +93,14 @@ public class CharacterCreationContext extends UIContext{
     private Image characterPreviewImage;
 
     // Different placeholder textures for the character preview screen
+    // Will put into texture manager later, was getting odd null pointer exceptions
     private Texture male1 = new Texture("resources/sprites/player/m2_360.png");
     private Texture male2 = new Texture("resources/sprites/player/m2_3602.png");
     private Texture male3 = new Texture("resources/sprites/player/m2_3603.png");
     private Texture female1 = new Texture("resources/sprites/player/f2_360.png");
     private Texture female2 = new Texture("resources/sprites/player/f2_3602.png");
     private Texture female3 = new Texture("resources/sprites/player/f2_3603.png");
+    private Texture blank_window_background = new Texture("resources/ui/character_creation/window_background_white.png");
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
@@ -133,7 +137,7 @@ public class CharacterCreationContext extends UIContext{
     private void initMasterTable() {
         masterTable = new Table(skin);
         masterTable.setFillParent(true);
-        masterTable.setBackground("white");
+        masterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
         stage.addActor(masterTable);
     }
 
@@ -153,6 +157,12 @@ public class CharacterCreationContext extends UIContext{
         statsWindow.setMovable(false);
         characterPreviewWindow.setMovable(false);
         selectedDescriptionWindow.setMovable(false);
+
+        attributesWindow.setBackground(new Image(blank_window_background).getDrawable());
+        skillsWindow.setBackground(new Image(blank_window_background).getDrawable());
+        statsWindow.setBackground(new Image(blank_window_background).getDrawable());
+        characterPreviewWindow.setBackground(new Image(blank_window_background).getDrawable());
+        selectedDescriptionWindow.setBackground(new Image(blank_window_background).getDrawable());
 
         /* Need to find a way to do this without overwriting the button and label listeners.
         attributesWindow.addListener(new ClickListener() {
@@ -670,11 +680,12 @@ public class CharacterCreationContext extends UIContext{
 
     private void setupSelectedDescriptionWindow() {
         selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
-        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
+        selectedDescriptionText.setColor(Color.WHITE);
+        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY().padTop(10);
     }
 
     private void addSubtables() {
-        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2);
+        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(10);
         masterTable.row();
         masterTable.add(attributesWindow).top().left().expandX().fillX();
         masterTable.add(skillsWindow).top().right().expandX().fillX().fillY();
