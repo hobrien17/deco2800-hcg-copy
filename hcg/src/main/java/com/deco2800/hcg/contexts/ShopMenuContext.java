@@ -26,8 +26,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private TimeManager timeManager;
 
     private Skin skin;
-    private Image shop_title;
-    private Image player_title;
+    private Image shopTitle;
+    private Image playerTitle;
     private Table shopInventory;
     private Table playerInventory;
     private ImageButton shopBuy;
@@ -37,6 +37,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private Table buySell;
     
     private TextField amount;
+    private String amountString;
 
     private Player player;
     private ShopNPC shopKeeper;
@@ -50,6 +51,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopKeeper.getShop().open(0, player);
         this.player = player;
         this.shopKeeper = shopKeeper;
+        amountString = "1";
 
         draw();
 
@@ -75,8 +77,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
         centreTable.setFillParent(true);
         centreTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 
-        shop_title = new Image(textureManager.getTexture("shop_title"));
-        player_title = new Image(textureManager.getTexture("player_title"));
+        shopTitle = new Image(textureManager.getTexture("shop_title"));
+        playerTitle = new Image(textureManager.getTexture("player_title"));
 
         shopInventory = new Table();
         shopInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
@@ -87,7 +89,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy_button")).getDrawable());
         
         //adding the textfield
-        amount = new TextField("Amount to Buy/Sell", skin);
+        amount = new TextField(amountString, skin);
 
         buySell = new Table();
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
@@ -101,9 +103,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
         inventoryDisplay(textureManager, shopKeeper, skin, shopInventory, this);
 
         //add elements to table
-        centreTable.add(shop_title);
+        centreTable.add(shopTitle);
         centreTable.add();
-        centreTable.add(player_title);
+        centreTable.add(playerTitle);
         centreTable.row();
         centreTable.add(shopInventory);
         centreTable.add(buySell);
@@ -131,12 +133,10 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopBuy.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	int number = Integer.parseInt(amount.getMessageText());
-            	
+            	int number = Integer.parseInt(amount.getText().trim());
             	for(int i=0; i < number; i++) {
-            		shopKeeper.getShop().buyStock(selectedItem);
-            	}
-            	
+                    shopKeeper.getShop().buyStock(selectedItem);
+                }
             	draw();
             }
         });
@@ -144,7 +144,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopSell.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	int number = Integer.parseInt(amount.getMessageText());
+            	int number = Integer.parseInt(amount.getText().trim());
             	for(int i = 0; i < number; i++){
             		shopKeeper.getShop().sellStock(selectedItem);
             	}
