@@ -49,7 +49,7 @@ public class ConversationContext extends UIContext {
 		buttons.clearChildren();
 
 		// Add new buttons
-		for (ConversationOption option : node.getOptions()) {
+		for (ConversationOption option : node.getValidOptions()) {
 			System.err.println(" * " + option.getOptionText()); //DEBUG
 			TextButton button = new TextButton(option.getOptionText(), skin);
 			button.addListener(new ChangeListener() {

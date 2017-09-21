@@ -9,14 +9,17 @@ public class ConversationOption {
     private Conversation grandparent;
     private String optionText;
     private ConversationNode target;    // null if this option will end the Conversation
+    private AbstractConversationCondition condition;    // null if the option is always displayed
     private List<AbstractConversationAction> actions;
 
     public ConversationOption(ConversationNode parent, String optionText,
-                ConversationNode target, List<AbstractConversationAction> actions) {
+                ConversationNode target, AbstractConversationCondition condition,
+                List<AbstractConversationAction> actions) {
         this.parent = parent;
         this.grandparent = parent.getParent();
         this.optionText = optionText;
         this.target = target;
+        this.condition = condition;
         this.actions = new ArrayList<>(actions);
     }
 
@@ -44,11 +47,24 @@ public class ConversationOption {
         return optionText;
     }
 
+    public boolean testCondition() {
+        if (condition == null) {
+            return true;
+        } else {
+            return condition.testCondition();
+        }
+    }
+
     // Needed for serialisation
 	ConversationNode getTarget() {
 		return target;
 	}
-    
+
+    // Needed for serialisation
+    AbstractConversationCondition getCondition() {
+        return condition;
+    }
+
     // Needed for serialisation
 	ArrayList<AbstractConversationAction> getActions() {
 		return new ArrayList<>(actions);

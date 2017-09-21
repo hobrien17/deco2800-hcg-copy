@@ -52,4 +52,13 @@ public class ConversationNode {
         return options;
     }
 
+    public List<ConversationOption> getValidOptions() {
+        List<ConversationOption> validOptions = new ArrayList<>();
+        for (ConversationOption option : options) {
+            if (option.testCondition()) {
+                validOptions.add(option);
+            }
+        }
+        return options;
+    }
 }

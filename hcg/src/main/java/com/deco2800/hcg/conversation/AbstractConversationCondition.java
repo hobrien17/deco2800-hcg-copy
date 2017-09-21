@@ -1,8 +1,8 @@
 package com.deco2800.hcg.conversation;
 
-public abstract class AbstractConversationAction {
+public abstract class AbstractConversationCondition {
 
-    abstract void executeAction();
+    abstract boolean testCondition();
 
     @Override
     public abstract String toString();
