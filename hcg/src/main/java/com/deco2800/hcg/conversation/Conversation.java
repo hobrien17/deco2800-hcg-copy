@@ -28,8 +28,7 @@ public class Conversation {
 	public Conversation() {
 		// Get necessary managers
 		GameManager gameManager = GameManager.get();
-		contextManager = (ContextManager)
-				gameManager.getManager(ContextManager.class);
+		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 	}
 
 	/**
@@ -68,16 +67,19 @@ public class Conversation {
 
 	// Called by ConversationNodes
 	void changeNode(ConversationNode target) {
-		currentNode = target;
-		if(currentNode == null){
-			contextManager.popContext();
+		if (target != null) {
+			currentNode = target;
+			conversationContext.displayNode(currentNode);
+		} else {
+			endConversation();
 		}
-		conversationContext.displayNode(currentNode);
 	}
 
 	// Called by ConversationNodes
 	void endConversation() {
 		contextManager.popContext();
+		conversationContext = null;
+		currentNode = null;
 	}
 	
 	// Needed for serialisation
