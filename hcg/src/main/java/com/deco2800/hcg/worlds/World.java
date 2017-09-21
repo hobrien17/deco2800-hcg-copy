@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -167,7 +168,7 @@ public class World {
 			map.getLayers().remove(layer);
 
 		}
-
+		
 	}
 
 	/**
@@ -178,7 +179,7 @@ public class World {
 	public List<AbstractEntity> getEntities() {
 		return new ArrayList<AbstractEntity>(this.entities);
 	}
-
+	
 	/**
 	 * Returns all Object Layers present in the map. Implementation assumes that
 	 * the only types of layers are Tile Layers and Object Layers(!!!).
@@ -214,63 +215,100 @@ public class World {
 	}
 
 	/**
-	 * Returns the TiledMapTileLayer that contains the cell at the given X and Y
+	 * Returns the highest TiledMapTileLayer that contains the cell at the given X and Y
 	 * position. See documentation on TiledMapTileLayer.
 	 *
 	 * @param posX
 	 *            X position
 	 * @param posY
 	 *            Y position
-	 * @return A TiledMapTileLayer that contains the players current cell. Null
+	 * @return The highest TiledMapTileLayer that contains a cell at the given position. Null
 	 *         if no such TiledMapTileLayer exists.
 	 */
 	public TiledMapTileLayer getTiledMapTileLayerAtPos(int posX, int posY) {
 		// check for no map
+	  
+	  TiledMapTileLayer highestLayer = null;
+	  
 		if (map != null) {
 			// loop through all layers
-			Iterator<MapLayer> itr = map.getLayers().iterator(); // GameManager.get().getWorld().getMap()
+		    // we want the highest up layer that satisfies it
+		  
+			Iterator<MapLayer> itr = map.getLayers().iterator();
 
 			while (itr.hasNext()) {
 
 				TiledMapTileLayer layer = (TiledMapTileLayer) itr.next();
 
 				if (layer.getCell(posX, posY) != null) {
-					return (TiledMapTileLayer) layer;
+				  highestLayer = (TiledMapTileLayer) layer;
+				  
 				}
 
 			}
 		}
 
+		if (highestLayer != null) {
+          return highestLayer;
+		}
+		
 		return null;
 
 	}
 	
 	/**
-	 *  Changes the texture of the tile at a given position.
+	 * Returns a layer with the given property name and property
+	 * @param propertyName name of the property
+	 * @param property property
+	 * @return MapLayer that has the given property
+	 */
+	public MapLayer getMapLayerWithProperty(String propertyName, String property) {
+         
+      for (MapLayer m : map.getLayers()) {
+        if (property.equals(m.getProperties().get(propertyName))) {
+          return m;
+        }
+      }
+      return null;
+      
+    }
+
+	/**
+	 * Adds a TiledMapTileLayer with a given name and the given properties.
+	 * Note .getName() will not work after this method, you must go through 
+	 * getProperties().get("name")
+	 * @param name name of the layer
+	 * @param properties properties of the layer
+	 */
+	public void addTiledMapTileLayer(String name, MapProperties properties) {
+	  
+	   TiledMapTileLayer layer = new TiledMapTileLayer(this.getWidth(), this.getLength(), 55, 32);
+	   layer.getProperties().putAll(properties);
+	   map.getLayers().add(layer);
+	   	   
+	}
+	
+	/**
+	 *  Adds / changes a tile with a given texture at a given position in a given layer.
 	 *  
 	 * @param posX X position of tile to change
 	 * @param posY Y position of tile to change
 	 * @param texture texture to change tile to
+	 * @param newLayer the destination layer of the tile
 	 * @return true if success, false if failure
 	 */
-	public boolean changeTileAtPos(int posX, int posY, Texture texture) {
-	  	  	  
-	  TiledMapTileLayer layer = getTiledMapTileLayerAtPos(posY, posX);
-	  	  
-	  if (layer != null) {
+	public boolean newTileAtPos(int posX, int posY, Texture texture, TiledMapTileLayer newLayer) {	  
+	  if (newLayer != null) {
 	    
 	    // make new texture region
 	    TextureRegion textureRegion = new TextureRegion(texture);
 	    StaticTiledMapTile tile = new StaticTiledMapTile(textureRegion);
 	    
-	    // change cell texture
-	    if (layer.getCell(posY, posX) != null) {
-    	    layer.getCell(posY, posX).setTile(tile);	      
-    	    return true;
-	    }
-	    else {
-	      return false;
-	    }
+	    Cell cell = new Cell();
+	    cell.setTile(tile);
+	    
+	    newLayer.setCell(posY, posX, cell);
+	    
 	  }
 	  return false;
 	}
