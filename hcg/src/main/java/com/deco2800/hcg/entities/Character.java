@@ -259,7 +259,7 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's current movement speed.
      */
     public float getMovementSpeed() {
         return movementSpeed;
@@ -267,7 +267,7 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's speed in the X direction.
      */
     public float getSpeedX() {
         return speedX;
@@ -275,15 +275,22 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's speed in the Y direction.
      */
     public float getSpeedY() {
         return speedY;
     }
+    
+    /**
+     * @return The direction that the character is facing.
+     */
+    public int getDirection() {
+        return direction;
+    }
 
     /**
      *
-     * @return
+     * @return The character's level.
      */
     public int getLevel() {
         return level;
@@ -291,7 +298,7 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's experience.
      */
     public int getXp() {
         return xp;
