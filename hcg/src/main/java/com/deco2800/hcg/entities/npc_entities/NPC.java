@@ -5,6 +5,8 @@ import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
 //import org.slf4j.Logger;
@@ -26,6 +28,7 @@ public abstract class NPC extends Character implements Tickable {
     private final Box3D INITIAL_POSITION;
     protected PlayerManager playerManager;
     private String conversation;
+    
 
     
     /**
@@ -92,6 +95,8 @@ public abstract class NPC extends Character implements Tickable {
     public Box3D getInitialPosition(){
     	return this.INITIAL_POSITION;
     }
+    
+    public abstract void interact();
     
     @Override
     public boolean equals(Object object){

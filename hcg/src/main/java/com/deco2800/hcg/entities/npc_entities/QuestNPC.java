@@ -2,7 +2,10 @@ package com.deco2800.hcg.entities.npc_entities;
 
 import java.util.List;
 
+import com.badlogic.gdx.Input;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 
@@ -17,6 +20,7 @@ public class QuestNPC extends NPC {
 	private float boundaryY; // defaults to 5
 	private int moveDirection; // defaults to 0;
 	private int speed; // defaults to 1;
+	private ConversationManager conversationManager;
 
 	/**
 	 * Constructs a new Quest NPC
@@ -40,6 +44,11 @@ public class QuestNPC extends NPC {
 		this.boundaryY = 5;
 		moveDirection = 0;
 		speed = 1;
+		this.conversationManager = new ConversationManager();
+	}
+	
+	public void interact(){
+			conversationManager.startConversation("test_conversation_01",this.getTexture());
 	}
 
 	/**

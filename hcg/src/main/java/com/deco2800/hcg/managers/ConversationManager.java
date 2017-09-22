@@ -44,12 +44,12 @@ public class ConversationManager extends Manager {
      * Being displaying a stored Conversation
      * @param name The name of the conversation to launch
      */
-    public void startConversation(String name) {
+    public void startConversation(String name, String texture) {
         Conversation conversation = conversations.get(name);
         if (conversation == null) {
             throw new IllegalArgumentException("No conversation by the name \""+name+"\" exists!");
         } else {
-            conversation.initiateConversation();
+            conversation.initiateConversation(texture);
         }
     }
 

@@ -58,9 +58,9 @@ public class Conversation {
 	/**
 	 * Begin presenting the conversation to the player
 	 */
-	public void initiateConversation() {
+	public void initiateConversation(String texture) {
 		currentNode = initialNode;
-		conversationContext = new ConversationContext(this);
+		conversationContext = new ConversationContext(this, texture);
 		conversationContext.displayNode(currentNode);
 		contextManager.pushContext(conversationContext);
 	}

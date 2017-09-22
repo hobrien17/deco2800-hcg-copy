@@ -16,9 +16,12 @@ public class ConversationContext extends UIContext {
     private Table table;
     private Label nodeText;
     private HorizontalGroup buttons;
+    private HorizontalGroup space;
     private Skin skin;
+    private String npcTexture;
+    private Image npcImage;
 
-	public ConversationContext(Conversation conversation){
+	public ConversationContext(Conversation conversation, String texture){
 		super();
 
 		GameManager gameManager = GameManager.get();
@@ -26,19 +29,28 @@ public class ConversationContext extends UIContext {
 	            gameManager.getManager(ContextManager.class);
 		TextureManager textureManager = (TextureManager) 
 				gameManager.getManager(TextureManager.class);
-
+		
+		npcTexture = texture;
+		npcImage = new Image(textureManager.getTexture(npcTexture));
+		
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		table = new Table();
 		table.setBackground(new Image(textureManager.getTexture("conversation_context")).getDrawable());
 		table.setFillParent(true);
+		
+		table.add(npcImage);
+		space = new HorizontalGroup();
+		space.padTop(100);
+		
 		nodeText = new Label("", skin);
 		buttons = new HorizontalGroup();
-		table.add(nodeText);
-		table.row();
+		buttons.space(30);
+		table.add(nodeText).padTop(325);
+		table.row().padTop(150);
 		table.add(buttons);
 		stage.addActor(table);
 
-		table.debug(); //DEBUG
+		//table.debug(); //DEBUG
 
 	}
 
@@ -53,6 +65,7 @@ public class ConversationContext extends UIContext {
 		for (ConversationOption option : node.getValidOptions()) {
 			System.err.println(" * " + option.getOptionText()); //DEBUG
 			TextButton button = new TextButton(option.getOptionText(), skin);
+			button.pad(20);
 			button.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
@@ -62,7 +75,6 @@ public class ConversationContext extends UIContext {
 			buttons.addActor(button);
 		}
 
-    } 
-    	
+    }   	
     
 }

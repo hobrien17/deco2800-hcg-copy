@@ -46,4 +46,10 @@ public class ShopNPC extends NPC {
 	    return shop;
     }
 
+	@Override
+	public void interact() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
