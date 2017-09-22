@@ -598,6 +598,7 @@ public class Player extends Character implements Tickable {
     	healthCur = healthMax;
     	staminaMax = 50 * agility;
     	staminaCur = staminaMax;
+    	skillPoints = 4 + 2 * intellect;
     }
     
     /**

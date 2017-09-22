@@ -133,6 +133,10 @@ public abstract class Character extends AbstractEntity {
 
     }
 
+    /**
+     * Sets the character's name
+     * @param name
+     */
     protected void setName(String name) {
         this.Name = name;
     }

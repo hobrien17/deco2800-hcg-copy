@@ -1,6 +1,5 @@
 package com.deco2800.hcg.contexts;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -15,22 +14,17 @@ import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-import com.deco2800.hcg.managers.ContextManager;
-import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.TextureManager;
 
 /**
  * The CharacterCreationContext is used at the start of the game to create a character by assigning various points,
  * as well as choosing from some visual templates.
  *
- * It can currently be accessed by pressing 'C' whilst in the game.
- *
  * TODO: Finalise skills and actually initialise them when creating the player
  *
  * @author avryn
  */
-public class CharacterCreationContext extends UIContext{
+public class CharacterCreationContext extends CharacterContext{
 
     private Label strengthLabel;
     private Label vitalityLabel;
@@ -60,7 +54,6 @@ public class CharacterCreationContext extends UIContext{
     private Boolean gunsSkillSpecialiseChecked = false;
     private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
-    private Table masterTable;
     private Table topRowInfoTable;
 
     private Window attributesWindow;
@@ -91,8 +84,6 @@ public class CharacterCreationContext extends UIContext{
     private int healthGain = 200;
     private int staminaGain = 200;
 
-    private Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
-
     private Image characterPreviewImage;
 
     // Different placeholder textures for the character preview screen
@@ -111,11 +102,6 @@ public class CharacterCreationContext extends UIContext{
 
     private TextArea selectedDescriptionText;
 
-    private GameManager gameManager;
-    private ContextManager contextManager;
-    private TextureManager textureManager;
-    private PlayerManager playerManager;
-
     /**
      * Creates a new character creation screen
      */
@@ -130,20 +116,6 @@ public class CharacterCreationContext extends UIContext{
         setupCharacterPreviewWindow();
         setupSelectedDescriptionWindow();
         addSubtables();
-    }
-
-    private void getManagers() {
-        gameManager = GameManager.get();
-        contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
-        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
-
-    }
-
-    private void initMasterTable() {
-        masterTable = new Table(skin);
-        masterTable.setFillParent(true);
-        masterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
-        stage.addActor(masterTable);
     }
 
     // Declaring sub-tables/sub-windows
@@ -212,7 +184,8 @@ public class CharacterCreationContext extends UIContext{
                 if (attributePoints == 0 && specializedSkillsPoints == 0) {
                     contextManager.pushContext(new WorldStackContext());
                     /* Create new player */
-                    createPlayer(strength, vitality, agility, charisma, intellect, characterName.getText());
+                    createPlayer(strength, vitality, agility, charisma, intellect,
+                            characterName.getText(), charTextureArray[textureCount].toString());
                 } else {
                     selectedDescriptionText.setText("Please distribute all skill points and choose your specialised" +
                             " skills");
@@ -226,7 +199,8 @@ public class CharacterCreationContext extends UIContext{
             public void changed(ChangeEvent event, Actor actor) {
                 contextManager.pushContext(new WorldStackContext());
                 /* Create new player with default values. */
-                createPlayer(5, 5, 5, 5, 5, characterName.getText());
+                createPlayer(5, 5, 5, 5, 5,
+                        characterName.getText(), charTextureArray[textureCount].toString());
             }
         });
 
@@ -715,10 +689,11 @@ public class CharacterCreationContext extends UIContext{
 
 
     // Will be changed later to include skill specialisations
-    private void createPlayer(int strength, int vitality, int agility, int charisma, int intellect, String name) {
+    private void createPlayer(int strength, int vitality, int agility, int charisma, int intellect, String name, String texture) {
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, 20, name);
+        player.setTexture(texture);
         playerManager.setPlayer(player);
         //TODO: Change this, currently these are just testing items
         Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
@@ -733,5 +708,6 @@ public class CharacterCreationContext extends UIContext{
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
+
     }
 }
