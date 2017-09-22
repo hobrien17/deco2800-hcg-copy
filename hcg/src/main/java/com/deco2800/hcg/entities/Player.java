@@ -605,6 +605,7 @@ public class Player extends Character implements Tickable {
     private void checkDeath() {
         if (healthCur <= 0) {
             this.contextManager.pushContext(new DeathContext());
+            healthCur = healthMax;
         }
     }
 
