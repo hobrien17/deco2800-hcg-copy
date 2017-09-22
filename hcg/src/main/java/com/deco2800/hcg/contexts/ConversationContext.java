@@ -29,6 +29,7 @@ public class ConversationContext extends UIContext {
 
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		table = new Table();
+		table.setBackground(new Image(textureManager.getTexture("conversation_context")).getDrawable());
 		table.setFillParent(true);
 		nodeText = new Label("", skin);
 		buttons = new HorizontalGroup();

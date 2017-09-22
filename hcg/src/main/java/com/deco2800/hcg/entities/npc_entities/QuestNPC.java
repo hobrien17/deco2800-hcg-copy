@@ -33,8 +33,8 @@ public class QuestNPC extends NPC {
 	 *            texture of NPC
 	 */
 	public QuestNPC(float posX, float posY, String fName, String sName,
-			String texture) {
-		super(posX, posY, fName, sName, texture);
+			String texture, String conversation) {
+		super(posX, posY, fName, sName, texture, conversation);
 
 		this.boundaryX = 5;
 		this.boundaryY = 5;

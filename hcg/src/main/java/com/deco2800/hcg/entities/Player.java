@@ -25,6 +25,7 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.multiplayer.NetworkState;
 import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.Weapon;
@@ -50,6 +51,7 @@ public class Player extends Character implements Tickable {
     private SoundManager soundManager;
     private ContextManager contextManager;
     private PlayerInputManager playerInputManager;
+    private ConversationManager conversationManager;
 
     private boolean collided;
     private int xpThreshold = 200;
@@ -90,6 +92,8 @@ public class Player extends Character implements Tickable {
 	GameManager gameManager = GameManager.get();
 	this.contextManager = (ContextManager) gameManager
 		.getManager(ContextManager.class);
+	
+	this.conversationManager = new ConversationManager();
 
 	this.id = id;
 	if (id == 0) {
@@ -427,6 +431,7 @@ public class Player extends Character implements Tickable {
 
 	if (npc instanceof QuestNPC) {
 	    LOGGER.info("Quest NPC Interaction Started");
+	    conversationManager.startConversation("test_conversation_01");
 	}
 
 	else if (npc instanceof ShopNPC) {

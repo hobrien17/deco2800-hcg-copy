@@ -23,7 +23,7 @@ public class ShopNPC extends NPC {
 	 * @param texture texture of NPC
 	 */
 	public ShopNPC(float posX, float posY, String fName, String sName, String texture) {
-		super(posX, posY, fName, sName, texture);
+		super(posX, posY, fName, sName, texture, null);
 		shop = new GeneralShop();
 	}
 
