@@ -7,15 +7,33 @@ import com.deco2800.hcg.entities.bullets.Bullet;
 
 /**
  * Fireball class
- * Extends bullet
  * Used by the FireTurret
- * Currently is just a larger bullet, but this will probably change
+ * Is currently a large bullet that destroys everything in its path
+ * Has the capability to be changed to set enemies on fire instead of destroying them
  *
  * @author Henry O'Brien
  *
  */
 public class Fireball extends Bullet {
 
+	/**
+	 * Creates a new fireball moving towards the given co-ordinates
+	 * 
+	 * @param posX
+	 * 			the fireball's starting x position
+	 * @param posY
+	 * 			the fireball's starting y position
+	 * @param posZ
+	 * 			the fireball's starting z position
+	 * @param newX
+	 * 			the fireball's target x position
+	 * @param newY
+	 * 			the fireball's target y position
+	 * @param newZ
+	 * 			the fireball's target z position
+	 * @param user
+	 * 			the entity who shot the fireball
+	 */
 	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(getPosChange(posX, posY, newX, newY)[0], getPosChange(posX, posY, newX, newY)[1], posZ, newX, newY, newZ, 
 				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, -1);
@@ -32,6 +50,7 @@ public class Fireball extends Bullet {
 	
 	/**
 	 * Aligns the position of the fireball so that it appears to be fired out of the user
+	 * Since the fireball is a very large sprite, this method is required so the fireball is not mis-aligned
 	 * 
 	 * @param posX
 	 * 			the normal x position
@@ -60,6 +79,8 @@ public class Fireball extends Bullet {
 	
 	/**
 	 * Modifies the texture size so that all fireballs are evenly sized
+	 * Due to the isometric nature of the game, this method is required to scale fireballs so they all appear
+	 * 	to be the same size
 	 * 
 	 * @param posX
 	 * 			the original x position
