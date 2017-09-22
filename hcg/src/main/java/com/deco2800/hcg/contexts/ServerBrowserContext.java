@@ -23,6 +23,7 @@ public class ServerBrowserContext extends UIContext {
     private Table main;
     private Table buttonTable;
     private Table titleTable;
+    private Table serverListTable;
     private Image title;
     private Image separator1;
     private Image separator2;
@@ -51,7 +52,7 @@ public class ServerBrowserContext extends UIContext {
 
         main.setFillParent(true);
         main.setBackground(new Image(textureManager.getTexture("multi_menu_background")).getDrawable());
-        main.setDebug(false); //display lines for debugging
+        main.setDebug(true); //display lines for debugging
 
         title = new Image(textureManager.getTexture("multiplayer_title"));
         separator1 = new Image(textureManager.getTexture("lobby_separator"));
@@ -71,6 +72,8 @@ public class ServerBrowserContext extends UIContext {
         serverListPane = new ScrollPane(serverList);
         serverListPane.setSmoothScrolling(false);
         serverListPane.setDebug(false);
+        serverListTable = new Table();
+        serverListTable.add(serverListPane).expand().fill();
 
         enterServer = new Dialog("Enter Host IP", skin);
         serverIPTextfield = new TextField("", skin);
@@ -92,7 +95,7 @@ public class ServerBrowserContext extends UIContext {
         main.row();
         main.add(separator1).fill();
         main.row();
-        main.add(serverListPane).fill();
+        main.add(serverListTable).fill().prefWidth(1080).prefWidth(1920).expand();
         main.row();
         main.add(separator2).fill();
         main.row();
@@ -103,13 +106,14 @@ public class ServerBrowserContext extends UIContext {
         main.add(buttonTable).fill();
         stage.addActor(main);
 
+
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 contextManager.popContext();
             }
         });
-        
+
         host.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

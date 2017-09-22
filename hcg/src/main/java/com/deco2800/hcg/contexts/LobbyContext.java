@@ -17,16 +17,35 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class LobbyContext extends UIContext{
 
-    private ImageButton start, back, send;
-    private Table main, playerTable, labelTable, titleTable, chatTable;
-    private Label lobbyLabel, members;
-    private Image lobbyTitle, separator1, separator2, playerPortrait1, playerPortrait2, playerPortrait3, playerPortrait4;
+    private ImageButton start;
+    private ImageButton back;
+    private ImageButton send;
+    private Table main;
+    private Table playerTable;
+    private Table labelTable;
+    private Table titleTable;
+    private Table chatTable;
+    private Label lobbyLabel;
+    private Label members;
+    private Image lobbyTitle;
+    private Image separator1;
+    private Image separator2;
+    private Image playerPortrait1;
+    private Image playerPortrait2;
+    private Image playerPortrait3;
+    private Image playerPortrait4;
     private CheckBox readyCheckBox;
-    private Stack player1, player2, player3, player4;
-    private TextField chatTextfield, lobbyNameTextfield;
+    private Stack player1;
+    private Stack player2;
+    private Stack player3;
+    private Stack player4;
+    private TextField chatTextfield;
+    private TextField lobbyNameTextfield;
     private TextArea chatTextArea;
     private Dialog hostName;
-    private TextButton changeLobbyName, hostNameAdd, hostNameExit;
+    private TextButton changeLobbyName;
+    private TextButton hostNameAdd;
+    private TextButton hostNameExit;
 
     /**
      * Lobby UI constructor, initializes the entire UI
