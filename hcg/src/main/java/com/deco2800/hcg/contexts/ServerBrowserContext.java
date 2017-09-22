@@ -52,7 +52,7 @@ public class ServerBrowserContext extends UIContext {
 
         main.setFillParent(true);
         main.setBackground(new Image(textureManager.getTexture("multi_menu_background")).getDrawable());
-        main.setDebug(true); //display lines for debugging
+        main.setDebug(false); //display lines for debugging
 
         title = new Image(textureManager.getTexture("multiplayer_title"));
         separator1 = new Image(textureManager.getTexture("lobby_separator"));
@@ -74,6 +74,7 @@ public class ServerBrowserContext extends UIContext {
         serverListPane.setDebug(false);
         serverListTable = new Table();
         serverListTable.add(serverListPane).expand().fill();
+
 
         enterServer = new Dialog("Enter Host IP", skin);
         serverIPTextfield = new TextField("", skin);

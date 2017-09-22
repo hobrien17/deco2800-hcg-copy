@@ -164,6 +164,7 @@ public class TextureManager extends Manager {
 		textureMap.put("server_join_button", new Texture("resources/ui/multiplayer_ui/menu_join_button.png"));
 		textureMap.put("server_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
 		textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
+		textureMap.put("transparentUI", new Texture("resources/ui/multiplayer_ui/transparentUI.png"));
 	}
 
 	/**

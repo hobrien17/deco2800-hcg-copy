@@ -34,6 +34,7 @@ public class LobbyContext extends UIContext{
     private Image playerPortrait2;
     private Image playerPortrait3;
     private Image playerPortrait4;
+    private Image transparentUI;
     private CheckBox readyCheckBox;
     private Stack player1;
     private Stack player2;
@@ -59,7 +60,6 @@ public class LobbyContext extends UIContext{
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
-
         main = new Table();
         playerTable = new Table();
         labelTable = new Table();
@@ -76,6 +76,7 @@ public class LobbyContext extends UIContext{
         playerPortrait2 = new Image(textureManager.getTexture("lobby_image_frame"));
         playerPortrait3 = new Image(textureManager.getTexture("lobby_image_frame"));
         playerPortrait4 = new Image(textureManager.getTexture("lobby_image_frame"));
+        transparentUI = new Image(textureManager.getTexture("transparentUI"));
         //buttons set up
         back = new ImageButton(new Image(textureManager.getTexture("lobby_back_button")).getDrawable());
         start = new ImageButton(new Image(textureManager.getTexture("lobby_start_button")).getDrawable());
@@ -108,6 +109,7 @@ public class LobbyContext extends UIContext{
         main.row().height(90);
         titleTable.add(back).expandX().left();
         titleTable.add(lobbyTitle).expandX();
+
         
         // FIXME
         if (networkManager.isHost()) {
