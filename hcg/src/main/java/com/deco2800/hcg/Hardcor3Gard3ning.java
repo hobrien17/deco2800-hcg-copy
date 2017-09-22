@@ -73,6 +73,8 @@ public class Hardcor3Gard3ning extends Game {
         inputManager.addKeyUpListener(new Planter());
         
         /* Create a player manager. */
+
+        /*
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
@@ -89,7 +91,7 @@ public class Hardcor3Gard3ning extends Game {
         player.addItemToInventory(test2);
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
-        player.addItemToInventory(startingSeeds);
+        player.addItemToInventory(startingSeeds); */
 
         LevelStore levels = new LevelStore();
         ArrayList<Level> levelList = levels.getLevels();
