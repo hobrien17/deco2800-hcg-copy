@@ -580,7 +580,7 @@ public class Player extends Character implements Tickable {
 				this.setTexture("hcg_character_sink");
 				break;
 			default:
-				this.setTexture("hcg_character");
+				updateSprite(this.direction);
 				break;
     	}
     }
@@ -853,6 +853,40 @@ public class Player extends Character implements Tickable {
     		move = 1;
             this.direction = 3;
     	}
+    }
+    
+    /**
+     * Updates the player's sprite based on its direction.
+     */
+    private void updateSprite(int direction) {
+        switch (direction) {
+            case 0:
+                this.setTexture("player_leftBack_stand");
+                break;
+            case 1:
+                this.setTexture("player_back_stand");
+                break;
+            case 2:
+                this.setTexture("player_rightBack_stand");
+                break;
+            case 3:
+                this.setTexture("player_right_stand");
+                break;
+            case 4:
+                this.setTexture("player_rightFront_stand");
+                break;
+            case 5:
+                this.setTexture("player_front_stand");
+                break;
+            case 6:
+                this.setTexture("player_leftFront_stand");
+                break;
+            case 7:
+                this.setTexture("player_left_stand");
+                break;
+            default:
+                break;
+        }
     }
 
     /**
