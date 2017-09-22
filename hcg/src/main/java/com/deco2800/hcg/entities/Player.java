@@ -590,13 +590,15 @@ public class Player extends Character implements Tickable {
      * character in the character creation screen
      */
     public void initialiseNewPlayer(int strength, int vitality, int agility,
-    		int charisma, int intellect, int meleeSkill) {
+    		int charisma, int intellect, int meleeSkill, String name) {
     	setAttributes(strength, vitality, agility, charisma, intellect);
     	setSkills(meleeSkill);
+    	setName(name);
     	healthMax = 50 * vitality;
     	healthCur = healthMax;
     	staminaMax = 50 * agility;
     	staminaCur = staminaMax;
+    	skillPoints = 4 + 2 * intellect;
     }
     
     /**

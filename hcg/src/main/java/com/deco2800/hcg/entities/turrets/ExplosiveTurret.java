@@ -25,16 +25,29 @@ public class ExplosiveTurret extends AbstractTurret {
 	
 	ParticleEffect exp;
 	
+	/**
+	 * Creates a new explosive turret in the given corpse
+	 * 
+	 * @param master
+	 * 			the corpse to plant this turret inside
+	 */
 	public ExplosiveTurret(Corpse master) {
 		super(master, "Explosive");
 		seconds = 0;
 		exp = new ParticleEffect();
 	}
-
+	
+	/**
+	 * Updates the turret, destroying itself and all enemies around it if the blow time has elapsed
+	 * 
+	 * @param o
+	 * 			the Observable object calling the update method (should be an instance of StopwatchManager)
+	 * @param arg
+	 * 			the argument passed by the Observable object (should be the stopwatch's current time)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
-			
 			List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 					master.getPosY(), RANGE, Enemy.class);
 			for(AbstractEntity entity : entities) {

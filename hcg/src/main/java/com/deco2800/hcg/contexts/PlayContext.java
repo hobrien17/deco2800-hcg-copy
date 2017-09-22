@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.contexts.playContextClasses.*;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
@@ -336,5 +337,9 @@ public class PlayContext extends Context {
     
     public void removeExitWindow() {
     	exitWindow.remove();
+    }
+    
+    public void addParticleEffect(ParticleEffectActor actor) {
+    	stage.addActor(actor);
     }
 }

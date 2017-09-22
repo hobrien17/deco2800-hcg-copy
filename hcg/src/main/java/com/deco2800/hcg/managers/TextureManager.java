@@ -80,7 +80,7 @@ public class TextureManager extends Manager {
 
 		// Corpse textures
 		textureMap.put("corpse", new Texture("resources/sprites/dead_enemies/deadant.png"));
-		textureMap.put("sunflower_corpse", new Texture("resources/sprites/dead_enemies/sunflower_big.png"));
+		textureMap.put("sunflower_corpse", new Texture("resources/sprites/dead_enemies/sunflower.png"));
 		textureMap.put("cactus_corpse_01", new Texture("resources/sprites/dead_enemies/cactus01.png"));
 		textureMap.put("cactus_corpse_02", new Texture("resources/sprites/dead_enemies/cactus02.png"));
 		textureMap.put("cactus_corpse_03", new Texture("resources/sprites/dead_enemies/cactus03.png"));
@@ -88,7 +88,7 @@ public class TextureManager extends Manager {
 		textureMap.put("ice_corpse_02", new Texture("resources/sprites/dead_enemies/ice02.png"));
 		textureMap.put("ice_corpse_03", new Texture("resources/sprites/dead_enemies/ice03.png"));
 		textureMap.put("water_corpse", new Texture("resources/sprites/dead_enemies/waterlily.png"));
-		textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass_alt.png"));
+		textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass.png"));
 		textureMap.put("fire_corpse", new Texture("resources/sprites/dead_enemies/inferno.png"));
 		
 		// Miscellaneous textures
