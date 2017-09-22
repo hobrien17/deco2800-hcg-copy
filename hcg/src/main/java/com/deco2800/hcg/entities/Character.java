@@ -36,13 +36,17 @@ import com.deco2800.hcg.managers.GameManager;
 public abstract class Character extends AbstractEntity {
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
-	protected final static List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "carryWeight",
+	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "carryWeight",
             "strength", "vitality", "agility", "charisma", "intellect");
 
     protected float movementSpeed;
     protected float movementSpeedNorm;
     protected float speedX;
     protected float speedY;
+    
+    // Direction that the character is facing. Direction starts at 0 representing ↖ and successive values
+    // incrementing 45 degrees clockwise.
+    protected int direction;
 
     protected int level;
     protected int xp;
@@ -95,6 +99,8 @@ public abstract class Character extends AbstractEntity {
 
         //Initialize the empty kill log
         killLog = new HashMap<>();
+        
+        this.direction = 0;
     }
 
     /**
@@ -253,7 +259,7 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's current movement speed.
      */
     public float getMovementSpeed() {
         return movementSpeed;
@@ -261,7 +267,7 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's speed in the X direction.
      */
     public float getSpeedX() {
         return speedX;
@@ -269,15 +275,22 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's speed in the Y direction.
      */
     public float getSpeedY() {
         return speedY;
     }
+    
+    /**
+     * @return The direction that the character is facing.
+     */
+    public int getDirection() {
+        return direction;
+    }
 
     /**
      *
-     * @return
+     * @return The character's level.
      */
     public int getLevel() {
         return level;
@@ -285,7 +298,7 @@ public abstract class Character extends AbstractEntity {
 
     /**
      *
-     * @return
+     * @return The character's experience.
      */
     public int getXp() {
         return xp;

@@ -30,7 +30,11 @@ public class PlayerManager extends Manager {
      */
     public void spawnPlayers() {
     		World world = GameManager.get().getWorld();
-    		for (Player player : players.toArray(new Player[0])) {
+    		for (Player player : players) {
+    			// FIXME Players shouldn't spawn in the same place
+    		    player.setPosX(world.getStartingPlayerX());
+                player.setPosY(world.getStartingPlayerY());
+
     			world.addEntity(player);
     			world.addEntity(player.getEquippedWeapon());
     		}
@@ -38,7 +42,7 @@ public class PlayerManager extends Manager {
     
     /**
      * Gets all players.
-     * @return List of players
+     * @return Set of players
      */
     public Set<Player> getPlayers() {
     		return players;

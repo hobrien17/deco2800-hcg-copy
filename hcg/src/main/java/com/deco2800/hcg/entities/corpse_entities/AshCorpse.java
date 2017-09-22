@@ -4,8 +4,8 @@ import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 
 public class AshCorpse extends Corpse {
 
-    public AshCorpse(float posX, float posY, float posZ, String texture) {
-        super(posX, posY, posZ,texture);
+    public AshCorpse(float posX, float posY, float posZ) {
+        super(posX, posY, posZ);
     }
     
     @Override

@@ -1,32 +1,43 @@
 package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observable;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.bullets.Fireball;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 
 /**
- * Fire turret Fires four massive fireballs in different directions
+ * Fire turret 
+ * Fires four massive fireballs in different directions
  *
- * @author Henry
+ * @author Henry O'Brien
  *
  */
 public class FireTurret extends AbstractTurret {
 
 	private int seconds;
-	private final static int RANGE = 10;
+	private static final int RANGE = 10;
 
+	/**
+	 * Creates a new fire turret in the given corpse
+	 * 
+	 * @param master
+	 * 			the corpse to plant the turret inside
+	 */
 	public FireTurret(Corpse master) {
 		super(master, "Fire");
 		seconds = 0;
 
 	}
 
+	/**
+	 * Updates the turret, shooting the next fireball in the turret's sequence or destroying itself
+	 * 	if the sequence is complete
+	 * 
+	 * @param o
+	 * 			the Observable object calling the update method (should be an instance of StopwatchManager)
+	 * @param arg
+	 * 			the argument passed by the Observable object (should be the stopwatch's current time)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		
@@ -46,7 +57,7 @@ public class FireTurret extends AbstractTurret {
 
 	@Override
 	public String getThisTexture() {
-		return "tree";
+		return "fire_corpse";
 	}
 
 }

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
@@ -53,6 +54,7 @@ public class Player extends Character implements Tickable {
 
     private boolean collided;
     private boolean onExit = false;
+    private boolean exitMessageDisplayed = false;
     private int xpThreshold = 200;
     private float lastSpeedX;
     private float lastSpeedY;
@@ -281,7 +283,9 @@ public class Player extends Character implements Tickable {
     private void handleTouchDown(int screenX, int screenY, int pointer,
     		int button) {
     	if (this.getEquippedWeapon() != null) {
-    		this.getEquippedWeapon().updateAim(screenX, screenY);
+            Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
+            LOGGER.info("Position: " + position);
+            this.getEquippedWeapon().updateAim(position);
     		this.getEquippedWeapon().openFire();
     	}
     }
@@ -298,8 +302,10 @@ public class Player extends Character implements Tickable {
      */
     private void handleTouchDragged(int screenX, int screenY, int pointer) {
     	if (this.getEquippedWeapon() != null) {
-    		this.getEquippedWeapon().updatePosition(screenX, screenY);
-    		this.getEquippedWeapon().updateAim(screenX, screenY);
+    	    Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
+    		this.getEquippedWeapon().updateAim(position);
+    		//TODO: remove
+    		this.getEquippedWeapon().updatePosition(position.x, position.y);
     	}
     }
 
@@ -331,9 +337,11 @@ public class Player extends Character implements Tickable {
      *            the y position of mouse movement on the screen
      */
     private void handleMouseMoved(int screenX, int screenY) {
-    	if (this.getEquippedWeapon() != null) {
-    		this.getEquippedWeapon().updatePosition(screenX, screenY);
-    	}
+        if (this.getEquippedWeapon() != null) {
+            Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
+            //TODO: remove
+            this.getEquippedWeapon().updatePosition(position.x, position.y);
+        }
     }
 
     /**
@@ -427,7 +435,14 @@ public class Player extends Character implements Tickable {
     	World world = GameManager.get().getWorld();
 
         Box3D newPos = getBox3D();
-
+        
+        // removes the exit message if the player exits the exit zone
+        if(!onExit && exitMessageDisplayed) {
+        	PlayContext play = (PlayContext) contextManager.currentContext();
+			play.removeExitWindow();
+			exitMessageDisplayed = false;
+        }
+        
     	// get speed of current tile. this is done before checking if a tile
     	// exists so a slow down tile next to the edge wouldn't cause problems.
     	if (world.getTiledMapTileLayerAtPos((int) oldPosY,
@@ -449,6 +464,7 @@ public class Player extends Character implements Tickable {
         					PlayContext play = (PlayContext) contextManager.currentContext();
         					play.addExitWindow();
         					onExit = true;
+        					exitMessageDisplayed = true;
         	    		}
         			} else {
         				onExit = false;
@@ -505,6 +521,8 @@ public class Player extends Character implements Tickable {
     	if (!collided) {
     	    this.setPosition(newPos.getX(), newPos.getY(), 1);
     	}
+    	
+    	this.checkDeath();
     }
 
 	/**
@@ -527,9 +545,9 @@ public class Player extends Character implements Tickable {
 			float slipperyFactor2 = slippery * 0.06f;
 
 			// created helper function to avoid duplicate code
-			lastSpeedX = slipperySpeedHelper(speedX, lastSpeedX, speed,
+			lastSpeedX = slipperySpeedHelper(speedX * sprintMultiplier, lastSpeedX, speed,
 					slipperyFactor, slipperyFactor2);
-			lastSpeedY = slipperySpeedHelper(speedY, lastSpeedY, speed,
+			lastSpeedY = slipperySpeedHelper(speedY * sprintMultiplier, lastSpeedY, speed,
 					slipperyFactor, slipperyFactor2);
 		} else {
 			// non slippery movement
@@ -579,6 +597,15 @@ public class Player extends Character implements Tickable {
     	healthCur = healthMax;
     	staminaMax = 50 * agility;
     	staminaCur = staminaMax;
+    }
+    
+    /**
+     * Checks if the player is dead and ends the game if true.
+     */
+    private void checkDeath() {
+        if (healthCur <= 0) {
+            this.contextManager.pushContext(new DeathContext());
+        }
     }
 
     /**
@@ -894,9 +921,9 @@ public class Player extends Character implements Tickable {
     	float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
 
     	if (GameManager.get().getCamera() != null) {
-    		GameManager.get().getCamera().position.x = isoX;
-    		GameManager.get().getCamera().position.y = isoY;
-    		GameManager.get().getCamera().update();
+			GameManager.get().getCamera().position.x += (isoX - GameManager.get().getCamera().position.x) * .09f;
+			GameManager.get().getCamera().position.y += (isoY - GameManager.get().getCamera().position.y) * .09f;
+			GameManager.get().getCamera().update();
     	}
     }
 
