@@ -4,6 +4,8 @@ import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
+import com.deco2800.hcg.weapons.WeaponBuilder;
+import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.HashMap;
 
@@ -24,11 +26,20 @@ public class Hedgehog extends Enemy implements Tickable {
      */
     public Hedgehog(float posX, float posY, float posZ, int ID) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
-        //this.setTexture();
+        this.setTexture("tree");
         this.level = 1;
         walkingRange = 30 * this.level;
         chargingRange = 15 * this.level;
         chargedAtPlayer = false;
+        newPos.setX(posX);
+        newPos.setY(posY);
+        newPos.setZ(posZ);
+        this.enemyWeapon = new WeaponBuilder()
+                .setWeaponType(WeaponType.MACHINEGUN)
+                .setUser(this)
+                .setCooldown(50)
+                .setTexture("battle_seed")
+                .build();
 
     }
 
