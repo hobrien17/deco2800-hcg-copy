@@ -71,6 +71,7 @@ public class Hedgehog extends Enemy implements Tickable {
             chargedAtPlayer = true;
         }
         this.moveAction();//Move enemy to the position in Box3D.
+        myEffects.apply();
 
     }
 
