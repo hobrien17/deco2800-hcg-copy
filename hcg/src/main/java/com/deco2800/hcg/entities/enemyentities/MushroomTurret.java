@@ -17,6 +17,7 @@ public class MushroomTurret extends Enemy implements Observer {
 
     int seconds;
     int range;
+    StopwatchManager manager;
 
     /**
      * Constructor for the MushroomTurret class. Creates a new turret at the given
@@ -34,7 +35,7 @@ public class MushroomTurret extends Enemy implements Observer {
         this.level = 1;
         seconds = 0;
         range = 15 * this.level;
-        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
         // weapon not working
         this.enemyWeapon = new WeaponBuilder()
@@ -43,6 +44,11 @@ public class MushroomTurret extends Enemy implements Observer {
                 .setCooldown(50)
                 .setTexture("battle_seed")
                 .build();
+
+    }
+
+    public void remove_observer(){
+        manager.deleteObserver(this);
     }
 
     @Override
