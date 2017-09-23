@@ -4,8 +4,10 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
+import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.Player;
 
@@ -18,12 +20,12 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 	protected float speed = 0.5f;
 
-	private float goalX;
-	private float goalY;
+	protected float goalX;
+	protected float goalY;
 
-	private float angle;
-	private float changeX;
-	private float changeY;
+	protected float angle;
+	protected float changeX;
+	protected float changeY;
 
 	private AbstractEntity user;
 	private int hitCount;
@@ -181,6 +183,12 @@ public class Bullet extends AbstractEntity implements Tickable {
 					applyEffect(target);
 					hitCount--;
 				}
+				// Collision with destructable tree
+				if (entity instanceof DestructableTree && user instanceof Player) {
+					DestructableTree tree = (DestructableTree)entity;
+					applyEffect(tree);
+					hitCount--;
+				}
 				// Collision with player
 				if (entity instanceof Player && user instanceof Enemy) {
 					// add code to apply effect to player here
@@ -207,7 +215,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 * @param target
 	 *            the hit enemy
 	 */
-	protected void applyEffect(Enemy target) {
+	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
 		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0));

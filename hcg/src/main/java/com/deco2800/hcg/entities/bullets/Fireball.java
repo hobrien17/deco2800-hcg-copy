@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.bullets;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.bullets.Bullet;
 
 /**
@@ -105,7 +106,7 @@ public class Fireball extends Bullet {
 	}
 
 	@Override
-	protected void applyEffect(Enemy target) {
+	protected void applyEffect(Harmable target) {
 		target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
 	}
 
