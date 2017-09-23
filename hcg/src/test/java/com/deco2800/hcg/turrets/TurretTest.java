@@ -19,7 +19,6 @@ import com.deco2800.hcg.entities.corpse_entities.Corpse;
 
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
-
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
