@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.bullets;
 
+import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
@@ -180,9 +181,15 @@ public class Bullet extends AbstractEntity implements Tickable {
 				// Collision with enemy
 				if (entity instanceof Enemy
 						&& (user instanceof Player || user instanceof Corpse)) {
-					Enemy target = (Enemy) entity;
-					if (target.getHealthCur() <= 0) {
-						applyEffect(target);
+					if (entity instanceof MushroomTurret) {
+							MushroomTurret turret = (MushroomTurret) entity;
+							turret.remove_observer();
+							GameManager.get().getWorld().removeEntity(turret);
+					} else {
+						Enemy target = (Enemy) entity;
+						if (target.getHealthCur() <= 0) {
+							applyEffect(target);
+						}
 					}
 					hitCount--;
 				}

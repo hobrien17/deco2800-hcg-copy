@@ -37,7 +37,12 @@ public class Snail extends Enemy implements Tickable {
 
     @Override
     public void onTick(long gameTickCount) {
-        // TODO Auto-generated method stub
+        // status should always be 1
+        this.setNewPos();//Put new position into Box3D.
+        this.detectCollision();//Detect collision.
+        this.moveAction();//Move enemy to the position in Box3D.
+        // Apply any effects that exist on the entity
+        myEffects.apply();
         
     }
 

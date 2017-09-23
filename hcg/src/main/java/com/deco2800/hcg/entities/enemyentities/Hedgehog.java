@@ -50,7 +50,7 @@ public class Hedgehog extends Enemy implements Tickable {
     @Override
     public void onTick(long gameTickCount) {
         float distance = this.distance(playerManager.getPlayer());
-        if (chargedAtPlayer == true && distance > walkingRange){
+        if (chargedAtPlayer == true && distance > chargingRange){
             chargedAtPlayer = false;
         }
         if (chargedAtPlayer == false && distance < walkingRange && distance > chargingRange){
