@@ -14,10 +14,11 @@ import com.deco2800.hcg.entities.terrain_entities.Rock;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
+import com.deco2800.hcg.entities.terrain_entities.Sign;
 
 public enum WorldEntities {
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER,
-    ROCK, ICEBOULDER;
+    ROCK, ICEBOULDER, SIGN;
   
     /**
      * Return an instance of the entity at the given position and the selected index.
@@ -29,15 +30,15 @@ public enum WorldEntities {
     AbstractEntity spawn(float x, float y, int index){
       switch(this){
         case WALL:
-          return new WallBlock(x, y, 0f);            
+            return new WallBlock(x, y, 0f);
         case TREE:
-          return new Tree(x, y, 0f, true);
+            return new Tree(x, y, 0f, true);
         case SQUIRREL:
-          return new Squirrel(x, y, 0f, index);
+            return new Squirrel(x, y, 0f, index);
         case HEDGEHOG:
-          return new Hedgehog(x, y, 0f, index);
+            return new Hedgehog(x, y, 0f, index);
         case POT:
-        	return new Pot(x, y, 0f);
+            return new Pot(x, y, 0f);
         case MUSHROOMTURRET:
             return new MushroomTurret(x, y, 0f, index);
         case CORPSE:
@@ -50,6 +51,8 @@ public enum WorldEntities {
             return new Rock(x, y, 0f);
         case ICEBOULDER:
             return new IceBoulder(x, y, 0f);
+        case SIGN:
+            return new Sign(x, y, 0f, index);
         default:
         	return null;
       }
