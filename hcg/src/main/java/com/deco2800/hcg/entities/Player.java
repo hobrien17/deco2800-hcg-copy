@@ -583,7 +583,7 @@ public class Player extends Character implements Tickable {
 				this.setTexture("hcg_character_sink");
 				break;
 			default:
-				this.setTexture("hcg_character");
+				updateSprite(this.direction);
 				break;
     	}
     }
@@ -806,21 +806,25 @@ public class Player extends Character implements Tickable {
     		speedX = movementSpeed;
     		speedY = 0;
     		move = 1;
+    		this.direction = 2;
     	} else if (movementDirection.get("up")
     			&& movementDirection.get("left")) {
     		speedY = -movementSpeed;
     		speedX = 0;
     		move = 1;
+            this.direction = 0;
     	} else if (movementDirection.get("down")
     			&& movementDirection.get("right")) {
     		speedY = movementSpeed;
     		speedX = 0;
     		move = 1;
+            this.direction = 4;
     	} else if (movementDirection.get("down")
     			&& movementDirection.get("left")) {
     		speedX = -movementSpeed;
     		speedY = 0;
     		move = 1;
+            this.direction = 6;
     	} else if (movementDirection.get("up")
     			&& movementDirection.get("down")) {
     		speedX = 0;
@@ -835,19 +839,57 @@ public class Player extends Character implements Tickable {
     		speedY = -diagonalSpeed;
     		speedX = diagonalSpeed;
     		move = 1;
+            this.direction = 1;
     	} else if (movementDirection.get("down")) {
     		speedY = diagonalSpeed;
     		speedX = -diagonalSpeed;
     		move = 1;
+            this.direction = 5;
     	} else if (movementDirection.get("left")) {
     		speedX = -diagonalSpeed;
     		speedY = -diagonalSpeed;
     		move = 1;
+            this.direction = 7;
     	} else if (movementDirection.get("right")) {
     		speedX = diagonalSpeed;
     		speedY = diagonalSpeed;
     		move = 1;
+            this.direction = 3;
     	}
+    }
+    
+    /**
+     * Updates the player's sprite based on its direction.
+     */
+    private void updateSprite(int direction) {
+        switch (direction) {
+            case 0:
+                this.setTexture("player_leftBack_stand");
+                break;
+            case 1:
+                this.setTexture("player_back_stand");
+                break;
+            case 2:
+                this.setTexture("player_rightBack_stand");
+                break;
+            case 3:
+                this.setTexture("player_right_stand");
+                break;
+            case 4:
+                this.setTexture("player_rightFront_stand");
+                break;
+            case 5:
+                this.setTexture("player_front_stand");
+                break;
+            case 6:
+                this.setTexture("player_leftFront_stand");
+                break;
+            case 7:
+                this.setTexture("player_left_stand");
+                break;
+            default:
+                break;
+        }
     }
 
     /**
