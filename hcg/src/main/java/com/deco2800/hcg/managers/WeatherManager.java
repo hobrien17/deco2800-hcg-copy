@@ -46,8 +46,8 @@ public class WeatherManager extends Manager {
 		weather = new ParticleEffect();
 		weather.start();
 
-		setWeather(Weathers.RAIN);
-		setWeather(Weathers.SNOW);
+		// setWeather(Weathers.RAIN);
+		// setWeather(Weathers.SNOW);
 		// setWeather(Weathers.SANDSTORM);
 		// setWeather(Weathers.WIND);
 		// stopEffect();
