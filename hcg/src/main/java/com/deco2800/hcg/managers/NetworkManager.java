@@ -9,9 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLongArray;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +33,9 @@ public final class NetworkManager extends Manager {
 	private DatagramChannel channel;
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
-	private ConcurrentHashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
-	private ConcurrentHashMap<Integer, byte[]> sendQueue;
-	private AtomicLongArray peerTickCounts;
+	private HashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
+	private HashMap<Integer, byte[]> sendQueue;
+	private HashMap<Integer, Long> peerTickCounts;
 	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
 	private boolean host = false;
 	private boolean initialised = false;
@@ -58,9 +57,9 @@ public final class NetworkManager extends Manager {
 	 * @param hostGame Boolean indicating if we are hosting a game
 	 */
 	public void init(boolean hostGame) {
-		sockets = new ConcurrentHashMap<>();
-		sendQueue = new ConcurrentHashMap<>();
-		peerTickCounts = new AtomicLongArray(MAX_PLAYERS);
+		sockets = new HashMap<>();
+		sendQueue = new HashMap<>();
+		peerTickCounts = new HashMap<>();
 		processedIds = new ArrayList<>();
 		
 		gameManager = GameManager.get();
@@ -128,7 +127,9 @@ public final class NetworkManager extends Manager {
 	 * @param tick Tick count
 	 */
 	public void updatePeerTickCount(int peer, long tick) {
-		peerTickCounts.compareAndSet(peer, tick - 1, tick);
+		if (peerTickCounts.get(peer) == tick - 1) {
+			peerTickCounts.put(peer, tick);
+		}
 	}
 
 	/**
