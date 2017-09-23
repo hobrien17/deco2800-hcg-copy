@@ -45,7 +45,8 @@ public class WeatherManager extends Manager {
 		// setWeather(Weathers.WIND);
 		// stopEffect();
 
-		weatherActor = new ParticleEffectActor(weather);
+		weatherActor = new ParticleEffectActor();
+		weatherActor.add(weather, true);
 	}
 
 	/**

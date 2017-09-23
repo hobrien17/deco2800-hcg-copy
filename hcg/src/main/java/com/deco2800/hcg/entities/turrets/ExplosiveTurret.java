@@ -32,7 +32,7 @@ public class ExplosiveTurret extends AbstractTurret {
 	 * 			the corpse to plant this turret inside
 	 */
 	public ExplosiveTurret(Corpse master) {
-		super(master, "Explosive");
+		super(master, "Cactus");
 		seconds = 0;
 		exp = new ParticleEffect();
 	}
@@ -53,7 +53,7 @@ public class ExplosiveTurret extends AbstractTurret {
 			for(AbstractEntity entity : entities) {
 				GameManager.get().getWorld().removeEntity(entity);
 			}
-			//GameManager.get().getWorld().removeEntity(master);
+			GameManager.get().getWorld().removeEntity(master);
 		} else if(seconds == BLOW - 1) {
 			master.setTexture("cactus_corpse_03");
 		} else if(seconds == BLOW - 2) {

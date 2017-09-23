@@ -1,6 +1,9 @@
 package com.deco2800.hcg.entities.corpse_entities;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.bullets.FireBullet;
+import com.deco2800.hcg.entities.bullets.GrassBullet;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
 
@@ -42,4 +45,20 @@ public abstract class Corpse extends AbstractEntity {
      * @return true if the seed was added, false if it could not be added
      */
     public abstract boolean plantInside(Seed seed);
+    
+    /**
+     * Adds a bullet to the enemy corpse, if empty
+     *
+     * @param seed the seed to be added
+     * @return true if the seed was added, false if it could not be added
+     */
+    public boolean plantInside(Bullet bullet) {
+    	if(bullet instanceof GrassBullet) {
+    		return plantInside(new Seed(Seed.Type.GRASS));
+    	} else if(bullet instanceof FireBullet) {
+    		return plantInside(new Seed(Seed.Type.FIRE));
+    	} else {
+    		return plantInside(new Seed(Seed.Type.SUNFLOWER));
+    	}
+    }
 }

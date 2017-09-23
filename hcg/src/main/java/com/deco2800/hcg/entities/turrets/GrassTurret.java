@@ -2,8 +2,10 @@ package com.deco2800.hcg.entities.turrets;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.Optional;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.bullets.GrassBullet;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
@@ -22,6 +24,7 @@ public class GrassTurret extends AbstractTurret {
 
 	private int seconds;
 	private final static int GROW = 5;
+	private final static int DISTANCE = 5;
 	
 	/**
 	 * Creates a new grass turret inside the given corpse
@@ -45,6 +48,13 @@ public class GrassTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == GROW) {
+			for(int angle = 0; angle < 360; angle += 5) {
+				double newX = master.getPosX() + DISTANCE*Math.cos(angle);
+				double newY = master.getPosY() + DISTANCE*Math.sin(angle);
+				GrassBullet bullet = new GrassBullet(master.getPosX(), master.getPosY(), master.getPosZ(), 
+						(float)newX, (float)newY, 0, master);
+				GameManager.get().getWorld().addEntity(bullet);
+			}
 			GameManager.get().getWorld().removeEntity(master);
 		}
 	}

@@ -36,8 +36,10 @@ import com.deco2800.hcg.managers.GameManager;
 public abstract class Character extends AbstractEntity {
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
-	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList("level", "xp", "carryWeight",
+	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList( "level", "xp", "carryWeight",
             "strength", "vitality", "agility", "charisma", "intellect");
+
+	protected String Name;
 
     protected float movementSpeed;
     protected float movementSpeedNorm;
@@ -86,6 +88,9 @@ public abstract class Character extends AbstractEntity {
         for (String attribute: CHARACTER_ATTRIBUTES) {
             attributes.put(attribute, 10);
         }
+
+        this.Name = "No Name";
+
         this.speedX = 0.0f;
         this.speedY = 0.0f;
         this.movementSpeed = 0.02f * attributes.get("agility");
@@ -126,6 +131,14 @@ public abstract class Character extends AbstractEntity {
      */
     protected void setSkills(int meleeSkill) {
 
+    }
+
+    /**
+     * Sets the character's name
+     * @param name
+     */
+    protected void setName(String name) {
+        this.Name = name;
     }
 
     /**
