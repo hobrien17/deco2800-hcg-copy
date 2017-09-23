@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.deco2800.hcg.BaseTest;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.bullets.Bullet;
@@ -26,10 +27,8 @@ import com.deco2800.hcg.entities.turrets.IceTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 import com.deco2800.hcg.entities.turrets.WaterTurret;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TimeManager;
-import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.worlds.World;
 
 public class TurretTest {
@@ -41,11 +40,13 @@ public class TurretTest {
 	private Corpse corpse;
 	private AbstractTurret turret;
 	private Enemy enemy;
-	private Player player;
+	private Enemy enemyFar; //used in ice test
+	private Player player; //used in water test
 	
 	private final static int CORPSE_X = 5;
 	private final static int CORPSE_Y = 5;
 	private final static int ENEMY_X = 7;
+	private final static int ENEMY_2_X = 15;
 	private final static int ENEMY_Y = 5;
 	private final static int PLAYER_X = 5;
 	private final static int PLAYER_Y = 6;
@@ -147,15 +148,19 @@ public class TurretTest {
 	@Test
 	public void testFireball() {
 		setupFireTest();
+		for(int i = 0; i < 5; i++) {
+			turret.update(sw, i);
+		}
 		turret.update(sw, 0); //update the turret twice to spawn a fireball
 		turret.update(sw, 1);
 		
+		int counter = 0;
 		for(AbstractEntity entity : gm.getWorld().getEntities()) {
 			if(entity instanceof Fireball) {
-				return; //if a fireball exists return
+				counter++;
 			}
 		}
-		fail("A fireball should have been created"); //if we get here a fireball does not exist, so we fail the test
+		assertEquals("There should be exactly 4 fireballs", 4, counter);
 	}
 	
 	/*
@@ -184,7 +189,10 @@ public class TurretTest {
 		
 		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); //add an enemy to test speed change
 		enemy.setSpeed(1f);
+		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 0);
+		enemyFar.setSpeed(1f);
 		gm.getWorld().addEntity(enemy);
+		gm.getWorld().addEntity(enemyFar);
 	}
 	
 	/*
@@ -196,8 +204,8 @@ public class TurretTest {
 		for(int i = 0; i < 5; i++) {
 			turret.update(sw, i); //update until the turret detonates
 		}
-		assertEquals("The enemy should be frozen", enemy.getSpeedX(), 0, 0); //check that the enemy is frozen
-		assertEquals("The enemy should be frozen", enemy.getSpeedY(), 0, 0);
+		assertEquals("The enemy should be frozen", 0, enemy.getMovementSpeed(), 0); //check that the enemy is frozen
+		assertEquals("The second enemy should be slower than normal", 0.5f, enemyFar.getMovementSpeed(), 0);
 		for(int i = 0; i < 10; i++) {
 			assertTrue("The corpse should still be in the world", gm.getWorld().containsEntity(corpse));
 			turret.update(sw, i); //update until the turret destroys itself
