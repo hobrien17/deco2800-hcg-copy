@@ -32,7 +32,7 @@ public class ExplosiveTurret extends AbstractTurret {
 	 * 			the corpse to plant this turret inside
 	 */
 	public ExplosiveTurret(Corpse master) {
-		super(master, "Explosive");
+		super(master, "Cactus");
 		seconds = 0;
 		exp = new ParticleEffect();
 	}

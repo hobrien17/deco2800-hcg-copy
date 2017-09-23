@@ -24,7 +24,7 @@ public class FireTurret extends AbstractTurret {
 	 * 			the corpse to plant the turret inside
 	 */
 	public FireTurret(Corpse master) {
-		super(master, "Fire");
+		super(master, "Inferno");
 		seconds = 0;
 
 	}

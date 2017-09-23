@@ -28,7 +28,7 @@ public class WaterTurret extends AbstractTurret {
 	 * 			the corpse to plant the turret inside
 	 */
 	public WaterTurret(Corpse master) {
-		super(master, "Water");
+		super(master, "Lily");
 	}
 
 	/**
