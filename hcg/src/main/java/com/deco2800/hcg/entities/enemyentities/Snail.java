@@ -1,8 +1,13 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
+
+import java.util.HashMap;
 
 public class Snail extends Enemy implements Tickable {
     /**
@@ -37,9 +42,19 @@ public class Snail extends Enemy implements Tickable {
     }
 
     @Override
-    void setupLoot() {
-        // TODO Auto-generated method stub
-        
+    public void setupLoot() {
+        lootRarity = new HashMap<>();
+
+        lootRarity.put("grass_seed", 1.0);
+
+        checkLootRarity();
+    }
+
+    @Override
+    public Item[] loot() {
+        Item[] arr = new Item[1];
+        arr[0] = ((ItemManager) GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+        return arr;
     }
 
 }

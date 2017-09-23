@@ -37,7 +37,7 @@ public class Squirrel extends Enemy implements Tickable {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put("sunflower_seed", 1.0);
+		lootRarity.put("gardening_seed", 1.0);
 
 		checkLootRarity();
 	}
