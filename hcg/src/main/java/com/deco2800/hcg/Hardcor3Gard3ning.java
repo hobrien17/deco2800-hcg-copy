@@ -118,9 +118,7 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
-		if (networkManager.isInitialised()) {
-			networkManager.processReceivedMessages();
-		}
+        networkManager.tick(); // It's important that this is called before fireTicks()
         fireTicks();
         clearScreen();
         super.render(); // Will render current context

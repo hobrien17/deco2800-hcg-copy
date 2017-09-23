@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.contexts.playContextClasses.*;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.multiplayer.ChatMessage;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 
@@ -170,10 +171,9 @@ public class PlayContext extends Context {
 			public void changed(ChangeEvent event, Actor actor) {
 				if (networkManager.isInitialised()) {
 					if (chatString.trim().length()>0) {
-						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
-
+						networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
+						chatTextArea.appendText(chatTextField.getText() + "\n");
 						chatTextField.setText("");
-						chatTextArea.appendText(chatMessage + "\n");
 						stage.setKeyboardFocus(null);
 						chatString = "";
 					} else {
@@ -198,9 +198,9 @@ public class PlayContext extends Context {
 				}
 				if ((c == '\r' && networkManager.isInitialised())) {
 					if (chatString.trim().length()>0) {
-						String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
+						networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
+						chatTextArea.appendText(chatTextField.getText() + "\n");
 						chatTextField.setText("");
-						chatTextArea.appendText(chatMessage + "\n");
 						stage.setKeyboardFocus(null);
 						chatString = "";
 					} else {

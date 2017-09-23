@@ -30,9 +30,7 @@ public class NetworkStateTest  {
 		networkManager2 = (NetworkManager) gameManager.getManager(NetworkManager.class);
 	}
 	@Test
-	public void InitializeTest() {
-		System.out.println("Initialise Test");
-		//assertThat("Not yet initialise but appear to initialise already", networkManager.isInitialised(), is(equalTo(null)));
+	public void initializeTest() {
 		networkManager.init(true);
 		assertThat("Network is not initialised after initiallising", networkManager.isInitialised(), is(equalTo(true)));
 		networkManager2.init(false);
@@ -40,8 +38,7 @@ public class NetworkStateTest  {
 	}
 	
 	@Test
-	public void HostTest() {		
-		System.out.println("Host Test");
+	public void initHostTest() {
 		networkManager.init(true);
 		assertThat("Player is not hosting", networkManager.isHost(), is(equalTo(true)));
 		networkManager.init(false);
@@ -49,15 +46,13 @@ public class NetworkStateTest  {
 	}
 	
 	@Test
-	public void InputMessageTest(){
+	public void queueMessageTest() {
 		networkManager.init(true);
-		//networkManager.sendInputMessage(1,5,8);
-		//networkManager.sendInputMessage(1,5,6);
 		int size = networkManager.getSendQueueSize();
 		assertThat("The message queue contains messages", size, is(equalTo(0)));
-		networkManager.sendInputMessage(1,5,6);
-		assertThat("The queue should only have 1 message only", networkManager.getSendQueueSize(), is(equalTo(1)) );
-		networkManager.sendChatMessage("This is a test");
+		networkManager.queueMessage(new Message(MessageType.ACK));
+		assertThat("The queue should only have 1 message only", networkManager.getSendQueueSize(), is(equalTo(1)));
+		networkManager.queueMessage(new Message(MessageType.ACK));
 		assertThat("Queue should have 2 messages", networkManager.getSendQueueSize(), is(equalTo(2)));
 	}
 }
