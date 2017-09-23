@@ -1,5 +1,6 @@
 package com.deco2800.hcg.worlds;
 
+import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
@@ -17,12 +18,12 @@ public enum NPCs {
    * @param texture - texture string
    * @return the NPC
    */
-  AbstractEntity spawn(float x, float y, String fName, String sName, String texture){
+  AbstractEntity spawn(float x, float y, String fName, String sName, String texture, String conversation, String faceImage){
     switch(this){
       case SHOP:
-        return new ShopNPC(x, y, fName, sName, texture);     
+        return new ShopNPC(x, y, fName, sName, texture, null, faceImage);     
       case QUEST:
-        return new QuestNPC(x, y, fName, sName, texture, "test_conversation_01");     
+        return new QuestNPC(x, y, fName, sName, texture, "test_conversation_01", faceImage);     
       default:
           return null;
     }

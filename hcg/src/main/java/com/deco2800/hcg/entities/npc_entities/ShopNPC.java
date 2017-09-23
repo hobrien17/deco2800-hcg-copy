@@ -1,6 +1,6 @@
 package com.deco2800.hcg.entities.npc_entities;
 
-
+import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.Shop;
 
@@ -22,8 +22,8 @@ public class ShopNPC extends NPC {
 	 * @param sName last name of NPC
 	 * @param texture texture of NPC
 	 */
-	public ShopNPC(float posX, float posY, String fName, String sName, String texture) {
-		super(posX, posY, fName, sName, texture, null);
+	public ShopNPC(float posX, float posY, String fName, String sName, String texture, String conversation, String faceImage) {
+		super(posX, posY, fName, sName, texture, null, faceImage);
 		shop = new GeneralShop();
 	}
 
@@ -48,8 +48,9 @@ public class ShopNPC extends NPC {
 
 	@Override
 	public void interact() {
-		// TODO Auto-generated method stub
-		
+		Shop shop = this.getShop();
+		shop.open(0, this.getPlayerManager().getPlayer());
+		this.getContextManager().pushContext(new ShopMenuContext(this.getPlayerManager().getPlayer(), this));		
 	}
 
 }

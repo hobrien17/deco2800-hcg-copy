@@ -37,8 +37,8 @@ public class QuestNPC extends NPC {
 	 *            texture of NPC
 	 */
 	public QuestNPC(float posX, float posY, String fName, String sName,
-			String texture, String conversation) {
-		super(posX, posY, fName, sName, texture, conversation);
+			String texture, String conversation, String faceImage) {
+		super(posX, posY, fName, sName, texture, conversation, faceImage);
 
 		this.boundaryX = 5;
 		this.boundaryY = 5;
@@ -48,7 +48,7 @@ public class QuestNPC extends NPC {
 	}
 	
 	public void interact(){
-			conversationManager.startConversation("test_conversation_01",this.getTexture());
+			conversationManager.startConversation(this.getConversation(),this.getFaceImage());
 	}
 
 	/**
@@ -58,7 +58,6 @@ public class QuestNPC extends NPC {
 		// TODO actually get NPC moving again
 		do {
 			checkBoundaryPosition();
-
 		} while (!collided());
 
 	}

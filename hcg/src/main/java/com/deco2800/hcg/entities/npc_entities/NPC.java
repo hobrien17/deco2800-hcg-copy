@@ -4,6 +4,7 @@ package com.deco2800.hcg.entities.npc_entities;
 import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
@@ -27,7 +28,9 @@ public abstract class NPC extends Character implements Tickable {
     private String sName;
     private final Box3D INITIAL_POSITION;
     protected PlayerManager playerManager;
+    protected ContextManager contextManager;
     private String conversation;
+    private String faceImage;
     
 
     
@@ -40,7 +43,7 @@ public abstract class NPC extends Character implements Tickable {
      * @param sName NPC's surname
      * @param texture NPC's texture
      */
-    public NPC(float posX, float posY,String fName,String sName, String texture, String conversation) {
+    public NPC(float posX, float posY,String fName,String sName, String texture, String conversation, String faceImage) {
 
         //Set up the parent constructor
         super(posX,posY,0,0.5f,0.5f,1.0f,false);
@@ -49,9 +52,11 @@ public abstract class NPC extends Character implements Tickable {
         this.fName = fName;
         this.sName = sName;
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
+        this.contextManager = (ContextManager)GameManager.get().getManager(ContextManager.class);
         this.INITIAL_POSITION = new Box3D(posX, posY, 0, 0, 0, 0);
         setTexture(texture);
         this.conversation = conversation;
+        this.faceImage = faceImage;
     }
     
 	public String getConversation(){
@@ -86,6 +91,18 @@ public abstract class NPC extends Character implements Tickable {
      */
     public String getSurname(){
     	return this.sName;
+    }
+    
+    public String getFaceImage(){
+    	return this.faceImage;
+    }
+    
+    public PlayerManager getPlayerManager(){
+    	return this.playerManager;
+    }
+    
+    public ContextManager getContextManager(){
+    	return this.contextManager;
     }
     
     /**

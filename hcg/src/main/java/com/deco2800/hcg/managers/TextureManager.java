@@ -149,6 +149,7 @@ public class TextureManager extends Manager {
 		
 		//Conversation textures
 		textureMap.put("conversation_context",  new Texture("resources/ui/conversations/conversation_context.png"));
+		textureMap.put("npc_face", new Texture("resources/sprites/npc/npc_face.png"));
 	}
 
 	/**

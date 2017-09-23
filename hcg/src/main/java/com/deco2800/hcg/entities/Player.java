@@ -430,18 +430,12 @@ public class Player extends Character implements Tickable {
     private void NPCInteraction(AbstractEntity npc) {
 
 	if (npc instanceof QuestNPC) {
-		
 		((QuestNPC) npc).interact();
-	    LOGGER.info("Quest NPC Interaction Started");
-	    //conversationManager.startConversation("test_conversation_01");
+	    LOGGER.info("Quest NPC Interaction Started");;
 	}
-
 	else if (npc instanceof ShopNPC) {
 	    LOGGER.info("Shop NPC Interaction Started");
-	    //Shop shop = ((ShopNPC) npc).getShop();
-	    //shop.open(0, this);
-	    //contextManager
-		  //  .pushContext(new ShopMenuContext(this, (ShopNPC) npc));
+	    ((ShopNPC) npc).interact();
 	} else {
 	    LOGGER.info("Other NPC Interaction Started");
 

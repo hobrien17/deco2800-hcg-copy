@@ -531,7 +531,9 @@
   <object id="77" gid="36" x="198.455" y="899.545" width="55" height="32">
    <properties>
     <property name="Type" value="Quest"/>
+    <property name="conversation" value="test_conversation_01"/>
     <property name="fName" value="Jane"/>
+    <property name="faceImage" value="npc_face"/>
     <property name="sName" value="Jensen"/>
     <property name="texture" value="character_1"/>
    </properties>
@@ -539,7 +541,9 @@
   <object id="80" gid="36" x="305.027" y="657.473" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
+    <property name="conversation" value=""/>
     <property name="fName" value="Jane"/>
+    <property name="faceImage" value="npc_face"/>
     <property name="sName" value="Jensen"/>
     <property name="texture" value="character_shop"/>
    </properties>

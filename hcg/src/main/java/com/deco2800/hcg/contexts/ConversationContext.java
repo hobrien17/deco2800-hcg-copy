@@ -3,7 +3,6 @@ package com.deco2800.hcg.contexts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.conversation.ConversationNode;
@@ -15,8 +14,8 @@ import com.deco2800.hcg.managers.TextureManager;
 public class ConversationContext extends UIContext {
     private Table table;
     private Label nodeText;
+    private Label npcName;
     private HorizontalGroup buttons;
-    private HorizontalGroup space;
     private Skin skin;
     private String npcTexture;
     private Image npcImage;
@@ -30,28 +29,29 @@ public class ConversationContext extends UIContext {
 		TextureManager textureManager = (TextureManager) 
 				gameManager.getManager(TextureManager.class);
 		
+		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		
 		npcTexture = texture;
 		npcImage = new Image(textureManager.getTexture(npcTexture));
 		
-		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		nodeText = new Label("", skin);
+		npcName = new Label("Angela", skin);
+		buttons = new HorizontalGroup();
+		buttons.space(30f);
+		
 		table = new Table();
 		table.setBackground(new Image(textureManager.getTexture("conversation_context")).getDrawable());
 		table.setFillParent(true);
 		
+		table.row().spaceBottom(40);
 		table.add(npcImage);
-		space = new HorizontalGroup();
-		space.padTop(100);
-		
-		nodeText = new Label("", skin);
-		buttons = new HorizontalGroup();
-		buttons.space(30);
-		table.add(nodeText).padTop(325);
-		table.row().padTop(150);
-		table.add(buttons);
+		table.row().padBottom(30);
+		table.add(npcName);
+		table.row().spaceTop(60);
+		table.add(nodeText).padBottom(50);
+		table.row().space(50, 0, 50, 0);
+		table.add(buttons).padBottom(100);
 		stage.addActor(table);
-
-		//table.debug(); //DEBUG
-
 	}
 
     public void displayNode(ConversationNode node) {
