@@ -3,11 +3,13 @@ package com.deco2800.hcg.turrets;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.bullets.Fireball;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
@@ -22,9 +24,12 @@ import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.GrassTurret;
 import com.deco2800.hcg.entities.turrets.IceTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
+import com.deco2800.hcg.entities.turrets.WaterTurret;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.worlds.World;
 
 public class TurretTest {
@@ -36,11 +41,14 @@ public class TurretTest {
 	private Corpse corpse;
 	private AbstractTurret turret;
 	private Enemy enemy;
+	private Player player;
 	
 	private final static int CORPSE_X = 5;
 	private final static int CORPSE_Y = 5;
 	private final static int ENEMY_X = 7;
 	private final static int ENEMY_Y = 5;
+	private final static int PLAYER_X = 5;
+	private final static int PLAYER_Y = 6;
 	
 	private static Map<Class<? extends AbstractTurret>, String> textures;
 	
@@ -259,47 +267,73 @@ public class TurretTest {
 		//we should have 72 grass bullets in the world
 	}
 	
+	private void setupWaterTest() {
+		setupGM();
+		
+		sw = (StopwatchManager)gm.getManager(StopwatchManager.class);
+		tm = (TimeManager)gm.getManager(TimeManager.class);
+		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
+		gm.getWorld().addEntity(corpse);
+		turret = new WaterTurret(corpse);
+		
+		player = new Player(PLAYER_X, PLAYER_Y, 0);
+		gm.getWorld().addEntity(player);
+	}
+	
+	@Test
+	public void testWaterTurret() {
+		setupWaterTest();
+		
+		assertEquals("Health should start at max", player.getHealthCur(), player.getHealthMax());
+		player.takeDamage(10);
+		for(int i = 9; i >= 0; i--) {
+			turret.update(sw, 10-i);
+			assertEquals("Health should currently be " + i + "below max", player.getHealthMax()-i, 
+					player.getHealthCur());
+		}
+	}
+	
 	@Test
 	public void testTextures() {
 		setupGM();
 		sw = (StopwatchManager)gm.getManager(StopwatchManager.class);
 		
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
-		assertEquals("An empty corpse should have the empty corpse sprite", corpse.getTexture(), "corpse");
+		assertEquals("An empty corpse should have the empty corpse sprite", "corpse", corpse.getTexture());
 		corpse.plantInside(new Seed(Seed.Type.SUNFLOWER));
-		assertEquals("The corpse should have the sunflower sprite", corpse.getTexture(), "sunflower_corpse");
+		assertEquals("The corpse should have the sunflower sprite", "sunflower_corpse", corpse.getTexture());
 		
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		corpse.plantInside(new Seed(Seed.Type.WATER));
-		assertEquals("The corpse should have the water sprite", corpse.getTexture(), "water_corpse");
+		assertEquals("The corpse should have the water sprite", "water_corpse", corpse.getTexture());
 		
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		corpse.plantInside(new Seed(Seed.Type.GRASS));
-		assertEquals("The corpse should have the grass sprite", corpse.getTexture(), "grass_corpse");
+		assertEquals("The corpse should have the grass sprite", "grass_corpse", corpse.getTexture());
 		
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		corpse.plantInside(new Seed(Seed.Type.FIRE));
-		assertEquals("The corpse should have the fire sprite", corpse.getTexture(), "fire_corpse");
+		assertEquals("The corpse should have the fire sprite", "fire_corpse", corpse.getTexture());
 		
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		corpse.plantInside(new Seed(Seed.Type.EXPLOSIVE));
 		for(int i = 0; i < 3; i++) {
-			assertEquals("The corpse should have the first cactus sprite", corpse.getTexture(), "cactus_corpse_01");
+			assertEquals("The corpse should have the first cactus sprite", "cactus_corpse_01", corpse.getTexture());
 			corpse.getTurret().update(sw, i);
 		}
-		assertEquals("The corpse should have the second cactus sprite", corpse.getTexture(), "cactus_corpse_02");
+		assertEquals("The corpse should have the second cactus sprite", "cactus_corpse_02", corpse.getTexture());
 		corpse.getTurret().update(sw, 3);
-		assertEquals("The corpse should have the third cactus sprite", corpse.getTexture(), "cactus_corpse_03");
+		assertEquals("The corpse should have the third cactus sprite", "cactus_corpse_03", corpse.getTexture());
 		
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		corpse.plantInside(new Seed(Seed.Type.ICE));
 		for(int i = 0; i < 3; i++) {
-			assertEquals("The corpse should have the first ice sprite", corpse.getTexture(), "ice_corpse_01");
+			assertEquals("The corpse should have the first ice sprite", "ice_corpse_01", corpse.getTexture());
 			corpse.getTurret().update(sw, i);
 		}
-		assertEquals("The corpse should have the second ice sprite", corpse.getTexture(), "ice_corpse_02");
+		assertEquals("The corpse should have the second ice sprite",  "ice_corpse_02", corpse.getTexture());
 		corpse.getTurret().update(sw, 3);
-		assertEquals("The corpse should have the third ice sprite", corpse.getTexture(), "ice_corpse_03");
+		assertEquals("The corpse should have the third ice sprite", "ice_corpse_03", corpse.getTexture());
 	}
 	
 	
