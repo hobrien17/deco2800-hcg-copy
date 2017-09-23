@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.deco2800.hcg.BaseTest;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.bullets.Bullet;
@@ -19,6 +20,7 @@ import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
+import com.deco2800.hcg.entities.turrets.Explosion;
 import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
 import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.GrassTurret;
@@ -26,10 +28,8 @@ import com.deco2800.hcg.entities.turrets.IceTurret;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 import com.deco2800.hcg.entities.turrets.WaterTurret;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TimeManager;
-import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.worlds.World;
 
 public class TurretTest {
@@ -41,14 +41,17 @@ public class TurretTest {
 	private Corpse corpse;
 	private AbstractTurret turret;
 	private Enemy enemy;
-	private Player player;
+	private Enemy enemyFar; //used in ice test
+	private Player player; //used in water test
 	
 	private final static int CORPSE_X = 5;
 	private final static int CORPSE_Y = 5;
 	private final static int ENEMY_X = 7;
+	private final static int ENEMY_2_X = 15;
 	private final static int ENEMY_Y = 5;
 	private final static int PLAYER_X = 5;
 	private final static int PLAYER_Y = 6;
+	private final static float EXP_CHANGE = 0.3f;
 	
 	private static Map<Class<? extends AbstractTurret>, String> textures;
 	
@@ -147,15 +150,19 @@ public class TurretTest {
 	@Test
 	public void testFireball() {
 		setupFireTest();
+		for(int i = 0; i < 5; i++) {
+			turret.update(sw, i);
+		}
 		turret.update(sw, 0); //update the turret twice to spawn a fireball
 		turret.update(sw, 1);
 		
+		int counter = 0;
 		for(AbstractEntity entity : gm.getWorld().getEntities()) {
 			if(entity instanceof Fireball) {
-				return; //if a fireball exists return
+				counter++;
 			}
 		}
-		fail("A fireball should have been created"); //if we get here a fireball does not exist, so we fail the test
+		assertEquals("There should be exactly 4 fireballs", 4, counter);
 	}
 	
 	/*
@@ -184,7 +191,10 @@ public class TurretTest {
 		
 		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); //add an enemy to test speed change
 		enemy.setSpeed(1f);
+		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 0);
+		enemyFar.setSpeed(1f);
 		gm.getWorld().addEntity(enemy);
+		gm.getWorld().addEntity(enemyFar);
 	}
 	
 	/*
@@ -196,8 +206,8 @@ public class TurretTest {
 		for(int i = 0; i < 5; i++) {
 			turret.update(sw, i); //update until the turret detonates
 		}
-		assertEquals("The enemy should be frozen", enemy.getSpeedX(), 0, 0); //check that the enemy is frozen
-		assertEquals("The enemy should be frozen", enemy.getSpeedY(), 0, 0);
+		assertEquals("The enemy should be frozen", 0, enemy.getMovementSpeed(), 0); //check that the enemy is frozen
+		assertEquals("The second enemy should be slower than normal", 0.5f, enemyFar.getMovementSpeed(), 0);
 		for(int i = 0; i < 10; i++) {
 			assertTrue("The corpse should still be in the world", gm.getWorld().containsEntity(corpse));
 			turret.update(sw, i); //update until the turret destroys itself
@@ -235,6 +245,48 @@ public class TurretTest {
 		//check that the enemy has been destroyed
 		assertFalse("The turret should have been destroyed", gm.getWorld().containsEntity(corpse)); 
 		//check that the turret has been destroyed
+		
+		
+	}
+	
+	@Test(timeout=1000)
+	public void testExplosion() {
+		setupExplosiveTest();
+		for(int i = 0; i < 5; i++) {
+			turret.update(sw, i);
+		}
+		
+		Explosion exp = null;
+		
+		for(AbstractEntity entity : gm.getWorld().getEntities()) {
+			if(entity instanceof Explosion) {
+				exp = (Explosion)entity;
+				break;
+			}
+		}
+		if(exp == null) {
+			fail("There should be an explosion in the world");
+			return;
+		}
+		assertEquals("The explosion should have the right sprite", "explosion", exp.getTexture());
+		assertEquals("The explosion should be at the correct x position", CORPSE_X + 1, exp.getPosX(), 0);
+		assertEquals("The explosion should be at the correct y position", CORPSE_Y, exp.getPosY(), 0);
+		assertEquals("The explosion should have the correct x-length", 0.01f, exp.getXRenderLength(), 0);
+		assertEquals("The explosion should have the correct y-length", 0.01f, exp.getYRenderLength(), 0);
+		exp.onTick(0);
+		assertEquals("The explosion should be at the correct x position", CORPSE_X + 1 - EXP_CHANGE, 
+				exp.getPosX(), 0);
+		assertEquals("The explosion should be at the correct y position", CORPSE_Y, exp.getPosY(), 0);
+		assertEquals("The explosion should have the correct new x-length", 0.01f + EXP_CHANGE, 
+				exp.getXRenderLength(), 0);
+		assertEquals("The explosion should have the correct new y-length", 0.01f + EXP_CHANGE, 
+				exp.getYRenderLength(), 0);
+		
+		while(gm.getWorld().containsEntity(exp)) {
+			exp.onTick(0);
+			//this loop will continue until the explosion is destroyed
+			//if the explosion is never destroyed, the test will timeout (after 1 second)
+		}
 	}
 	
 	private void setupGrassTest() {

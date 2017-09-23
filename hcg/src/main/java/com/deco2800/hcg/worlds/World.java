@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Selectable;
+import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.types.Weathers;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class World {
 	private Weathers weather;
 
 	private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
+	public List<Renderable> renderables = new ArrayList<Renderable>();
 	protected TiledMap map;
 
 	private int width;
