@@ -28,8 +28,7 @@ public class Conversation {
 	public Conversation() {
 		// Get necessary managers
 		GameManager gameManager = GameManager.get();
-		contextManager = (ContextManager)
-				gameManager.getManager(ContextManager.class);
+		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 	}
 
 	/**
@@ -59,22 +58,28 @@ public class Conversation {
 	/**
 	 * Begin presenting the conversation to the player
 	 */
-	public void initiateConversation() {
+	public void initiateConversation(String texture) {
 		currentNode = initialNode;
-		conversationContext = new ConversationContext();
+		conversationContext = new ConversationContext(this, texture);
 		conversationContext.displayNode(currentNode);
 		contextManager.pushContext(conversationContext);
 	}
 
 	// Called by ConversationNodes
 	void changeNode(ConversationNode target) {
-		currentNode = target;
-		conversationContext.displayNode(currentNode);
+		if (target != null) {
+			currentNode = target;
+			conversationContext.displayNode(currentNode);
+		} else {
+			endConversation();
+		}
 	}
 
 	// Called by ConversationNodes
 	void endConversation() {
 		contextManager.popContext();
+		conversationContext = null;
+		currentNode = null;
 	}
 	
 	// Needed for serialisation

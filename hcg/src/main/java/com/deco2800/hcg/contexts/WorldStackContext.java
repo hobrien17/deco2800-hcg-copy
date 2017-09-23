@@ -16,7 +16,7 @@ import com.deco2800.hcg.entities.worldmap.WorldStackEntity;
 import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.StackInputManager;
+import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.TextureManager;
 
 public class WorldStackContext extends UIContext {
@@ -43,7 +43,7 @@ public class WorldStackContext extends UIContext {
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		StackInputManager inputManager = new StackInputManager();
+		InputManager inputManager = new InputManager();
 
 		// Setup UI + Buttons
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));

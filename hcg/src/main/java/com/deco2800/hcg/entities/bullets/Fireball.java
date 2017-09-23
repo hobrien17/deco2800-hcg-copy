@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.bullets;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.bullets.Bullet;
 
 /**
@@ -14,7 +15,7 @@ import com.deco2800.hcg.entities.bullets.Bullet;
  * @author Henry O'Brien
  *
  */
-public class Fireball extends Bullet {
+public class Fireball extends FireBullet {
 
 	/**
 	 * Creates a new fireball moving towards the given co-ordinates
@@ -102,11 +103,6 @@ public class Fireball extends Bullet {
 			ret[1] = 1f;
 		}
 		return ret;
-	}
-
-	@Override
-	protected void applyEffect(Enemy target) {
-		target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
 	}
 
 }

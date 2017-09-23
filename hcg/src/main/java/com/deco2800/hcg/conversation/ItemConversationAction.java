@@ -5,6 +5,11 @@ public class ItemConversationAction extends AbstractConversationAction {
     @Override
     void executeAction() {} //TODO
 
+    @Override
+    public String toString() {
+        return "";
+    }
+
 }
 
 
