@@ -11,7 +11,6 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ParticleManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.util.WorldUtil;
@@ -48,8 +47,6 @@ public class IceTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
-			//ParticleManager pm = (ParticleManager)GameManager.get().getManager(ParticleManager.class);
-			//pm.start(ParticleManager.Effect.HEALTH, master.getBox3D());
 			near = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 					master.getPosY(), CLOSE_RANGE, Enemy.class);
 			far = WorldUtil.allEntitiesToPosition(master.getPosX(), 

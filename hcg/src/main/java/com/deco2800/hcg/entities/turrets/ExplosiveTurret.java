@@ -48,6 +48,8 @@ public class ExplosiveTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
+			Explosion exp = new Explosion(master.getPosX()+1, master.getPosY(), 0);
+			GameManager.get().getWorld().addEntity(exp);
 			List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 					master.getPosY(), RANGE, Enemy.class);
 			for(AbstractEntity entity : entities) {
