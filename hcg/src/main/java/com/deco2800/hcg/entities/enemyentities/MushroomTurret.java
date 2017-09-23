@@ -90,7 +90,6 @@ public class MushroomTurret extends Enemy implements Observer {
                 break;
         }
         seconds++;
-        myEffects.apply();
     }
 
     @Override

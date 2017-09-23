@@ -54,9 +54,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 	protected Effects myEffects;
 
     protected Weapon enemyWeapon;
-    
-    // Sound manager
-    private SoundManager soundManager;
 
     /**
      * Creates a new enemy at the given position
@@ -101,9 +98,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.newPos = getBox3D();
 
 		// Effects container 
-        myEffects = new Effects(this);
-        
-        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);        
+        myEffects = new Effects(this);      
     }
 
     /**
