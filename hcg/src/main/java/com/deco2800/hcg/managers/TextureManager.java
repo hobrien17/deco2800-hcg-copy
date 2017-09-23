@@ -172,27 +172,6 @@ public class TextureManager extends Manager {
 		textureMap.put("instructions_text", new Texture("resources/ui/main_menu/instructions_text.png"));
 		textureMap.put("instructions_title",new Texture("resources/ui/main_menu/instructions_title.png"));
 
-		// Textures for the Radial Menu
-		textureMap.put("explosiveButton", new Texture("resources/ui/radial_menu/explosiveButton.png"));
-		textureMap.put("explosiveButtonHover", new Texture("resources/ui/radial_menu/explosiveButtonHover.png"));
-		textureMap.put("fertiliserButton", new Texture("resources/ui/radial_menu/fertiliserButton.png"));
-		textureMap.put("fertiliserButtonHover", new Texture("resources/ui/radial_menu/fertiliserButtonHover.png"));
-		textureMap.put("fireButton", new Texture("resources/ui/radial_menu/fireButton.png"));
-		textureMap.put("fireButtonHover", new Texture("resources/ui/radial_menu/fireButtonHover.png"));
-		textureMap.put("grassButton", new Texture("resources/ui/radial_menu/grassButton.png"));
-		textureMap.put("grassButtonHover", new Texture("resources/ui/radial_menu/grassButtonHover.png"));
-		textureMap.put("iceButton", new Texture("resources/ui/radial_menu/iceButton.png"));
-		textureMap.put("iceButtonHover", new Texture("resources/ui/radial_menu/iceButtonHover.png"));
-		textureMap.put("normalButton", new Texture("resources/ui/radial_menu/normalButton.png"));
-		textureMap.put("normalButtonHover", new Texture("resources/ui/radial_menu/normalButtonHover.png"));
-		textureMap.put("sprayButton", new Texture("resources/ui/radial_menu/sprayButton.png"));
-		textureMap.put("sprayButtonHover", new Texture("resources/ui/radial_menu/sprayButtonHover.png"));
-		textureMap.put("waterButton", new Texture("resources/ui/radial_menu/waterButton.png"));
-		textureMap.put("waterButtonHover", new Texture("resources/ui/radial_menu/waterButtonHover.png"));
-		textureMap.put("xButton", new Texture("resources/ui/radial_menu/xButton.png"));
-		textureMap.put("xButtonHover", new Texture("resources/ui/radial_menu/xButtonHover.png"));
-		textureMap.put("radialOutline", new Texture("resources/ui/radial_menu/radialOutline.png"));
-
 		//Perks
 		textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
 		textureMap.put("red_tree_path", new Texture("resources/ui/perks/red_tree_path.png"));
