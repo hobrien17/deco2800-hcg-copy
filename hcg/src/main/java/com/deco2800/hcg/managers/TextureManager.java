@@ -38,6 +38,14 @@ public class TextureManager extends Manager {
 		textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
 		textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
 		textureMap.put("hcg_character_sink", new Texture("resources/sprites/player/hcg_character_hat_sink.png"));
+        textureMap.put("player_leftBack_stand", new Texture("resources/sprites/player/player_leftBack_stand.png"));
+        textureMap.put("player_back_stand", new Texture("resources/sprites/player/player_back_stand.png"));
+        textureMap.put("player_rightBack_stand", new Texture("resources/sprites/player/player_rightBack_stand.png"));
+        textureMap.put("player_right_stand", new Texture("resources/sprites/player/player_right_stand.png"));
+        textureMap.put("player_rightFront_stand", new Texture("resources/sprites/player/player_rightFront_stand.png"));
+        textureMap.put("player_front_stand", new Texture("resources/sprites/player/player_front_stand.png"));
+        textureMap.put("player_leftFront_stand", new Texture("resources/sprites/player/player_leftFront_stand.png"));
+        textureMap.put("player_left_stand", new Texture("resources/sprites/player/player_left_stand.png"));
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
