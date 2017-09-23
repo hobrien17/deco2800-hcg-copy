@@ -15,7 +15,6 @@ public class House extends TerrainEntity {
 	 */
 	public House(float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 5f, 5f, 0.5f);
-		System.out.print("run1");
 		this.setTexture("house");
 	}
 }
