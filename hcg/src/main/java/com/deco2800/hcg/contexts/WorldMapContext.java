@@ -72,7 +72,7 @@ public class WorldMapContext extends UIContext {
 				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		MapInputManager inputManager = new MapInputManager();
+		InputManager inputManager = new InputManager();
 
 		showAllNodes = false;
 
