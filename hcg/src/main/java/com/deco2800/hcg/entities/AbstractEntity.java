@@ -227,7 +227,15 @@ public abstract class AbstractEntity implements Renderable,
         return this.yRenderLength;
     }
     
-    protected void growRender(float xAmount, float yAmount) {
+    /**
+     * Grows the size of the rendered sprite by xAmount and yAmount
+     * 
+     * @param xAmount
+     * 			the amount to grow in the x-direction
+     * @param yAmount
+     * 			the amount to grow in the y-direction
+     */
+    public void growRender(float xAmount, float yAmount) {
     	xRenderLength += xAmount;
     	yRenderLength += yAmount;
     }
