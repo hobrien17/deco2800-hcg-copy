@@ -136,15 +136,14 @@ public class World {
 					try {
 
 						this.addEntity(NPCs.valueOf(
-								((String) obj.getProperties().get("Type"))
-										.toUpperCase())
-								.spawn(x, y,
-										(String) obj.getProperties()
+								((String) obj.getProperties().get("Type")).toUpperCase()).spawn(x, y,(String) obj.getProperties()
 												.get("fName"),
 										(String) obj.getProperties()
 												.get("sName"),
 										(String) obj.getProperties()
-												.get("texture")));
+												.get("texture"), (String) obj.getProperties()
+												.get("conversation"), (String) obj.getProperties()
+												.get("faceImage")));
 
 					} finally {
 						/* it didn't work */}

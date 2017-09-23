@@ -4,6 +4,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.Player;
@@ -58,7 +59,7 @@ public class SunflowerSeed extends Bullet {
 	}
 
 	@Override
-	protected void applyEffect(Enemy target) {
+	protected void applyEffect(Harmable target) {
 		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0));
 	}
 }

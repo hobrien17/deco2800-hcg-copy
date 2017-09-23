@@ -520,6 +520,11 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public void resetSpeed() {
     	this.movementSpeed = normalSpeed;
     }
+    
+    @Override
+    public float getMovementSpeed() {
+    	return this.movementSpeed;
+    }
 	
 	// to comply with temporary harmable implementations to get the Effects class working
 	@Override

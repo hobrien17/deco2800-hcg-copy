@@ -51,7 +51,7 @@ public class DeathContext extends UIContext {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // TODO: actually end the game
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 2; i++) {
                     contextManager.popContext();
                 }
             }
