@@ -48,8 +48,8 @@ public class IceTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
-			ParticleManager pm = (ParticleManager)GameManager.get().getManager(ParticleManager.class);
-			pm.start(ParticleManager.Effect.HEALTH, master.getBox3D());
+			//ParticleManager pm = (ParticleManager)GameManager.get().getManager(ParticleManager.class);
+			//pm.start(ParticleManager.Effect.HEALTH, master.getBox3D());
 			near = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 					master.getPosY(), CLOSE_RANGE, Enemy.class);
 			far = WorldUtil.allEntitiesToPosition(master.getPosX(), 
