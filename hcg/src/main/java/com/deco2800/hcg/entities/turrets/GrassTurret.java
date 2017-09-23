@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Observable;
 
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.WorldUtil;
 

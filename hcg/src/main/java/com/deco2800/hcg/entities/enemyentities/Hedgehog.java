@@ -1,4 +1,4 @@
-package com.deco2800.hcg.entities.enemy_entities;
+package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.Item;
@@ -22,10 +22,10 @@ public class Hedgehog extends Enemy implements Tickable {
      * @param posX the x position
      * @param posY the y position
      * @param posZ the x position
-     * @param ID the ID of the Hedgehog Enemy
+     * @param id the ID of the Hedgehog Enemy
      */
-    public Hedgehog(float posX, float posY, float posZ, int ID) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
+    public Hedgehog(float posX, float posY, float posZ, int id) {
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
         this.setTexture("tree");
         this.level = 1;
         walkingRange = 30 * this.level;
@@ -55,7 +55,7 @@ public class Hedgehog extends Enemy implements Tickable {
         }
         if (chargedAtPlayer == false && distance < walkingRange && distance > chargingRange){
             // move_slowly to player
-            setSpeed((this.level * 0.01f));
+            setSpeed(this.level * 0.01f);
             newPos = this.getToPlayerPos();
         } else if (chargedAtPlayer == false && distance < chargingRange) {
             // charge at player

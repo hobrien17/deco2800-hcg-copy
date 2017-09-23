@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.deco2800.hcg.contexts.*;
-import com.deco2800.hcg.entities.enemy_entities.Squirrel;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
@@ -34,6 +33,7 @@ import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
 
 /**
  * Entity for the playable character.

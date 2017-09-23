@@ -2,9 +2,9 @@ package com.deco2800.hcg.worlds;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
-import com.deco2800.hcg.entities.enemy_entities.Hedgehog;
-import com.deco2800.hcg.entities.enemy_entities.MushroomTurret;
-import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.enemyentities.Hedgehog;
+import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.terrain_entities.Boulder;
 import com.deco2800.hcg.entities.terrain_entities.IceBoulder;

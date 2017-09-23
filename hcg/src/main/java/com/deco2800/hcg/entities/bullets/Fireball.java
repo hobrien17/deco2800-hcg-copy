@@ -1,9 +1,9 @@
 package com.deco2800.hcg.entities.bullets;
 
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 
 /**
  * Fireball class

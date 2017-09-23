@@ -1,4 +1,4 @@
-package com.deco2800.hcg.entities.enemy_entities;
+package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.items.Item;
@@ -25,10 +25,10 @@ public class MushroomTurret extends Enemy implements Observer {
      * @param posX the x position
      * @param posY the y position
      * @param posZ the x position
-     * @param ID the ID of the MushroomTurret Enemy
+     * @param id the ID of the MushroomTurret Enemy
      */
-    public MushroomTurret(float posX, float posY, float posZ, int ID) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
+    public MushroomTurret(float posX, float posY, float posZ, int id) {
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
         //testing with tower sprite
         this.setTexture("tower");
         this.level = 1;
@@ -45,6 +45,7 @@ public class MushroomTurret extends Enemy implements Observer {
                 .build();
     }
 
+    @Override
     public void update(Observable o, Object arg){
         switch (seconds%5){
             case 0: // set turret phase 1 this.setTexture()
