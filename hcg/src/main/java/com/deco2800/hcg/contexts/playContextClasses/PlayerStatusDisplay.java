@@ -114,7 +114,8 @@ public class PlayerStatusDisplay extends Group {
         float healthBarWidth = ((float) player.getHealthCur()) /
                 ((float) player.getHealthMax()) * 330f;
         /* colour functions*/
-        float G, R;
+        float G;
+        float R;
         if (healthBarWidth > (330f / 2f)) {
             G = 1f;
             R = 2f - (2f * healthBarWidth / 325f);

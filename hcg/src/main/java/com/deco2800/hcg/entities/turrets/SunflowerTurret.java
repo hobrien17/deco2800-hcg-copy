@@ -14,17 +14,9 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.WorldUtil;
 
 /**
-<<<<<<< HEAD
- * Basic sunflower turret Shoots standard seeds at any enemies in a limited
- * range
- * 
-=======
  * Basic sunflower turret
- * Shoots standard seeds at any enemies in a limited range
- *
->>>>>>> origin/master
- * @author Henry O'Brien
- *
+ * Shoots seeds at enemies in a limited range, and destroys itself when out of ammo
+ * 
  */
 public class SunflowerTurret extends AbstractTurret {
 
@@ -33,11 +25,25 @@ public class SunflowerTurret extends AbstractTurret {
 	private static final int RANGE = 5;
 	protected int ammo;
 
+	/**
+	 * Creates a new sunflower turret inside the given corpse
+	 * 
+	 * @param master
+	 * 			the corpse to plant the turret inside
+	 */
 	public SunflowerTurret(Corpse master) {
 		super(master, "Sunflower");
 		ammo = 10;
 	}
 
+	/**
+	 * Updates the turret, shooting at any nearby enemies and destroying itself if out of ammo
+	 * 
+	 * @param o
+	 * 			the Observable object calling the update method (should be an instance of StopwatchManager)
+	 * @param arg
+	 * 			the argument passed by the Observable object (should be the stopwatch's current time)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		if (ammo > 0) {
@@ -58,7 +64,7 @@ public class SunflowerTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		// TODO Auto-generated method stub
-		return "tree";
+		return "sunflower_corpse";
 	}
 
 }

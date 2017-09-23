@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
 import com.deco2800.hcg.multiplayer.*;
 import com.deco2800.hcg.worlds.World;
 
@@ -127,9 +128,12 @@ public final class NetworkManager extends Manager {
 	 * @param tick Tick count
 	 */
 	public void updatePeerTickCount(int peer, long tick) {
+		// FIXME
+		/*
 		if (peerTickCounts.get(peer) == tick - 1) {
 			peerTickCounts.put(peer, tick);
 		}
+		*/
 	}
 
 	/**
@@ -184,14 +188,20 @@ public final class NetworkManager extends Manager {
 	public void startGame() {
 		queueMessage(new StartMessage(getNextRandomInt()));
 		
+		// FIXME
+		/*
 		gameManager.setOccupiedNode(gameManager.getWorldMap().getContainedNodes().get(0));
 		gameManager.setWorld(new World(gameManager.getWorldMap().getContainedNodes().get(0)
 				.getNodeLinkedLevel().getWorld().getLoadedFile()));
+		*/
 		Player otherPlayer = new Player(1, 5, 10, 0);
-		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, "Player 2");
 		playerManager.addPlayer(otherPlayer);
+		/*
 		playerManager.spawnPlayers();
 		contextManager.pushContext(new PlayContext());
+		*/
+		contextManager.pushContext(new CharacterCreationContext());
 	}
 	
 	/**

@@ -42,7 +42,7 @@ public abstract class AbstractTurret implements Observer {
 	}
 	
 	/**
-	 * Gets the texture of this object, based on what type of turret it is
+	 * Gets the initial texture of this object, based on what type of turret it is
 	 * 
 	 * @return the texture name of this object
 	 */
