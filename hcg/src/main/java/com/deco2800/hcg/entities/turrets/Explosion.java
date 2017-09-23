@@ -1,0 +1,28 @@
+package com.deco2800.hcg.entities.turrets;
+
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.managers.GameManager;
+
+public class Explosion extends AbstractEntity implements Tickable {
+	
+	private float change;
+	private final static float MOD = 0.015f;
+	
+	public Explosion(float posX, float posY, float posZ) {
+		super(posX, posY, posZ, 0, 0, 0, 0.01f, 0.01f, true);
+		this.setTexture("explosion");
+		change = 0.3f;
+	}
+
+	@Override
+	public void onTick(long gameTickCount) {
+		if(this.getXRenderLength() <= 0 || this.getYRenderLength() <= 0) {
+			GameManager.get().getWorld().removeEntity(this);
+		} else{
+			growRender(change, change);
+			this.setPosX(this.getPosX()-change);
+			change -= MOD;
+		}
+	}
+}

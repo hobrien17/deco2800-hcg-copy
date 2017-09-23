@@ -22,6 +22,7 @@ import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
+import com.deco2800.hcg.entities.turrets.Explosion;
 import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
 import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.GrassTurret;
@@ -52,6 +53,7 @@ public class TurretTest {
 	private final static int ENEMY_Y = 5;
 	private final static int PLAYER_X = 5;
 	private final static int PLAYER_Y = 6;
+	private final static float EXP_CHANGE = 0.3f;
 	
 	private static Map<Class<? extends AbstractTurret>, String> textures;
 	
@@ -245,6 +247,48 @@ public class TurretTest {
 		//check that the enemy has been destroyed
 		assertFalse("The turret should have been destroyed", gm.getWorld().containsEntity(corpse)); 
 		//check that the turret has been destroyed
+		
+		
+	}
+	
+	@Test(timeout=1000)
+	public void testExplosion() {
+		setupExplosiveTest();
+		for(int i = 0; i < 5; i++) {
+			turret.update(sw, i);
+		}
+		
+		Explosion exp = null;
+		
+		for(AbstractEntity entity : gm.getWorld().getEntities()) {
+			if(entity instanceof Explosion) {
+				exp = (Explosion)entity;
+				break;
+			}
+		}
+		if(exp == null) {
+			fail("There should be an explosion in the world");
+			return;
+		}
+		assertEquals("The explosion should have the right sprite", "explosion", exp.getTexture());
+		assertEquals("The explosion should be at the correct x position", CORPSE_X + 1, exp.getPosX(), 0);
+		assertEquals("The explosion should be at the correct y position", CORPSE_Y, exp.getPosY(), 0);
+		assertEquals("The explosion should have the correct x-length", 0.01f, exp.getXRenderLength(), 0);
+		assertEquals("The explosion should have the correct y-length", 0.01f, exp.getYRenderLength(), 0);
+		exp.onTick(0);
+		assertEquals("The explosion should be at the correct x position", CORPSE_X + 1 - EXP_CHANGE, 
+				exp.getPosX(), 0);
+		assertEquals("The explosion should be at the correct y position", CORPSE_Y, exp.getPosY(), 0);
+		assertEquals("The explosion should have the correct new x-length", 0.01f + EXP_CHANGE, 
+				exp.getXRenderLength(), 0);
+		assertEquals("The explosion should have the correct new y-length", 0.01f + EXP_CHANGE, 
+				exp.getYRenderLength(), 0);
+		
+		while(gm.getWorld().containsEntity(exp)) {
+			exp.onTick(0);
+			//this loop will continue until the explosion is destroyed
+			//if the explosion is never destroyed, the test will timeout (after 1 second)
+		}
 	}
 	
 	private void setupGrassTest() {

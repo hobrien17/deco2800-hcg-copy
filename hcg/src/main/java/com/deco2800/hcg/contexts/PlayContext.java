@@ -35,7 +35,6 @@ public class PlayContext extends Context {
 	private ContextManager contextManager;
 	private MessageManager messageManager;
 	private TextureManager textureManager;
-	private ParticleManager particleManager;
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -81,7 +80,6 @@ public class PlayContext extends Context {
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
-		particleManager = (ParticleManager) gameManager.getManager(ParticleManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -119,7 +117,6 @@ public class PlayContext extends Context {
         
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
-        stage.addActor(particleManager.getActor());
 
 		/* Add all buttons to the menu */
 		window.add(button);

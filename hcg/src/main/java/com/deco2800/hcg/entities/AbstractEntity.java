@@ -226,6 +226,11 @@ public abstract class AbstractEntity implements Renderable,
     public float getYRenderLength() {
         return this.yRenderLength;
     }
+    
+    protected void growRender(float xAmount, float yAmount) {
+    	xRenderLength += xAmount;
+    	yRenderLength += yAmount;
+    }
 
     /**
      * Returns a Box3D representing the location.
