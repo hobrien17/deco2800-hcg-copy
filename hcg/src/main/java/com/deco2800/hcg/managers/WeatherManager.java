@@ -46,13 +46,14 @@ public class WeatherManager extends Manager {
 		weather = new ParticleEffect();
 		weather.start();
 
-		// setWeather(Weathers.RAIN);
-		// setWeather(Weathers.SNOW);
+		setWeather(Weathers.RAIN);
+		setWeather(Weathers.SNOW);
 		// setWeather(Weathers.SANDSTORM);
 		// setWeather(Weathers.WIND);
 		// stopEffect();
 
-		weatherActor = new ParticleEffectActor(weather);
+		weatherActor = new ParticleEffectActor();
+		weatherActor.add(weather, true);
 	}
 
 	/**
@@ -67,38 +68,48 @@ public class WeatherManager extends Manager {
 	private void setUp(String fileName) {
 		weather.load(Gdx.files.internal("resources/particles/" + fileName),
 				Gdx.files.internal("resources/particles/"));
-		ParticleEmitter newEmitter = weather.getEmitters()
-				.get(weather.getEmitters().size - 1);
-		newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
-				Gdx.graphics.getHeight() / 2);
+		for (int emitter = 0; emitter < weather.getEmitters().size; emitter++) {
 
-		// Scale is currently hardcoded; TO DO
-		int scale = 9;
-		float heightHighMax, heightLowMax, heightHighMin, heightLowMin,
-				widthHighMax, widthLowMax, widthHighMin, widthLowMin;
-		heightHighMax = newEmitter.getSpawnHeight().getHighMax();
-		newEmitter.getSpawnHeight().setHighMax(heightHighMax * scale);
+			ParticleEmitter newEmitter = weather.getEmitters()
+					.get(emitter);
+			newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
+					Gdx.graphics.getHeight() / 2);
 
-		heightLowMax = newEmitter.getSpawnHeight().getLowMax();
-		newEmitter.getSpawnHeight().setLowMax(heightLowMax * scale);
+			// Scale is currently hardcoded; TO DO
+			int scale = 9;
+			float heightHighMax;
+			float heightLowMax;
+			float heightHighMin;
+			float heightLowMin;
+			float widthHighMax;
+			float widthLowMax;
+			float widthHighMin;
+			float widthLowMin;
+			
+			heightHighMax = newEmitter.getSpawnHeight().getHighMax();
+			newEmitter.getSpawnHeight().setHighMax(heightHighMax * scale);
 
-		heightHighMin = newEmitter.getSpawnHeight().getHighMin();
-		newEmitter.getSpawnHeight().setHighMin(heightHighMin * scale);
+			heightLowMax = newEmitter.getSpawnHeight().getLowMax();
+			newEmitter.getSpawnHeight().setLowMax(heightLowMax * scale);
 
-		heightLowMin = newEmitter.getSpawnHeight().getLowMin();
-		newEmitter.getSpawnHeight().setLowMin(heightLowMin * scale);
+			heightHighMin = newEmitter.getSpawnHeight().getHighMin();
+			newEmitter.getSpawnHeight().setHighMin(heightHighMin * scale);
 
-		widthHighMax = newEmitter.getSpawnWidth().getHighMax();
-		newEmitter.getSpawnWidth().setHighMax(widthHighMax * scale * 2);
+			heightLowMin = newEmitter.getSpawnHeight().getLowMin();
+			newEmitter.getSpawnHeight().setLowMin(heightLowMin * scale);
 
-		widthLowMax = newEmitter.getSpawnWidth().getLowMax();
-		newEmitter.getSpawnWidth().setLowMax(widthLowMax * scale * 2);
+			widthHighMax = newEmitter.getSpawnWidth().getHighMax();
+			newEmitter.getSpawnWidth().setHighMax(widthHighMax * scale * 2);
 
-		widthHighMin = newEmitter.getSpawnWidth().getHighMin();
-		newEmitter.getSpawnWidth().setHighMin(widthHighMin * scale * 2);
+			widthLowMax = newEmitter.getSpawnWidth().getLowMax();
+			newEmitter.getSpawnWidth().setLowMax(widthLowMax * scale * 2);
 
-		widthLowMin = newEmitter.getSpawnWidth().getLowMin();
-		newEmitter.getSpawnWidth().setLowMin(widthLowMin * scale * 2);
+			widthHighMin = newEmitter.getSpawnWidth().getHighMin();
+			newEmitter.getSpawnWidth().setHighMin(widthHighMin * scale * 2);
+
+			widthLowMin = newEmitter.getSpawnWidth().getLowMin();
+			newEmitter.getSpawnWidth().setLowMin(widthLowMin * scale * 2);
+		}
 	}
 
 	/**

@@ -18,6 +18,8 @@ public class SoundManager extends Manager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoundManager.class);
 	private Map<String, Sound> soundMap = new HashMap<String, Sound>();
 
+	// String Constants
+	private static final String NO_REF = "No reference to sound effect: ";
 	/**
 	 * Constructor Loads all audio files to memory on startup.
 	 */
@@ -57,7 +59,7 @@ public class SoundManager extends Manager {
 			LOGGER.info("Playing sound effect: " + soundString);
 			sound.play(1f);
 		} else {
-			LOGGER.info("No reference to sound effect: " + soundString);
+			LOGGER.info(NO_REF + soundString);
 		}
 	}
 
@@ -70,7 +72,7 @@ public class SoundManager extends Manager {
 			LOGGER.info("Stop sound effect: " + soundString);
 			sound.stop();
 		} else {
-			LOGGER.info("No reference to sound effect: " + soundString);
+			LOGGER.info(NO_REF + soundString);
 		}
 	}
 
@@ -83,7 +85,7 @@ public class SoundManager extends Manager {
 			LOGGER.info("Playing sound effect, looping : " + soundString);
 			sound.loop(1f);
 		} else {
-			LOGGER.info("No reference to sound effect: " + soundString);
+			LOGGER.info(NO_REF + soundString);
 		}
 	}
 

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
@@ -24,6 +25,7 @@ import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.Weapon;
@@ -50,9 +52,11 @@ public class Player extends Character implements Tickable {
     private SoundManager soundManager;
     private ContextManager contextManager;
     private PlayerInputManager playerInputManager;
+    private ConversationManager conversationManager;
 
     private boolean collided;
     private boolean onExit = false;
+    private boolean exitMessageDisplayed = false;
     private int xpThreshold = 200;
     private float lastSpeedX;
     private float lastSpeedY;
@@ -91,6 +95,8 @@ public class Player extends Character implements Tickable {
 		gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
+		
+		this.conversationManager = new ConversationManager();
 
 		this.id = id;
 		if (id == 0) {
@@ -149,7 +155,6 @@ public class Player extends Character implements Tickable {
 		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
 		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
-
     }
 
     /**
@@ -281,7 +286,9 @@ public class Player extends Character implements Tickable {
     private void handleTouchDown(int screenX, int screenY, int pointer,
     		int button) {
     	if (this.getEquippedWeapon() != null) {
-    		this.getEquippedWeapon().updateAim(screenX, screenY);
+            Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
+            LOGGER.info("Position: " + position);
+            this.getEquippedWeapon().updateAim(position);
     		this.getEquippedWeapon().openFire();
     	}
     }
@@ -298,8 +305,10 @@ public class Player extends Character implements Tickable {
      */
     private void handleTouchDragged(int screenX, int screenY, int pointer) {
     	if (this.getEquippedWeapon() != null) {
-    		this.getEquippedWeapon().updatePosition(screenX, screenY);
-    		this.getEquippedWeapon().updateAim(screenX, screenY);
+    	    Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
+    		this.getEquippedWeapon().updateAim(position);
+    		//TODO: remove
+    		this.getEquippedWeapon().updatePosition(position.x, position.y);
     	}
     }
 
@@ -331,9 +340,11 @@ public class Player extends Character implements Tickable {
      *            the y position of mouse movement on the screen
      */
     private void handleMouseMoved(int screenX, int screenY) {
-    	if (this.getEquippedWeapon() != null) {
-    		this.getEquippedWeapon().updatePosition(screenX, screenY);
-    	}
+        if (this.getEquippedWeapon() != null) {
+            Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
+            //TODO: remove
+            this.getEquippedWeapon().updatePosition(position.x, position.y);
+        }
     }
 
     /**
@@ -389,12 +400,12 @@ public class Player extends Character implements Tickable {
      */
     private void NPCInteraction(AbstractEntity npc) {
     	if (npc instanceof QuestNPC) {
-    		LOGGER.info("Quest NPC Interaction Started");
-    	} else if (npc instanceof ShopNPC) {
+    		((QuestNPC) npc).interact();
+    		LOGGER.info("Quest NPC Interaction Started");;
+    	}
+    	else if (npc instanceof ShopNPC) {
     		LOGGER.info("Shop NPC Interaction Started");
-    		Shop shop = ((ShopNPC) npc).getShop();
-    		shop.open(0, this);
-    		contextManager.pushContext(new ShopMenuContext(this, (ShopNPC) npc));
+    		((ShopNPC) npc).interact();
     	} else {
     		LOGGER.info("Other NPC Interaction Started");
     	}
@@ -427,7 +438,14 @@ public class Player extends Character implements Tickable {
     	World world = GameManager.get().getWorld();
 
         Box3D newPos = getBox3D();
-
+        
+        // removes the exit message if the player exits the exit zone
+        if(!onExit && exitMessageDisplayed) {
+        	PlayContext play = (PlayContext) contextManager.currentContext();
+			play.removeExitWindow();
+			exitMessageDisplayed = false;
+        }
+        
     	// get speed of current tile. this is done before checking if a tile
     	// exists so a slow down tile next to the edge wouldn't cause problems.
     	if (world.getTiledMapTileLayerAtPos((int) oldPosY,
@@ -449,6 +467,7 @@ public class Player extends Character implements Tickable {
         					PlayContext play = (PlayContext) contextManager.currentContext();
         					play.addExitWindow();
         					onExit = true;
+        					exitMessageDisplayed = true;
         	    		}
         			} else {
         				onExit = false;
@@ -505,6 +524,8 @@ public class Player extends Character implements Tickable {
     	if (!collided) {
     	    this.setPosition(newPos.getX(), newPos.getY(), 1);
     	}
+    	
+    	this.checkDeath();
     }
 
 	/**
@@ -562,7 +583,7 @@ public class Player extends Character implements Tickable {
 				this.setTexture("hcg_character_sink");
 				break;
 			default:
-				this.setTexture("hcg_character");
+				updateSprite(this.direction);
 				break;
     	}
     }
@@ -572,13 +593,25 @@ public class Player extends Character implements Tickable {
      * character in the character creation screen
      */
     public void initialiseNewPlayer(int strength, int vitality, int agility,
-    		int charisma, int intellect, int meleeSkill) {
+    		int charisma, int intellect, int meleeSkill, String name) {
     	setAttributes(strength, vitality, agility, charisma, intellect);
     	setSkills(meleeSkill);
+    	setName(name);
     	healthMax = 50 * vitality;
     	healthCur = healthMax;
     	staminaMax = 50 * agility;
     	staminaCur = staminaMax;
+    	skillPoints = 4 + 2 * intellect;
+    }
+    
+    /**
+     * Checks if the player is dead and ends the game if true.
+     */
+    private void checkDeath() {
+        if (healthCur <= 0) {
+            this.contextManager.pushContext(new DeathContext());
+            healthCur = healthMax;
+        }
     }
 
     /**
@@ -773,21 +806,25 @@ public class Player extends Character implements Tickable {
     		speedX = movementSpeed;
     		speedY = 0;
     		move = 1;
+    		this.direction = 2;
     	} else if (movementDirection.get("up")
     			&& movementDirection.get("left")) {
     		speedY = -movementSpeed;
     		speedX = 0;
     		move = 1;
+            this.direction = 0;
     	} else if (movementDirection.get("down")
     			&& movementDirection.get("right")) {
     		speedY = movementSpeed;
     		speedX = 0;
     		move = 1;
+            this.direction = 4;
     	} else if (movementDirection.get("down")
     			&& movementDirection.get("left")) {
     		speedX = -movementSpeed;
     		speedY = 0;
     		move = 1;
+            this.direction = 6;
     	} else if (movementDirection.get("up")
     			&& movementDirection.get("down")) {
     		speedX = 0;
@@ -802,19 +839,57 @@ public class Player extends Character implements Tickable {
     		speedY = -diagonalSpeed;
     		speedX = diagonalSpeed;
     		move = 1;
+            this.direction = 1;
     	} else if (movementDirection.get("down")) {
     		speedY = diagonalSpeed;
     		speedX = -diagonalSpeed;
     		move = 1;
+            this.direction = 5;
     	} else if (movementDirection.get("left")) {
     		speedX = -diagonalSpeed;
     		speedY = -diagonalSpeed;
     		move = 1;
+            this.direction = 7;
     	} else if (movementDirection.get("right")) {
     		speedX = diagonalSpeed;
     		speedY = diagonalSpeed;
     		move = 1;
+            this.direction = 3;
     	}
+    }
+    
+    /**
+     * Updates the player's sprite based on its direction.
+     */
+    private void updateSprite(int direction) {
+        switch (direction) {
+            case 0:
+                this.setTexture("player_leftBack_stand");
+                break;
+            case 1:
+                this.setTexture("player_back_stand");
+                break;
+            case 2:
+                this.setTexture("player_rightBack_stand");
+                break;
+            case 3:
+                this.setTexture("player_right_stand");
+                break;
+            case 4:
+                this.setTexture("player_rightFront_stand");
+                break;
+            case 5:
+                this.setTexture("player_front_stand");
+                break;
+            case 6:
+                this.setTexture("player_leftFront_stand");
+                break;
+            case 7:
+                this.setTexture("player_left_stand");
+                break;
+            default:
+                break;
+        }
     }
 
     /**

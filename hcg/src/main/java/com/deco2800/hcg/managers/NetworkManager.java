@@ -232,7 +232,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 		gameManager.setWorld(new World(gameManager.getWorldMap().getContainedNodes().get(0)
 				.getNodeLinkedLevel().getWorld().getLoadedFile()));
 		Player otherPlayer = new Player(1, 5, 10, 0);
-		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, "Name");
 		playerManager.addPlayer(otherPlayer);
 		playerManager.spawnPlayers();
 		contextManager.pushContext(new PlayContext());
@@ -357,7 +357,7 @@ public final class NetworkManager extends Manager implements TickableManager {
 						gameManager.setWorld(new World(gameManager.getWorldMap().getContainedNodes().get(0)
 								.getNodeLinkedLevel().getWorld().getLoadedFile()));
 						Player otherPlayer = new Player(1, 5, 10, 0);
-						otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+						otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, "Name");
 						playerManager.addPlayer(otherPlayer);
 						playerManager.spawnPlayers();
 						contextManager.pushContext(new PlayContext());

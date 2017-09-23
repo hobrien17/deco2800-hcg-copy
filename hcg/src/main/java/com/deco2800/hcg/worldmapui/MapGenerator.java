@@ -143,10 +143,8 @@ public class MapGenerator {
 		for(MapNode node : worldNodes) {
 			LOGGER.info(node.toString());
 		}
-		/* If a multi-world/WorldStack is introduced, the world position of 0 will need to be changed to a function 
-		 * which returns the world's position in the stack/collection of worlds. 
-		 */
-		WorldMap generatedWorld = new WorldMap(worldType, "", 0, rowCount, columnCount, worldNodes);
+
+		WorldMap generatedWorld = new WorldMap(worldType, "", rowCount, columnCount, worldNodes);
 		generatedWorld.addSeed(generateMapSeed(generatedWorld));
 		return generatedWorld;
 	}

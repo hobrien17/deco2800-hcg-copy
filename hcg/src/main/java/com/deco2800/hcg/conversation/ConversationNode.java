@@ -40,16 +40,41 @@ public class ConversationNode {
         this.options = new ArrayList<>(options);
     }
 
+    /**
+     * Get the Conversation this node is a part of
+     * @return A reference to the parent Conversation
+     */
     public Conversation getParent() {
         return parent;
     }
 
+    /**
+     * Get this node's dialog text
+     * @return A string of dialog
+     */
     public String getNodeText() {
         return nodeText;
     }
 
+    /**
+     * Return all dialog options associated with this node unconditionally
+     * @return List of Conversation Options
+     */
     public List<ConversationOption> getOptions() {
         return options;
     }
 
+    /**
+     * Get all associated dialog options whose condition is currently True
+     * @return List of Conversation Options
+     */
+    public List<ConversationOption> getValidOptions() {
+        List<ConversationOption> validOptions = new ArrayList<>();
+        for (ConversationOption option : options) {
+            if (option.testCondition()) {
+                validOptions.add(option);
+            }
+        }
+        return options;
+    }
 }

@@ -2,6 +2,7 @@ package com.deco2800.hcg.managers;
 
 import java.util.ArrayList;
 
+import com.deco2800.hcg.BaseTest;
 import org.junit.*;
 
 import com.deco2800.hcg.BaseTest;
@@ -59,6 +60,7 @@ public class WeatherManagerTests extends BaseTest {
 				testOnEffects, wmTurnOnTests.getOnEffects());
 	}
 
+
 	@Test
 	public void stopEffectTests() {
 		ArrayList<Weathers> testOffEffects = new ArrayList<Weathers>();
@@ -82,6 +84,8 @@ public class WeatherManagerTests extends BaseTest {
 		Assert.assertTrue("No effects should be turned on",
 				wmStopEffectTests.getOnEffects().isEmpty());
 	}
+
+	
 
 	@Test
 	public void stopAllEffectTest() {

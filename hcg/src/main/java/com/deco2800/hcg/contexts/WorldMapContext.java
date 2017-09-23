@@ -2,16 +2,19 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
+import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.worlds.World;
-
 import java.util.ArrayList;
 
 /**
@@ -40,16 +43,21 @@ public class WorldMapContext extends UIContext {
 	private GameManager gameManager;
 	private PlayerManager playerManager;
 	private ContextManager contextManager;
-	private MapInputManager inputManager;
 
 	private InputMultiplexer inputMultiplexer;
 
-	private boolean showAllNodes;
-
+	// Lists of the nodes in the map, the hidden nodes is there for demo purposes
 	private ArrayList<MapNodeEntity> allNodes;
 	private ArrayList<MapNodeEntity> hiddenNodes;
 
 	private Window window;
+	private Window exitWindow;
+	private Skin skin;
+
+	private TextureRegion lineTexture;
+	// used for demo purposes
+	private boolean showAllNodes;
+
 
 	/**
 	 * Constructor to create a new WorldMapContext
@@ -57,21 +65,19 @@ public class WorldMapContext extends UIContext {
 	public WorldMapContext() {
 		gameManager = GameManager.get();
 		gameManager.setMapContext(this);
-
-		// Not currently used, but might be later
-		SoundManager soundManager = (SoundManager) gameManager
-				.getManager(SoundManager.class);
+		
+		TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+		lineTexture = new TextureRegion(textureManager.getTexture("black_px"));
 		playerManager = (PlayerManager) gameManager
 				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		inputManager = (MapInputManager) gameManager
-				.getManager(MapInputManager.class);
+		InputManager inputManager = new InputManager();
 
 		showAllNodes = false;
 
 		// Setup UI + Buttons
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
 
 		Button quitButton = new TextButton("Quit", skin);
@@ -84,10 +90,12 @@ public class WorldMapContext extends UIContext {
 		window.setPosition(0, stage.getHeight());
 
 		stage.addActor(new WorldMapEntity());
+		
+		createExitWindow();
 
 		allNodes = new ArrayList<>();
 		hiddenNodes = new ArrayList<>();
-
+		
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			MapNodeEntity nodeEntry = new MapNodeEntity(node);
 			if (!node.isDiscovered()) {
@@ -95,9 +103,8 @@ public class WorldMapContext extends UIContext {
 				nodeEntry.setVisible(false);
 			}
 			allNodes.add(nodeEntry);
-			stage.addActor(nodeEntry);
 		}
-
+		
 		stage.addActor(window);
 
 		quitButton.addListener(new ChangeListener() {
@@ -127,7 +134,44 @@ public class WorldMapContext extends UIContext {
 		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
+		//inputManager.addMouseMovedListener(this::handleMouseMoved);
 	}
+
+	/*
+	// when hovering the node, change the mouse cursor, delete if not needed
+	private void handleMouseMoved(int screenX, int screenY){
+
+		Vector2 mouseScreen = new Vector2(screenX, screenY);
+		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
+		for (MapNodeEntity nodeEntity : allNodes) {
+			float nodeStartX = nodeEntity.getXPos();
+			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
+			float nodeStartY = nodeEntity.getYPos();
+			float nodeEndY = nodeEntity.getYPos() + nodeEntity.getHeight();
+			if (mouseStage.x >= nodeStartX && mouseStage.x <= nodeEndX
+					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
+					&& nodeEntity.getNode().isDiscovered()
+					&& !(nodeEntity.getNode().getNodeType() == 2)) {
+
+				// online free png https://dribbble.com/shots/815059-Basic-Cursor-PNG-Pack
+				// for design team: create a 'cursor' png file with:
+				//        a "power of 2" width px (256, 512,...)
+				//        a "RGBA8888" format
+				// otherwise, the code below will break
+
+				Pixmap pixmap = new Pixmap(Gdx.files.internal("resources/cursor-hand.png"));
+				Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0));
+				pixmap.dispose();
+				//Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
+			} else {
+				// this line should set the current cursor back to normal. but I don't know how to do. will look into this
+				// at the moment it's kind of automatically change back to normal when you no longer hovering
+
+				//Gdx.graphics.setSystemCursor(SystemCursor.Arrow);  // according to the library, this only works in LWJG3
+
+			}
+		}
+	}*/
 
 	private void handleTouchUp(int screenX, int screenY, int pointer,
 			int button) {
@@ -149,15 +193,30 @@ public class WorldMapContext extends UIContext {
 				 * to fix that problem.
 				 */
 				gameManager.setOccupiedNode(nodeEntity.getNode());
-				gameManager.setWorld(new World(nodeEntity.getNode()
-						.getNodeLinkedLevel().getWorld().getLoadedFile()));
+
+				// clear old observers (mushroom turret for example)
+                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+                manager.deleteObservers();
+				
+                // stop the old weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                
+                // create new world
+				World newWorld = new World(nodeEntity.getNode()
+                    .getNodeLinkedLevel().getWorld().getLoadedFile());
+				
+                // add the new weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                  setWeather(newWorld.getWeatherType());
+                
+				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}
 		}
 	}
 
-	public void updateMapDisplay() {
+	void updateMapDisplay() {
 		updateNodesDisplayed();
 		stage.clear();
 		stage.addActor(new WorldMapEntity());
@@ -168,7 +227,6 @@ public class WorldMapContext extends UIContext {
 				hiddenNodes.add(nodeEntry);
 				nodeEntry.setVisible(false);
 			}
-			stage.addActor(nodeEntry);
 		}
 		stage.addActor(window);
 	}
@@ -185,9 +243,137 @@ public class WorldMapContext extends UIContext {
 		}
 	}
 
+
 	@Override
 	public void show() {
 		// Capture user input
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
+
+	/**
+	 * Adds a new line to be drawn to the rendering batch. The line is drawn between the two given (x, y) pairs
+	 * @param batch the instance of the sprite batch to add the lines to.
+	 * @param x1 x co-ordinate of the first point
+	 * @param y1 y co-ordinate of the first point
+	 * @param x2 x co-ordinate of the second point
+	 * @param y2 y co-ordinate of the second point
+	 */
+	private void drawLine(Batch batch, int x1, int y1, int x2, int y2) {
+		int dx = x2 - x1;
+		int dy = y2 - y1;
+		// Length of line segment between two points
+		float length = (float)Math.sqrt((double)dx*dx + dy*dy);
+		// Theta (rads)
+		float rotation = (float) Math.asin(dy/length);
+		float thickness = 4;
+		// Convert to degrees
+		rotation = rotation * 180/(float)Math.PI;
+		batch.draw(lineTexture, x1, y1, 2, 2, length, thickness, 1, 1, rotation);
+	}
+
+	/**
+	 * Adds a new pot to be drawn to the rendering batch.
+	 * @param batch the sprite batch instance to group pots into
+	 * @param node the node which needs to be drawn
+	 */
+	private void drawPot(SpriteBatch batch, MapNodeEntity node) {
+		batch.draw(node.getNodeTexture(), node.getXPos(), node.getYPos(), node.getWidth(), node.getHeight());
+	}
+
+	/**
+	 * Creates separate render batches for the lines and pots, in order to get the layering done correctly.
+	 * @param delta the time step in between stage.act() calls.
+	 */
+	@Override
+	public void render(float delta) {
+		super.render(delta);
+		Batch lineBatch = new SpriteBatch();
+		SpriteBatch potBatch = new SpriteBatch();
+
+		// Render all the lines first
+		lineBatch.begin();
+		for (MapNodeEntity nodeEntity : allNodes) {
+			for (MapNode proceedingNode : nodeEntity.getNode().getProceedingNodes()) {
+				if (nodeEntity.getNode().isDiscovered() && proceedingNode.isDiscovered() || showAllNodes) {
+					drawLine(lineBatch, nodeEntity.getNode().getXPos(), nodeEntity.getNode().getYPos(),
+							proceedingNode.getXPos(), proceedingNode.getYPos());
+				}
+			}
+		}
+		lineBatch.end();
+
+		// Render all the pots second, in order to ensure they are rendered on top of the lines.
+		potBatch.begin();
+		for (MapNodeEntity nodeEntity : allNodes) {
+			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
+				nodeEntity.updateTexture();
+				drawPot(potBatch, nodeEntity);
+			}
+		}
+		potBatch.end();
+
+		// dispose of the batches to prevent memory leaks
+		lineBatch.dispose();
+		potBatch.dispose();
+	}
+	
+	private void createExitWindow() {
+    	exitWindow = new Window("Complete World?", skin);
+    	Button yesButton = new TextButton("Yes", skin);
+    	yesButton.pad(5, 10, 5, 10);
+    	Button noButton = new TextButton("No", skin);
+    	noButton.pad(5, 10, 5, 10);
+    	
+    	/* Add a programmatic listener to the buttons */
+		yesButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				endWorld();
+			}
+		});
+
+		noButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Button completeWorldButton = new TextButton("Complete World", skin);
+				window.remove();
+				window.add(completeWorldButton);
+				window.pack();
+				stage.addActor(window);
+				exitWindow.remove();
+				
+				completeWorldButton.addListener(new ChangeListener() {
+					@Override
+					public void changed(ChangeEvent event, Actor actor) {
+						endWorld();
+					}
+				});
+			}
+		});
+    	
+    	exitWindow.add(yesButton);
+    	exitWindow.add(noButton);
+    	exitWindow.pack();
+		exitWindow.setMovable(false); // So it doesn't fly around the screen
+		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+    }
+    
+    public void addEndOfContext() {
+    	if(exitWindow.getStage() == null) {
+    		/* Add the window to the stage */
+    		stage.addActor(exitWindow);
+    	}
+    }
+    
+    private void endWorld() {
+    	for(WorldMap map : gameManager.getWorldStack().getWorldStack()) {
+    		if(map.getWorldPosition() == gameManager.getWorldMap().getWorldPosition() + 1) {
+    			map.setUnlocked();
+    		}
+    	}
+    	gameManager.getWorldMap().toggleCompleted();
+    	WorldStackContext context = gameManager.getStackContext();
+    	context.updateWorldDisplay();
+    	contextManager.popContext();
+    }
 }
