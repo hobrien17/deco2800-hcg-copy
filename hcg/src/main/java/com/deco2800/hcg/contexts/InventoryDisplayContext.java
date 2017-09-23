@@ -154,7 +154,6 @@ public abstract class InventoryDisplayContext extends UIContext{
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
             commonSetup(currentItem, button, stack, itemLabel, clickedImage);
-
             //Add listener for this item button
             stack.addListener(new ClickListener() {
                 @Override
@@ -164,6 +163,7 @@ public abstract class InventoryDisplayContext extends UIContext{
                     shopMenuContext.draw();
                 }
             });
+            stack.addListener(new TextTooltip("test", skin));
             currentRow++;
         }
     }
