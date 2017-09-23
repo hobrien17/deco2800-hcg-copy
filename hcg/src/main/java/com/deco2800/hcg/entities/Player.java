@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.deco2800.hcg.contexts.*;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
@@ -513,7 +514,7 @@ public class Player extends Character implements Tickable {
     	List<AbstractEntity> entities = GameManager.get().getWorld()
     		.getEntities();
     	for (AbstractEntity entity : entities) {
-    	    if (!this.equals(entity) && !(entity instanceof Squirrel)
+    	    if (!this.equals(entity) && !(entity instanceof Enemy)
     		    && newPos.overlaps(entity.getBox3D())
     		    && !(entity instanceof Bullet)
     		    && !(entity instanceof Weapon)) {

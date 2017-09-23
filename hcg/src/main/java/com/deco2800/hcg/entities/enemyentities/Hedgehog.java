@@ -1,5 +1,7 @@
 package com.deco2800.hcg.entities.enemyentities;
 
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
@@ -8,6 +10,7 @@ import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Hedgehog extends Enemy implements Tickable {
 
@@ -43,29 +46,38 @@ public class Hedgehog extends Enemy implements Tickable {
 
     }
 
+
+    public void setHedgehogStatus() {
+        float distance = this.distance(playerManager.getPlayer());
+        if (chargedAtPlayer == true && distance > chargingRange){
+            this.setChargeStatus(false);
+        }
+        if (chargedAtPlayer == false && distance < walkingRange && distance > chargingRange) {
+            // move slowly to player
+            setSpeed(this.level * 0.01f);
+            this.setStatus(2);
+            this.lastPlayerX = playerManager.getPlayer().getPosX();
+            this.lastPlayerY = playerManager.getPlayer().getPosY();
+        } else if (chargedAtPlayer == false && distance < chargingRange) {
+            // charge at player
+            setSpeed(this.level * 0.05f);
+            this.setStatus(2);
+            this.lastPlayerX = playerManager.getPlayer().getPosX();
+            this.lastPlayerY = playerManager.getPlayer().getPosY();
+        } else {
+            // move randomly
+            setSpeed(this.level * 0.03f);
+            this.setStatus(3);
+        }
+    }
     /**
      * On Tick handler
      * @param gameTickCount Current game tick
      */
     @Override
     public void onTick(long gameTickCount) {
-        float distance = this.distance(playerManager.getPlayer());
-        if (chargedAtPlayer == true && distance > chargingRange){
-            this.setChargeStatus(false);
-        }
-        if (chargedAtPlayer == false && distance < walkingRange && distance > chargingRange){
-            // move_slowly to player
-            setSpeed(this.level * 0.01f);
-            newPos = this.getToPlayerPos();
-        } else if (chargedAtPlayer == false && distance < chargingRange) {
-            // charge at player
-            setSpeed(this.level * 0.05f);
-            newPos = getToPlayerPos();
-        } else {
-            // move randomly
-            setSpeed(this.level * 0.03f);
-            newPos = this.getRandomPos();
-        }
+        this.setHedgehogStatus();
+        this.setNewPos();//Put new position into Box3D.
         this.detectCollision();//Detect collision.
         if (this.collidedPlayer == true) {
             this.setChargeStatus(true);
