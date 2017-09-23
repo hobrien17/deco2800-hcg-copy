@@ -193,6 +193,7 @@ public class TextureManager extends Manager {
 		textureMap.put("purple_potion", new Texture("resources/sprites/potions/potion_round_purple.png"));
 		textureMap.put("blue_potion", new Texture("resources/sprites/potions/potion_round_blue.png"));
 		textureMap.put("seed", new Texture("resources/placeholderassets/placeholderseed.png"));
+
 		//Multiplayer UI Textures
 		//Multiplayer Lobby
 		textureMap.put("chat_background",	new Texture("resources/ui/multiplayer_ui/chatbar.png"));
@@ -209,6 +210,11 @@ public class TextureManager extends Manager {
 		textureMap.put("server_join_button", new Texture("resources/ui/multiplayer_ui/menu_join_button.png"));
 		textureMap.put("server_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
 		textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
+		
+		//Conversation textures
+		textureMap.put("conversation_context",  new Texture("resources/ui/conversations/conversation_context.png"));
+		textureMap.put("npc_face", new Texture("resources/sprites/npc/npc_face.png"));
+
 	}
 
 	/**
