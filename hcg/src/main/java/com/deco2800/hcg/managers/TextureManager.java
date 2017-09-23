@@ -100,6 +100,7 @@ public class TextureManager extends Manager {
 		textureMap.put("water_corpse", new Texture("resources/sprites/dead_enemies/waterlily.png"));
 		textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass.png"));
 		textureMap.put("fire_corpse", new Texture("resources/sprites/dead_enemies/inferno.png"));
+		textureMap.put("explosion", new Texture("resources/sprites/dead_enemies/explosion_temp.png"));
 		
 		// Miscellaneous textures
 		textureMap.put("error", new Texture("resources/misc/error.png"));
@@ -109,6 +110,7 @@ public class TextureManager extends Manager {
 	    textureMap.put("boulder", new Texture("resources/terrain_objects/boulder.png"));
 	    textureMap.put("rock", new Texture("resources/terrain_objects/rock.png"));
 	    textureMap.put("iceboulder", new Texture("resources/terrain_objects/iceboulder.png"));
+	    textureMap.put("house", new Texture("resources/terrain_objects/house.png"));
 	    
 	    // terrain tiles
         textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
