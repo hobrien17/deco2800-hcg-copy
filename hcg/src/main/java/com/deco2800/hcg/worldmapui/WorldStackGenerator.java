@@ -15,6 +15,10 @@ public class WorldStackGenerator {
 		mapGenerator = new MapGenerator(levelSet);
 	}
 	
+	public void setGeneratorSeed(int seed) {
+		mapGenerator.setGeneratorSeed(seed);
+	}
+	
 	public WorldStack generateWorldStack() {
 		return buildStack(0, 0);
 	}
