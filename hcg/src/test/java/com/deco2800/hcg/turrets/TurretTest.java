@@ -284,13 +284,24 @@ public class TurretTest {
 	public void testWaterTurret() {
 		setupWaterTest();
 		
-		assertEquals("Health should start at max", player.getHealthCur(), player.getHealthMax());
+		assertEquals("Health should start at max", player.getHealthMax(), player.getHealthCur());
 		player.takeDamage(10);
 		for(int i = 9; i >= 0; i--) {
 			turret.update(sw, 10-i);
 			assertEquals("Health should currently be " + i + "below max", player.getHealthMax()-i, 
 					player.getHealthCur());
 		}
+	}
+	
+	@Test
+	public void testWaterTurretDie() {
+		setupWaterTest();
+		
+		for(int i = 0; i < 30; i++) {
+			assertTrue("World should still contain corpse", gm.getWorld().containsEntity(corpse));
+			turret.update(sw, i);
+		}
+		assertFalse("Turret should have been removed", gm.getWorld().containsEntity(corpse));
 	}
 	
 	@Test
