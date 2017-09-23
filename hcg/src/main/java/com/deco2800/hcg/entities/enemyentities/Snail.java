@@ -12,7 +12,7 @@ public class Snail extends Enemy implements Tickable {
      * @param posX the x position
      * @param posY the y position
      * @param posZ the x position
-     * @param id the ID of the Hedgehog Enemy
+     * @param id the ID of the Snail Enemy
      */
     public Snail(float posX, float posY, float posZ, int id) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
