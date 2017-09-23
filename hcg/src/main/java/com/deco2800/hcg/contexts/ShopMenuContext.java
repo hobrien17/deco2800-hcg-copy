@@ -101,6 +101,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
         buySell.add(shopBuy);
         buySell.row();
+        buySell.add(amount);
         buySell.row();
         buySell.add(shopSell);
         shopExit.setPosition(0, stage.getHeight()-shopExit.getHeight());
@@ -121,9 +122,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
         //add table to stage
         stage.addActor(centreTable);
         stage.addActor(shopExit);
-        
-        //add textfield to stage
-        stage.addActor(amount);
 
         //Listeners
         shopExit.addListener(new ClickListener() {
@@ -143,7 +141,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
             	for(int i=0; i < number; i++) {
                     shopKeeper.getShop().buyStock(selectedItem);
                 }
-            	selectedItem = null;
+            	//selectedItem = null;
             	draw();
             }
         });
@@ -155,7 +153,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
             	for(int i = 0; i < number; i++){
             		shopKeeper.getShop().sellStock(selectedItem);
             	}
-            	selectedItem = null;
+            	//selectedItem = null;
                 draw();
             }
         });
