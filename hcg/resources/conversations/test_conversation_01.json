@@ -1,0 +1,57 @@
+{
+  "initialNode": "0",
+  "nodes": [
+    {
+      "id": "0",
+      "nodeText": "Hi there how are you going today?",
+      "options": [
+        {
+          "optionText": "I am going well mate!",
+          "target": "1"
+        },
+        {
+          "optionText": "I'm not feeling so good, I got rekt by midsemester exams",
+          "target": "3"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "nodeText": "That's great, would you like to complete a quest?",
+      "options": [
+        {
+          "optionText": "Yes please",
+          "target": "2"
+        },
+        {
+          "optionText": "No I hate quests",
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "nodeText": "Awesome, I have just placed the quest in your objectives",
+      "options": [
+        {
+          "optionText": "Okay thank you",
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "nodeText": "Yeah mid sem exams are annoying, so are you sure you don't want to complete a quest?",
+      "options": [
+        {
+          "optionText": "Yeah I don't want to do a quest, sorry.",
+          "target": null
+        },
+        {
+          "optionText": "Okay give me the quest!",
+          "target": "2"
+        }
+      ]
+    }
+  ]
+}
