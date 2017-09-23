@@ -287,14 +287,18 @@ public final class NetworkManager extends Manager {
 				Integer messageId = Message.getId(receiveBuffer);
 				// get message type
 				MessageType messageType = Message.getType(receiveBuffer);
-				Message message = null;
+				
+				if (messageType == MessageType.ACK) {
+					// remove message from queue
+					receiveBuffer.position(14);
+					int removeId = receiveBuffer.getInt();
+					sendQueue.remove(removeId);
+					return;
+				}
+				
+				// get message
+				Message message;
 				switch (messageType) {
-					case ACK:
-						// remove message from queue
-						receiveBuffer.position(14);
-						int removeId = receiveBuffer.getInt();
-						sendQueue.remove(removeId);
-						break;
 					case JOINING:
 						message = new JoiningMessage();
 						// add peer to lobby
