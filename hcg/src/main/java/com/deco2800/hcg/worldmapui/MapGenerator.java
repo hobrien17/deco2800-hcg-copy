@@ -53,7 +53,6 @@ public class MapGenerator {
 		Random seedGenerator = new Random();
 		seedValue = Math.abs(seedGenerator.nextInt(999));
 		mainGenerator = new Random(seedValue);
-		System.out.println(seedValue);
 	}
 	
 	public void setGeneratorSeed(int seed) {
