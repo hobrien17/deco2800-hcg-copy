@@ -11,12 +11,12 @@ import java.util.Optional;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 
 /**
- * Fireball class
- * Used by the FireTurret
- * Is currently a large bullet that destroys everything in its path
- * Has the capability to be changed to set enemies on fire instead of destroying them
+ * Grass bullet class
+ * This bullet acts like a normal bullet, but if it doesn't hit any enemies it will spawn a DestructableTree
+ *    in its spot
  *
  * @author Henry O'Brien
  *
@@ -24,25 +24,26 @@ import com.deco2800.hcg.entities.bullets.Bullet;
 public class GrassBullet extends Bullet {
 
 	/**
-	 * Creates a new fireball moving towards the given co-ordinates
+	 * Creates a new grass bullet moving towards the given co-ordinates
 	 * 
 	 * @param posX
-	 * 			the fireball's starting x position
+	 * 			the bullet's starting x position
 	 * @param posY
-	 * 			the fireball's starting y position
+	 * 			the bullet's starting y position
 	 * @param posZ
-	 * 			the fireball's starting z position
+	 * 			the bullet's starting z position
 	 * @param newX
-	 * 			the fireball's target x position
+	 * 			the bullet's target x position
 	 * @param newY
-	 * 			the fireball's target y position
+	 * 			the bullet's target y position
 	 * @param newZ
-	 * 			the fireball's target z position
+	 * 			the bullet's target z position
 	 * @param user
-	 * 			the entity who shot the fireball
+	 * 			the entity who shot the bullet
 	 */
 	public GrassBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
-		super(posX, posY, posZ, newX, newY, newZ, user, 1);	
+		super(posX, posY, posZ, newX, newY, newZ, user, 1);
+		this.setTexture("battle_seed_green");
 	}
 
 	@Override

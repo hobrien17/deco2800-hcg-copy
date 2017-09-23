@@ -201,8 +201,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         Bullet bullet;
         switch (bulletType) {
             case 0:
-                bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+            	bullet = new GrassBullet(posX, posY, posZ, goalX, goalY, 0, this.user);
+                //bullet = new Bullet(posX, posY, posZ,
+                //        goalX, goalY, this.user, 1);
                 break;
             case 1:
                 bullet = new SunflowerSeed(posX, posY, posZ,

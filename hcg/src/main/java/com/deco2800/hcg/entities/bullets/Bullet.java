@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
+import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.Player;
 
@@ -184,7 +185,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 					hitCount--;
 				}
 				// Collision with destructable tree
-				if (entity instanceof DestructableTree && user instanceof Player) {
+				if (entity instanceof DestructableTree && user instanceof Player && !(this instanceof GrassBullet)) {
 					DestructableTree tree = (DestructableTree)entity;
 					applyEffect(tree);
 					hitCount--;
@@ -198,7 +199,8 @@ public class Bullet extends AbstractEntity implements Tickable {
 				}
 				// COllision with corpse
 				if (entity instanceof Corpse && user instanceof Player) {
-					// create sunflower turret here
+					Corpse corpse = (Corpse)entity;
+					corpse.plantInside(this);
 					hitCount = 0;
 				}
 				if (hitCount == 0) {
