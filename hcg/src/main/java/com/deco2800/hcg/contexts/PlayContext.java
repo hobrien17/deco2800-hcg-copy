@@ -149,7 +149,12 @@ public class PlayContext extends Context {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                playerManager.removeCurrentPlayer();
+            	// clear old observers (mushroom turret for example)
+                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+                manager.deleteObservers();
+
+                // stop the old weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
                 contextManager.popContext();
             }
         });
