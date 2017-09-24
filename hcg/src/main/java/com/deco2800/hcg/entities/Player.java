@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.deco2800.hcg.contexts.*;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
@@ -514,7 +515,7 @@ public class Player extends Character implements Tickable {
 		for (AbstractEntity entity : entities) {
 			if (!this.equals(entity) && !(entity instanceof Squirrel) && !(entity instanceof Hedgehog)
 					&& newPos.overlaps(entity.getBox3D()) && !(entity instanceof Bullet)
-							&& !(entity instanceof Weapon)) {
+							&& !(entity instanceof Weapon) && !(entity instanceof Corpse)) {
 				LOGGER.info(this + " colliding with " + entity);
 				collided = true;
 			}
