@@ -2,7 +2,6 @@ package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observer;
 
-import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
@@ -43,7 +42,7 @@ public abstract class AbstractTurret implements Observer {
 	}
 	
 	/**
-	 * Gets the texture of this object, based on what type of turret it is
+	 * Gets the initial texture of this object, based on what type of turret it is
 	 * 
 	 * @return the texture name of this object
 	 */

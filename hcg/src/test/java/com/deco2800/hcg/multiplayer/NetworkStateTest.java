@@ -7,42 +7,52 @@
 package com.deco2800.hcg.multiplayer;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import org.junit.Before;
+import org.junit.Test;
 
-import org.junit.*;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 
 
 
-public class NetworkStateTest {
-	private static NetworkState network;
-	private byte[] payload = "123456789ABC".getBytes();
-	private byte[] payload1 = "123456789ABCD".getBytes();
-	Message message1 = new Message(MessageType.CHAT, payload);
-	Message message2 = new Message(MessageType.CHAT, payload1);
+public class NetworkStateTest  {
+	private GameManager gameManager;
+	private NetworkManager networkManager;
+	private NetworkManager networkManager2;
 	
-	
-	
-	@Test
-	public void InitializeTest(){
-		network.init(false);
-		System.out.println(network.isInitialised());
-		assert(network.isInitialised() == true);
+	@Before
+	public void setupNetworkManager(){
+		gameManager = GameManager.get();
+		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+		networkManager2 = (NetworkManager) gameManager.getManager(NetworkManager.class);
 	}
 	@Test
-	public void sendMessageTest(){
-		network.init(false);
-		network.sendMessage(message2);
-		
-		System.out.println(network.sendQueue.size());
-		assertTrue("Incorrect number of messages sent", network.sendQueue.size() == 1);
-	
-		network.sendChatMessage("String 1");
-		System.out.println(network.sendQueue.size());
-		assertTrue("Incorrect number of messages sent", network.sendQueue.size() == 2);
-		
-		network.join("HOST_1");
-		System.out.println(network.sockets.values());
-		assertTrue("Correct name of socket address", network.sockets.values().toString().equals("[HOST_1:1337]"));
+	public void initializeTest() {
+		networkManager.init(true);
+		assertThat("Network is not initialised after initiallising", networkManager.isInitialised(), is(equalTo(true)));
+		networkManager2.init(false);
+		assertThat("Network is not initialised after initiallising", networkManager2.isInitialised(), is(equalTo(true)));
 	}
-
 	
+	@Test
+	public void initHostTest() {
+		networkManager.init(true);
+		assertThat("Player is not hosting", networkManager.isHost(), is(equalTo(true)));
+		networkManager.init(false);
+		assertThat("Player is hosting", networkManager.isHost(), is(equalTo(false)));
+	}
+	
+	@Test
+	public void queueMessageTest() {
+		networkManager.init(true);
+		int size = networkManager.getSendQueueSize();
+		assertThat("The message queue contains messages", size, is(equalTo(0)));
+		networkManager.queueMessage(new Message(MessageType.ACK));
+		assertThat("The queue should only have 1 message only", networkManager.getSendQueueSize(), is(equalTo(1)));
+		networkManager.queueMessage(new Message(MessageType.ACK));
+		assertThat("Queue should have 2 messages", networkManager.getSendQueueSize(), is(equalTo(2)));
+	}
 }

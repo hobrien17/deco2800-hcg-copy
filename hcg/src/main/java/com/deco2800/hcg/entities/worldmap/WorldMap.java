@@ -16,20 +16,17 @@ import java.util.List;
 public class WorldMap {
 	private int worldType; // <- possibility of map biomes?
 	private List<MapNode> containedNodes;
-	private String worldBackgroundTexture;
 	private int worldPosition; // <- world position in the collection of worlds
-	private String worldSeed;
+	private int worldSeed;
 	private int worldRowNumber;
 	private int worldColumnNumber;
+	private boolean unlocked;
+	private boolean completed;
 	
 	/**
 	 * Initialises the WorldMap object using the specified parameters.	
 	 * @param type
 	 *     The world's type (not 100% confirmed yet so for now it is not used)
-	 * @param texture
-	 *     The background texture to display on the screen when the map is being displayed
-	 * @param position
-	 *     The position of the WorldMap in the WorldStack
 	 * @param rows
 	 *     The number of rows that the WorldMap supports
 	 * @param columns
@@ -37,15 +34,13 @@ public class WorldMap {
 	 * @param nodeList
 	 *     The nodes which make up the WorldMap's playable game areas
 	 */
-	public WorldMap(int type, String texture, int position, int rows, int columns, List<MapNode> nodeList) {
+	public WorldMap(int type, int rows, int columns, List<MapNode> nodeList) {
 		worldType = type;
-		worldBackgroundTexture = texture;
-		worldPosition = position;
-		// blank initial seed
-		worldSeed = "";
 		worldRowNumber = rows;
 		worldColumnNumber = columns;
 		containedNodes = nodeList;
+		completed = false;
+		unlocked = false;
 	}
 	
 	//TEMPORARY CONSTRUCTOR! REMOVE ONCE IMPLEMENTATION IS FINISHED!
@@ -74,15 +69,6 @@ public class WorldMap {
 	}
 	
 	/**
-	 * Gets the world's texture.
-	 * @return
-	 *     Returns the world's current texture
-	 */
-	public String getWorldTexture() {
-		return worldBackgroundTexture;
-	}
-	
-	/**
 	 * Gets the world's position in the WorldStack.
 	 * @return
 	 *     Returns the world's current position in the WorldStack (0 being the top position)
@@ -96,7 +82,7 @@ public class WorldMap {
 	 * @return
 	 *     Returns the world's generated seed value
 	 */
-	public String getWorldSeed() {
+	public int getWorldSeed() {
 		return worldSeed;
 	}
 	
@@ -143,22 +129,33 @@ public class WorldMap {
 			}
 		}
 	}
-
-	/**
-	 * Changes the background texture of the world display.
-	 * @param newTexture
-	 *     The new texture to change to
-	 */
-	public void changeWorldTexture(String newTexture) {
-		worldBackgroundTexture = newTexture;
-	}
 	
 	/**
 	 * Adds a new seed to the world or changes the current one.
 	 * @param seed
 	 *     The seed to change to
 	 */
-	public void addSeed(String seed) {
+	public void addSeed(int seed) {
 		worldSeed = seed;
+	}
+	
+	public void toggleCompleted() {
+		completed = !completed;
+	}
+	
+	public boolean isCompleted() {
+		return completed;
+	}
+	
+	public void setUnlocked() {
+		unlocked = true;
+	}
+	
+	public boolean isUnlocked() {
+		return unlocked;
+	}
+	
+	public void setPosition(int position) {
+		worldPosition = position;
 	}
 }

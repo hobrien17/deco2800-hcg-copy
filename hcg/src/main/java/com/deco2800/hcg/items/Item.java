@@ -73,15 +73,6 @@ public interface Item {
      * @return Whether or not this item can be traded.
      */
     boolean isTradable();
-
-    /**
-     * Function for setting the icon of an item
-     * Implemented similar to the AbstractEntitry texture. Be sure to register texture with
-     * TextureRegister before assigning the texture to a item
-     * @param texture filename of texture
-     * @throws IllegalArgumentException if texture is an invalid file name
-     */
-    void setTexture(String texture) throws IllegalArgumentException;
     
     /**
      * Function for getting the icon of an item
@@ -122,6 +113,13 @@ public interface Item {
      * @return whether or not this item and the given item are equivalent.
      */
     boolean equals(Item item) throws IllegalArgumentException;
+    
+    /**
+     * Gets this item's rarity.
+     * 
+     * @return The rarity of this item.
+     */
+    ItemRarity getRarity();
 
     /**
      * Make a deep copy of this item
