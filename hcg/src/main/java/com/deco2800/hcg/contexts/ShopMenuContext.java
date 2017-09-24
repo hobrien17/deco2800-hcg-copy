@@ -30,6 +30,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private Image playerTitle;
     private Table shopInventory;
     private Table playerInventory;
+    private Image buyBag;
+    private Image sellBag;
     private ImageButton shopBuy;
     private ImageButton shopSell;
     private ImageButton shopExit;
@@ -56,7 +58,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         		new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
         
         draw();
-        
+
 
 
     }
@@ -88,8 +90,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
 
         playerInventory = new Table();
         playerInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
-
-        shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy_button")).getDrawable());
         
         //adding the textfield
         amountString = amount.getText();
@@ -97,13 +97,22 @@ public class ShopMenuContext extends InventoryDisplayContext {
         amount.setWidth(100);
         
         buySell = new Table();
+
+        buyBag = new Image(new Image(textureManager.getTexture("buy_bag")).getDrawable());
+        sellBag = new Image(new Image(textureManager.getTexture("sell_bag")).getDrawable());
+        shopBuy = new ImageButton(new Image(textureManager.getTexture("shop_buy_button")).getDrawable());
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
-        buySell.add(shopBuy);
+        buySell.add(sellBag).height(80).width(80);
         buySell.row();
-        buySell.add(amount);
+        buySell.add(shopBuy).height(80).width(160);
         buySell.row();
-        buySell.add(shopSell);
+        buySell.add(amount).height(40).width(40);
+        buySell.row();
+        buySell.add(buyBag).height(100).width(80);
+        buySell.row();
+        buySell.add(shopSell).height(80).width(160);
+        buySell.row();
         shopExit.setPosition(0, stage.getHeight()-shopExit.getHeight());
 
         inventoryDisplay(textureManager, player, skin, playerInventory, this);

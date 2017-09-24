@@ -21,7 +21,7 @@
 0,29,1,1,1,1,1,1,1,1,1,1,1,1,1,1,29,1,1,1,1,1,1,1,1,1,1,1,1,0,
 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,59,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
@@ -88,6 +88,8 @@
  </layer>
  <layer name="Healing" width="30" height="30">
   <properties>
+   <property name="damage" value="-1"/>
+   <property name="damagetype" value="1"/>
    <property name="name" value="healingspring"/>
    <property name="speed" value="1.0"/>
   </properties>
@@ -381,16 +383,16 @@
   <object id="1" gid="57" x="704.563" y="386.016" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
-    <property name="fName" value="Jane"/>
-    <property name="sName" value="Jensen"/>
+    <property name="fName" value="Beta"/>
+    <property name="sName" value="Cornish"/>
     <property name="texture" value="character_shop"/>
    </properties>
   </object>
   <object id="2" gid="57" x="264.785" y="384.352" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
-    <property name="fName" value="Jane"/>
-    <property name="sName" value="Jensen"/>
+    <property name="fName" value="Georgio"/>
+    <property name="sName" value="Burteo"/>
     <property name="texture" value="character_shop"/>
    </properties>
   </object>
