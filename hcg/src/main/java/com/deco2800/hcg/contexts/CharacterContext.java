@@ -18,6 +18,7 @@ import com.deco2800.hcg.managers.TextureManager;
 public abstract class CharacterContext extends UIContext {
 
     protected Table masterTable;
+    protected Table topRowInfoTable;
 
     protected Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
     protected GameManager gameManager;
@@ -30,6 +31,7 @@ public abstract class CharacterContext extends UIContext {
         gameManager = GameManager.get();
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
     }
 
     protected void initMasterTable() {
