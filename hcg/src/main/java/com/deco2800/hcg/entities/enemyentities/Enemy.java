@@ -544,4 +544,13 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        // We create a polynomial hash-code based on start, end and capacity
+        final int prime = 31; // an odd base prime
+        int result = 1; // the hash code under construction
+        result = prime * result + this.id;
+        return result;
+    }
 }
