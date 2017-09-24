@@ -31,7 +31,7 @@ public class PlayerTest {
 	public void testInitialiseNewPlayer() {
 
 		Player player = new Player(0, 0, 0);
-		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, "Name");
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0, "Name");
 		
 		assertTrue("Player agility isn't set to value 0.", player.attributes.get("agility") == 0);
 
@@ -40,7 +40,7 @@ public class PlayerTest {
 	@Test
 	public void testAttributesMap() {
 		Player player = new Player(0, 0, 0);
-		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, "Name");
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0,"Name");
 		player.setAttribute("agility",2);
 		assertEquals("player agility should be 2 after setAttribute changed it",2, player.getAttribute("agility"));
 		player.setAttribute("DontAddThis",1000);
@@ -189,7 +189,7 @@ public class PlayerTest {
 	    
 	    Player player = new Player(0, 0, 0);
 	    
-	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, "Name");
+	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Name");
 	    
 	    assertTrue("Player's maximum stamina was not initialised correctly",
 	            player.getStaminaMax() == 250);

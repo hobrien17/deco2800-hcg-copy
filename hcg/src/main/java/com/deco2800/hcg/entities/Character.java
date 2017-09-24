@@ -61,7 +61,7 @@ public abstract class Character extends AbstractEntity {
 
     // Skills
     // TODO: Message weapons team to find out what categories of weapons they will implement
-    protected int meleeSkill;
+
 
     //Kill Log with worlds
     //Main level is a mapping between the world ID to Enemies and their amount of kills
@@ -100,7 +100,6 @@ public abstract class Character extends AbstractEntity {
         this.xp = 1;
         this.healthMax = 20;
         this.healthCur = healthMax;
-        this.meleeSkill = 1;
 
         //Initialize the empty kill log
         killLog = new HashMap<>();
@@ -249,18 +248,12 @@ public abstract class Character extends AbstractEntity {
      *
      * @param attribute is in CHARACTER_ATTRIBUTES
      */
-    protected void setAttribute(String attribute,int value){
+    public void setAttribute(String attribute,int value){
         if (CHARACTER_ATTRIBUTES.contains(attribute)) {
             this.attributes.put(attribute, value);
         }
     }
-    /**
-     *
-     * @param meleeSkill
-     */
-    protected void setMeleeSkill(int meleeSkill) {
-        this.meleeSkill = meleeSkill;
-    }
+
     
     /**
      * Fetches the item this character currently has equipped, or null if this
@@ -365,14 +358,6 @@ public abstract class Character extends AbstractEntity {
 
     public int getStrength() {
         return attributes.get("strength");
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getMeleeSkill() {
-        return meleeSkill;
     }
 
     /**
