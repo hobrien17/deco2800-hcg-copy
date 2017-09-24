@@ -173,7 +173,6 @@ public abstract class InventoryDisplayContext extends UIContext {
                     shopMenuContext.draw();
                 }
             });
-            stack.addListener(new TextTooltip("test", skin));
             currentRow++;
         }
     }
