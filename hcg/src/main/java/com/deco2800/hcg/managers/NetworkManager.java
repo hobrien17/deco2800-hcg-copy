@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
 import com.deco2800.hcg.multiplayer.*;
 import com.deco2800.hcg.worlds.World;
 

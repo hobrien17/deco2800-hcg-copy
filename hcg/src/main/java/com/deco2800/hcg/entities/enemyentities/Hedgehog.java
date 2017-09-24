@@ -23,7 +23,7 @@ public class Hedgehog extends Enemy implements Tickable {
      */
     public Hedgehog(float posX, float posY, float posZ, int id) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
-        this.setTexture("hedgehog");
+        this.setTexture("tree");
         this.level = 1;
         walkingRange = 30 * this.level;
         chargingRange = 10 * this.level;
@@ -50,21 +50,18 @@ public class Hedgehog extends Enemy implements Tickable {
             // move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.setTexture("hedgehog");
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else if (!chargedAtPlayer && distance < chargingRange) {
             // charge at player
             setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.setTexture("hedgeball");
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else {
             // move randomly
             setSpeed(this.level * 0.03f);
             this.setStatus(3);
-            this.setTexture("hedgehog");
         }
     }
     /**
@@ -76,7 +73,7 @@ public class Hedgehog extends Enemy implements Tickable {
         this.setHedgehogStatus();
         this.setNewPos();//Put new position into Box3D.
         this.detectCollision();//Detect collision.
-        if (this.collidedPlayer == true) {
+        if (this.collidedPlayer) {
             this.setChargeStatus(true);
         }
         this.moveAction();//Move enemy to the position in Box3D.

@@ -194,7 +194,7 @@ public class TurretTest {
 		turret = new IceTurret(corpse);
 
 		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); // to test speed change
-		enemy.setSpeed(1f);
+		enemy.setSpeed(0f);
 		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 1);
 		enemyFar.setSpeed(1f);
 		gm.getWorld().addEntity(enemy);
@@ -211,7 +211,7 @@ public class TurretTest {
 		for (int i = 0; i < 5; i++) {
 			turret.update(sw, i); // update until the turret detonates
 		}
-		assertEquals("The enemy should be frozen", 0, enemy.getMovementSpeed(), 0); 
+		assertEquals("The enemy should be frozen", 0f, enemy.getMovementSpeed(), 0);
 		// check that the enemy is frozen
 		assertEquals("The second enemy should be slower than normal", 0.5f, enemyFar.getMovementSpeed(), 0);
 		for (int i = 0; i < 10; i++) {

@@ -29,12 +29,14 @@ public class MushroomTurret extends Enemy implements Observer {
     public MushroomTurret(float posX, float posY, float posZ, int ID) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
         //testing with tower sprite
-        this.setTexture("mushroom");
+        this.setTexture("tower");
         this.level = 1;
         seconds = 0;
         range = 15 * this.level;
         manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
+        healthMax = 20;
+        healthCur = healthMax;
         // weapon not working
         this.enemyWeapon = new WeaponBuilder()
                 .setWeaponType(WeaponType.MACHINEGUN)
@@ -78,17 +80,15 @@ public class MushroomTurret extends Enemy implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         switch (seconds%6){
-            case 0: // set turret phase 1
-                this.setTexture("mushroom");
+            case 0: // set turret phase 1 this.setTexture()
                 break;
-            case 1: // set turret phase 2
+            case 1: // set turret phase 2 this.setTexture();
                 break;
-            case 2: // set turret phase 3
+            case 2: // set turret phase 3 this.setTexture();
                 break;
-            case 3: // set turret phase 4
-                this.setTexture("tower");
+            case 3: // set turret phase 4 this.setTexture();
                 break;
-            case 4:
+            case 4: // set turret phase 5 this.setTexture();
                 this.turretShoot();
                 break;
             default:
