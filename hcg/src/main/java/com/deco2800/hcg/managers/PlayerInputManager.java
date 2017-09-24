@@ -1,5 +1,6 @@
 package com.deco2800.hcg.managers;
 
+import com.deco2800.hcg.multiplayer.InputMessage;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.observers.*;
 
@@ -164,11 +165,12 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	}
 	
 	public void queueLocalAction(int... args) {
+		long tick = gameTickCount + (networkManager.isInitialised() ? 3 : 1);
+		
 		if (networkManager.isInitialised()) {
-			networkManager.sendInputMessage(args);
+			networkManager.queueMessage(new InputMessage(tick, args));
 		}
 		
-		long tick = gameTickCount + (networkManager.isInitialised() ? 3 : 1);
 		if (!actionQueue.containsKey(tick)) {
 			actionQueue.put(tick, new ArrayList<>());
 		}
