@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.multiplayer.*;
-import com.deco2800.hcg.worlds.World;
 
 /**
  * Lockstep UDP network manager.
@@ -48,7 +47,7 @@ public final class NetworkManager extends Manager {
 	private ByteBuffer sendBuffer;
 	private ByteBuffer receiveBuffer;
 	
-	private Random messageIdGenerator = new Random();
+	private Random random = new Random();
 
 	private String lobbyName;
 
@@ -118,7 +117,24 @@ public final class NetworkManager extends Manager {
 	 * @return Random int
 	 */
 	public int getNextRandomInt() {
-		return messageIdGenerator.nextInt(Integer.MAX_VALUE);
+		return random.nextInt();
+	}
+	
+	/**
+	 * Returns a random int
+	 * @param bound The exclusive upper bound
+	 * @return Random int
+	 */
+	public int getNextRandomInt(int bound) {
+		return random.nextInt(bound);
+	}
+	
+	/**
+	 * Sets the networked random generator's seed
+	 * @param seed The seed
+	 */
+	public void setSeed(long seed) {
+		random.setSeed(seed);
 	}
 	
 	/**
@@ -128,11 +144,6 @@ public final class NetworkManager extends Manager {
 	 */
 	public void updatePeerTickCount(int peer, long tick) {
 		// FIXME
-		/*
-		if (peerTickCounts.get(peer) == tick - 1) {
-			peerTickCounts.put(peer, tick);
-		}
-		*/
 	}
 
 	/**
@@ -185,21 +196,14 @@ public final class NetworkManager extends Manager {
 	 * Starts a co-op game
 	 */
 	public void startGame() {
-		queueMessage(new StartMessage(getNextRandomInt()));
+		int seed = getNextRandomInt();
+		queueMessage(new StartMessage(seed));
+		random.setSeed((long) seed);
 		
 		// FIXME
-		/*
-		gameManager.setOccupiedNode(gameManager.getWorldMap().getContainedNodes().get(0));
-		gameManager.setWorld(new World(gameManager.getWorldMap().getContainedNodes().get(0)
-				.getNodeLinkedLevel().getWorld().getLoadedFile()));
-		*/
 		Player otherPlayer = new Player(1, 5, 10, 0);
 		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Player 2");
 		playerManager.addPlayer(otherPlayer);
-		/*
-		playerManager.spawnPlayers();
-		contextManager.pushContext(new PlayContext());
-		*/
 		contextManager.pushContext(new CharacterCreationContext());
 	}
 	
