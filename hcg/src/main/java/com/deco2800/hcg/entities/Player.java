@@ -1,13 +1,15 @@
 package com.deco2800.hcg.entities;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import com.deco2800.hcg.contexts.*;
-import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,15 +29,16 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
-import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 
 /**
  * Entity for the playable character.
@@ -59,10 +62,22 @@ public class Player extends Character implements Tickable {
 	private boolean collided;
 	private boolean onExit = false;
 	private boolean exitMessageDisplayed = false;
+	private boolean sprinting;
+	private boolean levelUp = false;
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
-	private boolean sprinting;
+
+	// List containing skills that can be specialised in
+	private List<String> SPECIALISED_SKILLS = Arrays.asList( "meleeSkill", "gunsSkill", "energyWeaponsSkill");
+
+	//Specialised skills map
+	private Map<String, Boolean> specialisedSkills;
+
+
+	
+    // Records the current frame number for player's move animation 
+    private int spriteFrame; 
 
 	// current tile name
 	private String name = "";
@@ -93,6 +108,11 @@ public class Player extends Character implements Tickable {
 	public Player(int id, float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
+		//Set up specialised skills map
+		this.specialisedSkills = new HashMap<String, Boolean>();
+		for (String attribute: SPECIALISED_SKILLS) {
+			specialisedSkills.put(attribute, false);
+		}
 		// Get necessary managers
 		gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
@@ -119,11 +139,15 @@ public class Player extends Character implements Tickable {
 		playerInputManager.addTouchUpListener(id, this::handleTouchUp);
 		playerInputManager.addMouseMovedListener(id, this::handleMouseMoved);
 
+		this.myEffects = new Effects(this);
+
 		collided = false;
 		sprinting = false;
 		this.setTexture("hcg_character");
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 		this.contextManager = (ContextManager) GameManager.get().getManager(ContextManager.class);
+		
+		this.spriteFrame = 0;
 
 		// HUD display
 		displayImage = "resources/ui/player_status_hud/player_display_one.png";
@@ -147,9 +171,12 @@ public class Player extends Character implements Tickable {
 		Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL).setUser(this).setRadius(0.7).build();
 		Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
 				.build();
-		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
-		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+	    Weapon grenadelauncher = new WeaponBuilder().setWeaponType(WeaponType.GRENADELAUNCHER).setUser(this).setRadius(0.7)
+	                .build();
+		//equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
+	    equippedItems.addItem(new WeaponItem(grenadelauncher, "Grenade Launcher", 10));
+        equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
 	}
 
 	/**
@@ -414,6 +441,9 @@ public class Player extends Character implements Tickable {
 		float oldPosX = this.getPosX();
 		float oldPosY = this.getPosY();
 
+		// Apply any active effects
+		myEffects.apply();
+
 		// Center the camera on the player
 		updateCamera();
 
@@ -496,7 +526,8 @@ public class Player extends Character implements Tickable {
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
-				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
+				//this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
+				myEffects.addEffect(new Effect("Damage", 10, Integer.parseInt((String) layer.getProperties().get("damage")), 1, 0, 1, 0));
 			}
 			// log
 			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
@@ -510,8 +541,9 @@ public class Player extends Character implements Tickable {
 		}
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps(entity.getBox3D())
-					&& !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
+			if (!this.equals(entity) && !(entity instanceof Squirrel) && !(entity instanceof Hedgehog)
+					&& newPos.overlaps(entity.getBox3D()) && !(entity instanceof Bullet)
+							&& !(entity instanceof Weapon) && !(entity instanceof Corpse)) {
 				LOGGER.info(this + " colliding with " + entity);
 				collided = true;
 			}
@@ -520,6 +552,7 @@ public class Player extends Character implements Tickable {
 			this.setPosition(newPos.getX(), newPos.getY(), 1);
 		}
 
+		checkXp();
 		this.checkDeath();
 	}
 
@@ -591,15 +624,19 @@ public class Player extends Character implements Tickable {
 	 * character in the character creation screen
 	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
-			int meleeSkill, String name) {
+			int meleeSkill, int gunsSkill, int energyWeaponsSkill, String name) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
-		setSkills(meleeSkill);
+		setSkills(meleeSkill, gunsSkill, energyWeaponsSkill);
 		setName(name);
 		healthMax = 50 * vitality;
 		healthCur = healthMax;
 		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
 		skillPoints = 4 + 2 * intellect;
+	}
+
+	public void setSpecialisedSkills(Map specialisedSkills) {
+		this.specialisedSkills = specialisedSkills;
 	}
 
 	/**
@@ -618,7 +655,8 @@ public class Player extends Character implements Tickable {
 	 */
 	private void checkXp() {
 		if (xp >= xpThreshold) {
-			levelUp();
+			//TODO: You have levelled up pop up
+			levelUp = true;
 		}
 	}
 
@@ -627,22 +665,23 @@ public class Player extends Character implements Tickable {
 	 * health and stamina based on player agility and vitality
 	 */
 	private void levelUp() {
-		xpThreshold *= 1.3;
+		xpThreshold *= 1.5;
 		level++;
 
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");
-		healthMax += vitality;
-		healthCur += vitality;
+		healthMax += vitality * 40;
+		healthCur += vitality * 40;
 
 		// Increase stamina by agility points
 		int agility = attributes.get("agility");
-		staminaMax += agility;
-		staminaCur += agility;
+		staminaMax += agility * 40;
+		staminaCur += agility * 40;
 
-		skillPoints = 4 + attributes.get("intellect");
+		skillPoints = 4 + attributes.get("intellect") * 2;
 		// TODO: enter level up screen
 	}
+
 
 	/**
 	 * Increases the xp of the player by the given amount
@@ -655,22 +694,22 @@ public class Player extends Character implements Tickable {
 		checkXp();
 	}
 
-	/**
-	 * Decrease the current health of the player by the given amount
-	 *
-	 * @param amount
-	 *            the amount of health to lose
-	 */
-	public void takeDamage(int amount) {
-		// if user is taking damage
-		if (amount > 0) {
-			this.healthCur = Math.max(this.healthCur - amount, 0);
-			return;
-		}
-		// otherwise user is being healed
-		this.healthCur = Math.min(this.healthCur - amount, this.healthMax);
-
-	}
+//	/**
+//	 * Decrease the current health of the player by the given amount
+//	 *
+//	 * @param amount
+//	 *            the amount of health to lose
+//	 */
+//	public void takeDamage(int amount) {
+//		// if user is taking damage
+//		if (amount > 0) {
+//			this.healthCur = Math.max(this.healthCur - amount, 0);
+//			return;
+//		}
+//		// otherwise user is being healed
+//		this.healthCur = Math.min(this.healthCur - amount, this.healthMax);
+//
+//	}
 
 	/**
 	 * Stamina determines how the player can use additional movement mechanics
@@ -678,7 +717,7 @@ public class Player extends Character implements Tickable {
 	 * recover over time.
 	 *
 	 */
-	protected void handleStamina() {
+	private void handleStamina() {
 		// conditionals to handle players sprint
 		if (sprinting && move == 1) {
 			/*
@@ -719,7 +758,13 @@ public class Player extends Character implements Tickable {
 			this.contextManager.pushContext(new PerksSelectionScreen());
 			break;
 		case Input.Keys.C:
-			this.contextManager.pushContext(new CharacterCreationContext());
+			if (levelUp) {
+				levelUp = false;
+				levelUp();
+				this.contextManager.pushContext(new LevelUpContext());
+			} else {
+				this.contextManager.pushContext(new CharacterStatsContext());
+			}
 			break;
 		case Input.Keys.SHIFT_LEFT:
 			if (staminaCur > 0) {
@@ -758,6 +803,13 @@ public class Player extends Character implements Tickable {
 			System.out.println("Access player inventory");
 			contextManager.pushContext(new PlayerInventoryContext(this));
 			break;
+		case Input.Keys.U:
+			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 
+					1.5f, Pot.class);
+			if(closest.isPresent()) {
+				Pot pot = (Pot)closest.get();
+				pot.unlock();
+			}
 		default:
 			break;
 		}
@@ -852,36 +904,28 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Updates the player's sprite based on its direction.
+	 * 
+	 * @param direction 
+     *            Direction the player is facing. Integer between 0 and 3.
 	 */
 	private void updateSprite(int direction) {
-		switch (direction) {
-		case 0:
-			this.setTexture("player_leftBack_stand");
-			break;
-		case 1:
-			this.setTexture("player_back_stand");
-			break;
-		case 2:
-			this.setTexture("player_rightBack_stand");
-			break;
-		case 3:
-			this.setTexture("player_right_stand");
-			break;
-		case 4:
-			this.setTexture("player_rightFront_stand");
-			break;
-		case 5:
-			this.setTexture("player_front_stand");
-			break;
-		case 6:
-			this.setTexture("player_leftFront_stand");
-			break;
-		case 7:
-			this.setTexture("player_left_stand");
-			break;
-		default:
-			break;
-		}
+	    StringBuilder spriteName = new StringBuilder("player_"); 
+        spriteName.append(direction);
+        if (this.speedX == 0 && this.speedY == 0) { 
+            // Player is not moving 
+            spriteName.append("_stand"); 
+        } else { 
+            // Player is moving 
+            if (this.spriteFrame == 0 || this.spriteFrame == 2) { 
+                spriteName.append("_stand"); 
+            } else if (this.spriteFrame == 1) { 
+                spriteName.append("_move1"); 
+            } else if (this.spriteFrame == 3) { 
+                spriteName.append("_move2");       
+            } 
+            this.spriteFrame = ++this.spriteFrame % 4; 
+        }
+        this.setTexture(spriteName.toString());
 	}
 
 	/**
@@ -1010,5 +1054,17 @@ public class Player extends Character implements Tickable {
 			return ((WeaponItem) item).getWeapon();
 		}
 		return null;
+	}
+
+	public int getXpThreshold() {
+		return xpThreshold;
+	}
+
+	public Map<String, Boolean> getSpecialisedSkills() {
+		return specialisedSkills;
+	}
+
+	public List<String> getSpecialisedSkillsList() {
+		return SPECIALISED_SKILLS;
 	}
 }

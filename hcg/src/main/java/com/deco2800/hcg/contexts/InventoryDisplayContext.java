@@ -1,8 +1,24 @@
 package com.deco2800.hcg.contexts;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.lwjgl.input.Mouse;
+
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
@@ -11,8 +27,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.managers.TextureManager;
 
-import java.util.Iterator;
-
 /**
  * Class for displaying items in a player or shopkeeper's inventory. This class holds the methods that are common in the
  * ShopMenuContext and PlayerEquipmentContext to cut down on duplicated code.
@@ -20,7 +34,7 @@ import java.util.Iterator;
  * @author Taari Meiners (@tmein) / Group 1
  * @author Group 2
  */
-public abstract class InventoryDisplayContext extends UIContext{
+public abstract class InventoryDisplayContext extends UIContext {
 
     //Input arguments
     private Skin skin;
@@ -32,6 +46,94 @@ public abstract class InventoryDisplayContext extends UIContext{
 
     protected Item selectedItem;
     protected Image selectedImage;
+    
+    protected boolean hoveringOverItem;
+    protected Item mouseOverItem;
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        
+        if(hoveringOverItem) {
+            drawTooltip();
+        }
+    }
+    
+    /**
+     * Draws a tooltip for a the item currently being hovered over at the location of the mouse pointer
+     */
+    private void drawTooltip() {
+        SpriteBatch batch = new SpriteBatch();
+        Texture tooltip = textureManager.getTexture("tooltip");
+        BitmapFont font = new BitmapFont();
+        int originX = Mouse.getX();
+        int originY = Mouse.getY();
+        
+        ArrayList<String> text = new ArrayList<>();
+        text.add(mouseOverItem.getName());
+        ArrayList<String> information = mouseOverItem.getInformation();
+        if(information != null) {
+            text.addAll(information);
+        }
+
+        GlyphLayout layout = new GlyphLayout();
+        float width = 0;
+        float lineHeight = font.getCapHeight();
+        float padding = 5;
+        int lines = text.size();
+        float height = lineHeight * lines + padding * (lines - 1);
+        for(int i = 0; i < lines; i++) {
+            layout.setText(font, text.get(i));
+            if(layout.width >= width) {
+                width = layout.width;
+            }
+        }
+        
+        // We need to account for the position of the arrow
+        int offsetX = -38;
+        int offsetY = 16 - 3;
+        
+        batch.begin();
+        
+        // We're using a single texture for the tooltip but cutting it into pieces to allow the tooltip to resize
+        
+        // bottom left
+        batch.draw(tooltip, originX + offsetX, originY + offsetY, 16, 16, 0, 112, 16, 16, false, false);
+        // bottom
+        batch.draw(tooltip, originX + offsetX + 16, originY + offsetY, width, 16, 16, 112, 2, 16, false, false);
+        // top
+        batch.draw(tooltip, originX + offsetX + 16, originY + offsetY + height + 16, width, 16, 16, 0, 2, 16, false, false);
+        // left
+        batch.draw(tooltip, originX + offsetX, originY + offsetY + 16, 16, height, 0, 16, 16, 2, false, false);
+        // top left
+        batch.draw(tooltip, originX + offsetX, originY + offsetY + 16 + height, 16, 16, 0, 0, 16, 16, false, false);
+        // right
+        batch.draw(tooltip, originX + offsetX + width + 16, originY + offsetY + 16, 16, height, 288, 16, 16, 2, false, false);
+        // top right
+        batch.draw(tooltip, originX + offsetX + width + 16, originY + offsetY + 16 + height, 16, 16, 288, 0, 16, 16, false, false);
+        // bottom right
+        batch.draw(tooltip, originX + offsetX + 16 + width, originY + offsetY, 16, 16, 288, 112, 16, 16, false, false);
+        // middle
+        batch.draw(tooltip, originX + offsetX + 16, originY + offsetY + 16, width, height, 16, 16, 16, 16, false, false);
+        // arrow
+        batch.draw(tooltip, originX, originY, 16, 16, 38, 152, 16, 16, false, false);
+        
+        for(int i = 0; i < lines; i++) {
+            float down = lineHeight * i + padding * (i);
+            // Only the item name should have a shadow
+            if(i == 0) {
+                font.setColor(Color.BLACK);
+                font.draw(batch, text.get(i), originX + offsetX + 16 + 1, originY + offsetY + height + 16 - 1 - down);
+            }
+            
+            // Only the item name should ever be any colour other than black
+            font.setColor(i == 0 ? mouseOverItem.getRarity().colour : Color.BLACK);
+            font.draw(batch, text.get(i), originX + offsetX + 16, originY + offsetY + height + 16 - down);
+        }
+        
+        batch.end();
+        batch.dispose();
+    }
 
     /**
      * Inventory display method when called by the PlayerEquipmentContext. It has more input arguments because more tables
@@ -56,12 +158,14 @@ public abstract class InventoryDisplayContext extends UIContext{
         this.inventory = inventory;
         this.textureManager = textureManager;
         currentRow = 0;
-
         for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
-            ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
-                    .getDrawable());
-            //ImageButton button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            ImageButton button;
+            if (textureManager.getTexture(currentItem.getTexture()) == null) {
+                button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            } else {
+                button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
+            }
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
@@ -82,10 +186,20 @@ public abstract class InventoryDisplayContext extends UIContext{
                     Label title = new Label("Item Info", skin);
                     title.setColor(Color.BLACK);
                     title.setFontScale(1.5f);
-                    itemName.setColor(Color.BLACK);
+                    itemName.setColor(currentItem.getRarity().colour);
+                    itemName.setFontScale(1.2f);
                     itemInfo.add(title).top();
                     itemInfo.row();
                     itemInfo.add(itemName).left();
+                    ArrayList<String> itemData = currentItem.getInformation();
+                    if(itemData != null) {
+                        for(int i = 0; i < itemData.size(); i++) {
+                            Label line = new Label(itemData.get(i), skin);
+                            line.setColor(Color.BLACK);
+                            itemInfo.row();
+                            itemInfo.add(line).left();
+                        }
+                    }
                     //If the item is consumable or stackable or equipablle, show use button
                     if (currentItem instanceof ConsumableItem || currentItem.isEquippable() || currentItem.isWearable()) {
                         //Add the button to use the consumable
@@ -95,14 +209,17 @@ public abstract class InventoryDisplayContext extends UIContext{
                             public void clicked(InputEvent event, float x, float y) {
                                 System.out.println("Clicked USE");
                                 if (currentItem instanceof ConsumableItem) {
+                                    //Consume Item
                                     ((ConsumableItem) currentItem).consume(player);
                                     player.getInventory().removeItem(currentItem, 1);
                                     inventory.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
-                                    //TODO: Equip the item
-                                } else if (currentItem.isWearable()) {
-                                    //TODO: Wear item
+                                    //Equip the item
+                                    player.getEquippedItems().addItem(currentItem);
+                                    player.getInventory().removeItem(currentItem);
+                                    inventory.clear();
+                                    inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 }
 
                             }
@@ -110,6 +227,18 @@ public abstract class InventoryDisplayContext extends UIContext{
                         useButton.add("USE");
                         itemDisplay.add(useButton).pad(15);
                     }
+                }
+            
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = true;
+                    mouseOverItem = currentItem;
+                }
+                
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = false;
+                    mouseOverItem = null;
                 }
             });
             currentRow++;
@@ -154,7 +283,6 @@ public abstract class InventoryDisplayContext extends UIContext{
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
             commonSetup(currentItem, button, stack, itemLabel, clickedImage);
-
             //Add listener for this item button
             stack.addListener(new ClickListener() {
                 @Override
@@ -162,6 +290,17 @@ public abstract class InventoryDisplayContext extends UIContext{
                     selectedImage = clickedImage;
                     selectedItem = currentItem;
                     shopMenuContext.draw();
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = true;
+                    mouseOverItem = currentItem;
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = false;
+                    mouseOverItem = null;
                 }
             });
             currentRow++;
@@ -240,9 +379,12 @@ public abstract class InventoryDisplayContext extends UIContext{
             Item currentItem = player.getEquippedItems().getItem(i);
             System.out.println(textureManager.getTexture(currentItem.getTexture()));
             //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
-            //ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
-            //.getDrawable());
-            ImageButton button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            ImageButton button;
+            if (textureManager.getTexture(currentItem.getTexture()) == null) {
+                 button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            } else {
+                 button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
+            }
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
@@ -251,6 +393,12 @@ public abstract class InventoryDisplayContext extends UIContext{
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (clickedImage.isVisible()) {
+                        //Remove from equipped items into the inventory
+                        player.getEquippedItems().removeItem(currentItem);
+                        player.getInventory().addItem(currentItem);
+                        //Refresh the inventory
+                        playerEquipment.clear();
+                        equipmentDisplay(textureManager, player, skin, playerEquipment);
                         clickedImage.setVisible(false);
                     } else {
                         clickedImage.setVisible(true);

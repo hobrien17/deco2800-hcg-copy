@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStackEntity;
 import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
@@ -18,6 +19,7 @@ import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.worlds.World;
 
 public class WorldStackContext extends UIContext {
 	// Managers used by the game
@@ -31,6 +33,8 @@ public class WorldStackContext extends UIContext {
 	private ArrayList<WorldStackMapEntity> hiddenWorldMaps;
 
 	private Window window;
+	
+	Skin skin;
 
 	/**
 	 * Constructor to create a new WorldStackContext
@@ -46,7 +50,7 @@ public class WorldStackContext extends UIContext {
 		InputManager inputManager = new InputManager();
 
 		// Setup UI + Buttons
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		window = new Window("Menu", skin);
 
 		Button quitButton = new TextButton("Quit", skin);
@@ -114,14 +118,24 @@ public class WorldStackContext extends UIContext {
 		updateUnlockedWorlds();
 		stage.clear();
 		stage.addActor(new WorldStackEntity());
-		for(WorldStackMapEntity worldEntry: allWorldMaps) {
+		for(WorldStackMapEntity worldEntry : allWorldMaps) {
 			if(worldEntry.getWorldMap().isUnlocked()) {
 				worldEntry.updateTexture();
 				if(worldEntry.getWorldMap().isCompleted()) {
-					worldEntry.setWorldTexture(textureManager.getTexture("completed_node"));
+					if(worldEntry.getWorldMap().getWorldType() == 1) {
+						worldEntry.setWorldTexture(textureManager.getTexture("ws_urban_completed"));
+					} else if(worldEntry.getWorldMap().getWorldType() == 2) {
+						worldEntry.setWorldTexture(textureManager.getTexture("ws_forest_completed"));
+					} else {
+						worldEntry.setWorldTexture(textureManager.getTexture("ws_fungi_completed"));
+					}
 				}
 			} else {
-				worldEntry.setWorldTexture(textureManager.getTexture("fungi_node"));
+				if(worldEntry.getWorldMap().getWorldType() == 2) {
+					worldEntry.setWorldTexture(textureManager.getTexture("ws_forest_locked"));
+				} else {
+					worldEntry.setWorldTexture(textureManager.getTexture("ws_fungi_locked"));
+				}
 			}
 			stage.addActor(worldEntry);
 		}
@@ -141,6 +155,25 @@ public class WorldStackContext extends UIContext {
 		}
 	}
 
+	public void endOfGame() {
+		Window youWin = new Window("You win!", skin);
+		Button okButton = new TextButton("OK", skin);
+		okButton.pad(5, 10, 5, 10);
+		
+		okButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				youWin.remove();
+			}
+		});
+		
+		youWin.add(okButton);
+		youWin.pack();
+		youWin.setMovable(false); // So it doesn't fly around the screen
+		youWin.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+		
+		stage.addActor(youWin);
+	}
 
 	@Override
 	public void show() {

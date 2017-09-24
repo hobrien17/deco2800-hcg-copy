@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.deco2800.hcg.BaseTest;
 import org.junit.*;
+
+import com.deco2800.hcg.BaseTest;
+import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.types.Weathers;
 
 public class WeatherManagerTests extends BaseTest {
@@ -11,6 +14,7 @@ public class WeatherManagerTests extends BaseTest {
 	private WeatherManager wmTurnOnTests;
 	private WeatherManager wmStopEffectTests;
 	private WeatherManager wmStopAllEffectsTests;
+	private WeatherManager wmParticleEffectsTest;
 
 	@Before
 	public void setUp() {
@@ -18,6 +22,7 @@ public class WeatherManagerTests extends BaseTest {
 		wmTurnOnTests = new WeatherManager();
 		wmStopEffectTests = new WeatherManager();
 		wmStopAllEffectsTests = new WeatherManager();
+		wmParticleEffectsTest = new WeatherManager();
 	}
 
 	// Instantiate State Tests
@@ -36,6 +41,10 @@ public class WeatherManagerTests extends BaseTest {
 		ArrayList<Weathers> testOnEffects = new ArrayList<Weathers>();
 
 		for (Weathers weatherType : Weathers.values()) {
+			if (weatherType == Weathers.NONE) {
+				continue;
+			}
+
 			testOnEffects.add(weatherType);
 
 			wmTurnOnTests.setWeather(weatherType);
@@ -86,8 +95,16 @@ public class WeatherManagerTests extends BaseTest {
 		}
 
 		wmStopAllEffectsTests.stopAllEffect();
-		
+
 		Assert.assertTrue("duplicate weather have been turned on",
 				wmStopAllEffectsTests.getOnEffects().isEmpty());
+	}
+
+	@Test
+	public void particleEffectsTest() {
+		Assert.assertEquals("particleEffectActor is not instantiated correctly",
+				ParticleEffectActor.class,
+				wmParticleEffectsTest.getActor().getClass());
+
 	}
 }

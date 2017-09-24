@@ -1,7 +1,8 @@
 package com.deco2800.hcg.util;
 
-import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.Character;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,8 +11,8 @@ import java.util.HashSet;
 
 public class EffectsTest {
 
-    // The AbstractEntity used to store the effects object.
-    AbstractEntity entity = new Squirrel(0, 0, 0, 12345);
+    // The Character used to store the effects object.
+    Character entity = new Squirrel(0, 0, 0, 12345);
 
     @Test
     public void effectsConstructorTest() {
