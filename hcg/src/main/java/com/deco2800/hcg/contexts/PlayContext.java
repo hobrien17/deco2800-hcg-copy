@@ -1,35 +1,60 @@
 package com.deco2800.hcg.contexts;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.actors.ParticleEffectActor;
-import com.deco2800.hcg.contexts.playContextClasses.*;
+import com.deco2800.hcg.contexts.playContextClasses.ChatStack;
+import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
+import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
+import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
+import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
+import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
-import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.MessageManager;
+import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.deco2800.hcg.items.*;
+import com.deco2800.hcg.shading.ShaderState;
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be
  * instantiated once.
  */
 public class PlayContext extends Context {
+    
+    private static Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
 
 	// Managers used by the game
 	private GameManager gameManager;
@@ -37,6 +62,7 @@ public class PlayContext extends Context {
 	private ContextManager contextManager;
 	private MessageManager messageManager;
 	private TextureManager textureManager;
+	private TimeManager timeManager;
 
 
 	// FIXME mouseHandler is never assigned
@@ -62,20 +88,11 @@ public class PlayContext extends Context {
 	private PlayerStatusDisplay playerStatus;
 	private NetworkManager networkManager;
 	private ClockDisplay clockDisplay;
-	private PlantWindow plantWindow;
 	private ChatStack chatStack;
 	private RadialDisplay radialDisplay;
 
 	private Window window;
 	private Window plantWindow;
-	private Table chatWindow;
-	private Label plantInfo;
-	private Label clockLabel;
-	private Label dateLabel;
-	private Label chatLabel;
-	private TextField chatTextField;
-	private TextArea chatTextArea;
-	private  Button chatButton;
 	
 	// TODO make sure this doesn't stay here.
 	private ShaderProgram shader;
@@ -99,6 +116,7 @@ public class PlayContext extends Context {
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -231,11 +249,6 @@ public class PlayContext extends Context {
         timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
 	}
 	
-	
-	private void handleChatMessage(Message message) {
-		chatTextArea.appendText(message.getPayloadString() + "\n");
-	}
-
 	/**
 	 * Renderer thread Must update all displayed elements using a Renderer
 	 */
@@ -334,9 +347,6 @@ public class PlayContext extends Context {
 		// Update and draw the stage
 		stage.act();
 		stage.draw();
-
-		/* Dispose of the spritebatch to not have memory leaks */
-		batch.dispose();
 	}
 	
 	/**
@@ -413,8 +423,7 @@ public class PlayContext extends Context {
             contextManager.pushContext(new WorldMapContext());
         } if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
-        }
-		else if (keycode == Input.Keys.B) {
+        } else if (keycode == Input.Keys.B) {
 			if(RadialDisplay.plantableNearby()) {
 				radialDisplay.addRadialMenu(stage);
 			}
