@@ -16,6 +16,8 @@ import com.deco2800.hcg.weapons.*;
 import com.deco2800.hcg.worlds.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -42,6 +44,13 @@ public abstract class Enemy extends Character implements Lootable {
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
+    
+    //Multiple players
+    private int numPlayers;
+    private Player closestPlayer;
+    
+	// Effects container
+	protected Effects myEffects;
     protected Box3D prevPos;
 
     protected Weapon enemyWeapon;
@@ -250,7 +259,70 @@ public abstract class Enemy extends Character implements Lootable {
     public void setStatus(int newStatus){
         this.status = newStatus;
     }
+    
+    /**
+     * Detects the number of players in the current game. Returns number of elements in players list.
+     * 
+     * @return: int numPlayers - number of players in game.
+     * @author Elvin - Team 9
+     */
+    public int getNumberPlayers() {
+    	numPlayers = playerManager.getPlayers().size();
+    	//System.out.println(numPlayers);
+    	return numPlayers;
+    }
+    
+    /**
+     * Changes status of enemy based on the closest player's position via least distance.
+     * Used when there are multiple players in the same game.
+     * 
+     * @author Elvin - Team 9
+     */
+    public void detectPlayers() {
+    	
+        List<Player> players;
+		HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
 
+		int playerCount = 0;
+		float[] distances = new float[numPlayers];		
+		float closestDistance; 
+
+    	getNumberPlayers();
+    	players = playerManager.getPlayers();
+    	
+    	//Iterates through all players and puts distance from enemy to each player into an array
+    	//Puts all players and their respective distances into a hash map
+    	for (Player player : players) {
+    		distances[playerCount] = this.distance(player);
+    		playerHashMap.put(distances[playerCount], player);
+    		playerCount++;
+    	}
+    	
+    	//Finds the smallest distance in the distance array
+    	closestDistance = distances[0];
+    	for (int j = 0; j < distances.length; j++) {
+    		if (distances[j] < closestDistance) {
+    			closestDistance = distances[j];
+    		}
+    	}
+    	
+    	//Gets the player with closest distance from the enemy and assigns to variable
+    	closestPlayer = playerHashMap.get(closestDistance);
+    	
+    	//Following is a modification of detectPlayer 
+    	if (closestDistance <= 5 * this.level) {
+    		this.setStatus(2);
+    		this.lastPlayerX = closestPlayer.getPosX();
+    		this.lastPlayerY = closestPlayer.getPosY();
+    	} else if (this.getStatus() == 2){
+    		this.setStatus(3);
+    	} else {
+    		this.setStatus(1);
+    	}
+    	
+    }
+    
+    
     /**
      * To detect player's position. If player is near enemy, return 1.
      * @return: false: Undetected
@@ -361,6 +433,39 @@ public abstract class Enemy extends Character implements Lootable {
         newPos.setY(currPosY);
         return newPos;
     }
+    
+    /**
+     * Copied and modified from getToPlayerPos().
+     * Added an input argument to allow function to work on any player passed in, rather than the single
+     * 'hard coded' player in playerManager.
+     * 
+     * @return Box3D 
+     * @author Elvin - Team 9
+     */
+    public Box3D moveToPlayer(Player player){
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
+        if((abs(this.getPosX() - player.getPosX()) > 1)||
+                (abs(this.getPosY() - player.getPosY()) > 1)){
+            this.setCollided(false);
+            this.setCollidedPlayer(false);
+        }
+        if(this.getPosX() < player.getPosX()){
+            currPosX += movementSpeed;
+        }
+        else if(this.getPosX() > player.getPosX()){
+            currPosX -= movementSpeed;
+        }
+        if(this.getPosY() < player.getPosY()){
+            currPosY += movementSpeed;
+        }
+        else if(this.getPosY() > player.getPosY()){
+            currPosY -= movementSpeed;
+        }
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
+    }
 
     /**
      * Move enemy to pointed position. Use for going to the player's last position.
@@ -452,7 +557,27 @@ public abstract class Enemy extends Character implements Lootable {
                 newPos = this.getRandomPos();
         }
     }
-
+    
+    /**
+     * Set new position by different situations, modified for multiple players
+     * 
+     * @author Elvin - Team 9
+     */
+    public void setNewPosMultiplayer() {
+    	switch(this.getStatus()) {
+    	case 1: //Status: New born enemy
+    		newPos = this.getRandomPos();
+    		break;
+    	case 2: //Status: Chasing closest player
+    		newPos = this.moveToPlayer(closestPlayer);
+    		this.shoot();
+    		break;
+    	case 3: //Status: Annoyed/Lost player
+    		newPos = this.getMoveToPos(this.getLastPlayerX(), this.getLastPlayerY());
+    		break;
+    	}
+    	
+    }
 
     /**
      * Shoot the entity

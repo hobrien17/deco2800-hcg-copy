@@ -40,7 +40,34 @@ public class Hedgehog extends Enemy implements Tickable {
 
     }
 
+    @Override
+    public void setupLoot() {
+        lootRarity = new HashMap<>();
 
+        lootRarity.put("explosive_seed", 1.0);
+
+        checkLootRarity();
+    }
+
+    /**
+     * Sets the charged at player status to the status given.
+     * @param status
+     * 			the status of charged at player, true if charged at player, false otherwise.
+     *
+     */
+    public void setChargeStatus(boolean status) { this.chargedAtPlayer = status; }
+
+    /**
+     * Gets the charged at player status.
+     * @return: status of chargedAtPlayer
+     *
+     */
+    public boolean getChargeStatus() { return this.chargedAtPlayer; }
+
+    /**
+     * Changes the hedgehog's speed and status depending on the situation.
+     *
+     */
     public void setHedgehogStatus() {
         float distance = this.distance(playerManager.getPlayer());
         if (chargedAtPlayer && distance > chargingRange){
@@ -81,16 +108,4 @@ public class Hedgehog extends Enemy implements Tickable {
 
     }
 
-    public void setChargeStatus(boolean status) { this.chargedAtPlayer = status; }
-    
-    public boolean getChargeStatus() { return this.chargedAtPlayer; }
-
-    @Override
-    public void setupLoot() {
-        lootRarity = new HashMap<>();
-
-        lootRarity.put("explosive_seed", 1.0);
-
-        checkLootRarity();
-    }
 }
