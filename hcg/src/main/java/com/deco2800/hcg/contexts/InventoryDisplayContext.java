@@ -291,6 +291,17 @@ public abstract class InventoryDisplayContext extends UIContext {
                     selectedItem = currentItem;
                     shopMenuContext.draw();
                 }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = true;
+                    mouseOverItem = currentItem;
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = false;
+                    mouseOverItem = null;
+                }
             });
             currentRow++;
         }

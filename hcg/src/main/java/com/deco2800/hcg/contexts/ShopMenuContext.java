@@ -121,6 +121,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 
         Image error = new Image(textureManager.getTexture("error_shop"));
         error.setPosition((stage.getHeight()/2 - error.getHeight()), (stage.getWidth()/2 - error.getWidth()));
+        error.setVisible(false);
 
         //add table to stage
         stage.addActor(centreTable);
