@@ -14,6 +14,7 @@ import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.bullets.BulletType;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 	protected AbstractEntity user;
 	protected int hitCount;
+	protected BulletType bulletType;
 
 	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
@@ -121,6 +123,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
+		this.bulletType = BulletType.BASIC;
 
         this.goalX = newX;
         this.goalY = newY;
@@ -137,6 +140,16 @@ public class Bullet extends AbstractEntity implements Tickable {
 		this.hitCount = hitCount;
 
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
+	}
+	
+	/**
+	 * Return BulletType
+	 * 
+	 * @return bulletType
+	 *             Type of Bullet Enum
+	 */
+	public BulletType getBulletType() {
+	    return this.bulletType;
 	}
 	
 	/**
@@ -198,7 +211,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 						//Temporary increase of xp for all enemies killed
 						playerManager.getPlayer().gainXp(50);
 						applyEffect(target);
-
 					}
 					hitCount--;
 				}

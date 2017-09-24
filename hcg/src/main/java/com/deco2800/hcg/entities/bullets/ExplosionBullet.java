@@ -42,6 +42,7 @@ public class ExplosionBullet extends Bullet {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
 		this.setTexture("battle_seed_red");
+		this.bulletType = BulletType.EXPLOSION;
 	}
 	
 	/**
@@ -65,6 +66,7 @@ public class ExplosionBullet extends Bullet {
 	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_red");
+	    this.bulletType = BulletType.EXPLOSION;
 	}
 	
 	/**
@@ -97,6 +99,7 @@ public class ExplosionBullet extends Bullet {
 			float yLength, float zLength, AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount);
 		this.setTexture("battle_seed_red");
+		this.bulletType = BulletType.EXPLOSION;
 	}
 	
 	@Override
