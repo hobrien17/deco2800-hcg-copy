@@ -38,6 +38,7 @@ public class PlayContext extends Context {
 	private ContextManager contextManager;
 	private MessageManager messageManager;
 	private TextureManager textureManager;
+	private PlayerManager playerManager;
 
 
 	// FIXME mouseHandler is never assigned
@@ -85,6 +86,7 @@ public class PlayContext extends Context {
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -117,6 +119,7 @@ public class PlayContext extends Context {
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				playerManager.removeCurrentPlayer();
 				contextManager.popContext();
 			}
 		});

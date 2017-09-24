@@ -252,6 +252,15 @@ public class TextureManager extends Manager {
 		//Conversation textures
 		textureMap.put("conversation_context",  new Texture("resources/ui/conversations/conversation_context.png"));
 		textureMap.put("npc_face", new Texture("resources/sprites/npc/npc_face.png"));
+
+		//Character creation textures
+		textureMap.put("ccMale1", new Texture("resources/sprites/player/character_creation/male1.png"));
+		textureMap.put("ccMale2", new Texture("resources/sprites/player/character_creation/male2.png"));
+		textureMap.put("ccMale3", new Texture("resources/sprites/player/character_creation/male3.png"));
+		textureMap.put("ccFemale1", new Texture("resources/sprites/player/character_creation/female1.png"));
+		textureMap.put("ccFemale2", new Texture("resources/sprites/player/character_creation/female2.png"));
+		textureMap.put("ccFemale3", new Texture("resources/sprites/player/character_creation/female3.png"));
+		textureMap.put("ccWindow_Background_White", new Texture("resources/ui/character_creation/window_background_white.png"));
 	}
 
 	/**

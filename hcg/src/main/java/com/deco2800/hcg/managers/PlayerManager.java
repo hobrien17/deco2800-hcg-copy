@@ -1,5 +1,6 @@
 package com.deco2800.hcg.managers;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -13,7 +14,8 @@ import com.deco2800.hcg.worlds.World;
  */
 public class PlayerManager extends Manager {
 
-	private Set<Player> players = new LinkedHashSet<>();
+    //Was changed from LinkedHashset to ArrayList to resolve issue with removing players
+	private ArrayList<Player> players = new ArrayList<>();
     private Player player;
     
     /**
@@ -44,7 +46,7 @@ public class PlayerManager extends Manager {
      * Gets all players.
      * @return Set of players
      */
-    public Set<Player> getPlayers() {
+    public ArrayList<Player> getPlayers() {
     		return players;
     }
 
@@ -63,6 +65,10 @@ public class PlayerManager extends Manager {
      */
     public Player getPlayer() {
         return this.player;
+    }
+
+    public boolean removeCurrentPlayer() {
+        return players.remove(this.player);
     }
 
 }
