@@ -1,6 +1,8 @@
 package com.deco2800.hcg.worldmapui;
 
 import com.deco2800.hcg.entities.worldmap.WorldMap;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 
@@ -27,6 +29,8 @@ public class MapGenerator {
 	private static final int MIN_NODES_PER_COLUMN = 2; // <- be very careful with this value. Should never exceed rowNumber/2
 	private static final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
 	
+	private NetworkManager networkManager;
+	
 	private List<Level> levelsMaster;
 	private List<Level> levelsOfType;
 	private List<Level> levelsNotOfType;
@@ -41,6 +45,8 @@ public class MapGenerator {
 	 *     to use, the MapGenerator will start to reuse levels.
 	 */
 	public MapGenerator(List<Level> levelSet) {
+		networkManager = (NetworkManager) GameManager.get().getManager(NetworkManager.class);
+		
 		levelsMaster = levelSet;
 		levelsBoss = new ArrayList<>();
 		levelsOfType = new ArrayList<>();
@@ -330,19 +336,18 @@ public class MapGenerator {
 	 *     the non boss set will be chosen.
 	 */
 	private Level getLevel(int worldType) {
-		Random rand = new Random();
 		if(worldType == 0 && !levelsNonBoss.isEmpty()) {
-			int index = rand.nextInt(levelsNonBoss.size());
+			int index = networkManager.getNextRandomInt(levelsNonBoss.size());
 			Level levelReturned = levelsNonBoss.get(index);
 			levelsNonBoss.remove(index);
 			return levelReturned;
 		} else if(!(levelsOfType.isEmpty())) {
-			int index = rand.nextInt(levelsOfType.size());
+			int index = networkManager.getNextRandomInt(levelsOfType.size());
 			Level levelReturned = levelsOfType.get(index);
 			levelsOfType.remove(index);
 			return levelReturned;
 		} else if (!(levelsNotOfType.isEmpty())){
-			int index = rand.nextInt(levelsNotOfType.size());
+			int index = networkManager.getNextRandomInt(levelsNotOfType.size());
 			Level levelReturned = levelsNotOfType.get(index);
 			levelsNotOfType.remove(index);
 			return levelReturned;
