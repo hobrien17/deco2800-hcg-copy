@@ -119,9 +119,13 @@ public class ShopMenuContext extends InventoryDisplayContext {
         centreTable.add(playerInventory);
         centreTable.row();
 
+        Image error = new Image(textureManager.getTexture("error_shop"));
+        error.setPosition((stage.getHeight()/2 - error.getHeight()), (stage.getWidth()/2 - error.getWidth()));
+
         //add table to stage
         stage.addActor(centreTable);
         stage.addActor(shopExit);
+        stage.addActor(error);
 
         //Listeners
         shopExit.addListener(new ClickListener() {
