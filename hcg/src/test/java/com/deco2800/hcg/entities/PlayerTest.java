@@ -40,7 +40,9 @@ public class PlayerTest {
 	@Test
 	public void testAttributesMap() {
 		Player player = new Player(0, 0, 0);
+
 		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0,"Name");
+
 		player.setAttribute("agility",2);
 		assertEquals("player agility should be 2 after setAttribute changed it",2, player.getAttribute("agility"));
 		player.setAttribute("DontAddThis",1000);
@@ -188,7 +190,7 @@ public class PlayerTest {
 	public void testSprint() {
 	    
 	    Player player = new Player(0, 0, 0);
-	    
+		
 	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Name");
 	    
 	    assertTrue("Player's maximum stamina was not initialised correctly",
