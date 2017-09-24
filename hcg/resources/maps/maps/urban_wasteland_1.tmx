@@ -3,10 +3,10 @@
  <properties>
   <property name="PlayerX" value="25"/>
   <property name="PlayerY" value="65"/>
- </properties>
+  <property name="weather" value="snow"/>
  <tileset firstgid="1" source="../tiles/concrete.tsx"/>
  <tileset firstgid="46" source="../tiles/dry-grass.tsx"/>
- <layer name="generalTerrain" width="75" height="75" opacity="0.9" offsetx="352" offsety="-64">
+ <layer name="generalTerrain" width="75" height="75">
   <properties>
    <property name="name" value="ground"/>
    <property name="speed" value="1"/>
