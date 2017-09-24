@@ -36,15 +36,20 @@ public class LevelUpContext extends CharacterStatsScreen {
                     playerManager.getPlayer().setAttribute("meleeSkill", meleeSkill);
                     playerManager.getPlayer().setAttribute("gunsSkill", gunsSkill);
                     playerManager.getPlayer().setAttribute("energyWeaponsSkill", energyWeaponsSkill);
+                    contextManager.popContext();
                 }
             }
         });
+
+        finishTable.add(finishButton);
 
         masterTable.row();
         masterTable.add(finishTable);
     }
 
     private void skillsButtons() {
+        skillsWindow.clear();
+
         Label skillPointsLabel;
         skillPointsLabel = new Label("Available Specialities: " + skillPoints, skin);
         meleeSkillLabel = new Label("Melee Skill: " + meleeSkill, skin);

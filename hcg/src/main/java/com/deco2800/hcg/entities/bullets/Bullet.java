@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.bullets;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
@@ -32,6 +33,9 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 	private AbstractEntity user;
 	private int hitCount;
+
+	private GameManager gameManager = GameManager.get();
+	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
@@ -191,16 +195,18 @@ public class Bullet extends AbstractEntity implements Tickable {
 						GameManager.get().getWorld().removeEntity(turret);
 
 					} else if (target.getHealthCur() <= 0) {
-							Double prob = Math.random();
-							if (prob > 0.3) {
-								Corpse corpse = new BasicCorpse(target.getPosX(), target.getPosY(), 0);
-								GameManager.get().getWorld().addEntity(corpse);
-							}
-							applyEffect(target);
-							if (user instanceof Player) {
-								Player playerUser = (Player) user;
-								playerUser.killLogAdd(target.getID());
-							}
+						//Temporary increase of xp for all enemies killed
+						playerManager.getPlayer().gainXp(100);
+						Double prob = Math.random();
+						if (prob > 0.3) {
+							Corpse corpse = new BasicCorpse(target.getPosX(), target.getPosY(), 0);
+							GameManager.get().getWorld().addEntity(corpse);
+						}
+						applyEffect(target);
+						if (user instanceof Player) {
+							Player playerUser = (Player) user;
+							playerUser.killLogAdd(target.getID());
+						}
 					}
 					hitCount--;
 				}

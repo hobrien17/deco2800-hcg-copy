@@ -190,7 +190,7 @@ public class PlayerTest {
 	public void testSprint() {
 	    
 	    Player player = new Player(0, 0, 0);
-		
+
 	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Name");
 	    
 	    assertTrue("Player's maximum stamina was not initialised correctly",

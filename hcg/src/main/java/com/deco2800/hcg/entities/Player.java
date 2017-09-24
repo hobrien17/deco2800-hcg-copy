@@ -544,6 +544,7 @@ public class Player extends Character implements Tickable {
 			this.setPosition(newPos.getX(), newPos.getY(), 1);
 		}
 
+		checkXp();
 		this.checkDeath();
 	}
 
@@ -646,6 +647,7 @@ public class Player extends Character implements Tickable {
 	 */
 	private void checkXp() {
 		if (xp >= xpThreshold) {
+			//TODO: You have levelled up pop up
 			levelUp = true;
 		}
 	}
