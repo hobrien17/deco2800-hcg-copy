@@ -173,7 +173,7 @@ public class RadialDisplay extends Group {
         sprayButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO
+                addBugSpray();
                 radialDisplay.remove();
             }
         });
@@ -181,7 +181,7 @@ public class RadialDisplay extends Group {
         fertiliserButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //TODO
+                addFertiliser();
                 radialDisplay.remove();
             }
         });
@@ -212,13 +212,9 @@ public class RadialDisplay extends Group {
      * 			the seed to plant
      */
     private void plant(Seed seed) {
-    	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
-		Player player = pm.getPlayer();
-		float px = player.getPosX();
-		float py = player.getPosY();
-		
-		Optional<AbstractEntity> closestPot = WorldUtil.closestEntityToPosition(px, py, 1.5f, Pot.class);
-		if(closestPot.isPresent() && closestPot.get() instanceof Pot) {
+    	
+    	Optional<AbstractEntity> closestPot = getClosestPot();
+		if(closestPot.isPresent()) {
 			Pot pot = (Pot)closestPot.get();
 			if(pot.plantInside(seed)) {
 				plantManager.addPlants(pot.getPlant());
@@ -227,29 +223,74 @@ public class RadialDisplay extends Group {
 			return;
 		}
 		
-		Optional<AbstractEntity> closestCorpse = WorldUtil.closestEntityToPosition(px, py, 1.5f, Corpse.class);
-		if(closestCorpse.isPresent() && closestCorpse.get() instanceof Corpse) {
+		Optional<AbstractEntity> closestCorpse = getClosestCorpse();
+		if(closestCorpse.isPresent()) {
 			Corpse corpse = (Corpse)closestCorpse.get();
 			corpse.plantInside(seed);
 			return;
 		}
     }
     
+    private void addBugSpray() {
+    	Optional<AbstractEntity> closest = getClosestPot();
+    	if(closest.isPresent()) {
+    		Pot pot = (Pot)closest.get();
+    		if(!pot.isEmpty()) {
+    			pot.getPlant().increaseRarity(0.1, 0.05);
+    		}
+    	}
+    }
+    
+    private void addFertiliser() {
+    	Optional<AbstractEntity> closest = getClosestPot();
+    	if(closest.isPresent()) {
+    		Pot pot = (Pot)closest.get();
+    		if(!pot.isEmpty()) {
+    			pot.getPlant().changeDelay(0.8f);
+    		}
+    	}
+    }
+    
     /**
-     * Determines whether a plantable pot or a corpse is nearby
+     * Returns the closest pot to the player
      * 
-     * @return
-     * 		true if a plantable pot or corpse is nearby, otherwise false
+     * @return the closedst pot to the player
      */
-    public static boolean plantableNearby() {
+    private static Optional<AbstractEntity> getClosestPot() {
     	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 		Player player = pm.getPlayer();
 		float px = player.getPosX();
 		float py = player.getPosY();
-				
-		Optional<AbstractEntity> closestPot = WorldUtil.closestEntityToPosition(px, py, 1.5f, Pot.class);
-		Optional<AbstractEntity> closestCorpse = WorldUtil.closestEntityToPosition(px, py, 1.5f, Corpse.class);
-		return (closestPot.isPresent() && ((Pot)closestPot.get()).isEmpty() && !((Pot)closestPot.get()).isLocked()) || 
+		
+		return WorldUtil.closestEntityToPosition(px, py, 1.5f, Pot.class);
+    }
+    
+    /**
+     * Returns the closest corpse to the player
+     * 
+     * @return the closest corpse to the player
+     */
+    private static Optional<AbstractEntity> getClosestCorpse() {
+    	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
+		Player player = pm.getPlayer();
+		float px = player.getPosX();
+		float py = player.getPosY();
+		
+		return WorldUtil.closestEntityToPosition(px, py, 1.5f, Corpse.class);
+    }
+    
+    /**
+     * Determines whether a plantable pot or a corpse is nearby
+     * A pot is defined as plantable if it is unlocked (regardless of whether it is empty or not)
+     * A corpse must be empty to be plantable
+     * 
+     * @return
+     * 		true if a plantable pot or corpse is nearby, otherwise false
+     */
+    public static boolean plantableNearby() {				
+		Optional<AbstractEntity> closestPot = getClosestPot();
+		Optional<AbstractEntity> closestCorpse = getClosestCorpse();
+		return (closestPot.isPresent() && !((Pot)closestPot.get()).isLocked()) || 
 				(closestCorpse.isPresent() && ((Corpse)closestCorpse.get()).isEmpty());
     }
 }
