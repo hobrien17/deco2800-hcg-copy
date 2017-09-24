@@ -1,8 +1,6 @@
 package com.deco2800.hcg.entities.garden_entities.seeds;
 
 import java.lang.reflect.InvocationTargetException;
-
-import com.badlogic.gdx.graphics.Texture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

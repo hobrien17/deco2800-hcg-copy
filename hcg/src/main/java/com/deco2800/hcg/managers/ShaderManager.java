@@ -1,6 +1,5 @@
 package com.deco2800.hcg.managers;
 
-import com.deco2800.hcg.renderers.RenderLightmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
