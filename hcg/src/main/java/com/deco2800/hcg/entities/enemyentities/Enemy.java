@@ -9,6 +9,7 @@ import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
@@ -207,7 +208,9 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      */
     @Override
     public Item[] loot() {
-        return new Item[0];
+        Item[] arr = new Item[1];
+        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+        return arr;
     }
 
     /**
