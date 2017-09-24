@@ -16,10 +16,11 @@ public class QuestTest {
 	
 	@Before
 	public void initialiseConstructor(){
+		String name = "Test Quest";
 		String instruction = "Go find me the item at the end of the map";
 		Item itemRequested = new TestItem();
 		Item itemRewarded = new TestUniqueItem("x", 5);
-		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
+		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
 		questToTest = quest;
 	}
 	
@@ -41,29 +42,42 @@ public class QuestTest {
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
-	public void testEmptyStringConstructor(){
+	public void testEmptyStringInstructionConstructor(){
+		String name = "Test";
 		String instruction = "";
 		Item itemRequested = new TestItem();
 		Item itemRewarded = new TestUniqueItem("x", 5);
-		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
+		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
+		questToTest = quest;
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void testEmptyStringNameConstructor(){
+		String name = "";
+		String instruction = "Test";
+		Item itemRequested = new TestItem();
+		Item itemRewarded = new TestUniqueItem("x", 5);
+		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
 		questToTest = quest;
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testNullItemRequestedConstructor(){
+		String name = "Test";
 		String instruction = "Go find me the item at the end of the map";
 		Item itemRequested = null;
 		Item itemRewarded = new TestUniqueItem("x", 5);
-		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
+		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
 		questToTest = quest;
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testNullItemRewardedConstructor(){
+		String name = "Test";
 		String instruction = "Go find me the item at the end of the map";
 		Item itemRequested = new TestItem();
 		Item itemRewarded = null;
-		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
+		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
 		questToTest = quest;
 	}
 	

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.deco2800.hcg.util.Array2D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,12 +44,27 @@ public class World {
 	
 	private float startingPlayerX;
 	private float startingPlayerY;
-	
+
+	//Store Collisions
+	protected Array2D<List<AbstractEntity>> collisionMap;
+
 	/**
 	 * Empty abstract world, for testing
 	 */
 	public World() {
 		// Purposefully empty for test code
+
+		//Create Test Collision Map - with test dimensions
+
+		this.setWidth(1000);
+		this.setLength(1000);
+
+		this.collisionMap = new Array2D<> (this.getWidth() + 1, this.getLength() + 1);
+		for (int x = 0; x < this.getWidth() + 1; x++) {
+			for (int y = 0; y < this.getLength() + 1; y++) {
+				this.collisionMap.set(x, y, new ArrayList<>());
+			}
+		}
 	}
 
 	/**
@@ -56,6 +72,10 @@ public class World {
 	 * 
 	 */
 	public World(String file) {
+		if (file == null) {
+			LOGGER.error("Empty filename, not test conditions");
+			return;
+		}
 
 		// attempt to load the given file
 		try {
@@ -74,11 +94,22 @@ public class World {
 		 * Grab the width and length values from the map file to use as the
 		 * world size
 		 */
+
 		this.setWidth(
 				this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(
 				this.getMap().getProperties().get("height", Integer.class));
-		
+
+
+		//Create Collision Map
+		//Added Extra Y-length to allow for inconsistencies between the CollisionMap and Tiled.
+		this.collisionMap = new Array2D<> (this.getWidth(), this.getLength()*2);
+		for (int x = 0; x < this.getWidth(); x++) {
+			for (int y = 0; y < this.getLength()*2; y++) {
+				this.collisionMap.set(x, y, new ArrayList<>());
+			}
+		}
+
         // check for weather
         if (this.map.getProperties().get("weather") != null) {
           // make string of weather for enum
@@ -170,6 +201,38 @@ public class World {
 
 		}
 		
+	}
+
+
+	/**
+	 * Makes an int array of coordinates (left, right, bottom top) which would be used for updating the collision map
+	 * from a provided entity.
+	 *
+	 * @param entity  the entity to get the collision coordinates for
+	 * @return int array of the coordinates. would be in order of left, right, bottom top.
+	 */
+	public int[] makeCollisionCoords(AbstractEntity entity) {
+		int[] result = new int[4];
+		result[0] = (int)entity.getPosX();
+		result[1] = (int)Math.ceil(entity.getPosX() + entity.getXLength());
+		result[2] = (int)entity.getPosY();
+		result[3] = (int)Math.ceil(entity.getPosY() + entity.getYLength());
+		return result;
+	}
+
+	/**
+	 * Gets the entity at an x y position.
+	 *
+	 * @param x a tile x coordinate
+	 * @param y a tile y coordinate
+	 * @return a list of entities found at the given tile.
+	 */
+	public List<AbstractEntity> getEntities(int x, int y) {
+		try {
+			return this.collisionMap.get(x, y);
+		} catch (IndexOutOfBoundsException e) {
+			throw new IndexOutOfBoundsException("Invalid tile coordinate.");
+		}
 	}
 
 	/**
@@ -331,6 +394,15 @@ public class World {
 	 */
 	public void addEntity(AbstractEntity entity) {
 		entities.add(entity);
+
+		//Add to the collision map
+		int[] collisionCoords = makeCollisionCoords(entity);
+
+		for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
+			for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
+				collisionMap.get(x, y).add(entity);
+			}
+		}
 	}
 
 	/**
@@ -351,6 +423,30 @@ public class World {
 	 */
 	public void removeEntity(AbstractEntity entity) {
 		entities.remove(entity);
+
+		//Remove from collision map
+		int[] collisionCoords = makeCollisionCoords(entity);
+
+		int x_val = collisionCoords[0];
+		int y_val = collisionCoords[2];
+
+		if (x_val > 0 && x_val < this.getWidth() && y_val > 0 && y_val < this.getLength()) {
+			for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
+				for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
+					collisionMap.get(x, y).remove(entity);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Gets the collision map of the world.
+	 * yes this uses a lot of memory.
+	 *
+	 * @return the map of collisions of the world.
+	 */
+	public Array2D<List<AbstractEntity>> getCollisionMap() {
+		return collisionMap;
 	}
 
 	/**

@@ -9,6 +9,7 @@ import com.deco2800.hcg.items.Item;
  *
  */
 public class Quest {
+	private String name; //The unique name of the quest.
 	private String instruction; //what the player must do to complete the quest
 	private Item itemToReward; //what the player will receive for doing the quest
 	private Item itemRequested; //what the player needs to have in order to complete the quest
@@ -21,10 +22,11 @@ public class Quest {
 	 * @param itemToReward the item being rewarded by the quest
 	 * @throws IllegalArgumentException
 	 */
-	public Quest(String instruction, Item itemRequested, Item itemToReward) throws IllegalArgumentException {
-		if("".equals(instruction) || itemRequested == null || itemToReward == null){
+	public Quest(String name, String instruction, Item itemRequested, Item itemToReward) throws IllegalArgumentException {
+		if("".equals(instruction) || "".equals(name) || itemRequested == null || itemToReward == null){
 			throw new IllegalArgumentException(); 
 		}
+		this.name = name;
 		this.instruction = instruction;
 		this.itemRequested = itemRequested;
 		this.itemToReward = itemToReward;
@@ -64,8 +66,29 @@ public class Quest {
 	public String getInstruction(){
 		return instruction;
 	}
+
+	/**
+	 * Returns the name of the quest.
+	 *
+	 * @return Returns a string containing the name of the quest.
+	 */
+	public String getName(){
+		return name;
+	}
 	
-	
-	
+	@Override
+	/**
+	 * Returns true if object is of type quest and their names and descriptions are found to be equal.
+	 */
+	public boolean equals(Object object) {
+
+		//Ensure object is of type Quest
+		if (!(object instanceof Quest)) {
+			return false;
+		}
+		Quest tempQuest = (Quest) object;
+
+		return this.name.equals(tempQuest.name) && this.instruction.equals(tempQuest.instruction);
+	}
 	
 }
