@@ -36,7 +36,6 @@ public class Squirrel extends Enemy implements Tickable {
 	@Override
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
-
 		lootRarity.put("sunflower_seed", 1.0);
 
 		checkLootRarity();
@@ -55,11 +54,20 @@ public class Squirrel extends Enemy implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		this.detectPlayer();//Change status if player detected.
-        this.setNewPos();//Put new position into Box3D.
-		this.detectCollision();//Detect collision.
-        this.moveAction();//Move enemy to the position in Box3D.
-		// Apply any effects that exist on the entity
-		myEffects.apply();
+		if (this.getNumberPlayers() == 1) {
+			this.detectPlayer();//Change status if player detected.
+	        this.setNewPos();//Put new position into Box3D.
+			this.detectCollision();//Detect collision.
+	        this.moveAction();//Move enemy to the position in Box3D.
+			// Apply any effects that exist on the entity
+			myEffects.apply();
+		} else if (this.getNumberPlayers() > 1 && this.getNumberPlayers() <= 4) {
+			// Limit of 4 players.
+		} else {
+			//do nothing, maybe throw error? or could just ensure you can't have more than 4 players in networkmanager
+		}
+		
+		
+		
 	}
 }
