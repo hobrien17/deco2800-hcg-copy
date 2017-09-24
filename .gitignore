@@ -16,6 +16,7 @@ build
 .classpath
 .settings
 .metadata
+.xmi
 
 # IntelliJ IDEA
 *.iml

@@ -58,6 +58,7 @@ public class Grenade extends Bullet implements Tickable {
             AbstractEntity user, int hitCount) {
         super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, -1);
         this.activated = false;
+        this.bulletType = BulletType.GRENADE;
     }
 
     /**
