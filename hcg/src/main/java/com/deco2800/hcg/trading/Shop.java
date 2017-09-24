@@ -174,7 +174,7 @@ public abstract class Shop {
      * @param item
      *          Item that is to be sold
      * @return 0 if sold successfully, 1 if player cannot accept more currency,
-     * 			2 if item is null
+     * 			2 if item is null, 3 if item not in inventory
      */
     public int sellStock(Item item) {
     	if(item == null){
@@ -183,7 +183,9 @@ public abstract class Shop {
         seed = new BasicSeed();
         seed.setStackSize(item.getBaseValue()+modifier);
         if ((item instanceof SingleItem) || (item.getStackSize() == 1)) {
-            player.getInventory().removeItem(item);
+            if (!player.getInventory().removeItem(item)) {
+                return 3;
+            }
         } else {
             item.addToStack(-1);
         }
