@@ -106,6 +106,8 @@ public class TextureManager extends Manager {
 	    textureMap.put("iceboulder", new Texture("resources/terrain_objects/iceboulder.png"));
 	    textureMap.put("house", new Texture("resources/terrain_objects/house.png"));
 	    textureMap.put("sludgebarrel", new Texture("resources/terrain_objects/sludge-barrel.png"));
+        textureMap.put("house2", new Texture("resources/terrain_objects/house2.png"));
+        textureMap.put("house2destroyed", new Texture("resources/terrain_objects/house2destroyed.png"));
 
 	    // terrain tiles
         textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
@@ -118,6 +120,10 @@ public class TextureManager extends Manager {
 		textureMap.put("tree_fruiting", new Texture("resources/terrain_objects/tree_fruit_01.png"));
 		textureMap.put("tree_snowy", new Texture("resources/terrain_objects/tree_snow_01.png"));
 		textureMap.put("tree_flaming", new Texture("resources/terrain_objects/tree_flame_01.png"));
+
+		// mushrooms
+		textureMap.put("mushroom_tree_thick", new Texture("resources/terrain_objects/mushroom1.png"));
+		textureMap.put("mushroom_tree_thin", new Texture("resources/terrain_objects/mushroom2.png"));
 
 		//NPCs
 		textureMap.put("character_1", new Texture("resources/sprites/npc/basic_character.png"));
@@ -210,6 +216,9 @@ public class TextureManager extends Manager {
 		textureMap.put("ws_urban", new Texture("resources/worldmap/ws_urban_small.png"));
 		textureMap.put("ws_forest_locked", new Texture("resources/worldmap/ws_forest_locked_small.png"));
 		textureMap.put("ws_fungi_locked", new Texture("resources/worldmap/ws_fungi_locked_small.png"));
+		textureMap.put("ws_forest_completed", new Texture("resources/worldmap/ws_forest_completed_small.png"));
+		textureMap.put("ws_fungi_completed", new Texture("resources/worldmap/ws_fungi_completed_small.png"));
+		textureMap.put("ws_urban_completed", new Texture("resources/worldmap/ws_urban_completed_small.png"));
 		textureMap.put("ws_purp_bg", new Texture("resources/worldmap/ws_purp_background.png"));
 		
         //Item textures

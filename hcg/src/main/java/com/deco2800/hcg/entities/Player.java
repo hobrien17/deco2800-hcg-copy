@@ -1,8 +1,6 @@
 package com.deco2800.hcg.entities;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
@@ -67,10 +65,19 @@ public class Player extends Character implements Tickable {
 	private boolean collided;
 	private boolean onExit = false;
 	private boolean exitMessageDisplayed = false;
+	private boolean sprinting;
+	private boolean levelUp = false;
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
-	private boolean sprinting;
+
+	// List containing skills that can be specialised in
+	private List<String> SPECIALISED_SKILLS = Arrays.asList( "meleeSkill", "gunsSkill", "energyWeaponsSkill");
+
+	//Specialised skills map
+	private Map<String, Boolean> specialisedSkills;
+
+
 	
     // Records the current frame number for player's move animation 
     private int spriteFrame; 
@@ -104,6 +111,11 @@ public class Player extends Character implements Tickable {
 	public Player(int id, float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
+		//Set up specialised skills map
+		this.specialisedSkills = new HashMap<String, Boolean>();
+		for (String attribute: SPECIALISED_SKILLS) {
+			specialisedSkills.put(attribute, false);
+		}
 		// Get necessary managers
 		gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
@@ -611,15 +623,19 @@ public class Player extends Character implements Tickable {
 	 * character in the character creation screen
 	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
-			int meleeSkill, String name) {
+			int meleeSkill, int gunsSkill, int energyWeaponsSkill, String name) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
-		setSkills(meleeSkill);
+		setSkills(meleeSkill, gunsSkill, energyWeaponsSkill);
 		setName(name);
 		healthMax = 50 * vitality;
 		healthCur = healthMax;
 		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
 		skillPoints = 4 + 2 * intellect;
+	}
+
+	public void setSpecialisedSkills(Map specialisedSkills) {
+		this.specialisedSkills = specialisedSkills;
 	}
 
 	/**
@@ -638,7 +654,7 @@ public class Player extends Character implements Tickable {
 	 */
 	private void checkXp() {
 		if (xp >= xpThreshold) {
-			levelUp();
+			levelUp = true;
 		}
 	}
 
@@ -663,6 +679,7 @@ public class Player extends Character implements Tickable {
 		skillPoints = 4 + attributes.get("intellect");
 		// TODO: enter level up screen
 	}
+
 
 	/**
 	 * Increases the xp of the player by the given amount
@@ -739,7 +756,12 @@ public class Player extends Character implements Tickable {
 			this.contextManager.pushContext(new PerksSelectionScreen());
 			break;
 		case Input.Keys.C:
-			this.contextManager.pushContext(new CharacterCreationContext());
+			if (levelUp) {
+				levelUp();
+				this.contextManager.pushContext(new LevelUpContext());
+			} else {
+				this.contextManager.pushContext(new CharacterStatsContext());
+			}
 			break;
 		case Input.Keys.SHIFT_LEFT:
 			if (staminaCur > 0) {
@@ -879,11 +901,27 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Updates the player's sprite based on its direction.
+	 * 
+	 * @param direction 
+     *            Direction the player is facing. Integer between 0 and 3.
 	 */
 	private void updateSprite(int direction) {
 	    StringBuilder spriteName = new StringBuilder("player_"); 
-        spriteName.append(direction); 
-        spriteName.append("_stand"); 
+        spriteName.append(direction);
+        if (this.speedX == 0 && this.speedY == 0) { 
+            // Player is not moving 
+            spriteName.append("_stand"); 
+        } else { 
+            // Player is moving 
+            if (this.spriteFrame == 0 || this.spriteFrame == 2) { 
+                spriteName.append("_stand"); 
+            } else if (this.spriteFrame == 1) { 
+                spriteName.append("_move1"); 
+            } else if (this.spriteFrame == 3) { 
+                spriteName.append("_move2");       
+            } 
+            this.spriteFrame = ++this.spriteFrame % 4; 
+        }
         this.setTexture(spriteName.toString());
 	}
 
@@ -1013,5 +1051,17 @@ public class Player extends Character implements Tickable {
 			return ((WeaponItem) item).getWeapon();
 		}
 		return null;
+	}
+
+	public int getXpThreshold() {
+		return xpThreshold;
+	}
+
+	public Map<String, Boolean> getSpecialisedSkills() {
+		return specialisedSkills;
+	}
+
+	public List<String> getSpecialisedSkillsList() {
+		return SPECIALISED_SKILLS;
 	}
 }

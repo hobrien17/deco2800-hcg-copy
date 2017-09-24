@@ -223,6 +223,17 @@ public class TimeManagerTests {
 	}
 
 	@Test
+	public void getDayStringTest() {
+		timeManager.setDateTime(31, 27, 11, 12, 1, 2001);
+		Assert.assertEquals("getDayString() not returning the correct string.", "Friday",
+                timeManager.getDayString());
+
+        timeManager.setDateTime(31, 27, 11, 3, 6, 1997);
+        Assert.assertEquals("getDayString() not returning the correct string.", "Tuesday",
+                timeManager.getDayString());
+	}
+
+	@Test
 	public void pauseTimeTest() {
 		// time is paused, nothing should increment during onTick method call
 		timeManagerPauseTest.pauseTime();
