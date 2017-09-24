@@ -316,7 +316,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 
 		int playerCount = 0;
 		float[] distances = new float[numPlayers];		
-		float closestDistance = distances[0];
+		float closestDistance; 
 
     	getNumberPlayers();
     	players = playerManager.getPlayers();
@@ -328,7 +328,9 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     		playerHashMap.put(distances[playerCount], player);
     		playerCount++;
     	}
+    	
     	//Finds the smallest distance in the distance array
+    	closestDistance = distances[0];
     	for (int j = 0; j < distances.length; j++) {
     		if (distances[j] < closestDistance) {
     			closestDistance = distances[j];
