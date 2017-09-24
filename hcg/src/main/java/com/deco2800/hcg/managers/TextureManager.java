@@ -54,6 +54,7 @@ public class TextureManager extends Manager {
         textureMap.put("loot_beam", new Texture("resources/sprites/loot_beam/loot_beam_2.0.png"));
         textureMap.put("lightmap", new Texture("resources/sprites/light/lightmap.png"));
 
+		try {
 			textureMap.put("grass", new Texture("resources/maps/textures/grass.png"));
 			textureMap.put("ground", new Texture("resources/maps/textures/ground.png"));
 			textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
