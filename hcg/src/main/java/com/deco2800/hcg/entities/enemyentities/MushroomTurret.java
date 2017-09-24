@@ -47,6 +47,8 @@ public class MushroomTurret extends Enemy implements Observer {
     public void remove_observer() {
         manager.deleteObserver(this);
     }
+
+    @Override
     public void update(Observable o, Object arg) {
         switch (seconds%6){
             case 0: // set turret phase 1 this.setTexture()
@@ -82,6 +84,8 @@ public class MushroomTurret extends Enemy implements Observer {
                 Bullet bullet8 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                         Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet8);
+                break;
+            default:
                 break;
 
             // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
