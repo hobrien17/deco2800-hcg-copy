@@ -4,6 +4,7 @@ import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
@@ -33,6 +34,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected AbstractEntity user;
 	protected int hitCount;
 
+	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
@@ -58,6 +60,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			AbstractEntity user, int hitCount) {
 		this(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
+		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
 	/**
@@ -83,6 +86,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
 			float newZ, AbstractEntity user, int hitCount) {
 		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount);
+		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
 	/**
@@ -131,6 +135,8 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 		this.user = user;
 		this.hitCount = hitCount;
+
+		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 	
 	/**
@@ -172,7 +178,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 					Enemy target = (Enemy) entity;
 					if (target instanceof MushroomTurret) {
 						MushroomTurret turret = (MushroomTurret) target;
-						turret.remove_observer();
+						turret.removeObserver();
 						GameManager.get().getWorld().removeEntity(turret);
 
 					} else if (target.getHealthCur() <= 0) {
@@ -239,5 +245,13 @@ public class Bullet extends AbstractEntity implements Tickable {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
 		target.giveEffect(new Effect("Shot", 1, 500, 0, 0, 1, 0));
+	}
+
+	protected void playCollisionSound(Bullet bulletType) {
+		String soundName;
+		if (bulletType instanceof Grenade) {
+			soundManager.stopSound("bullet-grenade-explode");
+			soundManager.playSound("bullet-grenade-explode");
+		}
 	}
 }

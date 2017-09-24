@@ -194,7 +194,7 @@ public class TurretTest {
 		turret = new IceTurret(corpse);
 
 		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); // to test speed change
-		enemy.setSpeed(0f);
+		enemy.setSpeed(1f);
 		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 1);
 		enemyFar.setSpeed(1f);
 		gm.getWorld().addEntity(enemy);
