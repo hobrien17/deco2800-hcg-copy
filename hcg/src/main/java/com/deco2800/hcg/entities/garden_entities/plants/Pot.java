@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 
 /**
  * An entity that contains a plant
@@ -28,7 +29,8 @@ public class Pot extends AbstractEntity  {
 	/**
 	 * Adds a plant to the pot, if empty
 	 * 
-	 * @param plant the plant to be added
+	 * @param plant 
+	 * 			the plant to be added
 	 * @return true if the plant was added, false if it could not be added
 	 */
 	public boolean addPlant(AbstractGardenPlant plant) {
@@ -38,7 +40,22 @@ public class Pot extends AbstractEntity  {
 			return true;
 		}
 		return false;
-		
+	}
+	
+	/**
+	 * Grows a plant out of the given seed and adds it to the pot
+	 * 
+	 * @param seed
+	 * 			the seed to plant in the pot
+	 * @return true of the seed was successfully added, false if it could not be added
+	 */
+	public boolean plantInside(Seed seed) {
+		if(this.plant == null && !locked) {
+			this.plant = seed.getNewPlant(this);
+			setThisTexture();
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -65,7 +82,7 @@ public class Pot extends AbstractEntity  {
 	public void setThisTexture() {
 		if(plant == null) {
 			if(locked) {
-				this.setTexture("pot");
+				this.setTexture("pot_locked");
 			} else {
 				this.setTexture("pot");
 			}

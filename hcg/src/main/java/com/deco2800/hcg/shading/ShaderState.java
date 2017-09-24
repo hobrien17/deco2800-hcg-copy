@@ -115,7 +115,7 @@ public class ShaderState {
     /**
      * Sets whether or not bloom should be applied.
      * 
-     * @param heat
+     * @param bloom
      *            Whether or not to use heat bloom.
      */
     public void setBloom(boolean bloom) {

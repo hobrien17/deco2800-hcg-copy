@@ -48,7 +48,7 @@ public class PlayerEquipmentContext extends UIContext{
 
         centreTable = new Table();
         centreTable.setFillParent(true);
-        centreTable.setBackground(new Image(textureManager.getTexture("wooden_background")).getDrawable());
+        centreTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 
         title = new Image(textureManager.getTexture("shop_title"));
         shopFunds = new Image(textureManager.getTexture("shop_funds"));

@@ -29,15 +29,15 @@ public class ConversationTest {
 		ConversationNode baz = new ConversationNode(conversationA, "Baz");
 		nodes.add(baz);
 		List<ConversationOption> fooOptions = new ArrayList<>();
-		fooOptions.add(new ConversationOption(foo, "to Bar", bar, new ArrayList<>()));
-		fooOptions.add(new ConversationOption(foo, "to Baz", baz, new ArrayList<>()));
+		fooOptions.add(new ConversationOption(foo, "to Bar", bar, null, new ArrayList<>()));
+		fooOptions.add(new ConversationOption(foo, "to Baz", baz, null, new ArrayList<>()));
 		foo.setup(fooOptions);
 		List<ConversationOption> barOptions = new ArrayList<>();
-		barOptions.add(new ConversationOption(bar, "to Baz", baz, new ArrayList<>()));
-		barOptions.add(new ConversationOption(bar, "quit", null, new ArrayList<>()));
+		barOptions.add(new ConversationOption(bar, "to Baz", baz, null, new ArrayList<>()));
+		barOptions.add(new ConversationOption(bar, "quit", null, null, new ArrayList<>()));
 		bar.setup(barOptions);
 		List<ConversationOption> bazOptions = new ArrayList<>();
-		bazOptions.add(new ConversationOption(foo, "back to Foo", foo, new ArrayList<>()));
+		bazOptions.add(new ConversationOption(foo, "back to Foo", foo, null, new ArrayList<>()));
 		baz.setup(bazOptions);
 		conversationA.setup(nodes, foo);
 	}
