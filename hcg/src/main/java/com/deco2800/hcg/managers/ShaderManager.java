@@ -50,9 +50,6 @@ public class ShaderManager extends Manager {
             LOGGER.error("Shader failed to compile.");
             LOGGER.error(preShader.getLog());
 
-            // For the time being
-            System.out.println("Shader failed to compile.");
-            System.out.println(preShader.getLog());
             preShader = null;
         }
 
@@ -60,9 +57,6 @@ public class ShaderManager extends Manager {
             LOGGER.error("Post preShader failed to compile");
             LOGGER.error(this.postShader.getLog());
 
-            // For the time being
-            System.out.println("Post preShader failed to compile");
-            System.out.println(this.postShader.getLog());
             this.postShader = null;
         }
 
