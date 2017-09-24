@@ -124,7 +124,7 @@ public class TextureManager extends Manager {
 		textureMap.put("player_0_move1", new Texture("resources/sprites/player/player_0_move1.png"));
 		textureMap.put("player_0_move2", new Texture("resources/sprites/player/player_0_move2.png"));
 		textureMap.put("player_1_stand", new Texture("resources/sprites/player/player_1_stand.png"));
-		textureMap.put("player_1_move", new Texture("resources/sprites/player/player_1_move1.png"));
+		textureMap.put("player_1_move1", new Texture("resources/sprites/player/player_1_move1.png"));
 		textureMap.put("player_1_move2", new Texture("resources/sprites/player/player_1_move2.png"));
 		textureMap.put("player_2_stand", new Texture("resources/sprites/player/player_2_stand.png"));
 		textureMap.put("player_2_move1", new Texture("resources/sprites/player/player_2_move1.png"));
