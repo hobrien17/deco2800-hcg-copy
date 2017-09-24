@@ -2,16 +2,16 @@ Wind
 - Delay -
 active: false
 - Duration - 
-lowMin: 1000.0
-lowMax: 1000.0
+lowMin: 100.0
+lowMax: 100.0
 - Count - 
-min: 500
-max: 600
+min: 600
+max: 700
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 550.0
-highMax: 550.0
+highMin: 650.0
+highMax: 650.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -47,7 +47,7 @@ shape: square
 - Spawn Width - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 100.0
+highMin: 300.0
 highMax: -300.0
 relative: false
 scalingCount: 1
@@ -69,15 +69,15 @@ timeline1: 0.7876712
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 6.0
-highMax: 6.0
+highMin: 10.0
+highMax: 10.0
 relative: false
 scalingCount: 2
 scaling0: 1.0
-scaling1: 0.33333334
+scaling1: 0.627451
 timelineCount: 2
 timeline0: 0.0
-timeline1: 1.0
+timeline1: 0.9931507
 - Velocity - 
 active: true
 lowMin: 10.0
@@ -105,18 +105,20 @@ active: true
 lowMin: 0.0
 lowMax: 0.0
 highMin: 0.0
-highMax: 0.0
-relative: false
-scalingCount: 1
+highMax: 180.0
+relative: true
+scalingCount: 2
 scaling0: 1.0
-timelineCount: 1
+scaling1: 0.3529412
+timelineCount: 2
 timeline0: 0.0
+timeline1: 0.9794521
 - Wind - 
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 100.0
-highMax: 50.0
+highMin: 50.0
+highMax: 20.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -127,7 +129,7 @@ active: true
 lowMin: 0.0
 lowMax: 0.0
 highMin: -22.0
-highMax: -22.0
+highMax: 10.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -135,9 +137,9 @@ timelineCount: 1
 timeline0: 0.0
 - Tint - 
 colorsCount: 3
-colors0: 1.0
+colors0: 0.40784314
 colors1: 1.0
-colors2: 1.0
+colors2: 0.34117648
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -164,4 +166,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-sand.png
+wind.png

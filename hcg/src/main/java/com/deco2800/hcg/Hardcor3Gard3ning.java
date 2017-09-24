@@ -9,7 +9,6 @@ import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.WorldStack;
-import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
@@ -70,7 +69,6 @@ public class Hardcor3Gard3ning extends Game {
 
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
-        inputManager.addKeyUpListener(new Planter());
         
         /* Create a player manager. */
 
@@ -122,9 +120,7 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
-		if (networkManager.isInitialised()) {
-			networkManager.processReceivedMessages();
-		}
+        networkManager.tick(); // It's important that this is called before fireTicks()
         fireTicks();
         clearScreen();
         super.render(); // Will render current context

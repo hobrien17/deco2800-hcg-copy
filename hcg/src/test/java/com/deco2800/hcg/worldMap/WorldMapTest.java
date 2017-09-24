@@ -21,16 +21,16 @@ public class WorldMapTest {
     	MapNode node = new MapNode(0, 0, 0, newLevel, false);
     	nodeList = new ArrayList<>();
     	nodeList.add(node);
-        worldMap = new WorldMap(0, "sand", 5, 3, nodeList);
+        worldMap = new WorldMap(0, 5, 3, nodeList);
+        worldMap.addSeed(92);
         worldMap.setPosition(1);
     }
 
     @Test
     public void testAccessors() {
         assertEquals(0, worldMap.getWorldType());
-        assertEquals("sand", worldMap.getWorldTexture());
         assertEquals(1, worldMap.getWorldPosition());
-        assertEquals("", worldMap.getWorldSeed());
+        assertEquals(92, worldMap.getWorldSeed());
         assertEquals(5, worldMap.getWorldRows());
         assertEquals(3, worldMap.getWorldColumns());
     }
@@ -76,17 +76,4 @@ public class WorldMapTest {
         assertEquals(1 + numTest, worldMap.getContainedNodes().size());
 
     }
-
-    @Test
-    public void testChangeWorldTexture() {
-        worldMap.changeWorldTexture("yolo");
-        assertEquals("yolo", worldMap.getWorldTexture());
-        worldMap.changeWorldTexture("");
-        assertEquals("", worldMap.getWorldTexture());
-
-    }
-
-
-
-
 }

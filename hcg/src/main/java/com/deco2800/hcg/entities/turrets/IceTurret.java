@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.types.Weathers;
@@ -51,15 +51,14 @@ public class IceTurret extends AbstractTurret {
 					master.getPosY(), CLOSE_RANGE, Enemy.class);
 			far = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 					master.getPosY(), FAR_RANGE, Enemy.class);
+			far.removeAll(near);
 			for(AbstractEntity entity : near) {
 				Enemy enemy = (Enemy)entity;
 				enemy.setSpeed(0);
 			}
 			for(AbstractEntity entity : far) {
-				if(!near.contains(entity)) {
-					Enemy enemy = (Enemy)entity;
-					enemy.changeSpeed(0.5f);
-				}
+				Enemy enemy = (Enemy)entity;
+				enemy.changeSpeed(0.5f);
 			}
 		}
 		if(seconds == RESET) {

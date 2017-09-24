@@ -88,16 +88,16 @@ public class CharacterCreationContext extends CharacterContext{
 
     // Different placeholder textures for the character preview screen
     // Will put into texture manager later, was getting odd null pointer exceptions
-    private Texture male1 = new Texture("resources/sprites/player/m2_360.png");
-    private Texture male2 = new Texture("resources/sprites/player/m2_3602.png");
-    private Texture male3 = new Texture("resources/sprites/player/m2_3603.png");
-    private Texture female1 = new Texture("resources/sprites/player/f2_360.png");
-    private Texture female2 = new Texture("resources/sprites/player/f2_3602.png");
-    private Texture female3 = new Texture("resources/sprites/player/f2_3603.png");
-    private Texture blank_window_background = new Texture("resources/ui/character_creation/window_background_white.png");
+    private Texture male1;
+    private Texture male2;
+    private Texture male3;
+    private Texture female1;
+    private Texture female2;
+    private Texture female3;
+    private Texture blank_window_background;
 
     //Cycle through this array using texture count to display the different character presets
-    private Texture[] charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
+    private Texture[] charTextureArray;
     private int textureCount;
 
     private TextArea selectedDescriptionText;
@@ -108,6 +108,7 @@ public class CharacterCreationContext extends CharacterContext{
     public CharacterCreationContext() {
         getManagers();
         initMasterTable();
+        setupTextures();
         initSubTables();
         setupTopRowInfo();
         setupAttributesWindow();
@@ -116,6 +117,17 @@ public class CharacterCreationContext extends CharacterContext{
         setupCharacterPreviewWindow();
         setupSelectedDescriptionWindow();
         addSubtables();
+    }
+
+    private void setupTextures() {
+        male1 = textureManager.getTexture("ccMale1");
+        male2 = textureManager.getTexture("ccMale2");
+        male3 = textureManager.getTexture("ccMale3");
+        female1 = textureManager.getTexture("ccFemale1");
+        female2 = textureManager.getTexture("ccFemale2");
+        female3 = textureManager.getTexture("ccFemale3");
+        blank_window_background = textureManager.getTexture("ccWindow_Background_White");
+        charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
 
     // Declaring sub-tables/sub-windows
