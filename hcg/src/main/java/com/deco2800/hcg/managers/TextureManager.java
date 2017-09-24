@@ -215,10 +215,10 @@ public class TextureManager extends Manager {
 		textureMap.put("wm_green_bg", new Texture("resources/worldmap/temporary_background.png"));
 		// Uncomment once temp message can be removed
         //textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
-        textureMap.put("completed_node", new Texture("resources/worldmap/completed_node.png"));
-        textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node.png"));
-        textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
-        textureMap.put("safe_node", new Texture("resources/worldmap/safe_node.png"));
+        textureMap.put("completed_node", new Texture("resources/worldmap/completed_node_small.png"));
+        textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node_small.png"));
+        textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node_small.png"));
+        textureMap.put("safe_node", new Texture("resources/worldmap/safe_node_small.png"));
 		textureMap.put("black_px", new Texture("resources/worldmap/black_px.png"));
         //Item textures
 		textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
