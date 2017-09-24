@@ -38,8 +38,6 @@ public abstract class Enemy extends Character implements Lootable {
     protected float randomY;
     protected float lastPlayerX;
     protected float lastPlayerY;
-    protected float normalSpeed;
-    protected float movementSpeed;
     protected Random random;
     protected boolean collided;
     protected boolean collidedPlayer;
@@ -83,7 +81,7 @@ public abstract class Enemy extends Character implements Lootable {
         this.speedX = 0;
         this.speedY = 0;
         this.level = 1;
-        this.normalSpeed = this.movementSpeed = (float)(this.level * 0.03);
+        this.movementSpeedNorm = this.movementSpeed = (float)(this.level * 0.03);
         this.random = new Random();
         this.random.setSeed(this.getID());
         this.setCollided(false);
@@ -482,7 +480,7 @@ public abstract class Enemy extends Character implements Lootable {
 //     *
 //     */
 //    public void resetSpeed() {
-//    	this.movementSpeed = normalSpeed;
+//    	this.movementSpeed = movementSpeedNorm;
 //    }
     
 //    @Override
