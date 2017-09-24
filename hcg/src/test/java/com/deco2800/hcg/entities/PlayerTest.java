@@ -31,7 +31,7 @@ public class PlayerTest {
 	public void testInitialiseNewPlayer() {
 
 		Player player = new Player(0, 0, 0);
-		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0);
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, "Name");
 		
 		assertTrue("Player agility isn't set to value 0.", player.attributes.get("agility") == 0);
 
@@ -40,7 +40,7 @@ public class PlayerTest {
 	@Test
 	public void testAttributesMap() {
 		Player player = new Player(0, 0, 0);
-		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0);
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, "Name");
 		player.setAttribute("agility",2);
 		assertEquals("player agility should be 2 after setAttribute changed it",2, player.getAttribute("agility"));
 		player.setAttribute("DontAddThis",1000);
@@ -91,118 +91,12 @@ public class PlayerTest {
 		
 	@Test
 	public void testPlayerInput() {
-	  
-	  Player player = new Player(0, 0, 0);
-	  
-      InputManager input = (InputManager) GameManager.get()
-          .getManager(InputManager.class);
-
-	  input.keyDown(Input.Keys.S);
-	  
-	  assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.S);
-      
-      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
-
-      input.keyDown(Input.Keys.A);
-      
-      assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.A);
-      
-      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
-      
-      input.keyDown(Input.Keys.D);
-      
-      assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.D);
-      
-      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
-      
-      input.keyDown(Input.Keys.W);
-      
-      assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.W);
-      
-      assertTrue("Player X speed wasn't reset.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed wasn't reset.", player.getSpeedY() == 0);
-      
+		// TODO This must be performed by a PlayerInputManager test as inputs are now queued
 	}
 	
 	@Test
 	public void testMultiPlayerInput() {
-	      
-	  Player player = new Player(0, 0, 0);
-	      
-	  InputManager input = (InputManager) GameManager.get()
-	      .getManager(InputManager.class);
-	  
-      // test multiple keys at same time
-
-      input.keyDown(Input.Keys.W);
-      input.keyDown(Input.Keys.S);
-
-      assertTrue("Player X was moving.", player.getSpeedX() == 0);
-      assertTrue("Player Y was moving.", player.getSpeedY() == 0);
-
-      input.keyUp(Input.Keys.W);
-      input.keyUp(Input.Keys.S);
-
-      input.keyDown(Input.Keys.A);
-      input.keyDown(Input.Keys.D);
-
-      assertTrue("Player X was moving.", player.getSpeedX() == 0);
-      assertTrue("Player Y was moving.", player.getSpeedY() == 0);
-
-      input.keyUp(Input.Keys.A);
-      input.keyUp(Input.Keys.D);
-
-      input.keyDown(Input.Keys.A);
-      input.keyDown(Input.Keys.S);
-
-      assertTrue("Player X speed didn't change.", player.getSpeedX() != 0);
-      assertTrue("Player Y speed didn change.", player.getSpeedY() == 0);
-
-      input.keyUp(Input.Keys.A);
-      input.keyUp(Input.Keys.S);
-      
-      input.keyDown(Input.Keys.A);
-      input.keyDown(Input.Keys.W);
-
-      assertTrue("Player X speed didn change.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.A);
-      input.keyUp(Input.Keys.W);
-
-      input.keyDown(Input.Keys.D);
-      input.keyDown(Input.Keys.S);
-
-      assertTrue("Player X speed didn change.", player.getSpeedX() == 0);
-      assertTrue("Player Y speed didn't change.", player.getSpeedY() != 0);
-
-      input.keyUp(Input.Keys.D);
-      input.keyUp(Input.Keys.S);
-
-      input.keyDown(Input.Keys.D);
-      input.keyDown(Input.Keys.W);
-
-      assertTrue("Player X wasn't moving.", player.getSpeedX() != 0);
-      assertTrue("Player Y was moving.", player.getSpeedY() == 0);
-
-      input.keyUp(Input.Keys.D);
-      input.keyUp(Input.Keys.W);
-
+		// TODO This must be performed by a PlayerInputManager test as inputs are now queued
 	}
 	
 	GameManager gameManager;
@@ -295,7 +189,7 @@ public class PlayerTest {
 	    
 	    Player player = new Player(0, 0, 0);
 	    
-	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
+	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, "Name");
 	    
 	    assertTrue("Player's maximum stamina was not initialised correctly",
 	            player.getStaminaMax() == 250);

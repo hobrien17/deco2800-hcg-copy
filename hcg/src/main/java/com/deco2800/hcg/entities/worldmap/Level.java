@@ -28,7 +28,7 @@ public class Level {
 	 * Initialises a Level object. The provided parameters are used as the properties of the level.
 	 * @param world
 	 *     The level's layout/world.
-	 * @param type
+	 * @param worldType
 	 *     The world's type (jungle, city, beach, etc.) given as an integer (once biome numbers are decided they can
 	 *     be added here for description).
 	 * @param difficulty
@@ -39,9 +39,9 @@ public class Level {
 	 *         1 for standard level
 	 *         2 for boss level 
 	 */
-	public Level(World world, int type, int difficulty, int levelType) {
+	public Level(World world, int worldType, int difficulty, int levelType) {
 		this.world = world;
-		worldType = type;
+		this.worldType = worldType;
 		this.difficulty = difficulty;
 		this.levelType = levelType;
 	}
@@ -99,6 +99,10 @@ public class Level {
 	 * Sets the level's world type to the specified new type.
 	 * @param newWorldType
 	 *     The type to set the level's world type to
+	 *         0: no world type
+	 *         1: abandoned suburbs
+	 *         2: desolate forest
+	 *         3: fungal wasteland
 	 */
 	public void changeWorldType(int newWorldType) {
 		worldType = newWorldType;

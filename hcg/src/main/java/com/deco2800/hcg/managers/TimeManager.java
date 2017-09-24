@@ -142,6 +142,37 @@ public class TimeManager extends Manager implements TickableManager {
 	}
 
 	/**
+	 * Returns a string of the current day.
+	 */
+	public String getDayString() {
+		// array to index the day out of once calcs done
+		String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+		// adding offset to the months (for calculation purposes)
+		int m = (getMonth() + 10) % 12;
+
+		// last two digits of the year
+		int d = getYear() % 100;
+
+		if (m == 11 || m == 12) {
+			d--;
+		}
+
+		// the century
+		int c = getYear() / 100;
+
+		// parts of the calculation
+		int floor1 = (13 * m - 1)/5;
+		int floor2 = d/4;
+		int floor3 = c/4;
+
+		int dayInt = getDay() + floor1 + d + floor2 + floor3 - 2*c;
+		dayInt = dayInt % 7;
+
+		return days[dayInt];
+	}
+
+	/**
 	 * Increments the number of days by 1.
 	 */
 	public void nextDay() {
@@ -153,13 +184,13 @@ public class TimeManager extends Manager implements TickableManager {
 			this.day = 1;
 			if (this.month == 12) {
 				this.month = 1;
-				this.year += 1;
+				this.year++;
 			} else {
-				this.month += 1;
+				this.month++;
 			}
 			return;
 		}
-		this.day += 1;
+		this.day++;
 	}
 
 	/**
@@ -169,8 +200,9 @@ public class TimeManager extends Manager implements TickableManager {
 	 */
 	public void nextSecond() {
 		setChanged();
-		if (this.seconds != 59) {
-			this.seconds++;
+		
+		if (this.seconds <= 58) {
+			this.seconds += 2;
 			return;
 		}
 
@@ -310,14 +342,12 @@ public class TimeManager extends Manager implements TickableManager {
 	public void setDateTime(int second, int minute, int hour, int day, int month, int year) {
 
 		// clamp inputs just in case they're not valid numbers
-				this.seconds = MathHelper.clamp(second, 0, 59);
+				this.seconds = MathHelper.clamp(second, 0, 60);
 				this.minutes = MathHelper.clamp(minute, 0, 59);
 				this.hours = MathHelper.clamp(hour, 0, 23);
 				this.day = MathHelper.clamp(day, 1, 31);
 				this.month = MathHelper.clamp(month, 1, 12);
 				this.year = MathHelper.clamp(year, 1, 10000);
 				checkNight();
-
 	}
-
 }

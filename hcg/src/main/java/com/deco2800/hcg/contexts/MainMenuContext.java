@@ -60,14 +60,15 @@ public class MainMenuContext extends UIContext {
 		newGame.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				contextManager.pushContext(new WorldMapContext());
+				contextManager.pushContext(new CharacterCreationContext());
+				//contextManager.pushContext(new WorldStackContext());
 			}
 		});
 		
 		multiplayer.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				contextManager.pushContext(new MultiplayerMenuContext());
+				contextManager.pushContext(new ServerBrowserContext());
 			}
 		});
 		

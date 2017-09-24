@@ -18,6 +18,8 @@ public class SoundManager extends Manager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoundManager.class);
 	private Map<String, Sound> soundMap = new HashMap<String, Sound>();
 
+	// String Constants
+	private static final String NO_REF = "No reference to sound effect: ";
 	/**
 	 * Constructor Loads all audio files to memory on startup.
 	 */
@@ -33,6 +35,19 @@ public class SoundManager extends Manager {
 		soundMap.put("sludge", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/sludge.wav")));
 		soundMap.put("spikes", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/spikes.wav")));
 		soundMap.put("ground", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ground.wav")));
+		soundMap.put("hit", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/hit.wav")));
+		soundMap.put("gun-rifle-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-rifle-shoot.wav")));
+		soundMap.put("gun-shotgun-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-shotgun-shoot.wav")));
+		soundMap.put("gun-stargun-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-stargun-shoot.wav")));
+	
+		// For weather Effects
+		soundMap.put("weatherRain", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
+		soundMap.put("weatherSandStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/darude-sandstorm-shortloop.wav")));
+		soundMap.put("weatherSnow", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
+		soundMap.put("weatherWind", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
+		soundMap.put("weatherDrought", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
+		soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
+	
 	}
 
 	/**
@@ -44,7 +59,7 @@ public class SoundManager extends Manager {
 			LOGGER.info("Playing sound effect: " + soundString);
 			sound.play(1f);
 		} else {
-			LOGGER.info("No reference to sound effect: " + soundString);
+			LOGGER.info(NO_REF + soundString);
 		}
 	}
 
@@ -57,7 +72,7 @@ public class SoundManager extends Manager {
 			LOGGER.info("Stop sound effect: " + soundString);
 			sound.stop();
 		} else {
-			LOGGER.info("No reference to sound effect: " + soundString);
+			LOGGER.info(NO_REF + soundString);
 		}
 	}
 
@@ -70,7 +85,7 @@ public class SoundManager extends Manager {
 			LOGGER.info("Playing sound effect, looping : " + soundString);
 			sound.loop(1f);
 		} else {
-			LOGGER.info("No reference to sound effect: " + soundString);
+			LOGGER.info(NO_REF + soundString);
 		}
 	}
 

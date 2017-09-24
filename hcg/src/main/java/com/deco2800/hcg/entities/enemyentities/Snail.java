@@ -1,0 +1,76 @@
+package com.deco2800.hcg.entities.enemyentities;
+
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.weapons.WeaponBuilder;
+import com.deco2800.hcg.weapons.WeaponType;
+import com.deco2800.hcg.managers.TextureManager;
+import java.util.HashMap;
+
+public class Snail extends Enemy implements Tickable {
+    /**
+     * Constructor for the Hedgehog class. Creates a new hedgehog at the given
+     * position.
+     *
+     * @param posX the x position
+     * @param posY the y position
+     * @param posZ the x position
+     * @param id the ID of the Snail Enemy
+     */
+    public Snail(float posX, float posY, float posZ, int id) {
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
+        //this.setTexture("snail"); - TO DO: add the right texture
+        this.level = 1;
+        newPos.setX(posX);
+        newPos.setY(posY);
+        newPos.setZ(posZ);
+        this.enemyWeapon = new WeaponBuilder()
+                .setWeaponType(WeaponType.SHOTGUN)
+                .setUser(this)
+                .setCooldown(50)
+                .setTexture("fire_seed")
+                .build();
+
+        // add new tile for poison trail
+        MapProperties mapProperties = new MapProperties();
+        mapProperties.put("name", "newSludge");
+        mapProperties.put("damagetype", "1");
+        mapProperties.put("damage", "1");
+        mapProperties.put("speed", "1.0");
+
+        GameManager.get().getWorld().addTiledMapTileLayer("newSludge", mapProperties);
+
+    }
+
+    public void setPoisonTrail() {
+        // get texture manager
+        TextureManager textureManager = (TextureManager) GameManager.get().getManager(TextureManager.class);
+
+        // add tile
+        GameManager.get().getWorld().newTileAtPos((int) prevPos.getX(), (int) prevPos.getY(),
+                textureManager.getTexture("poisontile"),
+                (TiledMapTileLayer) GameManager.get().getWorld().getMapLayerWithProperty("name", "newSludge"));
+    }
+    @Override
+    public void onTick(long gameTickCount) {
+        // status should always be 1
+        this.setNewPos();//Put new position into Box3D.
+        this.setPoisonTrail();//Set poison trail
+        this.detectCollision();//Detect collision.
+        this.moveAction();//Move enemy to the position in Box3D.
+        // Apply any effects that exist on the entity
+        myEffects.apply();
+        
+    }
+
+    @Override
+    public void setupLoot() {
+        lootRarity = new HashMap<>();
+
+        lootRarity.put("grass_seed", 1.0);
+
+        checkLootRarity();
+    }
+}

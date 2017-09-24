@@ -1,12 +1,13 @@
 package com.deco2800.hcg.entities.terrain_entities;
 
-
-
 /**
- * the type of tree
+ * @author Ken
  */
 public enum TreeType {
-    BASIC,
+    LEAFLESS,
+    BUDDING,
+    LEAFY,
+    FRUITING,
     SNOWY,
     FLAMING
 }

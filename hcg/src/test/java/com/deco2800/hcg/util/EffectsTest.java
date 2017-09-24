@@ -1,7 +1,8 @@
 package com.deco2800.hcg.util;
 
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
+
 import org.junit.Assert;
 import org.junit.Test;
 

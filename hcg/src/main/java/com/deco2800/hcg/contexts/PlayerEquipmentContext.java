@@ -64,7 +64,7 @@ public class PlayerEquipmentContext extends InventoryDisplayContext {
         centreTable.add(playerEquipmentTab).left();
         //Centre table is the main table holding all elements
         centreTable.setFillParent(true);
-        centreTable.setBackground(new Image(textureManager.getTexture("wooden_background")).getDrawable());
+        centreTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 
         //Generate the inner table, this holds the actual item inventory
         Table innerTable = new Table();
@@ -85,6 +85,7 @@ public class PlayerEquipmentContext extends InventoryDisplayContext {
         centreTable.row();
         centreTable.add(playerEquipment).expandY().fillY();
         centreTable.add(innerTable).expandY().fillY();
+        centreTable.add(itemDisplay).expandY().fillY();
         centreTable.row();
         centreTable.add(shopExit);
 

@@ -1,17 +1,13 @@
 package com.deco2800.hcg.weapons;
 
 import java.util.Random;
-import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.managers.GameManager;
 
 /**
  * The Shotgun class represents a shotgun weapon
  */
 public class Shotgun extends Weapon implements Tickable {
-    protected int pellets;
-
     /**
      * Creates a new Shotgun at the given position
      * @param posX the x position
@@ -38,8 +34,6 @@ public class Shotgun extends Weapon implements Tickable {
     
     @Override
     protected void fireWeapon() {
-        Vector3 worldCoords = GameManager.get().getCamera()
-                .unproject(new Vector3(this.aimX, this.aimY, 0));
         Random random = new Random();
         // Shoot bullets at random locations around cursor
         for(int i = 0; i < this.pellets; i++) {
@@ -48,11 +42,12 @@ public class Shotgun extends Weapon implements Tickable {
                     this.getPosY() + 0.2f *
                     (float) random.nextGaussian(),
                     this.getPosZ(),
-                    worldCoords.x + 20 *
+                    this.aim.x + 1f *
                     (float) random.nextGaussian(),
-                    worldCoords.y + 20 *
+                    this.aim.y + 1f *
                     (float) random.nextGaussian()); 
         }
+        playFireSound();
     }
     
 }

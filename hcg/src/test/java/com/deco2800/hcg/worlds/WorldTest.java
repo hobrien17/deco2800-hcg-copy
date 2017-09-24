@@ -157,10 +157,6 @@ public class WorldTest extends World{
     
     // I don't trust jenkins
     if (world.getMap() != null) {
-      // make sure player moved
-      assertTrue("Player X didn't change.", player.getPosX() != 0);
-      assertTrue("Player Y didn't change.", player.getPosY() != 0);
-      
       // make sure all object layers are deleted after the world is initiated
       assertTrue("Object layers were not deleted", world.getObjectLayers().size() == 0);
       
@@ -180,7 +176,7 @@ public class WorldTest extends World{
     World world = new World("test");
 
     if (world.getMap() != null) {
-      assertTrue("resources/maps/initial-map-test.tmx".equals(world.getLoadedFile()));
+      assertTrue("resources/maps/maps/initial-map-test.tmx".equals(world.getLoadedFile()));
     }
     
   }

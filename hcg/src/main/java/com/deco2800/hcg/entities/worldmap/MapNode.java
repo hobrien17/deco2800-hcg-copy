@@ -29,6 +29,14 @@ public class MapNode {
 	private boolean isDiscovered;
 	
 	private static int nodeCount = 0;
+
+	/* These are the screen positions of the nodes on the world map screen.
+	 * Note: The engine uses all sprite co-ordinates from the bottom left corner of the sprite, however when these are
+	 * set from MapNodeEntity, they are actually calculated to be the center point of the sprite since we are using them
+	 * to draw lines between the nodes.
+	 */
+	private int xPos;
+	private int yPos;
 	
 	/**
 	 * Initialises a new MapNode object based on the specified parameters.
@@ -119,7 +127,41 @@ public class MapNode {
 	public Level getNodeLinkedLevel() {
 		return linkedLevel;
 	}
-	
+
+	/**
+	 * Gets the nodes sprite center point screen x position
+	 * @return
+	 * 		Returns the x co-ordinate
+	 */
+	public int getXPos() {
+		return xPos;
+	}
+
+	/**
+	 * Sets the nodes sprite center point screen x position
+	 * @param xPos the new center point screen x position
+	 */
+	public void setXPos(int xPos) {
+		this.xPos = xPos;
+	}
+
+	/**
+	 * Gets the nodes sprite center point screen y position
+	 * @return
+	 * 		Returns the y co-ordinate
+	 */
+	public int getYPos() {
+		return yPos;
+	}
+
+	/**
+	 * Sets the nodes sprite center point screen y position
+	 * @param yPos the new center point screen y position
+	 */
+	public void setYPos(int yPos) {
+		this.yPos = yPos;
+	}
+
 	/**
 	 * Gets the node's selection status.
 	 * @return
@@ -139,6 +181,11 @@ public class MapNode {
 		return isDiscovered;
 	}
 	
+	/**
+	 * Gets the node's ID.
+	 * @return
+	 *     Returns the node's ID
+	 */
 	public int getNodeID() {
 		return nodeID;
 	}
@@ -242,6 +289,11 @@ public class MapNode {
 		isDiscovered = false;
 	}
 	
+	/**
+	 * Sets a new ID for the node.
+	 * @param newID
+	 *     The new ID for the node.
+	 */
 	public void setNodeID(int newID) {
 		nodeID = newID;
 	}
@@ -251,7 +303,7 @@ public class MapNode {
 	 */
 	@Override
 	public String toString() {
-		String nodeTypeString = "";
+		String nodeTypeString;
 		String newline = System.getProperty("line.separator");
 		switch (nodeType) {
 			case 0:
@@ -265,7 +317,9 @@ public class MapNode {
 				break;
 			case 3:
 				nodeTypeString = "Boss Node";
-				break;			
+				break;
+			default:
+				nodeTypeString = "Default Node";
 		}
 		String nodeString = "nodeType: " + nodeTypeString + " | nodeRow: " + nodeRow + " | nodeColumn: " + 
 				nodeColumn + " | nodeLevel: " + linkedLevel + newline +

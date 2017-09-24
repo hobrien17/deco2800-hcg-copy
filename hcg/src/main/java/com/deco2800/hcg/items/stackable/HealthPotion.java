@@ -1,5 +1,7 @@
 package com.deco2800.hcg.items.stackable;
 
+import java.util.ArrayList;
+
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
@@ -37,12 +39,12 @@ public class HealthPotion extends ConsumableItem {
 
     @Override
     public String getName() {
-        return String.format("%s (%s)", this.itemName, "+"+this.healthAmount+"HP");
+        return this.itemName;
     }
 
     @Override
     public boolean sameItem(Item item) {
-        return item instanceof HealthPotion && this.itemName == ((HealthPotion) item).itemName;
+        return item instanceof HealthPotion && this.healthAmount == ((HealthPotion) item).healthAmount;
     }
 
     @Override
@@ -50,5 +52,12 @@ public class HealthPotion extends ConsumableItem {
         HealthPotion newPotion = new HealthPotion(healthAmount);
         newPotion.setStackSize(this.getStackSize());
         return newPotion;
+    }
+    
+    @Override
+    public ArrayList<String> getInformation() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add(String.format("+%s HP", this.healthAmount));
+        return list;
     }
 }

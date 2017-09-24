@@ -5,13 +5,13 @@ active: false
 lowMin: 500.0
 lowMax: 500.0
 - Count - 
-min: 700
-max: 800
+min: 3000
+max: 4000
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 900.0
-highMax: 900.0
+highMin: 3500.0
+highMax: 3500.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -69,8 +69,8 @@ timeline1: 0.80136985
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 1.0
-highMax: 4.0
+highMin: 10.0
+highMax: 19.0
 relative: false
 scalingCount: 2
 scaling0: 1.0
@@ -130,8 +130,8 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 20.0
-highMax: -20.0
+highMin: 40.0
+highMax: -40.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -140,7 +140,7 @@ timeline0: 0.0
 - Tint - 
 colorsCount: 3
 colors0: 1.0
-colors1: 0.77254903
+colors1: 0.76862746
 colors2: 0.047058824
 timelineCount: 1
 timeline0: 0.0
@@ -168,4 +168,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-/C:/Users/stk/Documents/2800/libgdx/particle.png
+sandstorm_cluster.png
