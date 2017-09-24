@@ -209,6 +209,7 @@ public class TextureManager extends Manager {
 		textureMap.put("item_background", new Texture("resources/ui/shop_ui/square.png"));
 		textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
         textureMap.put("selected", new Texture("resources/ui/shop_ui/selected.png"));
+        textureMap.put("tooltip", new Texture("resources/ui/tooltip.png"));
 
 		//World map textures
 		textureMap.put("wm_blue_bg", new Texture("resources/worldmap/blue_background.png"));
