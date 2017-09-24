@@ -18,8 +18,8 @@ public class Squirrel extends Enemy implements Tickable {
 	 * @param posZ the x position
 	 * @param Id the ID of the squirrel
 	 */
-	public Squirrel(float posX, float posY, float posZ, int id) {
-		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
+	public Squirrel(float posX, float posY, float posZ, int Id) {
+		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, Id);
 		this.setTexture("squirrel");
 		this.level = 1;
 		this.enemyWeapon = new WeaponBuilder()
@@ -34,10 +34,11 @@ public class Squirrel extends Enemy implements Tickable {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put("gardening_seed", 1.0);
+		lootRarity.put("sunflower_seed", 1.0);
 
 		checkLootRarity();
 	}
+
 	/**
 	 * On Tick handler
 	 * @param gameTickCount Current game tick
