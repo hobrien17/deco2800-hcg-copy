@@ -44,7 +44,7 @@ abstract class CharacterStatsScreen extends CharacterContext {
         statsWindow = new Window("Stats", skin);
         perksWindow = new Window("Perks", skin);
 
-        Texture backgroundTexture = textureManager.getTexture("ccWindow_Background_White");
+        Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
         attributesWindow.setBackground(new Image(backgroundTexture).getDrawable());
         skillsWindow.setBackground(new Image(backgroundTexture).getDrawable());
         statsWindow.setBackground(new Image(backgroundTexture).getDrawable());
@@ -129,10 +129,10 @@ abstract class CharacterStatsScreen extends CharacterContext {
     }
 
     private  void addSubtables() {
-        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(10);
+        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesWindow).top().left().expandX().expandY().fillX().fillY().padBottom(10);
-        masterTable.add(skillsWindow).top().right().expandX().expandY().fillX().fillY().padBottom(10);
+        masterTable.add(attributesWindow).top().left().expandX().expandY().fillX().fillY().padBottom(15);
+        masterTable.add(skillsWindow).top().right().expandX().expandY().fillX().fillY().padBottom(15);
         masterTable.row();
         masterTable.add(statsWindow).top().left().expandX().expandY().fillX().fillY();
         masterTable.add(perksWindow).top().right().expandX().expandY().fillX().fillY();
