@@ -8,9 +8,10 @@ import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.renderers.CustomRenderable;
+import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.worlds.World;
 
-public class ItemEntity extends AbstractEntity implements Tickable, CustomRenderable {
+public class ItemEntity extends AbstractEntity implements Tickable, CustomRenderable, LightEmitter {
 
 	protected Item item;
 
@@ -84,5 +85,15 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
         
         batch.draw(texture, posX, posY, tileWidth * this.getXRenderLength(),
                 (texture.getHeight() / aspect) * this.getYRenderLength());
+    }
+
+    @Override
+    public Color getLightColour() {
+        return this.getItem().getRarity().colour;
+    }
+
+    @Override
+    public float getLightPower() {
+        return this.getItem().getRarity() == ItemRarity.COMMON ? 0 : 5;
     }
 }
