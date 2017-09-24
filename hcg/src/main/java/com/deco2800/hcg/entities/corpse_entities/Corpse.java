@@ -61,4 +61,13 @@ public abstract class Corpse extends AbstractEntity {
     		return plantInside(new Seed(Seed.Type.SUNFLOWER));
     	}
     }
+    
+    /**
+     * Determines whether this corpse has a turret in it or not
+     * 
+     * @return true if the corpse is empty, otherwise false
+     */
+    public boolean isEmpty() {
+    	return turret == null;
+    }
 }

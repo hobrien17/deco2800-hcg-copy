@@ -23,7 +23,6 @@ import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.items.*;
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -65,6 +64,7 @@ public class PlayContext extends Context {
 	private ClockDisplay clockDisplay;
 	private PlantWindow plantWindow;
 	private ChatStack chatStack;
+	private RadialDisplay radialDisplay;
 
 	private Window window;
 	private Window plantWindow;
@@ -83,7 +83,6 @@ public class PlayContext extends Context {
 	private boolean useShaders = true;
 	
 	private Window exitWindow;
-	private RadialDisplay radialDisplay;
 
 	private Stage stage;
 	private Skin skin;
@@ -408,7 +407,7 @@ public class PlayContext extends Context {
         return unpaused;
     }
 
-    // Handle switching to World Map by pressing "m"
+    // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
         if (keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
@@ -416,7 +415,9 @@ public class PlayContext extends Context {
             useShaders = !useShaders;
         }
 		else if (keycode == Input.Keys.B) {
-			radialDisplay.addRadialMenu(stage);
+			if(RadialDisplay.plantableNearby()) {
+				radialDisplay.addRadialMenu(stage);
+			}
 		}
     }
     
