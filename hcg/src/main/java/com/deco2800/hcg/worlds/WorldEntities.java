@@ -17,6 +17,7 @@ import com.deco2800.hcg.entities.terrain_entities.SludgeBarrel;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
+import com.deco2800.hcg.entities.terrain_entities.Sign;
 
 public enum WorldEntities {
 	WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,

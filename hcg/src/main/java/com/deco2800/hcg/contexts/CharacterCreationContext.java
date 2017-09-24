@@ -10,11 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.items.BasicSeed;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-
 import java.util.*;
 import java.util.List;
 
@@ -719,8 +718,8 @@ public class CharacterCreationContext extends CharacterContext{
         Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
-        Item startingSeeds = new BasicSeed();
-        startingSeeds.addToStack(100);
+        Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
+        startingSeeds.setStackSize(100);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);
@@ -728,6 +727,5 @@ public class CharacterCreationContext extends CharacterContext{
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
-
     }
 }

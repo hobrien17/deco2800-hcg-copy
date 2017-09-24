@@ -9,7 +9,6 @@ import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;

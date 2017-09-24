@@ -1,7 +1,6 @@
 package com.deco2800.hcg.managers;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.deco2800.hcg.entities.Player;
