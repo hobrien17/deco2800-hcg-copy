@@ -11,15 +11,9 @@
  <tileset firstgid="11" source="../tiles/general-tiles.tsx"/>
  <tileset firstgid="21" source="../tiles/sludgebubbling.tsx"/>
  <tileset firstgid="29" source="../tiles/spikes-large.tsx"/>
-<<<<<<< HEAD
  <layer name="layer" width="30" height="30">
   <properties>
    <property name="name" value="layer"/>
-=======
- <layer name="Tile Layer 1" width="30" height="30">
-  <properties>
-   <property name="name" value="Tile Layer 1"/>
->>>>>>> dbe8c78c7129ff7762d6f7a15e8dbf60aad046ae
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">
