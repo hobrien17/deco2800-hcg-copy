@@ -3,7 +3,7 @@
  <properties>
   <property name="PlayerX" value="50"/>
   <property name="PlayerY" value="50"/>
-  <property name="weather" value="none"/>
+  <property name="weather" value="snow"/>
  </properties>
  <tileset firstgid="1" source="../tiles/grass.tsx"/>
  <tileset firstgid="2" source="../tiles/charcoal.tsx"/>
