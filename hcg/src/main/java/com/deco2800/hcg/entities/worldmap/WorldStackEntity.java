@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.worldmap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,12 +13,14 @@ public class WorldStackEntity extends Actor {
 	public WorldStackEntity() {
         GameManager gameManager = GameManager.get();
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
-        worldStackBackground = textureManager.getTexture("wm_green_bg");
-
+        worldStackBackground = textureManager.getTexture("ws_purp_bg");
+     // Grab the current viewport dimensions
     }
 
     @Override
     public void draw(Batch batch, float alpha){
-        batch.draw(worldStackBackground, 0, 0);
+    	int viewPortX = Gdx.graphics.getWidth();
+        int viewPortY = Gdx.graphics.getHeight();
+        batch.draw(worldStackBackground, 0, 0, viewPortX, viewPortY);
     }
 }

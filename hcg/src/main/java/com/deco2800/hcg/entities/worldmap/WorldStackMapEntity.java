@@ -16,7 +16,7 @@ public class WorldStackMapEntity extends Actor {
 
     private WorldMap worldMap;
 
-    private float spriteWidth = 175; // Used to scale the drawing of the mapNodes. (pixels)
+    private float spriteWidth = 300; // Used to scale the drawing of the mapNodes. (pixels)
     private float spriteHeight; // Will be calculated based on the above width
     
     public WorldStackMapEntity(WorldMap worldMap) {
@@ -28,7 +28,7 @@ public class WorldStackMapEntity extends Actor {
         updateTexture();
         
         // pixels padding around each direction of the map
-     	int mapPadding = 175;
+     	int mapPadding = 75;
 
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
@@ -57,18 +57,18 @@ public class WorldStackMapEntity extends Actor {
 				break;
 			case 1:
 				//suburbs biome
-				worldStackMapTexture = textureManager.getTexture("discovered_node");
+				worldStackMapTexture = textureManager.getTexture("ws_urban");
 				break;
 			case 2:
 				//desolate forest biome
-				worldStackMapTexture = textureManager.getTexture("discovered_node");
+				worldStackMapTexture = textureManager.getTexture("ws_forest");
 				break;
 			case 3:
 				//fungal wasteland biome
-				worldStackMapTexture = textureManager.getTexture("safe_node");
+				worldStackMapTexture = textureManager.getTexture("ws_fungi");
 				break;
 			default: // This shouldn't happen, but catch all if it does.
-				worldStackMapTexture = textureManager.getTexture("discovered_node");
+				worldStackMapTexture = textureManager.getTexture("safe_node");
 		}
 	}
 	
