@@ -27,10 +27,6 @@ public class WorldMap {
 	 * Initialises the WorldMap object using the specified parameters.	
 	 * @param type
 	 *     The world's type (not 100% confirmed yet so for now it is not used)
-	 * @param texture
-	 *     The background texture to display on the screen when the map is being displayed
-	 * @param position
-	 *     The position of the WorldMap in the WorldStack
 	 * @param rows
 	 *     The number of rows that the WorldMap supports
 	 * @param columns
@@ -45,11 +41,6 @@ public class WorldMap {
 		containedNodes = nodeList;
 		completed = false;
 		unlocked = false;
-	}
-	
-	//TEMPORARY CONSTRUCTOR! REMOVE ONCE IMPLEMENTATION IS FINISHED!
-	public WorldMap() {
-		
 	}
 
 	// ACCESSOR METHODS
@@ -143,22 +134,43 @@ public class WorldMap {
 		worldSeed = seed;
 	}
 	
+	/**
+	 * Toggles the completion status of the WorldMap.
+	 */
 	public void toggleCompleted() {
 		completed = !completed;
 	}
 	
+	/**
+	 * Gets the completion status of the WorldMap.
+	 * @return
+	 *     Returns the completion status of the WorldMap.
+	 */
 	public boolean isCompleted() {
 		return completed;
 	}
 	
+	/**
+	 * Sets the lock status of the WorldMap to be unlocked.
+	 */
 	public void setUnlocked() {
 		unlocked = true;
 	}
 	
+	/**
+	 * Gets the lock status of the WorldMap.
+	 * @return
+	 *     Returns whether the WorldMap is unlocked.
+	 */
 	public boolean isUnlocked() {
 		return unlocked;
 	}
 	
+	/**
+	 * Sets the position of the WorldMap in its WorldStack
+	 * @param position
+	 *     The position to set to.
+	 */
 	public void setPosition(int position) {
 		worldPosition = position;
 	}

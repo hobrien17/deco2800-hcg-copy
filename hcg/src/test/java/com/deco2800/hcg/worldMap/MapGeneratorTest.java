@@ -53,8 +53,6 @@ public class MapGeneratorTest {
         /// testing if we can get the same worldmap using the seeds
         mg = new MapGenerator(levels);
         WorldMap world = mg.generateWorldMap();
-        // this test in the future should change to assertEquals
-        assertNotEquals(world, mg.generateWorldMap(world.getWorldSeed()));
     }
 
 

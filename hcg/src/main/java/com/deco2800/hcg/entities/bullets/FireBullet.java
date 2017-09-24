@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.WorldUtil;
 
@@ -13,10 +13,20 @@ import com.deco2800.hcg.util.WorldUtil;
  * Kills the enemy it hits, and sets nearby enemies on fire
  * Since effects are not fully implemented, this bullet doesn't work at the moment
  * 
+ * This bullet isn't fully-completed, but is used to extend the fireball from
+ * It's assumed the weapons team will find a use for this class later
+ * 
  * @author Henry O'Brien
  *
  */
 public class FireBullet extends Bullet {
+
+	public FireBullet(float posX, float posY, float posZ, float xd, float yd,
+					 AbstractEntity user, int hitCount) {
+		super(posX, posY, posZ, xd, yd, posZ,
+				user, hitCount);
+		this.setTexture("battle_seed_red");
+	}
 	
 	/**
 	 * Creates a new firebullet moving towards the specified location
@@ -75,11 +85,11 @@ public class FireBullet extends Bullet {
 	
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Shot", 1, 2, 0, 0, 1, 0));
-		AbstractEntity entity = (AbstractEntity)target;
-		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 1, Enemy.class);
-		for(AbstractEntity close : closest) {
-			((Enemy)close).giveEffect(new Effect("Fire", 1, 0, 0, 0, 5, 0));
-		}
+		target.giveEffect(new Effect("Shot", 1, 5, 0, 0, 200, 0));
+//		AbstractEntity entity = (AbstractEntity)target;
+//		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 1, Enemy.class);
+//		for(AbstractEntity close : closest) {
+//			((Enemy)close).giveEffect(new Effect("Fire", 1, 5, 0, 0, 200, 0));
+//		}
 	}
 }

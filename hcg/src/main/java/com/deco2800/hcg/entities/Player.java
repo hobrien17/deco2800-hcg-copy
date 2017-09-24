@@ -2,9 +2,12 @@ package com.deco2800.hcg.entities;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import com.deco2800.hcg.contexts.*;
-import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
+import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
@@ -29,6 +32,7 @@ import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -36,6 +40,8 @@ import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 
 /**
  * Entity for the playable character.
@@ -510,8 +516,9 @@ public class Player extends Character implements Tickable {
 		}
 		List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
 		for (AbstractEntity entity : entities) {
-			if (!this.equals(entity) && !(entity instanceof Squirrel) && newPos.overlaps(entity.getBox3D())
-					&& !(entity instanceof Bullet) && !(entity instanceof Weapon)) {
+			if (!this.equals(entity) && !(entity instanceof Squirrel) && !(entity instanceof Hedgehog)
+					&& newPos.overlaps(entity.getBox3D()) && !(entity instanceof Bullet)
+							&& !(entity instanceof Weapon) && !(entity instanceof Corpse)) {
 				LOGGER.info(this + " colliding with " + entity);
 				collided = true;
 			}
@@ -758,6 +765,13 @@ public class Player extends Character implements Tickable {
 			System.out.println("Access player inventory");
 			contextManager.pushContext(new PlayerInventoryContext(this));
 			break;
+		case Input.Keys.U:
+			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 
+					1.5f, Pot.class);
+			if(closest.isPresent()) {
+				Pot pot = (Pot)closest.get();
+				pot.unlock();
+			}
 		default:
 			break;
 		}

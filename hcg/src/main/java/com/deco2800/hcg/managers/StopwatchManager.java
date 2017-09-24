@@ -104,7 +104,6 @@ public class StopwatchManager extends Manager implements TickableManager {
 			setChanged();
 			timedMinutes += delay;
 		}
-
 		
 		if (hasChanged()){
 			notifyObservers(getStopwatchTime());
@@ -112,5 +111,4 @@ public class StopwatchManager extends Manager implements TickableManager {
 		}
 		clearChanged();
 	}
-
 }

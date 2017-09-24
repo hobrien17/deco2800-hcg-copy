@@ -16,9 +16,11 @@ import com.deco2800.hcg.entities.bullets.Fireball;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
-import com.deco2800.hcg.entities.enemy_entities.Squirrel;
+
+import com.deco2800.hcg.entities.enemyentities.Enemy;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.entities.turrets.Explosion;
 import com.deco2800.hcg.entities.turrets.ExplosiveTurret;
@@ -191,10 +193,9 @@ public class TurretTest {
 		gm.getWorld().addEntity(corpse);
 		turret = new IceTurret(corpse);
 
-		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); // add an enemy to test
-														// speed change
+		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); // to test speed change
 		enemy.setSpeed(1f);
-		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 0);
+		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 1);
 		enemyFar.setSpeed(1f);
 		gm.getWorld().addEntity(enemy);
 		gm.getWorld().addEntity(enemyFar);
@@ -210,12 +211,8 @@ public class TurretTest {
 		for (int i = 0; i < 5; i++) {
 			turret.update(sw, i); // update until the turret detonates
 		}
-		assertEquals("The enemy should be frozen", 0, enemy.getMovementSpeed(), 0); // check
-																					// that
-																					// the
-																					// enemy
-																					// is
-																					// frozen
+		assertEquals("The enemy should be frozen", 0, enemy.getMovementSpeed(), 0); 
+		// check that the enemy is frozen
 		assertEquals("The second enemy should be slower than normal", 0.5f, enemyFar.getMovementSpeed(), 0);
 		for (int i = 0; i < 10; i++) {
 			assertTrue("The corpse should still be in the world", gm.getWorld().containsEntity(corpse));
