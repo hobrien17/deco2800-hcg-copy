@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.renderers.RenderLightmap;
 import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -32,9 +33,13 @@ public class ShaderManager extends Manager {
 
     private FrameBuffer renderTarget;
     private TextureRegion scene;
+    private FrameBuffer lightTarget;
+    private TextureRegion lightMap;
+    private SpriteBatch lightBatch;
     private SpriteBatch preBatch;
     private SpriteBatch postBatch;
     private BatchTiledMapRenderer tileRenderer;
+    private RenderLightmap lightRenderer;
     
     public ShaderManager() {
         this.preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
@@ -71,8 +76,9 @@ public class ShaderManager extends Manager {
         this.state.setBloom(true);
         this.state.setHeat(false);
         
-
+        this.lightRenderer = new RenderLightmap();
     }
+    
     public boolean shadersCompiled() {
         return !(this.preShader == null || this.postShader == null);
     }
@@ -87,6 +93,25 @@ public class ShaderManager extends Manager {
         this.renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
         this.scene = new TextureRegion(renderTarget.getColorBufferTexture());
         this.scene.flip(false, true);
+        
+        // Begin lightmap //////////////////////////////////////////////////////////////////////////////////////////
+        
+        this.lightTarget = new FrameBuffer(Format.RGB565, width, height, false);
+        this.lightMap = new TextureRegion(lightTarget.getColorBufferTexture());
+        this.lightMap.flip(false,  true);
+        
+        this.lightBatch = new SpriteBatch();
+        this.lightBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
+        
+        // Draw onto light target //////////////////////////////////////
+        this.lightTarget.begin();
+        Gdx.gl.glClearColor(1, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        
+        this.lightRenderer.render(this.lightBatch);
+        
+        this.lightTarget.end();
+        this.lightBatch.dispose();
         
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
@@ -131,7 +156,8 @@ public class ShaderManager extends Manager {
         // Finish drawing onto screen /////////////////////////////////
             
         this.postShader.end();
-        postBatch.dispose();
-        renderTarget.dispose();
+        this.postBatch.dispose();
+        this.renderTarget.dispose();
+        this.lightTarget.dispose();
     }
 }

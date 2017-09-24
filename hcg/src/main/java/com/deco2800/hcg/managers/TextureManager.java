@@ -99,6 +99,7 @@ public class TextureManager extends Manager {
 		// Miscellaneous textures
 		textureMap.put("error", new Texture("resources/misc/error.png"));
         textureMap.put("loot_beam", new Texture("resources/sprites/loot_beam/loot_beam_2.0.png"));
+        textureMap.put("lightmap", new Texture("resources/sprites/light/lightmap.png"));
 
 		//Terrain objects
 		textureMap.put("wallblock", new Texture("resources/terrain_objects/wallblock.png"));

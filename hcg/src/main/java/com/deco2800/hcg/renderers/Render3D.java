@@ -84,10 +84,6 @@ public class Render3D implements Renderer {
             // We want to keep the aspect ratio of the image so...
             float aspect = (float) (tex.getWidth()) / (float) (tileWidth);
             
-            if(entity instanceof LightEmitter) {
-                //Do your lighting stuff here.
-            }
-            
             if(entity instanceof CustomRenderable) {
                 ((CustomRenderable) entity).customDraw(batch, isoX, isoY, tileWidth, tileHeight, aspect, reg);
             } else {
