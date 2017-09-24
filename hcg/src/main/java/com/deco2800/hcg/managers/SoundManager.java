@@ -25,9 +25,7 @@ public class SoundManager extends Manager {
 	 * Constructor Loads all audio files to memory on startup.
 	 */
 	public SoundManager() {
-
 		try {
-
 			soundMap.put("ree", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree1.wav")));
 			soundMap.put("quack", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/quack.wav")));
 			// walking sound effect
@@ -40,9 +38,13 @@ public class SoundManager extends Manager {
 			soundMap.put("spikes", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/spikes.wav")));
 			soundMap.put("ground", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ground.wav")));
 			soundMap.put("hit", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/hit.wav")));
+
+			// Gun sounds
 			soundMap.put("gun-rifle-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-rifle-shoot.wav")));
 			soundMap.put("gun-shotgun-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-shotgun-shoot.wav")));
 			soundMap.put("gun-stargun-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-stargun-shoot.wav")));
+			soundMap.put("gun-grenadelauncher-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-grenadelauncher-shoot.wav")));
+			soundMap.put("bullet-grenade-explode", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/bullet-grenade-explode.wav")));
 
 			// For weather Effects
 			soundMap.put("weatherRain", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
@@ -51,11 +53,9 @@ public class SoundManager extends Manager {
 			soundMap.put("weatherWind", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherDrought", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
-
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}
-
 	}
 
 	/**
