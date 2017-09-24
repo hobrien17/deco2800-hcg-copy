@@ -1,9 +1,12 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.nio.ByteBuffer;
+
 import com.deco2800.hcg.contexts.CharacterCreationContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 
 /**
@@ -12,32 +15,41 @@ import com.deco2800.hcg.managers.PlayerManager;
  * @author Max Crofts
  */
 public class StartMessage extends Message {
-	GameManager gameManager = GameManager.get();
-	ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
-	PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+	private final GameManager gameManager = GameManager.get();
+	private final ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+	private final NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+	private final PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+	
+	private int seed;
 	
 	public StartMessage() {}
 	
-	public StartMessage(int id) {
+	public StartMessage(int seed) {
 		super(MessageType.START);
+		this.seed = seed;
+	}
+	
+	@Override
+	public void packData(ByteBuffer buffer) {
+		super.packData(buffer);
+		buffer.putInt(seed);
+	}
+	
+	@Override
+	public void unpackData(ByteBuffer buffer) throws MessageFormatException {
+		super.unpackData(buffer);
+		seed = buffer.getInt();
 	}
 	
 	@Override
 	public void process() {
+		networkManager.setSeed((long) seed);
+		
 		// TODO: we need to support more (4?) players
 		// FIXME
-		/*
-		gameManager.setOccupiedNode(gameManager.getWorldMap().getContainedNodes().get(0));
-		gameManager.setWorld(new World(gameManager.getWorldMap().getContainedNodes().get(0)
-				.getNodeLinkedLevel().getWorld().getLoadedFile()));
-		*/
 		Player otherPlayer = new Player(1, 5, 10, 0);
 		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, "Player 2");
 		playerManager.addPlayer(otherPlayer);
-		/*
-		playerManager.spawnPlayers();
-		contextManager.pushContext(new PlayContext());
-		*/
 		contextManager.pushContext(new CharacterCreationContext());
 	}
 }
