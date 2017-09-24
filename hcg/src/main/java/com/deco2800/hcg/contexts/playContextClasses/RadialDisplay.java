@@ -1,5 +1,7 @@
 package com.deco2800.hcg.contexts.playContextClasses;
 
+import java.util.Optional;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -9,10 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.util.WorldUtil;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.*;
 
 
@@ -21,7 +30,6 @@ public class RadialDisplay extends Group {
     private PlantManager plantManager;
     private TextureManager textureManager;
     private GameManager gameManager;
-    private Planter planter;
 
     private ImageButton normalButton;
     private ImageButton explosiveButton;
@@ -32,15 +40,6 @@ public class RadialDisplay extends Group {
     private ImageButton xButton;
     private ImageButton fertiliserButton;
     private ImageButton sprayButton;
-    private ImageButton normalButtonHover;
-    private ImageButton explosiveButtonHover;
-    private ImageButton fireButtonHover;
-    private ImageButton grassButtonHover;
-    private ImageButton iceButtonHover;
-    private ImageButton waterButtonHover;
-    private ImageButton xButtonHover;
-    private ImageButton fertiliserButtonHover;
-    private ImageButton sprayButtonHover;
     private Image radialOutline;
 
     private Stage stageInput;
@@ -53,142 +52,141 @@ public class RadialDisplay extends Group {
         gameManager = GameManager.get();
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
-        planter = new Planter();
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
         stageInput = stage;
 
         radialOutline = new Image(textureManager.getTexture("radialOutline"));
 
         radialDisplay = new Group();
-
-        normalButton = new ImageButton(new Image(textureManager.getTexture("normalButton")).getDrawable());
-        explosiveButton = new ImageButton(new Image(textureManager.getTexture("explosiveButton")).getDrawable());
-        fireButton = new ImageButton(new Image(textureManager.getTexture("fireButton")).getDrawable());
-        grassButton = new ImageButton(new Image(textureManager.getTexture("grassButton")).getDrawable());
-        iceButton = new ImageButton(new Image(textureManager.getTexture("iceButton")).getDrawable());
-        waterButton = new ImageButton(new Image(textureManager.getTexture("waterButton")).getDrawable());
+        
+        normalButton = new ImageButton(new Image(textureManager.getTexture("sunflower_btn")).getDrawable());
+        waterButton = new ImageButton(new Image(textureManager.getTexture("water_btn")).getDrawable());
+        iceButton = new ImageButton(new Image(textureManager.getTexture("ice_btn")).getDrawable());
+        fireButton = new ImageButton(new Image(textureManager.getTexture("fire_btn")).getDrawable());
+        grassButton = new ImageButton(new Image(textureManager.getTexture("grass_btn")).getDrawable());
+        explosiveButton = new ImageButton(new Image(textureManager.getTexture("explosive_btn")).getDrawable());
+        sprayButton = new ImageButton(new Image(textureManager.getTexture("bugspray_btn")).getDrawable());
+        fertiliserButton = new ImageButton(new Image(textureManager.getTexture("fertiliser_btn")).getDrawable());
         xButton = new ImageButton(new Image(textureManager.getTexture("menuClose")).getDrawable());
-        fertiliserButton = new ImageButton(new Image(textureManager.getTexture("fertiliserButton")).getDrawable());
-        sprayButton = new ImageButton(new Image(textureManager.getTexture("sprayButton")).getDrawable());
-
-        normalButtonHover = new ImageButton(new Image(textureManager.getTexture("normalButtonHover")).getDrawable());
-        explosiveButtonHover = new ImageButton(new Image(textureManager.getTexture("explosiveButtonHover")).getDrawable());
-        fireButtonHover = new ImageButton(new Image(textureManager.getTexture("fireButtonHover")).getDrawable());
-        grassButtonHover = new ImageButton(new Image(textureManager.getTexture("grassButtonHover")).getDrawable());
-        iceButtonHover = new ImageButton(new Image(textureManager.getTexture("iceButtonHover")).getDrawable());
-        waterButtonHover = new ImageButton(new Image(textureManager.getTexture("waterButtonHover")).getDrawable());
-        xButtonHover = new ImageButton(new Image(textureManager.getTexture("xButtonHover")).getDrawable());
-        fertiliserButtonHover = new ImageButton(new Image(textureManager.getTexture("fertiliserButtonHover")).getDrawable());
-        sprayButtonHover = new ImageButton(new Image(textureManager.getTexture("sprayButtonHover")).getDrawable());
 
         radialOutline.setSize(350, 350);
         radialOutline.setPosition(radialDisplay.getWidth() / 2f - radialOutline.getWidth() / 2f, radialDisplay.getHeight() / 2f - radialOutline.getHeight() / 2f);
         radialDisplay.setPosition(stageInput.getWidth() / 2, stageInput.getHeight() / 2);
+        //radialDisplay.setSize(350, 350);
         radialDisplay.addActor(radialOutline);
-
-        xButton.setSize(220,220);
-        normalButton.setSize(135, 135);
-        grassButton.setSize(135, 135);
-        explosiveButton.setSize(135, 135);
-        iceButton.setSize(136, 135);
-        waterButton.setSize(135, 135);
-        fireButton.setSize(135, 135);
-        sprayButton.setSize(135, 135);
-        fertiliserButton.setSize(140, 136);
-
-        normalButton.setPosition(radialDisplay.getWidth() / 2f - normalButton.getWidth() / 2f - 102, radialDisplay.getHeight() / 2f - normalButton.getHeight() / 2f - 60);
-        explosiveButton.setPosition(radialDisplay.getWidth() / 2f - explosiveButton.getWidth() / 2f - 102, radialDisplay.getHeight() / 2f - explosiveButton.getHeight() / 2f + 61);
-        fireButton.setPosition(radialDisplay.getWidth() / 2f - fireButton.getWidth() / 2f - 63f,radialDisplay.getHeight() - fireButton.getHeight() / 2f + 103f);
-        grassButton.setPosition(radialDisplay.getWidth() / 2f - grassButton.getWidth() / 2f + 62f,radialDisplay.getHeight() - grassButton.getHeight() / 2f + 103f);
-        iceButton.setPosition(radialDisplay.getWidth() / 2f - iceButton.getWidth() / 2f + 102, radialDisplay.getHeight() / 2f - iceButton.getHeight() / 2f + 60);
-        waterButton.setPosition(radialDisplay.getWidth() / 2f - waterButton.getWidth() / 2f + 102, radialDisplay.getHeight() / 2f - waterButton.getHeight() / 2f - 60);
-        xButton.setPosition(radialDisplay.getWidth() / 2f - xButton.getWidth() / 2f, radialDisplay.getHeight() / 2f - xButton.getHeight() / 2f);
-        fertiliserButton.setPosition(radialDisplay.getWidth() / 2f - fertiliserButton.getWidth() / 2f + 63f,radialDisplay.getHeight() - fertiliserButton.getHeight() / 2f - 102f);
-        sprayButton.setPosition(radialDisplay.getWidth() / 2f - sprayButton.getWidth() / 2f - 60f,radialDisplay.getHeight() - sprayButton.getHeight() / 2f - 103f);
-
+        
+        normalButton.setSize(80, 80);
+        waterButton.setSize(80, 80);
+        iceButton.setSize(80, 80);
+        fireButton.setSize(80, 80);
+        grassButton.setSize(80, 80);
+        explosiveButton.setSize(80, 80);
+        sprayButton.setSize(80, 80);
+        fertiliserButton.setSize(80, 80);
+        xButton.setSize(80,80);
+        
+        normalButton.setPosition(radialDisplay.getWidth()/2f - normalButton.getWidth()/2f - 150, 
+        		radialDisplay.getWidth()/2f - normalButton.getHeight()/2f);
+        waterButton.setPosition(radialDisplay.getWidth()/2f - waterButton.getWidth()/2f + 150,
+        		radialDisplay.getHeight()/2f - waterButton.getHeight()/2f);
+        iceButton.setPosition(radialDisplay.getWidth()/2f - iceButton.getWidth()/2f + 106,
+        		radialDisplay.getHeight()/2f - iceButton.getHeight()/2f + 106);
+        fireButton.setPosition(radialDisplay.getWidth()/2f - fireButton.getWidth()/2f,
+        		radialDisplay.getHeight()/2f - fireButton.getHeight()/2f + 150);
+        grassButton.setPosition(radialDisplay.getWidth()/2f - grassButton.getWidth()/2f + 106,
+        		radialDisplay.getHeight()/2f - grassButton.getHeight()/2f - 106);
+        explosiveButton.setPosition(radialDisplay.getWidth()/2f - explosiveButton.getWidth()/2f - 106,
+        		radialDisplay.getHeight()/2f - explosiveButton.getHeight()/2f + 106);
+        sprayButton.setPosition(radialDisplay.getWidth()/2f - sprayButton.getWidth()/2f,
+        		radialDisplay.getHeight()/2f - sprayButton.getHeight()/2f - 150);
+        fertiliserButton.setPosition(radialDisplay.getWidth()/2f - fertiliserButton.getWidth()/2f - 106,
+        		radialDisplay.getHeight()/2f - fertiliserButton.getHeight()/2f - 106);
+        xButton.setPosition(radialDisplay.getWidth()/2f - xButton.getWidth()/2f,
+        		radialDisplay.getHeight()/2f - xButton.getHeight()/2f);
+        
         radialDisplay.addActor(normalButton);
-        radialDisplay.addActor(explosiveButton);
         radialDisplay.addActor(fireButton);
-        radialDisplay.addActor(grassButton);
-        radialDisplay.addActor(iceButton);
         radialDisplay.addActor(waterButton);
-        radialDisplay.addActor(xButton);
-        radialDisplay.addActor(fertiliserButton);
+        radialDisplay.addActor(explosiveButton);
+        radialDisplay.addActor(iceButton);
+        radialDisplay.addActor(grassButton);
         radialDisplay.addActor(sprayButton);
-
+        radialDisplay.addActor(fertiliserButton);
+        radialDisplay.addActor(xButton);
+        
         xButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 radialDisplay.remove();
             }
         });
-
+        
         normalButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                planter.notifyKeyUp(8);
+            	plant(new Seed(Seed.Type.SUNFLOWER));
                 radialDisplay.remove();
             }
         });
-
-        explosiveButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                planter.notifyKeyUp(9);
-                radialDisplay.remove();
-            }
-        });
-
+        
         fireButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                planter.notifyKeyUp(12);
+            	plant(new Seed(Seed.Type.FIRE));
                 radialDisplay.remove();
             }
         });
-
-        grassButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                planter.notifyKeyUp(11);
-                radialDisplay.remove();
-            }
-        });
-
-        iceButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                planter.notifyKeyUp(13);
-                radialDisplay.remove();
-            }
-        });
-
+        
         waterButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                planter.notifyKeyUp(10);
+            	plant(new Seed(Seed.Type.WATER));
                 radialDisplay.remove();
             }
         });
-
-        fertiliserButton.addListener(new ChangeListener() {
+        
+        iceButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //growthDelayRes = true;
-                //if(growthDelayRes) {
-                //	fertiliser.reduceGrowth(AbstractGardenPlant);
-                //}
+            	plant(new Seed(Seed.Type.ICE));
+                radialDisplay.remove();
             }
         });
-
+        
+        grassButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            	plant(new Seed(Seed.Type.GRASS));
+                radialDisplay.remove();
+            }
+        });
+        
+        explosiveButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            	plant(new Seed(Seed.Type.EXPLOSIVE));
+                radialDisplay.remove();
+            }
+        });
+        
         sprayButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //radialDisplay.remove();
+                //TODO
+                radialDisplay.remove();
             }
         });
-
+        
+        fertiliserButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //TODO
+                radialDisplay.remove();
+            }
+        });
+        
     }
+
 
     public void addRadialMenu(Stage stage) {
         stage.addActor(radialDisplay);
@@ -196,5 +194,29 @@ public class RadialDisplay extends Group {
 
     public void removeRadialMenu() {
         radialDisplay.remove();
+    }
+    
+    private void plant(Seed seed) {
+    	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
+		Player player = pm.getPlayer();
+		float px = player.getPosX();
+		float py = player.getPosY();
+		
+		Optional<AbstractEntity> closestPot = WorldUtil.closestEntityToPosition(px, py, 1.5f, Pot.class);
+		if(closestPot.isPresent() && closestPot.get() instanceof Pot) {
+			Pot pot = (Pot)closestPot.get();
+			if(pot.plantInside(seed)) {
+				plantManager.addPlants(pot.getPlant());
+				plantManager.updateLabel();
+			}
+			return;
+		}
+		
+		Optional<AbstractEntity> closestCorpse = WorldUtil.closestEntityToPosition(px, py, 1.5f, Corpse.class);
+		if(closestCorpse.isPresent() && closestCorpse.get() instanceof Corpse) {
+			Corpse corpse = (Corpse)closestCorpse.get();
+			corpse.plantInside(seed);
+			return;
+		}
     }
 }
