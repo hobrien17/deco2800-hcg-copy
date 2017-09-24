@@ -71,7 +71,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 
         centreTable = new Table();
         centreTable.setFillParent(true);
-        centreTable.setBackground(new Image(textureManager.getTexture("wooden_background")).getDrawable());
+        centreTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 
         shop_title = new Image(textureManager.getTexture("shop_title"));
         player_title = new Image(textureManager.getTexture("player_title"));

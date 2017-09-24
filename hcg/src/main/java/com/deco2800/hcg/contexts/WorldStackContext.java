@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -14,17 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStackEntity;
 import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.MapInputManager;
-import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.StackInputManager;
+import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.TextureManager;
-import com.deco2800.hcg.worlds.World;
 
 public class WorldStackContext extends UIContext {
 	// Managers used by the game
@@ -40,7 +33,7 @@ public class WorldStackContext extends UIContext {
 	private Window window;
 
 	/**
-	 * Constructor to create a new WorldMapContext
+	 * Constructor to create a new WorldStackContext
 	 */
 	public WorldStackContext() {
 		gameManager = GameManager.get();
@@ -50,8 +43,7 @@ public class WorldStackContext extends UIContext {
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		StackInputManager inputManager = (StackInputManager) gameManager
-				.getManager(StackInputManager.class);
+		InputManager inputManager = new InputManager();
 
 		// Setup UI + Buttons
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -70,7 +62,7 @@ public class WorldStackContext extends UIContext {
 		for (WorldMap map : gameManager.getWorldStack().getWorldStack()) {
 			WorldStackMapEntity worldEntry = new WorldStackMapEntity(map);
 			if (map.getWorldPosition() == 0) {
-				map.toggleUnlocked();
+				map.setUnlocked();
 			} else {
 				hiddenWorldMaps.add(worldEntry);
 			}
@@ -141,7 +133,7 @@ public class WorldStackContext extends UIContext {
 			if (world.isCompleted()) {
 				for(WorldMap otherWorld : gameManager.getWorldStack().getWorldStack()) {
 					if(otherWorld.getWorldPosition() == (world.getWorldPosition() + 1) && !otherWorld.isUnlocked()) {
-						otherWorld.toggleUnlocked();
+						otherWorld.setUnlocked();
 						hiddenWorldMaps.remove(otherWorld);
 					}
 				}

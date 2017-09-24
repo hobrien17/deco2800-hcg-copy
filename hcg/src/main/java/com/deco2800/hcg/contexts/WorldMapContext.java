@@ -2,7 +2,6 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
@@ -64,18 +62,17 @@ public class WorldMapContext extends UIContext {
 	/**
 	 * Constructor to create a new WorldMapContext
 	 */
-	WorldMapContext() {
+	public WorldMapContext() {
 		gameManager = GameManager.get();
 		gameManager.setMapContext(this);
-
+		
 		TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		lineTexture = new TextureRegion(textureManager.getTexture("black_px"));
 		playerManager = (PlayerManager) gameManager
 				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		MapInputManager inputManager = (MapInputManager) gameManager
-				.getManager(MapInputManager.class);
+		InputManager inputManager = new InputManager();
 
 		showAllNodes = false;
 
@@ -98,7 +95,7 @@ public class WorldMapContext extends UIContext {
 
 		allNodes = new ArrayList<>();
 		hiddenNodes = new ArrayList<>();
-
+		
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			MapNodeEntity nodeEntry = new MapNodeEntity(node);
 			if (!node.isDiscovered()) {
@@ -107,7 +104,7 @@ public class WorldMapContext extends UIContext {
 			}
 			allNodes.add(nodeEntry);
 		}
-
+		
 		stage.addActor(window);
 
 		quitButton.addListener(new ChangeListener() {
@@ -196,8 +193,23 @@ public class WorldMapContext extends UIContext {
 				 * to fix that problem.
 				 */
 				gameManager.setOccupiedNode(nodeEntity.getNode());
-				gameManager.setWorld(new World(nodeEntity.getNode()
-						.getNodeLinkedLevel().getWorld().getLoadedFile()));
+
+				// clear old observers (mushroom turret for example)
+                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+                manager.deleteObservers();
+				
+                // stop the old weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                
+                // create new world
+				World newWorld = new World(nodeEntity.getNode()
+                    .getNodeLinkedLevel().getWorld().getLoadedFile());
+				
+                // add the new weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                  setWeather(newWorld.getWeatherType());
+                
+				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}
@@ -356,7 +368,7 @@ public class WorldMapContext extends UIContext {
     private void endWorld() {
     	for(WorldMap map : gameManager.getWorldStack().getWorldStack()) {
     		if(map.getWorldPosition() == gameManager.getWorldMap().getWorldPosition() + 1) {
-    			map.toggleUnlocked();
+    			map.setUnlocked();
     		}
     	}
     	gameManager.getWorldMap().toggleCompleted();

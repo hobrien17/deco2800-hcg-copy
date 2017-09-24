@@ -8,7 +8,6 @@ import com.deco2800.hcg.contexts.MainMenuContext;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.worldmap.Level;
-import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStack;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.handlers.MouseHandler;
@@ -19,9 +18,7 @@ import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.worldmapui.LevelStore;
-import com.deco2800.hcg.worldmapui.MapGenerator;
 import com.deco2800.hcg.worldmapui.WorldStackGenerator;
-import com.deco2800.hcg.worlds.World;
 
 import java.util.ArrayList;
 
@@ -76,6 +73,8 @@ public class Hardcor3Gard3ning extends Game {
         inputManager.addKeyUpListener(new Planter());
         
         /* Create a player manager. */
+
+        /*
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
@@ -92,7 +91,7 @@ public class Hardcor3Gard3ning extends Game {
         player.addItemToInventory(test2);
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
-        player.addItemToInventory(startingSeeds);
+        player.addItemToInventory(startingSeeds); */
 
         LevelStore levels = new LevelStore();
         ArrayList<Level> levelList = levels.getLevels();
@@ -123,9 +122,7 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
-		if (networkManager.isInitialised()) {
-			networkManager.processReceivedMessages();
-		}
+        networkManager.tick(); // It's important that this is called before fireTicks()
         fireTicks();
         clearScreen();
         super.render(); // Will render current context
