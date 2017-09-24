@@ -10,7 +10,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -35,7 +34,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected int level;
     // Current status of enemy. 1 : New Born, 2 : Chasing 3 : Annoyed
     protected int status;
-    protected int ID;
+    protected int id;
     protected transient Map<String, Double> lootRarity;
     protected float speedX;
     protected float speedY;
@@ -55,9 +54,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 
     protected Weapon enemyWeapon;
     
-    // Sound manager
-    private SoundManager soundManager;
-
     /**
      * Creates a new enemy at the given position
      * @param posX the x position
@@ -69,15 +65,15 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * @param centered whether the enemy is centered or not
      * @param health the health of the enemy
      * @param strength the strength of the enemy
-     * @param ID the enemy ID
+     * @param id the enemy ID
      */
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
-                   int health, int strength, int ID) {
+                   int health, int strength, int id) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         status = 1;
-        if (ID >= 0) {
-            this.ID = ID;
+        if (id >= 0) {
+            this.id = id;
         } else {
             throw new IllegalArgumentException();
         }
@@ -101,9 +97,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.newPos = getBox3D();
 
 		// Effects container 
-        myEffects = new Effects(this);
-        
-        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);        
+        myEffects = new Effects(this);      
     }
 
     /**
@@ -111,7 +105,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      *
      * @return the integer ID of the enemy
      */
-    public int getID() { return ID; }
+    public int getID() { return id; }
 
     /**
      * Gets the last position X of player.
@@ -324,7 +318,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         float currPosY = this.getPosY();
         float nextPosX;
         float nextPosY;
-        float nextPosZ;
         float tempX;
         float tempY;
         //Get direction of next position. Randomly be chosen between 0 and 360.
@@ -488,13 +481,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      *
      */
     public void shoot() {
-        /*Vector3 worldCoords = GameManager.get().getCamera()
-                .unproject(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
-        Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), worldCoords.x, worldCoords.y, thisEnemy);
-        GameManager.get().getWorld().addEntity(bullet);
-    */
         enemyWeapon.updateAim(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
-        //System.out.println("123   " + playerManager.getPlayer().getPosX());
         enemyWeapon.openFire();
     }
     
@@ -540,5 +527,17 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     @Override
     public void giveEffect(Collection<Effect> effects) {
         myEffects.addAllEffects(effects);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Enemy)) {
+            return false;
+        }
+        Enemy anotherEnemy = (Enemy) obj;
+        if (this.id == anotherEnemy.id) {
+            return true;
+        }
+        return false;
     }
 }
