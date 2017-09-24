@@ -64,25 +64,6 @@ public class Hardcor3Gard3ning extends Game {
 
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
-        
-        /* Create a player manager. */
-
-        /*
-        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
-        Player player = new Player(5, 10, 0);
-        player.initialiseNewPlayer(5, 5, 5, 5, 5, 20);
-        playerManager.setPlayer(player);
-        //TODO: Change this, currently these are just testing items
-        Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
-        Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
-        Item testPotion = new HealthPotion(100);
-        testPotion.setStackSize(4);
-        Item testPotion2 = new HealthPotion(100);
-        player.addItemToInventory(test);
-        player.addItemToInventory(test2);
-        player.addItemToInventory(testPotion);
-        player.addItemToInventory(testPotion2);
-        player.addItemToInventory(startingSeeds); */
 
         LevelStore levels = new LevelStore();
         ArrayList<Level> levelList = levels.getLevels();
