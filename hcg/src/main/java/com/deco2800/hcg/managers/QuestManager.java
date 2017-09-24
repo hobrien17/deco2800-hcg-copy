@@ -1,8 +1,6 @@
 package com.deco2800.hcg.managers;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.quests.Quest;
-import com.deco2800.hcg.quests.QuestLog;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
