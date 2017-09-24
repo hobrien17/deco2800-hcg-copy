@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2017.07.25" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1432">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1432">
  <properties>
   <property name="PlayerX" value="60"/>
   <property name="PlayerY" value="40"/>
+  <property name="weather" value="wind"/>
  </properties>
  <tileset firstgid="1" source="../tiles/misc1.tsx"/>
  <tileset firstgid="7" source="../tiles/general-tiles.tsx"/>

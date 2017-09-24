@@ -3,7 +3,7 @@
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="15"/>
-  <property name="weather" value="none"/>
+  <property name="weather" value="wind"/>
  </properties>
  <tileset firstgid="1" source="../tiles/general-tiles.tsx"/>
  <tileset firstgid="11" source="../tiles/sludgebubbling.tsx"/>
