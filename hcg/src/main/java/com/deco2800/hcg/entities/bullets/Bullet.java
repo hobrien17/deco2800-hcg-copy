@@ -202,12 +202,14 @@ public class Bullet extends AbstractEntity implements Tickable {
 					}
 					hitCount--;
 				}
+
 				// Collision with destructable tree
 				if (entity instanceof DestructableTree && user instanceof Player && !(this instanceof GrassBullet)) {
 					DestructableTree tree = (DestructableTree) entity;
 					applyEffect(tree);
 					hitCount--;
 				}
+
 				// Collision with player
 				if (entity instanceof Player && user instanceof Enemy) {
 					// add code to apply effect to player here
@@ -215,16 +217,17 @@ public class Bullet extends AbstractEntity implements Tickable {
 					enemyUser.causeDamage((Player) entity);
 					hitCount--;
 				}
-				// COllision with corpse
+
+				// Collision with corpse
 				if (entity instanceof Corpse && user instanceof Player) {
 					Corpse corpse = (Corpse) entity;
 					corpse.plantInside(this);
 					hitCount = 0;
 				}
+
 				if (hitCount == 0) {
 					GameManager.get().getWorld().removeEntity(this);
 					break;
-
 				}
 			}
 		}
@@ -239,6 +242,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 500, 0, 0, 1, 0));
 	}
 }
