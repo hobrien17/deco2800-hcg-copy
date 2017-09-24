@@ -1,5 +1,7 @@
 package com.deco2800.hcg.items;
 
+import java.util.ArrayList;
+
 /**
  * Item interface provides a high level guide for others to implement custom items.
  * The following methods outline the most basic methods an item requires
@@ -122,8 +124,16 @@ public interface Item {
     ItemRarity getRarity();
 
     /**
-     * Make a deep copy of this item
-     * @return the copy of the item
+     * Make a deep copy of this item.
+     * 
+     * @return the copy of the item.
      */
     Item copy();
+    
+    /**
+     * Retrieve the list of strings to be displayed in this item's tooltip.
+     * 
+     * @return The information to display in this item's tooltip. Null if there is none.
+     */
+    ArrayList<String> getInformation();
 }

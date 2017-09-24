@@ -77,6 +77,16 @@ public class GeneralShopTest {
     	assertEquals(1,shop.inStock(item1));
     	
     }
+
+    @Test
+    public void testAddStackableNoneBefore() {
+	    shop.open(0, player);
+	    shop.addStock(item2);
+	    shop.addStock(item2);
+	    ArrayList<Item> currentStock = (ArrayList<Item>) shop.getStock();
+	    assertThat(currentStock.get(currentStock.indexOf(item2)).getStackSize(), is(equalTo(2)));
+    }
+
     @Test
     public void testAddingAndGettingStock(){
     	shop.open(0, player);
@@ -85,7 +95,7 @@ public class GeneralShopTest {
     	shop.addStock(item2);
     	assertEquals(1,shop.inStock(item1));
     	assertEquals(2,shop.inStock(item2));
-    	ArrayList<Item> currentStock = shop.getStock();
+    	List<Item> currentStock = shop.getStock();
     	assertEquals(1, currentStock.get(currentStock.indexOf(item1)).getStackSize());
     	assertEquals(2, currentStock.get(currentStock.indexOf(item2)).getStackSize());
     }
@@ -96,7 +106,7 @@ public class GeneralShopTest {
         shop.addStock(item1);
         item2.addToStack(3);
         shop.addStock(arrayOfThings);
-        ArrayList<Item> currentStock = shop.getStock();
+        List<Item> currentStock = shop.getStock();
         assertEquals(2,shop.inStock(item1));
         assertEquals(4,shop.inStock(item2));
         assertEquals(4,currentStock.get(currentStock.indexOf(item2)).getStackSize());
@@ -183,5 +193,18 @@ public class GeneralShopTest {
         shop.open(0, player);
         assertThat(shop.sellStock(item), is(equalTo(0)));
         assertThat(shop.inStock(item), is(equalTo(2)));
+    }
+
+    @Test
+    public void sellItemOneOfTwo() {
+        Item item = new TestItem();
+        Item item2 = new TestItem();
+        item.addToStack(1);
+        player.getInventory().addItem(seeds);
+        player.getInventory().addItem(item2);
+        shop.addStock(item);
+        shop.open(0, player);
+        assertThat(shop.sellStock(item2), is(equalTo(0)));
+        assertThat(shop.inStock(item), is(equalTo(3)));
     }
 }

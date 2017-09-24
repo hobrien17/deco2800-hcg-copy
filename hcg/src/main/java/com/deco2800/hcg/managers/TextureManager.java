@@ -187,8 +187,6 @@ public class TextureManager extends Manager {
 		textureMap.put("fertiliser_btn", new Texture("resources/ui/radial_menu/fertiliser.png"));
 		textureMap.put("menuClose", new Texture("resources/ui/radial_menu/menu_close.png"));
 		textureMap.put("radialOutline", new Texture("resources/ui/radial_menu/radialOutline.png"));
-		
-		
 
 		//Perks
 		textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
@@ -205,17 +203,23 @@ public class TextureManager extends Manager {
 		textureMap.put("item_background", new Texture("resources/ui/shop_ui/square.png"));
 		textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
         textureMap.put("selected", new Texture("resources/ui/shop_ui/selected.png"));
+        textureMap.put("tooltip", new Texture("resources/ui/tooltip.png"));
 
 		//World map textures
 		textureMap.put("wm_blue_bg", new Texture("resources/worldmap/blue_background.png"));
-		textureMap.put("wm_green_bg", new Texture("resources/worldmap/temporary_background.png"));
-		// Uncomment once temp message can be removed
-        //textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
-        textureMap.put("completed_node", new Texture("resources/worldmap/completed_node.png"));
-        textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node.png"));
-        textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
-        textureMap.put("safe_node", new Texture("resources/worldmap/safe_node.png"));
+        textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
+        textureMap.put("completed_node", new Texture("resources/worldmap/completed_node_small.png"));
+        textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node_small.png"));
+        textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node_small.png"));
+        textureMap.put("safe_node", new Texture("resources/worldmap/safe_node_small.png"));
 		textureMap.put("black_px", new Texture("resources/worldmap/black_px.png"));
+		textureMap.put("ws_forest", new Texture("resources/worldmap/ws_forest.png"));
+		textureMap.put("ws_fungi", new Texture("resources/worldmap/ws_fungi.png"));
+		textureMap.put("ws_urban", new Texture("resources/worldmap/ws_urban.png"));
+		textureMap.put("ws_forest_locked", new Texture("resources/worldmap/ws_forest_locked.png"));
+		textureMap.put("ws_fungi_locked", new Texture("resources/worldmap/ws_fungi_locked.png"));
+		textureMap.put("ws_purp_bg", new Texture("resources/worldmap/ws_purp_background.png"));
+		
         //Item textures
 		textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
 		textureMap.put("green_potion", new Texture("resources/sprites/potions/potion_round_green.png"));
