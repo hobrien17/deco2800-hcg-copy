@@ -8,12 +8,13 @@ import static org.mockito.Mockito.mock;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.deco2800.hcg.BaseTest;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
 
-public class MushroomTurretTest {
+public class MushroomTurretTest extends BaseTest {
     MushroomTurret enemy;
     GameManager gameManager;
     
