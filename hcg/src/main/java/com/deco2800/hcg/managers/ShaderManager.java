@@ -46,7 +46,6 @@ public class ShaderManager extends Manager {
         this.postShader = new ShaderProgram(postVertexShader, postFragShader);
         
         LOGGER = LoggerFactory.getLogger(ShaderManager.class);
-        System.out.println("Instanciated");
         if(!preShader.isCompiled()) {
             LOGGER.error("Shader failed to compile.");
             LOGGER.error(preShader.getLog());
@@ -67,10 +66,10 @@ public class ShaderManager extends Manager {
             this.postShader = null;
         }
         
-        this.state = new ShaderState(new Color(2, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
+        this.state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
 
         this.state.setBloom(true);
-        this.state.setHeat(true);
+        this.state.setHeat(false);
         
 
     }
@@ -80,7 +79,6 @@ public class ShaderManager extends Manager {
 
     public void render(TimeManager timeManager, Renderer renderer) {
         this.state.setTime(timeManager);
-        System.out.println("Called render"); 
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
             
@@ -103,7 +101,7 @@ public class ShaderManager extends Manager {
             
         // Draw onto render target ////////////////////////////////////
         this.renderTarget.begin();
-        Gdx.gl.glClearColor(1, 0, 0, 0);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             
         this.tileRenderer.render();

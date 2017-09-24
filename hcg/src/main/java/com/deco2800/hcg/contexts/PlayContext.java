@@ -262,7 +262,6 @@ public class PlayContext extends Context {
             
             batch.dispose();
         } else {
-            System.out.println("going into if statement...");
             shaderManager.render(timeManager, renderer);
         }
 
