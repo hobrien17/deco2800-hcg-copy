@@ -185,7 +185,7 @@ public class LightBatch implements Batch {
             float fy2 = height - originY;
             
             // scale
-            if(scaleX != 1 || scaleY != 1) {
+            if((int) scaleX != 1 || (int) scaleY != 1) {
                 fx *= scaleX;
                 fy *= scaleY;
                 fx2 *= scaleX;
@@ -212,7 +212,7 @@ public class LightBatch implements Batch {
             float y4;
             
             // rotate
-            if(rotation != 0) {
+            if((int) rotation != 0) {
                 final float cos = MathUtils.cosDeg(rotation);
                 final float sin = MathUtils.sinDeg(rotation);
                 

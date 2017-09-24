@@ -398,11 +398,13 @@ public class World {
 		//Add to the collision map
 		int[] collisionCoords = makeCollisionCoords(entity);
 
-		//for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
-		//	for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
-		//		collisionMap.get(x, y).add(entity);
-		//	}
-		//}
+		for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
+			for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
+				if (x >= 0 && x < this.getWidth() && y >= 0 && y < this.getLength()) {
+					collisionMap.get(x, y).add(entity);
+				}
+			}
+		}
 	}
 
 	/**

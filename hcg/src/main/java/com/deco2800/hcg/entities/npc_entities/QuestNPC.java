@@ -2,7 +2,10 @@ package com.deco2800.hcg.entities.npc_entities;
 
 import java.util.List;
 import java.util.Random;
+<<<<<<< HEAD
 
+=======
+>>>>>>> e71ede5efdf1503d64e251ba0d6a56edc6c0431b
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -12,7 +15,10 @@ import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
+<<<<<<< HEAD
 
+=======
+>>>>>>> e71ede5efdf1503d64e251ba0d6a56edc6c0431b
 
 /**
  * Concrete class of a Quest NPC entity
@@ -21,8 +27,8 @@ import com.deco2800.hcg.util.Point;
  *
  */
 public class QuestNPC extends NPC {
-	private float boundaryX; // defaults to 15
-	private float boundaryY; // defaults to 15
+	private float boundaryX; // defaults to 10
+	private float boundaryY; // defaults to 10
 	private float startX;
 	private float startY;
 	private float goalX;
@@ -59,8 +65,8 @@ public class QuestNPC extends NPC {
 
 		this.startX = posX;
 		this.startY = posY;
-		this.boundaryX = 15;
-		this.boundaryY = 15;
+		this.boundaryX = 10;
+		this.boundaryY = 10;
 		this.moveDirection = 0;
 		this.speed = 0.02f;
 		this.conversationManager = new ConversationManager();
@@ -174,7 +180,6 @@ public class QuestNPC extends NPC {
 
 	@Override
 	public void onTick(long gameTickCount) {
-		// TODO get onTick stuff working
 		if (thread.isAlive()) {
 			return;
 		} else {
@@ -182,7 +187,6 @@ public class QuestNPC extends NPC {
 		}
 
 		if (path != null && !astar_debug) {
-			System.err.println(path.toString());
 			astar_debug = true;
 		}
 
