@@ -19,8 +19,8 @@ import com.deco2800.hcg.util.Point;
  *
  */
 public class QuestNPC extends NPC {
-	private float boundaryX; // defaults to 15
-	private float boundaryY; // defaults to 15
+	private float boundaryX; // defaults to 10
+	private float boundaryY; // defaults to 10
 	private float startX;
 	private float startY;
 	private float goalX;
@@ -57,8 +57,8 @@ public class QuestNPC extends NPC {
 
 		this.startX = posX;
 		this.startY = posY;
-		this.boundaryX = 15;
-		this.boundaryY = 15;
+		this.boundaryX = 10;
+		this.boundaryY = 10;
 		this.moveDirection = 0;
 		this.speed = 0.02f;
 		this.conversationManager = new ConversationManager();
@@ -172,7 +172,6 @@ public class QuestNPC extends NPC {
 
 	@Override
 	public void onTick(long gameTickCount) {
-		// TODO get onTick stuff working
 		if (thread.isAlive()) {
 			return;
 		} else {
@@ -180,7 +179,6 @@ public class QuestNPC extends NPC {
 		}
 
 		if (path != null && !astar_debug) {
-			System.err.println(path.toString());
 			astar_debug = true;
 		}
 
