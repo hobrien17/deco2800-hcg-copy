@@ -3,10 +3,11 @@
  <image source="../textures/wateranimated.png" width="110" height="64"/>
  <tile id="0">
   <animation>
-   <frame tileid="0" duration="100"/>
-   <frame tileid="1" duration="100"/>
-   <frame tileid="2" duration="100"/>
-   <frame tileid="3" duration="100"/>
+   <frame tileid="0" duration="300"/>
+   <frame tileid="3" duration="300"/>
+   <frame tileid="2" duration="300"/>
+   <frame tileid="3" duration="300"/>
+   <frame tileid="1" duration="300"/>
   </animation>
  </tile>
 </tileset>
