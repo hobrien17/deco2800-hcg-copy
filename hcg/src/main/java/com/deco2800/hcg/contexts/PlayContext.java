@@ -41,6 +41,8 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.MessageManager;
 import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.managers.WeatherManager;
@@ -422,11 +424,15 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
-        if (keycode == Input.Keys.M) {
+        if(keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
-        } if(keycode == Input.Keys.N) {
+        } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
-        } else if (keycode == Input.Keys.B) {
+        } else if(keycode == Input.Keys.EQUALS) { 
+            Item item = new HealthPotion(100);
+            ItemEntity entity = new ItemEntity(20, 20, 0, item);
+            gameManager.getWorld().addEntity(entity);
+        } else if(keycode == Input.Keys.B) {
 			if(RadialDisplay.plantableNearby()) {
 				radialDisplay.addRadialMenu(stage);
 			}

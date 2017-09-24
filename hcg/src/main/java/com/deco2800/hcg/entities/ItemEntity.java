@@ -77,7 +77,7 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
             batch.setColor(colour);
     
             batch.draw(beam, posX, posY, tileWidth * this.getXRenderLength(),
-                    (beam.getHeight() / aspect) * this.getYRenderLength() * 0.25F);
+                    (beam.getHeight() / aspect) * this.getYRenderLength());
             
             batch.setColor(precolour);
         }

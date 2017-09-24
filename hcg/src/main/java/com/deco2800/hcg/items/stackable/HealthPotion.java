@@ -44,7 +44,7 @@ public class HealthPotion extends ConsumableItem {
 
     @Override
     public boolean sameItem(Item item) {
-        return item instanceof HealthPotion && this.itemName == ((HealthPotion) item).itemName;
+        return item instanceof HealthPotion && this.healthAmount == ((HealthPotion) item).healthAmount;
     }
 
     @Override
