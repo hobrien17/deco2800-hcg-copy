@@ -603,9 +603,9 @@ public class Player extends Character implements Tickable {
 	 * character in the character creation screen
 	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
-			int meleeSkill, String name) {
+			int meleeSkill, int gunsSkill, int energyWeaponsSkill, String name) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
-		setSkills(meleeSkill);
+		setSkills(meleeSkill, gunsSkill, energyWeaponsSkill);
 		setName(name);
 		healthMax = 50 * vitality;
 		healthCur = healthMax;
@@ -731,7 +731,7 @@ public class Player extends Character implements Tickable {
 			this.contextManager.pushContext(new PerksSelectionScreen());
 			break;
 		case Input.Keys.C:
-			this.contextManager.pushContext(new CharacterCreationContext());
+			this.contextManager.pushContext(new CharacterStatsContext());
 			break;
 		case Input.Keys.SHIFT_LEFT:
 			if (staminaCur > 0) {
@@ -1021,5 +1021,9 @@ public class Player extends Character implements Tickable {
 			return ((WeaponItem) item).getWeapon();
 		}
 		return null;
+	}
+
+	public int getXpThreshold() {
+		return xpThreshold;
 	}
 }

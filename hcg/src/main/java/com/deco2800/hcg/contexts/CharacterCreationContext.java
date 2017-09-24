@@ -54,8 +54,6 @@ public class CharacterCreationContext extends CharacterContext{
     private Boolean gunsSkillSpecialiseChecked = false;
     private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
-    private Table topRowInfoTable;
-
     private Window attributesWindow;
     private Window skillsWindow;
     private Window statsWindow;
@@ -151,7 +149,6 @@ public class CharacterCreationContext extends CharacterContext{
         skillsWindow.setBackground(new Image(blank_window_background).getDrawable());
         statsWindow.setBackground(new Image(blank_window_background).getDrawable());
         characterPreviewWindow.setBackground(new Image(blank_window_background).getDrawable());
-        selectedDescriptionWindow.setBackground(new Image(blank_window_background).getDrawable());
 
         /* Need to find a way to do this without overwriting the button and label listeners.
         attributesWindow.addListener(new ClickListener() {
@@ -196,7 +193,7 @@ public class CharacterCreationContext extends CharacterContext{
                 if (attributePoints == 0 && specializedSkillsPoints == 0) {
                     contextManager.pushContext(new WorldStackContext());
                     /* Create new player */
-                    createPlayer(strength, vitality, agility, charisma, intellect,
+                    createPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill, energyWeaponsSkill,
                             characterName.getText(), charTextureArray[textureCount].toString());
                 } else {
                     selectedDescriptionText.setText("Please distribute all skill points and choose your specialised" +
@@ -211,7 +208,7 @@ public class CharacterCreationContext extends CharacterContext{
             public void changed(ChangeEvent event, Actor actor) {
                 contextManager.pushContext(new WorldStackContext());
                 /* Create new player with default values. */
-                createPlayer(5, 5, 5, 5, 5,
+                createPlayer(5, 5, 5, 5, 5, meleeSkill, gunsSkill, energyWeaponsSkill,
                         characterName.getText(), charTextureArray[textureCount].toString());
             }
         });
@@ -701,10 +698,11 @@ public class CharacterCreationContext extends CharacterContext{
 
 
     // Will be changed later to include skill specialisations
-    private void createPlayer(int strength, int vitality, int agility, int charisma, int intellect, String name, String texture) {
-        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+    private void createPlayer(int strength, int vitality, int agility, int charisma, int intellect, int meleeSkill,
+                              int gunsSkill, int energyWeaponsSkill, String name, String texture) {
         Player player = new Player(5, 10, 0);
-        player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, 20, name);
+        player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill,
+                energyWeaponsSkill, name);
         player.setTexture(texture);
         playerManager.setPlayer(player);
         //TODO: Change this, currently these are just testing items
