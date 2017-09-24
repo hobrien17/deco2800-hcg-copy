@@ -133,9 +133,9 @@ abstract class CharacterStatsScreen extends CharacterContext {
         masterTable.row();
         masterTable.add(attributesWindow).top().left().expandX().expandY().fillX().fillY().padBottom(15);
         masterTable.add(skillsWindow).top().right().expandX().expandY().fillX().fillY().padBottom(15);
-        masterTable.row();
-        masterTable.add(statsWindow).top().left().expandX().expandY().fillX().fillY();
-        masterTable.add(perksWindow).top().right().expandX().expandY().fillX().fillY();
+//        masterTable.row();
+//        masterTable.add(statsWindow).top().left().expandX().expandY().fillX().fillY();
+//        masterTable.add(perksWindow).top().right().expandX().expandY().fillX().fillY();
     }
 
 }
