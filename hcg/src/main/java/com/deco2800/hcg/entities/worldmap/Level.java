@@ -99,6 +99,10 @@ public class Level {
 	 * Sets the level's world type to the specified new type.
 	 * @param newWorldType
 	 *     The type to set the level's world type to
+	 *         0: no world type
+	 *         1: abandoned suburbs
+	 *         2: desolate forest
+	 *         3: fungal wasteland
 	 */
 	public void changeWorldType(int newWorldType) {
 		worldType = newWorldType;

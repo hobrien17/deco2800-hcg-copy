@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.entities.worldmap.MapNode;
@@ -52,6 +53,7 @@ public class WorldMapContext extends UIContext {
 
 	private Window window;
 	private Window exitWindow;
+	private Stage menuStage;
 	private Skin skin;
 
 	private TextureRegion lineTexture;
@@ -75,6 +77,8 @@ public class WorldMapContext extends UIContext {
 		InputManager inputManager = new InputManager();
 
 		showAllNodes = false;
+		
+		menuStage = new Stage();
 
 		// Setup UI + Buttons
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -105,7 +109,7 @@ public class WorldMapContext extends UIContext {
 			allNodes.add(nodeEntry);
 		}
 		
-		stage.addActor(window);
+		menuStage.addActor(window);
 
 		quitButton.addListener(new ChangeListener() {
 			@Override
@@ -130,6 +134,7 @@ public class WorldMapContext extends UIContext {
 		});
 
 		inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(menuStage); // Add the user options as a processor
 		inputMultiplexer.addProcessor(stage); // Add the UI as a processor
 		inputMultiplexer.addProcessor(inputManager);
 
@@ -228,7 +233,7 @@ public class WorldMapContext extends UIContext {
 				nodeEntry.setVisible(false);
 			}
 		}
-		stage.addActor(window);
+		menuStage.addActor(window);
 	}
 
 	private void updateNodesDisplayed() {
@@ -295,8 +300,8 @@ public class WorldMapContext extends UIContext {
 		for (MapNodeEntity nodeEntity : allNodes) {
 			for (MapNode proceedingNode : nodeEntity.getNode().getProceedingNodes()) {
 				if (nodeEntity.getNode().isDiscovered() && proceedingNode.isDiscovered() || showAllNodes) {
-					drawLine(lineBatch, nodeEntity.getNode().getXPos(), nodeEntity.getNode().getYPos(),
-							proceedingNode.getXPos(), proceedingNode.getYPos());
+					drawLine(lineBatch, nodeEntity.getNode().getXPos(), nodeEntity.getNode().getYPos() - 10,
+							proceedingNode.getXPos(), proceedingNode.getYPos() - 10);
 				}
 			}
 		}
@@ -315,6 +320,7 @@ public class WorldMapContext extends UIContext {
 		// dispose of the batches to prevent memory leaks
 		lineBatch.dispose();
 		potBatch.dispose();
+		menuStage.draw();
 	}
 	
 	private void createExitWindow() {
@@ -339,7 +345,7 @@ public class WorldMapContext extends UIContext {
 				window.remove();
 				window.add(completeWorldButton);
 				window.pack();
-				stage.addActor(window);
+				menuStage.addActor(window);
 				exitWindow.remove();
 				
 				completeWorldButton.addListener(new ChangeListener() {
@@ -350,7 +356,6 @@ public class WorldMapContext extends UIContext {
 				});
 			}
 		});
-    	
     	exitWindow.add(yesButton);
     	exitWindow.add(noButton);
     	exitWindow.pack();
@@ -361,7 +366,7 @@ public class WorldMapContext extends UIContext {
     public void addEndOfContext() {
     	if(exitWindow.getStage() == null) {
     		/* Add the window to the stage */
-    		stage.addActor(exitWindow);
+    		menuStage.addActor(exitWindow);
     	}
     }
     

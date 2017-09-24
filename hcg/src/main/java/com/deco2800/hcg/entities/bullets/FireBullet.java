@@ -13,6 +13,9 @@ import com.deco2800.hcg.util.WorldUtil;
  * Kills the enemy it hits, and sets nearby enemies on fire
  * Since effects are not fully implemented, this bullet doesn't work at the moment
  * 
+ * This bullet isn't fully-completed, but is used to extend the fireball from
+ * It's assumed the weapons team will find a use for this class later
+ * 
  * @author Henry O'Brien
  *
  */
