@@ -201,6 +201,8 @@ public class Bullet extends AbstractEntity implements Tickable {
 								Player playerUser = (Player) user;
 								playerUser.killLogAdd(target.getID());
 							}
+					} else {
+						applyEffect(target);
 					}
 					hitCount--;
 				}
