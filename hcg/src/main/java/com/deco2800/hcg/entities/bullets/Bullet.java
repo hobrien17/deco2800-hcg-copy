@@ -160,7 +160,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-	    
 	    entityHit();
 	    
         if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
@@ -256,7 +255,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 500, 0, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0));
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {

@@ -108,7 +108,7 @@ public class ExplosionBullet extends Bullet {
 		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 5, Enemy.class);
 		target.giveEffect(new Effect("Explosion", 1, 1000, 0, 0, 1, 0));
 		for(AbstractEntity close : closest) {
-			((Enemy)close).giveEffect(new Effect("Explosion", 1, 1000, 0, 0, 1, 0));
+			((Enemy)close).giveEffect(new Effect("Explosion", 1, 1000, 1, 0, 1, 0));
 		}
 	}
 }

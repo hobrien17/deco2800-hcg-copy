@@ -50,7 +50,7 @@ public abstract class Enemy extends Character implements Lootable {
     private Player closestPlayer;
     
 	// Effects container
-	protected Effects myEffects;
+	//protected Effects myEffects;
     protected Box3D prevPos;
 
     protected Weapon enemyWeapon;
