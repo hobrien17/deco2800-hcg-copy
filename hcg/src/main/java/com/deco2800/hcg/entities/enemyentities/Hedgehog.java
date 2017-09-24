@@ -88,6 +88,8 @@ public class Hedgehog extends Enemy implements Tickable {
     }
 
     public void setChargeStatus(boolean status) { this.chargedAtPlayer = status; }
+    
+    public boolean getChargeStatus() { return this.chargedAtPlayer; }
 
     @Override
     public void setupLoot() {
@@ -97,12 +99,4 @@ public class Hedgehog extends Enemy implements Tickable {
 
         checkLootRarity();
     }
-
-    @Override
-    public Item[] loot() {
-        Item[] arr = new Item[1];
-        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-        return arr;
-    }
-
 }
