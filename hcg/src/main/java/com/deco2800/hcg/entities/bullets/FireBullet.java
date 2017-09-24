@@ -100,7 +100,7 @@ public class FireBullet extends Bullet {
 
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Shot", 1, 5, 0, 0, 200, 0));
+		target.giveEffect(new Effect("Ice", 1, 5, 1, 0, 200, 0));
 //    AbstractEntity entity = (AbstractEntity)target;
 //    List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 1, Enemy.class);
 //    for(AbstractEntity close : closest) {

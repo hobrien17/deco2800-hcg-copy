@@ -133,7 +133,13 @@ public class TextureManager extends Manager {
 			textureMap.put("sludgebarrel", new Texture("resources/terrain_objects/sludge-barrel.png"));
 			textureMap.put("house2", new Texture("resources/terrain_objects/house2.png"));
 			textureMap.put("house2destroyed", new Texture("resources/terrain_objects/house2destroyed.png"));
-        textureMap.put("concretewall", new Texture("resources/terrain_objects/concretewall.png"));
+        	textureMap.put("concretewall", new Texture("resources/terrain_objects/concretewall.png"));
+			textureMap.put("largeTree", new Texture("resources/terrain_objects/tree_dead_01.png"));
+			textureMap.put("houseWRoof", new Texture("resources/terrain_objects/abandoned_house_01.png"));
+			textureMap.put("houseWORood", new Texture("resources/terrain_objects/busted_house_01.png"));
+			textureMap.put("swing", new Texture("resources/terrain_objects/broken_swing.png"));
+			textureMap.put("picketFenceNS", new Texture("resources/terrain_objects/picket_fence_northsouth.png"));
+			textureMap.put("picketFenceEW", new Texture("resources/terrain_objects/picket_fence_eastwest.png"));
 
 			// terrain tiles
 			textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
@@ -219,8 +225,8 @@ public class TextureManager extends Manager {
 
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
-		textureMap.put("buy_bag", new Texture("resources/ui/shop_ui/buy_bag.png"));
-		textureMap.put("sell_bag", new Texture("resources/ui/shop_ui/sell_bag.png"));
+			textureMap.put("buy_bag", new Texture("resources/ui/shop_ui/buy_bag.png"));
+			textureMap.put("sell_bag", new Texture("resources/ui/shop_ui/sell_bag.png"));
 			textureMap.put("shop_buy_button", new Texture("resources/ui/shop_ui/shop_buy.png"));
 			textureMap.put("shop_sell_button", new Texture("resources/ui/shop_ui/shop_sell.png"));
 			textureMap.put("player_title", new Texture("resources/ui/shop_ui/player_title.png"));
