@@ -27,10 +27,6 @@ public class WorldMap {
 	 * Initialises the WorldMap object using the specified parameters.	
 	 * @param type
 	 *     The world's type (not 100% confirmed yet so for now it is not used)
-	 * @param texture
-	 *     The background texture to display on the screen when the map is being displayed
-	 * @param position
-	 *     The position of the WorldMap in the WorldStack
 	 * @param rows
 	 *     The number of rows that the WorldMap supports
 	 * @param columns

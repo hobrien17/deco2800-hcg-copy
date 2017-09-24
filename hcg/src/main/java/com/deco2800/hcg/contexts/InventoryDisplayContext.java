@@ -1,6 +1,8 @@
 package com.deco2800.hcg.contexts;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -9,7 +11,9 @@ import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
+import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.TextureManager;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Iterator;
 
@@ -56,12 +60,14 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = inventory;
         this.textureManager = textureManager;
         currentRow = 0;
-
         for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
-            ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
-                    .getDrawable());
-            //ImageButton button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            ImageButton button;
+            if (textureManager.getTexture(currentItem.getTexture()) == null) {
+                button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            } else {
+                button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
+            }
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
@@ -95,20 +101,24 @@ public abstract class InventoryDisplayContext extends UIContext {
                             public void clicked(InputEvent event, float x, float y) {
                                 System.out.println("Clicked USE");
                                 if (currentItem instanceof ConsumableItem) {
+                                    //Consume Item
                                     ((ConsumableItem) currentItem).consume(player);
                                     player.getInventory().removeItem(currentItem, 1);
                                     inventory.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
-                                    //TODO: Equip the item
-                                } else if (currentItem.isWearable()) {
-                                    //TODO: Wear item
+                                    //Equip the item
+                                    player.getEquippedItems().addItem(currentItem);
+                                    player.getInventory().removeItem(currentItem);
+                                    inventory.clear();
+                                    inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 }
 
                             }
                         });
                         useButton.add("USE");
                         itemDisplay.add(useButton).pad(15);
+
                     }
                 }
             });
@@ -240,9 +250,12 @@ public abstract class InventoryDisplayContext extends UIContext {
             Item currentItem = player.getEquippedItems().getItem(i);
             System.out.println(textureManager.getTexture(currentItem.getTexture()));
             //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
-            //ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
-            //.getDrawable());
-            ImageButton button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            ImageButton button;
+            if (textureManager.getTexture(currentItem.getTexture()) == null) {
+                 button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            } else {
+                 button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
+            }
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
@@ -251,6 +264,12 @@ public abstract class InventoryDisplayContext extends UIContext {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (clickedImage.isVisible()) {
+                        //Remove from equipped items into the inventory
+                        player.getEquippedItems().removeItem(currentItem);
+                        player.getInventory().addItem(currentItem);
+                        //Refresh the inventory
+                        playerEquipment.clear();
+                        equipmentDisplay(textureManager, player, skin, playerEquipment);
                         clickedImage.setVisible(false);
                     } else {
                         clickedImage.setVisible(true);

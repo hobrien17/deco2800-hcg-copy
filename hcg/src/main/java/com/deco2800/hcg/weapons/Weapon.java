@@ -126,8 +126,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     /**
      * Updates the weapon's coordinates for bullets to be fired to
      *
-     * @param screenX int x coordinate for aim location
-     * @param screenY int y coordinate for aim location
+     * @param aim the aim vector
      */
     public void updateAim(Vector3 aim) {
         this.aim = new Vector3(aim);
@@ -137,8 +136,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * Updates the position the weapon is attempting to reach
      * within the game world
      *
-     * @param screenX int x coordinate for weapon location
-     * @param screenY int y coordinate for weapon location
+     * @param worldX int x coordinate for weapon location
+     * @param worldY int y coordinate for weapon location
      */
     //TODO: Remove
     public void updatePosition(float worldX, float worldY) {
