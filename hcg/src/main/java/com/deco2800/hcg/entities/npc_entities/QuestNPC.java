@@ -2,6 +2,7 @@ package com.deco2800.hcg.entities.npc_entities;
 
 import java.util.List;
 import java.util.Random;
+
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ConversationManager;
