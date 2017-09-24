@@ -152,7 +152,7 @@ public class TextureManager extends Manager {
 
 			//NPCs
 			textureMap.put("character_1", new Texture("resources/sprites/npc/QuestRipped.png"));
-			textureMap.put("character_shop", new Texture("resources/sprites/npc/shop_keeper.png"));
+			textureMap.put("character_shop", new Texture("resources/sprites/npc/Shopkeeper.png"));
 
 			//Players
 			textureMap.put("player_0_stand", new Texture("resources/sprites/player/player_0_stand.png"));
