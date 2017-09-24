@@ -131,15 +131,18 @@ public class Pathfinder {
      */
     private static List<Point> getAdjacentNodes(Point p, World baseWorld) {
         List<Point> adjacencies = new ArrayList<>();
-
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j<= 1; j++) {
-                if (!(i == 0 && j == 0)) {
-                    if (p.getX() + i >= 0 && p.getX() + i < baseWorld.getWidth() && p.getY() + j >= 0 && p.getY() + j < baseWorld.getLength()) {
-                        adjacencies.add(new Point(p.getX() + i, p.getY() + j));
+        try {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    if (!(i == 0 && j == 0)) {
+                        if (p.getX() + i >= 0 && p.getX() + i < baseWorld.getWidth() && p.getY() + j >= 0 && p.getY() + j < baseWorld.getLength()) {
+                            adjacencies.add(new Point(p.getX() + i, p.getY() + j));
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+
         }
 
         return adjacencies;

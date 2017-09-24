@@ -47,7 +47,6 @@ public class PathfindingThread implements Runnable {
         if (contextManager.currentContext() instanceof MainMenuContext) {
             //Wait
         } else{
-            //System.out.println("I RUN");
             this.path = Pathfinder.aStar(position, goal, world);
         }
     }
