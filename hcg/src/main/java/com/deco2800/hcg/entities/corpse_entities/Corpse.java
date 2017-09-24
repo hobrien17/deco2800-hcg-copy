@@ -49,7 +49,7 @@ public abstract class Corpse extends AbstractEntity {
     /**
      * Adds a bullet to the enemy corpse, if empty
      *
-     * @param seed the seed to be added
+     * @param bullet the seed to be added
      * @return true if the seed was added, false if it could not be added
      */
     public boolean plantInside(Bullet bullet) {
@@ -60,5 +60,14 @@ public abstract class Corpse extends AbstractEntity {
     	} else {
     		return plantInside(new Seed(Seed.Type.SUNFLOWER));
     	}
+    }
+    
+    /**
+     * Determines whether this corpse has a turret in it or not
+     * 
+     * @return true if the corpse is empty, otherwise false
+     */
+    public boolean isEmpty() {
+    	return turret == null;
     }
 }

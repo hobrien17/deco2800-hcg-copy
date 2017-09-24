@@ -21,7 +21,9 @@ import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.deco2800.hcg.items.*;
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be
@@ -35,6 +37,8 @@ public class PlayContext extends Context {
 	private ContextManager contextManager;
 	private MessageManager messageManager;
 	private TextureManager textureManager;
+	private PlayerManager playerManager;
+
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -61,12 +65,13 @@ public class PlayContext extends Context {
 	private ClockDisplay clockDisplay;
 	private PlantWindow plantWindow;
 	private ChatStack chatStack;
+	private RadialDisplay radialDisplay;
 
-	private Stage stage;
-	private Skin skin;
 	private Window window;
 	private Window exitWindow;
 
+	private Stage stage;
+	private Skin skin;
 
 	/**
 	 * Create the PlayContext
@@ -80,6 +85,7 @@ public class PlayContext extends Context {
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -89,6 +95,7 @@ public class PlayContext extends Context {
 		stage = new Stage(new ScreenViewport());
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
+		radialDisplay = new RadialDisplay(stage);
 		createExitWindow();
 		clockDisplay = new ClockDisplay();
 		playerStatus = new PlayerStatusDisplay();
@@ -111,6 +118,7 @@ public class PlayContext extends Context {
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				playerManager.removeCurrentPlayer();
 				contextManager.popContext();
 			}
 		});
@@ -234,6 +242,7 @@ public class PlayContext extends Context {
 		playerStatus.setPosition(30f, stage.getHeight()-200f);
 		clockDisplay.setPosition(stage.getWidth()-220f, 20f);
 		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+		radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
 		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
 	}
 
@@ -282,11 +291,16 @@ public class PlayContext extends Context {
         return unpaused;
     }
 
-    // Handle switching to World Map by pressing "m"
+    // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
         if (keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
         }
+		else if (keycode == Input.Keys.B) {
+			if(RadialDisplay.plantableNearby()) {
+				radialDisplay.addRadialMenu(stage);
+			}
+		}
     }
     
     private void createExitWindow() {
@@ -310,7 +324,12 @@ public class PlayContext extends Context {
 					gameManager.getMapContext().addEndOfContext();
 					contextManager.popContext();
 				}
+				// clear old observers (mushroom turret for example)
+                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+                manager.deleteObservers();
 				
+                // stop the old weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
 			}
 		});
 

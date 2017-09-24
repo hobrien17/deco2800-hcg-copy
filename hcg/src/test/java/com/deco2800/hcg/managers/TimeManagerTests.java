@@ -12,7 +12,6 @@ public class TimeManagerTests {
 	private TimeManager timeManagerIncrementingHrTest;
 	private TimeManager timeManagerCalanderIncrementingTest;
 
-
 	@Before
 	public void setUp() {
 		timeManager = new TimeManager();
@@ -44,24 +43,31 @@ public class TimeManagerTests {
 	// setDateTimeTests
 	@Test
 	public void setDateTimeTest() {
-		// invalid input cases (MathHelper.java not tested yet so testing here for own sanity)
+		// invalid input cases (MathHelper.java not tested yet so testing here
+		// for own sanity)
 		timeManager.setDateTime(-1, 0, 0, 1, 1, 1);
-		Assert.assertEquals("Invalid seconds input not clamped", 0, timeManager.getSeconds());
+		Assert.assertEquals("Invalid seconds input not clamped", 0,
+				timeManager.getSeconds());
 
 		timeManager.setDateTime(0, 62, 0, 1, 1, 1);
-		Assert.assertEquals("Invalid minutes input not clamped", 59, timeManager.getMinutes());
+		Assert.assertEquals("Invalid minutes input not clamped", 59,
+				timeManager.getMinutes());
 
 		timeManager.setDateTime(34, 58, 29, 1, 1, 1);
-		Assert.assertEquals("Invalid hours input not clamped", 23, timeManager.getHours());
+		Assert.assertEquals("Invalid hours input not clamped", 23,
+				timeManager.getHours());
 
 		timeManager.setDateTime(23, 23, 23, -4, 1, 1);
-		Assert.assertEquals("Invalid day input not clamped", 1, timeManager.getDay());
+		Assert.assertEquals("Invalid day input not clamped", 1,
+				timeManager.getDay());
 
 		timeManager.setDateTime(15, 35, 3, 5, 13, 1);
-		Assert.assertEquals("Invalid month input not clamped", 12, timeManager.getMonth());
+		Assert.assertEquals("Invalid month input not clamped", 12,
+				timeManager.getMonth());
 
 		timeManager.setDateTime(0, 0, 0, 1, 1, -1);
-		Assert.assertEquals("Invalid year input not clamped", 1, timeManager.getYear());
+		Assert.assertEquals("Invalid year input not clamped", 1,
+				timeManager.getYear());
 
 		// typical case
 		timeManager.setDateTime(0, 0, 0, 1, 1, 1);
@@ -71,8 +77,7 @@ public class TimeManagerTests {
 				timeManager.getMinutes());
 		Assert.assertEquals("Hour not correctly set.", 0,
 				timeManager.getHours());
-		Assert.assertEquals("Day not correctly set.", 1,
-				timeManager.getDay());
+		Assert.assertEquals("Day not correctly set.", 1, timeManager.getDay());
 		Assert.assertEquals("Month not correctly set.", 1,
 				timeManager.getMonth());
 		Assert.assertEquals("Year not correctly set.", 1,
@@ -158,14 +163,14 @@ public class TimeManagerTests {
 	@Test
 	public void nextSecondTest() {
 		// typical case
-		timeManager.setDateTime(31, 27, 11, 12, 1, 2007);
+		timeManager.setDateTime(30, 27, 11, 12, 1, 2007);
 		timeManager.nextSecond();
 		Assert.assertEquals(
 				"nextSecond 'second' not incrementing properly for typical case.",
 				32, timeManager.getSeconds());
 
 		// end of minute case
-		timeManager.setDateTime(59, 27, 11, 12, 1, 2007);
+		timeManager.setDateTime(60, 27, 11, 12, 1, 2007);
 		timeManager.nextSecond();
 		Assert.assertEquals(
 				"nextSecond 'second' not incrementing properly for end of minute case.",
@@ -175,7 +180,7 @@ public class TimeManagerTests {
 				28, timeManager.getMinutes());
 
 		// end of minute & hour case
-		timeManager.setDateTime(59, 59, 11, 12, 1, 2007);
+		timeManager.setDateTime(60, 59, 11, 12, 1, 2007);
 		timeManager.nextSecond();
 		Assert.assertEquals(
 				"nextSecond 'second' not incrementing properly for end of minute case.",
@@ -188,7 +193,7 @@ public class TimeManagerTests {
 				12, timeManager.getHours());
 
 		// end of minute, hour & day case
-		timeManager.setDateTime(59, 59, 23, 12, 1, 2007);
+		timeManager.setDateTime(60, 59, 23, 12, 1, 2007);
 		timeManager.nextSecond();
 		Assert.assertEquals(
 				"nextSecond 'second' not incrementing properly for end of minute case.",
@@ -200,7 +205,6 @@ public class TimeManagerTests {
 				"nextSecond 'hour' not incrementing properly for end of minute case.",
 				0, timeManager.getHours());
 		// nextDay already tested
-
 	}
 
 	@Test
@@ -241,7 +245,7 @@ public class TimeManagerTests {
 		// seconds should increment by 1 on tick
 		timeManagerPauseTest.onTick(0);
 		Assert.assertEquals(
-				"Time is not running correctly after being unpaused.", temp + 1,
+				"Time is not running correctly after being unpaused.", temp + 2,
 				timeManagerPauseTest.getSeconds());
 	}
 
@@ -255,19 +259,18 @@ public class TimeManagerTests {
 	// getTime test
 	@Test
 	public void getTimeTest() {
-		timeManager.setDateTime(34, 53,16, 3, 8,2017);
-		Assert.assertEquals("getDate string not printing correctly.",
-				"16:53", timeManager.getTime());
+		timeManager.setDateTime(34, 53, 16, 3, 8, 2017);
+		Assert.assertEquals("getDate string not printing correctly.", "16:53",
+				timeManager.getTime());
 	}
 
 	// getDateTime test
 	@Test
 	public void getDateTimeTest() {
-		timeManager.setDateTime(5, 6, 7, 8, 9,2010);
-		Assert.assertEquals("Incorrect date being printed", "08/09/2010 07:06:05",
-				timeManager.getDateTime());
+		timeManager.setDateTime(5, 6, 7, 8, 9, 2010);
+		Assert.assertEquals("Incorrect date being printed",
+				"08/09/2010 07:06:05", timeManager.getDateTime());
 	}
-
 
 	@Test
 	public void calanderIncrementingTest() {
@@ -319,10 +322,7 @@ public class TimeManagerTests {
 		Assert.assertEquals("night is not intiated to true", true,
 				timeManagerNightDayTest.isNight());
 
-		// get to a second before 5am (change over to day)
-		for (int i = 0; i < 17999; i++) {
-			timeManagerNightDayTest.nextSecond();
-		}
+		timeManagerNightDayTest.setDateTime(60, 59, 4, 0, 0, 0);
 
 		// edge case: last second that it is night
 		Assert.assertEquals("last second that it is night is not", true,
@@ -330,22 +330,19 @@ public class TimeManagerTests {
 
 		// edge case: the first second that it is day
 		timeManagerNightDayTest.nextSecond();
+
 		Assert.assertEquals("first second that is day is not", false,
 				timeManagerNightDayTest.isNight());
 	}
 
 	@Test
 	public void incrementingMinTest() {
-		// get to a second before 5am (change over to day)
-		for (int i = 0; i < 59; i++) {
-			timeManagerIncrementingMinTest.nextSecond();
-		}
+		timeManagerIncrementingMinTest.setDateTime(60, 0, 0, 0, 0, 0);
 
-		// edge case: last second that it is minute 0 and 59 seconds
-		Assert.assertEquals("last second of the minute", 59,
+		Assert.assertEquals("first second of the minute", 60,
 				timeManagerIncrementingMinTest.getSeconds());
 
-		Assert.assertEquals("last second that minute == 0", 0,
+		Assert.assertEquals("first second that minute == 1", 0,
 				timeManagerIncrementingMinTest.getMinutes());
 
 		timeManagerIncrementingMinTest.nextSecond();
@@ -361,19 +358,7 @@ public class TimeManagerTests {
 	@Test
 	public void incrementingHrTest() {
 		// get to a 00:59:59 (hr:min:sec)
-		for (int i = 0; i < 3599; i++) {
-			timeManagerIncrementingHrTest.nextSecond();
-		}
-
-		// edge case: last second where hr is 0
-		Assert.assertEquals("last second where hr == 0", 59,
-				timeManagerIncrementingHrTest.getSeconds());
-
-		Assert.assertEquals("last second that minute == 59", 59,
-				timeManagerIncrementingHrTest.getMinutes());
-
-		Assert.assertEquals("last second that hr == 0", 0,
-				timeManagerIncrementingHrTest.getHours());
+		timeManagerIncrementingHrTest.setDateTime(60, 59, 0, 0, 0, 0);
 
 		timeManagerIncrementingHrTest.nextSecond();
 

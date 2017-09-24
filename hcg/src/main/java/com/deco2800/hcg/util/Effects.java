@@ -2,6 +2,7 @@ package com.deco2800.hcg.util;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 
 import java.util.*;
 
@@ -197,8 +198,11 @@ public class Effects {
      */
     public void apply() {
         for (Effect effect : currentEffects) {
+            Enemy thisEnemy = (Enemy)owner;
+
             if (effect.getUseCount() == 0) {
                 if (!effect.onCooldown()) {
+                    thisEnemy.resetSpeed();
                     currentEffects.remove(effect);
                     continue;
                 }
@@ -206,21 +210,24 @@ public class Effects {
                 effect.decrementUses();
             }
 
+            //Only activate while buff is active
             if (!effect.onCooldown()) {
                 effect.startCooldownTimer();
-
-                // TODO
-                // Handle damage  -  NOT IMPLEMENTED IN HARMABLE YET
-                //owner.takeDamage(effect.getDamage());
-                GameManager.get().getWorld().removeEntity(owner);
-
-                // Handle slows  -  NOT IMPLEMENTED IN HARMABLE YET
-                //owner.setSpeed(owner.getSpeed * effect.getSlowAmount());
+                if(owner instanceof Enemy){
+                    // Handle damage
+                    thisEnemy.takeDamage(effect.getDamage());
+                    if(thisEnemy.getHealthCur() <= 0){
+                        GameManager.get().getWorld().removeEntity(owner);
+                    }
+                    // Handle slows
+                    thisEnemy.changeSpeed((float)effect.getSlowAmount());
+                } else {
+                    GameManager.get().getWorld().removeEntity(owner);
+                }
 
                 // Handle damage reduction, fire rate reduction, etc.
             }
         }
-
     }
 
     @Override
