@@ -1,5 +1,6 @@
 package com.deco2800.hcg.quests;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class QuestTest {
 	
 	@Test
 	public void testNotComplete(){
-		assert(questToTest.isQuestComplete() == false);
+		assertFalse(questToTest.isQuestComplete());
 	}
 	
 	@Test
@@ -36,8 +37,10 @@ public class QuestTest {
 	
 	@Test
 	public void testGetterMethods(){
-		assert(questToTest.itemNeeded().sameItem(new TestItem()) == true);
-		assert(questToTest.itemRewarded().sameItem(new TestUniqueItem("x", 5)) == true);
+		//Removed the equals true from below as the result is already boolean, so this is redundant as true is true
+		// or false is false
+		assertTrue(questToTest.itemNeeded().sameItem(new TestItem()));
+		assertTrue(questToTest.itemRewarded().sameItem(new TestUniqueItem("x", 5)));
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
