@@ -283,7 +283,6 @@ public abstract class InventoryDisplayContext extends UIContext {
             Image clickedImage = new Image(textureManager.getTexture("selected"));
             Label itemLabel = null;
             commonSetup(currentItem, button, stack, itemLabel, clickedImage);
-
             //Add listener for this item button
             stack.addListener(new ClickListener() {
                 @Override
@@ -291,6 +290,17 @@ public abstract class InventoryDisplayContext extends UIContext {
                     selectedImage = clickedImage;
                     selectedItem = currentItem;
                     shopMenuContext.draw();
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = true;
+                    mouseOverItem = currentItem;
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = false;
+                    mouseOverItem = null;
                 }
             });
             currentRow++;
