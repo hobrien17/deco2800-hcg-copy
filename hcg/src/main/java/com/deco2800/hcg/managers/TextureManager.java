@@ -100,7 +100,7 @@ public class TextureManager extends Manager {
 		textureMap.put("water_corpse", new Texture("resources/sprites/dead_enemies/waterlily.png"));
 		textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass.png"));
 		textureMap.put("fire_corpse", new Texture("resources/sprites/dead_enemies/inferno.png"));
-		textureMap.put("explosion", new Texture("resources/sprites/dead_enemies/explosion_temp.png"));
+		textureMap.put("explosion", new Texture("resources/sprites/bullets/explosion.png"));
 		
 		// Miscellaneous textures
 		textureMap.put("error", new Texture("resources/misc/error.png"));
