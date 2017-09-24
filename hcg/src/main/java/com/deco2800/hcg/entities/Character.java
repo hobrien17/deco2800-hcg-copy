@@ -37,7 +37,7 @@ public abstract class Character extends AbstractEntity {
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
 	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList( "level", "xp", "carryWeight",
-            "strength", "vitality", "agility", "charisma", "intellect");
+            "strength", "vitality", "agility", "charisma", "intellect", "meleeSkill", "gunsSkill", "energyWeaponsSkill");
 
 	protected String Name;
 
@@ -61,7 +61,7 @@ public abstract class Character extends AbstractEntity {
 
     // Skills
     // TODO: Message weapons team to find out what categories of weapons they will implement
-    protected int meleeSkill;
+
 
     //Kill Log with worlds
     //Main level is a mapping between the world ID to Enemies and their amount of kills
@@ -100,7 +100,6 @@ public abstract class Character extends AbstractEntity {
         this.xp = 1;
         this.healthMax = 20;
         this.healthCur = healthMax;
-        this.meleeSkill = 1;
 
         //Initialize the empty kill log
         killLog = new HashMap<>();
@@ -118,19 +117,21 @@ public abstract class Character extends AbstractEntity {
      */
     protected void setAttributes(int strength, int vitality, int agility,
             int charisma, int intellect) {
-     this.attributes.put("strength", strength);
-     this.attributes.put("vitality", vitality);
-     this.attributes.put("agility", agility);
-     this.attributes.put("charisma", charisma);
-     this.attributes.put("intellect", intellect);
+         this.attributes.put("strength", strength);
+         this.attributes.put("vitality", vitality);
+         this.attributes.put("agility", agility);
+         this.attributes.put("charisma", charisma);
+         this.attributes.put("intellect", intellect);
     }
 
     /**
      * Sets the character's skills
      * @param meleeSkill
      */
-    protected void setSkills(int meleeSkill) {
-
+    protected void setSkills(int meleeSkill, int gunsSkill, int energyWeaponsSkill) {
+        this.attributes.put("meleeSkill", meleeSkill);
+        this.attributes.put("gunsSkill", gunsSkill);
+        this.attributes.put("energyWeaponsSkill", energyWeaponsSkill);
     }
 
     /**
@@ -247,18 +248,12 @@ public abstract class Character extends AbstractEntity {
      *
      * @param attribute is in CHARACTER_ATTRIBUTES
      */
-    protected void setAttribute(String attribute,int value){
+    public void setAttribute(String attribute,int value){
         if (CHARACTER_ATTRIBUTES.contains(attribute)) {
             this.attributes.put(attribute, value);
         }
     }
-    /**
-     *
-     * @param meleeSkill
-     */
-    protected void setMeleeSkill(int meleeSkill) {
-        this.meleeSkill = meleeSkill;
-    }
+
     
     /**
      * Fetches the item this character currently has equipped, or null if this
@@ -361,12 +356,8 @@ public abstract class Character extends AbstractEntity {
         return -1;
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getMeleeSkill() {
-        return meleeSkill;
+    public int getStrength() {
+        return attributes.get("strength");
     }
 
     /**

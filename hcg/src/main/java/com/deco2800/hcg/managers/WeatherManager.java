@@ -20,15 +20,6 @@ import com.deco2800.hcg.managers.SoundManager;
 public class WeatherManager extends Manager {
 
 	SoundManager soundManager;
-
-	// list of effects to be implemented
-	// none
-	// rain
-	// snow
-	// drought
-	// storm (rain, clouds, lightning)
-	// sandstorm
-
 	ParticleEffect weather;
 	ParticleEffectActor weatherActor;
 
@@ -45,13 +36,6 @@ public class WeatherManager extends Manager {
 		onEffects = new ArrayList<Weathers>();
 		weather = new ParticleEffect();
 		weather.start();
-
-		// setWeather(Weathers.RAIN);
-		// setWeather(Weathers.SNOW);
-		// setWeather(Weathers.SANDSTORM);
-		// setWeather(Weathers.WIND);
-		// stopEffect();
-
 		weatherActor = new ParticleEffectActor();
 		weatherActor.add(weather, true);
 	}
