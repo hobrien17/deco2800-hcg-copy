@@ -1,4 +1,4 @@
-package com.deco2800.hcg.entities.enemy_entities;
+package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.items.Item;
@@ -17,6 +17,7 @@ public class MushroomTurret extends Enemy implements Observer {
 
     int seconds;
     int range;
+    StopwatchManager manager;
 
     /**
      * Constructor for the MushroomTurret class. Creates a new turret at the given
@@ -25,16 +26,16 @@ public class MushroomTurret extends Enemy implements Observer {
      * @param posX the x position
      * @param posY the y position
      * @param posZ the x position
-     * @param ID the ID of the MushroomTurret Enemy
+     * @param id the ID of the MushroomTurret Enemy
      */
-    public MushroomTurret(float posX, float posY, float posZ, int ID) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
+    public MushroomTurret(float posX, float posY, float posZ, int id) {
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
         //testing with tower sprite
         this.setTexture("tower");
         this.level = 1;
         seconds = 0;
         range = 15 * this.level;
-        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
         // weapon not working
         this.enemyWeapon = new WeaponBuilder()
@@ -43,10 +44,16 @@ public class MushroomTurret extends Enemy implements Observer {
                 .setCooldown(50)
                 .setTexture("battle_seed")
                 .build();
+
     }
 
-    public void update(Observable o, Object arg) {
-        switch (seconds%6){
+    public void remove_observer(){
+        manager.deleteObserver(this);
+    }
+
+    @Override
+    public void update(Observable o, Object arg){
+        switch (seconds%5){
             case 0: // set turret phase 1 this.setTexture()
                 break;
             case 1: // set turret phase 2 this.setTexture();
@@ -81,8 +88,6 @@ public class MushroomTurret extends Enemy implements Observer {
                         Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet8);
                 break;
-
-            // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
         }
         seconds++;
     }
@@ -96,11 +101,5 @@ public class MushroomTurret extends Enemy implements Observer {
         checkLootRarity();
     }
 
-    @Override
-    public Item[] loot() {
-        Item[] arr = new Item[1];
-        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-        return arr;
-    }
 }
 

@@ -1,4 +1,4 @@
-package com.deco2800.hcg.entities.enemy_entities;
+package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.Item;
@@ -21,8 +21,8 @@ public class Squirrel extends Enemy implements Tickable {
 	 * @param posZ the x position
 	 * @param Id the ID of the squirrel
 	 */
-	public Squirrel(float posX, float posY, float posZ, int Id) {
-		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, Id);
+	public Squirrel(float posX, float posY, float posZ, int id) {
+		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
 		this.setTexture("squirrel");
 		this.level = 1;
 		this.enemyWeapon = new WeaponBuilder()
@@ -37,16 +37,9 @@ public class Squirrel extends Enemy implements Tickable {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put("sunflower_seed", 1.0);
+		lootRarity.put("gardening_seed", 1.0);
 
 		checkLootRarity();
-	}
-
-	@Override
-	public Item[] loot() {
-		Item[] arr = new Item[1];
-		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-		return arr;
 	}
 
 	/**

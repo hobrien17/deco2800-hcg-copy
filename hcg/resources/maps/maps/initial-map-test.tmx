@@ -703,6 +703,8 @@
   <properties>
    <property name="name" value="hedgehog"/>
   </properties>
+  <object id="155" gid="1" x="2188.92" y="37.7455" width="55" height="32"/>
+  <object id="156" gid="1" x="117.382" y="538.618" width="55" height="32"/>
  </objectgroup>
  <objectgroup name="squirrel">
   <properties>
