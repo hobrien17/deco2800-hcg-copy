@@ -1,16 +1,10 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Hedgehog extends Enemy implements Tickable {
 
@@ -88,6 +82,8 @@ public class Hedgehog extends Enemy implements Tickable {
     }
 
     public void setChargeStatus(boolean status) { this.chargedAtPlayer = status; }
+    
+    public boolean getChargeStatus() { return this.chargedAtPlayer; }
 
     @Override
     public void setupLoot() {
@@ -97,6 +93,4 @@ public class Hedgehog extends Enemy implements Tickable {
 
         checkLootRarity();
     }
-
-
 }

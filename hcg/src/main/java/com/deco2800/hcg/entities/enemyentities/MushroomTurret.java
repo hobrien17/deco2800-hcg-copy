@@ -1,9 +1,7 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.bullets.Bullet;
-import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -26,10 +24,10 @@ public class MushroomTurret extends Enemy implements Observer {
      * @param posX the x position
      * @param posY the y position
      * @param posZ the x position
-     * @param id the ID of the MushroomTurret Enemy
+     * @param ID the ID of the MushroomTurret Enemy
      */
-    public MushroomTurret(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
+    public MushroomTurret(float posX, float posY, float posZ, int ID) {
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
         //testing with tower sprite
         this.setTexture("tower");
         this.level = 1;
@@ -44,16 +42,13 @@ public class MushroomTurret extends Enemy implements Observer {
                 .setCooldown(50)
                 .setTexture("battle_seed")
                 .build();
-
     }
 
-    public void remove_observer(){
+    public void remove_observer() {
         manager.deleteObserver(this);
     }
-
-    @Override
-    public void update(Observable o, Object arg){
-        switch (seconds%5){
+    public void update(Observable o, Object arg) {
+        switch (seconds%6){
             case 0: // set turret phase 1 this.setTexture()
                 break;
             case 1: // set turret phase 2 this.setTexture();
@@ -88,6 +83,8 @@ public class MushroomTurret extends Enemy implements Observer {
                         Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
                 GameManager.get().getWorld().addEntity(bullet8);
                 break;
+
+            // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
         }
         seconds++;
     }
