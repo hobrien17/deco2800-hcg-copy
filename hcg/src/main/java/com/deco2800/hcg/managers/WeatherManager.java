@@ -163,7 +163,7 @@ public class WeatherManager extends Manager {
 	/**
 	 * Turns off specific weather effect if turned on, else do nothing
 	 * 
-	 * @param Weathers:
+	 * @param weatherType:
 	 *            weather type you would like to turn off
 	 * 
 	 * @ensure weatherManager.getOnEffects() does not contain weathers

@@ -18,8 +18,8 @@ public class ParticleEffectActor extends Actor {
 	/**
 	 * Constructor for ParticleEffect Actor
 	 * 
-	 * @param effect:
-	 *            Particle effect displayed on screen
+	 *
+	 *
 	 */
 	public ParticleEffectActor() {
 		super();

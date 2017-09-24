@@ -33,7 +33,6 @@ public class Hardcor3Gard3ning extends Game {
     private PlayerManager playerManager;
     private TextureManager textureManager;
     private TimeManager timeManager;
-    private ParticleManager particleManager;
     private WeatherManager weatherManager;
 	private InputManager inputManager;
 	private PlantManager plantManager;
@@ -65,9 +64,6 @@ public class Hardcor3Gard3ning extends Game {
  
 		/* Create a time manager. */
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
-        
-        /* Create a particle manager. */
-        particleManager = (ParticleManager) gameManager.getManager(ParticleManager.class);
 
         /* Create a weather manager. */
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
@@ -126,9 +122,7 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
-		if (networkManager.isInitialised()) {
-			networkManager.processReceivedMessages();
-		}
+        networkManager.tick(); // It's important that this is called before fireTicks()
         fireTicks();
         clearScreen();
         super.render(); // Will render current context

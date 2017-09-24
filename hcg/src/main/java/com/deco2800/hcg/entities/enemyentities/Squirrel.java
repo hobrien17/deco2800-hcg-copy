@@ -1,9 +1,6 @@
-package com.deco2800.hcg.entities.enemy_entities;
+package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.weapons.*;
 import java.util.HashMap;
 
@@ -40,13 +37,6 @@ public class Squirrel extends Enemy implements Tickable {
 		lootRarity.put("sunflower_seed", 1.0);
 
 		checkLootRarity();
-	}
-
-	@Override
-	public Item[] loot() {
-		Item[] arr = new Item[1];
-		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-		return arr;
 	}
 
 	/**

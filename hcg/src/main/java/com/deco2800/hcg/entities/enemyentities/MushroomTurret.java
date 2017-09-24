@@ -1,9 +1,7 @@
-package com.deco2800.hcg.entities.enemy_entities;
+package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.bullets.Bullet;
-import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -17,6 +15,7 @@ public class MushroomTurret extends Enemy implements Observer {
 
     int seconds;
     int range;
+    StopwatchManager manager;
 
     /**
      * Constructor for the MushroomTurret class. Creates a new turret at the given
@@ -34,7 +33,7 @@ public class MushroomTurret extends Enemy implements Observer {
         this.level = 1;
         seconds = 0;
         range = 15 * this.level;
-        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
         // weapon not working
         this.enemyWeapon = new WeaponBuilder()
@@ -45,6 +44,9 @@ public class MushroomTurret extends Enemy implements Observer {
                 .build();
     }
 
+    public void remove_observer() {
+        manager.deleteObserver(this);
+    }
     public void update(Observable o, Object arg) {
         switch (seconds%6){
             case 0: // set turret phase 1 this.setTexture()
@@ -96,11 +98,5 @@ public class MushroomTurret extends Enemy implements Observer {
         checkLootRarity();
     }
 
-    @Override
-    public Item[] loot() {
-        Item[] arr = new Item[1];
-        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-        return arr;
-    }
 }
 
