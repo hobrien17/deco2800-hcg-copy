@@ -116,7 +116,10 @@ public abstract class Shop {
      * enough currency in player's inventory
      */
     public int buyStock(Item item) {
-        if (!shopStock.contains(item) || (shopStock.get(shopStock.indexOf(item)).getStackSize() == 0)) {
+        if (!player.getInventory().containsSingleItem(seed) || (!player.getInventory().removeItem(seed, item
+                .getBaseValue()+modifier))) {
+            return 3;
+        } else if (!shopStock.contains(item) || (shopStock.get(shopStock.indexOf(item)).getStackSize() == 0)) {
             return 1;
         } else if (!player.getInventory().canInsert(item)) {
             return 2;
@@ -128,10 +131,7 @@ public abstract class Shop {
         } else if (item instanceof SingleItem) {
             player.getInventory().addItem(item);
         }
-        if (!player.getInventory().containsSingleItem(seed) || (!player.getInventory().removeItem(seed, item
-                .getBaseValue()+modifier))) {
-            return 3;
-        }
+
 
         if (item instanceof SingleItem) {
             shopStock.remove(item);

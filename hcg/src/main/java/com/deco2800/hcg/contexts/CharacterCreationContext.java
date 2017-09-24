@@ -723,7 +723,7 @@ public class CharacterCreationContext extends CharacterContext{
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
         Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
-        startingSeeds.setStackSize(100);
+        startingSeeds.setStackSize(50);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);
