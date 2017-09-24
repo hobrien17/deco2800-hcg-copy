@@ -195,7 +195,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 					} else if (target.getHealthCur() <= 0) {
 						//Temporary increase of xp for all enemies killed
-						playerManager.getPlayer().gainXp(100);
+						playerManager.getPlayer().gainXp(50);
 						Double prob = Math.random();
 						if (prob > 0.3) {
 							Corpse corpse = new BasicCorpse(target.getPosX(), target.getPosY(), 0);
@@ -208,7 +208,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 						}
 					} else {
 						//Temporary increase of xp for all enemies killed
-						playerManager.getPlayer().gainXp(100);
+						playerManager.getPlayer().gainXp(50);
 						applyEffect(target);
 
 					}

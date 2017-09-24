@@ -158,6 +158,7 @@ public class CharacterCreationContext extends CharacterContext{
         statsWindow.setBackground(new Image(blank_window_background).getDrawable());
         characterPreviewWindow.setBackground(new Image(blank_window_background).getDrawable());
 
+
         /* Need to find a way to do this without overwriting the button and label listeners.
         attributesWindow.addListener(new ClickListener() {
             @Override
@@ -277,6 +278,7 @@ public class CharacterCreationContext extends CharacterContext{
         attributesWindow.add(charismaDown);
         attributesWindow.add(charismaLabel);
         attributesWindow.add(charismaUp);
+        attributesWindow.pack();
 
         // Add listeners for buttons
         strengthDown.addListener(new ClickListener() {
@@ -523,6 +525,7 @@ public class CharacterCreationContext extends CharacterContext{
         skillsWindow.row();
         skillsWindow.add(energyWeaponsSkillSpecialise);
         skillsWindow.add(energyWeaponsSkillLabel);
+        skillsWindow.pack();
 
         /*  Add listeners to the check-boxes have had to do some VERY odd work arounds to get these checkboxes working
             The checkbox.isChecked() methods don't seem to be working properly with the clickListener
@@ -688,20 +691,21 @@ public class CharacterCreationContext extends CharacterContext{
 
     private void setupSelectedDescriptionWindow() {
         selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
+        selectedDescriptionText.setDisabled(true);
         selectedDescriptionText.setColor(Color.WHITE);
-        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY().padTop(10);
+        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
     }
 
     private void addSubtables() {
-        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(10);
+        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesWindow).top().left().expandX().fillX();
-        masterTable.add(skillsWindow).top().right().expandX().fillX().fillY();
+        masterTable.add(attributesWindow).top().left().expandX().fillX().padBottom(15);
+        masterTable.add(skillsWindow).top().right().expandX().fillX().padBottom(15);
         masterTable.row();
-        masterTable.add(statsWindow).top().left().expandX().fillX().fillY();
-        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().fillY();
+        masterTable.add(statsWindow).top().left().expandX().fillX().fillY().padBottom(15);
+        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().padBottom(15);
         masterTable.row();
-        masterTable.add(selectedDescriptionWindow).top().left().fillX().fillY().expandY().expandX().colspan(2);
+        masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
 
 
