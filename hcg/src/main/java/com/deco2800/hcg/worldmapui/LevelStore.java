@@ -19,9 +19,11 @@ public class LevelStore {
         levelList.add(new Level(new World(DEMO_WORLD), 0, 1, 0));
         levelList.add(new Level(new World(DEMO_WORLD), 0, 1, 1));
         levelList.add(new Level(new World(DEMO_WORLD), 0, 1, 2));
+		levelList.add(new Level(new World("resources/maps/maps/Safezone.tmx"), 0, 1, 0));
 	}
 	
 	public ArrayList<Level> getLevels() {
 		return new ArrayList<>(levelList);
 	}
+
 }
