@@ -529,9 +529,9 @@ public abstract class Enemy extends Character implements Lootable {
                     this.causeDamage((Player)entity);
                     this.setCollidedPlayer(true);
                 }
-                if(entity instanceof Bullet) {
-                    this.changeHealth(-500);
-                }
+//                if(entity instanceof Bullet) {
+//                    this.changeHealth(-500);
+//                }
                 this.setCollided(true);
             }
         }
