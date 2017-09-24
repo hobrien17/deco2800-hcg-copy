@@ -1,22 +1,39 @@
 package com.deco2800.hcg.entities.bullets;
 
-import java.util.List;
-
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
-import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.util.Effect;
-import com.deco2800.hcg.util.WorldUtil;
+
 
 /**
  * Ice Bullet
- * Deals no damage but freezes the target on the spot for 1 second
+ * Deals no damage but freezes the target on the spot for x seconds
+ *
+ * ZA WARUDO
  * 
- * @author Henry O'Brien
+ * @author Yuki Nakazawa
  *
  */
 public class IceBullet extends Bullet {
 
+	/**
+	 * Creates a new Bullet at the given position with the given direction.
+	 *
+	 * @param posX
+	 *            the x position of the bullet
+	 * @param posY
+	 *            the y position of the bullet
+	 * @param posZ
+	 *            the z position of the bullet
+	 * @param xd
+	 *            the y direction for the bullet
+	 * @param yd
+	 *            the x direction for the bullet
+	 * @param user
+	 *            the entity using the bullet
+	 * @param hitCount
+	 *            the total number of enemies that can be hit
+	 */
 	public IceBullet(float posX, float posY, float posZ, float xd, float yd,
 				  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,

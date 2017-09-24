@@ -8,5 +8,6 @@ package com.deco2800.hcg.weapons;
 public enum WeaponType {
     MACHINEGUN,
     SHOTGUN,
-    STARFALL;
+    STARFALL,
+    GRENADELAUNCHER;
 }

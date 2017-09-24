@@ -56,7 +56,7 @@ import com.deco2800.hcg.shading.ShaderState;
  * instantiated once.
  */
 public class PlayContext extends Context {
-    
+
     private static Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
 
     // Managers used by the game
@@ -98,12 +98,12 @@ public class PlayContext extends Context {
 
     private Window window;
     private Window plantWindow;
-    
+
     // TODO make sure this doesn't stay here.
     private ShaderProgram shader;
     private ShaderProgram postShader;
     private boolean useShaders = true;
-    
+
     private Window exitWindow;
 
     private Stage stage;
@@ -127,7 +127,7 @@ public class PlayContext extends Context {
         /* Setup the camera and move it to the center of the world */
         GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
         GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
-                
+
         // Setup GUI
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -159,7 +159,7 @@ public class PlayContext extends Context {
                 contextManager.popContext();
             }
         });
-        
+
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
@@ -170,7 +170,7 @@ public class PlayContext extends Context {
 
         /* Add the window to the stage */
         stage.addActor(window);
-        
+
         /*
          * Setup an Input Multiplexer so that input can be handled by both the UI and
          * the game
@@ -222,11 +222,11 @@ public class PlayContext extends Context {
                 return true;
             }
         });
-        
+
         /** set initial time **/
         timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
     }
-    
+
     /**
      * Renderer thread Must update all displayed elements using a Renderer
      */
@@ -237,7 +237,7 @@ public class PlayContext extends Context {
          * eventually but for now: If any of the shaders fail to compile we default to
          * default SpriteBatch behaviour; a SpriteBatch is initalised with no parameters
          * to draw the game directly to the screen. No extra effects at all.
-         * 
+         *
          * If all shaders are go, we draw the game properly. We initialise a SpriteBatch
          * with our pre-processing shader attached to it, which handles things like
          * day/night cycle etc and we use that to draw the game to a FrameBuffer. We
@@ -246,19 +246,19 @@ public class PlayContext extends Context {
          * to draw our FrameBuffer to the screen with nice shiny effects in tow.
          */
         GameManager.get().getCamera().update();
-        
+
         if(!shaderManager.shadersCompiled() || !useShaders) {
             // Default drawing behaviour. Default to this if any shaders fail to compile.
             SpriteBatch batch = new SpriteBatch();
-            
+
             batch.setProjectionMatrix(GameManager.get().getCamera().combined);
             BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
-            
+
             tileRenderer.setView(GameManager.get().getCamera());
             tileRenderer.render();
-            
+
             renderer.render(batch);
-            
+
             batch.dispose();
         } else {
             shaderManager.render(timeManager, renderer);
@@ -268,7 +268,7 @@ public class PlayContext extends Context {
         stage.act();
         stage.draw();
     }
-    
+
     /**
      * Resizes the viewport
      *
@@ -343,7 +343,7 @@ public class PlayContext extends Context {
             contextManager.pushContext(new WorldMapContext());
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
-        } else if(keycode == Input.Keys.EQUALS) { 
+        } else if(keycode == Input.Keys.EQUALS) {
             Item item = new HealthPotion(100);
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
             gameManager.getWorld().addEntity(entity);
@@ -353,14 +353,14 @@ public class PlayContext extends Context {
             }
         }
     }
-    
+
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
         Button yesButton = new TextButton("Yes", skin);
         yesButton.pad(5, 10, 5, 10);
         Button noButton = new TextButton("No", skin);
         noButton.pad(5, 10, 5, 10);
-        
+
         /* Add a programmatic listener to the buttons */
         yesButton.addListener(new ChangeListener() {
             @Override
@@ -378,7 +378,7 @@ public class PlayContext extends Context {
                 // clear old observers (mushroom turret for example)
                 StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
                 manager.deleteObservers();
-                
+
                 // stop the old weather effects
                 ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
             }
@@ -390,25 +390,25 @@ public class PlayContext extends Context {
                 exitWindow.remove();
             }
         });
-        
+
         exitWindow.add(yesButton);
         exitWindow.add(noButton);
         exitWindow.pack();
         exitWindow.setMovable(false); // So it doesn't fly around the screen
         exitWindow.setWidth(150);
     }
-    
+
     public void addExitWindow() {
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
         }
     }
-    
+
     public void removeExitWindow() {
         exitWindow.remove();
     }
-    
+
     public void addParticleEffect(ParticleEffectActor actor) {
         stage.addActor(actor);
     }
