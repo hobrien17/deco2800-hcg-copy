@@ -189,6 +189,10 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 					} else if (target.getHealthCur() <= 0) {
 							applyEffect(target);
+							if (user instanceof Player) {
+								Player playerUser = (Player) user;
+								playerUser.killLogAdd(target.getID());
+							}
 					}
 					hitCount--;
 				}
