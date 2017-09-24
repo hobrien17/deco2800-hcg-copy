@@ -195,7 +195,7 @@ public final class NetworkManager extends Manager {
 				.getNodeLinkedLevel().getWorld().getLoadedFile()));
 		*/
 		Player otherPlayer = new Player(1, 5, 10, 0);
-		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, "Player 2");
+		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Player 2");
 		playerManager.addPlayer(otherPlayer);
 		/*
 		playerManager.spawnPlayers();

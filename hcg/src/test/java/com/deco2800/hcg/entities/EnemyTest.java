@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
+import com.deco2800.hcg.BaseTest;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.worlds.World;
@@ -15,7 +16,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnemyTest {
+public class EnemyTest extends BaseTest {
     Squirrel enemy;
     GameManager gameManager;
     

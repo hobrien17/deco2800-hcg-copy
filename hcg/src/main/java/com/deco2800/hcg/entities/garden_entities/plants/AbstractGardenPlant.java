@@ -1,9 +1,13 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -41,7 +45,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
     private int growDelay;
     private int lastGrow;
 
-    Map<String, Double> lootRarity;
+    protected Map<String, Double> lootRarity;
 
     /**
      * Creates a new plant in the given pot with the given growth delay.
@@ -67,7 +71,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 		    plantManager.updateLabel();
         	lastGrow = time;
         }
-		
 	}
 
     @Override
@@ -91,15 +94,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      */
     public Pot getPot(){
         return master;
-    }
-
-    /**
-     * Sets the current plant's name
-     *
-     * @param name plant's name
-     */
-    public void setName(String name){
-        this.name = name;
     }
 
     /**
@@ -147,7 +141,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
     /**
      * Sets up the loot rarity map for a plant
      */
-    abstract void setupLoot();
+    protected abstract void setupLoot();
 
 
     /**
@@ -164,7 +158,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      *
      * @return A random item string in the plant's loot map
      */
-    String randItem() {
+    protected String randItem() {
         Double prob = Math.random();
         Double total = 0.0;
         for (Map.Entry<String, Double> entry : lootRarity.entrySet()) {
@@ -197,5 +191,54 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         }
         return true;
     }
+    
+    /**
+     * Increases or reduces the delay between stages
+     * 
+     * @param amount
+     * 			the amount to reduce or increase the delay ( <1 to reduce, >1 to increase)
+     */
+    public void changeDelay(float amount) {
+    	growDelay *= amount;
+    }
+    
+    /**
+     * Increases the rarity of all "rare" items by change amount. 
+     * A rare item is defined by an item with rarity less than or equal to threshold. 
+     * Note that all rarities will be modified at the end of this method to ensure the total rarity remains at 1. 
+     * Because of this, the rarities will actually change by an amount slightly less than change.
+     * 
+     * @param threshold
+     * 			the threshold which defines a rare item
+     * @param change
+     * 			the amount to change the rarity by
+     */
+    public void increaseRarity(double threshold, double change) {
+    	double total = 0.0;
+    	for(Map.Entry<String, Double> entry : lootRarity.entrySet()) {
+    		if(entry.getValue() <= threshold) {
+    			// if the rarity is below the threshold, make it more common
+    			total += change;
+    			lootRarity.put(entry.getKey(), entry.getValue() + change);
+    		}
+    	}
+    	total /= lootRarity.size();
+    	// modify all the rarities so they sum up to 1
+    	for(Map.Entry<String, Double> entry : lootRarity.entrySet()) {
+    		BigDecimal decimal = new BigDecimal(entry.getValue() - total); 
+            decimal = decimal.setScale(4, RoundingMode.HALF_DOWN); //round to 4dps
+    		lootRarity.put(entry.getKey(), decimal.doubleValue());
+    	}
+    	
+    	checkLootRarity(); //will display a warning if the loot rarity goes above 1
+    }
+    
+    @Override
+	public Item[] loot() {
+		Item[] arr = new Item[1];
+		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+		
+		return arr;
+	}
 
 }

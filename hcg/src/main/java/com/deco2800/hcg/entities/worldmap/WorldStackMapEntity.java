@@ -21,7 +21,7 @@ public class WorldStackMapEntity extends Actor {
 
     private WorldMap worldMap;
 
-    private float spriteWidth = 300; // Used to scale the drawing of the mapNodes. (pixels)
+    private float spriteWidth = 350; // Used to scale the drawing of the mapNodes. (pixels)
     private float spriteHeight; // Will be calculated based on the above width
     
     public WorldStackMapEntity(WorldMap worldMap) {
@@ -33,7 +33,7 @@ public class WorldStackMapEntity extends Actor {
         updateTexture();
         
         // pixels padding around each direction of the map
-     	int mapPadding = 75;
+     	int mapPadding = 50;
 
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
