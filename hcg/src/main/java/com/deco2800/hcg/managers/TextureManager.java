@@ -207,14 +207,19 @@ public class TextureManager extends Manager {
 
 		//World map textures
 		textureMap.put("wm_blue_bg", new Texture("resources/worldmap/blue_background.png"));
-		textureMap.put("wm_green_bg", new Texture("resources/worldmap/temporary_background.png"));
-		// Uncomment once temp message can be removed
-        //textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
-        textureMap.put("completed_node", new Texture("resources/worldmap/completed_node.png"));
-        textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node.png"));
-        textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node.png"));
-        textureMap.put("safe_node", new Texture("resources/worldmap/safe_node.png"));
+        textureMap.put("wm_green_bg", new Texture("resources/worldmap/green_background.png"));
+        textureMap.put("completed_node", new Texture("resources/worldmap/completed_node_small.png"));
+        textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node_small.png"));
+        textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node_small.png"));
+        textureMap.put("safe_node", new Texture("resources/worldmap/safe_node_small.png"));
 		textureMap.put("black_px", new Texture("resources/worldmap/black_px.png"));
+		textureMap.put("ws_forest", new Texture("resources/worldmap/ws_forest_small.png"));
+		textureMap.put("ws_fungi", new Texture("resources/worldmap/ws_fungi_small.png"));
+		textureMap.put("ws_urban", new Texture("resources/worldmap/ws_urban_small.png"));
+		textureMap.put("ws_forest_locked", new Texture("resources/worldmap/ws_forest_locked_small.png"));
+		textureMap.put("ws_fungi_locked", new Texture("resources/worldmap/ws_fungi_locked_small.png"));
+		textureMap.put("ws_purp_bg", new Texture("resources/worldmap/ws_purp_background.png"));
+		
         //Item textures
 		textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
 		textureMap.put("green_potion", new Texture("resources/sprites/potions/potion_round_green.png"));
@@ -243,6 +248,15 @@ public class TextureManager extends Manager {
 		//Conversation textures
 		textureMap.put("conversation_context",  new Texture("resources/ui/conversations/conversation_context.png"));
 		textureMap.put("npc_face", new Texture("resources/sprites/npc/npc_face.png"));
+
+		//Character creation textures
+		textureMap.put("ccMale1", new Texture("resources/sprites/player/character_creation/male1.png"));
+		textureMap.put("ccMale2", new Texture("resources/sprites/player/character_creation/male2.png"));
+		textureMap.put("ccMale3", new Texture("resources/sprites/player/character_creation/male3.png"));
+		textureMap.put("ccFemale1", new Texture("resources/sprites/player/character_creation/female1.png"));
+		textureMap.put("ccFemale2", new Texture("resources/sprites/player/character_creation/female2.png"));
+		textureMap.put("ccFemale3", new Texture("resources/sprites/player/character_creation/female3.png"));
+		textureMap.put("ccWindow_Background_White", new Texture("resources/ui/character_creation/window_background_white.png"));
 	}
 
 	/**
