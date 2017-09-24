@@ -75,6 +75,7 @@ public class ShaderManager extends Manager {
 
         this.state.setBloom(true);
         this.state.setHeat(false);
+        this.state.setContrast(0.8F);
         
         this.lightRenderer = new RenderLightmap();
     }
@@ -144,6 +145,7 @@ public class ShaderManager extends Manager {
         this.postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
         this.postShader.setUniformf("u_heat", state.getHeat());
         this.postShader.setUniformf("u_bloom", state.getBloom());
+        this.postShader.setUniformf("u_contrast", state.getContrast());
             
         this.postBatch = new SpriteBatch(1, this.postShader);
             
@@ -159,5 +161,9 @@ public class ShaderManager extends Manager {
         this.postBatch.dispose();
         this.renderTarget.dispose();
         this.lightTarget.dispose();
+    }
+
+    public void setOvercast(float overcast) {
+        state.setContrast(overcast);
     }
 }

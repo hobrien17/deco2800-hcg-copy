@@ -111,7 +111,7 @@ public class ShaderState {
      *
      * @return current contrast
      */
-    public float getCOntrast() {
+    public float getContrast() {
         return this.overcast;
     }
     
