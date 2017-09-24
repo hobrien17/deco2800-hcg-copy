@@ -3,7 +3,6 @@ package com.deco2800.hcg.entities.enemyentities;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
-import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
@@ -12,22 +11,20 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.weapons.*;
 import com.deco2800.hcg.worlds.World;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import static java.lang.Math.*;
 
-public abstract class Enemy extends Character implements Lootable, Harmable {
+public abstract class Enemy extends Character implements Lootable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
@@ -43,16 +40,18 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected float randomY;
     protected float lastPlayerX;
     protected float lastPlayerY;
-    protected float normalSpeed;
-    protected float movementSpeed;
     protected Random random;
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
-    protected Box3D prevPos;
-
+    
+    //Multiple players
+    private int numPlayers;
+    private Player closestPlayer;
+    
 	// Effects container
 	protected Effects myEffects;
+    protected Box3D prevPos;
 
     protected Weapon enemyWeapon;
     
@@ -91,7 +90,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.speedX = 0;
         this.speedY = 0;
         this.level = 1;
-        this.normalSpeed = this.movementSpeed = (float)(this.level * 0.03);
+        this.movementSpeedNorm = this.movementSpeed = (float)(this.level * 0.03);
         this.random = new Random();
         this.random.setSeed(this.getID());
         this.setCollided(false);
@@ -127,23 +126,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public float getLastPlayerY(){
         return this.lastPlayerY;
     }
-    /**
-     * Take the damage inflicted by the other entities
-     * 
-     * @param damage: the amount of the damage
-     * @exception: throw IllegalArgumentException if damage is a negative integer
-     */
-    public void takeDamage(int damage) {
-        if (damage < 0){
-            throw new IllegalArgumentException();
-        }
-        else if (damage > healthCur){
-            healthCur = 0;
-        }
-        else {
-            healthCur -= damage;
-        }
-    }
+
     
     /**
      * 
@@ -176,20 +159,13 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public boolean getCollided(){
         return this.collided;
     }
-    /**
-     * Change the health level of the enemy i.e can increase or decrease the health level (depending on whether the amount is positive or negative)
-     * 
-     * @param amount: the amount that the health level will change by
-     */
-    public void changeHealth(int amount) {
-        healthCur = Math.max(healthCur + amount, 0);
-    }
 
     /**
      * Attack the player
      *
      */
     public void causeDamage(Player player) {
+        //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
         player.takeDamage(1);
     }
 
@@ -283,7 +259,70 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public void setStatus(int newStatus){
         this.status = newStatus;
     }
+    
+    /**
+     * Detects the number of players in the current game. Returns number of elements in players list.
+     * 
+     * @return: int numPlayers - number of players in game.
+     * @author Elvin - Team 9
+     */
+    public int getNumberPlayers() {
+    	numPlayers = playerManager.getPlayers().size();
+    	//System.out.println(numPlayers);
+    	return numPlayers;
+    }
+    
+    /**
+     * Changes status of enemy based on the closest player's position via least distance.
+     * Used when there are multiple players in the same game.
+     * 
+     * @author Elvin - Team 9
+     */
+    public void detectPlayers() {
+    	
+        List<Player> players;
+		HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
 
+		int playerCount = 0;
+		float[] distances = new float[numPlayers];		
+		float closestDistance; 
+
+    	getNumberPlayers();
+    	players = playerManager.getPlayers();
+    	
+    	//Iterates through all players and puts distance from enemy to each player into an array
+    	//Puts all players and their respective distances into a hash map
+    	for (Player player : players) {
+    		distances[playerCount] = this.distance(player);
+    		playerHashMap.put(distances[playerCount], player);
+    		playerCount++;
+    	}
+    	
+    	//Finds the smallest distance in the distance array
+    	closestDistance = distances[0];
+    	for (int j = 0; j < distances.length; j++) {
+    		if (distances[j] < closestDistance) {
+    			closestDistance = distances[j];
+    		}
+    	}
+    	
+    	//Gets the player with closest distance from the enemy and assigns to variable
+    	closestPlayer = playerHashMap.get(closestDistance);
+    	
+    	//Following is a modification of detectPlayer 
+    	if (closestDistance <= 5 * this.level) {
+    		this.setStatus(2);
+    		this.lastPlayerX = closestPlayer.getPosX();
+    		this.lastPlayerY = closestPlayer.getPosY();
+    	} else if (this.getStatus() == 2){
+    		this.setStatus(3);
+    	} else {
+    		this.setStatus(1);
+    	}
+    	
+    }
+    
+    
     /**
      * To detect player's position. If player is near enemy, return 1.
      * @return: false: Undetected
@@ -394,6 +433,39 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         newPos.setY(currPosY);
         return newPos;
     }
+    
+    /**
+     * Copied and modified from getToPlayerPos().
+     * Added an input argument to allow function to work on any player passed in, rather than the single
+     * 'hard coded' player in playerManager.
+     * 
+     * @return Box3D 
+     * @author Elvin - Team 9
+     */
+    public Box3D moveToPlayer(Player player){
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
+        if((abs(this.getPosX() - player.getPosX()) > 1)||
+                (abs(this.getPosY() - player.getPosY()) > 1)){
+            this.setCollided(false);
+            this.setCollidedPlayer(false);
+        }
+        if(this.getPosX() < player.getPosX()){
+            currPosX += movementSpeed;
+        }
+        else if(this.getPosX() > player.getPosX()){
+            currPosX -= movementSpeed;
+        }
+        if(this.getPosY() < player.getPosY()){
+            currPosY += movementSpeed;
+        }
+        else if(this.getPosY() > player.getPosY()){
+            currPosY -= movementSpeed;
+        }
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
+    }
 
     /**
      * Move enemy to pointed position. Use for going to the player's last position.
@@ -485,7 +557,27 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
                 newPos = this.getRandomPos();
         }
     }
-
+    
+    /**
+     * Set new position by different situations, modified for multiple players
+     * 
+     * @author Elvin - Team 9
+     */
+    public void setNewPosMultiplayer() {
+    	switch(this.getStatus()) {
+    	case 1: //Status: New born enemy
+    		newPos = this.getRandomPos();
+    		break;
+    	case 2: //Status: Chasing closest player
+    		newPos = this.moveToPlayer(closestPlayer);
+    		this.shoot();
+    		break;
+    	case 3: //Status: Annoyed/Lost player
+    		newPos = this.getMoveToPos(this.getLastPlayerX(), this.getLastPlayerY());
+    		break;
+    	}
+    	
+    }
 
     /**
      * Shoot the entity
@@ -496,53 +588,33 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         enemyWeapon.openFire();
     }
     
-    /**
-     * Changes the speed by modifier amount
-     * 
-     * @param modifier 
-     * 			the amount to change the speed (<1 to slow,  >1 to speed)
-     */
-    public void changeSpeed(float modifier) {
-        this.movementSpeed *= (1 - modifier);
-    }
+//    /**
+//     * Changes the speed by modifier amount
+//     *
+//     * @param modifier
+//     * 			the amount to change the speed (<1 to slow,  >1 to speed)
+//     */
+//    public void changeSpeed(float modifier) {
+//    	this.movementSpeed *= (1 - modifier);
+//    }
     
-    /**
-     * Sets the movement speed of the enemy
-     * 
-     * @param speed
-     * 			the new movement speed
-     */
-    public void setSpeed(float speed) {
-    	    this.movementSpeed = speed;
-    }
-    
-    /**
-     * Sets the enemy's speed to its original value
-     * 
-     */
-    public void resetSpeed() {
-    	    this.movementSpeed = normalSpeed;
-    }
 
-    /**
-     * Returns the enemy movement speed
-     *
-     */
-    @Override
-    public float getMovementSpeed() {
-    	    return this.movementSpeed;
-    }
+    
+//    /**
+//     * Sets the enemy's speed to its original value
+//     *
+//     */
+//    public void resetSpeed() {
+//    	this.movementSpeed = movementSpeedNorm;
+//    }
+    
+//    @Override
+//    public float getMovementSpeed() {
+//    	return this.movementSpeed;
+//    }
 	
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
-	@Override
-    public void giveEffect(Effect effect) {
-        myEffects.addEffect(effect);
-    }
 
-    @Override
-    public void giveEffect(Collection<Effect> effects) {
-        myEffects.addAllEffects(effects);
-    }
     
     @Override
     public boolean equals(Object obj) {
@@ -558,6 +630,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 
     @Override
     public int hashCode() {
+        // We create a polynomial hash-code based on start, end and capacity
         final int prime = 31; // an odd base prime
         int result = 1; // the hash code under construction
         result = prime * result + this.id;

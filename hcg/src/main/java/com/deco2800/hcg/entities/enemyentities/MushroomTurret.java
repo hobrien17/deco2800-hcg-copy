@@ -35,6 +35,8 @@ public class MushroomTurret extends Enemy implements Observer {
         range = 15 * this.level;
         manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
+        healthMax = 20;
+        healthCur = healthMax;
         // weapon not working
         this.enemyWeapon = new WeaponBuilder()
                 .setWeaponType(WeaponType.MACHINEGUN)
@@ -61,7 +63,7 @@ public class MushroomTurret extends Enemy implements Observer {
     }
 
     /**
-     * Creates bullets and shoots them in 8 different directions.
+     * Creates 8 bullets and shoots them in different directions.
      */
     public void turretShoot() {
         Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
@@ -91,7 +93,7 @@ public class MushroomTurret extends Enemy implements Observer {
     }
 
     /**
-     * Updates the turret sprites and shoots every 5 seconds.
+     * Updates the turret sprites and shoots bullets every 8 seconds.
      *
      * @param o
      * 			the Observable object calling the update method (should be an instance of StopwatchManager)
@@ -111,7 +113,7 @@ public class MushroomTurret extends Enemy implements Observer {
             case 3: // set turret phase 4
                 this.setTexture("tower");
                 break;
-            case 4:
+            case 4: // set turret phase 5
                 this.turretShoot();
                 break;
             default:
@@ -120,7 +122,6 @@ public class MushroomTurret extends Enemy implements Observer {
         }
         seconds++;
     }
-
 
 }
 

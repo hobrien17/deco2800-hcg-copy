@@ -44,4 +44,12 @@ public class Inferno extends AbstractGardenPlant {
         checkLootRarity();
     }
 
+    @Override
+    public Item[] loot() {
+        Item[] arr = new Item[1];
+        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+
+        return arr;
+    }
+
 }

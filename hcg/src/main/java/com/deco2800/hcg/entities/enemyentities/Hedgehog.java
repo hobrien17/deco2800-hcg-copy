@@ -50,20 +50,22 @@ public class Hedgehog extends Enemy implements Tickable {
     }
 
     /**
-     * Sets the charged at player status.
+     * Sets the charged at player status to the status given.
+     * @param status
+     * 			the status of charged at player, true if charged at player, false otherwise.
      *
      */
     public void setChargeStatus(boolean status) { this.chargedAtPlayer = status; }
 
     /**
-     * Returns the charged at player status.
+     * Gets the charged at player status.
+     * @return: status of chargedAtPlayer
      *
-     *  @return: chargedAtPlayer status
      */
     public boolean getChargeStatus() { return this.chargedAtPlayer; }
 
     /**
-     * Changed the speed and status of the enemy depending on different situations.
+     * Changes the hedgehog's speed and status depending on the situation.
      *
      */
     public void setHedgehogStatus() {
@@ -75,14 +77,14 @@ public class Hedgehog extends Enemy implements Tickable {
             // move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.setTexture("hedgehog");
+            this.setTexture("hedgeball");
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else if (!chargedAtPlayer && distance < chargingRange) {
             // charge at player
             setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.setTexture("hedgeball");
+            this.setTexture("hedgehog");
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else {
@@ -108,4 +110,5 @@ public class Hedgehog extends Enemy implements Tickable {
         myEffects.apply();
 
     }
+
 }

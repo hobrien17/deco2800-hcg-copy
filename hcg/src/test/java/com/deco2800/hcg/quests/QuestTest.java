@@ -1,5 +1,6 @@
 package com.deco2800.hcg.quests;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -16,18 +17,17 @@ public class QuestTest {
 	
 	@Before
 	public void initialiseConstructor(){
-		String name = "Test Quest";
 		String instruction = "Go find me the item at the end of the map";
 		Item itemRequested = new TestItem();
 		Item itemRewarded = new TestUniqueItem("x", 5);
-		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
+		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
 		questToTest = quest;
 	}
 	
 	
 	@Test
 	public void testNotComplete(){
-		assert(questToTest.isQuestComplete() == false);
+		assertFalse(questToTest.isQuestComplete());
 	}
 	
 	@Test
@@ -37,47 +37,36 @@ public class QuestTest {
 	
 	@Test
 	public void testGetterMethods(){
-		assert(questToTest.itemNeeded().sameItem(new TestItem()) == true);
-		assert(questToTest.itemRewarded().sameItem(new TestUniqueItem("x", 5)) == true);
+		//Removed the equals true from below as the result is already boolean, so this is redundant as true is true
+		// or false is false
+		assertTrue(questToTest.itemNeeded().sameItem(new TestItem()));
+		assertTrue(questToTest.itemRewarded().sameItem(new TestUniqueItem("x", 5)));
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
-	public void testEmptyStringInstructionConstructor(){
-		String name = "Test";
+	public void testEmptyStringConstructor(){
 		String instruction = "";
 		Item itemRequested = new TestItem();
 		Item itemRewarded = new TestUniqueItem("x", 5);
-		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
-		questToTest = quest;
-	}
-
-	@Test (expected = IllegalArgumentException.class)
-	public void testEmptyStringNameConstructor(){
-		String name = "";
-		String instruction = "Test";
-		Item itemRequested = new TestItem();
-		Item itemRewarded = new TestUniqueItem("x", 5);
-		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
+		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
 		questToTest = quest;
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testNullItemRequestedConstructor(){
-		String name = "Test";
 		String instruction = "Go find me the item at the end of the map";
 		Item itemRequested = null;
 		Item itemRewarded = new TestUniqueItem("x", 5);
-		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
+		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
 		questToTest = quest;
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testNullItemRewardedConstructor(){
-		String name = "Test";
 		String instruction = "Go find me the item at the end of the map";
 		Item itemRequested = new TestItem();
 		Item itemRewarded = null;
-		Quest quest = new Quest(name, instruction, itemRequested, itemRewarded);
+		Quest quest = new Quest(instruction, itemRequested, itemRewarded);
 		questToTest = quest;
 	}
 	

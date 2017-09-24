@@ -10,7 +10,6 @@ import com.deco2800.hcg.managers.TextureManager;
 import java.util.HashMap;
 
 public class Snail extends Enemy implements Tickable {
-
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
      * position.
@@ -80,6 +79,6 @@ public class Snail extends Enemy implements Tickable {
         this.moveAction();//Move enemy to the position in Box3D.
         // Apply any effects that exist on the entity
         myEffects.apply();
-
+        
     }
 }
