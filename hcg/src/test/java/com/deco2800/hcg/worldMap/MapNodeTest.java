@@ -155,4 +155,12 @@ public class MapNodeTest {
 
     }
 
+    @Test
+    public void testSameNode() {
+        tmpNode = new MapNode(0, 9, 2, tmpLevel, false);
+        MapNode tmpNode2 = new MapNode(0, 9, 2, tmpLevel, false);
+        assertEquals(true, tmpNode.isSameNode(tmpNode2));
+
+    }
+
 }
