@@ -216,6 +216,9 @@ public class TextureManager extends Manager {
 		textureMap.put("ws_urban", new Texture("resources/worldmap/ws_urban_small.png"));
 		textureMap.put("ws_forest_locked", new Texture("resources/worldmap/ws_forest_locked_small.png"));
 		textureMap.put("ws_fungi_locked", new Texture("resources/worldmap/ws_fungi_locked_small.png"));
+		textureMap.put("ws_forest_completed", new Texture("resources/worldmap/ws_forest_completed_small.png"));
+		textureMap.put("ws_fungi_completed", new Texture("resources/worldmap/ws_fungi_completed_small.png"));
+		textureMap.put("ws_urban_completed", new Texture("resources/worldmap/ws_urban_completed_small.png"));
 		textureMap.put("ws_purp_bg", new Texture("resources/worldmap/ws_purp_background.png"));
 		
         //Item textures
