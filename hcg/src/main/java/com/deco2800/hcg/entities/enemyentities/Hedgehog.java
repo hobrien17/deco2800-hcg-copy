@@ -1,16 +1,10 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Hedgehog extends Enemy implements Tickable {
 
@@ -49,16 +43,16 @@ public class Hedgehog extends Enemy implements Tickable {
 
     public void setHedgehogStatus() {
         float distance = this.distance(playerManager.getPlayer());
-        if (chargedAtPlayer == true && distance > chargingRange){
+        if (chargedAtPlayer && distance > chargingRange){
             this.setChargeStatus(false);
         }
-        if (chargedAtPlayer == false && distance < walkingRange && distance > chargingRange) {
+        if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange) {
             // move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
-        } else if (chargedAtPlayer == false && distance < chargingRange) {
+        } else if (!chargedAtPlayer && distance < chargingRange) {
             // charge at player
             setSpeed(this.level * 0.05f);
             this.setStatus(2);
@@ -88,6 +82,8 @@ public class Hedgehog extends Enemy implements Tickable {
     }
 
     public void setChargeStatus(boolean status) { this.chargedAtPlayer = status; }
+    
+    public boolean getChargeStatus() { return this.chargedAtPlayer; }
 
     @Override
     public void setupLoot() {
@@ -97,6 +93,4 @@ public class Hedgehog extends Enemy implements Tickable {
 
         checkLootRarity();
     }
-
-
 }

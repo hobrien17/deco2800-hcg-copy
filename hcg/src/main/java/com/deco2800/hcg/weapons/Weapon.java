@@ -189,7 +189,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
 
     public void switchBullet() {
         bulletType++;
-        if(bulletType > 2) {
+        if(bulletType > 3) {
             bulletType = 0;
         }
     }
@@ -204,7 +204,11 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                         goalX, goalY, this.user, 1);
                 break;
             case 1:
-                bullet = new SunflowerSeed(posX, posY, posZ,
+                bullet = new IceBullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            case 2:
+                bullet = new FireBullet(posX, posY, posZ,
                         goalX, goalY, this.user, 1);
                 break;
             default:

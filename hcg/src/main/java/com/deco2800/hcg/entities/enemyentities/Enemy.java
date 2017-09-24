@@ -11,7 +11,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -55,7 +54,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 	protected Effects myEffects;
 
     protected Weapon enemyWeapon;
-
+    
     /**
      * Creates a new enemy at the given position
      * @param posX the x position
@@ -189,6 +188,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      *
      */
     public void causeDamage(Player player) {
+        //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
         player.takeDamage(1);
     }
 
@@ -210,6 +210,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public Item[] loot() {
         Item[] arr = new Item[1];
         arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+
         return arr;
     }
 
@@ -318,7 +319,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         float currPosY = this.getPosY();
         float nextPosX;
         float nextPosY;
-
         float tempX;
         float tempY;
         //Get direction of next position. Randomly be chosen between 0 and 360.
@@ -355,7 +355,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         } else if (this.getPosY() > nextPosY) {
             currPosY -= movementSpeed * 0.25;
         }
-        newPos = getBox3D();
+        Box3D newPos = getBox3D();
         newPos.setX(currPosX);
         newPos.setY(currPosY);
         return newPos;
@@ -413,7 +413,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
                 (abs(posY - currPosY) < 1)){
             this.setStatus(1);
         }
-        newPos = getBox3D();
+        Box3D newPos = getBox3D();
         newPos.setX(currPosX);
         newPos.setY(currPosY);
         return newPos;
@@ -450,12 +450,10 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
                     this.causeDamage((Player)entity);
                     this.setCollidedPlayer(true);
                 }
-                else if (entity instanceof Bullet) {
-                    this.takeDamage(500);
+                if(entity instanceof Bullet) {
+                    this.changeHealth(-500);
                 }
-                else {
-                    this.setCollided(true);
-                }
+                this.setCollided(true);
             }
         }
     }
@@ -498,7 +496,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 			the amount to change the speed (<1 to slow,  >1 to speed)
      */
     public void changeSpeed(float modifier) {
-    	this.movementSpeed *= modifier;
+    	this.movementSpeed *= (1 - modifier);
     }
     
     /**
@@ -524,7 +522,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     	return this.movementSpeed;
     }
 	
-	// to comply with temporary harmable implementations to get the Effects class working
+	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
 	@Override
     public void giveEffect(Effect effect) {
         myEffects.addEffect(effect);
@@ -545,5 +543,14 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        // We create a polynomial hash-code based on start, end and capacity
+        final int prime = 31; // an odd base prime
+        int result = 1; // the hash code under construction
+        result = prime * result + this.id;
+        return result;
     }
 }

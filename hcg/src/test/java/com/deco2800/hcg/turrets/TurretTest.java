@@ -193,10 +193,9 @@ public class TurretTest {
 		gm.getWorld().addEntity(corpse);
 		turret = new IceTurret(corpse);
 
-		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); // add an enemy to test
-														// speed change
+		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); // to test speed change
 		enemy.setSpeed(1f);
-		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 0);
+		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 1);
 		enemyFar.setSpeed(1f);
 		gm.getWorld().addEntity(enemy);
 		gm.getWorld().addEntity(enemyFar);
@@ -212,13 +211,9 @@ public class TurretTest {
 		for (int i = 0; i < 5; i++) {
 			turret.update(sw, i); // update until the turret detonates
 		}
-		assertEquals("The enemy should be frozen", 0, enemy.getMovementSpeed(), 0); // check
-																					// that
-																					// the
-																					// enemy
-																					// is
-																					// frozen
-		//assertEquals("The second enemy should be slower than normal", 0.5f, enemyFar.getMovementSpeed(), 0);
+		assertEquals("The enemy should be frozen", 0, enemy.getMovementSpeed(), 0); 
+		// check that the enemy is frozen
+		assertEquals("The second enemy should be slower than normal", 0.5f, enemyFar.getMovementSpeed(), 0);
 		for (int i = 0; i < 10; i++) {
 			assertTrue("The corpse should still be in the world", gm.getWorld().containsEntity(corpse));
 			turret.update(sw, i); // update until the turret destroys itself
