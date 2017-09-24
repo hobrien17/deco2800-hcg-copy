@@ -7,6 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 
+/**
+ * WorldStackMapEntity holds the information pertaining to the display of the world nodes on the WorldStack menu.
+ * 
+ * @author Ivo
+ */
 public class WorldStackMapEntity extends Actor {
 	private Texture worldStackMapTexture;
     private int xPos;
@@ -121,6 +126,11 @@ public class WorldStackMapEntity extends Actor {
 		return worldStackMapTexture;
 	}
 	
+	/**
+	 * Set the world's texture to the texture provided
+	 * @param newTexture
+	 *     The new texture to set the world's texture to
+	 */
 	public void setWorldTexture(Texture newTexture) {
 		worldStackMapTexture = newTexture;
 	}

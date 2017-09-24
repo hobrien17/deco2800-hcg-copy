@@ -7,6 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 
+/**
+ * WorldStackEntity holds the WorldStack menu background.
+ * 
+ * @author Ivo
+ */
 public class WorldStackEntity extends Actor {
 	private Texture worldStackBackground;
 	

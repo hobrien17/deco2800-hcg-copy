@@ -32,6 +32,7 @@ public class MapGenerator {
 	private List<Level> levelsNotOfType;
 	private List<Level> levelsBoss;
 	private List<Level> levelsNonBoss;
+	private Level safeLevel;
 	
 	private int seedValue;
 	private Random mainGenerator;
@@ -56,8 +57,15 @@ public class MapGenerator {
 		Random seedGenerator = new Random();
 		seedValue = Math.abs(seedGenerator.nextInt(999));
 		mainGenerator = new Random(seedValue);
+		//used in case there is no safe level present (REMOVE ONCE SAFE LEVEL IS ADDED)
+		safeLevel = levelsMaster.get(0);
 	}
 	
+	/**
+	 * Set a seed for the map generator for generating maps from a seed value.
+	 * @param seed
+	 *     The seed to set the generator to generate from.
+	 */
 	public void setGeneratorSeed(int seed) {
 		seedValue = seed;
 		mainGenerator = new Random(seedValue);
@@ -191,12 +199,14 @@ public class MapGenerator {
 					nodeType = 0; //node will be a safenode
 					safeNodeInColumn = true;
 					columnsSinceSafeNode = 0;
+					MapNode safeNode = new MapNode(i, nodeRow, nodeType, safeLevel,false);
+					nodeList.add(safeNode);
 				} else {
 					nodeType = 1;  // in the future, will add different node types in here
+					MapNode basicNode = new MapNode(i, nodeRow, nodeType, getLevel(worldType, i), false);
+					nodeList.add(basicNode);
 				}
-				MapNode basicNode = new MapNode(i, nodeRow, nodeType, getLevel(worldType, i), false);
 				currentOccupiedRows.add(nodeRow);
-				nodeList.add(basicNode);
 				if(!safeNodeInColumn) {
 					columnsSinceSafeNode++;
 				}
@@ -273,7 +283,9 @@ public class MapGenerator {
 		levelsNotOfType.clear();
 		levelsNonBoss.clear();
 		for(Level i : levelsMaster) {
-			if(i.getLevelType() == 2) {
+			if(i.getLevelType() == 0) {
+				safeLevel = i;
+			} else if(i.getLevelType() == 2) {
 				levelsBoss.add(i);
 			} else if(worldType == 0) {
 				levelsNonBoss.add(i);
@@ -327,6 +339,15 @@ public class MapGenerator {
 		}
 	}
 	
+	/**
+	 * Steps through the levels to find the most suitable level for the worldType and levelColumn.
+	 * @param worldType
+	 *     The worldType to select levels from.
+	 * @param levelColumn
+	 *     The levelColumn to select difficulties for.
+	 * @return
+	 *     The most relevant level for the node.
+	 */
 	private Level stepThroughLevels(int worldType, int levelColumn) {
 		if(worldType == 1) {
 			if(levelColumn < 3) {

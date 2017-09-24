@@ -181,6 +181,11 @@ public class MapNode {
 		return isDiscovered;
 	}
 	
+	/**
+	 * Gets the node's ID.
+	 * @return
+	 *     Returns the node's ID
+	 */
 	public int getNodeID() {
 		return nodeID;
 	}
@@ -284,6 +289,11 @@ public class MapNode {
 		isDiscovered = false;
 	}
 	
+	/**
+	 * Sets a new ID for the node.
+	 * @param newID
+	 *     The new ID for the node.
+	 */
 	public void setNodeID(int newID) {
 		nodeID = newID;
 	}
