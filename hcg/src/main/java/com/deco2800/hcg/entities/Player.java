@@ -9,6 +9,8 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,6 +141,8 @@ public class Player extends Character implements Tickable {
 		playerInputManager.addTouchDraggedListener(id, this::handleTouchDragged);
 		playerInputManager.addTouchUpListener(id, this::handleTouchUp);
 		playerInputManager.addMouseMovedListener(id, this::handleMouseMoved);
+
+		this.myEffects = new Effects(this);
 
 		collided = false;
 		sprinting = false;
@@ -437,6 +441,9 @@ public class Player extends Character implements Tickable {
 		float oldPosX = this.getPosX();
 		float oldPosY = this.getPosY();
 
+		// Apply any active effects
+		myEffects.apply();
+
 		// Center the camera on the player
 		updateCamera();
 
@@ -519,7 +526,8 @@ public class Player extends Character implements Tickable {
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
-				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
+				//this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
+				myEffects.addEffect(new Effect("Damage", 10, Integer.parseInt((String) layer.getProperties().get("damage")), 1, 0, 1, 0));
 			}
 			// log
 			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
@@ -684,22 +692,22 @@ public class Player extends Character implements Tickable {
 		checkXp();
 	}
 
-	/**
-	 * Decrease the current health of the player by the given amount
-	 *
-	 * @param amount
-	 *            the amount of health to lose
-	 */
-	public void takeDamage(int amount) {
-		// if user is taking damage
-		if (amount > 0) {
-			this.healthCur = Math.max(this.healthCur - amount, 0);
-			return;
-		}
-		// otherwise user is being healed
-		this.healthCur = Math.min(this.healthCur - amount, this.healthMax);
-
-	}
+//	/**
+//	 * Decrease the current health of the player by the given amount
+//	 *
+//	 * @param amount
+//	 *            the amount of health to lose
+//	 */
+//	public void takeDamage(int amount) {
+//		// if user is taking damage
+//		if (amount > 0) {
+//			this.healthCur = Math.max(this.healthCur - amount, 0);
+//			return;
+//		}
+//		// otherwise user is being healed
+//		this.healthCur = Math.min(this.healthCur - amount, this.healthMax);
+//
+//	}
 
 	/**
 	 * Stamina determines how the player can use additional movement mechanics
@@ -707,7 +715,7 @@ public class Player extends Character implements Tickable {
 	 * recover over time.
 	 *
 	 */
-	protected void handleStamina() {
+	private void handleStamina() {
 		// conditionals to handle players sprint
 		if (sprinting && move == 1) {
 			/*
