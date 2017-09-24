@@ -31,6 +31,10 @@ public class Explosion extends AbstractEntity implements Tickable {
 		this.setTexture("explosion");
 		change = 0.3f;
 	}
+	
+	public float getRateOfChange() {
+	    return this.change;
+	}
 
 	@Override
 	public void onTick(long gameTickCount) {

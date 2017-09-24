@@ -3,10 +3,8 @@ package com.deco2800.hcg.entities;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
-import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TimeManager;
 import org.junit.Before;
@@ -43,7 +41,7 @@ public class MushroomTurretTest {
     }
 
     @Test
-    public void testTimer() {
+     public void testTimer() {
         StopwatchManager stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
         TimeManager timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         gameManager.getWorld().addEntity(enemy);

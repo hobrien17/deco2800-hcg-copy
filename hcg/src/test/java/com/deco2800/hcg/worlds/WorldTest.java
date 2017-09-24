@@ -31,12 +31,12 @@ public class WorldTest extends World{
     testWorld.addEntity(tower1);
     testWorld.addEntity(tower2);
    
-    assertTrue("Entity was not added.", testWorld.getEntities().contains(tower1) == true);
+    assertTrue("Entity was not added.", testWorld.getEntities().contains(tower1));
 
     testWorld.removeEntity(tower1);
     
-    assertTrue("Entity was not removed.", testWorld.getEntities().contains(tower1) == false);
-    assertTrue("Not deleted entity was removed.", testWorld.getEntities().contains(tower2) == true);
+    assertFalse("Entity was not removed.", testWorld.getEntities().contains(tower1));
+    assertTrue("Not deleted entity was removed.", testWorld.getEntities().contains(tower2));
 
     // attempt remove multiple times 
     testWorld.removeEntity(tower1);
@@ -191,7 +191,7 @@ public class WorldTest extends World{
     
     world.deSelectAll();
     
-    assertTrue("Tower was selected", tower.isSelected() == false);
+    assertFalse("Tower was selected", tower.isSelected());
   }
   
 }

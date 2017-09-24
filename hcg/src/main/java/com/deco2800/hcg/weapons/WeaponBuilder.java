@@ -206,6 +206,18 @@ public class WeaponBuilder {
             
             return new Stargun(posX, posY, posZ, xLength, yLength, zLength,
                     weaponType, user, radius, texture, cooldown, pellets);
+        } else if(weaponType == WeaponType.GRENADELAUNCHER) {
+            if(texture.equals("")) {
+                //TODO: Get proper texture
+                texture = "battle_seed";
+            }
+            
+            if(cooldown == -1) {
+                cooldown = 30;
+            }
+            
+            return new Grenadelauncher(posX, posY, posZ, xLength, yLength, zLength,
+                    weaponType, user, radius, texture, cooldown);
         }
         
         return null;

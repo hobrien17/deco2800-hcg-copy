@@ -142,7 +142,7 @@ public class Pathfinder {
                 }
             }
         } catch (Exception e) {
-
+            return null;
         }
 
         return adjacencies;

@@ -35,6 +35,8 @@ public class MushroomTurret extends Enemy implements Observer {
         range = 15 * this.level;
         manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
+        healthMax = 20;
+        healthCur = healthMax;
         // weapon not working
         this.enemyWeapon = new WeaponBuilder()
                 .setWeaponType(WeaponType.MACHINEGUN)
@@ -44,10 +46,25 @@ public class MushroomTurret extends Enemy implements Observer {
                 .build();
     }
 
-    public void remove_observer() {
+    @Override
+    public void setupLoot() {
+        lootRarity = new HashMap<>();
+
+        lootRarity.put("fire_seed", 1.0);
+
+        checkLootRarity();
+    }
+
+    /**
+     * Removes the observer from the stopwatch manager.
+     */
+    public void removeObserver() {
         manager.deleteObserver(this);
     }
 
+    /**
+     * Creates 8 bullets and shoots them in different directions.
+     */
     public void turretShoot() {
         Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 this.getPosX() + range, this.getPosY(), this.getPosZ(), this, 1);
@@ -75,6 +92,14 @@ public class MushroomTurret extends Enemy implements Observer {
         GameManager.get().getWorld().addEntity(bullet8);
     }
 
+    /**
+     * Updates the turret sprites and shoots bullets every 8 seconds.
+     *
+     * @param o
+     * 			the Observable object calling the update method (should be an instance of StopwatchManager)
+     * @param arg
+     * 			the argument passed by the Observable object (should be the stopwatch's current time)
+     */
     @Override
     public void update(Observable o, Object arg) {
         switch (seconds%6){
@@ -88,7 +113,7 @@ public class MushroomTurret extends Enemy implements Observer {
             case 3: // set turret phase 4
                 this.setTexture("tower");
                 break;
-            case 4:
+            case 4: // set turret phase 5
                 this.turretShoot();
                 break;
             default:
@@ -96,15 +121,6 @@ public class MushroomTurret extends Enemy implements Observer {
 
         }
         seconds++;
-    }
-
-    @Override
-    public void setupLoot() {
-        lootRarity = new HashMap<>();
-
-        lootRarity.put("fire_seed", 1.0);
-
-        checkLootRarity();
     }
 
 }

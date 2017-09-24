@@ -1,17 +1,10 @@
 package com.deco2800.hcg.entities.bullets;
 
-import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
-import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.WorldUtil;
-
 import java.util.Optional;
-
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.bullets.Bullet;
-import com.deco2800.hcg.entities.corpse_entities.Corpse;
 
 /**
  * Grass bullet class
@@ -44,6 +37,7 @@ public class GrassBullet extends Bullet {
 	public GrassBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_green");
+		this.bulletType = BulletType.GRASS;
 	}
 
 	@Override

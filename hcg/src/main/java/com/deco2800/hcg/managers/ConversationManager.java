@@ -25,7 +25,7 @@ public class ConversationManager extends Manager {
         try {
             loadConversation("test_conversation_01", "resources/conversations/test_conversation_01.json");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ResourceLoadException(e);
         }
     }
 
