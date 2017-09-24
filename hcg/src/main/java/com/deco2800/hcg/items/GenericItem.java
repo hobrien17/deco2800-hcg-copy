@@ -1,5 +1,7 @@
 package com.deco2800.hcg.items;
 
+import java.util.ArrayList;
+
 /**
  * A generic item forms the basis of the Item class.
  */
@@ -42,5 +44,10 @@ public abstract class GenericItem implements Item {
     @Override
     public ItemRarity getRarity() {
         return ItemRarity.COMMON;
+    }
+    
+    @Override
+    public ArrayList<String> getInformation() {
+        return null;
     }
 }
