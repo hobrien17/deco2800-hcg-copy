@@ -75,8 +75,10 @@ public class Grenade extends Bullet implements Tickable {
             explosion = new Explosion(goalX, goalY, this.getPosZ());
             GameManager.get().getWorld().addEntity(explosion);
             activated = true;
+            // Play explosion sound
+            playCollisionSound(this);
         }
-        
+
         if(activated) {
             if(GameManager.get().getWorld().containsEntity(explosion)
                     && explosion.getRateOfChange() >= 0) {
