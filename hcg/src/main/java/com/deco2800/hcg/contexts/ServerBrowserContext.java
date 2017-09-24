@@ -30,6 +30,7 @@ public class ServerBrowserContext extends UIContext {
     private ScrollPane serverListPane;
     private List<String> serverList;
     private String servers[];
+    private String refreshedServers[];
     private Dialog enterServer;
     private TextButton enterServerAdd;
     private TextButton enterServerExit;
@@ -62,11 +63,13 @@ public class ServerBrowserContext extends UIContext {
         refresh = new ImageButton(new Image(textureManager.getTexture("server_refresh_button")).getDrawable());
         addServer = new ImageButton(new Image(textureManager.getTexture("menu_add_button")).getDrawable());
         back = new ImageButton(new Image(textureManager.getTexture("lobby_back_button")).getDrawable());
+        
+        
         servers = new String[20];
-        for (int i = 0, k = 0; i < 20; i++) {
-            servers[k++] = "Server: " + i;
-
+        for (int i = 0; i < 20; i++) {
+            servers[i] = "Server: " + i;
         }
+        
         serverList = new List<String>(skin);
         serverList.setItems(servers);
         serverListPane = new ScrollPane(serverList);
@@ -74,7 +77,7 @@ public class ServerBrowserContext extends UIContext {
         serverListPane.setDebug(false);
         serverListTable = new Table();
         serverListTable.add(serverListPane).expand().fill();
-
+        
 
         enterServer = new Dialog("Enter Host IP", skin);
         serverIPTextfield = new TextField("", skin);
@@ -127,14 +130,21 @@ public class ServerBrowserContext extends UIContext {
         refresh.addListener(new ChangeListener() {
         	@Override
         	public void changed(ChangeEvent event, Actor actor) {
-        		for (int i = 0, k = 0; i < 20; i++) {
-                    servers[k++] = "Server: " + i;
+        		//function that searches for games hosted on lan
+        		//get the number of servers hosted on lan
+        		//set the number of elements in refreshServers to the number of servers
+        		//check if the number of servers hosted is > 0, else exception/error?
+        		//int numServers = function that finds servers;
+        		//refreshedServers = new String[numServers];
+                refreshedServers = new String[0];
+
+        		for (int i = 0; i < refreshedServers.length; i++) {
+        			refreshedServers[i] = "Server: " + i;
+                    System.out.println(refreshedServers[i]);
                 }
-                serverList.setItems(servers);
-                serverListTable = new Table();
+                serverList.setItems(refreshedServers);
+                serverListTable.clear();
                 serverListTable.add(serverListPane).expand().fill();
-        		
-        		
         	}
         });
         
