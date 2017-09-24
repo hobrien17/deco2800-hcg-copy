@@ -42,6 +42,7 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.MessageManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.ShaderManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.TimeManager;
@@ -58,207 +59,180 @@ public class PlayContext extends Context {
     
     private static Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
 
-	// Managers used by the game
-	private GameManager gameManager;
-	private WeatherManager weatherManager;
-	private ContextManager contextManager;
-	private MessageManager messageManager;
-	private TextureManager textureManager;
-	private TimeManager timeManager;
-	private PlayerManager playerManager;
+    // Managers used by the game
+    private GameManager gameManager;
+    private WeatherManager weatherManager;
+    private ContextManager contextManager;
+    private MessageManager messageManager;
+    private TextureManager textureManager;
+    private TimeManager timeManager;
+    private PlayerManager playerManager;
+    private ShaderManager shaderManager;
 
 
-	// FIXME mouseHandler is never assigned
-	private MouseHandler mouseHandler;
+    // FIXME mouseHandler is never assigned
+    private MouseHandler mouseHandler;
 
-	// Multiplexer to take input and distrubute it
-	InputMultiplexer inputMultiplexer;
+    // Multiplexer to take input and distrubute it
+    InputMultiplexer inputMultiplexer;
 
-	// Is the game paused?
-	private boolean unpaused = true;
+    // Is the game paused?
+    private boolean unpaused = true;
 
-	/**
-	 * Set the renderer. 3D is for Isometric worlds 2D is for Side Scrolling worlds
-	 * Check the documentation for each renderer to see how it handles WorldEntity
-	 * coordinates
-	 */
-	private Renderer renderer = new Render3D();
+    /**
+     * Set the renderer. 3D is for Isometric worlds 2D is for Side Scrolling worlds
+     * Check the documentation for each renderer to see how it handles WorldEntity
+     * coordinates
+     */
+    private Renderer renderer = new Render3D();
 
-	// Stage and actors for game UI
-	// TODO Game UI should probably be moved to a separate file
+    // Stage and actors for game UI
+    // TODO Game UI should probably be moved to a separate file
 
-	//HUDs
-	private PlayerStatusDisplay playerStatus;
-	private NetworkManager networkManager;
-	private ClockDisplay clockDisplay;
-	private ChatStack chatStack;
-	private RadialDisplay radialDisplay;
+    //HUDs
+    private PlayerStatusDisplay playerStatus;
+    private NetworkManager networkManager;
+    private ClockDisplay clockDisplay;
+    private ChatStack chatStack;
+    private RadialDisplay radialDisplay;
 
-	private Window window;
-	private Window plantWindow;
-	
-	// TODO make sure this doesn't stay here.
-	private ShaderProgram shader;
-	private ShaderProgram postShader;
-	private boolean useShaders = true;
-	
-	private Window exitWindow;
+    private Window window;
+    private Window plantWindow;
+    
+    // TODO make sure this doesn't stay here.
+    private ShaderProgram shader;
+    private ShaderProgram postShader;
+    private boolean useShaders = true;
+    
+    private Window exitWindow;
 
-	private Stage stage;
-	private Skin skin;
+    private Stage stage;
+    private Skin skin;
 
-	/**
-	 * Create the PlayContext
-	 */
-	public PlayContext() {
+    /**
+     * Create the PlayContext
+     */
+    public PlayContext() {
 
-		// Set up managers for this game
-		gameManager = GameManager.get();
-		weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
-		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+        // Set up managers for this game
+        gameManager = GameManager.get();
+        weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
+        contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
-		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
-		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
-		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
-		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
+        networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+        timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
+        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+        shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+        System.out.println("TESTING...");
+        /* Setup the camera and move it to the center of the world */
+        GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
+        GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
+                
+        // Setup GUI
+        stage = new Stage(new ScreenViewport());
+        skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
-		/* Setup the camera and move it to the center of the world */
-		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
-		GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
-				
-		// Setup GUI
-		stage = new Stage(new ScreenViewport());
-		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+        radialDisplay = new RadialDisplay(stage);
+        createExitWindow();
+        clockDisplay = new ClockDisplay();
+        playerStatus = new PlayerStatusDisplay();
+        plantWindow = new PlantWindow(skin);
+        chatStack = new ChatStack(stage);
 
-		radialDisplay = new RadialDisplay(stage);
-		createExitWindow();
-		clockDisplay = new ClockDisplay();
-		playerStatus = new PlayerStatusDisplay();
-		plantWindow = new PlantWindow(skin);
-		chatStack = new ChatStack(stage);
+        if (networkManager.isInitialised()) {
+            stage.addActor(chatStack);
+        }
+        stage.addActor(clockDisplay);
+        stage.addActor(playerStatus);
+        stage.addActor(plantWindow);
 
-		if (networkManager.isInitialised()) {
-			stage.addActor(chatStack);
-		}
-		stage.addActor(clockDisplay);
-		stage.addActor(playerStatus);
-		stage.addActor(plantWindow);
+        window = new Window("Menu", skin);
 
-		window = new Window("Menu", skin);
+        /* Add a quit button to the menu */
+        Button button = new TextButton("Quit", skin);
 
-		/* Add a quit button to the menu */
-		Button button = new TextButton("Quit", skin);
-
-		/* Add a programmatic listener to the quit button */
-		button.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				playerManager.removeCurrentPlayer();
-				contextManager.popContext();
-			}
-		});
+        /* Add a programmatic listener to the quit button */
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                playerManager.removeCurrentPlayer();
+                contextManager.popContext();
+            }
+        });
         
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
-		/* Add all buttons to the menu */
-		window.add(button);
-		window.pack();
-		window.setMovable(false); // So it doesn't fly around the screen
+        /* Add all buttons to the menu */
+        window.add(button);
+        window.pack();
+        window.setMovable(false); // So it doesn't fly around the screen
 
-		/* Add the window to the stage */
-		stage.addActor(window);
+        /* Add the window to the stage */
+        stage.addActor(window);
         
-		/*
-		 * Setup an Input Multiplexer so that input can be handled by both the UI and
-		 * the game
-		 */
-		inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(stage); // Add the UI as a processor
-		InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
-		inputMultiplexer.addProcessor(input);
+        /*
+         * Setup an Input Multiplexer so that input can be handled by both the UI and
+         * the game
+         */
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage); // Add the UI as a processor
+        InputManager input = (InputManager) GameManager.get().getManager(InputManager.class);
+        inputMultiplexer.addProcessor(input);
 
         input.addKeyDownListener(this::handleKeyDown);
 
-		/*
-		 * Set up some input handlers for panning with dragging.
-		 */
-		inputMultiplexer.addProcessor(new InputAdapter() {
+        /*
+         * Set up some input handlers for panning with dragging.
+         */
+        inputMultiplexer.addProcessor(new InputAdapter() {
 
-			int originX;
-			int originY;
+            int originX;
+            int originY;
 
-			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				originX = screenX;
-				originY = screenY;
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                originX = screenX;
+                originY = screenY;
 
-				Vector3 worldCoords = GameManager.get().getCamera().unproject(new Vector3(screenX, screenY, 0));
-				mouseHandler.handleMouseClick(worldCoords.x, worldCoords.y);
+                Vector3 worldCoords = GameManager.get().getCamera().unproject(new Vector3(screenX, screenY, 0));
+                mouseHandler.handleMouseClick(worldCoords.x, worldCoords.y);
 
-				return true;
-			}
+                return true;
+            }
 
-			@Override
-			public boolean touchDragged(int screenX, int screenY, int pointer) {
+            @Override
+            public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-				originX -= screenX;
-				originY -= screenY;
+                originX -= screenX;
+                originY -= screenY;
 
-				// invert the y axis
-				originY = -originY;
+                // invert the y axis
+                originY = -originY;
 
-				originX += GameManager.get().getCamera().position.x;
-				originY += GameManager.get().getCamera().position.y;
+                originX += GameManager.get().getCamera().position.x;
+                originY += GameManager.get().getCamera().position.y;
 
-				GameManager.get().getCamera().translate(originX - GameManager.get().getCamera().position.x,
-						originY - GameManager.get().getCamera().position.y);
+                GameManager.get().getCamera().translate(originX - GameManager.get().getCamera().position.x,
+                        originY - GameManager.get().getCamera().position.y);
 
-				originX = screenX;
-				originY = screenY;
+                originX = screenX;
+                originY = screenY;
 
-				return true;
-			}
-		});
-		
-		/* This won't stay here forever - loading and compiling shaders here is super inefficienct so we should
-		 * do that somewhere else but for testing purposes this is fine. */
-        FileHandle preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
-        FileHandle postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
-        FileHandle preFragShader = Gdx.files.internal("resources/shaders/fragment_pre.glsl");
-        FileHandle postFragShader = Gdx.files.internal("resources/shaders/fragment_post.glsl");
+                return true;
+            }
+        });
         
-        shader = new ShaderProgram(preVertexShader, preFragShader);
-        postShader = new ShaderProgram(postVertexShader, postFragShader);
-        
-        if(!shader.isCompiled()) {
-            LOGGER.error("Shader failed to compile.");
-            LOGGER.error(shader.getLog());
-            
-            // For the time being
-            System.out.println("Shader failed to compile.");
-            System.out.println(shader.getLog());
-            shader = null;
-        }
-        
-        if(!postShader.isCompiled()) {
-            LOGGER.error("Post shader failed to compile");
-            LOGGER.error(postShader.getLog());
-            
-            // For the time being
-            System.out.println("Post shader failed to compile");
-            System.out.println(postShader.getLog());
-            postShader = null;
-        }
-        
+        /** set initial time **/
         timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
-	}
-	
-	/**
-	 * Renderer thread Must update all displayed elements using a Renderer
-	 */
-	@Override
-	public void render(float delta) {
+    }
+    
+    /**
+     * Renderer thread Must update all displayed elements using a Renderer
+     */
+    @Override
+    public void render(float delta) {
         /*
          * All sorts of fun things happen in here. This will likely get its own method
          * eventually but for now: If any of the shaders fail to compile we default to
@@ -272,150 +246,93 @@ public class PlayContext extends Context {
          * initalise a new one with our post-processing shader attached to it and use it
          * to draw our FrameBuffer to the screen with nice shiny effects in tow.
          */
-	    GameManager.get().getCamera().update();
-	    
-	    if(shader == null || postShader == null || !useShaders) {
-	        // Default drawing behaviour. Default to this if any shaders fail to compile.
-	        SpriteBatch batch = new SpriteBatch();
-	        
-	        batch.setProjectionMatrix(GameManager.get().getCamera().combined);
-	        BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
-	        
-	        tileRenderer.setView(GameManager.get().getCamera());
-	        tileRenderer.render();
-	        
-	        renderer.render(batch);
-	        
-	        batch.dispose();
-	    } else {
-	        ShaderState state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
-            state.setTime(timeManager);
-            state.setBloom(true);
-            state.setHeat(true);
+        GameManager.get().getCamera().update();
+        
+        if(!shaderManager.shadersCompiled() || !useShaders) {
+            // Default drawing behaviour. Default to this if any shaders fail to compile.
+            SpriteBatch batch = new SpriteBatch();
             
-            int width = Gdx.graphics.getWidth();
-            int height = Gdx.graphics.getHeight();
+            batch.setProjectionMatrix(GameManager.get().getCamera().combined);
+            BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(batch);
             
-            // This is our render target. We draw onto this first and then draw this
-            // directly to the screen using a post processing shader
-            FrameBuffer renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
-            TextureRegion scene = new TextureRegion(renderTarget.getColorBufferTexture());
-            scene.flip(false, true);
-            
-            // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
-            shader.begin();
-            
-            shader.setUniformf("u_globalColor", state.getGlobalLightColour());
-            
-            SpriteBatch preBatch = new SpriteBatch(1000, shader);
-            preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
-            
-            BatchTiledMapRenderer tileRenderer = renderer.getTileRenderer(preBatch);
             tileRenderer.setView(GameManager.get().getCamera());
-            
-            // Draw onto render target ////////////////////////////////////
-            renderTarget.begin();
-            Gdx.gl.glClearColor(0, 0, 0, 0);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-            
             tileRenderer.render();
-            renderer.render(preBatch);
             
-            renderTarget.end();
-            // Finish drawing onto render target //////////////////////////
+            renderer.render(batch);
             
-            shader.end();
-            preBatch.dispose();
-            
-            // Begin post-processing ///////////////////////////////////////////////////////////////////////////////////
-            postShader.begin();
-            
-            postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
-            postShader.setUniformf("u_heat", state.getHeat());
-            postShader.setUniformf("u_bloom", state.getBloom());
-            
-            SpriteBatch postBatch = new SpriteBatch(1, postShader);
-            
-            // Draw onto screen ///////////////////////////////////////////
-            postBatch.begin();
-            
-            postBatch.draw(scene, 0, 0, width, height);
-            
-            postBatch.end();
-            // Finish drawing onto screen /////////////////////////////////
-            
-            postShader.end();
-            postBatch.dispose();
-            renderTarget.dispose();
-	    }
+            batch.dispose();
+        } else {
+            System.out.println("going into if statement...");
+            shaderManager.render(timeManager, renderer);
+        }
 
-		// Update and draw the stage
-		stage.act();
-		stage.draw();
-	}
-	
-	/**
-	 * Resizes the viewport
-	 *
-	 * @param width
-	 *            The new window width.
-	 * @param height
-	 *            The new window height.
-	 */
-	@Override
-	public void resize(int width, int height) {
-		GameManager.get().getCamera().viewportWidth = width;
-		GameManager.get().getCamera().viewportHeight = height;
-		GameManager.get().getCamera().update();
+        // Update and draw the stage
+        stage.act();
+        stage.draw();
+    }
+    
+    /**
+     * Resizes the viewport
+     *
+     * @param width
+     *            The new window width.
+     * @param height
+     *            The new window height.
+     */
+    @Override
+    public void resize(int width, int height) {
+        GameManager.get().getCamera().viewportWidth = width;
+        GameManager.get().getCamera().viewportHeight = height;
+        GameManager.get().getCamera().update();
 
-		stage.getViewport().update(width, height, true);
-		window.setPosition(0, stage.getHeight());
-		playerStatus.setPosition(30f, stage.getHeight()-200f);
-		clockDisplay.setPosition(stage.getWidth()-220f, 20f);
-		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
-		radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
-		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
-	}
+        stage.getViewport().update(width, height, true);
+        window.setPosition(0, stage.getHeight());
+        playerStatus.setPosition(30f, stage.getHeight()-200f);
+        clockDisplay.setPosition(stage.getWidth()-220f, 20f);
+        plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+        radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
+        exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+    }
 
-	/**
-	 * Disposes of assets etc when the rendering system is stopped.
-	 */
-	@Override
-	public void dispose() {
-		// Don't need this at the moment
-	}
+    /**
+     * Disposes of assets etc when the rendering system is stopped.
+     */
+    @Override
+    public void dispose() {
+        // Don't need this at the moment
+    }
 
-	@Override
-	public void show() {
-		// Capture user input
-		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
+    @Override
+    public void show() {
+        // Capture user input
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
 
-	@Override
-	public void hide() {
-		// Release user input
-		Gdx.input.setInputProcessor(null);
-	}
+    @Override
+    public void hide() {
+        // Release user input
+        Gdx.input.setInputProcessor(null);
+    }
 
-	@Override
-	public void pause() {
-		if (!networkManager.isInitialised()) {
-			unpaused = false;
-		}
-	}
+    @Override
+    public void pause() {
+        if (!networkManager.isInitialised()) {
+            unpaused = false;
+        }
+    }
 
-	@Override
-	public void resume() {
-		if (!networkManager.isInitialised()) {
-			unpaused = true;
-		}
-	}
+    @Override
+    public void resume() {
+        if (!networkManager.isInitialised()) {
+            unpaused = true;
+        }
+    }
 
-	@Override
-	public void onTick(long gameTickCount) {
-		playerStatus.updatePlayerStatus();
+    @Override
+    public void onTick(long gameTickCount) {
+        playerStatus.updatePlayerStatus();
 
-	}
+    }
 
     @Override
     public boolean ticksRunning() {
@@ -433,68 +350,68 @@ public class PlayContext extends Context {
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
             gameManager.getWorld().addEntity(entity);
         } else if(keycode == Input.Keys.B) {
-			if(RadialDisplay.plantableNearby()) {
-				radialDisplay.addRadialMenu(stage);
-			}
-		}
+            if(RadialDisplay.plantableNearby()) {
+                radialDisplay.addRadialMenu(stage);
+            }
+        }
     }
     
     private void createExitWindow() {
-    	exitWindow = new Window("Complete Level?", skin);
-    	Button yesButton = new TextButton("Yes", skin);
-    	yesButton.pad(5, 10, 5, 10);
-    	Button noButton = new TextButton("No", skin);
-    	noButton.pad(5, 10, 5, 10);
-    	
-    	/* Add a programmatic listener to the buttons */
-		yesButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if(gameManager.getCurrentNode().getNodeType() != 3) {
-					gameManager.getCurrentNode().changeNodeType(2);
-					gameManager.getMapContext().updateMapDisplay();
-					contextManager.popContext();
-				} else {
-					gameManager.getCurrentNode().changeNodeType(2);
-					gameManager.getMapContext().updateMapDisplay();
-					gameManager.getMapContext().addEndOfContext();
-					contextManager.popContext();
-				}
-				// clear old observers (mushroom turret for example)
+        exitWindow = new Window("Complete Level?", skin);
+        Button yesButton = new TextButton("Yes", skin);
+        yesButton.pad(5, 10, 5, 10);
+        Button noButton = new TextButton("No", skin);
+        noButton.pad(5, 10, 5, 10);
+        
+        /* Add a programmatic listener to the buttons */
+        yesButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(gameManager.getCurrentNode().getNodeType() != 3) {
+                    gameManager.getCurrentNode().changeNodeType(2);
+                    gameManager.getMapContext().updateMapDisplay();
+                    contextManager.popContext();
+                } else {
+                    gameManager.getCurrentNode().changeNodeType(2);
+                    gameManager.getMapContext().updateMapDisplay();
+                    gameManager.getMapContext().addEndOfContext();
+                    contextManager.popContext();
+                }
+                // clear old observers (mushroom turret for example)
                 StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
                 manager.deleteObservers();
-				
+                
                 // stop the old weather effects
                 ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
-			}
-		});
+            }
+        });
 
-		noButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				exitWindow.remove();
-			}
-		});
-    	
-    	exitWindow.add(yesButton);
-    	exitWindow.add(noButton);
-    	exitWindow.pack();
-		exitWindow.setMovable(false); // So it doesn't fly around the screen
-		exitWindow.setWidth(150);
+        noButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                exitWindow.remove();
+            }
+        });
+        
+        exitWindow.add(yesButton);
+        exitWindow.add(noButton);
+        exitWindow.pack();
+        exitWindow.setMovable(false); // So it doesn't fly around the screen
+        exitWindow.setWidth(150);
     }
     
     public void addExitWindow() {
-    	if(exitWindow.getStage() == null) {
-    		/* Add the window to the stage */
-    		stage.addActor(exitWindow);
-    	}
+        if(exitWindow.getStage() == null) {
+            /* Add the window to the stage */
+            stage.addActor(exitWindow);
+        }
     }
     
     public void removeExitWindow() {
-    	exitWindow.remove();
+        exitWindow.remove();
     }
     
     public void addParticleEffect(ParticleEffectActor actor) {
-    	stage.addActor(actor);
+        stage.addActor(actor);
     }
 }

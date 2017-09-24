@@ -46,7 +46,7 @@ public class ShaderManager extends Manager {
         this.postShader = new ShaderProgram(postVertexShader, postFragShader);
         
         LOGGER = LoggerFactory.getLogger(ShaderManager.class);
-
+        System.out.println("Instanciated");
         if(!preShader.isCompiled()) {
             LOGGER.error("Shader failed to compile.");
             LOGGER.error(preShader.getLog());
@@ -74,11 +74,13 @@ public class ShaderManager extends Manager {
         
 
     }
-
+    public boolean shadersCompiled() {
+        return !(this.preShader == null || this.postShader == null);
+    }
 
     public void render(TimeManager timeManager, Renderer renderer) {
         this.state.setTime(timeManager);
-        
+        System.out.println("Called render"); 
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
             
