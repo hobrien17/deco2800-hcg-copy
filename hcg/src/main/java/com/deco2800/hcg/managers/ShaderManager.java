@@ -1,22 +1,21 @@
 package com.deco2800.hcg.managers;
 
+import com.deco2800.hcg.renderers.RenderLightmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.deco2800.hcg.managers.TimeManager;
-import com.deco2800.hcg.renderers.RenderLightmap;
-import com.deco2800.hcg.renderers.Renderer;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.deco2800.hcg.shading.ShaderState;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
+import com.deco2800.hcg.renderers.Renderer;
+import com.deco2800.hcg.shading.ShaderState;
 
 public class ShaderManager extends Manager {
     private FileHandle preVertexShader;
@@ -33,13 +32,9 @@ public class ShaderManager extends Manager {
 
     private FrameBuffer renderTarget;
     private TextureRegion scene;
-    private FrameBuffer lightTarget;
-    private TextureRegion lightMap;
-    private SpriteBatch lightBatch;
     private SpriteBatch preBatch;
     private SpriteBatch postBatch;
     private BatchTiledMapRenderer tileRenderer;
-    private RenderLightmap lightRenderer;
     
     public ShaderManager() {
         this.preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
@@ -49,35 +44,34 @@ public class ShaderManager extends Manager {
 
         this.preShader = new ShaderProgram(preVertexShader, preFragShader);
         this.postShader = new ShaderProgram(postVertexShader, postFragShader);
-        
+
         LOGGER = LoggerFactory.getLogger(ShaderManager.class);
-        if(!preShader.isCompiled()) {
+        if (!preShader.isCompiled()) {
             LOGGER.error("Shader failed to compile.");
             LOGGER.error(preShader.getLog());
-            
+
             // For the time being
             System.out.println("Shader failed to compile.");
             System.out.println(preShader.getLog());
             preShader = null;
         }
-        
-        if(!this.postShader.isCompiled()) {
+
+        if (!this.postShader.isCompiled()) {
             LOGGER.error("Post preShader failed to compile");
             LOGGER.error(this.postShader.getLog());
-            
+
             // For the time being
             System.out.println("Post preShader failed to compile");
             System.out.println(this.postShader.getLog());
             this.postShader = null;
         }
-        
+
         this.state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
 
         this.state.setBloom(true);
+
         this.state.setHeat(false);
         this.state.setContrast(0.8F);
-        
-        this.lightRenderer = new RenderLightmap();
     }
     
     public boolean shadersCompiled() {
@@ -95,6 +89,8 @@ public class ShaderManager extends Manager {
         this.scene = new TextureRegion(renderTarget.getColorBufferTexture());
         this.scene.flip(false, true);
         
+        // We tried to do a lightmap but OpenGL is hard. We'll try this again in cp3.
+        /*
         // Begin lightmap //////////////////////////////////////////////////////////////////////////////////////////
         
         this.lightTarget = new FrameBuffer(Format.RGB565, width, height, false);
@@ -113,6 +109,10 @@ public class ShaderManager extends Manager {
         
         this.lightTarget.end();
         this.lightBatch.dispose();
+        
+        this.lightTarget.dispose();
+        
+        */
         
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
@@ -160,7 +160,6 @@ public class ShaderManager extends Manager {
         this.postShader.end();
         this.postBatch.dispose();
         this.renderTarget.dispose();
-        this.lightTarget.dispose();
     }
 
     public void setOvercast(float overcast) {
