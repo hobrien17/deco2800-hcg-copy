@@ -123,6 +123,21 @@ public class ServerBrowserContext extends UIContext {
                 contextManager.pushContext(new LobbyContext());
             }
         });
+        
+        refresh.addListener(new ChangeListener() {
+        	@Override
+        	public void changed(ChangeEvent event, Actor actor) {
+        		for (int i = 0, k = 0; i < 20; i++) {
+                    servers[k++] = "Server: " + i;
+                }
+                serverList.setItems(servers);
+                serverListTable = new Table();
+                serverListTable.add(serverListPane).expand().fill();
+        		
+        		
+        	}
+        });
+        
 
         addServer.addListener(new ChangeListener() {
             @Override
