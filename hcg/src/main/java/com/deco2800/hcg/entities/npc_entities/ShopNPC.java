@@ -28,8 +28,10 @@ public class ShopNPC extends NPC {
 		switch(sName) {
 			case "George":
 				shop = new GeneralShop();
+				break;
 			case "Plants":
 				shop = new GardenShop();
+				break;
 		}
 	}
 
