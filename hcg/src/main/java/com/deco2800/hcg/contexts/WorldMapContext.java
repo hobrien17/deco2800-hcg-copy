@@ -201,6 +201,13 @@ public class WorldMapContext extends UIContext {
 				 * due to the same world being loaded multiple times. This seems
 				 * to fix that problem.
 				 */
+
+				gameManager.setOccupiedNode(nodeEntity.getNode());
+
+				// delete stopwatches
+                ((StopwatchManager) GameManager.get().getManager(StopwatchManager.class)).deleteObservers();
+                
+
                 // create new world
 				World newWorld = new World(nodeEntity.getNode()
                     .getNodeLinkedLevel().getWorld().getLoadedFile());

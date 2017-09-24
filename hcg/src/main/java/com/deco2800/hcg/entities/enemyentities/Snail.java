@@ -44,6 +44,18 @@ public class Snail extends Enemy implements Tickable {
 
     }
 
+    @Override
+    public void setupLoot() {
+        lootRarity = new HashMap<>();
+
+        lootRarity.put("grass_seed", 1.0);
+
+        checkLootRarity();
+    }
+
+    /**
+     * Sets the tile at the Snail's previous position to be a poison tile.
+     */
     public void setPoisonTrail() {
         // get texture manager
         TextureManager textureManager = (TextureManager) GameManager.get().getManager(TextureManager.class);
@@ -53,6 +65,11 @@ public class Snail extends Enemy implements Tickable {
                 textureManager.getTexture("poisontile"),
                 (TiledMapTileLayer) GameManager.get().getWorld().getMapLayerWithProperty("name", "newSludge"));
     }
+
+    /**
+     * On Tick handler
+     * @param gameTickCount Current game tick
+     */
     @Override
     public void onTick(long gameTickCount) {
         // status should always be 1
@@ -63,14 +80,5 @@ public class Snail extends Enemy implements Tickable {
         // Apply any effects that exist on the entity
         myEffects.apply();
         
-    }
-
-    @Override
-    public void setupLoot() {
-        lootRarity = new HashMap<>();
-
-        lootRarity.put("grass_seed", 1.0);
-
-        checkLootRarity();
     }
 }

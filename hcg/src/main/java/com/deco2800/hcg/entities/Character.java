@@ -4,6 +4,11 @@ import java.util.*;
 
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
+import com.deco2800.hcg.entities.Harmable;
+import com.deco2800.hcg.entities.Tickable;
+
 
 /**
  * The Character abstract class is to be extended by all Characters, both
@@ -33,11 +38,11 @@ import com.deco2800.hcg.managers.GameManager;
  *
  * @author avryn, trent_s
  */
-public abstract class Character extends AbstractEntity {
+public abstract class Character extends AbstractEntity implements Harmable, Tickable {
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
 	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList( "level", "xp", "carryWeight",
-            "strength", "vitality", "agility", "charisma", "intellect");
+            "strength", "vitality", "agility", "charisma", "intellect", "meleeSkill", "gunsSkill", "energyWeaponsSkill");
 
 	protected String Name;
 
@@ -59,9 +64,12 @@ public abstract class Character extends AbstractEntity {
     //Attributes map
     protected Map<String,Integer> attributes;
 
+    // Effects container
+    protected Effects myEffects;
+
     // Skills
     // TODO: Message weapons team to find out what categories of weapons they will implement
-    protected int meleeSkill;
+
 
     //Kill Log with worlds
     //Main level is a mapping between the world ID to Enemies and their amount of kills
@@ -100,10 +108,11 @@ public abstract class Character extends AbstractEntity {
         this.xp = 1;
         this.healthMax = 20;
         this.healthCur = healthMax;
-        this.meleeSkill = 1;
 
         //Initialize the empty kill log
         killLog = new HashMap<>();
+
+        myEffects = new Effects(this);
         
         this.direction = 0;
     }
@@ -118,19 +127,21 @@ public abstract class Character extends AbstractEntity {
      */
     protected void setAttributes(int strength, int vitality, int agility,
             int charisma, int intellect) {
-     this.attributes.put("strength", strength);
-     this.attributes.put("vitality", vitality);
-     this.attributes.put("agility", agility);
-     this.attributes.put("charisma", charisma);
-     this.attributes.put("intellect", intellect);
+         this.attributes.put("strength", strength);
+         this.attributes.put("vitality", vitality);
+         this.attributes.put("agility", agility);
+         this.attributes.put("charisma", charisma);
+         this.attributes.put("intellect", intellect);
     }
 
     /**
      * Sets the character's skills
      * @param meleeSkill
      */
-    protected void setSkills(int meleeSkill) {
-
+    protected void setSkills(int meleeSkill, int gunsSkill, int energyWeaponsSkill) {
+        this.attributes.put("meleeSkill", meleeSkill);
+        this.attributes.put("gunsSkill", gunsSkill);
+        this.attributes.put("energyWeaponsSkill", energyWeaponsSkill);
     }
 
     /**
@@ -194,6 +205,71 @@ public abstract class Character extends AbstractEntity {
             this.healthMax = health;
         }
     }
+
+    /**
+     * Take the damage inflicted by the other entities
+     *
+     * @param damage: the amount of the damage
+     */
+    public void takeDamage(int damage) {
+        if (damage < 0){
+            heal(Math.abs(damage));
+        }
+        else if (damage > healthCur){
+            healthCur = 0;
+        }
+        else {
+            healthCur -= damage;
+        }
+    }
+
+    /**
+     * Heal the player by a specified amount.
+     *
+     * @param amount: the amount to heal the player
+     * @exception: throw IllegalArgumentException if amount is negative
+     */
+    public void heal(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Heal amount must be positive.");
+        }
+        if (healthCur + amount > healthMax) {
+            healthCur = healthMax;
+        } else {
+            healthCur += amount;
+        }
+    }
+
+    /**
+     * Changes the speed by modifier amount
+     *
+     * @param modifier
+     * 			the amount to change the speed (<1 to slow,  >1 to speed)
+     */
+    public void changeSpeed(float modifier) {
+        if (!(modifier >= 0)) {
+            throw new IllegalArgumentException("Invalid speed modifier being applied.");
+        }
+        setSpeed(movementSpeed * modifier);
+    }
+
+    /**
+     * Sets the enemy's speed to its original value
+     *
+     */
+    public void resetSpeed() {
+        this.movementSpeed = movementSpeedNorm;
+    }
+
+    /**
+     * Sets the movement speed of the enemy
+     *
+     * @param speed
+     * 			the new movement speed
+     */
+    public void setSpeed(float speed) {
+        this.movementSpeed = speed;
+    }
     
     /**
     * Sets the character's current health to the passed value. Defaults to
@@ -210,6 +286,16 @@ public abstract class Character extends AbstractEntity {
         } else {
             this.healthCur = health;
         }
+    }
+
+    /**
+     * Change the health level of the character i.e can increase or decrease the
+     * health level (depending on whether the amount is positive or negative).
+     *
+     * @param amount: the amount that the health level will change by
+     */
+    public void changeHealth(int amount) {
+        healthCur = Math.max(healthCur + amount, 0);
     }
    
     /**
@@ -247,18 +333,12 @@ public abstract class Character extends AbstractEntity {
      *
      * @param attribute is in CHARACTER_ATTRIBUTES
      */
-    protected void setAttribute(String attribute,int value){
+    public void setAttribute(String attribute,int value){
         if (CHARACTER_ATTRIBUTES.contains(attribute)) {
             this.attributes.put(attribute, value);
         }
     }
-    /**
-     *
-     * @param meleeSkill
-     */
-    protected void setMeleeSkill(int meleeSkill) {
-        this.meleeSkill = meleeSkill;
-    }
+
     
     /**
      * Fetches the item this character currently has equipped, or null if this
@@ -361,12 +441,8 @@ public abstract class Character extends AbstractEntity {
         return -1;
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getMeleeSkill() {
-        return meleeSkill;
+    public int getStrength() {
+        return attributes.get("strength");
     }
 
     /**
@@ -492,5 +568,25 @@ public abstract class Character extends AbstractEntity {
      */
     private int getCurrentNodeID() {
         return GameManager.get().getCurrentNode().getNodeID();
+    }
+
+    @Override
+    public void giveEffect(Effect effect) {
+        myEffects.addEffect(effect);
+    }
+
+    @Override
+    public void giveEffect(Collection<Effect> effects) {
+        myEffects.addAllEffects(effects);
+    }
+
+    /**
+     * On tick is called periodically (time dependant on the world settings)
+     *
+     * @param gameTickCount Current game tick
+     */
+    @Override
+    public void onTick(long gameTickCount) {
+        myEffects.apply();
     }
 }
