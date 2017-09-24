@@ -66,13 +66,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
         		new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
         errorImageVisible = false;
         draw();
-        
-
-
     }
 
     public void draw() {
-
 
         //stop in-game time while in shop
         timeManager.pauseTime();
@@ -127,7 +123,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 (stage.getHeight()/2 - errorImage.getHeight()));
         errorImage.toFront();
         errorImage.setVisible(errorImageVisible);
-
 
         //add table to stage
         stage.addActor(centreTable);
@@ -203,5 +198,4 @@ public class ShopMenuContext extends InventoryDisplayContext {
             }
         });
     }
-
 }
