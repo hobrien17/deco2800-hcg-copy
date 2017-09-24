@@ -1,6 +1,5 @@
 package com.deco2800.hcg.worlds;
 
-import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;

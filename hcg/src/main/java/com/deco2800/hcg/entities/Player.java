@@ -1,16 +1,15 @@
 package com.deco2800.hcg.entities;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,14 +29,12 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
-import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
@@ -65,10 +62,19 @@ public class Player extends Character implements Tickable {
 	private boolean collided;
 	private boolean onExit = false;
 	private boolean exitMessageDisplayed = false;
+	private boolean sprinting;
+	private boolean levelUp = false;
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
-	private boolean sprinting;
+
+	// List containing skills that can be specialised in
+	private List<String> SPECIALISED_SKILLS = Arrays.asList( "meleeSkill", "gunsSkill", "energyWeaponsSkill");
+
+	//Specialised skills map
+	private Map<String, Boolean> specialisedSkills;
+
+
 	
     // Records the current frame number for player's move animation 
     private int spriteFrame; 
@@ -102,6 +108,11 @@ public class Player extends Character implements Tickable {
 	public Player(int id, float posX, float posY, float posZ) {
 		super(posX, posY, posZ, 0.5f, 0.5f, 0.5f, true);
 
+		//Set up specialised skills map
+		this.specialisedSkills = new HashMap<String, Boolean>();
+		for (String attribute: SPECIALISED_SKILLS) {
+			specialisedSkills.put(attribute, false);
+		}
 		// Get necessary managers
 		gameManager = GameManager.get();
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
@@ -127,6 +138,8 @@ public class Player extends Character implements Tickable {
 		playerInputManager.addTouchDraggedListener(id, this::handleTouchDragged);
 		playerInputManager.addTouchUpListener(id, this::handleTouchUp);
 		playerInputManager.addMouseMovedListener(id, this::handleMouseMoved);
+
+		this.myEffects = new Effects(this);
 
 		collided = false;
 		sprinting = false;
@@ -428,6 +441,9 @@ public class Player extends Character implements Tickable {
 		float oldPosX = this.getPosX();
 		float oldPosY = this.getPosY();
 
+		// Apply any active effects
+		myEffects.apply();
+
 		// Center the camera on the player
 		updateCamera();
 
@@ -510,7 +526,8 @@ public class Player extends Character implements Tickable {
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
-				this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
+				//this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
+				myEffects.addEffect(new Effect("Damage", 10, Integer.parseInt((String) layer.getProperties().get("damage")), 1, 0, 1, 0));
 			}
 			// log
 			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);
@@ -535,6 +552,7 @@ public class Player extends Character implements Tickable {
 			this.setPosition(newPos.getX(), newPos.getY(), 1);
 		}
 
+		checkXp();
 		this.checkDeath();
 	}
 
@@ -617,6 +635,10 @@ public class Player extends Character implements Tickable {
 		skillPoints = 4 + 2 * intellect;
 	}
 
+	public void setSpecialisedSkills(Map specialisedSkills) {
+		this.specialisedSkills = specialisedSkills;
+	}
+
 	/**
 	 * Checks if the player is dead and ends the game if true.
 	 */
@@ -633,7 +655,8 @@ public class Player extends Character implements Tickable {
 	 */
 	private void checkXp() {
 		if (xp >= xpThreshold) {
-			levelUp();
+			//TODO: You have levelled up pop up
+			levelUp = true;
 		}
 	}
 
@@ -642,7 +665,7 @@ public class Player extends Character implements Tickable {
 	 * health and stamina based on player agility and vitality
 	 */
 	private void levelUp() {
-		xpThreshold *= 1.3;
+		xpThreshold *= 1.5;
 		level++;
 
 		// Increase health by vitality points
@@ -655,9 +678,10 @@ public class Player extends Character implements Tickable {
 		staminaMax += agility;
 		staminaCur += agility;
 
-		skillPoints = 4 + attributes.get("intellect");
+		skillPoints = 4 + attributes.get("intellect") * 2;
 		// TODO: enter level up screen
 	}
+
 
 	/**
 	 * Increases the xp of the player by the given amount
@@ -670,22 +694,22 @@ public class Player extends Character implements Tickable {
 		checkXp();
 	}
 
-	/**
-	 * Decrease the current health of the player by the given amount
-	 *
-	 * @param amount
-	 *            the amount of health to lose
-	 */
-	public void takeDamage(int amount) {
-		// if user is taking damage
-		if (amount > 0) {
-			this.healthCur = Math.max(this.healthCur - amount, 0);
-			return;
-		}
-		// otherwise user is being healed
-		this.healthCur = Math.min(this.healthCur - amount, this.healthMax);
-
-	}
+//	/**
+//	 * Decrease the current health of the player by the given amount
+//	 *
+//	 * @param amount
+//	 *            the amount of health to lose
+//	 */
+//	public void takeDamage(int amount) {
+//		// if user is taking damage
+//		if (amount > 0) {
+//			this.healthCur = Math.max(this.healthCur - amount, 0);
+//			return;
+//		}
+//		// otherwise user is being healed
+//		this.healthCur = Math.min(this.healthCur - amount, this.healthMax);
+//
+//	}
 
 	/**
 	 * Stamina determines how the player can use additional movement mechanics
@@ -693,7 +717,7 @@ public class Player extends Character implements Tickable {
 	 * recover over time.
 	 *
 	 */
-	protected void handleStamina() {
+	private void handleStamina() {
 		// conditionals to handle players sprint
 		if (sprinting && move == 1) {
 			/*
@@ -734,7 +758,13 @@ public class Player extends Character implements Tickable {
 			this.contextManager.pushContext(new PerksSelectionScreen());
 			break;
 		case Input.Keys.C:
-			this.contextManager.pushContext(new CharacterStatsContext());
+			if (levelUp) {
+				levelUp = false;
+				levelUp();
+				this.contextManager.pushContext(new LevelUpContext());
+			} else {
+				this.contextManager.pushContext(new CharacterStatsContext());
+			}
 			break;
 		case Input.Keys.SHIFT_LEFT:
 			if (staminaCur > 0) {
@@ -1028,5 +1058,13 @@ public class Player extends Character implements Tickable {
 
 	public int getXpThreshold() {
 		return xpThreshold;
+	}
+
+	public Map<String, Boolean> getSpecialisedSkills() {
+		return specialisedSkills;
+	}
+
+	public List<String> getSpecialisedSkillsList() {
+		return SPECIALISED_SKILLS;
 	}
 }

@@ -13,7 +13,9 @@ public class LevelStore {
 		 * https://github.com/UQdeco2800/deco2800-2017-hardcor3gard3ning/wiki/Creating-Maps
 		 */
 		levelList = new ArrayList<>();
-		
+        // Test levels for now. Eventually this will contain all the playable game levels
+		levelList.add(new Level(new World("resources/maps/maps/safezone_2.tmx"), 0, 1, 0));
+
 		// Safe node level (there should only be one!)
 		// Add safe node level here
 		
@@ -23,6 +25,8 @@ public class LevelStore {
         levelList.add(new Level(new World("resources/maps/maps/level1.tmx"), 0, 1, 1));
         levelList.add(new Level(new World("resources/maps/maps/initial-map-test.tmx"), 0, 1, 1));
         levelList.add(new Level(new World("resources/maps/maps/snow.tmx"), 0, 1, 1));
+        levelList.add(new Level(new World("resources/maps/maps/simons-level1.tmx"), 0, 4, 1));
+        levelList.add(new Level(new World("resources/maps/maps/simons-level2.tmx"), 0, 4, 1));
 		levelList.add(new Level(new World("resources/maps/maps/mushroom_map_1.tmx"), 3, 1, 1));
         //levelList.add(new Level(new World("resources/maps/maps/level2.tmx"), 0, 1, 1));
 	}
@@ -30,4 +34,5 @@ public class LevelStore {
 	public ArrayList<Level> getLevels() {
 		return new ArrayList<>(levelList);
 	}
+
 }
