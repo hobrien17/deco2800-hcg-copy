@@ -1,8 +1,6 @@
 package com.deco2800.hcg.worldmapui;
 
 import com.deco2800.hcg.entities.worldmap.WorldMap;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 
@@ -36,8 +34,6 @@ public class MapGenerator {
 	private List<Level> levelsNonBoss;
 	private Level safeLevel;
 	
-	private NetworkManager networkManager;
-	
 	private int seedValue;
 	private Random mainGenerator;
 	
@@ -58,8 +54,9 @@ public class MapGenerator {
 		levelsBoss = new ArrayList<>();
 		levelsNonBoss = new ArrayList<>();
 		
-		networkManager = (NetworkManager) GameManager.get().getManager(NetworkManager.class);
-		mainGenerator = new Random(networkManager.getNextRandomInt(999));
+		Random seedGenerator = new Random();
+		seedValue = Math.abs(seedGenerator.nextInt(999));
+		mainGenerator = new Random(seedValue);
 		//used in case there is no safe level present (REMOVE ONCE SAFE LEVEL IS ADDED)
 		safeLevel = levelsMaster.get(0);
 	}
