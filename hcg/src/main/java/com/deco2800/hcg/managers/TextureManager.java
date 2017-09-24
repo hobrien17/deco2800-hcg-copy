@@ -112,6 +112,10 @@ public class TextureManager extends Manager {
 		textureMap.put("tree_snowy", new Texture("resources/terrain_objects/tree_snow_01.png"));
 		textureMap.put("tree_flaming", new Texture("resources/terrain_objects/tree_flame_01.png"));
 
+		// mushrooms
+		textureMap.put("mushroom_tree_thick", new Texture("resources/terrain_objects/mushroom_1.png"));
+		textureMap.put("mushroom_tree_thin", new Texture("resources/terrain_objects/mushroom_2.png"));
+
 		//NPCs
 		textureMap.put("character_1", new Texture("resources/sprites/npc/basic_character.png"));
 		textureMap.put("character_shop", new Texture("resources/sprites/npc/shop_keeper.png"));
