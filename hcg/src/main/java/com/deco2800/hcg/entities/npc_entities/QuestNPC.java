@@ -2,10 +2,7 @@ package com.deco2800.hcg.entities.npc_entities;
 
 import java.util.List;
 import java.util.Random;
-<<<<<<< HEAD
 
-=======
->>>>>>> e71ede5efdf1503d64e251ba0d6a56edc6c0431b
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -15,10 +12,6 @@ import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
-<<<<<<< HEAD
-
-=======
->>>>>>> e71ede5efdf1503d64e251ba0d6a56edc6c0431b
 
 /**
  * Concrete class of a Quest NPC entity
