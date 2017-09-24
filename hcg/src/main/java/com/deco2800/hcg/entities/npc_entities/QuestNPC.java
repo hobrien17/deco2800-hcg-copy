@@ -18,7 +18,7 @@ import org.lwjgl.Sys;
 
 /**
  * Concrete class of a Quest NPC entity
- * 
+ *
  * @author Blake Bodycote & Ryan Lonergan
  *
  */
@@ -43,7 +43,7 @@ public class QuestNPC extends NPC {
 
 	/**
 	 * Constructs a new Quest NPC
-	 * 
+	 *
 	 * @param posX
 	 *            X Position of the NPC
 	 * @param posY
@@ -56,7 +56,7 @@ public class QuestNPC extends NPC {
 	 *            texture of NPC
 	 */
 	public QuestNPC(float posX, float posY, String fName, String sName,
-			String texture, String conversation, String faceImage) {
+					String texture, String conversation, String faceImage) {
 		super(posX, posY, fName, sName, texture, conversation, faceImage);
 
 		this.startX = posX;
@@ -69,9 +69,9 @@ public class QuestNPC extends NPC {
 
 		this.setGoal(posX, posY);
 	}
-	
+
 	public void interact(){
-			conversationManager.startConversation(this.getConversation(),this.getFaceImage());
+		conversationManager.startConversation(this.getConversation(),this.getFaceImage());
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class QuestNPC extends NPC {
 
 	/**
 	 * Sets the boundary of the NPC
-	 * 
+	 *
 	 * @param x
 	 *            maximum distance from
 	 * @param y
@@ -95,7 +95,7 @@ public class QuestNPC extends NPC {
 
 	/**
 	 * Sets the speed for the NPC
-	 * 
+	 *
 	 * @param speed
 	 */
 	public void setMovementSpeed(int speed) {
@@ -130,7 +130,7 @@ public class QuestNPC extends NPC {
 
 	/**
 	 * Checks if a NPC has collided with something
-	 * 
+	 *
 	 * @return true if NPC overlaps with another entity
 	 */
 	private boolean collided() {
@@ -167,7 +167,7 @@ public class QuestNPC extends NPC {
 
 	/**
 	 * Gets the current position of the NPC
-	 * 
+	 *
 	 * @return the NPC position in the Box3D form
 	 */
 	public Box3D getPosition() {
