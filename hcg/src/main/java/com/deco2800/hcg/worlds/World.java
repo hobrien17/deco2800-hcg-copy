@@ -100,9 +100,9 @@ public class World {
 		this.setLength(
 				this.getMap().getProperties().get("height", Integer.class));
 
-		System.err.println(String.format("Width: %d, Length: %d", this.getWidth(), this.getLength()));
 
 		//Create Collision Map
+		//Added Extra Y-length to allow for inconsistencies between the CollisionMap and Tiled.
 		this.collisionMap = new Array2D<> (this.getWidth(), this.getLength()*2);
 		for (int x = 0; x < this.getWidth(); x++) {
 			for (int y = 0; y < this.getLength()*2; y++) {
@@ -397,8 +397,6 @@ public class World {
 
 		//Add to the collision map
 		int[] collisionCoords = makeCollisionCoords(entity);
-
-		System.err.println(String.format("x: %d, y: %d", collisionCoords[0], collisionCoords[1]));
 
 		for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
 			for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
