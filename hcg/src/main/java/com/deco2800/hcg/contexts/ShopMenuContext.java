@@ -154,7 +154,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 errorImageVisible = false;
-                if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
+                if ((selectedItem != null) && !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
                     int number = Integer.parseInt(amount.getText().trim());
                     for (int i = 0; i < number; i++) {
                         if (shopKeeper.getShop().buyStock(selectedItem) != 0) {
@@ -172,7 +172,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
             public void clicked(InputEvent event, float x, float y) {
                 errorImageVisible = false;
                 int number = Integer.parseInt(amount.getText().trim());
-                if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER)) && !(shopKeeper.getShop().getStock().contains(selectedItem))) {
+                if ((selectedItem != null) && !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER)) && !(shopKeeper.getShop().getStock().contains(selectedItem))) {
                     for(int i = 0; i < number; i++){
                         if (shopKeeper.getShop().sellStock(selectedItem) != 0) {
                             errorImageVisible = true;
