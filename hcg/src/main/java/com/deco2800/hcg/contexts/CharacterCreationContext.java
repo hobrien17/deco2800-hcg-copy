@@ -572,7 +572,7 @@ public class CharacterCreationContext extends CharacterContext{
                         gunsSkill += 10;
                         gunsSkillSpecialise.setChecked(true);
                         gunsSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("gunsSkill", false);
+                        specialisedSkills.replace("gunsSkill", true);
                     } else {
                         gunsSkillSpecialise.setChecked(false);
                         gunsSkillSpecialiseChecked = false;

@@ -665,7 +665,7 @@ public class Player extends Character implements Tickable {
 	 * health and stamina based on player agility and vitality
 	 */
 	private void levelUp() {
-		xpThreshold *= 1.3;
+		xpThreshold *= 1.5;
 		level++;
 
 		// Increase health by vitality points
@@ -678,7 +678,7 @@ public class Player extends Character implements Tickable {
 		staminaMax += agility;
 		staminaCur += agility;
 
-		skillPoints = 4 + attributes.get("intellect");
+		skillPoints = 4 + attributes.get("intellect") * 2;
 		// TODO: enter level up screen
 	}
 
@@ -759,6 +759,7 @@ public class Player extends Character implements Tickable {
 			break;
 		case Input.Keys.C:
 			if (levelUp) {
+				levelUp = false;
 				levelUp();
 				this.contextManager.pushContext(new LevelUpContext());
 			} else {
