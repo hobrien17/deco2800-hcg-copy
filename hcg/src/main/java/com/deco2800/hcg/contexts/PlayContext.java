@@ -24,6 +24,7 @@ import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.deco2800.hcg.entities.garden_entities.plants.Planter;
+import com.deco2800.hcg.items.*;
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be
@@ -33,12 +34,11 @@ public class PlayContext extends Context {
 
 	// Managers used by the game
 	private GameManager gameManager;
-	private PlantManager plantManager;
 	private WeatherManager weatherManager;
 	private ContextManager contextManager;
 	private MessageManager messageManager;
 	private TextureManager textureManager;
-	private Planter planter;
+
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -66,32 +66,12 @@ public class PlayContext extends Context {
 	private PlantWindow plantWindow;
 	private ChatStack chatStack;
 
-	private ImageButton normalButton;
-	private ImageButton explosiveButton;
-	private ImageButton fireButton;
-	private ImageButton grassButton;
-	private ImageButton iceButton;
-	private ImageButton waterButton;
-	private ImageButton xButton;
-	private ImageButton fertiliserButton;
-	private ImageButton sprayButton;
-	private ImageButton normalButtonHover;
-	private ImageButton explosiveButtonHover;
-	private ImageButton fireButtonHover;
-	private ImageButton grassButtonHover;
-	private ImageButton iceButtonHover;
-	private ImageButton waterButtonHover;
-	private ImageButton xButtonHover;
-	private ImageButton fertiliserButtonHover;
-	private ImageButton sprayButtonHover;
-	private Image radialOutline;
+	private Window window;
+	private Window exitWindow;
+	private RadialDisplay radialDisplay;
 
 	private Stage stage;
 	private Skin skin;
-	private Window window;
-	private Window exitWindow;
-	private Group radialDisplay;
-
 
 	/**
 	 * Create the PlayContext
@@ -100,13 +80,11 @@ public class PlayContext extends Context {
 
 		// Set up managers for this game
 		gameManager = GameManager.get();
-		plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
 		weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
-		planter = new Planter();
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -116,7 +94,7 @@ public class PlayContext extends Context {
 		stage = new Stage(new ScreenViewport());
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
-		createRadialDisplay();
+		radialDisplay = new RadialDisplay(stage);
 		createExitWindow();
 		clockDisplay = new ClockDisplay();
 		playerStatus = new PlayerStatusDisplay();
@@ -262,7 +240,7 @@ public class PlayContext extends Context {
 		playerStatus.setPosition(30f, stage.getHeight()-200f);
 		clockDisplay.setPosition(stage.getWidth()-220f, 20f);
 		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
-		radialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+		radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
 		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
 	}
 
@@ -317,7 +295,7 @@ public class PlayContext extends Context {
             contextManager.pushContext(new WorldMapContext());
         }
 		else if (keycode == Input.Keys.B) {
-			addRadialMenu();
+			radialDisplay.addRadialMenu(stage);
 		}
     }
     
@@ -374,135 +352,4 @@ public class PlayContext extends Context {
     public void addParticleEffect(ParticleEffectActor actor) {
     	stage.addActor(actor);
     }
-
-	private void createRadialDisplay() {
-
-
-		radialOutline = new Image(textureManager.getTexture("radialOutline"));
-
-		radialDisplay = new Group();
-
-		normalButton = new ImageButton(new Image(textureManager.getTexture("normalButton")).getDrawable());
-		explosiveButton = new ImageButton(new Image(textureManager.getTexture("explosiveButton")).getDrawable());
-		fireButton = new ImageButton(new Image(textureManager.getTexture("fireButton")).getDrawable());
-		grassButton = new ImageButton(new Image(textureManager.getTexture("grassButton")).getDrawable());
-		iceButton = new ImageButton(new Image(textureManager.getTexture("iceButton")).getDrawable());
-		waterButton = new ImageButton(new Image(textureManager.getTexture("waterButton")).getDrawable());
-		xButton = new ImageButton(new Image(textureManager.getTexture("xButton")).getDrawable());
-		fertiliserButton = new ImageButton(new Image(textureManager.getTexture("fertiliserButton")).getDrawable());
-		sprayButton = new ImageButton(new Image(textureManager.getTexture("sprayButton")).getDrawable());
-
-		normalButtonHover = new ImageButton(new Image(textureManager.getTexture("normalButtonHover")).getDrawable());
-		explosiveButtonHover = new ImageButton(new Image(textureManager.getTexture("explosiveButtonHover")).getDrawable());
-		fireButtonHover = new ImageButton(new Image(textureManager.getTexture("fireButtonHover")).getDrawable());
-		grassButtonHover = new ImageButton(new Image(textureManager.getTexture("grassButtonHover")).getDrawable());
-		iceButtonHover = new ImageButton(new Image(textureManager.getTexture("iceButtonHover")).getDrawable());
-		waterButtonHover = new ImageButton(new Image(textureManager.getTexture("waterButtonHover")).getDrawable());
-		xButtonHover = new ImageButton(new Image(textureManager.getTexture("xButtonHover")).getDrawable());
-		fertiliserButtonHover = new ImageButton(new Image(textureManager.getTexture("fertiliserButtonHover")).getDrawable());
-		sprayButtonHover = new ImageButton(new Image(textureManager.getTexture("sprayButtonHover")).getDrawable());
-
-		//radialOutline.setPosition(stage.getWidth()/2.0f, stage.getHeight/2.0f );
-		radialDisplay.addActor(radialOutline);
-
-		normalButton.setPosition(4,79);
-		explosiveButton.setPosition(4,257);
-		fireButton.setPosition(78,304);
-		grassButton.setPosition(254,308);
-		iceButton.setPosition(301,257);
-		waterButton.setPosition(306,81);
-		xButton.setPosition(195,195);
-		fertiliserButton.setPosition(260,2);
-		sprayButton.setPosition(74,2);
-
-		radialDisplay.setPosition(stage.getWidth()-1000f, stage.getHeight()-1000f);
-
-		radialDisplay.addActor(normalButton);
-		radialDisplay.addActor(explosiveButton);
-		radialDisplay.addActor(fireButton);
-		radialDisplay.addActor(grassButton);
-		radialDisplay.addActor(iceButton);
-		radialDisplay.addActor(waterButton);
-		radialDisplay.addActor(xButton);
-		radialDisplay.addActor(fertiliserButton);
-		radialDisplay.addActor(sprayButton);
-
-		xButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				radialDisplay.remove();
-			}
-		});
-
-		normalButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				planter.notifyKeyUp(8);
-				radialDisplay.remove();
-			}
-		});
-
-		explosiveButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				planter.notifyKeyUp(9);
-				radialDisplay.remove();
-			}
-		});
-
-		fireButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				planter.notifyKeyUp(12);
-				radialDisplay.remove();
-			}
-		});
-
-		grassButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				planter.notifyKeyUp(11);
-				radialDisplay.remove();
-			}
-		});
-
-		iceButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				planter.notifyKeyUp(13);
-				radialDisplay.remove();
-			}
-		});
-
-		waterButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				planter.notifyKeyUp(10);
-				radialDisplay.remove();
-			}
-		});
-
-		fertiliserButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				//radialDisplay.remove();
-			}
-		});
-
-		sprayButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				//radialDisplay.remove();
-			}
-		});
-
-	}
-
-	private void addRadialMenu() {
-		stage.addActor(radialDisplay);
-	}
-
-	public void removeRadialMenu() {
-		radialDisplay.remove();
-	}
 }

@@ -87,6 +87,8 @@ public class TextureManager extends Manager {
 		textureMap.put("fireball_left", new Texture("resources/sprites/bullets/fireball_left.png"));
 		textureMap.put("fireball_right", new Texture("resources/sprites/bullets/fireball_right.png"));
 		textureMap.put("sunflower_alt", new Texture("resources/sprites/plants/sunflower_alt.png"));
+		textureMap.put("fertiliser", new Texture("resources/sprites/gardentools/fertiliser.png"));
+		textureMap.put("bug_spray", new Texture("resources/sprites/gardentools/bugspray.png"));
 
 		// Corpse textures
 		textureMap.put("corpse", new Texture("resources/sprites/dead_enemies/deadant.png"));
@@ -193,6 +195,7 @@ public class TextureManager extends Manager {
 		textureMap.put("xButton", new Texture("resources/ui/radial_menu/xButton.png"));
 		textureMap.put("xButtonHover", new Texture("resources/ui/radial_menu/xButtonHover.png"));
 		textureMap.put("radialOutline", new Texture("resources/ui/radial_menu/radialOutline.png"));
+		textureMap.put("menuClose", new Texture("resources/ui/radial_menu/menu_close.png"));
 
 		//Perks
 		textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
