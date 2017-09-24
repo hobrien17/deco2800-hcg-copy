@@ -144,22 +144,29 @@ public class TimeManager extends Manager implements TickableManager {
 	/**
 	 * Returns a string of the current day.
 	 */
-	public String getWeekDay() {
-
+	public String getDayString() {
+		// array to index the day out of once calcs done
 		String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-		int k = getDay();
+
+		// adding offset to the months (for calculation purposes)
 		int m = (getMonth() + 10) % 12;
+
+		// last two digits of the year
 		int d = getYear() % 100;
 
 		if (m == 11 || m == 12) {
 			d--;
 		}
+
+		// the century
 		int c = getYear() / 100;
 
+		// parts of the calculation
 		int floor1 = (13 * m - 1)/5;
 		int floor2 = d/4;
 		int floor3 = c/4;
-		int dayInt = k + floor1 + d + floor2 + floor3 - 2*c;
+
+		int dayInt = getDay() + floor1 + d + floor2 + floor3 - 2*c;
 		dayInt = dayInt % 7;
 
 		return days[dayInt];

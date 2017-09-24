@@ -28,10 +28,11 @@ public class MapGenerator {
 	private static final int SAFE_NODE_PROBABILITY = 5; // <- probability that a generated node will be a safe node in %
 	
 	private List<Level> levelsMaster;
-	private List<Level> levelsOfType;
+	private List<List<Level>> levelsOfType;
 	private List<Level> levelsNotOfType;
 	private List<Level> levelsBoss;
 	private List<Level> levelsNonBoss;
+	private Level safeLevel;
 	
 	private int seedValue;
 	private Random mainGenerator;
@@ -44,17 +45,27 @@ public class MapGenerator {
 	 *     to use, the MapGenerator will start to reuse levels.
 	 */
 	public MapGenerator(List<Level> levelSet) {
-		levelsMaster = levelSet;
-		levelsBoss = new ArrayList<>();
+		levelsMaster = new ArrayList<>(levelSet);
 		levelsOfType = new ArrayList<>();
+		for(int i = 0; i < 10; i++) {
+			levelsOfType.add(new ArrayList<Level>());
+		}
 		levelsNotOfType = new ArrayList<>();
+		levelsBoss = new ArrayList<>();
 		levelsNonBoss = new ArrayList<>();
 		
 		Random seedGenerator = new Random();
 		seedValue = Math.abs(seedGenerator.nextInt(999));
 		mainGenerator = new Random(seedValue);
+		//used in case there is no safe level present (REMOVE ONCE SAFE LEVEL IS ADDED)
+		safeLevel = levelsMaster.get(0);
 	}
 	
+	/**
+	 * Set a seed for the map generator for generating maps from a seed value.
+	 * @param seed
+	 *     The seed to set the generator to generate from.
+	 */
 	public void setGeneratorSeed(int seed) {
 		seedValue = seed;
 		mainGenerator = new Random(seedValue);
@@ -162,7 +173,7 @@ public class MapGenerator {
 	 *     Returns a list of nodes for the world map to use
 	 */
 	private List<MapNode> generateNodes(int rowNumber, int columnNumber, int worldType) {
-		MapNode initialNode = new MapNode(0, rowNumber/2, 1, getLevel(worldType), true);
+		MapNode initialNode = new MapNode(0, rowNumber/2, 1, getLevel(worldType, 0), true);
 		
 		int columnsSinceSafeNode = 0;
 		List<MapNode> nodeList = new ArrayList<>();
@@ -188,18 +199,20 @@ public class MapGenerator {
 					nodeType = 0; //node will be a safenode
 					safeNodeInColumn = true;
 					columnsSinceSafeNode = 0;
+					MapNode safeNode = new MapNode(i, nodeRow, nodeType, safeLevel,false);
+					nodeList.add(safeNode);
 				} else {
 					nodeType = 1;  // in the future, will add different node types in here
+					MapNode basicNode = new MapNode(i, nodeRow, nodeType, getLevel(worldType, i), false);
+					nodeList.add(basicNode);
 				}
-				MapNode basicNode = new MapNode(i, nodeRow, nodeType, getLevel(worldType), false);
 				currentOccupiedRows.add(nodeRow);
-				nodeList.add(basicNode);
 				if(!safeNodeInColumn) {
 					columnsSinceSafeNode++;
 				}
 			}
 		}
-		MapNode finalNode = new MapNode(columnNumber - 1, rowNumber/2, 3, getBossLevel(), false);
+		MapNode finalNode = new MapNode(columnNumber - 1, rowNumber/2, 3, getBossLevel(worldType), false);
 		nodeList.add(finalNode); //add the boss node to the end of the list
 		nodeList = createMapTree(nodeList, columnNumber); //create link mapping of nodes for use in world map
 		return nodeList;
@@ -264,17 +277,20 @@ public class MapGenerator {
 	 *     The requested world type
 	 */
 	private void resetLevelSets(int worldType) {
-		levelsOfType.clear();
+		for(int i = 0; i < 10; i++) {
+			levelsOfType.get(i).clear();
+		}
 		levelsNotOfType.clear();
-		levelsBoss.clear();
 		levelsNonBoss.clear();
 		for(Level i : levelsMaster) {
-			if(i.getLevelType() == 2) {
+			if(i.getLevelType() == 0) {
+				safeLevel = i;
+			} else if(i.getLevelType() == 2) {
 				levelsBoss.add(i);
 			} else if(worldType == 0) {
 				levelsNonBoss.add(i);
 			} else if(i.getWorldType() == worldType) {
-				levelsOfType.add(i);
+				levelsOfType.get(i.getDifficulty() - 1).add(i);
 			} else {
 				levelsNotOfType.add(i);
 			}
@@ -286,12 +302,12 @@ public class MapGenerator {
 	 * @return
 	 *     Returns a random boss level from the levelsBoss list
 	 */
-	private Level getBossLevel() {
+	private Level getBossLevel(int worldType) {
 		if(!(levelsBoss.isEmpty())) {
-			int index = mainGenerator.nextInt(levelsBoss.size());
-			return levelsBoss.get(index);
+			// boss levels should be in ascending biome order!
+			return levelsBoss.get(worldType);
 		} else {
-			return getLevel(0); //return a random level
+			return getLevel(0, 0); //return a random level
 		}
 	}
 	
@@ -304,17 +320,14 @@ public class MapGenerator {
 	 *     out, a level not of the requested type is provided. Once both of these lists are empty, a random level from
 	 *     the non boss set will be chosen.
 	 */
-	private Level getLevel(int worldType) {
+	private Level getLevel(int worldType, int levelColumn) {
 		if(worldType == 0 && !levelsNonBoss.isEmpty()) {
 			int index = mainGenerator.nextInt(levelsNonBoss.size());
 			Level levelReturned = levelsNonBoss.get(index);
 			levelsNonBoss.remove(index);
 			return levelReturned;
 		} else if(!(levelsOfType.isEmpty())) {
-			int index = mainGenerator.nextInt(levelsOfType.size());
-			Level levelReturned = levelsOfType.get(index);
-			levelsOfType.remove(index);
-			return levelReturned;
+			return stepThroughLevels(worldType, levelColumn);
 		} else if (!(levelsNotOfType.isEmpty())){
 			int index = mainGenerator.nextInt(levelsNotOfType.size());
 			Level levelReturned = levelsNotOfType.get(index);
@@ -322,7 +335,63 @@ public class MapGenerator {
 			return levelReturned;
 		} else {
 			resetLevelSets(0);
-			return getLevel(0);
+			return getLevel(0, levelColumn);
+		}
+	}
+	
+	/**
+	 * Steps through the levels to find the most suitable level for the worldType and levelColumn.
+	 * @param worldType
+	 *     The worldType to select levels from.
+	 * @param levelColumn
+	 *     The levelColumn to select difficulties for.
+	 * @return
+	 *     The most relevant level for the node.
+	 */
+	private Level stepThroughLevels(int worldType, int levelColumn) {
+		if(worldType == 1) {
+			if(levelColumn < 3) {
+				return getCorrectLevel(worldType, levelColumn, 0);
+			} else if(levelColumn < 6) {
+				return getCorrectLevel(worldType, levelColumn, 1);
+			} else {
+				return getCorrectLevel(worldType, levelColumn, 2);
+			}
+		} else if(worldType == 2) {
+			if(levelColumn < 2) {
+				return getCorrectLevel(worldType, levelColumn, 3);
+			} else if(levelColumn < 5) {
+				return getCorrectLevel(worldType, levelColumn, 4);
+			} else if(levelColumn < 7) {
+				return getCorrectLevel(worldType, levelColumn, 5);
+			} else {
+				return getCorrectLevel(worldType, levelColumn, 6);
+			}
+		} else {
+			if(levelColumn < 3) {
+				return getCorrectLevel(worldType, levelColumn, 7);
+			} else if(levelColumn < 6) {
+				return getCorrectLevel(worldType, levelColumn, 8);
+			} else {
+				return getCorrectLevel(worldType, levelColumn, 9);
+			}
+		}
+	}
+	
+	private Level getCorrectLevel(int worldType, int levelColumn, int difficulty) {
+		int index = 0;
+		if(levelsOfType.get(difficulty).isEmpty()) {
+			resetLevelSets(worldType);
+			// if it is still empty
+			if(levelsOfType.get(difficulty).isEmpty()) {
+				return getLevel(0, levelColumn);
+			} else {
+				index = mainGenerator.nextInt(levelsOfType.get(difficulty).size());
+				return levelsOfType.get(difficulty).get(index);						
+			}
+		} else {
+			index = mainGenerator.nextInt(levelsOfType.get(difficulty).size());
+			return levelsOfType.get(difficulty).get(index);
 		}
 	}
 }

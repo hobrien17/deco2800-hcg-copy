@@ -63,6 +63,7 @@ public class PlayContext extends Context {
 	private MessageManager messageManager;
 	private TextureManager textureManager;
 	private TimeManager timeManager;
+	private PlayerManager playerManager;
 
 
 	// FIXME mouseHandler is never assigned
@@ -117,6 +118,7 @@ public class PlayContext extends Context {
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 		timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
+		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
 		/* Setup the camera and move it to the center of the world */
 		GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -149,6 +151,7 @@ public class PlayContext extends Context {
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				playerManager.removeCurrentPlayer();
 				contextManager.popContext();
 			}
 		});
@@ -451,7 +454,12 @@ public class PlayContext extends Context {
 					gameManager.getMapContext().addEndOfContext();
 					contextManager.popContext();
 				}
+				// clear old observers (mushroom turret for example)
+                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+                manager.deleteObservers();
 				
+                // stop the old weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
 			}
 		});
 

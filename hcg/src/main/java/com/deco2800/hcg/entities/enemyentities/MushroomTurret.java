@@ -48,6 +48,33 @@ public class MushroomTurret extends Enemy implements Observer {
         manager.deleteObserver(this);
     }
 
+    public void turretShoot() {
+        Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                this.getPosX() + range, this.getPosY(), this.getPosZ(), this, 1);
+        GameManager.get().getWorld().addEntity(bullet1);
+        Bullet bullet2 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                Math.max(0,this.getPosX() - range), this.getPosY(), this.getPosZ(), this, 1);
+        GameManager.get().getWorld().addEntity(bullet2);
+        Bullet bullet3 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                this.getPosX(), this.getPosY() + range, this.getPosZ(), this, 1);
+        GameManager.get().getWorld().addEntity(bullet3);
+        Bullet bullet4 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
+        GameManager.get().getWorld().addEntity(bullet4);
+        Bullet bullet5 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                this.getPosX() + range, this.getPosY() + range, this.getPosZ(), this, 1);
+        GameManager.get().getWorld().addEntity(bullet5);
+        Bullet bullet6 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                Math.max(0,this.getPosX() - range), this.getPosY() + range , this.getPosZ(), this, 1);
+        GameManager.get().getWorld().addEntity(bullet6);
+        Bullet bullet7 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                this.getPosX() + range, Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
+        GameManager.get().getWorld().addEntity(bullet7);
+        Bullet bullet8 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
+        GameManager.get().getWorld().addEntity(bullet8);
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         switch (seconds%6){
@@ -60,35 +87,11 @@ public class MushroomTurret extends Enemy implements Observer {
             case 3: // set turret phase 4 this.setTexture();
                 break;
             case 4: // set turret phase 5 this.setTexture();
-                Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX() + range, this.getPosY(), this.getPosZ(), this, 1);
-                GameManager.get().getWorld().addEntity(bullet1);
-                Bullet bullet2 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        Math.max(0,this.getPosX() - range), this.getPosY(), this.getPosZ(), this, 1);
-                GameManager.get().getWorld().addEntity(bullet2);
-                Bullet bullet3 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX(), this.getPosY() + range, this.getPosZ(), this, 1);
-                GameManager.get().getWorld().addEntity(bullet3);
-                Bullet bullet4 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
-                GameManager.get().getWorld().addEntity(bullet4);
-                Bullet bullet5 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX() + range, this.getPosY() + range, this.getPosZ(), this, 1);
-                GameManager.get().getWorld().addEntity(bullet5);
-                Bullet bullet6 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        Math.max(0,this.getPosX() - range), this.getPosY() + range , this.getPosZ(), this, 1);
-                GameManager.get().getWorld().addEntity(bullet6);
-                Bullet bullet7 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        this.getPosX() + range, Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
-                GameManager.get().getWorld().addEntity(bullet7);
-                Bullet bullet8 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                        Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
-                GameManager.get().getWorld().addEntity(bullet8);
+                this.turretShoot();
                 break;
             default:
                 break;
 
-            // NEED TO IMPLEMENT WHAT TO DO WHEN BULLETS HIT PLAYER
         }
         seconds++;
     }

@@ -2,6 +2,7 @@ package com.deco2800.hcg.entities;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
@@ -31,6 +32,7 @@ import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -39,6 +41,7 @@ import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 
 /**
  * Entity for the playable character.
@@ -66,6 +69,9 @@ public class Player extends Character implements Tickable {
 	private float lastSpeedX;
 	private float lastSpeedY;
 	private boolean sprinting;
+	
+    // Records the current frame number for player's move animation 
+    private int spriteFrame; 
 
 	// current tile name
 	private String name = "";
@@ -127,6 +133,8 @@ public class Player extends Character implements Tickable {
 		this.setTexture("hcg_character");
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 		this.contextManager = (ContextManager) GameManager.get().getManager(ContextManager.class);
+		
+		this.spriteFrame = 0;
 
 		// HUD display
 		displayImage = "resources/ui/player_status_hud/player_display_one.png";
@@ -762,6 +770,13 @@ public class Player extends Character implements Tickable {
 			System.out.println("Access player inventory");
 			contextManager.pushContext(new PlayerInventoryContext(this));
 			break;
+		case Input.Keys.U:
+			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 
+					1.5f, Pot.class);
+			if(closest.isPresent()) {
+				Pot pot = (Pot)closest.get();
+				pot.unlock();
+			}
 		default:
 			break;
 		}
@@ -856,36 +871,28 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Updates the player's sprite based on its direction.
+	 * 
+	 * @param direction 
+     *            Direction the player is facing. Integer between 0 and 3.
 	 */
 	private void updateSprite(int direction) {
-		switch (direction) {
-		case 0:
-			this.setTexture("player_leftBack_stand");
-			break;
-		case 1:
-			this.setTexture("player_back_stand");
-			break;
-		case 2:
-			this.setTexture("player_rightBack_stand");
-			break;
-		case 3:
-			this.setTexture("player_right_stand");
-			break;
-		case 4:
-			this.setTexture("player_rightFront_stand");
-			break;
-		case 5:
-			this.setTexture("player_front_stand");
-			break;
-		case 6:
-			this.setTexture("player_leftFront_stand");
-			break;
-		case 7:
-			this.setTexture("player_left_stand");
-			break;
-		default:
-			break;
-		}
+	    StringBuilder spriteName = new StringBuilder("player_"); 
+        spriteName.append(direction);
+        if (this.speedX == 0 && this.speedY == 0) { 
+            // Player is not moving 
+            spriteName.append("_stand"); 
+        } else { 
+            // Player is moving 
+            if (this.spriteFrame == 0 || this.spriteFrame == 2) { 
+                spriteName.append("_stand"); 
+            } else if (this.spriteFrame == 1) { 
+                spriteName.append("_move1"); 
+            } else if (this.spriteFrame == 3) { 
+                spriteName.append("_move2");       
+            } 
+            this.spriteFrame = ++this.spriteFrame % 4; 
+        }
+        this.setTexture(spriteName.toString());
 	}
 
 	/**
