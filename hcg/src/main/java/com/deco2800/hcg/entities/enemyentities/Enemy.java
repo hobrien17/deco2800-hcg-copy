@@ -49,6 +49,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
+    protected Box3D prevPos;
 
 	// Effects container
 	protected Effects myEffects;
@@ -96,6 +97,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.setCollided(false);
         this.setCollidedPlayer(false);
         this.newPos = getBox3D();
+        this.prevPos = getBox3D();
 
 		// Effects container 
         myEffects = new Effects(this);      
@@ -321,6 +323,8 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         float nextPosY;
         float tempX;
         float tempY;
+        prevPos.setX(currPosX);
+        prevPos.setY(currPosY);
         //Get direction of next position. Randomly be chosen between 0 and 360.
         radius = Math.abs(random.nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
@@ -368,6 +372,8 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public Box3D getToPlayerPos(){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
+        prevPos.setX(currPosX);
+        prevPos.setY(currPosY);
         if((abs(this.getPosX() - playerManager.getPlayer().getPosX()) > 1)||
                 (abs(this.getPosY() - playerManager.getPlayer().getPosY()) > 1)){
             this.setCollided(false);
@@ -397,6 +403,8 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public Box3D getMoveToPos(float posX, float posY){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
+        prevPos.setX(currPosX);
+        prevPos.setY(currPosY);
         if(this.getPosX() < posX){
             currPosX += movementSpeed;
         }
