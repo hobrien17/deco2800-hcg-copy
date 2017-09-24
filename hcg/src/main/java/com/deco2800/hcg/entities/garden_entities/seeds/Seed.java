@@ -2,7 +2,6 @@ package com.deco2800.hcg.entities.garden_entities.seeds;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.badlogic.gdx.graphics.Texture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,12 +74,6 @@ public class Seed extends StackableItem {
 	 */
 	public Seed(Type type) {
 		this.type = type;
-		this.texture = type.getTexture();
-		this.baseValue = 1;
-		this.itemWeight = 0;
-		this.itemName = type.toString().toLowerCase();
-		this.maxStackSize = 256;
-		this.currentStackSize = 1;
 	}
 
 	/**
@@ -136,15 +129,11 @@ public class Seed extends StackableItem {
 
 	@Override
 	public Item copy() {
-		Seed newSeed = new Seed(type);
-		newSeed.setStackSize(this.getStackSize());
-		return newSeed;
+		return new Seed(type);
 	}
 	
 	@Override
 	public String getName() {
 		return type.toString().toLowerCase();
 	}
-
-
 }
