@@ -40,7 +40,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private Table buySell;
     private Image errorImage;
     private boolean errorImageVisible;
-    
+
     private TextField amount;
     private String amountString;
 
@@ -56,10 +56,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopKeeper.getShop().open(0, player);
         this.player = player;
         this.shopKeeper = shopKeeper;
-
-        amountString = "1";
-        amount = new TextField(amountString, 
-        		new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
         // Get necessary managers
         gameManager = GameManager.get();
         contextManager = (ContextManager)
@@ -69,8 +65,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
         timeManager = (TimeManager)
                 gameManager.getManager(TimeManager.class);
         amountString = "1";
-        amount = new TextField(amountString, 
-        		new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
+        amount = new TextField(amountString,
+                new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
         errorImageVisible = false;
         draw();
     }
@@ -94,13 +90,14 @@ public class ShopMenuContext extends InventoryDisplayContext {
 
         playerInventory = new Table();
         playerInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
-        
+
         //adding the textfield
         amountString = amount.getText();
         amount = new TextField(amountString, skin);
         amount.setWidth(160);
-        
+
         buySell = new Table();
+
 
         buyBag = new Image(new Image(textureManager.getTexture("buy_bag")).getDrawable());
         sellBag = new Image(new Image(textureManager.getTexture("sell_bag")).getDrawable());
@@ -161,7 +158,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
                     int number = Integer.parseInt(amount.getText().trim());
                     for (int i = 0; i < number; i++) {
-                        switch(shopKeeper.getShop().buyStock(selectedItem)) {
+                        switch (shopKeeper.getShop().buyStock(selectedItem)) {
                             case 0:
                                 //success!
                                 break;
@@ -179,8 +176,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
                                 break;
                         }
                     }
-                    draw();
                 }
+                //selectedItem = null;
+                draw();
             }
         });
 
@@ -188,9 +186,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 errorImageVisible = false;
+                int number = Integer.parseInt(amount.getText().trim());
                 if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER)) && !(shopKeeper.getShop().getStock().contains(selectedItem))) {
-                    int number = Integer.parseInt(amount.getText().trim());
-                    for (int i = 0; i < number; i++) {
+                    for(int i = 0; i < number; i++){
                         switch(shopKeeper.getShop().sellStock(selectedItem)) {
                             case 0:
                                 //success!
@@ -209,9 +207,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
                                 break;
                         }
                     }
-                    //selectedItem = null;
-                    draw();
                 }
+                //selectedItem = null;
+                draw();
             }
         });
     }

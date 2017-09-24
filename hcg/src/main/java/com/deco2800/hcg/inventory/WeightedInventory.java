@@ -167,7 +167,7 @@ public class WeightedInventory implements Inventory {
                         toRemove = 0;
                     }
                 }
-                
+
                 if(toRemove <= 0) {
                     break;
                 }

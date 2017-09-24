@@ -2,7 +2,7 @@ package com.deco2800.hcg.trading;
 
 
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.items.BasicSeed;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.SingleItem;
 import com.deco2800.hcg.items.StackableItem;
@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class Shop {
     int modifier = 0;
     Player player;
-    BasicSeed seed = new BasicSeed();
+    Seed seed = new Seed(Seed.Type.SUNFLOWER);
     ArrayList<Item> shopStock = new ArrayList<Item>();
 
     /**Open the shop so it can be interacted with.
@@ -80,6 +80,8 @@ public abstract class Shop {
             shopStock.add(item);
         } else {
             shopItem.addToStack(item.getStackSize());
+
+            //shopStock.get(shopStock.indexOf(shopItem)).addToStack(item.getStackSize());
         }
 
     }
@@ -193,12 +195,10 @@ public abstract class Shop {
     	if(item == null){
     		return 2;
     	}
-        seed = new BasicSeed();
+        seed = new Seed(Seed.Type.SUNFLOWER);
         seed.setStackSize(item.getBaseValue()+modifier);
         if ((item instanceof SingleItem) || (item.getStackSize() == 1)) {
-            System.out.println("fddf");
             if (!player.getInventory().removeItem(item)) {
-
                 return 3;
             }
         } else {

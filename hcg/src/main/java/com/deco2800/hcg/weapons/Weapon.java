@@ -116,6 +116,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
             case STARFALL:
                 soundName = "gun-stargun-shoot";
                 break;
+            case GRENADELAUNCHER:
+                soundName = "gun-grenadelauncher-shoot";
+                break;
             default:
                 soundName = "gun-rifle-shoot";
         }
@@ -158,8 +161,14 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      */
     protected void shootBullet(float posX, float posY, float posZ,
                                float goalX, float goalY) {
-        Bullet bullet = this.createBullet(posX, posY, posZ,
-                goalX, goalY);
+        Bullet bullet;
+        if(this.weaponType == WeaponType.GRENADELAUNCHER) {
+            bullet = new Grenade(posX, posY, posZ, goalX, goalY,
+                    0, 0.6f, 0.6f, 1, this.user, bulletType);
+        } else {
+            bullet = this.createBullet(posX, posY, posZ,
+                    goalX, goalY);
+        }
         GameManager.get().getWorld().addEntity(bullet);
     }
 
@@ -187,6 +196,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                 (float) (this.radius * Math.sin(angle)));
     }
 
+    /**
+     * Increments the integer bulletType to indicate a switch in bullet
+     */
     public void switchBullet() {
         bulletType++;
         if(bulletType > 3) {
@@ -194,6 +206,22 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         }
     }
 
+    /**
+     * Creates a specific bullet depending on the current equipped bullet.
+     * The current equipped bullet is represented by the integer bulletType.
+     *
+     * @param posX
+     *              The x position of the bullet
+     * @param posY
+     *              The y position of the bullet
+     * @param posZ
+     *              The z position of the bullet
+     * @param goalX
+     *              The x direction of the bullet
+     * @param goalY
+     *              The y direction of the bullet
+     * @return The bullet created
+     */
     //TODO: incorporate into Bullet constructor
     public Bullet createBullet(float posX, float posY, float posZ,
                         float goalX, float goalY) {
@@ -212,7 +240,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                         goalX, goalY, this.user, 1);
                 break;
             default:
-                bullet = new Bullet(posX, posY, posZ,
+                bullet = new ExplosionBullet(posX, posY, posZ,
                         goalX, goalY, this.user, 1);
                 break;
         }
