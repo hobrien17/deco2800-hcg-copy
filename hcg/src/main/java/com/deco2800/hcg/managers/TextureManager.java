@@ -116,8 +116,14 @@ public class TextureManager extends Manager {
 	    textureMap.put("sludgebarrel", new Texture("resources/terrain_objects/sludge-barrel.png"));
         textureMap.put("house2", new Texture("resources/terrain_objects/house2.png"));
         textureMap.put("house2destroyed", new Texture("resources/terrain_objects/house2destroyed.png"));
+		textureMap.put("largeTree", new Texture("resources/terrain_objects/tree_dead_01.png"));
+		textureMap.put("houseWRoof", new Texture("resources/terrain_objects/abandoned_house_01.png"));
+		textureMap.put("houseWORood", new Texture("resources/terrain_objects/busted_house_01.png"));
+		textureMap.put("swing", new Texture("resources/terrain_objects/broken_swing.png"));
+		textureMap.put("picketFenceNS", new Texture("resources/terrain_objects/picket_fence_northsouth.png"));
+		textureMap.put("picketFenceEW", new Texture("resources/terrain_objects/picket_fence_eastwest.png"));
 
-	    // terrain tiles
+		// terrain tiles
         textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
 
 	   
