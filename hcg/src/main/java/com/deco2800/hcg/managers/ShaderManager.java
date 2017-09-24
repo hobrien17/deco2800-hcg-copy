@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.renderers.Renderer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.deco2800.hcg.shading.ShaderState;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.Gdx;
@@ -64,7 +67,7 @@ public class ShaderManager extends Manager {
             this.postShader = null;
         }
         
-	    this.state = new ShaderState(new Color(2, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
+        this.state = new ShaderState(new Color(2, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
 
         this.state.setBloom(true);
         this.state.setHeat(true);
@@ -73,7 +76,7 @@ public class ShaderManager extends Manager {
     }
 
 
-    public void render(TimeManager timeManager) {
+    public void render(TimeManager timeManager, Renderer renderer) {
         this.state.setTime(timeManager);
         
         int width = Gdx.graphics.getWidth();
@@ -81,7 +84,7 @@ public class ShaderManager extends Manager {
             
         // This is our render target. We draw onto this first and then draw this
         // directly to the screen using a post processing shader
-        this.renderTarget = new FrameBuffer(Format.RGB566, width, height, false);
+        this.renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
         this.scene = new TextureRegion(renderTarget.getColorBufferTexture());
         this.scene.flip(false, true);
         
@@ -90,7 +93,7 @@ public class ShaderManager extends Manager {
             
         this.preShader.setUniformf("u_globalColor", state.getGlobalLightColour());
             
-        this.preBatch = new SpriteBatch(1001, shader);
+        this.preBatch = new SpriteBatch(1001, preShader);
         this.preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
             
         this.tileRenderer = renderer.getTileRenderer(preBatch);
@@ -99,7 +102,7 @@ public class ShaderManager extends Manager {
         // Draw onto render target ////////////////////////////////////
         this.renderTarget.begin();
         Gdx.gl.glClearColor(1, 0, 0, 0);
-        Gdx.gl.glClear(GL21.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             
         this.tileRenderer.render();
         renderer.render(preBatch);
