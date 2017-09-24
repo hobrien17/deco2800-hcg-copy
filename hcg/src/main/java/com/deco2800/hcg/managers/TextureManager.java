@@ -102,7 +102,7 @@ public class TextureManager extends Manager {
 		textureMap.put("water_corpse", new Texture("resources/sprites/dead_enemies/waterlily.png"));
 		textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass.png"));
 		textureMap.put("fire_corpse", new Texture("resources/sprites/dead_enemies/inferno.png"));
-		textureMap.put("explosion", new Texture("resources/sprites/dead_enemies/explosion_temp.png"));
+		textureMap.put("explosion", new Texture("resources/sprites/bullets/explosion.png"));
 		
 		// Miscellaneous textures
 		textureMap.put("error", new Texture("resources/misc/error.png"));
@@ -246,11 +246,11 @@ public class TextureManager extends Manager {
 		textureMap.put("server_join_button", new Texture("resources/ui/multiplayer_ui/menu_join_button.png"));
 		textureMap.put("server_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
 		textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
+		textureMap.put("transparentUI", new Texture("resources/ui/multiplayer_ui/transparentUI.png"));
 		
 		//Conversation textures
 		textureMap.put("conversation_context",  new Texture("resources/ui/conversations/conversation_context.png"));
 		textureMap.put("npc_face", new Texture("resources/sprites/npc/npc_face.png"));
-
 	}
 
 	/**

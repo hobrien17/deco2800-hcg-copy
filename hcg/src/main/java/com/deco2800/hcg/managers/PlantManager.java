@@ -58,6 +58,20 @@ public class PlantManager extends Manager {
 		}
 	}
 
+    /**
+     * Remove all plants
+     */
+	public void removeAll() {
+	    plantList.clear();
+    }
+
+    /**
+     * Gets all plants in manager
+     */
+	public ArrayList<AbstractGardenPlant> getPlants() {
+	    return plantList;
+    }
+
 	/**
 	 * Sets the window for the manager
      *

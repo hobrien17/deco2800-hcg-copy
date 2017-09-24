@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.WorldUtil;
 
