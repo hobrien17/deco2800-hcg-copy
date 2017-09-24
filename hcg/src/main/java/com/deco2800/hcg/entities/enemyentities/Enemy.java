@@ -5,6 +5,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
@@ -448,6 +449,9 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
                 if(entity instanceof Player) {
                     this.causeDamage((Player)entity);
                     this.setCollidedPlayer(true);
+                }
+                if(entity instanceof Bullet) {
+                    this.changeHealth(-500);
                 }
                 this.setCollided(true);
             }
