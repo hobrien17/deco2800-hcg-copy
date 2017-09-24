@@ -194,4 +194,17 @@ public class GeneralShopTest {
         assertThat(shop.sellStock(item), is(equalTo(0)));
         assertThat(shop.inStock(item), is(equalTo(2)));
     }
+
+    @Test
+    public void sellItemOneOfTwo() {
+        Item item = new TestItem();
+        Item item2 = new TestItem();
+        item.addToStack(1);
+        player.getInventory().addItem(seeds);
+        player.getInventory().addItem(item2);
+        shop.addStock(item);
+        shop.open(0, player);
+        assertThat(shop.sellStock(item2), is(equalTo(0)));
+        assertThat(shop.inStock(item), is(equalTo(3)));
+    }
 }

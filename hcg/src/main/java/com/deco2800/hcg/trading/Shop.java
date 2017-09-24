@@ -39,8 +39,9 @@ public abstract class Shop {
      * @return number in stock, 0 if none
      */
     public int inStock(Item item){
-        if (shopStock.contains(item) && (item instanceof StackableItem)) {
-            return shopStock.get(shopStock.indexOf(item)).getStackSize();
+        Item shopItem = contains(item);
+        if ((shopItem != null) && (item instanceof StackableItem)) {
+            return shopItem.getStackSize();
         } else {
             int number = 0;
             for (Item stock: shopStock) {
@@ -52,6 +53,20 @@ public abstract class Shop {
         }
     }
 
+    /**
+     * Helper method to retrieve if the shop has this item in stock
+     * @param item
+     * @return item in the shop
+     */
+    private Item contains(Item item) {
+        for (Item currentItem : shopStock) {
+            if (currentItem.sameItem(item)) {
+                return currentItem;
+            }
+        }
+        return null;
+    }
+
     /**Add a new stock item to the shop taking the current stack size of the item as the number the shop should have in
      * stock
      *
@@ -60,13 +75,7 @@ public abstract class Shop {
      *
      */
     public void addStock(Item item) {
-        Item shopItem = null;
-        for (Item currentItem : shopStock) {
-            if (currentItem.sameItem(item)) {
-                shopItem = currentItem;
-                break;
-            }
-        }
+        Item shopItem = contains(item);
         if ((shopItem == null) || (item instanceof SingleItem)) {
             shopStock.add(item);
         } else {
