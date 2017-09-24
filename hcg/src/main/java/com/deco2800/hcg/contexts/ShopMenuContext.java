@@ -130,8 +130,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         centreTable.row();
 
         errorImage = new Image(textureManager.getTexture("error_shop"));
-        errorImage.setPosition((stage.getWidth()/2 - errorImage.getWidth()),
-                (stage.getHeight()/2 - errorImage.getHeight()));
+        errorImage.setPosition(stage.getWidth()/2 - (errorImage.getWidth()/2) ,stage.getHeight()-errorImage.getHeight());
         errorImage.toFront();
         errorImage.setVisible(errorImageVisible);
 
@@ -158,22 +157,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
                     int number = Integer.parseInt(amount.getText().trim());
                     for (int i = 0; i < number; i++) {
-                        switch (shopKeeper.getShop().buyStock(selectedItem)) {
-                            case 0:
-                                //success!
-                                break;
-                            case 1:
-                                System.out.println("Returned 1");
-                                errorImageVisible = true;
-                                break;
-                            case 2:
-                                System.out.println("Returned 2");
-                                errorImageVisible = true;
-                                break;
-                            case 3:
-                                System.out.println("Returned 3");
-                                errorImageVisible = true;
-                                break;
+                        if (shopKeeper.getShop().buyStock(selectedItem) != 0) {
+                            errorImageVisible = true;
                         }
                     }
                 }
@@ -189,22 +174,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 int number = Integer.parseInt(amount.getText().trim());
                 if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER)) && !(shopKeeper.getShop().getStock().contains(selectedItem))) {
                     for(int i = 0; i < number; i++){
-                        switch(shopKeeper.getShop().sellStock(selectedItem)) {
-                            case 0:
-                                //success!
-                                break;
-                            case 1:
-                                System.out.println("Returned 1");
-                                errorImageVisible = true;
-                                break;
-                            case 2:
-                                System.out.println("Returned 2");
-                                errorImageVisible = true;
-                                break;
-                            case 3:
-                                System.out.println("Returned 3");
-                                errorImageVisible = true;
-                                break;
+                        if (shopKeeper.getShop().sellStock(selectedItem) != 0) {
+                            errorImageVisible = true;
                         }
                     }
                 }
