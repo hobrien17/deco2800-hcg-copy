@@ -225,7 +225,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
     	total /= lootRarity.size();
     	// modify all the rarities so they sum up to 1
     	for(Map.Entry<String, Double> entry : lootRarity.entrySet()) {
-    		BigDecimal decimal = new BigDecimal(entry.getValue() - total); 
+    		BigDecimal decimal = BigDecimal.valueOf(entry.getValue() - total); 
             decimal = decimal.setScale(4, RoundingMode.HALF_DOWN); //round to 4dps
     		lootRarity.put(entry.getKey(), decimal.doubleValue());
     	}
