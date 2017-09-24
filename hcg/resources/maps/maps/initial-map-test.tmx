@@ -673,10 +673,9 @@
   <object id="80" gid="36" x="305.027" y="657.473" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
-    <property name="conversation" value=""/>
-    <property name="fName" value="Jane"/>
+    <property name="fName" value="General"/>
     <property name="faceImage" value="npc_face"/>
-    <property name="sName" value="Jensen"/>
+    <property name="sName" value="George"/>
     <property name="texture" value="character_shop"/>
    </properties>
   </object>
