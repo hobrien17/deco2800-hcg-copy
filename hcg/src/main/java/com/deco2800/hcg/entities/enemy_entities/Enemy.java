@@ -20,9 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import static java.lang.Math.*;
 
@@ -48,6 +51,10 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
+    
+    //Multiple players
+    private int numPlayers;
+    private Set<Player> players = new LinkedHashSet<>();
 
 	// Effects container
 	protected Effects myEffects;
@@ -283,7 +290,69 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public void setStatus(int newStatus){
         this.status = newStatus;
     }
-
+    
+    /**
+     * Detects the number of players in the current game. Returns number of elements in players list.
+     * 
+     * @return: int numPlayers - number of players in game.
+     * @author Elvin - Team 9
+     */
+    public int getNumberPlayers() {
+    	numPlayers = playerManager.getPlayers().size();
+    	//System.out.println(numPlayers);
+    	return numPlayers;
+    }
+    
+    /**
+     * Changes status of enemy based on the closest player's position via least distance.
+     * Used when there are multiple players in the same game.
+     * 
+     * @author Elvin - Team 9
+     */
+    public void detectPlayers() {
+    	Player closestPlayer;
+		int playerCount = 0;
+		float closestDistance;
+		float[] distances;
+		HashMap<Float, Player> playerHashMap;
+		
+    	getNumberPlayers();
+    	distances = new float[numPlayers];
+    	playerHashMap = new HashMap<Float, Player>();
+    	closestDistance = distances[0];
+    	players = playerManager.getPlayers();
+    	
+    	//Iterates through all players and puts distance from enemy to each player into an array
+    	//Puts all players and their respective distances into a hash map
+    	for (Player player : players) {
+    		distances[playerCount] = this.distance(player);
+    		playerHashMap.put(distances[playerCount], player);
+    		playerCount++;
+    	}
+    	//Finds the smallest distance in the distance array
+    	for (int j = 0; j < distances.length; j++) {
+    		if (distances[j] < closestDistance) {
+    			closestDistance = distances[j];
+    		}
+    	}
+    	
+    	//Gets the player with closest distance from the enemy and assigns to variable
+    	closestPlayer = playerHashMap.get(closestDistance);
+    	
+    	//Following is a modification of detectPlayer 
+    	if (closestDistance <= 5 * this.level) {
+    		this.setStatus(2);
+    		this.lastPlayerX = closestPlayer.getPosX();
+    		this.lastPlayerY = closestPlayer.getPosY();
+    	} else if (this.getStatus() == 2){
+    		this.setStatus(3);
+    	} else {
+    		this.setStatus(1);
+    	}
+    	
+    }
+    
+    
     /**
      * To detect player's position. If player is near enemy, return 1.
      * @return: false: Undetected
