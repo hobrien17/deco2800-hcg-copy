@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -151,24 +152,28 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopBuy.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	int number = Integer.parseInt(amount.getText().trim());
-            	for(int i=0; i < number; i++) {
-                    shopKeeper.getShop().buyStock(selectedItem);
+                if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
+                    int number = Integer.parseInt(amount.getText().trim());
+                    for (int i = 0; i < number; i++) {
+                        shopKeeper.getShop().buyStock(selectedItem);
+                    }
+                    //selectedItem = null;
+                    draw();
                 }
-            	//selectedItem = null;
-            	draw();
             }
         });
 
         shopSell.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	int number = Integer.parseInt(amount.getText().trim());
-            	for(int i = 0; i < number; i++){
-            		shopKeeper.getShop().sellStock(selectedItem);
-            	}
-            	//selectedItem = null;
-                draw();
+                if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
+                    int number = Integer.parseInt(amount.getText().trim());
+                    for (int i = 0; i < number; i++) {
+                        shopKeeper.getShop().sellStock(selectedItem);
+                    }
+                    //selectedItem = null;
+                    draw();
+                }
             }
         });
     }
