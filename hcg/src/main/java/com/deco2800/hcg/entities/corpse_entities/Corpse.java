@@ -49,7 +49,7 @@ public abstract class Corpse extends AbstractEntity {
     /**
      * Adds a bullet to the enemy corpse, if empty
      *
-     * @param seed the seed to be added
+     * @param bullet the seed to be added
      * @return true if the seed was added, false if it could not be added
      */
     public boolean plantInside(Bullet bullet) {
