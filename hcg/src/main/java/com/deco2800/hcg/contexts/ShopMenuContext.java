@@ -162,7 +162,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
                         }
                     }
                 }
-                //selectedItem = null;
                 draw();
             }
         });
@@ -179,7 +178,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
                         }
                     }
                 }
-                //selectedItem = null;
                 draw();
             }
         });

@@ -61,7 +61,6 @@ public class MainMenuContext extends UIContext {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				contextManager.pushContext(new CharacterCreationContext());
-				//contextManager.pushContext(new WorldStackContext());
 			}
 		});
 		
