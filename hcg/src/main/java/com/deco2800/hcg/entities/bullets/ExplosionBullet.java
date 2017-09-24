@@ -9,15 +9,15 @@ import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.WorldUtil;
 
 /**
- * Ice Bullet
- * Deals no damage but freezes the target on the spot for x seconds
+ * Explosion bullet
+ * Deals a set amount of damage to all enemies in a specific radius
  *
- * ZA WARUDO
+ * EXPLOOOOSION
  * 
  * @author Yuki Nakazawa
  *
  */
-public class IceBullet extends Bullet {
+public class ExplosionBullet extends Bullet {
 
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
@@ -37,15 +37,15 @@ public class IceBullet extends Bullet {
 	 * @param hitCount
 	 *            the total number of enemies that can be hit
 	 */
-	public IceBullet(float posX, float posY, float posZ, float xd, float yd,
-				  AbstractEntity user, int hitCount) {
+	public ExplosionBullet(float posX, float posY, float posZ, float xd, float yd,
+					 AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
 		this.setTexture("battle_seed_red");
 	}
 	
 	/**
-	 * Creates a new iceBullet moving towards the specified location
+	 * Creates a new firebullet moving towards the specified location
 	 * 
 	 * @param posX
 	 * 			the starting x position
@@ -62,13 +62,13 @@ public class IceBullet extends Bullet {
 	 * @param user
 	 * 			the entity who shot this bullet
 	 */
-	public IceBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
+	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_red");
 	}
 	
 	/**
-	 * Creates a new icebullet moving towards a specified location, with given x y and z length
+	 * Creates a new firebullet moving towards a specified location, with given x y and z length
 	 * 
 	 * @param posX
 	 * 			the starting x position
@@ -93,14 +93,19 @@ public class IceBullet extends Bullet {
 	 * @param hitCount
 	 * 			the number of entities this object can hit before being destroyed
 	 */
-	public IceBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
+	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
 			float yLength, float zLength, AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount);
-		this.setTexture("battle_seed_green");
+		this.setTexture("battle_seed_red");
 	}
 	
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Shot", 1, 0, 1, 0, 100, 0));
+		AbstractEntity entity = (AbstractEntity)target;
+		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 5, Enemy.class);
+		target.giveEffect(new Effect("Explosion", 1, 1000, 0, 0, 1, 0));
+		for(AbstractEntity close : closest) {
+			((Enemy)close).giveEffect(new Effect("Explosion", 1, 1000, 0, 0, 1, 0));
+		}
 	}
 }
