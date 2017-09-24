@@ -115,8 +115,8 @@ public class Bullet extends AbstractEntity implements Tickable {
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
 
-		this.goalX = newX;
-		this.goalY = newY;
+        this.goalX = newX - this.getXLength()/2;
+        this.goalY = newY - this.getYLength()/2;
 
 		float deltaX = getPosX() - goalX;
 		float deltaY = getPosY() - goalY;
@@ -157,8 +157,10 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		if (Math.abs(Math.abs(this.getPosX()) - Math.abs(goalX)) < 1
-				&& Math.abs(Math.abs(this.getPosY()) - Math.abs(goalY)) < 1) {
+        if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
+                - Math.abs(goalX)) < 0.5
+                && Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
+                - Math.abs(goalY)) < 0.5) {
 			GameManager.get().getWorld().removeEntity(this);
 		}
 		setPosX(getPosX() + changeX);

@@ -29,7 +29,7 @@ public class MushroomTurret extends Enemy implements Observer {
     public MushroomTurret(float posX, float posY, float posZ, int ID) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
         //testing with tower sprite
-        this.setTexture("tower");
+        this.setTexture("mushroom");
         this.level = 1;
         seconds = 0;
         range = 15 * this.level;
@@ -78,15 +78,17 @@ public class MushroomTurret extends Enemy implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         switch (seconds%6){
-            case 0: // set turret phase 1 this.setTexture()
+            case 0: // set turret phase 1
+                this.setTexture("mushroom");
                 break;
-            case 1: // set turret phase 2 this.setTexture();
+            case 1: // set turret phase 2
                 break;
-            case 2: // set turret phase 3 this.setTexture();
+            case 2: // set turret phase 3
                 break;
-            case 3: // set turret phase 4 this.setTexture();
+            case 3: // set turret phase 4
+                this.setTexture("tower");
                 break;
-            case 4: // set turret phase 5 this.setTexture();
+            case 4:
                 this.turretShoot();
                 break;
             default:
