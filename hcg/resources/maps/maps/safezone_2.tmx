@@ -90,7 +90,7 @@
   <properties>
    <property name="damage" value="-1"/>
    <property name="damagetype" value="1"/>
-   <property name="name" value="healingspring"/>
+   <property name="name" value="healing"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">

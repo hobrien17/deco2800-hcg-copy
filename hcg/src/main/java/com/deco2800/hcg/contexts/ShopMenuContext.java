@@ -108,7 +108,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         buySell.row();
         buySell.add(shopBuy).height(80).width(160);
         buySell.row();
-        buySell.add(amount).height(40).width(40);
+        buySell.add(amount).height(40).width(40).pad(15);
         buySell.row();
         buySell.add(buyBag).height(100).width(80);
         buySell.row();
