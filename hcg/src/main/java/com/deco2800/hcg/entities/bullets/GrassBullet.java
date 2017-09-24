@@ -1,10 +1,17 @@
 package com.deco2800.hcg.entities.bullets;
 
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
+import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.WorldUtil;
+
 import java.util.Optional;
+
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 
 /**
  * Grass bullet class

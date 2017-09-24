@@ -5,28 +5,31 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.TestItem;
 import com.deco2800.hcg.items.single.TestUniqueItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.worlds.World;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GeneralShopTest {
 	Item item1 = new TestUniqueItem("test1",2);
 	Item item2 = new TestItem();
-	Seed seeds = new Seed(Seed.Type.SUNFLOWER);
+	BasicSeed seeds = new BasicSeed();
 	Item arrayOfThings[] = {item1,item2};
     GameManager gameManager;
     World AbstractWorld;

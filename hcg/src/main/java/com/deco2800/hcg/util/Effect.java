@@ -17,7 +17,7 @@ public class Effect {
     private int cooldown;       // effect cooldown (in ms)
     private int delay;          // delay until effect is ready for use (in ms)
     private long cooldownTimer; // timer used to keep track of whether effect is on ready to be used
-    private float speedModifier;  // amount (in percentage) of slow to apply. 0 is none, 1 is 100% slow effect
+    private double slowAmount;  // amount (in percentage) of slow to apply. 0 is none, 1 is 100% slow effect
 
     /**
      * Creates a new Effect with the given properties.
@@ -25,7 +25,8 @@ public class Effect {
      * @param name The name of the effect, a non-null string. Cannot be empty.
      * @param level The level of the effect, an integer greater than 0.
      * @param damage The damage caused each application, an integer greater than or equal to 1.
-     * @param speedModifier The new speed of the player relative to the current movement speed.
+     * @param slowAmount The amount the player is slowed. Expressed as a percentage between 0 and 1. 0 is no slow
+     *                   effect, 1 completely prevents movement.
      * @param cooldown The time (in ms) before the effect may be applied again, after it has just been applied. An
      *                 integer greater than or equal to 0.
      * @param duration The number of times the effect will be applied (the lifetime). An integer greater than or equal
@@ -36,7 +37,7 @@ public class Effect {
      * @throws NullPointerException if name is null.
      * @throws IllegalArgumentException if an argument is not valid.
      */
-    public Effect(String name, int level, int damage, float speedModifier, int cooldown, int duration, int delay) {
+    public Effect(String name, int level, int damage, double slowAmount, int cooldown, int duration, int delay) {
         // Check for valid arguments
         if (name == null) {
             throw new NullPointerException("Effect name cannot be null.");
@@ -49,11 +50,11 @@ public class Effect {
         if (!(level >= 1)) {
             throw new IllegalArgumentException("Level must be a positive integer and at least 1.");
         }
-//        if (!(damage >= 0)) {
-//            throw new IllegalArgumentException("Damage must be a positive integer.");
-//        }
-        if (!(speedModifier >= 0)) {
-            throw new IllegalArgumentException("Slow amount must be >= 0.");
+        if (!(damage >= 0)) {
+            throw new IllegalArgumentException("Damage must be a positive integer.");
+        }
+        if (!(slowAmount >= 0 && slowAmount <= 1)) {
+            throw new IllegalArgumentException("Slow amount must be between 0 and 1.");
         }
         if (!(cooldown >= 0)) {
             throw new IllegalArgumentException("Cooldown must be a positive integer.");
@@ -69,7 +70,7 @@ public class Effect {
         this.name = name;
         this.level = level;
         this.damage = damage;
-        this.speedModifier = speedModifier;
+        this.slowAmount = slowAmount;
         this.cooldown = cooldown;
         this.duration = duration;
         this.delay = delay;
@@ -174,12 +175,12 @@ public class Effect {
     }
 
     /**
-     * Returns the speed modifier.
+     * Returns the amount of slow caused by the effect when it is applied.
      *
-     * @return Returns a float denoting the new relative speed.
+     * @return Returns a double denoting the magnitude of the slow. 0 is no change, 1 reduces speed to 0.
      */
-    public float getSpeedModifier() {
-        return speedModifier;
+    public double getSlowAmount() {
+        return slowAmount;
     }
 
     /**
@@ -209,7 +210,7 @@ public class Effect {
         if (delay != effect.delay)
           return false;
 
-        return Float.compare(effect.speedModifier, speedModifier) == 0
+        return Double.compare(effect.slowAmount, slowAmount) == 0
                 && (name != null ? name.equals(effect.name) : effect.name == null);
     }
 
@@ -224,7 +225,7 @@ public class Effect {
         result = 31 * result + duration;
         result = 31 * result + cooldown;
         result = 31 * result + delay;
-        temp = Float.floatToIntBits(speedModifier);
+        temp = Double.doubleToLongBits(slowAmount);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
 
         return result;

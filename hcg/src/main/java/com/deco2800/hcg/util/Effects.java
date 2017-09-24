@@ -1,7 +1,8 @@
 package com.deco2800.hcg.util;
 
+import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.entities.Character;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class Effects {
 
     private Set<Effect> currentEffects; // a set of the current active effects
 
-    private Character owner;       // a reference to the owner of this effects collection. All effects contained
+    private AbstractEntity owner;       // a reference to the owner of this effects collection. All effects contained
                                         // here will be applied to the owner
 
     // TODO Store a copy of the original attributes of the owner (allows for temporary effects to take place)
@@ -32,7 +33,7 @@ public class Effects {
      *
      * @throws NullPointerException if owner is null.
      */
-    public Effects(Character owner) {
+    public Effects(AbstractEntity owner) {
         // Check for valid arguments
         if (owner == null) {
             throw new NullPointerException("Reference to owner cannot be null.");
@@ -54,7 +55,7 @@ public class Effects {
      *
      * @throws NullPointerException is owner is null, or effects is null.
      */
-    public Effects(Character owner, Collection<Effect> effects) {
+    public Effects(AbstractEntity owner, Collection<Effect> effects) {
         // Check for valid arguments
         if (owner == null) {
             throw new NullPointerException("Reference to owner cannot be null.");
@@ -197,11 +198,11 @@ public class Effects {
      */
     public void apply() {
         for (Effect effect : currentEffects) {
-            Character thisCharacter = owner;
+            Enemy thisEnemy = (Enemy)owner;
 
             if (effect.getUseCount() == 0) {
                 if (!effect.onCooldown()) {
-                    thisCharacter.resetSpeed();
+                    thisEnemy.resetSpeed();
                     currentEffects.remove(effect);
                     continue;
                 }
@@ -212,14 +213,14 @@ public class Effects {
             //Only activate while buff is active
             if (!effect.onCooldown()) {
                 effect.startCooldownTimer();
-                if(owner instanceof Character){
+                if(owner instanceof Enemy){
                     // Handle damage
-                    thisCharacter.takeDamage(effect.getDamage());
-                    if(thisCharacter.getHealthCur() <= 0){
+                    thisEnemy.takeDamage(effect.getDamage());
+                    if(thisEnemy.getHealthCur() <= 0){
                         GameManager.get().getWorld().removeEntity(owner);
                     }
                     // Handle slows
-                    thisCharacter.changeSpeed(effect.getSpeedModifier());
+                    thisEnemy.changeSpeed((float)effect.getSlowAmount());
                 } else {
                     GameManager.get().getWorld().removeEntity(owner);
                 }

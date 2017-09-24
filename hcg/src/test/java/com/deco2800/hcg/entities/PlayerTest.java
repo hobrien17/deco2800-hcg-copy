@@ -40,9 +40,7 @@ public class PlayerTest {
 	@Test
 	public void testAttributesMap() {
 		Player player = new Player(0, 0, 0);
-
-		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0,"Name");
-
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0, "Name");
 		player.setAttribute("agility",2);
 		assertEquals("player agility should be 2 after setAttribute changed it",2, player.getAttribute("agility"));
 		player.setAttribute("DontAddThis",1000);
@@ -190,8 +188,8 @@ public class PlayerTest {
 	public void testSprint() {
 	    
 	    Player player = new Player(0, 0, 0);
-
-	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Name");
+	    
+	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 0, 0, "Name");
 	    
 	    assertTrue("Player's maximum stamina was not initialised correctly",
 	            player.getStaminaMax() == 250);
@@ -274,27 +272,24 @@ public class PlayerTest {
 		assertTrue("Player current health not set correctly", player.getHealthCur() == startHealth);
 
 		// do one tick of movement
-		player.onTick(0);
+		player.onTick(0);	
 
-		//TODO temporary comment out until a proper heal layer exists in layerProperties.
-//		assertTrue("Player health wasn't decreased when it should have been", player.getHealthCur() == startHealth - 1);
+		assertTrue("Player health wasn't decreased when it should have been", player.getHealthCur() == startHealth - 1);
 		
 		// reset damage
 		when(mapProperties.get("damage")).thenReturn("2");
 
 		// do one tick of movement
-		player.onTick(1);
+		player.onTick(1);	
 
-		//TODO temporary comment out until a proper heal layer exists in layerProperties.
-//		assertTrue("Player health wasn't decreased as much it should have been", player.getHealthCur() == startHealth - 3);
+		assertTrue("Player health wasn't decreased as much it should have been", player.getHealthCur() == startHealth - 3);
 
 		when(mapProperties.get("damagetype")).thenReturn("0");
 
 		// do one tick of movement
-		player.onTick(1);
-
-		//TODO temporary comment out until a proper heal layer exists in layerProperties.
-//		assertTrue("Player health was decreased when the tile was enemy only", player.getHealthCur() == startHealth - 3);
+		player.onTick(1);	
+		
+		assertTrue("Player health was decreased when the tile was enemy only", player.getHealthCur() == startHealth - 3);
 
 	}
 	

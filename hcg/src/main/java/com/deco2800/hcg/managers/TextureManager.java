@@ -41,7 +41,11 @@ public class TextureManager extends Manager {
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
-		textureMap.put("squirrel", new Texture("resources/sprites/enemies/squirrel_basic.png"));
+		textureMap.put("squirrel", new Texture("resources/sprites/enemies/ant.png"));
+		textureMap.put("hedgehog", new Texture("resources/sprites/enemies/hedgehog.png"));
+		textureMap.put("hedgeball", new Texture("resources/sprites/enemies/hedgeball.png"));
+		textureMap.put("mushroom", new Texture("resources/sprites/enemies/mushy.png"));
+		textureMap.put("snail", new Texture("resources/sprites/enemies/snail.png"));
 		textureMap.put("battle_seed", new Texture("resources/sprites/seeds/battle_seed.png"));
 		textureMap.put("battle_seed_green", new Texture("resources/sprites/seeds/battle_seed_green.png"));
 		textureMap.put("battle_seed_red", new Texture("resources/sprites/seeds/battle_seed_red.png"));
@@ -194,8 +198,6 @@ public class TextureManager extends Manager {
 
 		//Shop textures
 		textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
-		textureMap.put("buy_bag", new Texture("resources/ui/shop_ui/buy_bag.png"));
-		textureMap.put("sell_bag", new Texture("resources/ui/shop_ui/sell_bag.png"));
 		textureMap.put("shop_buy_button", new Texture("resources/ui/shop_ui/shop_buy.png"));
 		textureMap.put("shop_sell_button", new Texture("resources/ui/shop_ui/shop_sell.png"));
 		textureMap.put("player_title", new Texture("resources/ui/shop_ui/player_title.png"));

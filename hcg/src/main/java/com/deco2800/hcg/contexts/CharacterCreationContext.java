@@ -10,12 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.items.BasicSeed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-import java.util.*;
-import java.util.List;
+import com.deco2800.hcg.managers.PlayerManager;
 
 /**
  * The CharacterCreationContext is used at the start of the game to create a character by assigning various points,
@@ -64,10 +63,7 @@ public class CharacterCreationContext extends CharacterContext{
     private String[] sexes = new String[]{"Male", "Female"};
 
     // Placeholder for setting what skills are specialised because I'm a data structures n00b
-    private List<String> SPECIALISED_SKILLS = Arrays.asList( "meleeSkill", "gunsSkill", "energyWeaponsSkill");
-    private Map<String, Boolean> specialisedSkills;
-
-    //private int[] specialisedSkills = new int[3];
+    private int[] specialisedSkills = new int[3];
 
     private int strength = 5; 
     private int vitality = 5;
@@ -109,10 +105,6 @@ public class CharacterCreationContext extends CharacterContext{
      */
     public CharacterCreationContext() {
         getManagers();
-        this.specialisedSkills = new HashMap<String, Boolean>();
-        for (String attribute: SPECIALISED_SKILLS) {
-            specialisedSkills.put(attribute, false);
-        }
         initMasterTable();
         setupTextures();
         initSubTables();
@@ -536,14 +528,14 @@ public class CharacterCreationContext extends CharacterContext{
                     meleeSkill -= 10;
                     meleeSkillSpecialise.setChecked(false);
                     meleeSkillSpecialiseChecked = false;
-                    specialisedSkills.replace("meleeSkill", false);
+                    specialisedSkills[0] = 0;
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
                         meleeSkill += 10;
                         meleeSkillSpecialise.setChecked(true);
                         meleeSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("meleeSkill", true);
+                        specialisedSkills[0] = 1;
                     } else {
                         meleeSkillSpecialise.setChecked(false);
                         meleeSkillSpecialiseChecked = false;
@@ -564,14 +556,14 @@ public class CharacterCreationContext extends CharacterContext{
                     gunsSkill -= 10;
                     gunsSkillSpecialise.setChecked(false);
                     gunsSkillSpecialiseChecked = false;
-                    specialisedSkills.replace("gunsSkill", false);
+                    specialisedSkills[1] = 0;
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
                         gunsSkill += 10;
                         gunsSkillSpecialise.setChecked(true);
                         gunsSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("gunsSkill", false);
+                        specialisedSkills[1] = 1;
                     } else {
                         gunsSkillSpecialise.setChecked(false);
                         gunsSkillSpecialiseChecked = false;
@@ -592,14 +584,14 @@ public class CharacterCreationContext extends CharacterContext{
                     energyWeaponsSkill -= 10;
                     energyWeaponsSkillSpecialise.setChecked(false);
                     energyWeaponsSkillSpecialiseChecked = false;
-                    specialisedSkills.replace("energyWeaponsSkill", false);
+                    specialisedSkills[2] = 0;
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
                         energyWeaponsSkill += 10;
                         energyWeaponsSkillSpecialise.setChecked(true);
                         energyWeaponsSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("energyWeaponsSkill", true);
+                        specialisedSkills[2] = 1;
                     } else {
                         energyWeaponsSkillSpecialise.setChecked(false);
                         energyWeaponsSkillSpecialiseChecked = false;
@@ -711,15 +703,14 @@ public class CharacterCreationContext extends CharacterContext{
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill,
                 energyWeaponsSkill, name);
-        player.setSpecialisedSkills(specialisedSkills);
         player.setTexture(texture);
         playerManager.setPlayer(player);
         //TODO: Change this, currently these are just testing items
         Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
-        Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
-        startingSeeds.setStackSize(100);
+        Item startingSeeds = new BasicSeed();
+        startingSeeds.addToStack(100);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);
@@ -727,5 +718,6 @@ public class CharacterCreationContext extends CharacterContext{
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
+
     }
 }
