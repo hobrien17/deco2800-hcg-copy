@@ -35,6 +35,8 @@ public class MushroomTurret extends Enemy implements Observer {
         range = 15 * this.level;
         manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
+        healthMax = 20;
+        healthCur = healthMax;
         // weapon not working
         this.enemyWeapon = new WeaponBuilder()
                 .setWeaponType(WeaponType.MACHINEGUN)

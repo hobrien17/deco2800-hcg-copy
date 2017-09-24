@@ -3,7 +3,6 @@ package com.deco2800.hcg.entities.enemyentities;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
-import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
@@ -12,7 +11,6 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.weapons.*;
 import com.deco2800.hcg.worlds.World;
@@ -27,7 +25,7 @@ import java.util.Random;
 
 import static java.lang.Math.*;
 
-public abstract class Enemy extends Character implements Lootable, Harmable {
+public abstract class Enemy extends Character implements Lootable {
     
     // logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
@@ -50,9 +48,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected boolean collidedPlayer;
     protected Box3D newPos;
     protected Box3D prevPos;
-
-	// Effects container
-	protected Effects myEffects;
 
     protected Weapon enemyWeapon;
     
@@ -127,23 +122,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public float getLastPlayerY(){
         return this.lastPlayerY;
     }
-    /**
-     * Take the damage inflicted by the other entities
-     * 
-     * @param damage: the amount of the damage
-     * @exception: throw IllegalArgumentException if damage is a negative integer
-     */
-    public void takeDamage(int damage) {
-        if (damage < 0){
-            throw new IllegalArgumentException();
-        }
-        else if (damage > healthCur){
-            healthCur = 0;
-        }
-        else {
-            healthCur -= damage;
-        }
-    }
+
     
     /**
      * 
@@ -175,14 +154,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      */
     public boolean getCollided(){
         return this.collided;
-    }
-    /**
-     * Change the health level of the enemy i.e can increase or decrease the health level (depending on whether the amount is positive or negative)
-     * 
-     * @param amount: the amount that the health level will change by
-     */
-    public void changeHealth(int amount) {
-        healthCur = Math.max(healthCur + amount, 0);
     }
 
     /**
@@ -497,49 +468,33 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         enemyWeapon.openFire();
     }
     
-    /**
-     * Changes the speed by modifier amount
-     * 
-     * @param modifier 
-     * 			the amount to change the speed (<1 to slow,  >1 to speed)
-     */
-    public void changeSpeed(float modifier) {
-    	this.movementSpeed *= (1 - modifier);
-    }
+//    /**
+//     * Changes the speed by modifier amount
+//     *
+//     * @param modifier
+//     * 			the amount to change the speed (<1 to slow,  >1 to speed)
+//     */
+//    public void changeSpeed(float modifier) {
+//    	this.movementSpeed *= (1 - modifier);
+//    }
     
-    /**
-     * Sets the movement speed of the enemy
-     * 
-     * @param speed
-     * 			the new movement speed
-     */
-    public void setSpeed(float speed) {
-    	this.movementSpeed = speed;
-    }
+
     
-    /**
-     * Sets the enemy's speed to its original value
-     * 
-     */
-    public void resetSpeed() {
-    	this.movementSpeed = normalSpeed;
-    }
+//    /**
+//     * Sets the enemy's speed to its original value
+//     *
+//     */
+//    public void resetSpeed() {
+//    	this.movementSpeed = normalSpeed;
+//    }
     
-    @Override
-    public float getMovementSpeed() {
-    	return this.movementSpeed;
-    }
+//    @Override
+//    public float getMovementSpeed() {
+//    	return this.movementSpeed;
+//    }
 	
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
-	@Override
-    public void giveEffect(Effect effect) {
-        myEffects.addEffect(effect);
-    }
 
-    @Override
-    public void giveEffect(Collection<Effect> effects) {
-        myEffects.addAllEffects(effects);
-    }
     
     @Override
     public boolean equals(Object obj) {
