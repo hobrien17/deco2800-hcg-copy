@@ -80,8 +80,6 @@ public abstract class Shop {
             shopStock.add(item);
         } else {
             shopItem.addToStack(item.getStackSize());
-
-            //shopStock.get(shopStock.indexOf(shopItem)).addToStack(item.getStackSize());
         }
 
     }
@@ -198,7 +196,9 @@ public abstract class Shop {
         seed = new Seed(Seed.Type.SUNFLOWER);
         seed.setStackSize(item.getBaseValue()+modifier);
         if ((item instanceof SingleItem) || (item.getStackSize() == 1)) {
+            System.out.println("fddf");
             if (!player.getInventory().removeItem(item)) {
+
                 return 3;
             }
         } else {
