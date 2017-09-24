@@ -25,6 +25,7 @@ public class SoundManager extends Manager {
 	 * Constructor Loads all audio files to memory on startup.
 	 */
 	public SoundManager() {
+
 		try {
 			soundMap.put("ree", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree1.wav")));
 			soundMap.put("quack", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/quack.wav")));
@@ -47,15 +48,17 @@ public class SoundManager extends Manager {
 			soundMap.put("bullet-grenade-explode", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/bullet-grenade-explode.wav")));
 
 			// For weather Effects
-			soundMap.put("weatherRain", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
+			soundMap.put("weatherRain", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/rain-ambient-hardsurface-shortloop.wav")));
 			soundMap.put("weatherSandStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/darude-sandstorm-shortloop.wav")));
 			soundMap.put("weatherSnow", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherWind", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherDrought", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
-			soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
+			soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/rain-ambient-hardsurface-shortloop.wav")));
+
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}
+
 	}
 
 	/**

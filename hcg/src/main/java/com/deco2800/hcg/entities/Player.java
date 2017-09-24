@@ -810,6 +810,10 @@ public class Player extends Character implements Tickable {
 				Pot pot = (Pot)closest.get();
 				pot.unlock();
 			}
+		case Input.Keys.TAB:
+			System.out.println("You press Tab!");
+			this.contextManager.pushContext(new ScoreBoardContext());
+			break;
 		default:
 			break;
 		}

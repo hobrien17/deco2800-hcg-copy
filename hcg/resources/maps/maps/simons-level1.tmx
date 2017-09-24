@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="40" height="40" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="83">
+
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="15"/>
-  <property name="weather" value="none"/>
+  <property name="weather" value="wind"/>
  </properties>
  <tileset firstgid="1" source="../tiles/exit.tsx"/>
  <tileset firstgid="2" source="../tiles/placeholder.tsx"/>
@@ -13,9 +14,8 @@
  <tileset firstgid="29" source="../tiles/charcoal.tsx"/>
  <tileset firstgid="30" source="../tiles/lava-animated.tsx"/>
  <tileset firstgid="38" source="../tiles/grass.tsx"/>
- <tileset firstgid="39" source="../tiles/grass.tsx"/>
- <tileset firstgid="40" source="../tiles/spikes-large.tsx"/>
- <tileset firstgid="41" source="../tiles/health.tsx"/>
+ <tileset firstgid="39" source="../tiles/spikes-large.tsx"/>
+ <tileset firstgid="40" source="../tiles/health.tsx"/>
  <objectgroup name="ant">
   <properties>
    <property name="name" value="ant"/>
@@ -64,9 +64,9 @@
 6,6,38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,14,14,14,14,38,38,38,38,38,38,38,38,38,
 6,6,38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,38,14,14,38,38,38,38,38,38,38,38,38,38,
 38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,14,14,38,38,38,38,38,38,38,38,38,38,
-38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,39,14,39,39,38,38,38,38,38,38,38,38,38,
-6,6,38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,39,39,39,39,38,38,38,38,38,38,38,38,38,
-6,6,38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,39,39,39,39,38,38,38,38,38,38,38,38,38
+38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,14,38,38,38,38,38,38,38,38,38,38,38,
+6,6,38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,
+6,6,38,38,6,6,38,38,6,6,38,38,6,6,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38
 </data>
  </layer>
  <layer name="exit" width="40" height="40">

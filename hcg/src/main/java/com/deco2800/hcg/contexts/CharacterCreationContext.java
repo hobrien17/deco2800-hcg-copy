@@ -132,7 +132,7 @@ public class CharacterCreationContext extends CharacterContext{
         female1 = textureManager.getTexture("ccFemale1");
         female2 = textureManager.getTexture("ccFemale2");
         female3 = textureManager.getTexture("ccFemale3");
-        blank_window_background = textureManager.getTexture("ccWindow_Border_White");
+        blank_window_background = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
 

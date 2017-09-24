@@ -137,9 +137,9 @@ timelineCount: 1
 timeline0: 0.0
 - Tint - 
 colorsCount: 3
-colors0: 0.40784314
-colors1: 1.0
-colors2: 0.34117648
+colors0: 0.101960786
+colors1: 0.22745098
+colors2: 0.08627451
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -149,15 +149,15 @@ highMin: 1.0
 highMax: 1.0
 relative: false
 scalingCount: 4
-scaling0: 0.0
+scaling0: 0.8596491
 scaling1: 0.877193
 scaling2: 0.8245614
-scaling3: 0.47368422
+scaling3: 0.36842105
 timelineCount: 4
 timeline0: 0.0
 timeline1: 0.36301368
 timeline2: 0.6849315
-timeline3: 0.9726027
+timeline3: 0.9931507
 - Options - 
 attached: false
 continuous: true

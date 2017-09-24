@@ -787,6 +787,12 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="exit">
+  <properties>
+   <property name="name" value="EXIT"/>
+  </properties>
+  <object id="1432" gid="21" x="960" y="1568" width="55" height="32"/>
+ </objectgroup>
  <objectgroup name="MUSHROOMTREETHICK">
   <properties>
    <property name="name" value="MUSHROOMTREETHICK"/>

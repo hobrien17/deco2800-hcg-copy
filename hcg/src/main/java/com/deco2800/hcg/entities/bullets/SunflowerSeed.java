@@ -14,6 +14,7 @@ public class SunflowerSeed extends Bullet {
 				  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
+		this.bulletType = BulletType.SUNFLOWER;
 	}
 
 	@Override

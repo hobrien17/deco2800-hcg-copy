@@ -36,10 +36,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected int cooldown;
     protected WeaponType weaponType;
     protected AbstractEntity user;
-    protected int bulletType;
+    protected BulletType bulletType;
     protected int pellets;
-
-    private SoundManager soundManager;    
+    protected SoundManager soundManager;
 
     /**
      * Constructor for Weapon objects.
@@ -63,7 +62,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.followX = 0;
         this.followY = 0;
         this.aim = new Vector3(0, 0, 0);
-        this.bulletType = 0;
+        this.bulletType = BulletType.BASIC;
 
         this.weaponType = weaponType;
         this.user = user;
@@ -71,7 +70,16 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         // TODO: Get proper weapon textures
         this.setTexture(texture);
         this.cooldown = cooldown;
-        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);        
+        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
+    }
+
+    /**
+     * Sets the type of bullet fired
+     *
+     * @param BulletType bulletType
+     */
+    public void setBulletType(BulletType bulletType) {
+        this.bulletType = bulletType;
     }
 
     /**
@@ -104,24 +112,12 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.shoot = false;
     }
 
+    /**
+     * Makes Sound Manager play firing sound for the weapon
+     * Stops the sound first if it is already being played
+     */
     protected void playFireSound() {
-        String soundName;
-        switch (weaponType) {
-            case MACHINEGUN:
-                soundName = "gun-rifle-shoot";
-                break;
-            case SHOTGUN:
-                soundName = "gun-shotgun-shoot";
-                break;
-            case STARFALL:
-                soundName = "gun-stargun-shoot";
-                break;
-            case GRENADELAUNCHER:
-                soundName = "gun-grenadelauncher-shoot";
-                break;
-            default:
-                soundName = "gun-rifle-shoot";
-        }
+        String soundName = "gun-rifle-shoot";
         soundManager.stopSound(soundName);
         soundManager.playSound(soundName);
     }
@@ -147,7 +143,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.followX = worldX;
         this.followY = worldY;
     }
-    
+
 
     /**
      * Creates a new bullet at given position
@@ -164,19 +160,63 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         Bullet bullet;
         if(this.weaponType == WeaponType.GRENADELAUNCHER) {
             bullet = new Grenade(posX, posY, posZ, goalX, goalY,
-                    0, 0.6f, 0.6f, 1, this.user, bulletType);
+                    0, 0.6f, 0.6f, 1, this.user, -1);
         } else {
-            bullet = this.createBullet(posX, posY, posZ,
-                    goalX, goalY);
+            switch (bulletType) {
+                case BASIC:
+                    bullet = new Bullet(posX, posY, posZ,
+                            goalX, goalY, this.user, 1);
+                    break;
+                case ICE:
+                    bullet = new IceBullet(posX, posY, posZ,
+                            goalX, goalY, this.user, 1);
+                    break;
+                case FIRE:
+                    bullet = new FireBullet(posX, posY, posZ,
+                            goalX, goalY, this.user, 1);
+                    break;
+                case EXPLOSION:
+                    bullet = new ExplosionBullet(posX, posY, posZ,
+                            goalX, goalY, this.user, 1);
+                    break;
+                default:
+                    bullet = new Bullet(posX, posY, posZ,
+                            goalX, goalY, this.user, 1);
+                    break;
+            }
         }
         GameManager.get().getWorld().addEntity(bullet);
+    }
+
+    public void switchBullet() {
+        switch (bulletType) {
+            case BASIC:
+                bulletType = BulletType.ICE;
+                break;
+            case ICE:
+                bulletType = BulletType.FIRE;
+                break;
+            case FIRE:
+                bulletType = BulletType.EXPLOSION;
+                break;
+            case EXPLOSION:
+                bulletType = BulletType.BASIC;
+                break;
+            default:
+                bulletType = BulletType.BASIC;
+                break;
+        }
     }
 
     /**
      * Fires weapon using different firing method based on weapon type
      * Takes local variables aimX and aimY as firing coordinates
      */
-    protected void fireWeapon() {}
+    protected void fireWeapon() {
+        shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                this.aim.x, this.aim.y);
+        playFireSound();
+    }
 
     /**
      * Changes the position of the weapon in the gameworld
@@ -194,57 +234,6 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                 (float) (this.radius * Math.cos(angle)));
         setPosY(this.user.getPosY() +
                 (float) (this.radius * Math.sin(angle)));
-    }
-
-    /**
-     * Increments the integer bulletType to indicate a switch in bullet
-     */
-    public void switchBullet() {
-        bulletType++;
-        if(bulletType > 3) {
-            bulletType = 0;
-        }
-    }
-
-    /**
-     * Creates a specific bullet depending on the current equipped bullet.
-     * The current equipped bullet is represented by the integer bulletType.
-     *
-     * @param posX
-     *              The x position of the bullet
-     * @param posY
-     *              The y position of the bullet
-     * @param posZ
-     *              The z position of the bullet
-     * @param goalX
-     *              The x direction of the bullet
-     * @param goalY
-     *              The y direction of the bullet
-     * @return The bullet created
-     */
-    //TODO: incorporate into Bullet constructor
-    public Bullet createBullet(float posX, float posY, float posZ,
-                        float goalX, float goalY) {
-        Bullet bullet;
-        switch (bulletType) {
-            case 0:
-                bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
-                break;
-            case 1:
-                bullet = new IceBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
-                break;
-            case 2:
-                bullet = new FireBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
-                break;
-            default:
-                bullet = new ExplosionBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
-                break;
-        }
-        return bullet;
     }
 
     /**
@@ -294,4 +283,3 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         return result;
     }
 }
-

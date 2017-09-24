@@ -23,7 +23,7 @@ import java.util.List;
  * A generic player instance for the game
  */
 public class Grenade extends Bullet implements Tickable {
-    
+
     private Explosion explosion;
     private boolean activated;
     /**
@@ -54,10 +54,11 @@ public class Grenade extends Bullet implements Tickable {
      *            the total number of enemies that can be hit
      */
     public Grenade(float posX, float posY, float posZ, float newX, float newY,
-            float newZ, float xLength, float yLength, float zLength,
-            AbstractEntity user, int hitCount) {
+                   float newZ, float xLength, float yLength, float zLength,
+                   AbstractEntity user, int hitCount) {
         super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, -1);
         this.activated = false;
+        this.bulletType = BulletType.GRENADE;
     }
 
     /**

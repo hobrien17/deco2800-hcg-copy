@@ -38,6 +38,7 @@ public class FireBullet extends Bullet {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
 		this.setTexture("battle_seed_red");
+		this.bulletType = BulletType.FIRE;
 	}
 
 	/**
@@ -61,6 +62,7 @@ public class FireBullet extends Bullet {
 	public FireBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_red");
+		this.bulletType = BulletType.FIRE;
 	}
 
 	/**
@@ -93,11 +95,12 @@ public class FireBullet extends Bullet {
 					  float yLength, float zLength, AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount);
 		this.setTexture("battle_seed_red");
+		this.bulletType = BulletType.FIRE;
 	}
 
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Shot", 1, 5, 0, 0, 200, 0));
+		target.giveEffect(new Effect("Ice", 1, 5, 1, 0, 200, 0));
 //    AbstractEntity entity = (AbstractEntity)target;
 //    List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 1, Enemy.class);
 //    for(AbstractEntity close : closest) {
