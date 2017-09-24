@@ -5,6 +5,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.TimeManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,5 +38,17 @@ public class MushroomTurretTest {
         enemy.setupLoot();
         assertThat("MushroomTurret only has 1 drop.", enemy.loot().length, is(equalTo(1)));
         assertThat("Item should be fire seed", enemy.randItem(), is(equalTo("fire_seed")));
+    }
+
+    @Test
+     public void testTimer() {
+        StopwatchManager stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
+        TimeManager timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
+        gameManager.getWorld().addEntity(enemy);
+        for (int i = 0; i < 4; i++) {
+            assertThat("MushroomTurret texture incorrect.", enemy.getTexture(), is(equalTo("mushroom")));
+            enemy.update(stopwatchManager, i);
+        }
+        assertThat("MushroomTurret texture incorrect.", enemy.getTexture(), is(equalTo("tower")));
     }
 }
