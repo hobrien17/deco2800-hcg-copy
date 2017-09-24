@@ -41,7 +41,11 @@ public class TextureManager extends Manager {
 		textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 		textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 		textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
-		textureMap.put("squirrel", new Texture("resources/sprites/enemies/squirrel_basic.png"));
+		textureMap.put("squirrel", new Texture("resources/sprites/enemies/ant.png"));
+		textureMap.put("hedgehog", new Texture("resources/sprites/enemies/hedgehog.png"));
+		textureMap.put("hedgeball", new Texture("resources/sprites/enemies/hedgeball.png"));
+		textureMap.put("mushroom", new Texture("resources/sprites/enemies/mushy.png"));
+		textureMap.put("snail", new Texture("resources/sprites/enemies/snail.png"));
 		textureMap.put("battle_seed", new Texture("resources/sprites/seeds/battle_seed.png"));
 		textureMap.put("battle_seed_green", new Texture("resources/sprites/seeds/battle_seed_green.png"));
 		textureMap.put("battle_seed_red", new Texture("resources/sprites/seeds/battle_seed_red.png"));
