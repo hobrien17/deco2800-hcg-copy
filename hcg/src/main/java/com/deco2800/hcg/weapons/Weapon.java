@@ -158,8 +158,14 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      */
     protected void shootBullet(float posX, float posY, float posZ,
                                float goalX, float goalY) {
-        Bullet bullet = this.createBullet(posX, posY, posZ,
-                goalX, goalY);
+        Bullet bullet;
+        if(this.weaponType == WeaponType.GRENADELAUNCHER) {
+            bullet = new Grenade(posX, posY, posZ, goalX, goalY,
+                    0, 0.6f, 0.6f, 1, this.user, bulletType);
+        } else {
+            bullet = this.createBullet(posX, posY, posZ,
+                    goalX, goalY);
+        }
         GameManager.get().getWorld().addEntity(bullet);
     }
 

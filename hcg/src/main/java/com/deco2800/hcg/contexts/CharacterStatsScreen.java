@@ -24,6 +24,8 @@ abstract class CharacterStatsScreen extends CharacterContext {
     Label gunsSkillLabel;
     Label energyWeaponsSkillLabel;
 
+    TextButton backButton;
+
     CharacterStatsScreen() {
         getManagers();
         initMasterTable();
@@ -54,7 +56,7 @@ abstract class CharacterStatsScreen extends CharacterContext {
         int currentXp = playerManager.getPlayer().getXp();
         int xpThreshold = playerManager.getPlayer().getXpThreshold();
 
-        TextButton backButton = new TextButton("Back", skin);
+        backButton = new TextButton("Back", skin);
         Label levelLabel = new Label("Level: " + level, skin);
         Label xpLabel = new Label("Xp: " + currentXp + "/" + xpThreshold, skin);
 

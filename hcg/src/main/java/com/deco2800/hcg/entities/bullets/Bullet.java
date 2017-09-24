@@ -9,7 +9,6 @@ import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.turrets.AbstractTurret;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
@@ -31,8 +30,8 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected float changeX;
 	protected float changeY;
 
-	private AbstractEntity user;
-	private int hitCount;
+	protected AbstractEntity user;
+	protected int hitCount;
 
 	private GameManager gameManager = GameManager.get();
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
@@ -119,11 +118,11 @@ public class Bullet extends AbstractEntity implements Tickable {
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
 
-        this.goalX = newX - this.getXLength()/2;
-        this.goalY = newY - this.getYLength()/2;
+        this.goalX = newX;
+        this.goalY = newY;
 
-		float deltaX = getPosX() - goalX;
-		float deltaY = getPosY() - goalY;
+		float deltaX = getPosX() - (goalX - this.getXLength()/2);
+		float deltaY = getPosY() - (goalY - this.getYLength()/2);
 
 		this.angle = (float) (Math.atan2(deltaY, deltaX)) + (float) (Math.PI);
 
@@ -133,26 +132,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 		this.user = user;
 		this.hitCount = hitCount;
 	}
-
-	/**
-	 * Returns the projection of the bullet
-	 *
-	 * @param xd
-	 *            the bullet's x direction
-	 * @param yd
-	 *            the bullet's y direction
-	 * @return a pair of x and y co-ordinates
-	 */
-	protected static float[] getProj(float xd, float yd) {
-		float[] proj = new float[2];
-
-		proj[0] = xd / 55f;
-		proj[1] = -(yd - 32f / 2f) / 32f + proj[0];
-		proj[0] -= proj[1] - proj[0];
-		
-		return proj;
-	}
-
+	
 	/**
 	 * On Tick handler
 	 *
@@ -161,6 +141,9 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
+	    
+	    entityHit();
+	    
         if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
                 - Math.abs(goalX)) < 0.5
                 && Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
@@ -169,8 +152,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
-
-		entityHit();
 	}
 
 	/**
@@ -196,7 +177,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 					} else if (target.getHealthCur() <= 0) {
 						//Temporary increase of xp for all enemies killed
-						playerManager.getPlayer().gainXp(100);
+						playerManager.getPlayer().gainXp(50);
 						Double prob = Math.random();
 						if (prob > 0.3) {
 							Corpse corpse = new BasicCorpse(target.getPosX(), target.getPosY(), 0);
@@ -208,6 +189,8 @@ public class Bullet extends AbstractEntity implements Tickable {
 							playerUser.killLogAdd(target.getID());
 						}
 					} else {
+						//Temporary increase of xp for all enemies killed
+						playerManager.getPlayer().gainXp(50);
 						applyEffect(target);
 
 					}
@@ -230,11 +213,13 @@ public class Bullet extends AbstractEntity implements Tickable {
 				}
 
 				// Collision with corpse
+				/*
 				if (entity instanceof Corpse && user instanceof Player) {
 					Corpse corpse = (Corpse) entity;
 					//corpse.plantInside(this); //commented out because this is immediately spawning sunflower turrets
 					hitCount = 0;
 				}
+				*/
 
 				if (hitCount == 0) {
 					GameManager.get().getWorld().removeEntity(this);

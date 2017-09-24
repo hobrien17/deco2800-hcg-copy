@@ -10,11 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.items.BasicSeed;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-
 import java.util.*;
 import java.util.List;
 
@@ -159,6 +158,7 @@ public class CharacterCreationContext extends CharacterContext{
         statsWindow.setBackground(new Image(blank_window_background).getDrawable());
         characterPreviewWindow.setBackground(new Image(blank_window_background).getDrawable());
 
+
         /* Need to find a way to do this without overwriting the button and label listeners.
         attributesWindow.addListener(new ClickListener() {
             @Override
@@ -278,6 +278,7 @@ public class CharacterCreationContext extends CharacterContext{
         attributesWindow.add(charismaDown);
         attributesWindow.add(charismaLabel);
         attributesWindow.add(charismaUp);
+        attributesWindow.pack();
 
         // Add listeners for buttons
         strengthDown.addListener(new ClickListener() {
@@ -524,6 +525,7 @@ public class CharacterCreationContext extends CharacterContext{
         skillsWindow.row();
         skillsWindow.add(energyWeaponsSkillSpecialise);
         skillsWindow.add(energyWeaponsSkillLabel);
+        skillsWindow.pack();
 
         /*  Add listeners to the check-boxes have had to do some VERY odd work arounds to get these checkboxes working
             The checkbox.isChecked() methods don't seem to be working properly with the clickListener
@@ -572,7 +574,7 @@ public class CharacterCreationContext extends CharacterContext{
                         gunsSkill += 10;
                         gunsSkillSpecialise.setChecked(true);
                         gunsSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("gunsSkill", false);
+                        specialisedSkills.replace("gunsSkill", true);
                     } else {
                         gunsSkillSpecialise.setChecked(false);
                         gunsSkillSpecialiseChecked = false;
@@ -689,20 +691,21 @@ public class CharacterCreationContext extends CharacterContext{
 
     private void setupSelectedDescriptionWindow() {
         selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
+        selectedDescriptionText.setDisabled(true);
         selectedDescriptionText.setColor(Color.WHITE);
-        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY().padTop(10);
+        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
     }
 
     private void addSubtables() {
-        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(10);
+        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesWindow).top().left().expandX().fillX();
-        masterTable.add(skillsWindow).top().right().expandX().fillX().fillY();
+        masterTable.add(attributesWindow).top().left().expandX().fillX().padBottom(15);
+        masterTable.add(skillsWindow).top().right().expandX().fillX().padBottom(15);
         masterTable.row();
-        masterTable.add(statsWindow).top().left().expandX().fillX().fillY();
-        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().fillY();
+        masterTable.add(statsWindow).top().left().expandX().fillX().fillY().padBottom(15);
+        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().padBottom(15);
         masterTable.row();
-        masterTable.add(selectedDescriptionWindow).top().left().fillX().fillY().expandY().expandX().colspan(2);
+        masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
 
 
@@ -719,8 +722,8 @@ public class CharacterCreationContext extends CharacterContext{
         Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
-        Item startingSeeds = new BasicSeed();
-        startingSeeds.addToStack(100);
+        Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
+        startingSeeds.setStackSize(100);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);
@@ -728,6 +731,5 @@ public class CharacterCreationContext extends CharacterContext{
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
-
     }
 }

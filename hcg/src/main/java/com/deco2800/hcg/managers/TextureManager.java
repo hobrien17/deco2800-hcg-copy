@@ -112,6 +112,7 @@ public class TextureManager extends Manager {
 			textureMap.put("sludgebarrel", new Texture("resources/terrain_objects/sludge-barrel.png"));
 			textureMap.put("house2", new Texture("resources/terrain_objects/house2.png"));
 			textureMap.put("house2destroyed", new Texture("resources/terrain_objects/house2destroyed.png"));
+        textureMap.put("concretewall", new Texture("resources/terrain_objects/concretewall.png"));
 
 			// terrain tiles
 			textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
@@ -197,6 +198,8 @@ public class TextureManager extends Manager {
 
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
+		textureMap.put("buy_bag", new Texture("resources/ui/shop_ui/buy_bag.png"));
+		textureMap.put("sell_bag", new Texture("resources/ui/shop_ui/sell_bag.png"));
 			textureMap.put("shop_buy_button", new Texture("resources/ui/shop_ui/shop_buy.png"));
 			textureMap.put("shop_sell_button", new Texture("resources/ui/shop_ui/shop_sell.png"));
 			textureMap.put("player_title", new Texture("resources/ui/shop_ui/player_title.png"));
@@ -205,6 +208,7 @@ public class TextureManager extends Manager {
 			textureMap.put("shop_exit", new Texture("resources/ui/shop_ui/shop_exit.png"));
 			textureMap.put("selected", new Texture("resources/ui/shop_ui/selected.png"));
 			textureMap.put("tooltip", new Texture("resources/ui/tooltip.png"));
+        textureMap.put("error_shop", new Texture("resources/ui/shop_ui/error.png"));
 
 			//World map textures
 			textureMap.put("wm_blue_bg", new Texture("resources/worldmap/blue_background.png"));
@@ -261,6 +265,7 @@ public class TextureManager extends Manager {
 			textureMap.put("ccFemale2", new Texture("resources/sprites/player/character_creation/female2.png"));
 			textureMap.put("ccFemale3", new Texture("resources/sprites/player/character_creation/female3.png"));
 			textureMap.put("ccWindow_Background_White", new Texture("resources/ui/character_creation/window_background_white.png"));
+			//textureMap.put("ccWindow_Border_White", new Texture("resources/ui/character_creation/border.png"));
 
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);

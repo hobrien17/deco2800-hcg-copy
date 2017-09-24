@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
@@ -30,14 +29,12 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
-import com.deco2800.hcg.trading.Shop;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
@@ -174,9 +171,12 @@ public class Player extends Character implements Tickable {
 		Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL).setUser(this).setRadius(0.7).build();
 		Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
 				.build();
-		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
-		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+	    Weapon grenadelauncher = new WeaponBuilder().setWeaponType(WeaponType.GRENADELAUNCHER).setUser(this).setRadius(0.7)
+	                .build();
+		//equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
+	    equippedItems.addItem(new WeaponItem(grenadelauncher, "Grenade Launcher", 10));
+        equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
 	}
 
 	/**
@@ -665,20 +665,20 @@ public class Player extends Character implements Tickable {
 	 * health and stamina based on player agility and vitality
 	 */
 	private void levelUp() {
-		xpThreshold *= 1.3;
+		xpThreshold *= 1.5;
 		level++;
 
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");
-		healthMax += vitality;
-		healthCur += vitality;
+		healthMax += vitality * 40;
+		healthCur += vitality * 40;
 
 		// Increase stamina by agility points
 		int agility = attributes.get("agility");
-		staminaMax += agility;
-		staminaCur += agility;
+		staminaMax += agility * 40;
+		staminaCur += agility * 40;
 
-		skillPoints = 4 + attributes.get("intellect");
+		skillPoints = 4 + attributes.get("intellect") * 2;
 		// TODO: enter level up screen
 	}
 
@@ -759,6 +759,7 @@ public class Player extends Character implements Tickable {
 			break;
 		case Input.Keys.C:
 			if (levelUp) {
+				levelUp = false;
 				levelUp();
 				this.contextManager.pushContext(new LevelUpContext());
 			} else {

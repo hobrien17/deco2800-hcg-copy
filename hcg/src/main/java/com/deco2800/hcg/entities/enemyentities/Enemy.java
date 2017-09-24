@@ -14,11 +14,8 @@ import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.weapons.*;
 import com.deco2800.hcg.worlds.World;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
