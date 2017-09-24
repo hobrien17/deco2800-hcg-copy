@@ -32,6 +32,13 @@ public class Grenadelauncher extends Weapon implements Tickable {
     }
     
     @Override
+    protected void playFireSound() {
+        String soundName = "gun-grenadelauncher-shoot";
+        soundManager.stopSound(soundName);
+        soundManager.playSound(soundName);
+    }
+    
+    @Override
     protected void fireWeapon() {
         shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 this.aim.x, this.aim.y);

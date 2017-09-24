@@ -33,6 +33,13 @@ public class Shotgun extends Weapon implements Tickable {
     }
     
     @Override
+    protected void playFireSound() {
+        String soundName = "gun-shotgun-shoot";
+        soundManager.stopSound(soundName);
+        soundManager.playSound(soundName);
+    }
+    
+    @Override
     protected void fireWeapon() {
         Random random = new Random();
         // Shoot bullets at random locations around cursor
