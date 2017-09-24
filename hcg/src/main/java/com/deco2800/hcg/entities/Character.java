@@ -37,7 +37,7 @@ public abstract class Character extends AbstractEntity {
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
 	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList( "level", "xp", "carryWeight",
-            "strength", "vitality", "agility", "charisma", "intellect");
+            "strength", "vitality", "agility", "charisma", "intellect", "meleeSkill", "gunsSkill", "energyWeaponsSkill");
 
 	protected String Name;
 
@@ -118,19 +118,21 @@ public abstract class Character extends AbstractEntity {
      */
     protected void setAttributes(int strength, int vitality, int agility,
             int charisma, int intellect) {
-     this.attributes.put("strength", strength);
-     this.attributes.put("vitality", vitality);
-     this.attributes.put("agility", agility);
-     this.attributes.put("charisma", charisma);
-     this.attributes.put("intellect", intellect);
+         this.attributes.put("strength", strength);
+         this.attributes.put("vitality", vitality);
+         this.attributes.put("agility", agility);
+         this.attributes.put("charisma", charisma);
+         this.attributes.put("intellect", intellect);
     }
 
     /**
      * Sets the character's skills
      * @param meleeSkill
      */
-    protected void setSkills(int meleeSkill) {
-
+    protected void setSkills(int meleeSkill, int gunsSkill, int energyWeaponsSkill) {
+        this.attributes.put("meleeSkill", meleeSkill);
+        this.attributes.put("gunsSkill", gunsSkill);
+        this.attributes.put("energyWeaponsSkill", energyWeaponsSkill);
     }
 
     /**
@@ -359,6 +361,10 @@ public abstract class Character extends AbstractEntity {
             return new Integer(attributes.get(attribute));
         }
         return -1;
+    }
+
+    public int getStrength() {
+        return attributes.get("strength");
     }
 
     /**

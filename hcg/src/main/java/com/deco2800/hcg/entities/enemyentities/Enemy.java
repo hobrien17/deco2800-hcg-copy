@@ -190,7 +190,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      *
      */
     public void causeDamage(Player player) {
-        //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
         player.takeDamage(1);
     }
 
@@ -504,7 +503,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 			the amount to change the speed (<1 to slow,  >1 to speed)
      */
     public void changeSpeed(float modifier) {
-    	this.movementSpeed *= (1 - modifier);
+        this.movementSpeed *= (1 - modifier);
     }
     
     /**
@@ -514,7 +513,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 			the new movement speed
      */
     public void setSpeed(float speed) {
-    	this.movementSpeed = speed;
+    	    this.movementSpeed = speed;
     }
     
     /**
@@ -522,12 +521,16 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 
      */
     public void resetSpeed() {
-    	this.movementSpeed = normalSpeed;
+    	    this.movementSpeed = normalSpeed;
     }
-    
+
+    /**
+     * Returns the enemy movement speed
+     *
+     */
     @Override
     public float getMovementSpeed() {
-    	return this.movementSpeed;
+    	    return this.movementSpeed;
     }
 	
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
@@ -555,7 +558,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 
     @Override
     public int hashCode() {
-        // We create a polynomial hash-code based on start, end and capacity
         final int prime = 31; // an odd base prime
         int result = 1; // the hash code under construction
         result = prime * result + this.id;
