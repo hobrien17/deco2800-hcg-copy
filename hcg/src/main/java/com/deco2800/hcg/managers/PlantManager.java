@@ -58,10 +58,27 @@ public class PlantManager extends Manager {
 		}
 	}
 
+    /**
+     * Remove all plants
+     */
+	public void removeAll() {
+	    plantList.clear();
+    }
+
+    /**
+     * Gets all plants in manager
+     */
+	public ArrayList<AbstractGardenPlant> getPlants() {
+	    return plantList;
+    }
+
 	/**
 	 * Sets the window for the manager
      *
-	 * @param plantWindow the Window to set it to
+	 * @param plantWindow 
+	 * 			the window to set it to
+	 * @param skin 
+	 * 			the window's skin
 	 */
 	public void setPlantWindow(Window plantWindow, Skin skin) {
 		this.plantWindow = plantWindow;
@@ -96,7 +113,7 @@ public class PlantManager extends Manager {
      * @param plant the plant to be highlighted
      */
     private void highLight(AbstractGardenPlant plant){
-
+    	//TODO implement this
     }
 
 	/**

@@ -1,12 +1,19 @@
 package com.deco2800.hcg.worlds;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Selectable;
+import com.deco2800.hcg.renderers.Renderable;
+import com.deco2800.hcg.types.Weathers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,13 +32,18 @@ public class World {
 	static final Logger LOGGER = LoggerFactory.getLogger(World.class);
 
 	private String loadedFile;
+	private Weathers weather;
 
 	private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
+	public List<Renderable> renderables = new ArrayList<Renderable>();
 	protected TiledMap map;
 
 	private int width;
 	private int length;
-
+	
+	private float startingPlayerX;
+	private float startingPlayerY;
+	
 	/**
 	 * Empty abstract world, for testing
 	 */
@@ -66,7 +78,20 @@ public class World {
 				this.getMap().getProperties().get("width", Integer.class));
 		this.setLength(
 				this.getMap().getProperties().get("height", Integer.class));
+		
+        // check for weather
+        if (this.map.getProperties().get("weather") != null) {
+          // make string of weather for enum
+          this.weather = Weathers.valueOf(((String) this.map.getProperties().get("weather")).toUpperCase());
 
+        } else {
+          this.weather = Weathers.NONE;
+        }
+        
+        // load starting player X and Y
+        startingPlayerX = Float.parseFloat((String) this.getMap().getProperties().get("PlayerX"));
+        startingPlayerY = Float.parseFloat((String) this.getMap().getProperties().get("PlayerY"));
+        
 		// loop over all object layers
 		for (MapLayer layer : getObjectLayers()) {
 
@@ -113,15 +138,14 @@ public class World {
 					try {
 
 						this.addEntity(NPCs.valueOf(
-								((String) obj.getProperties().get("Type"))
-										.toUpperCase())
-								.spawn(x, y,
-										(String) obj.getProperties()
+								((String) obj.getProperties().get("Type")).toUpperCase()).spawn(x, y,(String) obj.getProperties()
 												.get("fName"),
 										(String) obj.getProperties()
 												.get("sName"),
 										(String) obj.getProperties()
-												.get("texture")));
+												.get("texture"), (String) obj.getProperties()
+												.get("conversation"), (String) obj.getProperties()
+												.get("faceImage")));
 
 					} finally {
 						/* it didn't work */}
@@ -145,7 +169,7 @@ public class World {
 			map.getLayers().remove(layer);
 
 		}
-
+		
 	}
 
 	/**
@@ -156,7 +180,7 @@ public class World {
 	public List<AbstractEntity> getEntities() {
 		return new ArrayList<AbstractEntity>(this.entities);
 	}
-
+	
 	/**
 	 * Returns all Object Layers present in the map. Implementation assumes that
 	 * the only types of layers are Tile Layers and Object Layers(!!!).
@@ -192,35 +216,102 @@ public class World {
 	}
 
 	/**
-	 * Returns the TiledMapTileLayer that contains the cell at the given X and Y
+	 * Returns the highest TiledMapTileLayer that contains the cell at the given X and Y
 	 * position. See documentation on TiledMapTileLayer.
 	 *
 	 * @param posX
 	 *            X position
 	 * @param posY
 	 *            Y position
-	 * @return A TiledMapTileLayer that contains the players current cell. Null
+	 * @return The highest TiledMapTileLayer that contains a cell at the given position. Null
 	 *         if no such TiledMapTileLayer exists.
 	 */
 	public TiledMapTileLayer getTiledMapTileLayerAtPos(int posX, int posY) {
 		// check for no map
+	  
+	  TiledMapTileLayer highestLayer = null;
+	  
 		if (map != null) {
 			// loop through all layers
-			Iterator<MapLayer> itr = map.getLayers().iterator(); // GameManager.get().getWorld().getMap()
+		    // we want the highest up layer that satisfies it
+		  
+			Iterator<MapLayer> itr = map.getLayers().iterator();
 
 			while (itr.hasNext()) {
 
 				TiledMapTileLayer layer = (TiledMapTileLayer) itr.next();
 
 				if (layer.getCell(posX, posY) != null) {
-					return (TiledMapTileLayer) layer;
+				  highestLayer = (TiledMapTileLayer) layer;
+				  
 				}
 
 			}
 		}
 
+		if (highestLayer != null) {
+          return highestLayer;
+		}
+		
 		return null;
 
+	}
+	
+	/**
+	 * Returns a layer with the given property name and property
+	 * @param propertyName name of the property
+	 * @param property property
+	 * @return MapLayer that has the given property
+	 */
+	public MapLayer getMapLayerWithProperty(String propertyName, String property) {
+         
+      for (MapLayer m : map.getLayers()) {
+        if (property.equals(m.getProperties().get(propertyName))) {
+          return m;
+        }
+      }
+      return null;
+      
+    }
+
+	/**
+	 * Adds a TiledMapTileLayer with a given name and the given properties.
+	 * Note .getName() will not work after this method, you must go through 
+	 * getProperties().get("name")
+	 * @param name name of the layer
+	 * @param properties properties of the layer
+	 */
+	public void addTiledMapTileLayer(String name, MapProperties properties) {
+	  
+	   TiledMapTileLayer layer = new TiledMapTileLayer(this.getWidth(), this.getLength(), 55, 32);
+	   layer.getProperties().putAll(properties);
+	   map.getLayers().add(layer);
+	   	   
+	}
+	
+	/**
+	 *  Adds / changes a tile with a given texture at a given position in a given layer.
+	 *  
+	 * @param posX X position of tile to change
+	 * @param posY Y position of tile to change
+	 * @param texture texture to change tile to
+	 * @param newLayer the destination layer of the tile
+	 * @return true if success, false if failure
+	 */
+	public boolean newTileAtPos(int posX, int posY, Texture texture, TiledMapTileLayer newLayer) {	  
+	  if (newLayer != null) {
+	    
+	    // make new texture region
+	    TextureRegion textureRegion = new TextureRegion(texture);
+	    StaticTiledMapTile tile = new StaticTiledMapTile(textureRegion);
+	    
+	    Cell cell = new Cell();
+	    cell.setTile(tile);
+	    
+	    newLayer.setCell(posY, posX, cell);
+	    
+	  }
+	  return false;
 	}
 
 	/**
@@ -324,4 +415,28 @@ public class World {
 		}
 	}
 
+	/**
+	 * Returns the type of weather specified in the Tiled map.
+	 * @return The weather type of this map
+	 */
+	public Weathers getWeatherType() {
+	  return weather;
+	}
+	
+	/**
+	 * Returns the starting X for the player
+	 * @return the starting X for the player
+	 */
+	public float getStartingPlayerX() {
+	  return startingPlayerX;
+	  
+	} 
+	
+    /**
+     * Returns the starting Y for the player
+     * @return the starting Y for the player
+     */
+	public float getStartingPlayerY() {
+	  return startingPlayerY;
+    } 
 }

@@ -33,6 +33,9 @@ public class MapGenerator {
 	private List<Level> levelsBoss;
 	private List<Level> levelsNonBoss;
 	
+	private int seedValue;
+	private Random mainGenerator;
+	
 	/**
 	 * Initialises the MapGenerator class.
 	 * @param levelSet
@@ -46,6 +49,15 @@ public class MapGenerator {
 		levelsOfType = new ArrayList<>();
 		levelsNotOfType = new ArrayList<>();
 		levelsNonBoss = new ArrayList<>();
+		
+		Random seedGenerator = new Random();
+		seedValue = Math.abs(seedGenerator.nextInt(999));
+		mainGenerator = new Random(seedValue);
+	}
+	
+	public void setGeneratorSeed(int seed) {
+		seedValue = seed;
+		mainGenerator = new Random(seedValue);
 	}
 	
 	/**
@@ -77,17 +89,6 @@ public class MapGenerator {
 		int rowCount = DEFAULT_ROW_COUNT;
 		int columnCount = DEFAULT_COLUMN_COUNT;
 		return generateNewMap(rowCount, columnCount, worldType);
-	}
-
-	/**
-	 * Generates a world from the provided seed value. levelSet must contain all levels found in the seed's world.
-	 * @param seed
-	 *     The seed to generate the world from
-	 * @return
-	 *     Returns the generated world map
-	 */
-	public WorldMap generateWorldMap(String seed) {
-		return generateMapFromSeed(seed);
 	}
 	
 	/**
@@ -143,32 +144,9 @@ public class MapGenerator {
 		for(MapNode node : worldNodes) {
 			LOGGER.info(node.toString());
 		}
-
-		WorldMap generatedWorld = new WorldMap(worldType, "", rowCount, columnCount, worldNodes);
-		generatedWorld.addSeed(generateMapSeed(generatedWorld));
+		WorldMap generatedWorld = new WorldMap(worldType, rowCount, columnCount, worldNodes);
+		generatedWorld.addSeed(seedValue);
 		return generatedWorld;
-	}
-	
-	/**
-	 * Generates a new world map from the specified seed string.
-	 * @param seed
-	 *     The seed to generate from
-	 * @return
-	 *     Returns the generated world map
-	 */
-	private WorldMap generateMapFromSeed(String seed) {
-		return new WorldMap(); //still need to complete!
-	}
-	
-	/**
-	 * Generates a new map seed from the world map provided.
-	 * @param world
-	 *     The world map object to generate the seed from
-	 * @return
-	 *     The seed string of the provieded world
-	 */
-	private String generateMapSeed(WorldMap world) {
-		return "";
 	}
 	
 	/**
@@ -184,8 +162,6 @@ public class MapGenerator {
 	 *     Returns a list of nodes for the world map to use
 	 */
 	private List<MapNode> generateNodes(int rowNumber, int columnNumber, int worldType) {
-		Random rand = new Random();
-		
 		MapNode initialNode = new MapNode(0, rowNumber/2, 1, getLevel(worldType), true);
 		
 		int columnsSinceSafeNode = 0;
@@ -194,19 +170,19 @@ public class MapGenerator {
 		
 		for(int i = 1; i < columnNumber - 1; i++) {
 			boolean safeNodeInColumn = false;
-			int numberOfNodes = rand.nextInt(rowNumber/2) + MIN_NODES_PER_COLUMN;
+			int numberOfNodes = mainGenerator.nextInt(rowNumber/2) + MIN_NODES_PER_COLUMN;
 			List<Integer> currentOccupiedRows = new ArrayList<>();
 			for(int j = 0; j < numberOfNodes; j++) {
 				int nodeRow = 0;
 				boolean correctRow = false;
 				while(!correctRow) {
-					nodeRow = rand.nextInt(rowNumber);
+					nodeRow = mainGenerator.nextInt(rowNumber);
 					if(!(currentOccupiedRows.contains(nodeRow))) {
 						correctRow = true;
 					}
 				}
 				// Get a random integer between 1 and 100
-				int probability = rand.nextInt(101) + 1;
+				int probability = mainGenerator.nextInt(101) + 1;
 				int nodeType;
 				if(probability < SAFE_NODE_PROBABILITY || columnsSinceSafeNode >= MAX_COLUMNS_BEFORE_SAFENODE) {
 					nodeType = 0; //node will be a safenode
@@ -312,8 +288,7 @@ public class MapGenerator {
 	 */
 	private Level getBossLevel() {
 		if(!(levelsBoss.isEmpty())) {
-			Random rand = new Random();
-			int index = rand.nextInt(levelsBoss.size());
+			int index = mainGenerator.nextInt(levelsBoss.size());
 			return levelsBoss.get(index);
 		} else {
 			return getLevel(0); //return a random level
@@ -330,19 +305,18 @@ public class MapGenerator {
 	 *     the non boss set will be chosen.
 	 */
 	private Level getLevel(int worldType) {
-		Random rand = new Random();
 		if(worldType == 0 && !levelsNonBoss.isEmpty()) {
-			int index = rand.nextInt(levelsNonBoss.size());
+			int index = mainGenerator.nextInt(levelsNonBoss.size());
 			Level levelReturned = levelsNonBoss.get(index);
 			levelsNonBoss.remove(index);
 			return levelReturned;
 		} else if(!(levelsOfType.isEmpty())) {
-			int index = rand.nextInt(levelsOfType.size());
+			int index = mainGenerator.nextInt(levelsOfType.size());
 			Level levelReturned = levelsOfType.get(index);
 			levelsOfType.remove(index);
 			return levelReturned;
 		} else if (!(levelsNotOfType.isEmpty())){
-			int index = rand.nextInt(levelsNotOfType.size());
+			int index = mainGenerator.nextInt(levelsNotOfType.size());
 			Level levelReturned = levelsNotOfType.get(index);
 			levelsNotOfType.remove(index);
 			return levelReturned;

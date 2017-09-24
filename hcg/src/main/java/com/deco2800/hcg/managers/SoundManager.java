@@ -39,6 +39,15 @@ public class SoundManager extends Manager {
 		soundMap.put("gun-rifle-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-rifle-shoot.wav")));
 		soundMap.put("gun-shotgun-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-shotgun-shoot.wav")));
 		soundMap.put("gun-stargun-shoot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-stargun-shoot.wav")));
+	
+		// For weather Effects
+		soundMap.put("weatherRain", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/water-shallow.wav")));
+		soundMap.put("weatherSandStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/hit.wav")));
+		soundMap.put("weatherSnow", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-rifle-shoot.wav")));
+		soundMap.put("weatherWind", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-shotgun-shoot.wav")));
+		soundMap.put("weatherDrought", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-stargun-shoot.wav")));
+		soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/gun-stargun-shoot.wav")));
+	
 	}
 
 	/**

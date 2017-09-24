@@ -2,7 +2,6 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
@@ -74,7 +72,7 @@ public class WorldMapContext extends UIContext {
 				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		MapInputManager inputManager = new MapInputManager();
+		InputManager inputManager = new InputManager();
 
 		showAllNodes = false;
 
@@ -195,8 +193,23 @@ public class WorldMapContext extends UIContext {
 				 * to fix that problem.
 				 */
 				gameManager.setOccupiedNode(nodeEntity.getNode());
-				gameManager.setWorld(new World(nodeEntity.getNode()
-						.getNodeLinkedLevel().getWorld().getLoadedFile()));
+
+				// clear old observers (mushroom turret for example)
+                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+                manager.deleteObservers();
+				
+                // stop the old weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                
+                // create new world
+				World newWorld = new World(nodeEntity.getNode()
+                    .getNodeLinkedLevel().getWorld().getLoadedFile());
+				
+                // add the new weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                  setWeather(newWorld.getWeatherType());
+                
+				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}
