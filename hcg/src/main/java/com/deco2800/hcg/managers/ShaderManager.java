@@ -37,10 +37,10 @@ public class ShaderManager extends Manager {
     private BatchTiledMapRenderer tileRenderer;
     
     public ShaderManager() {
-        this.preVertexShader = Gdx.files.internal("resources/preShaders/vertex_pre.glsl");
-        this.postVertexShader = Gdx.files.internal("resources/preShaders/vertex_post.glsl");
-        this.preFragShader = Gdx.files.internal("resources/preShaders/fragment_pre.glsl");
-        this.postFragShader = Gdx.files.internal("resources/preShaders/fragment_post.glsl");
+        this.preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
+        this.postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
+        this.preFragShader = Gdx.files.internal("resources/shaders/fragment_pre.glsl");
+        this.postFragShader = Gdx.files.internal("resources/shaders/fragment_post.glsl");
 
         this.preShader = new ShaderProgram(preVertexShader, preFragShader);
         this.postShader = new ShaderProgram(postVertexShader, postFragShader);
