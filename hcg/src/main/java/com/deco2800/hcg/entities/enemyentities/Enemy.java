@@ -523,7 +523,11 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public void resetSpeed() {
     	    this.movementSpeed = normalSpeed;
     }
-    
+
+    /**
+     * Returns the enemy movement speed
+     *
+     */
     @Override
     public float getMovementSpeed() {
     	    return this.movementSpeed;

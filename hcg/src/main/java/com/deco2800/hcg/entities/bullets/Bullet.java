@@ -187,7 +187,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 					Enemy target = (Enemy) entity;
 					if (target instanceof MushroomTurret) {
 						MushroomTurret turret = (MushroomTurret) target;
-						turret.remove_observer();
+						turret.removeObserver();
 						GameManager.get().getWorld().removeEntity(turret);
 
 					} else if (target.getHealthCur() <= 0) {
