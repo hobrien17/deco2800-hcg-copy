@@ -27,6 +27,8 @@ public class LevelStore {
         levelList.add(new Level(new World("resources/maps/maps/snow.tmx"), 0, 1, 1));
         levelList.add(new Level(new World("resources/maps/maps/simons-level1.tmx"), 0, 4, 1));
         levelList.add(new Level(new World("resources/maps/maps/simons-level2.tmx"), 0, 4, 1));
+		levelList.add(new Level(new World("resources/maps/maps/mushroom_map_1.tmx"), 3, 1, 1));
+        //levelList.add(new Level(new World("resources/maps/maps/level2.tmx"), 0, 1, 1));
 	}
 	
 	public ArrayList<Level> getLevels() {

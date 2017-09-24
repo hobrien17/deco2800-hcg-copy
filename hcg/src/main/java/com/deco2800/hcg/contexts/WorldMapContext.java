@@ -199,12 +199,8 @@ public class WorldMapContext extends UIContext {
 				 */
 				gameManager.setOccupiedNode(nodeEntity.getNode());
 
-				// clear old observers (mushroom turret for example)
-                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-                manager.deleteObservers();
-				
-                // stop the old weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+				// delete stopwatches
+                ((StopwatchManager) GameManager.get().getManager(StopwatchManager.class)).deleteObservers();
                 
                 // create new world
 				World newWorld = new World(nodeEntity.getNode()
@@ -379,6 +375,9 @@ public class WorldMapContext extends UIContext {
     	gameManager.getWorldMap().toggleCompleted();
     	WorldStackContext context = gameManager.getStackContext();
     	context.updateWorldDisplay();
+    	if(gameManager.getWorldMap().getWorldPosition() == 2) {
+    		context.endOfGame();
+    	}
     	contextManager.popContext();
     }
 }

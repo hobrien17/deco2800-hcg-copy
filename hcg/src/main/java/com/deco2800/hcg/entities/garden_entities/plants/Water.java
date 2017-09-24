@@ -36,15 +36,7 @@ public class Water extends AbstractGardenPlant {
 	}
 
 	@Override
-	public Item[] loot() {
-		Item[] arr = new Item[1];
-		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-		
-		return arr;
-	}
-
-	@Override
-	void setupLoot() {
+	protected void setupLoot() {
 		lootRarity = new HashMap<>();
 
         lootRarity.put("water_seed", 1.0);

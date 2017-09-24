@@ -54,8 +54,6 @@ public class CharacterCreationContext extends CharacterContext{
     private Boolean gunsSkillSpecialiseChecked = false;
     private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
-    private Table topRowInfoTable;
-
     private Window attributesWindow;
     private Window skillsWindow;
     private Window statsWindow;
@@ -88,16 +86,16 @@ public class CharacterCreationContext extends CharacterContext{
 
     // Different placeholder textures for the character preview screen
     // Will put into texture manager later, was getting odd null pointer exceptions
-    private Texture male1 = new Texture("resources/sprites/player/m2_360.png");
-    private Texture male2 = new Texture("resources/sprites/player/m2_3602.png");
-    private Texture male3 = new Texture("resources/sprites/player/m2_3603.png");
-    private Texture female1 = new Texture("resources/sprites/player/f2_360.png");
-    private Texture female2 = new Texture("resources/sprites/player/f2_3602.png");
-    private Texture female3 = new Texture("resources/sprites/player/f2_3603.png");
-    private Texture blank_window_background = new Texture("resources/ui/character_creation/window_background_white.png");
+    private Texture male1;
+    private Texture male2;
+    private Texture male3;
+    private Texture female1;
+    private Texture female2;
+    private Texture female3;
+    private Texture blank_window_background;
 
     //Cycle through this array using texture count to display the different character presets
-    private Texture[] charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
+    private Texture[] charTextureArray;
     private int textureCount;
 
     private TextArea selectedDescriptionText;
@@ -108,6 +106,7 @@ public class CharacterCreationContext extends CharacterContext{
     public CharacterCreationContext() {
         getManagers();
         initMasterTable();
+        setupTextures();
         initSubTables();
         setupTopRowInfo();
         setupAttributesWindow();
@@ -116,6 +115,17 @@ public class CharacterCreationContext extends CharacterContext{
         setupCharacterPreviewWindow();
         setupSelectedDescriptionWindow();
         addSubtables();
+    }
+
+    private void setupTextures() {
+        male1 = textureManager.getTexture("ccMale1");
+        male2 = textureManager.getTexture("ccMale2");
+        male3 = textureManager.getTexture("ccMale3");
+        female1 = textureManager.getTexture("ccFemale1");
+        female2 = textureManager.getTexture("ccFemale2");
+        female3 = textureManager.getTexture("ccFemale3");
+        blank_window_background = textureManager.getTexture("ccWindow_Background_White");
+        charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
 
     // Declaring sub-tables/sub-windows
@@ -139,7 +149,6 @@ public class CharacterCreationContext extends CharacterContext{
         skillsWindow.setBackground(new Image(blank_window_background).getDrawable());
         statsWindow.setBackground(new Image(blank_window_background).getDrawable());
         characterPreviewWindow.setBackground(new Image(blank_window_background).getDrawable());
-        selectedDescriptionWindow.setBackground(new Image(blank_window_background).getDrawable());
 
         /* Need to find a way to do this without overwriting the button and label listeners.
         attributesWindow.addListener(new ClickListener() {
@@ -184,7 +193,7 @@ public class CharacterCreationContext extends CharacterContext{
                 if (attributePoints == 0 && specializedSkillsPoints == 0) {
                     contextManager.pushContext(new WorldStackContext());
                     /* Create new player */
-                    createPlayer(strength, vitality, agility, charisma, intellect,
+                    createPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill, energyWeaponsSkill,
                             characterName.getText(), charTextureArray[textureCount].toString());
                 } else {
                     selectedDescriptionText.setText("Please distribute all skill points and choose your specialised" +
@@ -199,7 +208,7 @@ public class CharacterCreationContext extends CharacterContext{
             public void changed(ChangeEvent event, Actor actor) {
                 contextManager.pushContext(new WorldStackContext());
                 /* Create new player with default values. */
-                createPlayer(5, 5, 5, 5, 5,
+                createPlayer(5, 5, 5, 5, 5, meleeSkill, gunsSkill, energyWeaponsSkill,
                         characterName.getText(), charTextureArray[textureCount].toString());
             }
         });
@@ -689,10 +698,11 @@ public class CharacterCreationContext extends CharacterContext{
 
 
     // Will be changed later to include skill specialisations
-    private void createPlayer(int strength, int vitality, int agility, int charisma, int intellect, String name, String texture) {
-        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+    private void createPlayer(int strength, int vitality, int agility, int charisma, int intellect, int meleeSkill,
+                              int gunsSkill, int energyWeaponsSkill, String name, String texture) {
         Player player = new Player(5, 10, 0);
-        player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, 20, name);
+        player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill,
+                energyWeaponsSkill, name);
         player.setTexture(texture);
         playerManager.setPlayer(player);
         //TODO: Change this, currently these are just testing items

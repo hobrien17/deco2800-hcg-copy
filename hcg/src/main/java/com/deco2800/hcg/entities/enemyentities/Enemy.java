@@ -49,6 +49,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
+    protected Box3D prevPos;
 
 	// Effects container
 	protected Effects myEffects;
@@ -96,6 +97,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         this.setCollided(false);
         this.setCollidedPlayer(false);
         this.newPos = getBox3D();
+        this.prevPos = getBox3D();
 
 		// Effects container 
         myEffects = new Effects(this);      
@@ -188,7 +190,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      *
      */
     public void causeDamage(Player player) {
-        //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
         player.takeDamage(1);
     }
 
@@ -321,6 +322,8 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         float nextPosY;
         float tempX;
         float tempY;
+        prevPos.setX(currPosX);
+        prevPos.setY(currPosY);
         //Get direction of next position. Randomly be chosen between 0 and 360.
         radius = Math.abs(random.nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
@@ -368,6 +371,8 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public Box3D getToPlayerPos(){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
+        prevPos.setX(currPosX);
+        prevPos.setY(currPosY);
         if((abs(this.getPosX() - playerManager.getPlayer().getPosX()) > 1)||
                 (abs(this.getPosY() - playerManager.getPlayer().getPosY()) > 1)){
             this.setCollided(false);
@@ -397,6 +402,8 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     public Box3D getMoveToPos(float posX, float posY){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
+        prevPos.setX(currPosX);
+        prevPos.setY(currPosY);
         if(this.getPosX() < posX){
             currPosX += movementSpeed;
         }
@@ -496,7 +503,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 			the amount to change the speed (<1 to slow,  >1 to speed)
      */
     public void changeSpeed(float modifier) {
-    	this.movementSpeed *= (1 - modifier);
+        this.movementSpeed *= (1 - modifier);
     }
     
     /**
@@ -506,7 +513,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 			the new movement speed
      */
     public void setSpeed(float speed) {
-    	this.movementSpeed = speed;
+    	    this.movementSpeed = speed;
     }
     
     /**
@@ -514,12 +521,12 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 
      */
     public void resetSpeed() {
-    	this.movementSpeed = normalSpeed;
+    	    this.movementSpeed = normalSpeed;
     }
     
     @Override
     public float getMovementSpeed() {
-    	return this.movementSpeed;
+    	    return this.movementSpeed;
     }
 	
 	// TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
@@ -547,7 +554,6 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
 
     @Override
     public int hashCode() {
-        // We create a polynomial hash-code based on start, end and capacity
         final int prime = 31; // an odd base prime
         int result = 1; // the hash code under construction
         result = prime * result + this.id;
