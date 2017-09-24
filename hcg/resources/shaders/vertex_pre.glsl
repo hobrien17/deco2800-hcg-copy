@@ -9,7 +9,6 @@ attribute vec4 a_color;
 // The texture coordinates for the vertex
 attribute vec2 a_texCoord0;
 
-
 /* Projection matrix
 /* Takes the world position and translates it into a screen position. */
 uniform mat4 u_projTrans;

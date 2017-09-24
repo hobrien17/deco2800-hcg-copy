@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 
 public class HealthPotion extends ConsumableItem {
     //Super simple example class of a health potion
@@ -44,7 +45,7 @@ public class HealthPotion extends ConsumableItem {
 
     @Override
     public boolean sameItem(Item item) {
-        return item instanceof HealthPotion && this.itemName == ((HealthPotion) item).itemName;
+        return item instanceof HealthPotion && this.healthAmount == ((HealthPotion) item).healthAmount;
     }
 
     @Override
@@ -59,5 +60,10 @@ public class HealthPotion extends ConsumableItem {
         ArrayList<String> list = new ArrayList<>();
         list.add(String.format("+%s HP", this.healthAmount));
         return list;
+    }
+    
+    @Override
+    public ItemRarity getRarity() {
+        return ItemRarity.UNCOMMON;
     }
 }
