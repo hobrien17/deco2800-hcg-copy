@@ -154,7 +154,11 @@ public class WeightedInventory implements Inventory {
             int toRemove = item.getStackSize();
             for(int i = 0; i < this.items.size(); i++) {
                 Item currentItem = this.getItem(i);
-                if(currentItem != null && item.sameItem(currentItem)) {
+                int num = containsExactItem(item);
+                if (num != -1) {
+                    items.remove(num);
+                    break;
+                } else if(currentItem != null && item.sameItem(currentItem)) {
                     if(toRemove >= currentItem.getStackSize()) {
                         toRemove -= currentItem.getStackSize();
                         this.removeItem(i);
@@ -163,7 +167,7 @@ public class WeightedInventory implements Inventory {
                         toRemove = 0;
                     }
                 }
-                
+
                 if(toRemove <= 0) {
                     break;
                 }
@@ -211,6 +215,21 @@ public class WeightedInventory implements Inventory {
             }
         }
         return false;
+    }
+
+    /**
+     * Helper method for removeitem if the actual copy of this item is requested to be removed (ie in trading)
+     *
+     * @param item
+     * @return index of item
+     */
+    private int containsExactItem(Item item) {
+        for(Item currentItem : this.items) {
+            if(item.equals(currentItem)) {
+                return items.indexOf(currentItem);
+            }
+        }
+        return -1;
     }
 
     @Override

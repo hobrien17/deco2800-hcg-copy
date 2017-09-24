@@ -2,9 +2,7 @@ package com.deco2800.hcg.entities.npc_entities;
 
 import java.util.List;
 
-import com.badlogic.gdx.Input;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
