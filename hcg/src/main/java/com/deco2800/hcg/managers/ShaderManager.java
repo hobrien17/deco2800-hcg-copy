@@ -3,20 +3,18 @@ package com.deco2800.hcg.managers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.deco2800.hcg.managers.TimeManager;
-import com.deco2800.hcg.renderers.RenderLightmap;
-import com.deco2800.hcg.renderers.Renderer;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.deco2800.hcg.shading.ShaderState;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
+import com.deco2800.hcg.renderers.Renderer;
+import com.deco2800.hcg.shading.ShaderState;
 
 public class ShaderManager extends Manager {
     private FileHandle preVertexShader;
@@ -33,13 +31,9 @@ public class ShaderManager extends Manager {
 
     private FrameBuffer renderTarget;
     private TextureRegion scene;
-    private FrameBuffer lightTarget;
-    private TextureRegion lightMap;
-    private SpriteBatch lightBatch;
     private SpriteBatch preBatch;
     private SpriteBatch postBatch;
     private BatchTiledMapRenderer tileRenderer;
-    private RenderLightmap lightRenderer;
     
     public ShaderManager() {
         this.preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
@@ -76,8 +70,6 @@ public class ShaderManager extends Manager {
 
         this.state.setBloom(true);
         this.state.setHeat(true);
-        
-        this.lightRenderer = new RenderLightmap();
     }
     
     public boolean shadersCompiled() {
@@ -96,6 +88,8 @@ public class ShaderManager extends Manager {
         this.scene = new TextureRegion(renderTarget.getColorBufferTexture());
         this.scene.flip(false, true);
         
+        // We tried to do a lightmap but OpenGL is hard. We'll try this again in cp3.
+        /*
         // Begin lightmap //////////////////////////////////////////////////////////////////////////////////////////
         
         this.lightTarget = new FrameBuffer(Format.RGB565, width, height, false);
@@ -115,6 +109,10 @@ public class ShaderManager extends Manager {
         this.lightTarget.end();
         this.lightBatch.dispose();
         
+        this.lightTarget.dispose();
+        
+        */
+        
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
             
@@ -128,7 +126,7 @@ public class ShaderManager extends Manager {
             
         // Draw onto render target ////////////////////////////////////
         this.renderTarget.begin();
-        Gdx.gl.glClearColor(1, 0, 0, 0);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             
         this.tileRenderer.render();
@@ -160,6 +158,5 @@ public class ShaderManager extends Manager {
         this.postShader.end();
         this.postBatch.dispose();
         this.renderTarget.dispose();
-        this.lightTarget.dispose();
     }
 }
