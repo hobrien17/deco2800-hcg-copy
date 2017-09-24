@@ -1,12 +1,17 @@
 package com.deco2800.hcg.entities.bullets;
 
+import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
+import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.enemy_entities.Enemy;
+import com.deco2800.hcg.entities.turrets.AbstractTurret;
+import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.Player;
 
 import java.util.List;
@@ -18,12 +23,12 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 	protected float speed = 0.5f;
 
-	private float goalX;
-	private float goalY;
+	protected float goalX;
+	protected float goalY;
 
-	private float angle;
-	private float changeX;
-	private float changeY;
+	protected float angle;
+	protected float changeX;
+	protected float changeY;
 
 	private AbstractEntity user;
 	private int hitCount;
@@ -178,21 +183,48 @@ public class Bullet extends AbstractEntity implements Tickable {
 				if (entity instanceof Enemy
 						&& (user instanceof Player || user instanceof Corpse)) {
 					Enemy target = (Enemy) entity;
-					applyEffect(target);
+					if (target instanceof MushroomTurret) {
+						MushroomTurret turret = (MushroomTurret) target;
+						turret.remove_observer();
+						GameManager.get().getWorld().removeEntity(turret);
+
+					} else if (target.getHealthCur() <= 0) {
+							Double prob = Math.random();
+							if (prob > 0.3) {
+								Corpse corpse = new BasicCorpse(target.getPosX(), target.getPosY(), 0);
+								GameManager.get().getWorld().addEntity(corpse);
+							}
+							applyEffect(target);
+							if (user instanceof Player) {
+								Player playerUser = (Player) user;
+								playerUser.killLogAdd(target.getID());
+							}
+					}
 					hitCount--;
 				}
+
+				// Collision with destructable tree
+				if (entity instanceof DestructableTree && user instanceof Player && !(this instanceof GrassBullet)) {
+					DestructableTree tree = (DestructableTree) entity;
+					applyEffect(tree);
+					hitCount--;
+				}
+
 				// Collision with player
 				if (entity instanceof Player && user instanceof Enemy) {
 					// add code to apply effect to player here
 					Enemy enemyUser = (Enemy) user;
-					enemyUser.causeDamage((Player)entity);
+					enemyUser.causeDamage((Player) entity);
 					hitCount--;
 				}
-				// COllision with corpse
+
+				// Collision with corpse
 				if (entity instanceof Corpse && user instanceof Player) {
-					// create sunflower turret here
+					Corpse corpse = (Corpse) entity;
+					corpse.plantInside(this);
 					hitCount = 0;
 				}
+
 				if (hitCount == 0) {
 					GameManager.get().getWorld().removeEntity(this);
 					break;
@@ -207,9 +239,9 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 * @param target
 	 *            the hit enemy
 	 */
-	protected void applyEffect(Enemy target) {
+	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 500, 0, 0, 1, 0));
 	}
 }

@@ -11,13 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStackEntity;
 import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.StackInputManager;
+import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.worlds.World;
 
 public class WorldStackContext extends UIContext {
 	// Managers used by the game
@@ -43,7 +45,7 @@ public class WorldStackContext extends UIContext {
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
-		StackInputManager inputManager = new StackInputManager();
+		InputManager inputManager = new InputManager();
 
 		// Setup UI + Buttons
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
