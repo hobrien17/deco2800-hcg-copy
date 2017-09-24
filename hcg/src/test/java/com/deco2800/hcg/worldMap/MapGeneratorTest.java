@@ -60,12 +60,13 @@ public class MapGeneratorTest {
         assertEquals(100, world.getWorldSeed());
 
     }
+    
     @Test
     public void testSameRandom() {
         WorldMap world = mg.generateWorldMap();
         WorldMap tmpWorld = mg.generateWorldMap();
-
     }
+    
     @Test
     public void testProcedureRandom() {
         WorldMap world = mg.generateWorldMap();
@@ -80,8 +81,5 @@ public class MapGeneratorTest {
         for (int i = 0; i < world.getContainedNodes().size(); i++) {
             assertEquals(true, world.getContainedNodes().get(i).isSameNode(tmpWorld.getContainedNodes().get(i)));
         }
-
     }
-
-
 }

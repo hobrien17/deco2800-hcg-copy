@@ -143,7 +143,4 @@ public class MapNodeEntityTest {
 //        tmpNodeEntity.getNode().setYPos(-1);
 //        assertEquals(-1, tmpNodeEntity.getNode().getYPos());
 //    }
-
-
-
 }
