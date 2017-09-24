@@ -871,11 +871,27 @@ public class Player extends Character implements Tickable {
 
 	/**
 	 * Updates the player's sprite based on its direction.
+	 * 
+	 * @param direction 
+     *            Direction the player is facing. Integer between 0 and 3.
 	 */
 	private void updateSprite(int direction) {
 	    StringBuilder spriteName = new StringBuilder("player_"); 
-        spriteName.append(direction); 
-        spriteName.append("_stand"); 
+        spriteName.append(direction);
+        if (this.speedX == 0 && this.speedY == 0) { 
+            // Player is not moving 
+            spriteName.append("_stand"); 
+        } else { 
+            // Player is moving 
+            if (this.spriteFrame == 0 || this.spriteFrame == 2) { 
+                spriteName.append("_stand"); 
+            } else if (this.spriteFrame == 1) { 
+                spriteName.append("_move1"); 
+            } else if (this.spriteFrame == 3) { 
+                spriteName.append("_move2");       
+            } 
+            this.spriteFrame = ++this.spriteFrame % 4; 
+        }
         this.setTexture(spriteName.toString());
 	}
 
