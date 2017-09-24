@@ -492,7 +492,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 			the amount to change the speed (<1 to slow,  >1 to speed)
      */
     public void changeSpeed(float modifier) {
-    	this.movementSpeed *= modifier;
+    	this.movementSpeed *= (1 - modifier);
     }
     
     /**

@@ -1,11 +1,16 @@
 package com.deco2800.hcg.managers;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.deco2800.hcg.BaseTest;
+import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.entities.garden_entities.plants.*;
 import org.junit.*;
 
 import java.util.ArrayList;
 
-public class PlantManagerTests {
+public class PlantManagerTests extends BaseTest {
     private PlantManager plantManager;
     private Pot pot;
     private AbstractGardenPlant ice;
@@ -15,6 +20,8 @@ public class PlantManagerTests {
     private AbstractGardenPlant inferno;
     private AbstractGardenPlant sunFlower;
     private AbstractGardenPlant water;
+    
+    private PlantWindow window;
 
     //Set up
     @Before
@@ -182,6 +189,94 @@ public class PlantManagerTests {
 
         Assert.assertEquals("Receive unexpected result",
                 expected, plantManager.getPlants());
+    }
+    
+    private void setupPlantWindow() {
+    	Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+    	window = new PlantWindow(skin);
+    	plantManager.setPlantWindow(window, skin);
+    }
+    
+    @Test
+    public void testVisibility() {
+    	setupPlantWindow();
+    	
+    	Assert.assertTrue("Plant manager should start visible", window.isVisible());
+    	plantManager.setWindowVisible(false);
+    	Assert.assertFalse("Plant manager should no longer be visible", window.isVisible());
+    }
+    
+    @Test
+    public void testUpdateEmptyLabel() {
+    	setupPlantWindow();
+    	
+    	String expectedFirst = "Window$1\n|  Label: Plants";
+    	String expectedSecond = "Table\n|  Label: No plants planted";
+    	
+    	plantManager.updateLabel();
+    	Assert.assertEquals("Window title is incorrect", expectedFirst, 
+    			window.getChildren().get(0).toString());
+    	Assert.assertEquals("Window contents are incorrect", expectedSecond, 
+    			window.getChildren().get(2).toString());
+    }
+    
+    @Test
+    public void testUpdateNonEmptyLabel() {
+    	setupPlantWindow();
+    	
+    	String expectedFirst = "Window$1\n|  Label: Plants";
+    	
+    	plantManager.addPlants(ice);
+    	plantManager.updateLabel();
+    	
+    	Assert.assertEquals("Window title is incorrect", expectedFirst, 
+    			window.getChildren().get(0).toString());
+    	String result = window.getChildren().get(2).toString();
+    	Assert.assertTrue("Window contents should contain plant name", 
+    			result.contains(ice.getName()));
+    	Assert.assertTrue("Window contents should contain stage of growth", 
+    			result.toString().contains("Stage: Sprout" ));
+    	Assert.assertTrue("Window contents should contain X and Y co-ordinates", 
+    			result.contains(String.format("X:%d   Y:%d", 
+    					(int)ice.getPot().getPosX(), (int)ice.getPot().getPosY())));
+    }
+    
+    @Test
+    public void testMultipleLabels() {
+    	setupPlantWindow();
+    	
+    	String expectedFirst = "Window$1\n|  Label: Plants";
+    	
+    	plantManager.addPlants(ice);
+    	plantManager.addPlants(inferno);
+    	plantManager.addPlants(cactus);
+    	plantManager.updateLabel();
+    	
+    	Assert.assertEquals("Window title is incorrect", expectedFirst, 
+    			window.getChildren().get(0).toString());
+    	String result = window.getChildren().get(2).toString();
+    	Assert.assertTrue("Window contents should contain plant name", result.contains(ice.getName()));
+    	Assert.assertTrue("Window contents should contain plant name", result.contains(inferno.getName()));
+    	Assert.assertTrue("Window contents should contain plant name", result.contains(cactus.getName()));
+    	
+    	Assert.assertTrue("Window contents should contain correct stage of growth", result.contains("Stage: Sprout"));
+    	Assert.assertFalse("Window contents should contain correct stage of growth", result.contains("Stage: Small"));
+    	Assert.assertFalse("Window contents should contain correct stage of growth", result.contains("Stage: Large"));
+    	
+    	ice.advanceStage();
+    	plantManager.updateLabel();
+    	result = window.getChildren().get(2).toString();
+    	Assert.assertTrue("Window contents should contain correct stage of growth", result.contains("Stage: Sprout"));
+    	Assert.assertTrue("Window contents should contain correct stage of growth", result.contains("Stage: Small"));
+    	Assert.assertFalse("Window contents should contain correct stage of growth", result.contains("Stage: Large"));
+    	
+    	ice.advanceStage();
+    	cactus.advanceStage();
+    	plantManager.updateLabel();
+    	result = window.getChildren().get(2).toString();
+    	Assert.assertTrue("Window contents should contain correct stage of growth", result.contains("Stage: Sprout"));
+    	Assert.assertTrue("Window contents should contain correct stage of growth", result.contains("Stage: Small"));
+    	Assert.assertTrue("Window contents should contain correct stage of growth", result.contains("Stage: Large"));
     }
 
 }

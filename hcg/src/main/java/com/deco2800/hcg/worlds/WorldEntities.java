@@ -10,12 +10,13 @@ import com.deco2800.hcg.entities.terrain_entities.Boulder;
 import com.deco2800.hcg.entities.terrain_entities.House;
 import com.deco2800.hcg.entities.terrain_entities.IceBoulder;
 import com.deco2800.hcg.entities.terrain_entities.Rock;
+import com.deco2800.hcg.entities.terrain_entities.SludgeBarrel;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 
 public enum WorldEntities {
-	WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE;
+	WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL;
 
 	/**
 	 * Return an instance of the entity at the given position and the selected
@@ -55,6 +56,8 @@ public enum WorldEntities {
 			return new IceBoulder(x, y, 0f);
 		case HOUSE:
 			return new House(x, y, 0f);
+		case SLUDGEBARREL:
+            return new SludgeBarrel(x, y, 0f);
 		default:
 			return null;
 		}
