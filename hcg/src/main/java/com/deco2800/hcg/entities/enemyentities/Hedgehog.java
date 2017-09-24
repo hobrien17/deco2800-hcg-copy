@@ -77,14 +77,14 @@ public class Hedgehog extends Enemy implements Tickable {
             // move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.setTexture("hedgeball");
+            this.setTexture("hedgehog");
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else if (!chargedAtPlayer && distance < chargingRange) {
             // charge at player
             setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.setTexture("hedgehog");
+            this.setTexture("hedgeball");
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else {
