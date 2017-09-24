@@ -15,12 +15,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.contexts.playContextClasses.*;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.deco2800.hcg.entities.garden_entities.plants.Planter;
+import com.deco2800.hcg.items.*;
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be
@@ -34,6 +38,7 @@ public class PlayContext extends Context {
 	private ContextManager contextManager;
 	private MessageManager messageManager;
 	private TextureManager textureManager;
+
 
 	// FIXME mouseHandler is never assigned
 	private MouseHandler mouseHandler;
@@ -61,11 +66,12 @@ public class PlayContext extends Context {
 	private PlantWindow plantWindow;
 	private ChatStack chatStack;
 
-	private Stage stage;
-	private Skin skin;
 	private Window window;
 	private Window exitWindow;
+	private RadialDisplay radialDisplay;
 
+	private Stage stage;
+	private Skin skin;
 
 	/**
 	 * Create the PlayContext
@@ -88,6 +94,7 @@ public class PlayContext extends Context {
 		stage = new Stage(new ScreenViewport());
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
+		radialDisplay = new RadialDisplay(stage);
 		createExitWindow();
 		clockDisplay = new ClockDisplay();
 		playerStatus = new PlayerStatusDisplay();
@@ -233,6 +240,7 @@ public class PlayContext extends Context {
 		playerStatus.setPosition(30f, stage.getHeight()-200f);
 		clockDisplay.setPosition(stage.getWidth()-220f, 20f);
 		plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+		radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
 		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
 	}
 
@@ -286,6 +294,9 @@ public class PlayContext extends Context {
         if (keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
         }
+		else if (keycode == Input.Keys.B) {
+			radialDisplay.addRadialMenu(stage);
+		}
     }
     
     private void createExitWindow() {
@@ -336,5 +347,9 @@ public class PlayContext extends Context {
     
     public void removeExitWindow() {
     	exitWindow.remove();
+    }
+    
+    public void addParticleEffect(ParticleEffectActor actor) {
+    	stage.addActor(actor);
     }
 }

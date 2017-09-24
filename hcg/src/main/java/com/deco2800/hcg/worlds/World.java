@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Selectable;
+import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.types.Weathers;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class World {
 	private Weathers weather;
 
 	private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
+	public List<Renderable> renderables = new ArrayList<Renderable>();
 	protected TiledMap map;
 
 	private int width;
@@ -136,15 +138,14 @@ public class World {
 					try {
 
 						this.addEntity(NPCs.valueOf(
-								((String) obj.getProperties().get("Type"))
-										.toUpperCase())
-								.spawn(x, y,
-										(String) obj.getProperties()
+								((String) obj.getProperties().get("Type")).toUpperCase()).spawn(x, y,(String) obj.getProperties()
 												.get("fName"),
 										(String) obj.getProperties()
 												.get("sName"),
 										(String) obj.getProperties()
-												.get("texture")));
+												.get("texture"), (String) obj.getProperties()
+												.get("conversation"), (String) obj.getProperties()
+												.get("faceImage")));
 
 					} finally {
 						/* it didn't work */}

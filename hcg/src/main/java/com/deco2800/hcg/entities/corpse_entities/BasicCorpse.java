@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.corpse_entities;
 
+import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 
 public class BasicCorpse extends Corpse {
@@ -28,7 +29,6 @@ public class BasicCorpse extends Corpse {
         }
         // Check if the enemy corpse does not contain special item
         return false;
-
     }
 
 }
