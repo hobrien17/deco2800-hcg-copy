@@ -95,7 +95,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         //adding the textfield
         amountString = amount.getText();
         amount = new TextField(amountString, skin);
-        amount.setWidth(100);
+        amount.setWidth(160);
         
         buySell = new Table();
 
@@ -110,9 +110,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
         buySell.row();
         buySell.add(amount).height(40).width(40).pad(15);
         buySell.row();
-        buySell.add(buyBag).height(100).width(80);
-        buySell.row();
         buySell.add(shopSell).height(80).width(160);
+        buySell.row();
+        buySell.add(buyBag).height(100).width(80);
         buySell.row();
         shopExit.setPosition(0, stage.getHeight()-shopExit.getHeight());
 
