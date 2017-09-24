@@ -670,13 +670,13 @@ public class Player extends Character implements Tickable {
 
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");
-		healthMax += vitality;
-		healthCur += vitality;
+		healthMax += vitality * 40;
+		healthCur += vitality * 40;
 
 		// Increase stamina by agility points
 		int agility = attributes.get("agility");
-		staminaMax += agility;
-		staminaCur += agility;
+		staminaMax += agility * 40;
+		staminaCur += agility * 40;
 
 		skillPoints = 4 + attributes.get("intellect") * 2;
 		// TODO: enter level up screen
