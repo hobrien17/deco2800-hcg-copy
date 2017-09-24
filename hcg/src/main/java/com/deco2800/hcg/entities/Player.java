@@ -171,9 +171,12 @@ public class Player extends Character implements Tickable {
 		Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL).setUser(this).setRadius(0.7).build();
 		Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
 				.build();
-		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
-		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+	    Weapon grenadelauncher = new WeaponBuilder().setWeaponType(WeaponType.GRENADELAUNCHER).setUser(this).setRadius(0.7)
+	                .build();
+		//equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
+	    equippedItems.addItem(new WeaponItem(grenadelauncher, "Grenade Launcher", 10));
+        equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
 	}
 
 	/**

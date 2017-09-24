@@ -108,6 +108,7 @@ public class TextureManager extends Manager {
 	    textureMap.put("sludgebarrel", new Texture("resources/terrain_objects/sludge-barrel.png"));
         textureMap.put("house2", new Texture("resources/terrain_objects/house2.png"));
         textureMap.put("house2destroyed", new Texture("resources/terrain_objects/house2destroyed.png"));
+        textureMap.put("concretewall", new Texture("resources/terrain_objects/concretewall.png"));
 
 	    // terrain tiles
         textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
