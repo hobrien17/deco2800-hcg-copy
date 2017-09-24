@@ -1,9 +1,7 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.bullets.Bullet;
-import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;

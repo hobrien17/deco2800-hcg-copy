@@ -9,6 +9,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.MessageManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.multiplayer.ChatMessage;
 
 public class ChatStack extends Stack {
 
@@ -64,10 +65,9 @@ public class ChatStack extends Stack {
             public void changed(ChangeEvent event, Actor actor) {
                 if (networkManager.isInitialised()) {
                     if (chatString.trim().length()>0) {
-                        String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
-
+                        networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
+                        chatTextArea.appendText(chatTextField.getText() + "\n");
                         chatTextField.setText("");
-                        chatTextArea.appendText(chatMessage + "\n");
                         stage.setKeyboardFocus(null);
                         chatString = "";
                     } else {
@@ -92,9 +92,9 @@ public class ChatStack extends Stack {
                 }
                 if ((c == '\r' && networkManager.isInitialised())) {
                     if (chatString.trim().length()>0) {
-                        String chatMessage = networkManager.sendChatMessage(chatTextField.getText());
+                        networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
+                        chatTextArea.appendText(chatTextField.getText() + "\n");
                         chatTextField.setText("");
-                        chatTextArea.appendText(chatMessage + "\n");
                         stage.setKeyboardFocus(null);
                         chatString = "";
                     } else {

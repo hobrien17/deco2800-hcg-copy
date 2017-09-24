@@ -1,9 +1,6 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.weapons.*;
 import java.util.HashMap;
 
