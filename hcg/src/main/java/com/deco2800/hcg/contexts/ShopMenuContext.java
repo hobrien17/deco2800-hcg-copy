@@ -157,7 +157,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopSell.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
+                if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER)) && !(shopKeeper.getShop().getStock().contains(selectedItem))) {
                     int number = Integer.parseInt(amount.getText().trim());
                     for (int i = 0; i < number; i++) {
                         shopKeeper.getShop().sellStock(selectedItem);
