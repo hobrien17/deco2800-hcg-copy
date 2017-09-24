@@ -15,7 +15,8 @@ import java.util.List;
  * @author Ethan Phan, Duc Thuan Chu
  */
 public class ScoreBoardContext extends UIContext {
-
+	private Window playersWindow;
+    
     protected Table masterTable;
     protected Table topRowInfoTable;
 
@@ -23,12 +24,14 @@ public class ScoreBoardContext extends UIContext {
     protected Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
     TextButton backButton;
 
-
     protected GameManager gameManager;
     protected ContextManager contextManager;
     protected TextureManager textureManager;
     protected PlayerManager playerManager;
-
+    
+    /**
+     * Creating Score Board
+     */
     public ScoreBoardContext() {
         // Get necessary managers
         gameManager = GameManager.get();
@@ -40,13 +43,28 @@ public class ScoreBoardContext extends UIContext {
         masterTable.setFillParent(true);
         masterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
         stage.addActor(masterTable);
-//        System.out.println(playerManager.getPlayers().size());
         playerWindows = new ArrayList<Window>();
-
+        
+        setPlayersWindow();
         display_top_row_info();
         display_player_windows();
     }
-
+    /**
+     *  The outermost window that contains the player windows
+     */
+    
+    private void setPlayersWindow() {
+        playersWindow = new Window("Player List" , skin); 
+        Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
+        playersWindow.setBackground(new Image(backgroundTexture).getDrawable());
+        Label title = new Label("YOUR TEAM", skin);
+        playersWindow.add(title).top().center();
+        playersWindow.row();
+    } 
+    
+    /**
+     * Top buttons to go back to the game
+     */
     public void display_top_row_info() {
         topRowInfoTable = new Table(skin);
         backButton = new TextButton("Back", skin);
@@ -60,15 +78,38 @@ public class ScoreBoardContext extends UIContext {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
     }
-
+    
+    /**
+     * Adding players info into the score board as pressing the TAB when in the game
+     */
+    
     public void display_player_windows() {
+	
         int numPlayers = playerManager.getPlayers().size();
         for (int i = 0; i < numPlayers; i++) {
-            playerWindows.add(new Window(playerManager.getPlayers().get(i).toString(), skin));
-            Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
-            playerWindows.get(i).setBackground(new Image(backgroundTexture).getDrawable());
-            masterTable.add(playerWindows.get(i)).top().left().expandX().expandY().fillX().fillY().padBottom(15);
+        		int level = playerManager.getPlayer().getLevel();
+        		playerWindows.add(new Window(" ",skin));
+        		int curHealth = playerManager.getPlayers().get(i).getHealthCur();
+        		int maxHealth  = playerManager.getPlayers().get(i).getHealthMax();
+        		int currentStamina = playerManager.getPlayer().getStaminaCur();
+        		int maxStamina = playerManager.getPlayer().getStaminaMax();
+	        	Label healthLabel = new Label("Health: " + curHealth + "/" + maxHealth, skin);
+	            Label staminaLabel = new Label("Stamina: " + currentStamina + "/" + maxStamina, skin);
+	            
+	        	Label playerLabel = new Label("Player" + (i + 1) + "- Level " + level, skin);
+	            Window window = playerWindows.get(i);
+	            window.add(playerLabel).top();
+	            window.row();
+	            window.add(healthLabel);
+	            window.row();
+	            window.add(staminaLabel);
+	            Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
+	            window.setBackground(new Image(backgroundTexture).getDrawable());
+	            playersWindow.add(window);
+        	
+            
         }
+        masterTable.add(playersWindow).top().expandY().fillY().padBottom(15);
     }
 
 
