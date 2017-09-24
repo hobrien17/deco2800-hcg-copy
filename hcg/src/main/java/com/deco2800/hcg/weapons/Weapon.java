@@ -116,6 +116,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
             case STARFALL:
                 soundName = "gun-stargun-shoot";
                 break;
+            case GRENADELAUNCHER:
+                soundName = "gun-grenadelauncher-shoot";
+                break;
             default:
                 soundName = "gun-rifle-shoot";
         }
