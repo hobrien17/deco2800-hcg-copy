@@ -85,6 +85,7 @@ public class PlayerEquipmentContext extends InventoryDisplayContext {
         centreTable.row();
         centreTable.add(playerEquipment).expandY().fillY();
         centreTable.add(innerTable).expandY().fillY();
+        centreTable.add(itemDisplay).expandY().fillY();
         centreTable.row();
         centreTable.add(shopExit);
 

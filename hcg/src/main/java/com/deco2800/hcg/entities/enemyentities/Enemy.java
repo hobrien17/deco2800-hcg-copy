@@ -1,4 +1,4 @@
-package com.deco2800.hcg.entities.enemy_entities;
+package com.deco2800.hcg.entities.enemyentities;
 
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
@@ -212,7 +213,10 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      */
     @Override
     public Item[] loot() {
-        return new Item[0];
+        Item[] arr = new Item[1];
+        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+
+        return arr;
     }
 
     /**
@@ -501,7 +505,7 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * 			the amount to change the speed (<1 to slow,  >1 to speed)
      */
     public void changeSpeed(float modifier) {
-    	this.movementSpeed *= modifier;
+    	this.movementSpeed *= (1 - modifier);
     }
     
     /**
