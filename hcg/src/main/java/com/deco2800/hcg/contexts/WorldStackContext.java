@@ -19,6 +19,11 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.TextureManager;
 
+/**
+ * Holds the WorldStackContext information. Used to navigate and view the WorldStack when the player is in the game.
+ * 
+ * @author Ivo
+ */
 public class WorldStackContext extends UIContext {
 	// Managers used by the game
 	private GameManager gameManager;
@@ -86,7 +91,19 @@ public class WorldStackContext extends UIContext {
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
 	}
-
+	
+	/**
+	 * Handles a mouse click up on the stage. If the mouse is over an unlocked WorldMap, the user is brought into this
+	 * WorldMap.
+	 * @param screenX
+	 *     The X position of the cursor on the screen.
+	 * @param screenY
+	 *     The Y position of the cursor on the screen.
+	 * @param pointer
+	 *     Not used.
+	 * @param button
+	 *     Not used.
+	 */
 	private void handleTouchUp(int screenX, int screenY, int pointer,
 			int button) {
 		Vector2 mouseScreen = new Vector2(screenX, screenY);
@@ -112,6 +129,10 @@ public class WorldStackContext extends UIContext {
 		}
 	}
 
+	/**
+	 * Updates the display of the WorldMap nodes on the world stack. Handles making locked worlds unlocked and
+	 * accessible to the user.
+	 */
 	public void updateWorldDisplay() {
 		updateUnlockedWorlds();
 		stage.clear();
@@ -140,6 +161,9 @@ public class WorldStackContext extends UIContext {
 		stage.addActor(window);
 	}
 
+	/**
+	 * Updates the lock status of the WorldMap node objects in the WorldStack.
+	 */
 	private void updateUnlockedWorlds() {
 		for (WorldMap world : gameManager.getWorldStack().getWorldStack()) {
 			if (world.isCompleted()) {
@@ -153,6 +177,9 @@ public class WorldStackContext extends UIContext {
 		}
 	}
 
+	/**
+	 * Adds a win message when the game is won by the player.
+	 */
 	public void endOfGame() {
 		Window youWin = new Window("You win!", skin);
 		Button okButton = new TextButton("OK", skin);
