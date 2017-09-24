@@ -54,8 +54,8 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
     
     //Multiple players
     private int numPlayers;
-    private Set<Player> players = new LinkedHashSet<>();
-
+    private Player closestPlayer;
+    
 	// Effects container
 	protected Effects myEffects;
 
@@ -310,16 +310,15 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
      * @author Elvin - Team 9
      */
     public void detectPlayers() {
-    	Player closestPlayer;
+    	
+        Set<Player> players = new LinkedHashSet<>();
+		HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
+
 		int playerCount = 0;
-		float closestDistance;
-		float[] distances;
-		HashMap<Float, Player> playerHashMap;
-		
+		float[] distances = new float[numPlayers];		
+		float closestDistance = distances[0];
+
     	getNumberPlayers();
-    	distances = new float[numPlayers];
-    	playerHashMap = new HashMap<Float, Player>();
-    	closestDistance = distances[0];
     	players = playerManager.getPlayers();
     	
     	//Iterates through all players and puts distance from enemy to each player into an array
@@ -460,6 +459,39 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
         newPos.setY(currPosY);
         return newPos;
     }
+    
+    /**
+     * Copied and modified from getToPlayerPos().
+     * Added an input argument to allow function to work on any player passed in, rather than the single
+     * 'hard coded' player in playerManager.
+     * 
+     * @return Box3D 
+     * @author Elvin - Team 9
+     */
+    public Box3D moveToPlayer(Player player){
+        float currPosX = this.getPosX();
+        float currPosY = this.getPosY();
+        if((abs(this.getPosX() - player.getPosX()) > 1)||
+                (abs(this.getPosY() - player.getPosY()) > 1)){
+            this.setCollided(false);
+            this.setCollidedPlayer(false);
+        }
+        if(this.getPosX() < player.getPosX()){
+            currPosX += movementSpeed;
+        }
+        else if(this.getPosX() > player.getPosX()){
+            currPosX -= movementSpeed;
+        }
+        if(this.getPosY() < player.getPosY()){
+            currPosY += movementSpeed;
+        }
+        else if(this.getPosY() > player.getPosY()){
+            currPosY -= movementSpeed;
+        }
+        newPos.setX(currPosX);
+        newPos.setY(currPosY);
+        return newPos;
+    }
 
     /**
      * Move enemy to pointed position. Use for going to the player's last position.
@@ -546,7 +578,27 @@ public abstract class Enemy extends Character implements Lootable, Harmable {
                 newPos = this.getRandomPos();
         }
     }
-
+    
+    /**
+     * Set new position by different situations, modified for multiple players
+     * 
+     * @author Elvin - Team 9
+     */
+    public void setNewPosMultiplayer() {
+    	switch(this.getStatus()) {
+    	case 1: //Status: New born enemy
+    		newPos = this.getRandomPos();
+    		break;
+    	case 2: //Status: Chasing closest player
+    		newPos = this.moveToPlayer(closestPlayer);
+    		this.shoot();
+    		break;
+    	case 3: //Status: Annoyed/Lost player
+    		newPos = this.getMoveToPos(this.getLastPlayerX(), this.getLastPlayerY());
+    		break;
+    	}
+    	
+    }
 
     /**
      * Shoot the entity
