@@ -8,7 +8,7 @@ import com.deco2800.hcg.items.SingleItem;
 import com.deco2800.hcg.items.StackableItem;
 
 import java.util.ArrayList;
-import java.util.Stack;
+import java.util.List;
 
 /** Generic shop interfece that has basic shop commands necessary for any shop such as the ability to buy, sell
  * and hold stock.
@@ -41,7 +41,7 @@ public abstract class Shop {
     public int inStock(Item item){
         if (shopStock.contains(item) && (item instanceof StackableItem)) {
             return shopStock.get(shopStock.indexOf(item)).getStackSize();
-        } else if (item instanceof SingleItem) {
+        } else {
             int number = 0;
             for (Item stock: shopStock) {
                 if (stock.sameItem(item)) {
@@ -49,8 +49,6 @@ public abstract class Shop {
                 }
             }
             return number;
-        } else {
-            return 0;
         }
     }
 
@@ -62,11 +60,21 @@ public abstract class Shop {
      *
      */
     public void addStock(Item item) {
-        if (!shopStock.contains(item) || (item instanceof SingleItem)) {
+        Item shopItem = null;
+        for (Item currentItem : shopStock) {
+            if (currentItem.sameItem(item)) {
+                shopItem = currentItem;
+                break;
+            }
+        }
+        if ((shopItem == null) || (item instanceof SingleItem)) {
             shopStock.add(item);
         } else {
-            shopStock.get(shopStock.indexOf(item)).addToStack(item.getStackSize());
+            shopItem.addToStack(item.getStackSize());
+
+            //shopStock.get(shopStock.indexOf(shopItem)).addToStack(item.getStackSize());
         }
+
     }
 
     /**Add many new stock items to the shop, useful during initialisation of the shop.
@@ -86,7 +94,7 @@ public abstract class Shop {
      *
      * @return the items the shop currently has in stock
      */
-    public ArrayList<Item> getStock() {
+    public List<Item> getStock() {
         return shopStock;
     }
 
@@ -159,10 +167,8 @@ public abstract class Shop {
             if (i.sameItem(item)) {
                 if (prelim == null) {
                     prelim = i;
-                } else {
-                    if ((prelim.getStackSize() == maxStack) && (i.getStackSize() != maxStack)) {
+                } else if ((prelim.getStackSize() == maxStack) && (i.getStackSize() != maxStack)) {
                         prelim = i;
-                    }
                 }
             }
         }
@@ -174,7 +180,7 @@ public abstract class Shop {
      * @param item
      *          Item that is to be sold
      * @return 0 if sold successfully, 1 if player cannot accept more currency,
-     * 			2 if item is null
+     * 			2 if item is null, 3 if item not in inventory
      */
     public int sellStock(Item item) {
     	if(item == null){
@@ -183,7 +189,9 @@ public abstract class Shop {
         seed = new BasicSeed();
         seed.setStackSize(item.getBaseValue()+modifier);
         if ((item instanceof SingleItem) || (item.getStackSize() == 1)) {
-            player.getInventory().removeItem(item);
+            if (!player.getInventory().removeItem(item)) {
+                return 3;
+            }
         } else {
             item.addToStack(-1);
         }

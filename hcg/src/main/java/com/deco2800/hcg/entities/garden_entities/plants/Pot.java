@@ -107,4 +107,13 @@ public class Pot extends AbstractEntity  {
 	public boolean isEmpty() {
 		return plant == null;
 	}
+	
+	/**
+	 * Determines whether the pot is locked or not
+	 * 
+	 * @return true if the pot is locked, otherwise false
+	 */
+	public boolean isLocked() {
+		return locked;
+	}
 }
