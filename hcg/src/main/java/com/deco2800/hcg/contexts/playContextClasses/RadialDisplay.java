@@ -3,28 +3,25 @@ package com.deco2800.hcg.contexts.playContextClasses;
 import java.util.Optional;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.util.WorldUtil;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.garden_entities.plants.Planter;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
-import com.deco2800.hcg.items.*;
 
-
+/**
+ * Displays a radial menu, used for planting in pots and corpses
+ * 
+ * @author Reilly Lundin
+ *
+ */
 public class RadialDisplay extends Group {
 
     private PlantManager plantManager;
@@ -47,6 +44,11 @@ public class RadialDisplay extends Group {
 
     private Group radialDisplay;
 
+    /**
+     * Creates a new radial display in the center of the screen
+     * 
+     * @param stage
+     */
     public RadialDisplay(Stage stage) {
 
         gameManager = GameManager.get();
@@ -72,7 +74,6 @@ public class RadialDisplay extends Group {
         radialOutline.setSize(350, 350);
         radialOutline.setPosition(radialDisplay.getWidth() / 2f - radialOutline.getWidth() / 2f, radialDisplay.getHeight() / 2f - radialOutline.getHeight() / 2f);
         radialDisplay.setPosition(stageInput.getWidth() / 2, stageInput.getHeight() / 2);
-        //radialDisplay.setSize(350, 350);
         radialDisplay.addActor(radialOutline);
         
         normalButton.setSize(80, 80);
@@ -187,15 +188,29 @@ public class RadialDisplay extends Group {
         
     }
 
-
+    /**
+     * Adds the radial menu to the given stage
+     * 
+     * @param stage
+     * 			the stage to add this to
+     */
     public void addRadialMenu(Stage stage) {
         stage.addActor(radialDisplay);
     }
 
+    /**
+     * Removes the radial menu
+     */
     public void removeRadialMenu() {
         radialDisplay.remove();
     }
     
+    /**
+     * Plants the given seed inside a nearby pot or corpse
+     * 
+     * @param seed
+     * 			the seed to plant
+     */
     private void plant(Seed seed) {
     	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 		Player player = pm.getPlayer();
@@ -218,5 +233,23 @@ public class RadialDisplay extends Group {
 			corpse.plantInside(seed);
 			return;
 		}
+    }
+    
+    /**
+     * Determines whether a plantable pot or a corpse is nearby
+     * 
+     * @return
+     * 		true if a plantable pot or corpse is nearby, otherwise false
+     */
+    public static boolean plantableNearby() {
+    	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
+		Player player = pm.getPlayer();
+		float px = player.getPosX();
+		float py = player.getPosY();
+				
+		Optional<AbstractEntity> closestPot = WorldUtil.closestEntityToPosition(px, py, 1.5f, Pot.class);
+		Optional<AbstractEntity> closestCorpse = WorldUtil.closestEntityToPosition(px, py, 1.5f, Corpse.class);
+		return (closestPot.isPresent() && ((Pot)closestPot.get()).isEmpty() && !((Pot)closestPot.get()).isLocked()) || 
+				(closestCorpse.isPresent() && ((Corpse)closestCorpse.get()).isEmpty());
     }
 }

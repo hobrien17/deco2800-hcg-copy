@@ -15,6 +15,13 @@ public class LevelStore {
 		levelList = new ArrayList<>();
         // Test levels for now. Eventually this will contain all the playable game levels
 		levelList.add(new Level(new World("resources/maps/maps/Safezone.tmx"), 0, 1, 0));
+
+		// Safe node level (there should only be one!)
+		// Add safe node level here
+		
+		// Boss levels (there should only be three! (one for each biome)) Ensure they are in ascending biome order
+		
+        // All standard levels (do not need any order; just add to the bottom)
         levelList.add(new Level(new World("resources/maps/maps/level1.tmx"), 0, 1, 1));
         levelList.add(new Level(new World("resources/maps/maps/initial-map-test.tmx"), 0, 1, 1));
         levelList.add(new Level(new World("resources/maps/maps/snow.tmx"), 0, 1, 1));

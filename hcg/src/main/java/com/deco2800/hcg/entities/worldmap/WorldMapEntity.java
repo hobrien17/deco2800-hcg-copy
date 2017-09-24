@@ -23,7 +23,6 @@ public class WorldMapEntity extends Actor {
         GameManager gameManager = GameManager.get();
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         mapBackground = textureManager.getTexture("wm_green_bg");
-
     }
 
     @Override

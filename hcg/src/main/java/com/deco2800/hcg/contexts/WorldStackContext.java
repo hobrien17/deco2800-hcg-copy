@@ -116,14 +116,18 @@ public class WorldStackContext extends UIContext {
 		updateUnlockedWorlds();
 		stage.clear();
 		stage.addActor(new WorldStackEntity());
-		for(WorldStackMapEntity worldEntry: allWorldMaps) {
+		for(WorldStackMapEntity worldEntry : allWorldMaps) {
 			if(worldEntry.getWorldMap().isUnlocked()) {
 				worldEntry.updateTexture();
 				if(worldEntry.getWorldMap().isCompleted()) {
 					worldEntry.setWorldTexture(textureManager.getTexture("completed_node"));
 				}
 			} else {
-				worldEntry.setWorldTexture(textureManager.getTexture("fungi_node"));
+				if(worldEntry.getWorldMap().getWorldType() == 2) {
+					worldEntry.setWorldTexture(textureManager.getTexture("ws_forest_locked"));
+				} else {
+					worldEntry.setWorldTexture(textureManager.getTexture("ws_fungi_locked"));
+				}
 			}
 			stage.addActor(worldEntry);
 		}
