@@ -11,16 +11,26 @@ import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 
+/**
+ * Used in order to display conversations
+ * @author Blake Bodycote
+ *
+ */
 public class ConversationContext extends UIContext {
-    private Table table;
-    private Label nodeText;
-    private Label npcName;
-    private HorizontalGroup buttons;
-    private Skin skin;
-    private String npcTexture;
-    private Image npcImage;
+    private Table table; //table that holds all the conversation items
+    private Label nodeText; //The text of the conversation
+    private Label npcName; //Name of the NPC character 
+    private HorizontalGroup buttons; //Group of buttons
+    private Skin skin; //The skin
+    private Image npcImage; //image of the NPC
 
-	public ConversationContext(Conversation conversation, String texture){
+	
+    /**
+     * Intialises the conversation context with a given conversation
+     * @param conversation to display
+     * @param npcFace the texture that textureManager will use to get the npcFace image
+     */
+    public ConversationContext(Conversation conversation, String npcFace){
 		super();
 
 		GameManager gameManager = GameManager.get();
@@ -31,11 +41,10 @@ public class ConversationContext extends UIContext {
 		
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		
-		npcTexture = texture;
-		npcImage = new Image(textureManager.getTexture(npcTexture));
-		
+		npcImage = new Image(textureManager.getTexture(npcFace));
 		nodeText = new Label("", skin);
 		npcName = new Label("Angela", skin);
+		
 		buttons = new HorizontalGroup();
 		buttons.space(30f);
 		
@@ -54,6 +63,10 @@ public class ConversationContext extends UIContext {
 		stage.addActor(table);
 	}
 
+    /**
+     * Called when the conversation needs to be displayed on the screen, dynamically alters the buttons/text displayed.
+     * @param node - the conversationNode to display
+     */
     public void displayNode(ConversationNode node) {
 
 		// Clear old buttons & replace text

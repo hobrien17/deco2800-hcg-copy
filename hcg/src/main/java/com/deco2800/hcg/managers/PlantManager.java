@@ -59,14 +59,16 @@ public class PlantManager extends Manager {
 	}
 
     /**
-     * Remove all plants
+     * Removes all plants in the plant manager
      */
 	public void removeAll() {
 	    plantList.clear();
     }
 
     /**
-     * Gets all plants in manager
+     * Returns all plants in the plant manager
+     * 
+     * @return a list of all plants
      */
 	public ArrayList<AbstractGardenPlant> getPlants() {
 	    return plantList;
@@ -75,7 +77,10 @@ public class PlantManager extends Manager {
 	/**
 	 * Sets the window for the manager
      *
-	 * @param plantWindow the Window to set it to
+	 * @param plantWindow 
+	 * 			the window to set it to
+	 * @param skin 
+	 * 			the window's skin
 	 */
 	public void setPlantWindow(Window plantWindow, Skin skin) {
 		this.plantWindow = plantWindow;
@@ -87,7 +92,7 @@ public class PlantManager extends Manager {
 	}
 
 	/**
-	 * Update the label
+	 * Updates the labels in the plant manager UI 
 	 */
 	public void updateLabel() {
 	    windowTable.clear();
@@ -96,12 +101,12 @@ public class PlantManager extends Manager {
 	}
 
     /**
-     * Set visibility of plantWindow
+     * Sets the visibility of the plantWindow
      * 
      * @param bool if window is set to visible
      */
-	public void setWindowVisible(boolean bool){
-	    this.plantWindow.setVisible(bool);
+	public void setWindowVisible(boolean visible){
+	    this.plantWindow.setVisible(visible);
     }
 
     /**
@@ -109,8 +114,8 @@ public class PlantManager extends Manager {
      *
      * @param plant the plant to be highlighted
      */
-    private void highLight(AbstractGardenPlant plant){
-
+    private void highLight(AbstractGardenPlant plant) {
+    	//TODO implement this
     }
 
 	/**

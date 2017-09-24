@@ -197,5 +197,44 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         }
         return true;
     }
+    
+    /**
+     * Increases or reduces the delay between stages
+     * 
+     * @param amount
+     * 			the amount to reduce or increase the delay ( <1 to reduce, >1 to increase)
+     */
+    public void changeDelay(float amount) {
+    	growDelay *= amount;
+    }
+    
+    /**
+     * Increases the rarity of all "rare" items by change amount. 
+     * A rare item is defined by an item with rarity less than or equal to threshold. 
+     * Note that all rarities will be modified at the end of this method to ensure the total rarity remains at 1. 
+     * Because of this, the rarities will actually change by an amount slightly less than change.
+     * 
+     * @param threshold
+     * 			the threshold which defines a rare item
+     * @param change
+     * 			the amount to change the rarity by
+     */
+    public void increaseRarity(double threshold, double change) {
+    	double total = 0.0;
+    	for(Map.Entry<String, Double> entry : lootRarity.entrySet()) {
+    		if(entry.getValue() <= threshold) {
+    			// if the rarity is below the threshold, make it more common
+    			total += change;
+    			lootRarity.put(entry.getKey(), entry.getValue() + change);
+    		}
+    	}
+    	total /= lootRarity.size();
+    	// modify all the rarities so they sum up to 1
+    	for(Map.Entry<String, Double> entry : lootRarity.entrySet()) {
+    		lootRarity.put(entry.getKey(), entry.getValue() - total);
+    	}
+    	
+    	checkLootRarity(); //will display a warning if the loot rarity goes above 1
+    }
 
 }

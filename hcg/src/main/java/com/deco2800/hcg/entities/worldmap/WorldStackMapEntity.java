@@ -7,6 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 
+/**
+ * WorldStackMapEntity holds the information pertaining to the display of the world nodes on the WorldStack menu.
+ * 
+ * @author Ivo
+ */
 public class WorldStackMapEntity extends Actor {
 	private Texture worldStackMapTexture;
     private int xPos;
@@ -16,7 +21,7 @@ public class WorldStackMapEntity extends Actor {
 
     private WorldMap worldMap;
 
-    private float spriteWidth = 175; // Used to scale the drawing of the mapNodes. (pixels)
+    private float spriteWidth = 350; // Used to scale the drawing of the mapNodes. (pixels)
     private float spriteHeight; // Will be calculated based on the above width
     
     public WorldStackMapEntity(WorldMap worldMap) {
@@ -28,7 +33,7 @@ public class WorldStackMapEntity extends Actor {
         updateTexture();
         
         // pixels padding around each direction of the map
-     	int mapPadding = 175;
+     	int mapPadding = 50;
 
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
@@ -57,18 +62,18 @@ public class WorldStackMapEntity extends Actor {
 				break;
 			case 1:
 				//suburbs biome
-				worldStackMapTexture = textureManager.getTexture("discovered_node");
+				worldStackMapTexture = textureManager.getTexture("ws_urban");
 				break;
 			case 2:
 				//desolate forest biome
-				worldStackMapTexture = textureManager.getTexture("discovered_node");
+				worldStackMapTexture = textureManager.getTexture("ws_forest");
 				break;
 			case 3:
 				//fungal wasteland biome
-				worldStackMapTexture = textureManager.getTexture("safe_node");
+				worldStackMapTexture = textureManager.getTexture("ws_fungi");
 				break;
 			default: // This shouldn't happen, but catch all if it does.
-				worldStackMapTexture = textureManager.getTexture("discovered_node");
+				worldStackMapTexture = textureManager.getTexture("safe_node");
 		}
 	}
 	
@@ -121,6 +126,11 @@ public class WorldStackMapEntity extends Actor {
 		return worldStackMapTexture;
 	}
 	
+	/**
+	 * Set the world's texture to the texture provided
+	 * @param newTexture
+	 *     The new texture to set the world's texture to
+	 */
 	public void setWorldTexture(Texture newTexture) {
 		worldStackMapTexture = newTexture;
 	}

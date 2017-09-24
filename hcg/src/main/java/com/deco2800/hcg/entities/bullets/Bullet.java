@@ -115,8 +115,8 @@ public class Bullet extends AbstractEntity implements Tickable {
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
 
-		this.goalX = newX;
-		this.goalY = newY;
+        this.goalX = newX - this.getXLength()/2;
+        this.goalY = newY - this.getYLength()/2;
 
 		float deltaX = getPosX() - goalX;
 		float deltaY = getPosY() - goalY;
@@ -157,8 +157,10 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		if (Math.abs(Math.abs(this.getPosX()) - Math.abs(goalX)) < 1
-				&& Math.abs(Math.abs(this.getPosY()) - Math.abs(goalY)) < 1) {
+        if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
+                - Math.abs(goalX)) < 0.5
+                && Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
+                - Math.abs(goalY)) < 0.5) {
 			GameManager.get().getWorld().removeEntity(this);
 		}
 		setPosX(getPosX() + changeX);
@@ -202,12 +204,14 @@ public class Bullet extends AbstractEntity implements Tickable {
 					}
 					hitCount--;
 				}
+
 				// Collision with destructable tree
 				if (entity instanceof DestructableTree && user instanceof Player && !(this instanceof GrassBullet)) {
 					DestructableTree tree = (DestructableTree) entity;
 					applyEffect(tree);
 					hitCount--;
 				}
+
 				// Collision with player
 				if (entity instanceof Player && user instanceof Enemy) {
 					// add code to apply effect to player here
@@ -215,16 +219,17 @@ public class Bullet extends AbstractEntity implements Tickable {
 					enemyUser.causeDamage((Player) entity);
 					hitCount--;
 				}
-				// COllision with corpse
+
+				// Collision with corpse
 				if (entity instanceof Corpse && user instanceof Player) {
 					Corpse corpse = (Corpse) entity;
-					corpse.plantInside(this);
+					//corpse.plantInside(this); //commented out because this is immediately spawning sunflower turrets
 					hitCount = 0;
 				}
+
 				if (hitCount == 0) {
 					GameManager.get().getWorld().removeEntity(this);
 					break;
-
 				}
 			}
 		}
@@ -239,6 +244,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 500, 0, 0, 1, 0));
 	}
 }
