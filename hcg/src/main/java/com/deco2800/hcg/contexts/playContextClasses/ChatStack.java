@@ -90,7 +90,7 @@ public class ChatStack extends Stack {
                 } else if (chatString.length() > 0) {
                     chatString = chatString.substring(0, chatString.length() - 1);
                 }
-                if ((c == '\r' && networkManager.isInitialised())) {
+                if (c == '\r' && networkManager.isInitialised()) {
                     if (chatString.trim().length()>0) {
                         networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
                         chatTextArea.appendText(chatTextField.getText() + "\n");

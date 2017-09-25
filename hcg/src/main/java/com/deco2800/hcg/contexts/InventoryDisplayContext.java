@@ -176,7 +176,7 @@ public abstract class InventoryDisplayContext extends UIContext {
                 public void clicked(InputEvent event, float x, float y) {
                     itemDisplay.clear();
                     //Show item when clicked
-                    Label itemName = new Label((button.getName()), skin);
+                    Label itemName = new Label(button.getName(), skin);
                     Image image = new Image(button.getImage().getDrawable());
                     itemDisplay.add(image).height(50).width(50);
                     itemDisplay.add(itemName).left();
