@@ -56,8 +56,8 @@ public class World {
 
 		//Create Test Collision Map - with test dimensions
 
-		this.setWidth(1000);
-		this.setLength(1000);
+		this.setWidth(100);
+		this.setLength(100);
 
 		this.collisionMap = new Array2D<> (this.getWidth() + 1, this.getLength() + 1);
 		for (int x = 0; x < this.getWidth() + 1; x++) {
