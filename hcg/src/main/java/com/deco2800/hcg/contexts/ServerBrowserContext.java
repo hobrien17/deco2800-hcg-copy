@@ -9,11 +9,15 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * UI for server browser, used for joining a server.
  */
 public class ServerBrowserContext extends UIContext {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerBrowserContext.class);
 
     private ImageButton host;
     private ImageButton refresh;
@@ -138,7 +142,7 @@ public class ServerBrowserContext extends UIContext {
 
         		for (int i = 0; i < refreshedServers.length; i++) {
         			refreshedServers[i] = "Server: " + i;
-                    System.out.println(refreshedServers[i]);
+                    LOGGER.info(refreshedServers[i]);
                 }
                 serverList.setItems(refreshedServers);
                 serverListTable.clear();

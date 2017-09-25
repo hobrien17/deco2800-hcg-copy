@@ -783,7 +783,7 @@ public class Player extends Character implements Tickable {
 			break;
 		case Input.Keys.I:
 			// Display Inventory
-			System.out.println("Access player inventory");
+			LOGGER.info("Access player inventory");
 			contextManager.pushContext(new PlayerInventoryContext(this));
 			break;
 		case Input.Keys.U:
@@ -794,7 +794,7 @@ public class Player extends Character implements Tickable {
 				pot.unlock();
 			}
 		case Input.Keys.TAB:
-			System.out.println("You press Tab!");
+			LOGGER.info("You press Tab!");
 			this.contextManager.pushContext(new ScoreBoardContext());
 			break;
 		default:

@@ -26,6 +26,8 @@ import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.managers.TextureManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for displaying items in a player or shopkeeper's inventory. This class holds the methods that are common in the
@@ -35,6 +37,8 @@ import com.deco2800.hcg.managers.TextureManager;
  * @author Group 2
  */
 public abstract class InventoryDisplayContext extends UIContext {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InventoryDisplayContext.class);
 
     //Input arguments
     private Skin skin;
@@ -208,7 +212,8 @@ public abstract class InventoryDisplayContext extends UIContext {
                         useButton.addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
-                                System.out.println("Clicked USE");
+                                LOGGER.info("clicked used");
+
                                 if (currentItem instanceof ConsumableItem) {
                                     //Consume Item
                                     ((ConsumableItem) currentItem).consume(player);
@@ -378,7 +383,7 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = playerEquipment;
         for (int i=0; i<player.getEquippedItems().getNumItems(); i++) {
             Item currentItem = player.getEquippedItems().getItem(i);
-            System.out.println(textureManager.getTexture(currentItem.getTexture()));
+            LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
             //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
             ImageButton button;
             if (textureManager.getTexture(currentItem.getTexture()) == null) {
