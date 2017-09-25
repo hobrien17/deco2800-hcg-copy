@@ -30,9 +30,9 @@ public class Grass extends AbstractGardenPlant {
                 return "grass_02";
             case LARGE:
                 return "grass_03";
+            default:
+                return null;
         }
-        return null;
-
     }
 
     @Override

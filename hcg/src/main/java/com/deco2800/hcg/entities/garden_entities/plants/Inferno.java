@@ -30,9 +30,9 @@ public class Inferno extends AbstractGardenPlant {
                 return "inferno_02";
             case LARGE:
                 return "inferno_03";
+            default:
+                return null;
         }
-        return null;
-
     }
 
     @Override

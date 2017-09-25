@@ -32,9 +32,9 @@ public class Ice extends AbstractGardenPlant {
 			return "ice_02";
 		case LARGE:
 			return "ice_03";
+		default:
+			return null;
 		}
-		return null;
-
 	}
 
 	@Override

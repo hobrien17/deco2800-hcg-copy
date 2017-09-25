@@ -49,8 +49,6 @@ public abstract class Enemy extends Character implements Lootable {
     private int numPlayers;
     private Player closestPlayer;
 
-    // Effects container
-    //protected Effects myEffects;
     protected Box3D prevPos;
 
     protected Weapon enemyWeapon;
@@ -570,6 +568,9 @@ public abstract class Enemy extends Character implements Lootable {
                 break;
             case 3: //Status: Annoyed/Lost player
                 newPos = this.getMoveToPos(this.getLastPlayerX(), this.getLastPlayerY());
+                break;
+            default:
+                newPos = this.getRandomPos();
                 break;
         }
 
