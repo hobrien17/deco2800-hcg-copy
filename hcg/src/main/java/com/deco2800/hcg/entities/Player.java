@@ -371,7 +371,7 @@ public class Player extends Character implements Tickable {
 	 *            name of current tile
 	 */
 	private void handleSound(String terrain) {
-		if (terrain != null && !name.equals("spikes") && move == 1) {
+		if (terrain != null && move == 1) {
 			// if player is moving
 			if (!terrain.equals(name)) {
 				// if player moved to a different tile
@@ -385,11 +385,12 @@ public class Player extends Character implements Tickable {
 			name = terrain;
 		} else if (move == 0) {
 			// if player not moving
-			if (!terrain.equals("spikes")){
-				// terminate sound effect && empty tile name
-				soundStop(name);
-				name = "";
+			if (terrain.equals("spikes")){
+				soundPlay(terrain);
 			}
+			// terminate sound effect && empty tile name
+			soundStop(name);
+			name = "";
 		}
 	}
 
