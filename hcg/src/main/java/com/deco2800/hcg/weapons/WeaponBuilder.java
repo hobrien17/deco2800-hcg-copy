@@ -28,7 +28,9 @@ public class WeaponBuilder {
     /**
      * Initialises a new WeaponBuilder
      */
-    public WeaponBuilder() {}
+    public WeaponBuilder() {
+        //deliberately empty
+    }
 
     /**
      * Sets the weapon type of the weapon builder

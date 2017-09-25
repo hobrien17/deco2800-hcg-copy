@@ -75,7 +75,7 @@ public class QuestNPC extends NPC {
 	 * Moves the NPC
 	 */
 	protected void move() {
-
+		throw new UnsupportedOperationException();
 	}
 
 	/**

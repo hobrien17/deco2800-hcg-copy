@@ -37,12 +37,12 @@ public class ShopNPC extends NPC {
 
 	@Override
 	public void onTick(long gameTickCount) {
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	protected void move() {
-		
+		throw new UnsupportedOperationException();
 	}
 
     /**

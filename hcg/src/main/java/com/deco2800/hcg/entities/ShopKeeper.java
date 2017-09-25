@@ -15,7 +15,7 @@ public class ShopKeeper implements Selectable{
 
     @Override
     public void deselect() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -25,6 +25,6 @@ public class ShopKeeper implements Selectable{
 
     @Override
     public void buttonWasPressed() {
-    	
+        throw new UnsupportedOperationException();
     }
 }

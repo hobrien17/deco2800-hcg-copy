@@ -16,7 +16,9 @@ public class ChatMessage extends Message {
 	
 	private String string;
 	
-	public ChatMessage() {}
+	public ChatMessage() {
+		//deliberately empty
+	}
 	
 	public ChatMessage(String string) {
 		super(MessageType.CHAT);
