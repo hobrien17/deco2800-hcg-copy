@@ -486,18 +486,6 @@ public class Player extends Character implements Tickable {
 
 			if (layer.getProperties().get("name", String.class) != null) {
 				String newName = layer.getProperties().get("name", String.class);
-				if (move == 1) {
-					if (newName.equals("exit")) {
-						if (!onExit) {
-							PlayContext play = (PlayContext) contextManager.currentContext();
-							play.addExitWindow();
-							onExit = true;
-							exitMessageDisplayed = true;
-						}
-					} else {
-						onExit = false;
-					}
-				}
 				// handle sound effects
 				handleSound(newName);
 
@@ -613,8 +601,16 @@ public class Player extends Character implements Tickable {
 		case "water-shallow":
 			this.setTexture("hcg_character_sink");
 			break;
+		case "exit":
+			if (!onExit) {
+					PlayContext play = (PlayContext) contextManager.currentContext();
+					play.addExitWindow();
+					onExit = true;
+					exitMessageDisplayed = true;
+				}
 		default:
 			updateSprite(this.direction);
+			onExit = false;
 			break;
 		}
 	}
