@@ -2,10 +2,19 @@ package com.deco2800.hcg.util;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.worlds.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class Pathfinder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Pathfinder.class);
+
+    private Pathfinder() {
+
+    }
+
     /**
      * Runs an A* Pathfinding algorithimn from start to goal on the baseWorld.
      * This code uses a lot of run time so its a good idea to multithread its use
@@ -63,7 +72,6 @@ public class Pathfinder {
 
                 int cost = 0;
                 for (AbstractEntity e : entities) {
-                    //cost += e.getCost();
                     //Set Standard pathfinding cost for the moment.
                     cost += 10;
                 }
@@ -87,7 +95,8 @@ public class Pathfinder {
                 fScore.put(p, gScore.get(p) + heuristicCostEstimate(p, truncGoal));
             }
         }
-        return null;
+
+        return Collections.emptyList();
     }
 
     /**
@@ -134,15 +143,16 @@ public class Pathfinder {
         try {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    if (!(i == 0 && j == 0)) {
-                        if (p.getX() + i >= 0 && p.getX() + i < baseWorld.getWidth() && p.getY() + j >= 0 && p.getY() + j < baseWorld.getLength()) {
-                            adjacencies.add(new Point(p.getX() + i, p.getY() + j));
-                        }
+                    if (!(i == 0 && j == 0) && p.getX() + i >= 0 && p.getX() + i < baseWorld.getWidth() &&
+                            p.getY() + j >= 0 && p.getY() + j < baseWorld.getLength()) {
+                        adjacencies.add(new Point(p.getX() + i, p.getY() + j));
+
                     }
                 }
             }
         } catch (Exception e) {
-            return null;
+            LOGGER.info(e.toString());
+            return Collections.emptyList();
         }
 
         return adjacencies;
@@ -161,9 +171,11 @@ public class Pathfinder {
     private static List<Point> reconstructPath(Map<Point, Point> cameFrom, Point current) {
         List<Point> result = new LinkedList<>();
 
-        while (cameFrom.containsKey(current)) {
-            result.add(current);
-            current = cameFrom.get(current);
+        Point currentPoint = current;
+
+        while (cameFrom.containsKey(currentPoint)) {
+            result.add(currentPoint);
+            currentPoint = cameFrom.get(currentPoint);
         }
         Collections.reverse(result);
         return result;
