@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;

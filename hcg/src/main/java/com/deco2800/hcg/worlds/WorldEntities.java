@@ -7,7 +7,6 @@ import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.terrain_entities.Boulder;
-import com.deco2800.hcg.entities.terrain_entities.ConcreteWall;
 import com.deco2800.hcg.entities.terrain_entities.House2;
 import com.deco2800.hcg.entities.terrain_entities.HouseWORoof;
 import com.deco2800.hcg.entities.terrain_entities.HouseWRoof;
