@@ -76,9 +76,6 @@ public class Effects {
      */
     private void saveOriginalStats() {
         // TODO implement when owner's attributes have been implemented
-//        originalSlow = owner.getSpeed();
-//        originalHealth = owner.getHealth();
-//        originalAttackSpeed = owner.getAttackSpeed();
     }
 
     /**
@@ -212,8 +209,6 @@ public class Effects {
             //Only activate while buff is active
             if (!effect.onCooldown()) {
                 effect.startCooldownTimer();
-                //if(owner instanceof Character){ commented out as owner is already of type Character, you will get
-                //  a compiler error if you do this wrong
                 // Handle damage
                 thisCharacter.takeDamage(effect.getDamage());
                 if(thisCharacter.getHealthCur() <= 0){

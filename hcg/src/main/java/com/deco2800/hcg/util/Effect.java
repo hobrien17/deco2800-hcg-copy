@@ -49,9 +49,7 @@ public class Effect {
         if (!(level >= 1)) {
             throw new IllegalArgumentException("Level must be a positive integer and at least 1.");
         }
-//        if (!(damage >= 0)) {
-//            throw new IllegalArgumentException("Damage must be a positive integer.");
-//        }
+
         if (!(speedModifier >= 0)) {
             throw new IllegalArgumentException("Slow amount must be >= 0.");
         }

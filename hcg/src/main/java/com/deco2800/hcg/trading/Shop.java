@@ -80,8 +80,6 @@ public abstract class Shop {
             shopStock.add(item);
         } else {
             shopItem.addToStack(item.getStackSize());
-
-            //shopStock.get(shopStock.indexOf(shopItem)).addToStack(item.getStackSize());
         }
 
     }

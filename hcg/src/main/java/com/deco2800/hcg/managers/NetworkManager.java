@@ -177,7 +177,7 @@ public final class NetworkManager extends Manager {
 		byte[] bytes = new byte[messageBuffer.remaining()];
 		messageBuffer.get(bytes);
 		// add byte array to queue
-		return (sendQueue.put(message.getId(), bytes) == null);
+		return sendQueue.put(message.getId(), bytes) == null;
 	}
 
 	/**
