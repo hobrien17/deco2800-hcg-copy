@@ -102,7 +102,7 @@ public class Seed extends StackableItem {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex) {
 			LOGGER.error("Error creating new object: " + ex.getStackTrace());
-			return null;
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class Seed extends StackableItem {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex) {
 			LOGGER.error("Error creating new object: " + ex.getStackTrace());
-			return null;
+			throw new RuntimeException(ex);
 		}
 	}
 

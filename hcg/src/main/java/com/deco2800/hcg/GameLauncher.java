@@ -23,8 +23,6 @@ public class GameLauncher {
         config.width = 1280;
         config.height = 720;
         config.title = "DECO2800 2017: Hardcor3Gard3ning";
-        @SuppressWarnings("unused")
-        LwjglApplication game = new LwjglApplication(new Hardcor3Gard3ning(),
-                config);
+        new LwjglApplication(new Hardcor3Gard3ning(), config);
     }
 }
