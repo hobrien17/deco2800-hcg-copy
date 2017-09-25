@@ -173,7 +173,6 @@ public class Player extends Character implements Tickable {
 				.build();
 	    Weapon grenadelauncher = new WeaponBuilder().setWeaponType(WeaponType.GRENADELAUNCHER).setUser(this).setRadius(0.7)
 	                .build();
-		//equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
 	    equippedItems.addItem(new WeaponItem(grenadelauncher, "Grenade Launcher", 10));
         equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
@@ -526,7 +525,6 @@ public class Player extends Character implements Tickable {
 
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
-				//this.takeDamage(Integer.parseInt((String) layer.getProperties().get("damage")));
 				myEffects.addEffect(new Effect("Damage", 10, Integer.parseInt((String) layer.getProperties().get("damage")), 1, 0, 1, 0));
 			}
 			// log
@@ -693,23 +691,6 @@ public class Player extends Character implements Tickable {
 		this.xp += amount;
 		checkXp();
 	}
-
-//	/**
-//	 * Decrease the current health of the player by the given amount
-//	 *
-//	 * @param amount
-//	 *            the amount of health to lose
-//	 */
-//	public void takeDamage(int amount) {
-//		// if user is taking damage
-//		if (amount > 0) {
-//			this.healthCur = Math.max(this.healthCur - amount, 0);
-//			return;
-//		}
-//		// otherwise user is being healed
-//		this.healthCur = Math.min(this.healthCur - amount, this.healthMax);
-//
-//	}
 
 	/**
 	 * Stamina determines how the player can use additional movement mechanics

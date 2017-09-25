@@ -134,8 +134,6 @@ public class ServerBrowserContext extends UIContext {
         		//get the number of servers hosted on lan
         		//set the number of elements in refreshServers to the number of servers
         		//check if the number of servers hosted is > 0, else exception/error?
-        		//int numServers = function that finds servers;
-        		//refreshedServers = new String[numServers];
                 refreshedServers = new String[0];
 
         		for (int i = 0; i < refreshedServers.length; i++) {

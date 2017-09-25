@@ -30,7 +30,6 @@ public class ClockDisplay extends Group {
         /* Add clock. */
         Image clockImage = new Image(new
                 Texture(Gdx.files.internal("resources/ui/clock_outline.png")));
-        // clockImage.setPosition(stage.getWidth() - 215, 10);
         clockLabel = new Label(timeManager.getTime(), skin);
         dateLabel = new Label(timeManager.getDate(), skin);
         timeManager.setTimeLabel(clockLabel);
