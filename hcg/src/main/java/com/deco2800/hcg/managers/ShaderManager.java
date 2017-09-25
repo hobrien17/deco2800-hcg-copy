@@ -81,32 +81,7 @@ public class ShaderManager extends Manager {
         this.renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
         this.scene = new TextureRegion(renderTarget.getColorBufferTexture());
         this.scene.flip(false, true);
-        
-        // We tried to do a lightmap but OpenGL is hard. We'll try this again in cp3.
-        /*
-        // Begin lightmap //////////////////////////////////////////////////////////////////////////////////////////
-        
-        this.lightTarget = new FrameBuffer(Format.RGB565, width, height, false);
-        this.lightMap = new TextureRegion(lightTarget.getColorBufferTexture());
-        this.lightMap.flip(false,  true);
-        
-        this.lightBatch = new SpriteBatch();
-        this.lightBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
-        
-        // Draw onto light target //////////////////////////////////////
-        this.lightTarget.begin();
-        Gdx.gl.glClearColor(1, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        
-        this.lightRenderer.render(this.lightBatch);
-        
-        this.lightTarget.end();
-        this.lightBatch.dispose();
-        
-        this.lightTarget.dispose();
-        
-        */
-        
+
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
             
