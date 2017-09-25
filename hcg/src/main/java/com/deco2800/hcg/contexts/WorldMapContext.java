@@ -129,44 +129,7 @@ public class WorldMapContext extends UIContext {
 		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
-		//inputManager.addMouseMovedListener(this::handleMouseMoved);
 	}
-
-	/*
-	// when hovering the node, change the mouse cursor, delete if not needed
-	private void handleMouseMoved(int screenX, int screenY){
-
-		Vector2 mouseScreen = new Vector2(screenX, screenY);
-		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
-		for (MapNodeEntity nodeEntity : allNodes) {
-			float nodeStartX = nodeEntity.getXPos();
-			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
-			float nodeStartY = nodeEntity.getYPos();
-			float nodeEndY = nodeEntity.getYPos() + nodeEntity.getHeight();
-			if (mouseStage.x >= nodeStartX && mouseStage.x <= nodeEndX
-					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
-					&& nodeEntity.getNode().isDiscovered()
-					&& !(nodeEntity.getNode().getNodeType() == 2)) {
-
-				// online free png https://dribbble.com/shots/815059-Basic-Cursor-PNG-Pack
-				// for design team: create a 'cursor' png file with:
-				//        a "power of 2" width px (256, 512,...)
-				//        a "RGBA8888" format
-				// otherwise, the code below will break
-
-				Pixmap pixmap = new Pixmap(Gdx.files.internal("resources/cursor-hand.png"));
-				Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0));
-				pixmap.dispose();
-				//Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
-			} else {
-				// this line should set the current cursor back to normal. but I don't know how to do. will look into this
-				// at the moment it's kind of automatically change back to normal when you no longer hovering
-
-				//Gdx.graphics.setSystemCursor(SystemCursor.Arrow);  // according to the library, this only works in LWJG3
-
-			}
-		}
-	}*/
 	
 	/**
 	 * Handles the mouse click up on a node entity. If the node is a clickable entity (not completed or hidden), the

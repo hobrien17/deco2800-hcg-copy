@@ -142,7 +142,6 @@ public class CharacterCreationContext extends CharacterContext{
     private void initSubTables() {
         topRowInfoTable = new Table(skin);
         attributesWindow = new Window("Attributes", skin);
-        //attributesWindow.setBackground();
         skillsWindow = new Window("Skills", skin);
         statsWindow = new Window("Stats", skin);
         characterPreviewWindow = new Window("Character Preview", skin);
