@@ -18,7 +18,6 @@ import com.deco2800.hcg.util.Box3D;
  */
 public abstract class NPC extends Character implements Tickable {
 
-    //private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
     private String fName;
     private String sName;
     private final Box3D INITIAL_POSITION;

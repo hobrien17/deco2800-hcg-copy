@@ -26,8 +26,8 @@ public class QuestNPC extends NPC {
 	private float startY;
 	private float goalX;
 	private float goalY;
-	private int moveDirection; // defaults to 0;
-	private float speed; // defaults to 1;
+	private int moveDirection; // defaults to 0
+	private float speed; // defaults to 1
 
 	private PathfindingThread pathfinder;
 	private Thread thread;

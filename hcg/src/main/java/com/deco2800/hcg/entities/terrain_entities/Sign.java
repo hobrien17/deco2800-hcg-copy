@@ -14,10 +14,8 @@ public class Sign extends TerrainEntity {
     public Sign(float posX, float posY, float posZ, int ID) {
         super(posX, posY, posZ, 1.0f, 1.0f, 1.0f);
         switch(ID) {
-            case 0:
-                //setTexture(sometexture);
-            case 1:
-                //setTexture(someothertexture);
+            default:
+                break;
         }
     }
 }
