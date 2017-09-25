@@ -479,9 +479,9 @@ public class Player extends Character implements Tickable {
 			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
 
 			// see if current tile is a Gateway
-			if (layer.getProperties().get("playerX") != null && layer.getProperties().get("playerY") != null) {
-				oldPosX = Float.parseFloat((String) layer.getProperties().get("playerX"));
-				oldPosY = Float.parseFloat((String) layer.getProperties().get("playerY"));
+			if (layer.getProperties().get("PlayerX") != null && layer.getProperties().get("PlayerY") != null) {
+				oldPosX = Float.parseFloat((String) layer.getProperties().get("PlayerX"));
+				oldPosY = Float.parseFloat((String) layer.getProperties().get("PlayerY"));
 			}
 
 			if (layer.getProperties().get("name", String.class) != null) {

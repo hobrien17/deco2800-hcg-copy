@@ -13,7 +13,7 @@
  <tileset firstgid="63" source="../tiles/health.tsx"/>
  <layer name="Ground" width="30" height="30">
   <properties>
-   <property name="name" value="ground"/>
+   <property name="name" value="grass"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">
@@ -51,7 +51,7 @@
  </layer>
  <layer name="Path" width="30" height="30">
   <properties>
-   <property name="name" value="path"/>
+   <property name="name" value="sand"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">

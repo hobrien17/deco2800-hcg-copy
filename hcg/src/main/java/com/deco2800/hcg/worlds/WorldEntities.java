@@ -8,7 +8,6 @@ import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.terrain_entities.Boulder;
 import com.deco2800.hcg.entities.terrain_entities.ConcreteWall;
-import com.deco2800.hcg.entities.terrain_entities.House;
 import com.deco2800.hcg.entities.terrain_entities.House2;
 import com.deco2800.hcg.entities.terrain_entities.HouseWORoof;
 import com.deco2800.hcg.entities.terrain_entities.HouseWRoof;
@@ -63,8 +62,6 @@ public enum WorldEntities {
                 return new Rock(x, y, 0f);
             case ICEBOULDER:
                 return new IceBoulder(x, y, 0f);
-            case HOUSE:
-                return new House(x, y, 0f);
             case SLUDGEBARREL:
                 return new SludgeBarrel(x, y, 0f);
             case MUSHROOMTREETHICK:

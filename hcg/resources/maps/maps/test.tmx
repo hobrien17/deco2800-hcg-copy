@@ -13,7 +13,7 @@
  <tileset firstgid="36" source="../tiles/placeholder.tsx"/>
  <layer name="tile" width="10" height="10">
   <properties>
-   <property name="name" value="tile"/>
+   <property name="name" value="grass"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">

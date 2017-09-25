@@ -24,7 +24,7 @@
  <tileset firstgid="49" source="../tiles/white.tsx"/>
  <layer name="Ground" width="50" height="50">
   <properties>
-   <property name="name" value="ground"/>
+   <property name="name" value="grass"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">
@@ -82,7 +82,7 @@
  </layer>
  <layer name="Path" width="50" height="50">
   <properties>
-   <property name="name" value="path"/>
+   <property name="name" value="sand"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">
