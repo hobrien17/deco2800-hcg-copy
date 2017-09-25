@@ -268,7 +268,6 @@ public abstract class Enemy extends Character implements Lootable {
      */
     public int getNumberPlayers() {
         numPlayers = playerManager.getPlayers().size();
-        //System.out.println(numPlayers);
         return numPlayers;
     }
 
@@ -529,9 +528,6 @@ public abstract class Enemy extends Character implements Lootable {
                     this.causeDamage((Player)entity);
                     this.setCollidedPlayer(true);
                 }
-//                if(entity instanceof Bullet) {
-//                    this.changeHealth(-500);
-//                }
                 this.setCollided(true);
             }
         }
@@ -587,34 +583,6 @@ public abstract class Enemy extends Character implements Lootable {
         enemyWeapon.updateAim(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
         enemyWeapon.openFire();
     }
-
-//    /**
-//     * Changes the speed by modifier amount
-//     *
-//     * @param modifier
-//     * 			the amount to change the speed (<1 to slow,  >1 to speed)
-//     */
-//    public void changeSpeed(float modifier) {
-//    	this.movementSpeed *= (1 - modifier);
-//    }
-
-
-
-//    /**
-//     * Sets the enemy's speed to its original value
-//     *
-//     */
-//    public void resetSpeed() {
-//    	this.movementSpeed = movementSpeedNorm;
-//    }
-
-//    @Override
-//    public float getMovementSpeed() {
-//    	return this.movementSpeed;
-//    }
-
-    // TEMPORARY METHODS to comply with temporary harmable implementations to get the Effects class working
-
 
     @Override
     public boolean equals(Object obj) {

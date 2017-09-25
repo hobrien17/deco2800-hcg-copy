@@ -229,15 +229,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 					hitCount--;
 				}
 
-				// Collision with corpse
-				/*
-				if (entity instanceof Corpse && user instanceof Player) {
-					Corpse corpse = (Corpse) entity;
-					//corpse.plantInside(this); //commented out because this is immediately spawning sunflower turrets
-					hitCount = 0;
-				}
-				*/
-
 				if (hitCount == 0) {
 					GameManager.get().getWorld().removeEntity(this);
 					break;
