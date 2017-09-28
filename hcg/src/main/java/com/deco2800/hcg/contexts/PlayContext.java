@@ -349,12 +349,10 @@ public class PlayContext extends Context {
             Item item = new HealthPotion(100);
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
             gameManager.getWorld().addEntity(entity);
-        } else if(keycode == Input.Keys.B) {
-            if(RadialDisplay.plantableNearby()) {
-                radialDisplay.addRadialMenu(stage);
-            }
-        }
-    }
+		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
+			radialDisplay.addRadialMenu(stage);
+		}
+	}
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);

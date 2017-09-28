@@ -26,30 +26,29 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
         for(AbstractEntity entity : world.getEntities()) {
             
             // Allow players to pick items up
-            if(entity instanceof Player && this.distance(entity) <= 1.2) {
-                if(((Player)entity).addItemToInventory(this.getItem())) {
-                    world.removeEntity(this);
-                    break;
-                }
-            }
+			if (entity instanceof Player && this.distance(entity) <= 1.2
+					& ((Player) entity).addItemToInventory(this.getItem())) {
+				world.removeEntity(this);
+				break;
+			}
 
             // Check to see if we're colliding with any other item entities and try
             // and merge with them if we can
-            if(this.item.isStackable()) {
-                if(entity instanceof ItemEntity && this.distance(entity) <= 1.5 && entity != this) {
-                    ItemEntity otherItem = (ItemEntity) entity;
-                    
-                    if(!this.getItem().sameItem(otherItem.getItem())) {
-                        continue;
-                    }
-                    
-                    if(otherItem.getItem().addToStack(this.getItem().getStackSize())) {
-                        world.removeEntity(this);
-                        break;
-                    }
-                }
-            }
-        }
+			if (this.item.isStackable() && entity instanceof ItemEntity
+					&& this.distance(entity) <= 1.5 && entity != this) {
+				ItemEntity otherItem = (ItemEntity) entity;
+
+				if (!this.getItem().sameItem(otherItem.getItem())) {
+					continue;
+				}
+
+				if (otherItem.getItem()
+						.addToStack(this.getItem().getStackSize())) {
+					world.removeEntity(this);
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
