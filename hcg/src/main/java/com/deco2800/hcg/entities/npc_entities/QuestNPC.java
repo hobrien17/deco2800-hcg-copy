@@ -32,11 +32,13 @@ public class QuestNPC extends NPC {
 	private PathfindingThread pathfinder;
 	private Thread thread;
 	private List<Point> path;
-	private Boolean astar_debug = true;
+	private Boolean astarDebug = true;
 
 	private ConversationManager conversationManager;
-	private TimeManager timemanager = (TimeManager) GameManager.get().getManager(TimeManager.class);
-	private PlayerManager playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
+	private TimeManager timemanager = (TimeManager) GameManager.get()
+			.getManager(TimeManager.class);
+	private PlayerManager playerManager = (PlayerManager) GameManager.get()
+			.getManager(PlayerManager.class);
 
 	/**
 	 * Constructs a new Quest NPC
@@ -53,7 +55,7 @@ public class QuestNPC extends NPC {
 	 *            texture of NPC
 	 */
 	public QuestNPC(float posX, float posY, String fName, String sName,
-					String texture, String conversation, String faceImage) {
+			String texture, String conversation, String faceImage) {
 		super(posX, posY, fName, sName, texture, conversation, faceImage);
 
 		this.startX = posX;
@@ -67,8 +69,9 @@ public class QuestNPC extends NPC {
 		this.setGoal(posX, posY);
 	}
 
-	public void interact(){
-		conversationManager.startConversation(this.getConversation(),this.getFaceImage());
+	public void interact() {
+		conversationManager.startConversation(this.getConversation(),
+				this.getFaceImage());
 	}
 
 	/**
@@ -156,7 +159,6 @@ public class QuestNPC extends NPC {
 				return true;
 			}
 
-
 		}
 
 		return false;
@@ -175,43 +177,48 @@ public class QuestNPC extends NPC {
 	public void onTick(long gameTickCount) {
 		if (thread.isAlive()) {
 			return;
-		} else {
-			path = pathfinder.getPath();
+		}
+		
+		path = pathfinder.getPath();
+
+		if (path != null && !astarDebug) {
+			astarDebug = true;
 		}
 
-		if (path != null && !astar_debug) {
-			astar_debug = true;
-		}
-
-		//Movement Completed (most likely)
+		// Movement Completed (most likely)
 		if (path != null && path.isEmpty()) {
 			Random random = new Random();
 
-			float newGoalX = (random.nextFloat() - 0.5f) * this.boundaryX + this.startX;
-			float newGoalY = (random.nextFloat() - 0.5f) * this.boundaryY + this.startY;
+			float newGoalX = (random.nextFloat() - 0.5f) * this.boundaryX
+					+ this.startX;
+			float newGoalY = (random.nextFloat() - 0.5f) * this.boundaryY
+					+ this.startY;
 
 			this.setGoal(newGoalX, newGoalY);
 			return;
 		}
 
 		if (path != null && !path.isEmpty()) {
-			//Move towards next point
+			// Move towards next point
 			float tmpGoalX = path.get(0).getX();
 			float tmpGoalY = path.get(0).getY();
 
-			if (Math.abs(this.getPosX() - tmpGoalX) < speed && Math.abs(this.getPosY() - tmpGoalY) < speed) {
+			if (Math.abs(this.getPosX() - tmpGoalX) < speed
+					&& Math.abs(this.getPosY() - tmpGoalY) < speed) {
 				this.setPosX(tmpGoalX);
 				this.setPosY(tmpGoalY);
 				path.remove(0);
 				return;
 			}
 
-			/* Calculate a deltaX and Y to move based on polar coordinates and speed to ensure
-				speed is constant regardless of direction
+			/*
+			 * Calculate a deltaX and Y to move based on polar coordinates and
+			 * speed to ensure speed is constant regardless of direction
 			 */
 			float deltaX = this.getPosX() - tmpGoalX;
 			float deltaY = this.getPosY() - tmpGoalY;
-			float angle = (float) (Math.atan2(deltaY, deltaX)) + (float) (Math.PI);
+			float angle = (float) (Math.atan2(deltaY, deltaX))
+					+ (float) (Math.PI);
 			float changeX = (float) (speed * Math.cos(angle));
 			float changeY = (float) (speed * Math.sin(angle));
 			float newX = this.getPosX() + changeX;
@@ -230,14 +237,17 @@ public class QuestNPC extends NPC {
 	/**
 	 * Set the immediate location goal for the NPC
 	 *
-	 * @param goalX desired x position
-	 * @param goalY desired y position
+	 * @param goalX
+	 *            desired x position
+	 * @param goalY
+	 *            desired y position
 	 */
 	private void setGoal(float goalX, float goalY) {
 		this.goalX = goalX;
 		this.goalY = goalY;
 
-		pathfinder = new PathfindingThread(GameManager.get().getWorld(), new Point(this.getPosX(), this.getPosY()),
+		pathfinder = new PathfindingThread(GameManager.get().getWorld(),
+				new Point(this.getPosX(), this.getPosY()),
 				new Point(this.goalX, this.goalY));
 
 		thread = new Thread(pathfinder);
