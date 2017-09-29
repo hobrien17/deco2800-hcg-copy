@@ -98,7 +98,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture female1;
     private Texture female2;
     private Texture female3;
-    private Texture blank_window_background;
+    private Texture blankWindowBackground;
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray;
@@ -134,7 +134,7 @@ public class CharacterCreationContext extends CharacterContext{
         female1 = textureManager.getTexture("ccFemale1");
         female2 = textureManager.getTexture("ccFemale2");
         female3 = textureManager.getTexture("ccFemale3");
-        blank_window_background = textureManager.getTexture("ccWindow_BorderSmaller_White");
+        blankWindowBackground = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
 
@@ -154,10 +154,10 @@ public class CharacterCreationContext extends CharacterContext{
         characterPreviewWindow.setMovable(false);
         selectedDescriptionWindow.setMovable(false);
 
-        attributesWindow.setBackground(new Image(blank_window_background).getDrawable());
-        skillsWindow.setBackground(new Image(blank_window_background).getDrawable());
-        statsWindow.setBackground(new Image(blank_window_background).getDrawable());
-        characterPreviewWindow.setBackground(new Image(blank_window_background).getDrawable());
+        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
     }
 
     //Setting up top row info
