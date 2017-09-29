@@ -16,8 +16,8 @@ import com.deco2800.hcg.managers.GameManager;
 public class GrassTurret extends AbstractTurret {
 
 	private int seconds;
-	private final static int GROW = 5;
-	private final static int DISTANCE = 5;
+	private static final int GROW = 5;
+	private static final int DISTANCE = 5;
 	
 	/**
 	 * Creates a new grass turret inside the given corpse

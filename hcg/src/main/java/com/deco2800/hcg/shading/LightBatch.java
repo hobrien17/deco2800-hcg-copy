@@ -31,7 +31,8 @@ public class LightBatch implements Batch {
     final float[] vertices;
     int idx = 0;
     Texture lastTexture = null;
-    float invTexWidth = 0, invTexHeight = 0;
+    float invTexWidth = 0;
+    float invTexHeight = 0;
     
     boolean drawing = false;
     
