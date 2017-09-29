@@ -84,28 +84,29 @@ public class FixedSizeInventory implements Inventory {
 
     @Override
     public boolean removeItem(Item item, int number) {
-        if(this.containsItem(item)) {
-            int toRemove = number;
-            for(int i = 0; i < this.getMaxSize(); i++) {
-                Item currentItem = this.items[i];
-                if(currentItem != null && item.sameItem(currentItem)) {
-                    if(toRemove >= currentItem.getStackSize()) {
-                        toRemove -= currentItem.getStackSize();
-                        this.removeItem(i);
-                    } else {
-                        currentItem.setStackSize(currentItem.getStackSize() - toRemove);
-                        toRemove = 0;
-                    }
-                }
+		if (!this.containsItem(item)) {
+			return false;
+		}
 
-                if(toRemove <= 0) {
-                    break;
-                }
-            }
-            return true;
-        }
+		int toRemove = number;
+		for (int i = 0; i < this.getMaxSize(); i++) {
+			Item currentItem = this.items[i];
+			if (currentItem != null && item.sameItem(currentItem)) {
+				if (toRemove >= currentItem.getStackSize()) {
+					toRemove -= currentItem.getStackSize();
+					this.removeItem(i);
+				} else {
+					currentItem.setStackSize(
+							currentItem.getStackSize() - toRemove);
+					toRemove = 0;
+				}
+			}
 
-        return false;
+			if (toRemove <= 0) {
+				break;
+			}
+		}
+		return true;
     }
     
     @Override
@@ -177,12 +178,12 @@ public class FixedSizeInventory implements Inventory {
 					if (currentItem == null) {
 						this.items[i] = item;
 						return true;
-					} else if (item.sameItem(currentItem)) {
-						
-						if (currentItem.addToStack(toAdd)) {
-							return true;
-						}
+					
+					} else if (item.sameItem(currentItem)
+							&& currentItem.addToStack(toAdd)) {
+						return true;
 
+					} else if (item.sameItem(currentItem)) {
 						toAdd -= currentItem.getMaxStackSize()
 								- currentItem.getStackSize();
 						currentItem.setStackSize(currentItem.getMaxStackSize());

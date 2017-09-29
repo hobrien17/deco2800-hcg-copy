@@ -193,28 +193,27 @@ public class WeightedInventory implements Inventory {
 
 	@Override
 	public boolean removeItem(Item item, int number) {
-		if (this.containsItem(item)) {
-			int toRemove = number;
-			for (int i = 0; i < this.items.size(); i++) {
-				Item currentItem = this.getItem(i);
-				if (currentItem != null && item.sameItem(currentItem)) {
-					if (toRemove >= currentItem.getStackSize()) {
-						toRemove -= currentItem.getStackSize();
-						this.removeItem(i);
-					} else {
-						currentItem.setStackSize(
-								currentItem.getStackSize() - toRemove);
-						toRemove = 0;
-					}
-				}
-
-				if (toRemove <= 0) {
-					break;
-				}
-			}
-			return true;
+		if (!this.containsItem(item)) {
+			return false;
 		}
-		return false;
+		int toRemove = number;
+		for (int i = 0; i < this.items.size(); i++) {
+			Item currentItem = this.getItem(i);
+			if (currentItem != null && item.sameItem(currentItem)
+					&& toRemove >= currentItem.getStackSize()) {
+				toRemove -= currentItem.getStackSize();
+				this.removeItem(i);
+
+			} else if (currentItem != null && item.sameItem(currentItem)) {
+				currentItem.setStackSize(currentItem.getStackSize() - toRemove);
+				toRemove = 0;
+			}
+
+			if (toRemove <= 0) {
+				break;
+			}
+		}
+		return true;
 	}
 
 	@Override

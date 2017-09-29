@@ -351,34 +351,32 @@ public final class NetworkManager extends Manager {
 					messageBuffer.putInt(messageId);
 					// send ACK to peer
 					messageBuffer.flip();
-					try {
-						channel.send(messageBuffer, address);
-					} catch (IOException e) {
-					}
-					return;
+				} else {
+					// acknowledge that we've already received this
+					messageBuffer.clear();
+					// put header
+					messageBuffer.put(MESSAGE_HEADER);
+					// put id
+					messageBuffer.putInt(-1);
+					// put type
+					messageBuffer.put((byte) MessageType.ACK.ordinal());
+					// put number of fields
+					messageBuffer.put((byte) 0);
+					// put ACK id
+					messageBuffer.putInt(messageId);
+					// send ACK to peer
+					messageBuffer.flip();
 				}
-
-				// acknowledge that we've already received this
-				messageBuffer.clear();
-				// put header
-				messageBuffer.put(MESSAGE_HEADER);
-				// put id
-				messageBuffer.putInt(-1);
-				// put type
-				messageBuffer.put((byte) MessageType.ACK.ordinal());
-				// put number of fields
-				messageBuffer.put((byte) 0);
-				// put ACK id
-				messageBuffer.putInt(messageId);
-				// send ACK to peer
-				messageBuffer.flip();
+				
 				try {
 					channel.send(messageBuffer, address);
 				} catch (IOException e) {
 				}
 			}
-		} catch (BufferOverflowException|BufferUnderflowException|MessageFormatException e) {
-			// we don't care if a datagram is invalid, only that we don't try to read it any further
+		} catch (BufferOverflowException | BufferUnderflowException
+				| MessageFormatException e) {
+			// we don't care if a datagram is invalid, only that we don't try to
+			// read it any further
 			// TODO Implement a timeout so we can get away with this
 		}
 	}
