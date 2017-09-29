@@ -319,58 +319,62 @@ public final class NetworkManager extends Manager {
 					case CHAT:
 						message = new ChatMessage();
 						break;
-					default:
-						throw new MessageFormatException();
+				default:
+					throw new MessageFormatException();
 				}
-				
-				if (messageType != MessageType.ACK) {
-					// unpack message
-					message.unpackData(receiveBuffer);
 
-					if (!processedIds.contains(messageId)) {
-						// process message
-						message.process();
-						// make sure we don't process this again
-						processedIds.add(messageId);
-						// log
-						LOGGER.debug("RECEIVED: " + messageType.toString());
+				if (messageType == MessageType.ACK) {
+					return;
+				}
+				// unpack message
+				message.unpackData(receiveBuffer);
 
-						// acknowledge that we've received this
-						messageBuffer.clear();
-						// put header
-						messageBuffer.put(MESSAGE_HEADER);
-						// put id
-						messageBuffer.putInt(-1);
-						// put type
-						messageBuffer.put((byte) MessageType.ACK.ordinal());
-						// put number of fields
-						messageBuffer.put((byte) 0);
-						// put ACK id
-						messageBuffer.putInt(messageId);
-						// send ACK to peer
-						messageBuffer.flip();
-						try {
-							channel.send(messageBuffer, address);
-						} catch (IOException e) {}
-					} else {
-						// acknowledge that we've already received this
-						messageBuffer.clear();
-						// put header
-						messageBuffer.put(MESSAGE_HEADER);
-						// put id
-						messageBuffer.putInt(-1);
-						// put type
-						messageBuffer.put((byte) MessageType.ACK.ordinal());
-						// put number of fields
-						messageBuffer.put((byte) 0);
-						// put ACK id
-						messageBuffer.putInt(messageId);
-						// send ACK to peer
-						messageBuffer.flip();
-						try {
-							channel.send(messageBuffer, address);
-						} catch (IOException e) {}
+				if (!processedIds.contains(messageId)) {
+					// process message
+					message.process();
+					// make sure we don't process this again
+					processedIds.add(messageId);
+					// log
+					LOGGER.debug("RECEIVED: " + messageType.toString());
+
+					// acknowledge that we've received this
+					messageBuffer.clear();
+					// put header
+					messageBuffer.put(MESSAGE_HEADER);
+					// put id
+					messageBuffer.putInt(-1);
+					// put type
+					messageBuffer.put((byte) MessageType.ACK.ordinal());
+					// put number of fields
+					messageBuffer.put((byte) 0);
+					// put ACK id
+					messageBuffer.putInt(messageId);
+					// send ACK to peer
+					messageBuffer.flip();
+					try {
+						channel.send(messageBuffer, address);
+					} catch (IOException e) {
 					}
+					return;
+				}
+
+				// acknowledge that we've already received this
+				messageBuffer.clear();
+				// put header
+				messageBuffer.put(MESSAGE_HEADER);
+				// put id
+				messageBuffer.putInt(-1);
+				// put type
+				messageBuffer.put((byte) MessageType.ACK.ordinal());
+				// put number of fields
+				messageBuffer.put((byte) 0);
+				// put ACK id
+				messageBuffer.putInt(messageId);
+				// send ACK to peer
+				messageBuffer.flip();
+				try {
+					channel.send(messageBuffer, address);
+				} catch (IOException e) {
 				}
 			}
 		} catch (BufferOverflowException|BufferUnderflowException|MessageFormatException e) {
