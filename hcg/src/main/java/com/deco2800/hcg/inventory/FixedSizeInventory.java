@@ -205,6 +205,8 @@ public class FixedSizeInventory implements Inventory {
 				return true;
 			}
 		}
+		
+		return true;
 	}
         
     @Override
