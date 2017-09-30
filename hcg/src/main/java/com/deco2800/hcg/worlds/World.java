@@ -429,10 +429,10 @@ public class World {
 		//Remove from collision map
 		int[] collisionCoords = makeCollisionCoords(entity);
 
-		int x_val = collisionCoords[0];
-		int y_val = collisionCoords[2];
+		int xVal = collisionCoords[0];
+		int yVal = collisionCoords[2];
 
-		if (x_val > 0 && x_val < this.getWidth() && y_val > 0 && y_val < this.getLength()) {
+		if (xVal > 0 && xVal < this.getWidth() && yVal > 0 && yVal < this.getLength()) {
 			for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
 				for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
 					collisionMap.get(x, y).remove(entity);
