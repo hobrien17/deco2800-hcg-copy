@@ -385,7 +385,7 @@ public class Player extends Character implements Tickable {
 			name = terrain;
 		} else if (move == 0) {
 			// if player not moving
-			if (terrain.equals("spikes")){
+			if ("spikes".equals(terrain)){
 				soundPlay(terrain);
 			}
 			// terminate sound effect && empty tile name
