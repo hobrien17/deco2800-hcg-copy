@@ -1,4 +1,4 @@
-package com.deco2800.hcg.contexts.playContextClasses;
+package com.deco2800.hcg.contexts.PlayContextClasses;
 
 import java.util.Optional;
 
