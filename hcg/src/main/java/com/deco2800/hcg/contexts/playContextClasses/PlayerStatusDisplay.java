@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.*;
 
-import java.awt.*;
-
 public class PlayerStatusDisplay extends Group {
 
     private Player player;
@@ -23,8 +21,6 @@ public class PlayerStatusDisplay extends Group {
     private Image playerImage;
     private Label playerHealth;
     private Label playerLevel;
-    private float posY;
-    private float posX;
     
     private String staminaBarLoction;
     
