@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.deco2800.hcg.BaseTest;
-import com.deco2800.hcg.contexts.PlayContextClasses.PlantWindow;
+import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.entities.garden_entities.plants.*;
 import org.junit.*;
 

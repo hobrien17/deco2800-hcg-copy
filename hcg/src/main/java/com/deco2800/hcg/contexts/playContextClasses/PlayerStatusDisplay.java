@@ -1,4 +1,4 @@
-package com.deco2800.hcg.contexts.PlayContextClasses;
+package com.deco2800.hcg.contexts.playContextClasses;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

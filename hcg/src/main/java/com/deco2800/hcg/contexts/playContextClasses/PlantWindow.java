@@ -1,4 +1,4 @@
-package com.deco2800.hcg.contexts.PlayContextClasses;
+package com.deco2800.hcg.contexts.playContextClasses;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
