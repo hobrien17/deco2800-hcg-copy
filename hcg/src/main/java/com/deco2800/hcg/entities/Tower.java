@@ -87,7 +87,5 @@ public class Tower extends AbstractEntity implements Clickable, Tickable,
     @Override
     public void buttonWasPressed() {
         LOGGER.info("Button was pressed for " + this);
-        /* We probably don't want these in random spots */
-        //currentAction = Optional.of(new GenerateAction(new Peon(this.getParent(), rand.nextInt(24), rand.nextInt(24), 0), this.getParent()));
     }
 }

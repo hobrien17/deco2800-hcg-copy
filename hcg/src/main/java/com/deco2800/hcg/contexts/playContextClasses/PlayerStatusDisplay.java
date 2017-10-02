@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.*;
 
-import java.awt.*;
-
 public class PlayerStatusDisplay extends Group {
 
     private Player player;
@@ -23,11 +21,13 @@ public class PlayerStatusDisplay extends Group {
     private Image playerImage;
     private Label playerHealth;
     private Label playerLevel;
-    private float posY;
-    private float posX;
-
+    
+    private String staminaBarLoction;
+    
     public PlayerStatusDisplay() {
         super();
+        staminaBarLoction = "resources/ui/player_status_hud/health_bar_pixel.png";
+        
         /*adding GameManager and obtaining player class*/
         gameManager = GameManager.get();
         PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
@@ -39,9 +39,9 @@ public class PlayerStatusDisplay extends Group {
         /* Add the player's health and stamina display*/
         playerImage = new Image(new Texture(player.getDisplayImage()));
         playerBorder = new Image(new Texture(Gdx.files.internal("resources/ui/player_status_hud/player_normal_border.png")));
-        staminaBar = new Image(new Texture(Gdx.files.internal("resources/ui/player_status_hud/health_bar_pixel.png")));
-        healthBar = new Image(new Texture(Gdx.files.internal("resources/ui/player_status_hud/health_bar_pixel.png")));
-        healthBarShadow = new Image(new Texture(Gdx.files.internal("resources/ui/player_status_hud/health_bar_pixel.png")));
+        staminaBar = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
+        healthBar = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
+        healthBarShadow = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
         playerHealth = new Label(player.getHealthCur() + " / " + player.getHealthMax(), skin);
         playerLevel = new Label("Lv: " + player.getLevel(), skin);
 

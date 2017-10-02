@@ -335,4 +335,23 @@ public class MapNode {
 		}
 		return nodeString;
 	}
+
+	public boolean isSameNode(MapNode other) {
+		if (previousNodes.size() != other.previousNodes.size()) {
+			return false;
+		}
+		if (proceedingNodes.size() != other.proceedingNodes.size()) {
+			return false;
+		}
+
+		if (nodeColumn != other.nodeColumn || nodeRow != other.nodeRow || nodeType != other.nodeType ||
+				selected != other.selected || isDiscovered != other.isDiscovered) {
+			return false;
+		}
+
+		if (linkedLevel != other.linkedLevel) { // dangerous. instace comparision. if needed, implement .equals in Level
+			return true;
+		}
+		return true;
+	}
 }

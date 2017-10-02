@@ -1,17 +1,12 @@
 package com.deco2800.hcg.entities.npc_entities;
 
 
-import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 
 
 /**
@@ -23,7 +18,6 @@ import com.deco2800.hcg.util.Box3D;
  */
 public abstract class NPC extends Character implements Tickable {
 
-    //private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
     private String fName;
     private String sName;
     private final Box3D INITIAL_POSITION;

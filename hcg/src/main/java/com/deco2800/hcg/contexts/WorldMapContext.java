@@ -23,19 +23,9 @@ import java.util.ArrayList;
  * WorldMap screen.
  *
  * Some testing buttons have been included in a UI frame, these are:
- *
  * quitButton: Pops the current context from the context manager stack
- * startButton: Pushes a new DemoWorld level to the context manager stack, and
- * places the player in that level discoveredButton: Toggles displaying all
- * nodes in the map, and only those discovered.
- *
- * Currently there is no method to discover new nodes, as nodes will only be
- * discovered when a level is completed, and there is not yet a way to complete
- * a level in the game.
- *
- * Drawing edges between the nodes is still a WIP, but the MapNode class keeps
- * track of the edges which exist between nodes.
- *
+ * discoveredButton: Toggles displaying all nodes in the map, and only those discovered.
+ * 
  * @author jakedunn
  */
 public class WorldMapContext extends UIContext {
@@ -139,45 +129,20 @@ public class WorldMapContext extends UIContext {
 		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
-		//inputManager.addMouseMovedListener(this::handleMouseMoved);
 	}
-
-	/*
-	// when hovering the node, change the mouse cursor, delete if not needed
-	private void handleMouseMoved(int screenX, int screenY){
-
-		Vector2 mouseScreen = new Vector2(screenX, screenY);
-		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
-		for (MapNodeEntity nodeEntity : allNodes) {
-			float nodeStartX = nodeEntity.getXPos();
-			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
-			float nodeStartY = nodeEntity.getYPos();
-			float nodeEndY = nodeEntity.getYPos() + nodeEntity.getHeight();
-			if (mouseStage.x >= nodeStartX && mouseStage.x <= nodeEndX
-					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
-					&& nodeEntity.getNode().isDiscovered()
-					&& !(nodeEntity.getNode().getNodeType() == 2)) {
-
-				// online free png https://dribbble.com/shots/815059-Basic-Cursor-PNG-Pack
-				// for design team: create a 'cursor' png file with:
-				//        a "power of 2" width px (256, 512,...)
-				//        a "RGBA8888" format
-				// otherwise, the code below will break
-
-				Pixmap pixmap = new Pixmap(Gdx.files.internal("resources/cursor-hand.png"));
-				Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0));
-				pixmap.dispose();
-				//Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
-			} else {
-				// this line should set the current cursor back to normal. but I don't know how to do. will look into this
-				// at the moment it's kind of automatically change back to normal when you no longer hovering
-
-				//Gdx.graphics.setSystemCursor(SystemCursor.Arrow);  // according to the library, this only works in LWJG3
-
-			}
-		}
-	}*/
-
+	
+	/**
+	 * Handles the mouse click up on a node entity. If the node is a clickable entity (not completed or hidden), the
+	 * player is taken into that node's level.
+	 * @param screenX
+	 *     The X position of the cursor on the screen.
+	 * @param screenY
+	 *     The Y position of the cursor on the screen.
+	 * @param pointer
+	 *     Not used.
+	 * @param button
+	 *     Not used.
+	 */
 	private void handleTouchUp(int screenX, int screenY, int pointer,
 			int button) {
 		Vector2 mouseScreen = new Vector2(screenX, screenY);
@@ -192,16 +157,20 @@ public class WorldMapContext extends UIContext {
 					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
 					&& nodeEntity.getNode().isDiscovered()
 					&& !(nodeEntity.getNode().getNodeType() == 2)) {
+				gameManager.setOccupiedNode(nodeEntity.getNode());
+				
 				/*
 				 * Simply loading in the world file caused bugs with movement
 				 * due to the same world being loaded multiple times. This seems
 				 * to fix that problem.
 				 */
+
 				gameManager.setOccupiedNode(nodeEntity.getNode());
 
 				// delete stopwatches
                 ((StopwatchManager) GameManager.get().getManager(StopwatchManager.class)).deleteObservers();
                 
+
                 // create new world
 				World newWorld = new World(nodeEntity.getNode()
                     .getNodeLinkedLevel().getWorld().getLoadedFile());
@@ -216,7 +185,10 @@ public class WorldMapContext extends UIContext {
 			}
 		}
 	}
-
+	
+	/**
+	 * Updates the display of the nodes on the world map. Handles making hidden nodes not visible to the user.
+	 */
 	void updateMapDisplay() {
 		updateNodesDisplayed();
 		stage.clear();
@@ -231,19 +203,20 @@ public class WorldMapContext extends UIContext {
 		}
 		menuStage.addActor(window);
 	}
-
+	
+	/**
+	 * Discovers nodes which come after completed nodes.
+	 */
 	private void updateNodesDisplayed() {
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			if (node.getNodeType() != 2) {
 				continue;
 			}
-			
 			for (MapNode nodeProceeding : node.getProceedingNodes()) {
 				nodeProceeding.discoverNode();
 			}
 		}
 	}
-
 
 	@Override
 	public void show() {
@@ -319,6 +292,9 @@ public class WorldMapContext extends UIContext {
 		menuStage.draw();
 	}
 	
+	/**
+	 * Adds the "Complete World?" pop-up to the game.
+	 */
 	private void createExitWindow() {
     	exitWindow = new Window("Complete World?", skin);
     	Button yesButton = new TextButton("Yes", skin);
@@ -359,6 +335,9 @@ public class WorldMapContext extends UIContext {
 		exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
     }
     
+	/**
+	 * Adds the "Complete World?" pop-up to the stage.
+	 */
     public void addEndOfContext() {
     	if(exitWindow.getStage() == null) {
     		/* Add the window to the stage */
@@ -366,6 +345,9 @@ public class WorldMapContext extends UIContext {
     	}
     }
     
+    /**
+     * Ends the current instance of the world and moves back to the WorldStackContext.
+     */
     private void endWorld() {
     	for(WorldMap map : gameManager.getWorldStack().getWorldStack()) {
     		if(map.getWorldPosition() == gameManager.getWorldMap().getWorldPosition() + 1) {

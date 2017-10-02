@@ -5,6 +5,8 @@ package com.deco2800.hcg.util;
  */
 public class MathHelper {
     
+    public static final float TWO_PI = (float) (Math.PI * 2);
+    
     /**
      * Clamps the given {@code input} between {@code min} and {@code max}, inclusive.
      * @param input

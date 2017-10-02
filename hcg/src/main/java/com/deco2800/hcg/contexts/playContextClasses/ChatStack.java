@@ -87,25 +87,25 @@ public class ChatStack extends Stack {
             public void keyTyped(TextField textField, char c) {
                 if (c != '\b') {
                     chatString += c;
-                } else if (chatString.length() > 0) {
-                    chatString = chatString.substring(0, chatString.length() - 1);
-                }
-                if ((c == '\r' && networkManager.isInitialised())) {
-                    if (chatString.trim().length()>0) {
-                        networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
-                        chatTextArea.appendText(chatTextField.getText() + "\n");
-                        chatTextField.setText("");
-                        stage.setKeyboardFocus(null);
-                        chatString = "";
-                    } else {
-                        chatTextField.setText("");
-                        chatTextField.setCursorPosition(0);
-                        chatString = "";
-                    }
-                }
-            }
-        });
+				} else if (chatString.length() > 0) {
+					chatString = chatString.substring(0,
+							chatString.length() - 1);
+				}
+				if (c == '\r' && networkManager.isInitialised()) {
+					if (chatString.trim().length() > 0) {
+						networkManager.queueMessage(
+								new ChatMessage(chatTextField.getText()));
+						chatTextArea.appendText(chatTextField.getText() + "\n");
+						stage.setKeyboardFocus(null);
+					} else {
+						chatTextField.setCursorPosition(0);
+					}
 
+					chatTextField.setText("");
+					chatString = "";
+				}
+			}
+		});
 
         messageManager.addChatMessageListener(this::handleChatMessage);
 

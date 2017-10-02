@@ -33,6 +33,13 @@ public class Stargun extends Weapon implements Tickable {
     }
     
     @Override
+    protected void playFireSound() {
+        String soundName = "gun-stargun-shoot";
+        soundManager.stopSound(soundName);
+        soundManager.playSound(soundName);
+    }
+    
+    @Override
     protected void fireWeapon() {
         Random random = new Random();
         for(int i = 0; i < this.pellets; i++) {

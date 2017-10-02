@@ -2,6 +2,7 @@ package com.deco2800.hcg.entities.npc_entities;
 
 import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.trading.GeneralShop;
+import com.deco2800.hcg.trading.GardenShop;
 import com.deco2800.hcg.trading.Shop;
 
 /**
@@ -24,17 +25,24 @@ public class ShopNPC extends NPC {
 	 */
 	public ShopNPC(float posX, float posY, String fName, String sName, String texture, String conversation, String faceImage) {
 		super(posX, posY, fName, sName, texture, null, faceImage);
-		shop = new GeneralShop();
+		switch(sName) {
+			case "George":
+				shop = new GeneralShop();
+				break;
+			case "Plants":
+				shop = new GardenShop();
+				break;
+		}
 	}
 
 	@Override
 	public void onTick(long gameTickCount) {
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	protected void move() {
-		
+		throw new UnsupportedOperationException();
 	}
 
     /**

@@ -17,6 +17,7 @@ uniform float u_time;
 
 uniform float u_heat;
 uniform float u_bloom;
+uniform float u_contrast;
 
 float getHeatDistortion(float time, vec2 texCoords) {
     return sin(texCoords.y * 50.0 + 2.0 * time) * 0.005 * u_heat;
@@ -75,7 +76,7 @@ vec4 getVignette(vec2 tc) {
 	//1. VIGNETTE
 
 	//determine center position
-	vec2 position = (gl_FragCoord.xy / vec2(1920,1080)) - vec2(0.5);
+	vec2 position = v_texCoords - vec2(0.5);//(gl_FragCoord.xy / vec2(1920,1080)) - vec2(0.5);
 
 	//determine the vector length of the center position
 	float len = length(position);
@@ -95,10 +96,10 @@ vec4 getVignette(vec2 tc) {
 	//3. SEPIA
 
 	//create our sepia tone from some constant value
-	vec3 sepiaColor = vec3(gray) * SEPIA;
+	vec3 sepiaColor = vec3(gray);
 
 	//again we'll use mix so that the sepia effect is at 75%
-	texColor.rgb = mix(texColor.rgb, sepiaColor, 0.0);
+	texColor.rgb = mix(texColor.rgb, sepiaColor, u_contrast*0.5);
 
 	//final colour, multiplied by vertex colour
 	return texColor;
@@ -121,7 +122,6 @@ void main() {
         final += getBloom(tex_final);
     }
 
-    
 
     gl_FragColor = final;
 }

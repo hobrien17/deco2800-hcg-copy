@@ -15,12 +15,8 @@ public class TextureManagerTests extends BaseTest {
     // This is the only actually important test here
     // Check that TextureManager is able to read all the required resources
     @Test
-    public void testConstructor() {
-        try {
-            TextureManager textureManager = new TextureManager();
-        } catch (com.badlogic.gdx.utils.GdxRuntimeException e) {
-            Assert.fail("There is almost certainly a misspelled filename in TextureManager");
-        }
+    public void testConstructor() throws ResourceLoadException {
+        new TextureManager();
     }
 
     // Check that .getTexture is sane

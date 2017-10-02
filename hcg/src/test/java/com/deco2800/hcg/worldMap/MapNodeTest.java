@@ -22,10 +22,13 @@ public class MapNodeTest {
     World world;
     Level tmpLevel;
     MapNode tmpNode;
+    MapNode fixNode;
     @Before
     public void setup() {
         world = new World();
         tmpLevel = new Level(world, 0, 0, 0);
+        fixNode = new MapNode(1, 0, 0, tmpLevel, false);
+
     }
 
     @Test
@@ -51,6 +54,8 @@ public class MapNodeTest {
         assertEquals(100, tmpNode.getPreviousNodes().size());
         assertEquals(0, tmpNode.getProceedingNodes().size());
 
+
+
         List<MapNode> nodeList = new ArrayList<MapNode>();
         for (int i = 0; i < 100; i++){
             nodeList.add(new MapNode(0, 9, 0, tmpLevel, false));
@@ -58,6 +63,12 @@ public class MapNodeTest {
         tmpNode.addPreviousNodeCollection(nodeList);
         assertEquals(200, tmpNode.getPreviousNodes().size());
 
+
+
+        tmpNode.addPreviousNode(fixNode);
+        tmpNode.addPreviousNode(fixNode);
+//        System.out.println("ahihi " + tmpNode.getPreviousNodes().size());
+        assertEquals(201, tmpNode.getPreviousNodes().size());
 
     }
 
@@ -76,6 +87,11 @@ public class MapNodeTest {
         }
         tmpNode.addProceedingNodeCollection(nodeList);
         assertEquals(200, tmpNode.getProceedingNodes().size());
+
+        tmpNode.addProceedingNode(fixNode);
+        tmpNode.addProceedingNode(fixNode);
+//        System.out.println("ahihi " + tmpNode.getPreviousNodes().size());
+        assertEquals(201, tmpNode.getProceedingNodes().size());
     }
     
     @Test
@@ -119,4 +135,32 @@ public class MapNodeTest {
 
 
     }
+
+    @Test
+    public void testXandYPos() {
+        tmpNode = new MapNode(0, 9, 1, tmpLevel, false);
+        tmpNode.setXPos(100);
+        assertEquals(100, tmpNode.getXPos());
+        tmpNode.setYPos(-1);
+        assertEquals(-1, tmpNode.getYPos());
+    }
+
+    @Test
+    public void testToString() {
+        tmpNode = new MapNode(0, 9, 2, tmpLevel, false);
+        String res = "nodeType: Cleared Node | nodeRow: 9 | nodeColumn: 0 | nodeLevel: ";
+        String newline = System.getProperty("line.separator");
+        res += tmpLevel.toString() + newline + "Previous Nodes:" + newline;
+        tmpNode.addPreviousNode(fixNode);
+
+    }
+
+    @Test
+    public void testSameNode() {
+        tmpNode = new MapNode(0, 9, 2, tmpLevel, false);
+        MapNode tmpNode2 = new MapNode(0, 9, 2, tmpLevel, false);
+        assertEquals(true, tmpNode.isSameNode(tmpNode2));
+
+    }
+
 }

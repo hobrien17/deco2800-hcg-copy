@@ -30,9 +30,9 @@ public class Inferno extends AbstractGardenPlant {
                 return "inferno_02";
             case LARGE:
                 return "inferno_03";
+            default:
+                return null;
         }
-        return null;
-
     }
 
     @Override
@@ -42,6 +42,14 @@ public class Inferno extends AbstractGardenPlant {
         lootRarity.put("fire_seed", 1.0);
 
         checkLootRarity();
+    }
+
+    @Override
+    public Item[] loot() {
+        Item[] arr = new Item[1];
+        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+
+        return arr;
     }
 
 }

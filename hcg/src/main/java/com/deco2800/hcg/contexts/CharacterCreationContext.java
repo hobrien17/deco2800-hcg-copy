@@ -10,11 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.items.BasicSeed;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-import com.deco2800.hcg.managers.PlayerManager;
+import java.util.*;
+import java.util.List;
 
 /**
  * The CharacterCreationContext is used at the start of the game to create a character by assigning various points,
@@ -25,6 +26,9 @@ import com.deco2800.hcg.managers.PlayerManager;
  * @author avryn
  */
 public class CharacterCreationContext extends CharacterContext{
+
+    private static final String FEMALE = "Female";
+    private static final String MALE = "Male";
 
     private Label strengthLabel;
     private Label vitalityLabel;
@@ -60,10 +64,12 @@ public class CharacterCreationContext extends CharacterContext{
     private Window characterPreviewWindow;
     private Window selectedDescriptionWindow;
 
-    private String[] sexes = new String[]{"Male", "Female"};
+    private String[] sexes = new String[]{MALE, FEMALE};
 
     // Placeholder for setting what skills are specialised because I'm a data structures n00b
-    private int[] specialisedSkills = new int[3];
+    private List<String> SPECIALISED_SKILLS = Arrays.asList( "meleeSkill", "gunsSkill", "energyWeaponsSkill");
+    private Map<String, Boolean> specialisedSkills;
+
 
     private int strength = 5; 
     private int vitality = 5;
@@ -92,7 +98,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture female1;
     private Texture female2;
     private Texture female3;
-    private Texture blank_window_background;
+    private Texture blankWindowBackground;
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray;
@@ -105,6 +111,10 @@ public class CharacterCreationContext extends CharacterContext{
      */
     public CharacterCreationContext() {
         getManagers();
+        this.specialisedSkills = new HashMap<String, Boolean>();
+        for (String attribute: SPECIALISED_SKILLS) {
+            specialisedSkills.put(attribute, false);
+        }
         initMasterTable();
         setupTextures();
         initSubTables();
@@ -124,7 +134,7 @@ public class CharacterCreationContext extends CharacterContext{
         female1 = textureManager.getTexture("ccFemale1");
         female2 = textureManager.getTexture("ccFemale2");
         female3 = textureManager.getTexture("ccFemale3");
-        blank_window_background = textureManager.getTexture("ccWindow_Background_White");
+        blankWindowBackground = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
 
@@ -132,7 +142,6 @@ public class CharacterCreationContext extends CharacterContext{
     private void initSubTables() {
         topRowInfoTable = new Table(skin);
         attributesWindow = new Window("Attributes", skin);
-        //attributesWindow.setBackground();
         skillsWindow = new Window("Skills", skin);
         statsWindow = new Window("Stats", skin);
         characterPreviewWindow = new Window("Character Preview", skin);
@@ -145,21 +154,10 @@ public class CharacterCreationContext extends CharacterContext{
         characterPreviewWindow.setMovable(false);
         selectedDescriptionWindow.setMovable(false);
 
-        attributesWindow.setBackground(new Image(blank_window_background).getDrawable());
-        skillsWindow.setBackground(new Image(blank_window_background).getDrawable());
-        statsWindow.setBackground(new Image(blank_window_background).getDrawable());
-        characterPreviewWindow.setBackground(new Image(blank_window_background).getDrawable());
-
-        /* Need to find a way to do this without overwriting the button and label listeners.
-        attributesWindow.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Attributes:\n Attributes are set at the start of the game and" +
-                        "may only be modified through special perks, items, or consumables. Since your attributes can" +
-                        "not be changed easily, be sure to choose wisely. Click on an attribute to" +
-                        " find out what it does.");
-            }
-        });*/
+        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
     }
 
     //Setting up top row info
@@ -217,7 +215,7 @@ public class CharacterCreationContext extends CharacterContext{
         characterSex.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (characterSex.getSelected() == "Male") {
+                if (characterSex.getSelected() == MALE) {
                     textureCount = 0;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 } else {
@@ -269,6 +267,7 @@ public class CharacterCreationContext extends CharacterContext{
         attributesWindow.add(charismaDown);
         attributesWindow.add(charismaLabel);
         attributesWindow.add(charismaUp);
+        attributesWindow.pack();
 
         // Add listeners for buttons
         strengthDown.addListener(new ClickListener() {
@@ -515,6 +514,7 @@ public class CharacterCreationContext extends CharacterContext{
         skillsWindow.row();
         skillsWindow.add(energyWeaponsSkillSpecialise);
         skillsWindow.add(energyWeaponsSkillLabel);
+        skillsWindow.pack();
 
         /*  Add listeners to the check-boxes have had to do some VERY odd work arounds to get these checkboxes working
             The checkbox.isChecked() methods don't seem to be working properly with the clickListener
@@ -528,14 +528,14 @@ public class CharacterCreationContext extends CharacterContext{
                     meleeSkill -= 10;
                     meleeSkillSpecialise.setChecked(false);
                     meleeSkillSpecialiseChecked = false;
-                    specialisedSkills[0] = 0;
+                    specialisedSkills.replace("meleeSkill", false);
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
                         meleeSkill += 10;
                         meleeSkillSpecialise.setChecked(true);
                         meleeSkillSpecialiseChecked = true;
-                        specialisedSkills[0] = 1;
+                        specialisedSkills.replace("meleeSkill", true);
                     } else {
                         meleeSkillSpecialise.setChecked(false);
                         meleeSkillSpecialiseChecked = false;
@@ -556,14 +556,14 @@ public class CharacterCreationContext extends CharacterContext{
                     gunsSkill -= 10;
                     gunsSkillSpecialise.setChecked(false);
                     gunsSkillSpecialiseChecked = false;
-                    specialisedSkills[1] = 0;
+                    specialisedSkills.replace("gunsSkill", false);
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
                         gunsSkill += 10;
                         gunsSkillSpecialise.setChecked(true);
                         gunsSkillSpecialiseChecked = true;
-                        specialisedSkills[1] = 1;
+                        specialisedSkills.replace("gunsSkill", true);
                     } else {
                         gunsSkillSpecialise.setChecked(false);
                         gunsSkillSpecialiseChecked = false;
@@ -584,14 +584,14 @@ public class CharacterCreationContext extends CharacterContext{
                     energyWeaponsSkill -= 10;
                     energyWeaponsSkillSpecialise.setChecked(false);
                     energyWeaponsSkillSpecialiseChecked = false;
-                    specialisedSkills[2] = 0;
+                    specialisedSkills.replace("energyWeaponsSkill", false);
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
                         energyWeaponsSkill += 10;
                         energyWeaponsSkillSpecialise.setChecked(true);
                         energyWeaponsSkillSpecialiseChecked = true;
-                        specialisedSkills[2] = 1;
+                        specialisedSkills.replace("energyWeaponsSkill", true);
                     } else {
                         energyWeaponsSkillSpecialise.setChecked(false);
                         energyWeaponsSkillSpecialiseChecked = false;
@@ -661,16 +661,16 @@ public class CharacterCreationContext extends CharacterContext{
         next.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (characterSex.getSelected().equals("Male") && textureCount < 2) {
+                if (characterSex.getSelected().equals(MALE) && textureCount < 2) {
                     textureCount++;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected().equals("Male") && textureCount == 2) {
+                } else if (characterSex.getSelected().equals(MALE) && textureCount == 2) {
                     textureCount = 0;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected().equals("Female") && textureCount < 5) {
+                } else if (characterSex.getSelected().equals(FEMALE) && textureCount < 5) {
                     textureCount++;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected().equals("Female") && textureCount == 5) {
+                } else if (characterSex.getSelected().equals(FEMALE) && textureCount == 5) {
                     textureCount = 3;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 }
@@ -680,20 +680,21 @@ public class CharacterCreationContext extends CharacterContext{
 
     private void setupSelectedDescriptionWindow() {
         selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
+        selectedDescriptionText.setDisabled(true);
         selectedDescriptionText.setColor(Color.WHITE);
-        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY().padTop(10);
+        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
     }
 
     private void addSubtables() {
-        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(10);
+        masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesWindow).top().left().expandX().fillX();
-        masterTable.add(skillsWindow).top().right().expandX().fillX().fillY();
+        masterTable.add(attributesWindow).top().left().expandX().fillX().padBottom(15);
+        masterTable.add(skillsWindow).top().right().expandX().fillX().padBottom(15);
         masterTable.row();
-        masterTable.add(statsWindow).top().left().expandX().fillX().fillY();
-        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().fillY();
+        masterTable.add(statsWindow).top().left().expandX().fillX().fillY().padBottom(15);
+        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().padBottom(15);
         masterTable.row();
-        masterTable.add(selectedDescriptionWindow).top().left().fillX().fillY().expandY().expandX().colspan(2);
+        masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
 
 
@@ -703,14 +704,15 @@ public class CharacterCreationContext extends CharacterContext{
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill,
                 energyWeaponsSkill, name);
+        player.setSpecialisedSkills(specialisedSkills);
         player.setTexture(texture);
         playerManager.setPlayer(player);
         //TODO: Change this, currently these are just testing items
         Item test = new CottonShirt(CottonShirt.ShirtColour.BLACK);
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
-        Item startingSeeds = new BasicSeed();
-        startingSeeds.addToStack(100);
+        Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
+        startingSeeds.setStackSize(50);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);
@@ -718,6 +720,5 @@ public class CharacterCreationContext extends CharacterContext{
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
-
     }
 }

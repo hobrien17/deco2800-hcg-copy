@@ -18,8 +18,8 @@ import com.deco2800.hcg.util.WorldUtil;
 public class WaterTurret extends AbstractTurret {
 	
 	private int seconds;
-	private final static int DIE = 30;
-	private final static int RANGE = 3;
+	private static final int DIE = 30;
+	private static final int RANGE = 3;
 
 	/**
 	 * Creates a new water turret inside the given corpse

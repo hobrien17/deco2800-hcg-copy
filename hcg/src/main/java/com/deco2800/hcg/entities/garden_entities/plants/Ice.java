@@ -32,9 +32,9 @@ public class Ice extends AbstractGardenPlant {
 			return "ice_02";
 		case LARGE:
 			return "ice_03";
+		default:
+			return null;
 		}
-		return null;
-
 	}
 
 	@Override
@@ -44,6 +44,14 @@ public class Ice extends AbstractGardenPlant {
 		lootRarity.put("ice_seed", 1.0);
 
 		checkLootRarity();
+	}
+
+	@Override
+	public Item[] loot() {
+		Item[] arr = new Item[1];
+		arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+
+		return arr;
 	}
 
 }

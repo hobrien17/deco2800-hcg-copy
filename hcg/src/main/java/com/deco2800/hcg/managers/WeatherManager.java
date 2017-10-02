@@ -126,6 +126,10 @@ public class WeatherManager extends Manager {
 		case WIND:
 			setUp("2dWind.p");
 			break;
+		case DROUGHT:
+			setUp("2dDrought.p");
+		case STORM:
+			setUp("2dStorm.p");
 		}
 		
 		soundManager.loopSound(enumToSoundFile(weatherType));
