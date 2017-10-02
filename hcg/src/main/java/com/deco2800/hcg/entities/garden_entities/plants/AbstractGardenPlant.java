@@ -52,7 +52,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      */
     public AbstractGardenPlant(Pot master, String name, int delay) {
     	WeatherManager weather = (WeatherManager)GameManager.get().getManager(WeatherManager.class);
-    	weather.setWeather(Weathers.DROUGHT);
     	
         this.stage = Stage.SPROUT;
         growDelay = delay;
