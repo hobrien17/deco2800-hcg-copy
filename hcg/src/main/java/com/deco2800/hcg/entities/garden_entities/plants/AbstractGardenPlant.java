@@ -5,6 +5,8 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.WeatherManager;
+import com.deco2800.hcg.types.Weathers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -53,6 +55,9 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      * @param delay the growth delay of the plant.
      */
     public AbstractGardenPlant(Pot master, String name, int delay) {
+    	WeatherManager weather = (WeatherManager)GameManager.get().getManager(WeatherManager.class);
+    	weather.setWeather(Weathers.DROUGHT);
+    	
         this.stage = Stage.SPROUT;
         growDelay = delay;
         StopwatchManager manager = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);

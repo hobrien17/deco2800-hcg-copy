@@ -1,5 +1,8 @@
 package com.deco2800.hcg.contexts;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -65,7 +68,7 @@ public class PlayContext extends Context {
 	private ClockDisplay clockDisplay;
 	private PlantWindow plantWindow;
 	private ChatStack chatStack;
-	private RadialDisplay radialDisplay;
+	private GeneralRadialDisplay radialDisplay;
 
 	private Window window;
 	private Window exitWindow;
@@ -95,7 +98,8 @@ public class PlayContext extends Context {
 		stage = new Stage(new ScreenViewport());
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
-		radialDisplay = new RadialDisplay(stage);
+		String[] radial = {"sunflower", "fire", "explosive", "grass", "water", "ice"};		
+		radialDisplay = new GeneralRadialDisplay(stage, Arrays.asList(radial));
 		createExitWindow();
 		clockDisplay = new ClockDisplay();
 		playerStatus = new PlayerStatusDisplay();
@@ -297,9 +301,9 @@ public class PlayContext extends Context {
             contextManager.pushContext(new WorldMapContext());
         }
 		else if (keycode == Input.Keys.B) {
-			if(RadialDisplay.plantableNearby()) {
+			//if(RadialDisplay.plantableNearby()) {
 				radialDisplay.addRadialMenu(stage);
-			}
+			//}
 		}
     }
     
