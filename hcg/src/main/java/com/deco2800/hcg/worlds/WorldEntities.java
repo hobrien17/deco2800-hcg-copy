@@ -7,6 +7,7 @@ import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.terrain_entities.Boulder;
+import com.deco2800.hcg.entities.terrain_entities.ConcreteWall;
 import com.deco2800.hcg.entities.terrain_entities.House2;
 import com.deco2800.hcg.entities.terrain_entities.HouseWORoof;
 import com.deco2800.hcg.entities.terrain_entities.HouseWRoof;
@@ -26,7 +27,7 @@ import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 public enum WorldEntities {
 
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
-    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS;
+    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL;
 
     /**
      * Return an instance of the entity at the given position and the selected
@@ -83,6 +84,8 @@ public enum WorldEntities {
                 return new PicketFenceEW(x, y, 0f);
             case PICKETFENCENS:
                 return new PicketFenceNS(x, y, 0f);
+            case CONCRETEWALL:
+                return new ConcreteWall(x, y, 0f);
             default:
                 return null;
         }
