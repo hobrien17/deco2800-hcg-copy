@@ -320,9 +320,7 @@ public abstract class Enemy extends Character implements Lootable {
 
 
     /**
-     * To detect player's position. If player is near enemy, return 1.
-     * @return: false: Undetected
-     *          true: Detected player
+     * To detect player's position and set enemy's status.
      *
      */
     public void detectPlayer(){
