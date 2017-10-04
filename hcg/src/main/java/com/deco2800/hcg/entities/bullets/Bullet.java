@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities.bullets;
 
-import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -14,7 +13,6 @@ import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.bullets.BulletType;
 
 import java.util.List;
 
