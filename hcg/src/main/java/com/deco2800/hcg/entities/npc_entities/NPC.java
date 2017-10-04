@@ -60,16 +60,6 @@ public abstract class NPC extends Character implements Tickable {
 	public void setConversation(String convo){
 		this.conversation = convo;
 	}
-
-    /**
-     * On Tick handler
-     *
-     * @param gameTickCount Current game tick
-     */
-    @Override
-	public abstract void onTick(long gameTickCount);
-    
-    protected abstract void move();
     
     /**
      * Returns the NPC's first name
