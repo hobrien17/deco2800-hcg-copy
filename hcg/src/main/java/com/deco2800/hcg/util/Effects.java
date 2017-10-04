@@ -1,5 +1,7 @@
 package com.deco2800.hcg.util;
 
+import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.entities.Character;
 
@@ -222,6 +224,11 @@ public class Effects {
                 // Handle damage
                 thisCharacter.takeDamage(effect.getDamage());
                 if(thisCharacter.getHealthCur() <= 0){
+                    Double prob = Math.random();
+                    if (prob > 0.3) {
+                        Corpse corpse = new BasicCorpse(owner.getPosX(), owner.getPosY(), 0);
+                        GameManager.get().getWorld().addEntity(corpse);
+                    }
                     GameManager.get().getWorld().removeEntity(owner);
                 }
                 // Handle slows
