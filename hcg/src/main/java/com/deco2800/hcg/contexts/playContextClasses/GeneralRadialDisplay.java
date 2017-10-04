@@ -52,7 +52,7 @@ public class GeneralRadialDisplay extends Group {
     private final static float Y_SIZE_MAX = 80f;
     private final static int MAX_BTNS = 11;
     private final static float OUTLINE_SIZE = 350f;
-    private final static float DISTANCE = 160f;
+    private final static float DISTANCE = 165f;
     
     private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 	
