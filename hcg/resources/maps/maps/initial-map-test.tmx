@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="154">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="154">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
-  <property name="weather" value="wind"/>
+  <property name="weather" value="storm"/>
  </properties>
  <tileset firstgid="1" source="../tiles/general-tiles.tsx"/>
  <tileset firstgid="11" source="../tiles/icesparkle.tsx"/>
@@ -668,15 +668,6 @@
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="Jensen"/>
     <property name="texture" value="character_1"/>
-   </properties>
-  </object>
-  <object id="80" gid="36" x="305.027" y="657.473" width="55" height="32">
-   <properties>
-    <property name="Type" value="Shop"/>
-    <property name="fName" value="General"/>
-    <property name="faceImage" value="npc_face"/>
-    <property name="sName" value="George"/>
-    <property name="texture" value="character_shop"/>
    </properties>
   </object>
  </objectgroup>

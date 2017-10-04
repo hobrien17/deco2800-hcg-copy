@@ -5,6 +5,7 @@ import java.util.Observer;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.WeatherManager;
 
 /**
  * An abstract class representing a turret planted in a corpse

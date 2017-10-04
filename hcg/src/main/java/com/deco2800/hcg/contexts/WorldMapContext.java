@@ -76,9 +76,11 @@ public class WorldMapContext extends UIContext {
 
 		Button quitButton = new TextButton("Quit", skin);
 		Button discoveredButton = new TextButton("Show all nodes", skin);
+		Button demoButton = new TextButton("Demo world", skin);
 
 		window.add(quitButton);
 		window.add(discoveredButton);
+		window.add(demoButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight());
@@ -120,6 +122,19 @@ public class WorldMapContext extends UIContext {
 						node.setVisible(false);
 					}
 				}
+			}
+		});
+		
+		demoButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				World world = new World("test");
+				
+				((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                setWeather(world.getWeatherType());
+				
+				gameManager.setWorld(world);
+				playerManager.spawnPlayers();
+				contextManager.pushContext(new PlayContext());
 			}
 		});
 
