@@ -109,13 +109,13 @@ public class ChatStack extends Stack {
 							networkManager.queueMessage(
 									new ChatMessage(chatTextField.getText()));
 							chatTextArea.appendText(chatTextField.getText() + "\n");
-							stage.setKeyboardFocus(null);
 						} else {
 							chatTextField.setCursorPosition(0);
 						}
 					}
 					chatTextField.setText("");
 					chatString = "";
+					stage.setKeyboardFocus(null);
 				}
 			}
 		});
