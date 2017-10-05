@@ -173,8 +173,7 @@ public abstract class InventoryDisplayContext extends UIContext {
             }
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
-            Label itemLabel = null;
-            commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+            commonSetup(currentItem, button, stack, clickedImage);
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -198,8 +197,8 @@ public abstract class InventoryDisplayContext extends UIContext {
                     itemInfo.add(itemName).left();
                     ArrayList<String> itemData = currentItem.getInformation();
                     if(itemData != null) {
-                        for(int i = 0; i < itemData.size(); i++) {
-                            Label line = new Label(itemData.get(i), skin);
+                        for(int j = 0; j < itemData.size(); j++) {
+                            Label line = new Label(itemData.get(j), skin);
                             line.setColor(Color.BLACK);
                             itemInfo.row();
                             itemInfo.add(line).left();
@@ -287,8 +286,7 @@ public abstract class InventoryDisplayContext extends UIContext {
                     .getDrawable());
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
-            Label itemLabel = null;
-            commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+            commonSetup(currentItem, button, stack, clickedImage);
             //Add listener for this item button
             stack.addListener(new ClickListener() {
                 @Override
@@ -322,13 +320,11 @@ public abstract class InventoryDisplayContext extends UIContext {
      *          The button for the item
      * @param stack
      *          The stack for the item
-     * @param itemLabel
-     *          The label for the item
      * @param clickedImage
      *          The clicked image for the item
      */
 
-    private void commonSetup(Item currentItem, ImageButton button, Stack stack, Label itemLabel, Image clickedImage) {
+    private void commonSetup(Item currentItem, ImageButton button, Stack stack, Image clickedImage) {
         //Get the item to be displayed as a button
         if (currentRow >= maxRow) {
             inventory.row();
@@ -337,6 +333,7 @@ public abstract class InventoryDisplayContext extends UIContext {
         button.setName(currentItem.getName());
 
         //Setup the label
+        Label itemLabel;
         if (currentItem.isStackable()) {
             itemLabel = new Label(""+ currentItem.getStackSize(), skin);
         } else {
@@ -393,8 +390,7 @@ public abstract class InventoryDisplayContext extends UIContext {
             }
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
-            Label itemLabel = null;
-            commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+            commonSetup(currentItem, button, stack, clickedImage);
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
