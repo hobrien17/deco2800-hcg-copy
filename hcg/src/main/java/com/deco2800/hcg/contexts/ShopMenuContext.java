@@ -150,36 +150,40 @@ public class ShopMenuContext extends InventoryDisplayContext {
             }
         });
 
-        shopBuy.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                errorImageVisible = false;
-                if ((selectedItem != null) && !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
-                    int number = Integer.parseInt(amount.getText().trim());
-                    for (int i = 0; i < number; i++) {
-                        if (shopKeeper.getShop().buyStock(selectedItem) != 0) {
-                            errorImageVisible = true;
-                        }
-                    }
-                }
-                draw();
-            }
-        });
+		shopBuy.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				errorImageVisible = false;
+				if ((selectedItem != null) && !selectedItem
+						.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
+					int number = Integer.parseInt(amount.getText().trim());
+					for (int i = 0; i < number; i++) {
+						if (shopKeeper.getShop().buyStock(selectedItem) != 0) {
+							errorImageVisible = true;
+						}
+					}
+				}
+				draw();
+			}
+		});
 
-        shopSell.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                errorImageVisible = false;
-                int number = Integer.parseInt(amount.getText().trim());
-                if ((selectedItem != null) && !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER)) && !(shopKeeper.getShop().getStock().contains(selectedItem))) {
-                    for(int i = 0; i < number; i++){
-                        if (shopKeeper.getShop().sellStock(selectedItem) != 0) {
-                            errorImageVisible = true;
-                        }
-                    }
-                }
-                draw();
-            }
-        });
-    }
+		shopSell.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				errorImageVisible = false;
+				int number = Integer.parseInt(amount.getText().trim());
+				if ((selectedItem != null)
+						&& !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))
+						&& !(shopKeeper.getShop().getStock()
+								.contains(selectedItem))) {
+					for (int i = 0; i < number; i++) {
+						if (shopKeeper.getShop().sellStock(selectedItem) != 0) {
+							errorImageVisible = true;
+						}
+					}
+				}
+				draw();
+			}
+		});
+	}
 }
