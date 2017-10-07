@@ -181,51 +181,53 @@ public class Bullet extends AbstractEntity implements Tickable {
 		List<AbstractEntity> entities = GameManager.get().getWorld()
 				.getEntities();
 		for (AbstractEntity entity : entities) {
-			if (this.collidesWith(entity)) {
-				// Collision with enemy
-				if (entity instanceof Enemy
-						&& (user instanceof Player || user instanceof Corpse)) {
-					Enemy target = (Enemy) entity;
-					if (target instanceof MushroomTurret) {
-						MushroomTurret turret = (MushroomTurret) target;
-						turret.removeObserver();
-						GameManager.get().getWorld().removeEntity(turret);
+			if (!this.collidesWith(entity)) {
+				continue;
+			}
+			// Collision with enemy
+			if (entity instanceof Enemy
+					&& (user instanceof Player || user instanceof Corpse)) {
+				Enemy target = (Enemy) entity;
+				if (target instanceof MushroomTurret) {
+					MushroomTurret turret = (MushroomTurret) target;
+					turret.removeObserver();
+					GameManager.get().getWorld().removeEntity(turret);
 
-					} else if (target.getHealthCur() <= 0) {
-						//Temporary increase of xp for all enemies killed
-						playerManager.getPlayer().gainXp(50);
-						applyEffect(target);
-						if (user instanceof Player) {
-							Player playerUser = (Player) user;
-							playerUser.killLogAdd(target.getID());
-						}
-					} else {
-						//Temporary increase of xp for all enemies killed
-						playerManager.getPlayer().gainXp(50);
-						applyEffect(target);
+				} else if (target.getHealthCur() <= 0) {
+					// Temporary increase of xp for all enemies killed
+					playerManager.getPlayer().gainXp(50);
+					applyEffect(target);
+					if (user instanceof Player) {
+						Player playerUser = (Player) user;
+						playerUser.killLogAdd(target.getID());
 					}
-					hitCount--;
+				} else {
+					// Temporary increase of xp for all enemies killed
+					playerManager.getPlayer().gainXp(50);
+					applyEffect(target);
 				}
+				hitCount--;
+			}
 
-				// Collision with destructable tree
-				if (entity instanceof DestructableTree && user instanceof Player && !(this instanceof GrassBullet)) {
-					DestructableTree tree = (DestructableTree) entity;
-					applyEffect(tree);
-					hitCount--;
-				}
+			// Collision with destructable tree
+			if (entity instanceof DestructableTree && user instanceof Player
+					&& !(this instanceof GrassBullet)) {
+				DestructableTree tree = (DestructableTree) entity;
+				applyEffect(tree);
+				hitCount--;
+			}
 
-				// Collision with player
-				if (entity instanceof Player && user instanceof Enemy) {
-					// add code to apply effect to player here
-					Enemy enemyUser = (Enemy) user;
-					enemyUser.causeDamage((Player) entity);
-					hitCount--;
-				}
+			// Collision with player
+			if (entity instanceof Player && user instanceof Enemy) {
+				// add code to apply effect to player here
+				Enemy enemyUser = (Enemy) user;
+				enemyUser.causeDamage((Player) entity);
+				hitCount--;
+			}
 
-				if (hitCount == 0) {
-					GameManager.get().getWorld().removeEntity(this);
-					break;
-				}
+			if (hitCount == 0) {
+				GameManager.get().getWorld().removeEntity(this);
+				break;
 			}
 		}
 	}
