@@ -177,15 +177,18 @@ public abstract class Shop {
     private Item containsItem(Item item) {
         int maxStack = item.getMaxStackSize();
         Item prelim = null;
-        for (Item i: shopStock) {
-            if (i.sameItem(item)) {
-                if (prelim == null) {
-                    prelim = i;
-                } else if ((prelim.getStackSize() == maxStack) && (i.getStackSize() != maxStack)) {
-                        prelim = i;
-                }
-            }
-        }
+		for (Item i : shopStock) {
+			if (!i.sameItem(item)) {
+				continue;
+			}
+			
+			if (prelim == null) {
+				prelim = i;
+			} else if ((prelim.getStackSize() == maxStack)
+					&& (i.getStackSize() != maxStack)) {
+				prelim = i;
+			}
+		}
         return prelim;
     }
 
