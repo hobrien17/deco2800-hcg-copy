@@ -112,6 +112,14 @@ public class TextureManager extends Manager {
 			textureMap.put("antSE", new Texture("resources/sprites/enemies/ant_SE_1.png"));
 			textureMap.put("antSW", new Texture("resources/sprites/enemies/ant_SW_1.png"));
 			textureMap.put("antW", new Texture("resources/sprites/enemies/ant_W_1.png"));
+			textureMap.put("antE2", new Texture("resources/sprites/enemies/ant_E_2.png"));
+			textureMap.put("antN2", new Texture("resources/sprites/enemies/ant_N_2.png"));
+			textureMap.put("antNE2", new Texture("resources/sprites/enemies/ant_NE_2.png"));
+			textureMap.put("antNW2", new Texture("resources/sprites/enemies/ant_NW_2.png"));
+			textureMap.put("antS2", new Texture("resources/sprites/enemies/ant_S_2.png"));
+			textureMap.put("antSE2", new Texture("resources/sprites/enemies/ant_SE_2.png"));
+			textureMap.put("antSW2", new Texture("resources/sprites/enemies/ant_SW_2.png"));
+			textureMap.put("antW2", new Texture("resources/sprites/enemies/ant_W_2.png"));
 			textureMap.put("mushroom", new Texture("resources/sprites/enemies/mushy.png"));
 			textureMap.put("hedgehog", new Texture("resources/sprites/enemies/hedgehog.png"));
 			textureMap.put("hedgeball", new Texture("resources/sprites/enemies/hedgeball_1.png"));
