@@ -131,11 +131,7 @@ public class PlayContext extends Context {
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
         String[] seeds = {"sunflower", "fire", "explosive", "grass", "water", "ice"};
-        ArrayList<String> s = new ArrayList<>();
-        for(int i = 0; i < 30; i++) {
-        	s.add("grass");
-        }
-        radialDisplay = new GeneralRadialDisplay(stage, s);
+        radialDisplay = new GeneralRadialDisplay(stage, Arrays.asList(seeds));
         createExitWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
