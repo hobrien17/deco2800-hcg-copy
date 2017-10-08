@@ -520,6 +520,16 @@ public class World {
 	public Weathers getWeatherType() {
 		return weather;
 	}
+	
+	/**
+	 * Sets the weather of the world to newWeather
+	 * 
+	 * @param newWeather
+	 * 			the world's new weather type
+	 */
+	public void setWeather(Weathers newWeather) {
+		weather = newWeather;
+	}
 
 	/**
 	 * Returns the starting X for the player
