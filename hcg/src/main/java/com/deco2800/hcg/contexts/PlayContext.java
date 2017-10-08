@@ -1,6 +1,5 @@
 package com.deco2800.hcg.contexts;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
@@ -130,7 +129,7 @@ public class PlayContext extends Context {
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
-        String[] seeds = {"sunflower", "fire", "explosive", "grass", "water", "ice"};
+        String[] seeds = {"sunflower", "fire", "explosive", "ice", "water", "grass"};
         radialDisplay = new GeneralRadialDisplay(stage, Arrays.asList(seeds));
         createExitWindow();
         clockDisplay = new ClockDisplay();
@@ -153,7 +152,15 @@ public class PlayContext extends Context {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                //Ensures no duplicate players, please don't delete
                 playerManager.removeCurrentPlayer();
+
+            	// clear old observers (mushroom turret for example)
+                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+                manager.deleteObservers();
+
+                // stop the old weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
                 contextManager.popContext();
             }
         });
@@ -345,21 +352,12 @@ public class PlayContext extends Context {
             Item item = new HealthPotion(100);
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
             gameManager.getWorld().addEntity(entity);
-<<<<<<< HEAD
-        } else if(keycode == Input.Keys.B) {
-            if(RadialDisplay.plantableNearby()) {
-                radialDisplay.addRadialMenu(stage);
-            }
-        }
-    }
-=======
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.T) {
 			chatStack.setVisible(!chatStack.isVisible());
 		}
 	}
->>>>>>> origin/master
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
