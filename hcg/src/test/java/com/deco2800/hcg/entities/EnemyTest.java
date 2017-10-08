@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -57,13 +58,12 @@ public class EnemyTest {
     public void testLoot() {
         enemy.setupLoot();
         assertThat("Loot rarity not valid.", enemy.checkLootRarity(), is(equalTo(true)));
-        assertThat("Basic enemy should only have 1 type of loot.", enemy.getLootStrings().size(),
+        assertThat("Basic enemy should only have 1 type of loot.", enemy.getAllLoot().size(),
                 is(equalTo(1)));
         assertThat("Basic Enemy only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
-        Map<String, Double> expectedRarity = new HashMap<>();
-        expectedRarity.put("gardening_seed", 1.0);
-        assertThat("Loot rarity should only have sunflower seed", enemy.getRarity(), is(equalTo(expectedRarity)));
-        assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo("gardening_seed")));
+        assertThat("Loot rarity should only have sunflower seed", enemy.getRarity().size(), is(equalTo(1)));
+        //assertThat("Loot rarity should only have sunflower seed", enemy.getRarity(), is(equalTo(expectedRarity)));
+        assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo(new LootWrapper("sunflower_seed"))));
     }
     
 //    @Test (expected = IllegalArgumentException.class)

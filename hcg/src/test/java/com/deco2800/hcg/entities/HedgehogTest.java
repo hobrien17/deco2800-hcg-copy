@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 
@@ -56,7 +57,7 @@ public class HedgehogTest {
     public void testLoot() {
         enemy.setupLoot();
         assertThat("Hedgehog only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
-        assertThat("Item should be explosive seed", enemy.randItem(), is(equalTo("explosive_seed")));
+        assertThat("Item should be explosive seed", enemy.randItem(), is(equalTo(new LootWrapper("explosive_seed"))));
     }
 
     @Test

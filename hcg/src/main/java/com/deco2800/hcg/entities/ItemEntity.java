@@ -18,7 +18,7 @@ import com.deco2800.hcg.worlds.World;
 public class ItemEntity extends AbstractEntity implements Tickable, CustomRenderable, LightEmitter {
 
 	protected Item item;
-
+	
 	public ItemEntity(float posX, float posY, float posZ, Item item) {
 		super(posX, posY, posZ, 0.5F, 0.5F, 0.5F);
 		this.item = item;
@@ -27,7 +27,7 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
 	@Override
 	public void onTick(long gameTickCount) {
 		Optional<AbstractEntity> entity = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 
-				1.2f, Player.class);
+				1f, Player.class);
 		if(entity.isPresent()) {
 			Player player = (Player)entity.get();
 			if(player.addItemToInventory(item)) {

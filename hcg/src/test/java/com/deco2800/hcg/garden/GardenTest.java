@@ -160,7 +160,7 @@ public class GardenTest {
 	 * Tests that the plant returns valid loot
 	 */
 	private void testLoot(AbstractGardenPlant plant) {
-		assertNotEquals(plant.getLootStrings().size(), 0);
+		assertNotEquals(plant.getAllLoot().size(), 0);
 		assertNotEquals(plant.getLoot().size(), 0);
 		
 		assertTrue(plant.checkLootRarity());
