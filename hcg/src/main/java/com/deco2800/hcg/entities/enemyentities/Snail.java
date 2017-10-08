@@ -21,7 +21,7 @@ public class Snail extends Enemy implements Tickable {
      */
     public Snail(float posX, float posY, float posZ, int id) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
-        //this.setTexture("snail"); - TO DO: add the right texture
+        this.setTexture("snail");
         this.level = 1;
         newPos.setX(posX);
         newPos.setY(posY);

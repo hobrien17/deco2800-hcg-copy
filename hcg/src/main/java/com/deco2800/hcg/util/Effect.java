@@ -196,18 +196,15 @@ public class Effect {
 
         Effect effect = (Effect) o;
 
-        if (level != effect.level)
-          return false;
-        if (damage != effect.damage)
-          return false;
-        if (duration != effect.duration)
-          return false;
-        if (cooldown != effect.cooldown)
-          return false;
-        if (delay != effect.delay)
-          return false;
+		if (level != effect.level 
+				|| damage != effect.damage
+				|| duration != effect.duration 
+				|| cooldown != effect.cooldown
+				|| delay != effect.delay) {
+			return false;
+		}
 
-        return Float.compare(effect.speedModifier, speedModifier) == 0
+		return Float.compare(effect.speedModifier, speedModifier) == 0
                 && (name != null ? name.equals(effect.name) : effect.name == null);
     }
 

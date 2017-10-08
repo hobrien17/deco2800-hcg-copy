@@ -172,16 +172,16 @@ public class ServerBrowserContext extends UIContext {
             public void changed(ChangeEvent event, Actor actor) {
                 String address;
                 address = serverIPTextfield.getText(); //recommended set up public method in networkManager
-                serverIPTextfield.setText("");
-                if(address.trim().length() == 0 || address == "") {
-                    serverStatus.setText("Invalid Server IP");
-                } else {
-                    enterServer.hide();
-                    networkManager.init(false);
-                    networkManager.join(serverIPTextfield.getText());
-                }
-
-            }
+				serverIPTextfield.setText("");
+				if (address.trim().length() == 0 || address == "") {
+					serverStatus.setText("Invalid Server IP");
+					return;
+				}
+				
+				enterServer.hide();
+				networkManager.init(false);
+				networkManager.join(serverIPTextfield.getText());
+			}
         });
     }
 

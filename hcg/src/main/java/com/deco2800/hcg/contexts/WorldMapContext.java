@@ -211,10 +211,12 @@ public class WorldMapContext extends UIContext {
 		hiddenNodes.clear();
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			MapNodeEntity nodeEntry = new MapNodeEntity(node);
-			if (!node.isDiscovered()) {
-				hiddenNodes.add(nodeEntry);
-				nodeEntry.setVisible(false);
+			if (node.isDiscovered()) {
+				continue;
 			}
+			
+			hiddenNodes.add(nodeEntry);
+			nodeEntry.setVisible(false);
 		}
 		menuStage.addActor(window);
 	}

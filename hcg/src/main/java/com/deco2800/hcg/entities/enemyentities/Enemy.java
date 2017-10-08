@@ -43,6 +43,7 @@ public abstract class Enemy extends Character implements Lootable {
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
+    protected int direction;
 
     //Multiple players
     private int numPlayers;
@@ -320,9 +321,7 @@ public abstract class Enemy extends Character implements Lootable {
 
 
     /**
-     * To detect player's position. If player is near enemy, return 1.
-     * @return: false: Undetected
-     *          true: Detected player
+     * To detect player's position and set enemy's status.
      *
      */
     public void detectPlayer(){
@@ -548,6 +547,20 @@ public abstract class Enemy extends Character implements Lootable {
                 break;
             default:
                 newPos = this.getRandomPos();
+        }
+    }
+
+    public void setDirection() {
+        float xMove = newPos.getX() - prevPos.getX();
+        float yMove = newPos.getY() - prevPos.getY();
+        if (yMove > 0 && xMove > 0) {
+            this.direction = 1;
+        } else if (yMove < 0 && xMove > 0) {
+            this.direction = 2;
+        } else if (yMove < 0 && xMove < 0) {
+            this.direction = 3;
+        } else {
+            this.direction = 4;
         }
     }
 

@@ -138,9 +138,8 @@ public class PlayContext extends Context {
         plantWindow = new PlantWindow(skin);
         chatStack = new ChatStack(stage);
 
-        if (networkManager.isInitialised()) {
-            stage.addActor(chatStack);
-        }
+        stage.addActor(chatStack);
+        chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
@@ -346,19 +345,26 @@ public class PlayContext extends Context {
             Item item = new HealthPotion(100);
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
             gameManager.getWorld().addEntity(entity);
+<<<<<<< HEAD
         } else if(keycode == Input.Keys.B) {
             if(RadialDisplay.plantableNearby()) {
                 radialDisplay.addRadialMenu(stage);
             }
         }
     }
+=======
+		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
+			radialDisplay.addRadialMenu(stage);
+		} else if (keycode == Input.Keys.T) {
+			chatStack.setVisible(!chatStack.isVisible());
+		}
+	}
+>>>>>>> origin/master
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
         Button yesButton = new TextButton("Yes", skin);
         yesButton.pad(5, 10, 5, 10);
-        Button noButton = new TextButton("No", skin);
-        noButton.pad(5, 10, 5, 10);
 
         /* Add a programmatic listener to the buttons */
         yesButton.addListener(new ChangeListener() {
@@ -383,15 +389,7 @@ public class PlayContext extends Context {
             }
         });
 
-        noButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                exitWindow.remove();
-            }
-        });
-
         exitWindow.add(yesButton);
-        exitWindow.add(noButton);
         exitWindow.pack();
         exitWindow.setMovable(false); // So it doesn't fly around the screen
         exitWindow.setWidth(150);

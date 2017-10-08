@@ -63,10 +63,6 @@ public class TextureManager extends Manager {
 			textureMap.put("selected", new Texture("resources/sprites/misc/selected.png"));
 			textureMap.put("selected_black", new Texture("resources/sprites/misc/selected_black.png"));
 			textureMap.put("tower", new Texture("resources/sprites/misc/tower.png"));
-			textureMap.put("squirrel", new Texture("resources/sprites/enemies/ant_SW_1.png"));
-			textureMap.put("mushroom", new Texture("resources/sprites/enemies/mushy.png"));
-			textureMap.put("hedgehog", new Texture("resources/sprites/enemies/hedgehog.png"));
-			textureMap.put("hedgeball", new Texture("resources/sprites/enemies/hedgeball_1.png"));
 			textureMap.put("battle_seed", new Texture("resources/sprites/seeds/battle_seed.png"));
 			textureMap.put("battle_seed_green", new Texture("resources/sprites/seeds/battle_seed_green.png"));
 			textureMap.put("battle_seed_red", new Texture("resources/sprites/seeds/battle_seed_red.png"));
@@ -106,6 +102,28 @@ public class TextureManager extends Manager {
 			textureMap.put("sunflower_alt", new Texture("resources/sprites/plants/sunflower_alt.png"));
 			textureMap.put("fertiliser", new Texture("resources/sprites/gardentools/fertiliser.png"));
 			textureMap.put("bug_spray", new Texture("resources/sprites/gardentools/bugspray.png"));
+
+			// Enemy textures
+			textureMap.put("antE", new Texture("resources/sprites/enemies/ant_E_1.png"));
+			textureMap.put("antN", new Texture("resources/sprites/enemies/ant_N_1.png"));
+			textureMap.put("antNE", new Texture("resources/sprites/enemies/ant_NE_1.png"));
+			textureMap.put("antNW", new Texture("resources/sprites/enemies/ant_NW_1.png"));
+			textureMap.put("antS", new Texture("resources/sprites/enemies/ant_S_1.png"));
+			textureMap.put("antSE", new Texture("resources/sprites/enemies/ant_SE_1.png"));
+			textureMap.put("antSW", new Texture("resources/sprites/enemies/ant_SW_1.png"));
+			textureMap.put("antW", new Texture("resources/sprites/enemies/ant_W_1.png"));
+			textureMap.put("antE2", new Texture("resources/sprites/enemies/ant_E_2.png"));
+			textureMap.put("antN2", new Texture("resources/sprites/enemies/ant_N_2.png"));
+			textureMap.put("antNE2", new Texture("resources/sprites/enemies/ant_NE_2.png"));
+			textureMap.put("antNW2", new Texture("resources/sprites/enemies/ant_NW_2.png"));
+			textureMap.put("antS2", new Texture("resources/sprites/enemies/ant_S_2.png"));
+			textureMap.put("antSE2", new Texture("resources/sprites/enemies/ant_SE_2.png"));
+			textureMap.put("antSW2", new Texture("resources/sprites/enemies/ant_SW_2.png"));
+			textureMap.put("antW2", new Texture("resources/sprites/enemies/ant_W_2.png"));
+			textureMap.put("mushroom", new Texture("resources/sprites/enemies/mushy.png"));
+			textureMap.put("hedgehog", new Texture("resources/sprites/enemies/hedgehog.png"));
+			textureMap.put("hedgeball", new Texture("resources/sprites/enemies/hedgeball_1.png"));
+			textureMap.put("snail", new Texture("resources/sprites/enemies/snail.png"));
 
 			// Corpse textures
 			textureMap.put("corpse", new Texture("resources/sprites/dead_enemies/deadant.png"));
