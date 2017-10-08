@@ -75,11 +75,12 @@ public abstract class InventoryDisplayContext extends UIContext {
         
         ArrayList<String> text = new ArrayList<>();
         text.add(mouseOverItem.getName());
-        text.add("Value: " + Integer.toString(mouseOverItem.getBaseValue()));
         ArrayList<String> information = mouseOverItem.getInformation();
         if(information != null) {
             text.addAll(information);
         }
+        text.add("");
+        text.add(String.format("Value: %d", mouseOverItem.getBaseValue()));
 
         GlyphLayout layout = new GlyphLayout();
         float width = 0;
@@ -380,13 +381,14 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = playerEquipment;
         for (int i=0; i<player.getEquippedItems().getNumItems(); i++) {
             Item currentItem = player.getEquippedItems().getItem(i);
-            LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
-            //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
             ImageButton button;
-            if (textureManager.getTexture(currentItem.getTexture()) == null) {
-                 button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            if(textureManager.getTexture(currentItem.getTexture()) == null) {
+                button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
             } else {
-                 button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
+                LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
+                // TODO: We need sprites for all items, weapons currently dont have sprites
+                // hence this fails with an NPE if the texture is null
+                button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
             }
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture("selected"));
