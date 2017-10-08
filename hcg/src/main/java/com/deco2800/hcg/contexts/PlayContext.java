@@ -139,6 +139,9 @@ public class PlayContext extends Context {
         plantWindow = new PlantWindow(skin);
         chatStack = new ChatStack(stage);
 
+        /* Add ParticleEffectActor that controls weather. */
+        stage.addActor(weatherManager.getActor());
+
         if (networkManager.isInitialised()) {
             stage.addActor(chatStack);
         }
@@ -159,9 +162,6 @@ public class PlayContext extends Context {
                 contextManager.popContext();
             }
         });
-
-        /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
 
         /* Add all buttons to the menu */
         window.add(button);
