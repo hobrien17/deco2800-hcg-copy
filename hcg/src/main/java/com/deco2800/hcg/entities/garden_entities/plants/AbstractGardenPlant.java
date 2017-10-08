@@ -1,11 +1,16 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.types.Weathers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -43,7 +48,8 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
     private int growDelay;
     private int lastGrow;
 
-    Map<String, Double> lootRarity;
+    protected Map<String, Double> lootRarity;
+    private int numLoot;
 
     /**
      * Creates a new plant in the given pot with the given growth delay.
@@ -60,6 +66,8 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         lastGrow = (int)manager.getStopwatchTime();
         this.master = master;
         this.name = name;
+        
+        numLoot = 1;
         setupLoot();
     }
     
@@ -72,11 +80,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         	lastGrow = time;
         }
 		
-	}
-
-    @Override
-    public Map<String, Double> getRarity() {
-        return lootRarity;
     }
 
     /**
@@ -153,22 +156,27 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
      */
     abstract void setupLoot();
 
-
-    /**
-     * Gets a list of all possible loot dropped by this plant
-     *
-     * @return An array of all possible loot
-     */
-    public String[] getLoot() {
-        return lootRarity.keySet().toArray(new String[lootRarity.size()]);
+    @Override
+    public Map<String, Double> getRarity() {
+        return lootRarity;
+    }
+    
+    @Override
+    public List<String> getLootStrings() {
+        return Arrays.asList(lootRarity.keySet().toArray(new String[lootRarity.size()]));
+    }
+    
+    @Override
+    public List<Item> getLoot() {
+    	List<Item> items = new ArrayList<>(numLoot);
+    	for(int i = 0; i < numLoot; i++) {
+    		items.add(((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem()));
+    	}
+        return items;
     }
 
-    /**
-     * Generates a random item based on the loot rarity
-     *
-     * @return A random item string in the plant's loot map
-     */
-    String randItem() {
+    @Override
+    public String randItem() {
         Double prob = Math.random();
         Double total = 0.0;
         for (Map.Entry<String, Double> entry : lootRarity.entrySet()) {
@@ -179,6 +187,11 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
         }
         LOGGER.warn("No item has been selected, returning null");
         return null;
+    }
+    
+    @Override
+    public void loot() {
+    	
     }
     
     /**
@@ -240,5 +253,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
     	
     	checkLootRarity(); //will display a warning if the loot rarity goes above 1
     }
+ 
 
 }

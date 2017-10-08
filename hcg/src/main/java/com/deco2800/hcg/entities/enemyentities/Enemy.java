@@ -16,6 +16,8 @@ import com.deco2800.hcg.worlds.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,11 +184,11 @@ public abstract class Enemy extends Character implements Lootable {
      * @return A list of items
      */
     @Override
-    public Item[] loot() {
-        Item[] arr = new Item[1];
-        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
+    public List<Item> getLoot() {
+        List<Item> items = new ArrayList<>();
+        items.add(((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem()));
 
-        return arr;
+        return items;
     }
 
     /**
@@ -194,8 +196,12 @@ public abstract class Enemy extends Character implements Lootable {
      *
      * @return An array of all possible loot
      */
-    public String[] getLoot() {
-        return lootRarity.keySet().toArray(new String[lootRarity.size()]);
+    public List<String> getLootStrings() {
+        return Arrays.asList(lootRarity.keySet().toArray(new String[lootRarity.size()]));
+    }
+    
+    public void loot() {
+    	//TODO implement this
     }
 
     /**

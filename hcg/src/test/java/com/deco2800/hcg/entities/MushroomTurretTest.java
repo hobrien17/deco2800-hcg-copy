@@ -36,7 +36,7 @@ public class MushroomTurretTest {
     @Test
     public void testLoot() {
         enemy.setupLoot();
-        assertThat("MushroomTurret only has 1 drop.", enemy.loot().length, is(equalTo(1)));
+        assertThat("MushroomTurret only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
         assertThat("Item should be fire seed", enemy.randItem(), is(equalTo("fire_seed")));
     }
 
