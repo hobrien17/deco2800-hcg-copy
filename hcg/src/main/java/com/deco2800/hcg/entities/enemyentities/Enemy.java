@@ -361,7 +361,10 @@ public abstract class Enemy extends Character implements Lootable {
         //Get direction of next position. Randomly be chosen between 0 and 360.
         radius = Math.abs(random.nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
-        distance = Math.abs(random.nextFloat()) * this.level * 3;
+        distance = Math.abs(random.nextFloat()) * this.level * 5;
+        if (distance < 3){
+            distance += 3;
+        }
         nextPosX = (float) (currPosX + distance * cos(radius));
         nextPosY = (float) (currPosY + distance * sin(radius));
         tempX = nextPosX;
