@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.garden_entities.plants;
 import java.util.HashMap;
 
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 
@@ -41,7 +42,9 @@ public class Ice extends AbstractGardenPlant {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put("ice_seed", 1.0);
+		lootRarity.put(new LootWrapper("ice_seed", 2, 5), 0.7);
+        lootRarity.put(new LootWrapper("water_seed", 5, 10), 0.2);
+        lootRarity.put(new LootWrapper("sunflower_seed", 5, 15), 0.1);
 
 		checkLootRarity();
 	}

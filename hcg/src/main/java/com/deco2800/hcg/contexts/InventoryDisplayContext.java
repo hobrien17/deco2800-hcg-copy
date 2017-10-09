@@ -219,12 +219,16 @@ public abstract class InventoryDisplayContext extends UIContext {
                                     ((ConsumableItem) currentItem).consume(player);
                                     player.getInventory().removeItem(currentItem, 1);
                                     inventory.clear();
+                                    itemInfo.clear();
+                                    itemDisplay.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
                                     //Equip the item
                                     player.getEquippedItems().addItem(currentItem);
                                     player.getInventory().removeItem(currentItem);
                                     inventory.clear();
+                                    itemInfo.clear();
+                                    itemDisplay.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 }
 

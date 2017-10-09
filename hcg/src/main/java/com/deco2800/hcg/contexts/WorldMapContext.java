@@ -185,7 +185,6 @@ public class WorldMapContext extends UIContext {
 				// delete stopwatches
                 ((StopwatchManager) GameManager.get().getManager(StopwatchManager.class)).deleteObservers();
                 
-
                 // create new world
 				World newWorld = new World(nodeEntity.getNode()
                     .getNodeLinkedLevel().getWorld().getLoadedFile());
@@ -193,6 +192,8 @@ public class WorldMapContext extends UIContext {
                 // add the new weather effects
                 ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
                   setWeather(newWorld.getWeatherType());
+               
+                newWorld.generatePuddles();
                 
 				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();

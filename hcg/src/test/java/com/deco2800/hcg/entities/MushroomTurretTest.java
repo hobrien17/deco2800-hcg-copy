@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
@@ -37,7 +38,7 @@ public class MushroomTurretTest {
     public void testLoot() {
         enemy.setupLoot();
         assertThat("MushroomTurret only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
-        assertThat("Item should be fire seed", enemy.randItem(), is(equalTo("fire_seed")));
+        assertThat("Item should be fire seed", enemy.randItem(), is(equalTo(new LootWrapper("fire_seed"))));
     }
 
     @Test
