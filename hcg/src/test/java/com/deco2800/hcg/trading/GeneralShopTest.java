@@ -154,8 +154,8 @@ public class GeneralShopTest {
         shop.open(0, player);
         Item item = new TestUniqueItem("heavy item", 100);
         player.getInventory().addItem(item);
-        shop.addStock(item1);
-        assertThat(shop.buyStock(item1), is(equalTo(2)));
+        shop.addStock(item);
+        assertThat(shop.buyStock(item), is(equalTo(2)));
     }
 
     @Test
