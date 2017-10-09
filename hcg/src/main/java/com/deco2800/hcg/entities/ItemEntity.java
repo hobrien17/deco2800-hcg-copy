@@ -6,14 +6,15 @@ import java.util.Optional;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.renderers.CustomRenderable;
 import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.WorldUtil;
-import com.deco2800.hcg.worlds.World;
 
 public class ItemEntity extends AbstractEntity implements Tickable, CustomRenderable, LightEmitter {
 
@@ -32,6 +33,8 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
 			Player player = (Player)entity.get();
 			if(player.addItemToInventory(item)) {
 				GameManager.get().getWorld().removeEntity(this);
+				((SoundManager)GameManager.get().getManager(SoundManager.class)).playSound(
+				        String.format("loot%d", MathUtils.random(1, 2)));
 			}
 		}
 		if(this.item.isStackable()) {

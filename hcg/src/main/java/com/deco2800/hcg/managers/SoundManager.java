@@ -56,6 +56,9 @@ public class SoundManager extends Manager {
 			soundMap.put("weatherDrought", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/rain-ambient-hardsurface-shortloop.wav")));
 
+			// Loot
+            soundMap.put("loot1", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot.wav")));
+            soundMap.put("loot2", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot2.wav")));
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}

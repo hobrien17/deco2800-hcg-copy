@@ -1,18 +1,17 @@
 package com.deco2800.hcg.items.stackable;
 
+import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.ItemRarity;
-import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ShaderManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import sun.security.provider.SHA;
-
-import java.util.ArrayList;
 
 public class MagicMushroom extends ConsumableItem {
     //Super simple example class of a health potion
