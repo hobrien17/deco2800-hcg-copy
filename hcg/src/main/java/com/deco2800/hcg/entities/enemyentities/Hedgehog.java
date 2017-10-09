@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
@@ -44,7 +45,7 @@ public class Hedgehog extends Enemy implements Tickable {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put("explosive_seed", 1.0);
+        lootRarity.put(new LootWrapper("explosive_seed"), 1.0);
 
         checkLootRarity();
     }

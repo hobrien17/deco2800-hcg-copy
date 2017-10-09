@@ -215,14 +215,14 @@ public class CharacterCreationContext extends CharacterContext{
         characterSex.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (characterSex.getSelected() == MALE) {
-                    textureCount = 0;
-                    characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else {
-                    textureCount = 3;
-                    characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                }
-            }
+				if (characterSex.getSelected() == MALE) {
+					textureCount = 0;
+				} else {
+					textureCount = 3;
+				}
+				characterPreviewImage.setDrawable(new SpriteDrawable(
+						new Sprite(charTextureArray[textureCount])));
+			}
         });
     }
 
@@ -553,22 +553,20 @@ public class CharacterCreationContext extends CharacterContext{
             public void clicked(InputEvent event, float x, float y){
                 if (gunsSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
-                    gunsSkill -= 10;
-                    gunsSkillSpecialise.setChecked(false);
-                    gunsSkillSpecialiseChecked = false;
-                    specialisedSkills.replace("gunsSkill", false);
-                } else {
-                    if (specializedSkillsPoints > 0) {
-                        specializedSkillsPoints--;
-                        gunsSkill += 10;
-                        gunsSkillSpecialise.setChecked(true);
-                        gunsSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("gunsSkill", true);
-                    } else {
-                        gunsSkillSpecialise.setChecked(false);
-                        gunsSkillSpecialiseChecked = false;
-                    }
-                }
+					gunsSkill -= 10;
+					gunsSkillSpecialise.setChecked(false);
+					gunsSkillSpecialiseChecked = false;
+					specialisedSkills.replace("gunsSkill", false);
+				} else if (specializedSkillsPoints > 0) {
+					specializedSkillsPoints--;
+					gunsSkill += 10;
+					gunsSkillSpecialise.setChecked(true);
+					gunsSkillSpecialiseChecked = true;
+					specialisedSkills.replace("gunsSkill", true);
+				} else {
+					gunsSkillSpecialise.setChecked(false);
+					gunsSkillSpecialiseChecked = false;
+				}
                 gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
                 selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
@@ -584,19 +582,17 @@ public class CharacterCreationContext extends CharacterContext{
                     energyWeaponsSkill -= 10;
                     energyWeaponsSkillSpecialise.setChecked(false);
                     energyWeaponsSkillSpecialiseChecked = false;
-                    specialisedSkills.replace("energyWeaponsSkill", false);
-                } else {
-                    if (specializedSkillsPoints > 0) {
-                        specializedSkillsPoints--;
-                        energyWeaponsSkill += 10;
-                        energyWeaponsSkillSpecialise.setChecked(true);
-                        energyWeaponsSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("energyWeaponsSkill", true);
-                    } else {
-                        energyWeaponsSkillSpecialise.setChecked(false);
-                        energyWeaponsSkillSpecialiseChecked = false;
-                    }
-                }
+					specialisedSkills.replace("energyWeaponsSkill", false);
+				} else if (specializedSkillsPoints > 0) {
+					specializedSkillsPoints--;
+					energyWeaponsSkill += 10;
+					energyWeaponsSkillSpecialise.setChecked(true);
+					energyWeaponsSkillSpecialiseChecked = true;
+					specialisedSkills.replace("energyWeaponsSkill", true);
+				} else {
+					energyWeaponsSkillSpecialise.setChecked(false);
+					energyWeaponsSkillSpecialiseChecked = false;
+				}
                 energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
                 selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +

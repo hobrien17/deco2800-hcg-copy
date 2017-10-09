@@ -245,7 +245,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
-		String soundName;
 		if (bulletType instanceof Grenade) {
 			soundManager.stopSound("bullet-grenade-explode");
 			soundManager.playSound("bullet-grenade-explode");

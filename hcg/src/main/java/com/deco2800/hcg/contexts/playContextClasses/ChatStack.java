@@ -64,21 +64,24 @@ public class ChatStack extends Stack {
 		 */
         chatButton.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (networkManager.isInitialised()) {
-                    if (chatString.trim().length()>0) {
-                        networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
-                        chatTextArea.appendText(chatTextField.getText() + "\n");
-                        chatTextField.setText("");
-                        stage.setKeyboardFocus(null);
-                        chatString = "";
-                    } else {
-                        chatTextField.setText("");
-                        chatTextField.setCursorPosition(0);
-                        chatString = "";
-                    }
-                }
-            }
+			public void changed(ChangeEvent event, Actor actor) {
+				if (!networkManager.isInitialised()) {
+					return;
+				}
+				
+				if (chatString.trim().length() > 0) {
+					networkManager.queueMessage(
+							new ChatMessage(chatTextField.getText()));
+					chatTextArea.appendText(chatTextField.getText() + "\n");
+					chatTextField.setText("");
+					stage.setKeyboardFocus(null);
+					chatString = "";
+					return;
+				}
+				chatTextField.setText("");
+				chatTextField.setCursorPosition(0);
+				chatString = "";
+			}
         });
 
         /*
@@ -93,30 +96,30 @@ public class ChatStack extends Stack {
 					chatString = chatString.substring(0,
 							chatString.length() - 1);
 				}
-                
-				if (c == '\r') {
-					if (chatString.trim().startsWith("/")) {
-						// split chat string into arguments, collapsing all whitespace
-						String args[] = chatString
-								.trim()
-								.substring(1)
-								.replaceAll("\\s+", " ")
-								.split(" ");
-						String commandMessage = commandManager.runCommand(args);
-						chatTextArea.appendText(commandMessage + "\n");
-					} else if (networkManager.isInitialised()) {
-						if (chatString.trim().length() > 0) {
-							networkManager.queueMessage(
-									new ChatMessage(chatTextField.getText()));
-							chatTextArea.appendText(chatTextField.getText() + "\n");
-						} else {
-							chatTextField.setCursorPosition(0);
-						}
-					}
-					chatTextField.setText("");
-					chatString = "";
-					stage.setKeyboardFocus(null);
+
+				if (c != '\r') {
+					return;
 				}
+
+				if (chatString.trim().startsWith("/")) {
+					// split chat string into arguments, collapsing all
+					// whitespace
+					String args[] = chatString.trim().substring(1)
+							.replaceAll("\\s+", " ").split(" ");
+					String commandMessage = commandManager.runCommand(args);
+					chatTextArea.appendText(commandMessage + "\n");
+				} else if (networkManager.isInitialised()) {
+					if (chatString.trim().length() > 0) {
+						networkManager.queueMessage(
+								new ChatMessage(chatTextField.getText()));
+						chatTextArea.appendText(chatTextField.getText() + "\n");
+					} else {
+						chatTextField.setCursorPosition(0);
+					}
+				}
+				chatTextField.setText("");
+				chatString = "";
+				stage.setKeyboardFocus(null);
 			}
 		});
 

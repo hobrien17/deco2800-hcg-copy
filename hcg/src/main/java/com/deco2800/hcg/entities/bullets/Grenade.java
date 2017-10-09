@@ -59,30 +59,31 @@ public class Grenade extends Bullet implements Tickable {
                 - Math.abs(goalX)) < 0.5
                 && Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
                 - Math.abs(goalY)) < 0.5 && !activated) {
-            explosion = new Explosion(goalX, goalY, this.getPosZ());
+            explosion = new Explosion(goalX, goalY, this.getPosZ(), 0.3f);
             GameManager.get().getWorld().addEntity(explosion);
             activated = true;
             // Play explosion sound
             playCollisionSound(this);
         }
 
-        if(activated) {
-            if(GameManager.get().getWorld().containsEntity(explosion)
-                    && explosion.getRateOfChange() >= 0) {
-                this.setPosX(goalX);
-                this.setPosY(goalY);
-                Bullet aoe = new Bullet(goalX - explosion.getXRenderLength()/2,
-                        goalY - explosion.getYRenderLength()/2,
-                        this.getPosZ(), goalX, goalY, this.getPosZ(),
-                        explosion.getXRenderLength(), explosion.getYRenderLength(), explosion.getZLength(),
-                        this.user, -1);
-                GameManager.get().getWorld().addEntity(aoe);
-            } else {
-                GameManager.get().getWorld().removeEntity(this);
-            }
-        } else {
-            setPosX(getPosX() + changeX);
-            setPosY(getPosY() + changeY);
-        }
-    }
+		if (!activated) {
+			setPosX(getPosX() + changeX);
+			setPosY(getPosY() + changeY);
+			return;
+		}
+		
+		if (GameManager.get().getWorld().containsEntity(explosion)
+				&& explosion.getRateOfChange() >= 0) {
+			this.setPosX(goalX);
+			this.setPosY(goalY);
+			Bullet aoe = new Bullet(goalX - explosion.getXRenderLength() / 2,
+					goalY - explosion.getYRenderLength() / 2, this.getPosZ(),
+					goalX, goalY, this.getPosZ(), explosion.getXRenderLength(),
+					explosion.getYRenderLength(), explosion.getZLength(),
+					this.user, -1);
+			GameManager.get().getWorld().addEntity(aoe);
+		} else {
+			GameManager.get().getWorld().removeEntity(this);
+		}
+	}
 }

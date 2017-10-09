@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.*;
 import java.util.HashMap;
 
@@ -36,7 +37,7 @@ public class Squirrel extends Enemy implements Tickable {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put("gardening_seed", 1.0);
+		lootRarity.put(new LootWrapper("sunflower_seed"), 1.0);
 
 		checkLootRarity();
 	}

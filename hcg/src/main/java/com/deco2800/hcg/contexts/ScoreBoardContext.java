@@ -106,12 +106,7 @@ public class ScoreBoardContext extends UIContext {
 	            Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
 	            window.setBackground(new Image(backgroundTexture).getDrawable());
 	            playersWindow.add(window);
-        	
-            
         }
         masterTable.add(playersWindow).top().expandY().fillY().padBottom(15);
     }
-
-
-
 }

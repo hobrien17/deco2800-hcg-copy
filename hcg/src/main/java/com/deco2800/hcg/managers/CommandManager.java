@@ -22,9 +22,8 @@ public class CommandManager extends Manager {
 		if (commands.get(name) == null) {
 			commands.put(name, command);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 	
 	/**
@@ -50,9 +49,8 @@ public class CommandManager extends Manager {
 		Command command = commands.get(args[0]);
 		if (command != null) {
 			return command.run(args);
-		} else {
-			return "Command \"" + args[0] + "\" not found";
 		}
+		return "Command \"" + args[0] + "\" not found";
 	}
 	
 	/**
@@ -72,7 +70,5 @@ public class CommandManager extends Manager {
 		 * @return Command message
 		 */
 		public String run(String... args);
-	    
 	}
-	
 }

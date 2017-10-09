@@ -161,6 +161,8 @@ public class TextureManager extends Manager {
 
 			// terrain tiles
 			textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
+            textureMap.put("rainpuddle", new Texture("resources/maps/textures/rain-puddle.png"));
+            textureMap.put("icepuddle", new Texture("resources/maps/textures/ice-puddle.png"));
 
 			//trees
 			textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
@@ -278,6 +280,7 @@ public class TextureManager extends Manager {
 			textureMap.put("green_potion", new Texture("resources/sprites/potions/potion_round_green.png"));
 			textureMap.put("purple_potion", new Texture("resources/sprites/potions/potion_round_purple.png"));
 			textureMap.put("blue_potion", new Texture("resources/sprites/potions/potion_round_blue.png"));
+			textureMap.put("magic_mushroom", new Texture("resources/sprites/mushrooms/mushroom_fully_grown.png"));
 			textureMap.put("seed", new Texture("resources/placeholderassets/placeholderseed.png"));
 
 			//Multiplayer UI Textures
