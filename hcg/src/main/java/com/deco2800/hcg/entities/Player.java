@@ -797,6 +797,15 @@ public class Player extends Character implements Tickable {
 				Pot pot = (Pot) closest.get();
 				pot.unlock();
 			}
+			break;
+		case Input.Keys.L:
+			closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
+					Pot.class);
+			if (closest.isPresent()) {
+				Pot pot = (Pot) closest.get();
+				pot.getPlant().loot();
+			}
+			break;
 		case Input.Keys.TAB:
 			LOGGER.info("You press Tab!");
 			this.contextManager.pushContext(new ScoreBoardContext());

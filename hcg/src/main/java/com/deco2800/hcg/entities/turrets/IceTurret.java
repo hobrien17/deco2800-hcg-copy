@@ -7,6 +7,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.util.WorldUtil;
 
 /**
@@ -22,10 +23,14 @@ public class IceTurret extends AbstractTurret {
 	private int seconds;
 	private List<AbstractEntity> near;
 	private List<AbstractEntity> far;
+	private int closeRange;
+	private int farRange;
 	private static final int BLOW = 5;
 	private static final int RESET = BLOW + 10;
-	private static final int CLOSE_RANGE = 5;
-	private static final int FAR_RANGE = 30;
+	private static final int NORMAL_CLOSE_RANGE = 10;
+	private static final int INCREASED_CLOSE_RANGE = 20;
+	private static final int REDUCED_CLOSE_RANGE = 0;
+	private static final int NORMAL_FAR_RANGE = 30;
 	
 	/**
 	 * Creates a new ice turret inside the given corpse
@@ -36,15 +41,23 @@ public class IceTurret extends AbstractTurret {
 	public IceTurret(Corpse master) {
 		super(master, "Ice");
 		seconds = 0;
+		if(GameManager.get().getWorld().getWeatherType().equals(Weathers.SNOW)) {
+			closeRange = INCREASED_CLOSE_RANGE;
+		} else if(GameManager.get().getWorld().getWeatherType().equals(Weathers.SANDSTORM)) {
+			closeRange = REDUCED_CLOSE_RANGE;
+		} else {
+			closeRange = NORMAL_CLOSE_RANGE;
+		}
+		farRange = NORMAL_FAR_RANGE;
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
 			near = WorldUtil.allEntitiesToPosition(master.getPosX(), 
-					master.getPosY(), CLOSE_RANGE, Enemy.class);
+					master.getPosY(), closeRange, Enemy.class);
 			far = WorldUtil.allEntitiesToPosition(master.getPosX(), 
-					master.getPosY(), FAR_RANGE, Enemy.class);
+					master.getPosY(), farRange, Enemy.class);
 			far.removeAll(near);
 			for(AbstractEntity entity : near) {
 				Enemy enemy = (Enemy)entity;

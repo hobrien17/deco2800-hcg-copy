@@ -1,5 +1,7 @@
 package com.deco2800.hcg.contexts;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.contexts.playContextClasses.ChatStack;
 import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
+import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
@@ -88,7 +91,7 @@ public class PlayContext extends Context {
     private NetworkManager networkManager;
     private ClockDisplay clockDisplay;
     private ChatStack chatStack;
-    private RadialDisplay radialDisplay;
+    private GeneralRadialDisplay radialDisplay;
 
     private Window window;
     private Window plantWindow;
@@ -126,16 +129,16 @@ public class PlayContext extends Context {
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
-        radialDisplay = new RadialDisplay(stage);
+        String[] seeds = {"sunflower", "fire", "explosive", "ice", "water", "grass"};
+        radialDisplay = new GeneralRadialDisplay(stage, Arrays.asList(seeds));
         createExitWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
         plantWindow = new PlantWindow(skin);
         chatStack = new ChatStack(stage);
 
-        if (networkManager.isInitialised()) {
-            stage.addActor(chatStack);
-        }
+        stage.addActor(chatStack);
+        chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
@@ -144,6 +147,14 @@ public class PlayContext extends Context {
 
         /* Add a quit button to the menu */
         Button button = new TextButton("Quit", skin);
+        Button end = new TextButton("Force quit", skin);
+        
+        end.addListener(new ChangeListener() {
+        	@Override
+        	public void changed(ChangeEvent event, Actor actor) {
+        		throw new NullPointerException("This is not a bug - simply a crude way of forcing the game to end");
+        	}
+        });
 
         /* Add a programmatic listener to the quit button */
         button.addListener(new ChangeListener() {
@@ -167,6 +178,7 @@ public class PlayContext extends Context {
 
         /* Add all buttons to the menu */
         window.add(button);
+        window.add(end);
         window.pack();
         window.setMovable(false); // So it doesn't fly around the screen
 
@@ -351,6 +363,8 @@ public class PlayContext extends Context {
             gameManager.getWorld().addEntity(entity);
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
+		} else if (keycode == Input.Keys.T) {
+			chatStack.setVisible(!chatStack.isVisible());
 		}
 	}
 

@@ -4,8 +4,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.lootable.LootWrapper;
+import com.deco2800.hcg.items.lootable.Lootable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -16,6 +17,8 @@ import com.deco2800.hcg.worlds.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +35,7 @@ public abstract class Enemy extends Character implements Lootable {
     // Current status of enemy. 1 : New Born, 2 : Chasing 3 : Annoyed
     protected int status;
     protected int id;
-    protected transient Map<String, Double> lootRarity;
+    protected transient Map<LootWrapper, Double> lootRarity;
     protected float speedX;
     protected float speedY;
     protected float randomX;
@@ -43,6 +46,7 @@ public abstract class Enemy extends Character implements Lootable {
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
+    protected int direction;
 
     //Multiple players
     private int numPlayers;
@@ -167,34 +171,28 @@ public abstract class Enemy extends Character implements Lootable {
     }
 
     @Override
-    public Map<String, Double> getRarity() {
+    public Map<LootWrapper, Double> getRarity() {
         return lootRarity;
     }
 
-    /**
-     * Returns a list of new loot items where 0 <= length(\result) <=
-     * length(this.getLoot()) Loot may vary based on rarity and other factors
-     * Possible to return an empty array
-     * <p>
-     * Currently only supports lists of 1 item
-     *
-     * @return A list of items
-     */
     @Override
-    public Item[] loot() {
-        Item[] arr = new Item[1];
-        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-
-        return arr;
+    public List<Item> getLoot() {
+    	List<Item> result = new ArrayList<>();
+    	result.add(randItem().getItem());
+        return result;
     }
 
-    /**
-     * Gets a list of all possible loot dropped by this plant
-     *
-     * @return An array of all possible loot
-     */
-    public String[] getLoot() {
-        return lootRarity.keySet().toArray(new String[lootRarity.size()]);
+    @Override
+	public List<Item> getAllLoot() {
+		List<Item> items = new ArrayList<>(lootRarity.size());
+		for(LootWrapper wrapper : lootRarity.keySet().toArray(new LootWrapper[lootRarity.size()])) {
+			items.add(wrapper.getItem());
+		}
+		return items;
+	}
+    
+    public void loot() {
+    	//TODO implement this
     }
 
     /**
@@ -203,23 +201,19 @@ public abstract class Enemy extends Character implements Lootable {
     abstract void setupLoot();
     //Use this in special enemy classes to set up drops
 
-    /**
-     * Generates a random item based on the loot rarity
-     *
-     * @return A random item string in the plant's loot map
-     */
-    public String randItem() {
-        Double prob = Math.random();
-        Double total = 0.0;
-        for (Map.Entry<String, Double> entry : lootRarity.entrySet()) {
-            total += entry.getValue();
-            if (total > prob) {
-                return entry.getKey();
-            }
-        }
-        LOGGER.warn("No item has been selected, returning null");
-        return null;
-    }
+    @Override
+	public LootWrapper randItem() {
+		Double prob = Math.random();
+		Double total = 0.0;
+		for (Map.Entry<LootWrapper, Double> entry : lootRarity.entrySet()) {
+			total += entry.getValue();
+			if (total > prob) {
+				return entry.getKey();
+			}
+		}
+		LOGGER.warn("No item has been selected, returning null");
+		return null;
+	}
 
     /**
      * Checks that the loot rarity is valid
@@ -320,9 +314,7 @@ public abstract class Enemy extends Character implements Lootable {
 
 
     /**
-     * To detect player's position. If player is near enemy, return 1.
-     * @return: false: Undetected
-     *          true: Detected player
+     * To detect player's position and set enemy's status.
      *
      */
     public void detectPlayer(){
@@ -548,6 +540,20 @@ public abstract class Enemy extends Character implements Lootable {
                 break;
             default:
                 newPos = this.getRandomPos();
+        }
+    }
+
+    public void setDirection() {
+        float xMove = newPos.getX() - prevPos.getX();
+        float yMove = newPos.getY() - prevPos.getY();
+        if (yMove > 0 && xMove > 0) {
+            this.direction = 1;
+        } else if (yMove < 0 && xMove > 0) {
+            this.direction = 2;
+        } else if (yMove < 0 && xMove < 0) {
+            this.direction = 3;
+        } else {
+            this.direction = 4;
         }
     }
 
