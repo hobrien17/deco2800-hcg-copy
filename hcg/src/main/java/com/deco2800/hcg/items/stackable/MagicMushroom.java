@@ -31,7 +31,7 @@ public class MagicMushroom extends ConsumableItem {
     public void consume(Character character) {
         // Update shader to run the magic mushroom shader for 4 in game hours. Also fully heals you
         ShaderManager shaders = (ShaderManager) GameManager.get().getManager(ShaderManager.class);
-        shaders.setCustom(0.3F, 0.3F, 0.4F, new Color(255, 153, 255, 50), 10);
+        shaders.setCustom(0.3F, 0.3F, 0.4F, new Color(255, 153, 255, 50), 35);
         ((Player)character).setHealthCur(character.getHealthMax());
     }
 
