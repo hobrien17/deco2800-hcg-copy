@@ -5,10 +5,15 @@ import java.util.ArrayList;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HealthPotion extends ConsumableItem {
     //Super simple example class of a health potion
     int healthAmount;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HealthPotion.class);
 
     public HealthPotion(int amount) {
         healthAmount = amount;
@@ -23,7 +28,7 @@ public class HealthPotion extends ConsumableItem {
     public void consume(Character character) {
         //TODO: Update character health
         ((Player)character).setHealthCur(character.getHealthCur() + 100);
-        System.out.println("Health Updated!");
+        LOGGER.info("Health Updated!");
 
     }
 
@@ -44,7 +49,7 @@ public class HealthPotion extends ConsumableItem {
 
     @Override
     public boolean sameItem(Item item) {
-        return item instanceof HealthPotion && this.itemName == ((HealthPotion) item).itemName;
+        return item instanceof HealthPotion && this.healthAmount == ((HealthPotion) item).healthAmount;
     }
 
     @Override
@@ -59,5 +64,10 @@ public class HealthPotion extends ConsumableItem {
         ArrayList<String> list = new ArrayList<>();
         list.add(String.format("+%s HP", this.healthAmount));
         return list;
+    }
+    
+    @Override
+    public ItemRarity getRarity() {
+        return ItemRarity.UNCOMMON;
     }
 }

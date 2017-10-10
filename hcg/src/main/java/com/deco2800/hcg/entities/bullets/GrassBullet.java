@@ -37,6 +37,7 @@ public class GrassBullet extends Bullet {
 	public GrassBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_green");
+		this.bulletType = BulletType.GRASS;
 	}
 
 	@Override

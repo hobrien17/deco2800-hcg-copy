@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.multiplayer.*;
-import com.deco2800.hcg.worlds.World;
 
 /**
  * Lockstep UDP network manager.
@@ -48,7 +47,7 @@ public final class NetworkManager extends Manager {
 	private ByteBuffer sendBuffer;
 	private ByteBuffer receiveBuffer;
 	
-	private Random messageIdGenerator = new Random();
+	private Random random = new Random();
 
 	private String lobbyName;
 
@@ -118,7 +117,24 @@ public final class NetworkManager extends Manager {
 	 * @return Random int
 	 */
 	public int getNextRandomInt() {
-		return messageIdGenerator.nextInt(Integer.MAX_VALUE);
+		return random.nextInt();
+	}
+	
+	/**
+	 * Returns a random int
+	 * @param bound The exclusive upper bound
+	 * @return Random int
+	 */
+	public int getNextRandomInt(int bound) {
+		return random.nextInt(bound);
+	}
+	
+	/**
+	 * Sets the networked random generator's seed
+	 * @param seed The seed
+	 */
+	public void setSeed(long seed) {
+		random.setSeed(seed);
 	}
 	
 	/**
@@ -128,11 +144,6 @@ public final class NetworkManager extends Manager {
 	 */
 	public void updatePeerTickCount(int peer, long tick) {
 		// FIXME
-		/*
-		if (peerTickCounts.get(peer) == tick - 1) {
-			peerTickCounts.put(peer, tick);
-		}
-		*/
 	}
 
 	/**
@@ -166,7 +177,7 @@ public final class NetworkManager extends Manager {
 		byte[] bytes = new byte[messageBuffer.remaining()];
 		messageBuffer.get(bytes);
 		// add byte array to queue
-		return (sendQueue.put(message.getId(), bytes) == null);
+		return sendQueue.put(message.getId(), bytes) == null;
 	}
 
 	/**
@@ -185,21 +196,14 @@ public final class NetworkManager extends Manager {
 	 * Starts a co-op game
 	 */
 	public void startGame() {
-		queueMessage(new StartMessage(getNextRandomInt()));
+		int seed = getNextRandomInt();
+		queueMessage(new StartMessage(seed));
+		random.setSeed((long) seed);
 		
 		// FIXME
-		/*
-		gameManager.setOccupiedNode(gameManager.getWorldMap().getContainedNodes().get(0));
-		gameManager.setWorld(new World(gameManager.getWorldMap().getContainedNodes().get(0)
-				.getNodeLinkedLevel().getWorld().getLoadedFile()));
-		*/
 		Player otherPlayer = new Player(1, 5, 10, 0);
 		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Player 2");
 		playerManager.addPlayer(otherPlayer);
-		/*
-		playerManager.spawnPlayers();
-		contextManager.pushContext(new PlayContext());
-		*/
 		contextManager.pushContext(new CharacterCreationContext());
 	}
 	
@@ -315,62 +319,64 @@ public final class NetworkManager extends Manager {
 					case CHAT:
 						message = new ChatMessage();
 						break;
-					default:
-						throw new MessageFormatException();
+				default:
+					throw new MessageFormatException();
+				}
+
+				if (messageType == MessageType.ACK) {
+					return;
+				}
+				// unpack message
+				message.unpackData(receiveBuffer);
+
+				if (!processedIds.contains(messageId)) {
+					// process message
+					message.process();
+					// make sure we don't process this again
+					processedIds.add(messageId);
+					// log
+					LOGGER.debug("RECEIVED: " + messageType.toString());
+
+					// acknowledge that we've received this
+					messageBuffer.clear();
+					// put header
+					messageBuffer.put(MESSAGE_HEADER);
+					// put id
+					messageBuffer.putInt(-1);
+					// put type
+					messageBuffer.put((byte) MessageType.ACK.ordinal());
+					// put number of fields
+					messageBuffer.put((byte) 0);
+					// put ACK id
+					messageBuffer.putInt(messageId);
+					// send ACK to peer
+					messageBuffer.flip();
+				} else {
+					// acknowledge that we've already received this
+					messageBuffer.clear();
+					// put header
+					messageBuffer.put(MESSAGE_HEADER);
+					// put id
+					messageBuffer.putInt(-1);
+					// put type
+					messageBuffer.put((byte) MessageType.ACK.ordinal());
+					// put number of fields
+					messageBuffer.put((byte) 0);
+					// put ACK id
+					messageBuffer.putInt(messageId);
+					// send ACK to peer
+					messageBuffer.flip();
 				}
 				
-				if (messageType != MessageType.ACK) {
-					// unpack message
-					message.unpackData(receiveBuffer);
-
-					if (!processedIds.contains(messageId)) {
-						// process message
-						message.process();
-						// make sure we don't process this again
-						processedIds.add(messageId);
-						// log
-						LOGGER.debug("RECEIVED: " + messageType.toString());
-
-						// acknowledge that we've received this
-						messageBuffer.clear();
-						// put header
-						messageBuffer.put(MESSAGE_HEADER);
-						// put id
-						messageBuffer.putInt(-1);
-						// put type
-						messageBuffer.put((byte) MessageType.ACK.ordinal());
-						// put number of fields
-						messageBuffer.put((byte) 0);
-						// put ACK id
-						messageBuffer.putInt(messageId);
-						// send ACK to peer
-						messageBuffer.flip();
-						try {
-							channel.send(messageBuffer, address);
-						} catch (IOException e) {}
-					} else {
-						// acknowledge that we've already received this
-						messageBuffer.clear();
-						// put header
-						messageBuffer.put(MESSAGE_HEADER);
-						// put id
-						messageBuffer.putInt(-1);
-						// put type
-						messageBuffer.put((byte) MessageType.ACK.ordinal());
-						// put number of fields
-						messageBuffer.put((byte) 0);
-						// put ACK id
-						messageBuffer.putInt(messageId);
-						// send ACK to peer
-						messageBuffer.flip();
-						try {
-							channel.send(messageBuffer, address);
-						} catch (IOException e) {}
-					}
+				try {
+					channel.send(messageBuffer, address);
+				} catch (IOException e) {
 				}
 			}
-		} catch (BufferOverflowException|BufferUnderflowException|MessageFormatException e) {
-			// we don't care if a datagram is invalid, only that we don't try to read it any further
+		} catch (BufferOverflowException | BufferUnderflowException
+				| MessageFormatException e) {
+			// we don't care if a datagram is invalid, only that we don't try to
+			// read it any further
 			// TODO Implement a timeout so we can get away with this
 		}
 	}

@@ -6,7 +6,6 @@ import com.deco2800.hcg.observers.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerInputManager extends Manager implements TickableManager {
 	
@@ -20,7 +19,7 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	private HashMap<Integer, MouseMovedObserver> mouseMovedListeners = new HashMap<>();
 	private HashMap<Integer, ScrollObserver> scrollListeners = new HashMap<>();
 	
-	private ConcurrentHashMap<Long, ArrayList<int[]>> actionQueue = new ConcurrentHashMap<>();
+	private HashMap<Long, ArrayList<int[]>> actionQueue = new HashMap<>();
 	
 	private long gameTickCount = 0;
 	
@@ -28,142 +27,190 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	 * Adds a key down listener to the list of key down listeners
 	 * @param observer the key down observer to add
 	 */
-	public void addKeyDownListener(Integer peer, KeyDownObserver observer) {
-		keyDownListeners.put(peer, observer);
+	public void addKeyDownListener(Integer player, KeyDownObserver observer) {
+		keyDownListeners.put(player, observer);
 	}
 
 	/**
 	 * Removes the given observer from the list of key down listeners
 	 * @param observer the key down observer to remove
 	 */
-	public void removeKeyDownListener(Integer peer, KeyDownObserver observer) {
-		keyDownListeners.remove(peer, observer);
+	public void removeKeyDownListener(Integer player, KeyDownObserver observer) {
+		keyDownListeners.remove(player, observer);
 	}
 
 	/**
 	 * Adds a key up listener to the list of key up listeners
 	 * @param observer the key up observer to add
 	 */
-	public void addKeyUpListener(Integer peer, KeyUpObserver observer) {
-		keyUpListeners.put(peer, observer);
+	public void addKeyUpListener(Integer player, KeyUpObserver observer) {
+		keyUpListeners.put(player, observer);
 	}
 
 	/**
 	 * Removes the given observer from the list of key up listeners
 	 * @param observer the key up observer to remove
 	 */
-	public void removeKeyUpListener(Integer peer, KeyUpObserver observer) {
-		keyUpListeners.remove(peer, observer);
+	public void removeKeyUpListener(Integer player, KeyUpObserver observer) {
+		keyUpListeners.remove(player, observer);
 	}
 
 	/**
 	 * Adds a touch down listener to the list of touch down listeners
 	 * @param observer the touch down observer to add
 	 */
-	public void addTouchDownListener(Integer peer, TouchDownObserver observer) {
-		touchDownListeners.put(peer, observer);
+	public void addTouchDownListener(Integer player, TouchDownObserver observer) {
+		touchDownListeners.put(player, observer);
 	}
 
 	/**
 	 * Removes the given observer from the list of touch down listeners
 	 * @param observer the touch down observer to remove
 	 */
-	public void removeTouchDownListener(Integer peer, TouchDownObserver observer) {
-		touchDownListeners.remove(peer, observer);
+	public void removeTouchDownListener(Integer player, TouchDownObserver observer) {
+		touchDownListeners.remove(player, observer);
 	}
 
 	/**
 	 * Adds a touch up listener to the list of touch up listeners
 	 * @param observer the touch up observer to add
 	 */
-	public void addTouchUpListener(Integer peer, TouchUpObserver observer) {
-		touchUpListeners.put(peer, observer);
+	public void addTouchUpListener(Integer player, TouchUpObserver observer) {
+		touchUpListeners.put(player, observer);
 	}
 
 	/**
 	 * Removes the given observer from the list of touch up listeners
 	 * @param observer the touch up observer to remove
 	 */
-	public void removeTouchUpListener(Integer peer, TouchUpObserver observer) {
-		touchUpListeners.remove(peer, observer);
+	public void removeTouchUpListener(Integer player, TouchUpObserver observer) {
+		touchUpListeners.remove(player, observer);
 	}
 
 	/**
 	 * Adds a touch dragged listener to the list of touch dragged listeners
 	 * @param observer the touch dragged observer to add
 	 */
-	public void addTouchDraggedListener(Integer peer, TouchDraggedObserver observer) {
-		touchDragegdListeners.put(peer, observer);
+	public void addTouchDraggedListener(Integer player, TouchDraggedObserver observer) {
+		touchDragegdListeners.put(player, observer);
 	}
 
 	/**
 	 * Removes the given observer from the list of touch dragged listeners
 	 * @param observer the touch dragged observer to remove
 	 */
-	public void removeTouchDraggedListener(Integer peer, TouchDraggedObserver observer) {
-		touchDragegdListeners.remove(peer, observer);
+	public void removeTouchDraggedListener(Integer player, TouchDraggedObserver observer) {
+		touchDragegdListeners.remove(player, observer);
 	}
 
 	/**
 	 * Adds a mouse moved listener to the list of mouse moved listeners
 	 * @param observer the mouse moved observer to add
 	 */
-	public void addMouseMovedListener(Integer peer, MouseMovedObserver observer) {
-		mouseMovedListeners.put(peer, observer);
+	public void addMouseMovedListener(Integer player, MouseMovedObserver observer) {
+		mouseMovedListeners.put(player, observer);
 	}
 
 	/**
 	 * Removes the given observer from the list of mouse moved listeners
 	 * @param observer the mouse moved observer to remove
 	 */
-	public void removeMouseMovedListener(Integer peer, MouseMovedObserver observer) {
-		mouseMovedListeners.remove(peer, observer);
+	public void removeMouseMovedListener(Integer player, MouseMovedObserver observer) {
+		mouseMovedListeners.remove(player, observer);
 	}
 
 	/**
 	 * Adds a scroll listener to the list of scroll listeners
 	 * @param observer the scroll observer to add
 	 */
-	public void addScrollListener(Integer peer, ScrollObserver observer) {
-		scrollListeners.put(peer, observer);
+	public void addScrollListener(Integer player, ScrollObserver observer) {
+		scrollListeners.put(player, observer);
 	}
 
 	/**
 	 * Removes the given observer from the list of scroll listeners
 	 * @param observer the scroll observer to remove
 	 */
-	public void removeScrollListener(Integer peer, ScrollObserver observer) {
-		scrollListeners.remove(peer, observer);
+	public void removeScrollListener(Integer player, ScrollObserver observer) {
+		scrollListeners.remove(player, observer);
 	}
 
-	public void keyDown(Integer peer, int keycode) {
-		keyDownListeners.get(peer).notifyKeyDown(keycode);
+	/**
+	 * Notifies key down listeners
+	 * @param player the player that performed the action
+	 * @param keycode the keycode that was pressed
+	 */
+	public void keyDown(Integer player, int keycode) {
+		keyDownListeners.get(player).notifyKeyDown(keycode);
 	}
 
-	public void keyUp(Integer peer, int keycode) {
-		keyUpListeners.get(peer).notifyKeyUp(keycode);
+	/**
+	 * Notifies key up listeners
+	 * @param player the player that performed the action
+	 * @param keycode the keycode that was released
+	 */
+	public void keyUp(Integer player, int keycode) {
+		keyUpListeners.get(player).notifyKeyUp(keycode);
 	}
 
-	public void touchDown(Integer peer, int screenX, int screenY, int pointer, int button) {
-		touchDownListeners.get(peer).notifyTouchDown(screenX, screenY, pointer, button);
+	/**
+	 * Notifies touch down listeners
+	 * @param player the player that performed the action
+	 * @param screenX x coordinate
+	 * @param screenY y coordinate
+	 * @param pointer unknown
+	 * @param button unknown
+	 */
+	public void touchDown(Integer player, int screenX, int screenY, int pointer, int button) {
+		touchDownListeners.get(player).notifyTouchDown(screenX, screenY, pointer, button);
 	}
 
-	public void touchUp(Integer peer, int screenX, int screenY, int pointer, int button) {
-		touchUpListeners.get(peer).notifyTouchUp(screenX, screenY, pointer, button);
+	/**
+	 * Notifies touch up listeners
+	 * @param player the player that performed the action
+	 * @param screenX x coordinate
+	 * @param screenY y coordinate
+	 * @param pointer unknown
+	 * @param button unknown
+	 */
+	public void touchUp(Integer player, int screenX, int screenY, int pointer, int button) {
+		touchUpListeners.get(player).notifyTouchUp(screenX, screenY, pointer, button);
 	}
 
-	public void touchDragged(Integer peer, int screenX, int screenY, int pointer) {
-		touchDragegdListeners.get(peer).notifyTouchDragged(screenX, screenY, pointer);
+	/**
+	 * Notifies touch dragged listeners
+	 * @param player the player that performed the action
+	 * @param screenX x coordinate
+	 * @param screenY y coordinate
+	 * @param pointer unknown
+	 */
+	public void touchDragged(Integer player, int screenX, int screenY, int pointer) {
+		touchDragegdListeners.get(player).notifyTouchDragged(screenX, screenY, pointer);
 	}
 
-	public void mouseMoved(Integer peer, int screenX, int screenY) {
-		mouseMovedListeners.get(peer).notifyMouseMoved(screenX, screenY);
+	/**
+	 * Notifies mouse moved listeners
+	 * @param player the player that performed the action
+	 * @param screenX x coordinate
+	 * @param screenY y coordinate
+	 */
+	public void mouseMoved(Integer player, int screenX, int screenY) {
+		mouseMovedListeners.get(player).notifyMouseMoved(screenX, screenY);
 	}
 
-	public void scrolled(Integer peer, int amount) {
-		scrollListeners.get(peer).notifyScrolled(amount);
+	/**
+	 * Notifies scroll listeners
+	 * @param player the player that performed the action
+	 * @param amount how far the player scrolled
+	 */
+	public void scrolled(Integer player, int amount) {
+		scrollListeners.get(player).notifyScrolled(amount);
 	}
 	
+	/**
+	 * Queues a local action
+	 * @param args the action arguments
+	 */
 	public void queueLocalAction(int... args) {
 		long tick = gameTickCount + (networkManager.isInitialised() ? 3 : 1);
 		
@@ -180,6 +227,11 @@ public class PlayerInputManager extends Manager implements TickableManager {
 		actionQueue.get(tick).add(localArgs);
 	}
 	
+	/**
+	 * Queues an action
+	 * @param tick the tick on which the action should take place
+	 * @param args the action arguments
+	 */
 	public void queueAction(long tick, int... args) {
 		if (!actionQueue.containsKey(tick)) {
 			actionQueue.put(tick, new ArrayList<>());

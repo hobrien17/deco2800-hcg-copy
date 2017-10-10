@@ -39,6 +39,7 @@ public class IceBullet extends Bullet {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
 		this.setTexture("battle_seed_red");
+		this.bulletType = BulletType.ICE;
 	}
 	
 	/**
@@ -62,6 +63,7 @@ public class IceBullet extends Bullet {
 	public IceBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_red");
+		this.bulletType = BulletType.ICE;
 	}
 	
 	/**
@@ -94,10 +96,11 @@ public class IceBullet extends Bullet {
 			float yLength, float zLength, AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount);
 		this.setTexture("battle_seed_green");
+		this.bulletType = BulletType.ICE;
 	}
 	
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Shot", 1, 0, 1, 0, 100, 0));
+		target.giveEffect(new Effect("Ice", 1, 0, 0, 0, 100, 0));
 	}
 }

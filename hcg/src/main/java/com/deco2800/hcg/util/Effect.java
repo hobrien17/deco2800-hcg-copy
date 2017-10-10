@@ -49,9 +49,7 @@ public class Effect {
         if (!(level >= 1)) {
             throw new IllegalArgumentException("Level must be a positive integer and at least 1.");
         }
-//        if (!(damage >= 0)) {
-//            throw new IllegalArgumentException("Damage must be a positive integer.");
-//        }
+
         if (!(speedModifier >= 0)) {
             throw new IllegalArgumentException("Slow amount must be >= 0.");
         }
@@ -198,18 +196,15 @@ public class Effect {
 
         Effect effect = (Effect) o;
 
-        if (level != effect.level)
-          return false;
-        if (damage != effect.damage)
-          return false;
-        if (duration != effect.duration)
-          return false;
-        if (cooldown != effect.cooldown)
-          return false;
-        if (delay != effect.delay)
-          return false;
+		if (level != effect.level 
+				|| damage != effect.damage
+				|| duration != effect.duration 
+				|| cooldown != effect.cooldown
+				|| delay != effect.delay) {
+			return false;
+		}
 
-        return Float.compare(effect.speedModifier, speedModifier) == 0
+		return Float.compare(effect.speedModifier, speedModifier) == 0
                 && (name != null ? name.equals(effect.name) : effect.name == null);
     }
 

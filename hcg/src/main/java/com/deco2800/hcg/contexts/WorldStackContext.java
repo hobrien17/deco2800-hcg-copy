@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStackEntity;
 import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
@@ -21,6 +20,11 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.worlds.World;
 
+/**
+ * Holds the WorldStackContext information. Used to navigate and view the WorldStack when the player is in the game.
+ * 
+ * @author Ivo
+ */
 public class WorldStackContext extends UIContext {
 	// Managers used by the game
 	private GameManager gameManager;
@@ -88,7 +92,19 @@ public class WorldStackContext extends UIContext {
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
 	}
-
+	
+	/**
+	 * Handles a mouse click up on the stage. If the mouse is over an unlocked WorldMap, the user is brought into this
+	 * WorldMap.
+	 * @param screenX
+	 *     The X position of the cursor on the screen.
+	 * @param screenY
+	 *     The Y position of the cursor on the screen.
+	 * @param pointer
+	 *     Not used.
+	 * @param button
+	 *     Not used.
+	 */
 	private void handleTouchUp(int screenX, int screenY, int pointer,
 			int button) {
 		Vector2 mouseScreen = new Vector2(screenX, screenY);
@@ -114,6 +130,10 @@ public class WorldStackContext extends UIContext {
 		}
 	}
 
+	/**
+	 * Updates the display of the WorldMap nodes on the world stack. Handles making locked worlds unlocked and
+	 * accessible to the user.
+	 */
 	public void updateWorldDisplay() {
 		updateUnlockedWorlds();
 		stage.clear();
@@ -130,31 +150,43 @@ public class WorldStackContext extends UIContext {
 						worldEntry.setWorldTexture(textureManager.getTexture("ws_fungi_completed"));
 					}
 				}
+			} else if (worldEntry.getWorldMap().getWorldType() == 2) {
+				worldEntry.setWorldTexture(
+						textureManager.getTexture("ws_forest_locked"));
 			} else {
-				if(worldEntry.getWorldMap().getWorldType() == 2) {
-					worldEntry.setWorldTexture(textureManager.getTexture("ws_forest_locked"));
-				} else {
-					worldEntry.setWorldTexture(textureManager.getTexture("ws_fungi_locked"));
-				}
+				worldEntry.setWorldTexture(
+						textureManager.getTexture("ws_fungi_locked"));
 			}
+
 			stage.addActor(worldEntry);
 		}
 		stage.addActor(window);
 	}
 
+	/**
+	 * Updates the lock status of the WorldMap node objects in the WorldStack.
+	 */
 	private void updateUnlockedWorlds() {
 		for (WorldMap world : gameManager.getWorldStack().getWorldStack()) {
-			if (world.isCompleted()) {
-				for(WorldMap otherWorld : gameManager.getWorldStack().getWorldStack()) {
-					if(otherWorld.getWorldPosition() == (world.getWorldPosition() + 1) && !otherWorld.isUnlocked()) {
-						otherWorld.setUnlocked();
-						hiddenWorldMaps.remove(otherWorld);
-					}
+			if (!world.isCompleted()) {
+				continue;
+			}
+			
+			for (WorldMap otherWorld : gameManager.getWorldStack()
+					.getWorldStack()) {
+				if (otherWorld.getWorldPosition() == (world.getWorldPosition() + 1)
+						&& !otherWorld.isUnlocked()) {
+					otherWorld.setUnlocked();
+					hiddenWorldMaps.remove(otherWorld);
 				}
 			}
+
 		}
 	}
 
+	/**
+	 * Adds a win message when the game is won by the player.
+	 */
 	public void endOfGame() {
 		Window youWin = new Window("You win!", skin);
 		Button okButton = new TextButton("OK", skin);

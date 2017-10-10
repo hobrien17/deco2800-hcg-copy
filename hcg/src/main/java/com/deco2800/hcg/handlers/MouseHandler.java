@@ -25,6 +25,7 @@ public class MouseHandler {
 	 * Constructor for the mouse handler
 	 */
 	public MouseHandler() {
+		//deliberately empty
 	}
 
 	/**

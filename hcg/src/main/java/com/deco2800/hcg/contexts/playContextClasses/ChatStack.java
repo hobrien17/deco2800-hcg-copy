@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.deco2800.hcg.managers.CommandManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.MessageManager;
 import com.deco2800.hcg.managers.NetworkManager;
@@ -17,6 +18,7 @@ public class ChatStack extends Stack {
     private NetworkManager networkManager;
     private TextureManager textureManager;
     private MessageManager messageManager;
+    private CommandManager commandManager;
     private Skin skin;
 
     private Table chatWindow;
@@ -34,7 +36,7 @@ public class ChatStack extends Stack {
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
-
+        commandManager = (CommandManager) gameManager.getManager(CommandManager.class);
 
         /* Create window for chat and all components */
         chatBar = new Image(textureManager.getTexture("chat_background"));
@@ -62,21 +64,24 @@ public class ChatStack extends Stack {
 		 */
         chatButton.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (networkManager.isInitialised()) {
-                    if (chatString.trim().length()>0) {
-                        networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
-                        chatTextArea.appendText(chatTextField.getText() + "\n");
-                        chatTextField.setText("");
-                        stage.setKeyboardFocus(null);
-                        chatString = "";
-                    } else {
-                        chatTextField.setText("");
-                        chatTextField.setCursorPosition(0);
-                        chatString = "";
-                    }
-                }
-            }
+			public void changed(ChangeEvent event, Actor actor) {
+				if (!networkManager.isInitialised()) {
+					return;
+				}
+				
+				if (chatString.trim().length() > 0) {
+					networkManager.queueMessage(
+							new ChatMessage(chatTextField.getText()));
+					chatTextArea.appendText(chatTextField.getText() + "\n");
+					chatTextField.setText("");
+					stage.setKeyboardFocus(null);
+					chatString = "";
+					return;
+				}
+				chatTextField.setText("");
+				chatTextField.setCursorPosition(0);
+				chatString = "";
+			}
         });
 
         /*
@@ -87,32 +92,40 @@ public class ChatStack extends Stack {
             public void keyTyped(TextField textField, char c) {
                 if (c != '\b') {
                     chatString += c;
-                } else if (chatString.length() > 0) {
-                    chatString = chatString.substring(0, chatString.length() - 1);
-                }
-                if ((c == '\r' && networkManager.isInitialised())) {
-                    if (chatString.trim().length()>0) {
-                        networkManager.queueMessage(new ChatMessage(chatTextField.getText()));
-                        chatTextArea.appendText(chatTextField.getText() + "\n");
-                        chatTextField.setText("");
-                        stage.setKeyboardFocus(null);
-                        chatString = "";
-                    } else {
-                        chatTextField.setText("");
-                        chatTextField.setCursorPosition(0);
-                        chatString = "";
-                    }
-                }
-            }
-        });
+				} else if (chatString.length() > 0) {
+					chatString = chatString.substring(0,
+							chatString.length() - 1);
+				}
 
+				if (c != '\r') {
+					return;
+				}
+
+				if (chatString.trim().startsWith("/")) {
+					// split chat string into arguments, collapsing all
+					// whitespace
+					String args[] = chatString.trim().substring(1)
+							.replaceAll("\\s+", " ").split(" ");
+					String commandMessage = commandManager.runCommand(args);
+					chatTextArea.appendText(commandMessage + "\n");
+				} else if (networkManager.isInitialised()) {
+					if (chatString.trim().length() > 0) {
+						networkManager.queueMessage(
+								new ChatMessage(chatTextField.getText()));
+						chatTextArea.appendText(chatTextField.getText() + "\n");
+					} else {
+						chatTextField.setCursorPosition(0);
+					}
+				}
+				chatTextField.setText("");
+				chatString = "";
+				stage.setKeyboardFocus(null);
+			}
+		});
 
         messageManager.addChatMessageListener(this::handleChatMessage);
-
-
-
-
     }
+    
     private void handleChatMessage(String message) {
         chatTextArea.appendText(message + "\n");
     }

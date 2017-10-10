@@ -44,7 +44,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList( "level", "xp", "carryWeight",
             "strength", "vitality", "agility", "charisma", "intellect", "meleeSkill", "gunsSkill", "energyWeaponsSkill");
 
-	protected String Name;
+	protected String name;
 
     protected float movementSpeed;
     protected float movementSpeedNorm;
@@ -97,7 +97,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
             attributes.put(attribute, 10);
         }
 
-        this.Name = "No Name";
+        this.name = "No Name";
 
         this.speedX = 0.0f;
         this.speedY = 0.0f;
@@ -149,7 +149,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * @param name
      */
     protected void setName(String name) {
-        this.Name = name;
+        this.name = name;
     }
 
     /**

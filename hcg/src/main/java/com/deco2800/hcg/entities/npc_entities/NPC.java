@@ -18,7 +18,6 @@ import com.deco2800.hcg.util.Box3D;
  */
 public abstract class NPC extends Character implements Tickable {
 
-    //private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
     private String fName;
     private String sName;
     private final Box3D INITIAL_POSITION;
@@ -61,16 +60,6 @@ public abstract class NPC extends Character implements Tickable {
 	public void setConversation(String convo){
 		this.conversation = convo;
 	}
-
-    /**
-     * On Tick handler
-     *
-     * @param gameTickCount Current game tick
-     */
-    @Override
-	public abstract void onTick(long gameTickCount);
-    
-    protected abstract void move();
     
     /**
      * Returns the NPC's first name

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="154">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="161">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
@@ -16,7 +16,7 @@
  <tileset firstgid="39" source="../tiles/health.tsx"/>
  <layer name="ground" width="50" height="50">
   <properties>
-   <property name="name" value="ground"/>
+   <property name="name" value="grass"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">
@@ -645,6 +645,14 @@
   <object id="147" x="480.164" y="797.836" width="32" height="32"/>
   <object id="148" x="412.836" y="799.164" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="items">
+  <properties>
+   <property name="name" value="item"/>
+  </properties>
+  <object id="160" x="350.328" y="734.943" width="32.6397" height="32.6397">
+   <ellipse/>
+  </object>
+ </objectgroup>
  <objectgroup name="corpse">
   <properties>
    <property name="name" value="corpse"/>
@@ -668,16 +676,6 @@
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="Jensen"/>
     <property name="texture" value="character_1"/>
-   </properties>
-  </object>
-  <object id="80" gid="36" x="305.027" y="657.473" width="55" height="32">
-   <properties>
-    <property name="Type" value="Shop"/>
-    <property name="conversation" value=""/>
-    <property name="fName" value="Jane"/>
-    <property name="faceImage" value="npc_face"/>
-    <property name="sName" value="Jensen"/>
-    <property name="texture" value="character_shop"/>
    </properties>
   </object>
  </objectgroup>

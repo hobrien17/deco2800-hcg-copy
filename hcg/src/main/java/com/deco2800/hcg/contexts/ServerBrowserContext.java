@@ -9,11 +9,15 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * UI for server browser, used for joining a server.
  */
 public class ServerBrowserContext extends UIContext {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerBrowserContext.class);
 
     private ImageButton host;
     private ImageButton refresh;
@@ -30,6 +34,7 @@ public class ServerBrowserContext extends UIContext {
     private ScrollPane serverListPane;
     private List<String> serverList;
     private String servers[];
+    private String refreshedServers[];
     private Dialog enterServer;
     private TextButton enterServerAdd;
     private TextButton enterServerExit;
@@ -62,11 +67,13 @@ public class ServerBrowserContext extends UIContext {
         refresh = new ImageButton(new Image(textureManager.getTexture("server_refresh_button")).getDrawable());
         addServer = new ImageButton(new Image(textureManager.getTexture("menu_add_button")).getDrawable());
         back = new ImageButton(new Image(textureManager.getTexture("lobby_back_button")).getDrawable());
+        
+        
         servers = new String[20];
-        for (int i = 0, k = 0; i < 20; i++) {
-            servers[k++] = "Server: " + i;
-
+        for (int i = 0; i < 20; i++) {
+            servers[i] = "Server: " + i;
         }
+        
         serverList = new List<String>(skin);
         serverList.setItems(servers);
         serverListPane = new ScrollPane(serverList);
@@ -74,7 +81,7 @@ public class ServerBrowserContext extends UIContext {
         serverListPane.setDebug(false);
         serverListTable = new Table();
         serverListTable.add(serverListPane).expand().fill();
-
+        
 
         enterServer = new Dialog("Enter Host IP", skin);
         serverIPTextfield = new TextField("", skin);
@@ -123,6 +130,26 @@ public class ServerBrowserContext extends UIContext {
                 contextManager.pushContext(new LobbyContext());
             }
         });
+        
+        refresh.addListener(new ChangeListener() {
+        	@Override
+        	public void changed(ChangeEvent event, Actor actor) {
+        		//function that searches for games hosted on lan
+        		//get the number of servers hosted on lan
+        		//set the number of elements in refreshServers to the number of servers
+        		//check if the number of servers hosted is > 0, else exception/error?
+                refreshedServers = new String[0];
+
+        		for (int i = 0; i < refreshedServers.length; i++) {
+        			refreshedServers[i] = "Server: " + i;
+                    LOGGER.info(refreshedServers[i]);
+                }
+                serverList.setItems(refreshedServers);
+                serverListTable.clear();
+                serverListTable.add(serverListPane).expand().fill();
+        	}
+        });
+        
 
         addServer.addListener(new ChangeListener() {
             @Override
@@ -145,16 +172,16 @@ public class ServerBrowserContext extends UIContext {
             public void changed(ChangeEvent event, Actor actor) {
                 String address;
                 address = serverIPTextfield.getText(); //recommended set up public method in networkManager
-                serverIPTextfield.setText("");
-                if(address.trim().length() == 0 || address == "") {
-                    serverStatus.setText("Invalid Server IP");
-                } else {
-                    enterServer.hide();
-                    networkManager.init(false);
-                    networkManager.join(serverIPTextfield.getText());
-                }
-
-            }
+				serverIPTextfield.setText("");
+				if (address.trim().length() == 0 || address == "") {
+					serverStatus.setText("Invalid Server IP");
+					return;
+				}
+				
+				enterServer.hide();
+				networkManager.init(false);
+				networkManager.join(serverIPTextfield.getText());
+			}
         });
     }
 

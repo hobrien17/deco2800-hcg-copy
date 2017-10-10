@@ -22,7 +22,9 @@ public class Message {
 	/**
 	 * Constructs an empty message
 	 */
-	public Message() {}
+	public Message() {
+		//deliberately empty
+	}
 	
 	/**
 	 * Constructs a new message with the specified type
@@ -76,7 +78,7 @@ public class Message {
 	 * Processes the received information
 	 * @require <code>unpackData</code> must have been called first
 	 */
-	public void process() {}
+	public void process() {throw new UnsupportedOperationException();}
 	
 	/**
 	 * Gets message ID

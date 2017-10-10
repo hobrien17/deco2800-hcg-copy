@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1432">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1432">
  <properties>
   <property name="PlayerX" value="60"/>
   <property name="PlayerY" value="40"/>
-  <property name="weather" value="wind"/>
+  <property name="weather" value="rain"/>
  </properties>
  <tileset firstgid="1" source="../tiles/misc1.tsx"/>
  <tileset firstgid="7" source="../tiles/general-tiles.tsx"/>
@@ -119,7 +119,7 @@
  </layer>
  <layer name="paths" width="100" height="100">
   <properties>
-   <property name="name" value="paths"/>
+   <property name="name" value="sand"/>
    <property name="speed" value="1"/>
   </properties>
   <data encoding="csv">
@@ -337,7 +337,7 @@
   <properties>
    <property name="damage" value="1"/>
    <property name="damagetype" value="2"/>
-   <property name="name" value="spiky-fungus"/>
+   <property name="name" value="grass"/>
    <property name="speed" value="1"/>
   </properties>
   <data encoding="csv">
@@ -445,7 +445,7 @@
  </layer>
  <layer name="deep-water" width="100" height="100">
   <properties>
-   <property name="name" value="deep-water"/>
+   <property name="name" value="water-deep"/>
    <property name="speed" value="1"/>
   </properties>
   <data encoding="csv">
@@ -786,6 +786,12 @@
     <property name="name" value="thin-mushroom-trees"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup name="exit">
+  <properties>
+   <property name="name" value="EXIT"/>
+  </properties>
+  <object id="1432" gid="21" x="960" y="1568" width="55" height="32"/>
  </objectgroup>
  <objectgroup name="MUSHROOMTREETHICK">
   <properties>

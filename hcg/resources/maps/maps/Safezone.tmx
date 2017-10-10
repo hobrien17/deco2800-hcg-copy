@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="267">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="50" height="50" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="267">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
+  <property name="weather" value="wind"/>
  </properties>
  <tileset firstgid="1" source="../tiles/charcoal.tsx"/>
  <tileset firstgid="2" source="../tiles/dirt.tsx"/>
@@ -23,7 +24,7 @@
  <tileset firstgid="49" source="../tiles/white.tsx"/>
  <layer name="Ground" width="50" height="50">
   <properties>
-   <property name="name" value="ground"/>
+   <property name="name" value="grass"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">
@@ -81,7 +82,7 @@
  </layer>
  <layer name="Path" width="50" height="50">
   <properties>
-   <property name="name" value="path"/>
+   <property name="name" value="sand"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">

@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 
@@ -55,7 +56,19 @@ public class HedgehogTest {
     @Test
     public void testLoot() {
         enemy.setupLoot();
-        assertThat("Hedgehog only has 1 drop.", enemy.loot().length, is(equalTo(1)));
-        assertThat("Item should be explosive seed", enemy.randItem(), is(equalTo("explosive_seed")));
+        assertThat("Hedgehog only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
+        assertThat("Item should be explosive seed", enemy.randItem(), is(equalTo(new LootWrapper("explosive_seed"))));
+    }
+
+    @Test
+    public void testMovement() {
+        gameManager.getWorld().addEntity(enemy);
+        Player player = new Player(0, 0, 0);
+        gameManager.getWorld().addEntity(player);
+        playerManager.setPlayer(player);
+        enemy.onTick(0);
+        assertThat("Status was not status given", enemy.getStatus(), is(equalTo(2)));
+        assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0.0f)));
+        assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0.0f)));
     }
 }

@@ -32,14 +32,15 @@ import com.deco2800.hcg.entities.turrets.WaterTurret;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.managers.WeatherManager;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.worlds.World;
 
-public class TurretTest {
+public class TurretTest extends BaseTest {
 
 	private GameManager gm;
 
 	private StopwatchManager sw;
-	private TimeManager tm;
 	private Corpse corpse;
 	private AbstractTurret turret;
 	private Enemy enemy;
@@ -53,13 +54,14 @@ public class TurretTest {
 	private final static int ENEMY_Y = 5;
 	private final static int PLAYER_X = 5;
 	private final static int PLAYER_Y = 6;
-	private final static float EXP_CHANGE = 0.3f;
+	private final static float EXP_CHANGE = 0.4f;
 
 	private static Map<Class<? extends AbstractTurret>, String> textures;
 
 	private void setupGM() {
 		gm = GameManager.get();
 		gm.setWorld(new World());
+		gm.getWorld().setWeather(Weathers.NONE);
 
 		setupTextures();
 	}
@@ -84,7 +86,6 @@ public class TurretTest {
 	private void setupSunflowerTest() {
 		setupGM();
 		sw = (StopwatchManager) gm.getManager(StopwatchManager.class);
-		tm = (TimeManager) gm.getManager(TimeManager.class);
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new SunflowerTurret(corpse);
@@ -142,7 +143,6 @@ public class TurretTest {
 		setupGM();
 
 		sw = (StopwatchManager) gm.getManager(StopwatchManager.class);
-		tm = (TimeManager) gm.getManager(TimeManager.class);
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new FireTurret(corpse);
@@ -188,13 +188,12 @@ public class TurretTest {
 		setupGM();
 
 		sw = (StopwatchManager) gm.getManager(StopwatchManager.class);
-		tm = (TimeManager) gm.getManager(TimeManager.class);
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new IceTurret(corpse);
 
 		enemy = new Squirrel(ENEMY_X, ENEMY_Y, 0, 0); // to test speed change
-		enemy.setSpeed(0f);
+		enemy.setSpeed(1f);
 		enemyFar = new Squirrel(ENEMY_2_X, ENEMY_Y, 0, 1);
 		enemyFar.setSpeed(1f);
 		gm.getWorld().addEntity(enemy);
@@ -226,7 +225,6 @@ public class TurretTest {
 		setupGM();
 
 		sw = (StopwatchManager) gm.getManager(StopwatchManager.class);
-		tm = (TimeManager) gm.getManager(TimeManager.class);
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new ExplosiveTurret(corpse);
@@ -339,7 +337,6 @@ public class TurretTest {
 		setupGM();
 
 		sw = (StopwatchManager) gm.getManager(StopwatchManager.class);
-		tm = (TimeManager) gm.getManager(TimeManager.class);
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new GrassTurret(corpse);
@@ -369,7 +366,6 @@ public class TurretTest {
 		setupGM();
 
 		sw = (StopwatchManager) gm.getManager(StopwatchManager.class);
-		tm = (TimeManager) gm.getManager(TimeManager.class);
 		corpse = new BasicCorpse(CORPSE_X, CORPSE_Y, 0);
 		gm.getWorld().addEntity(corpse);
 		turret = new WaterTurret(corpse);

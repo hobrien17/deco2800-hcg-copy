@@ -1,6 +1,5 @@
 package com.deco2800.hcg.weapons;
 
-import java.util.Random;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
 
@@ -29,6 +28,13 @@ public class Grenadelauncher extends Weapon implements Tickable {
             int cooldown) {
         super(posX, posY, posZ, xLength, yLength, zLength, weaponType, user, radius,
                 texture, cooldown);
+    }
+    
+    @Override
+    protected void playFireSound() {
+        String soundName = "gun-grenadelauncher-shoot";
+        soundManager.stopSound(soundName);
+        soundManager.playSound(soundName);
     }
     
     @Override

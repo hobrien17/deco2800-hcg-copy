@@ -19,11 +19,11 @@ public class WorldStackEntity extends Actor {
         GameManager gameManager = GameManager.get();
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         worldStackBackground = textureManager.getTexture("ws_purp_bg");
-     // Grab the current viewport dimensions
     }
 
     @Override
     public void draw(Batch batch, float alpha){
+    	// Grab the current viewport dimensions
     	int viewPortX = Gdx.graphics.getWidth();
         int viewPortY = Gdx.graphics.getHeight();
         batch.draw(worldStackBackground, 0, 0, viewPortX, viewPortY);

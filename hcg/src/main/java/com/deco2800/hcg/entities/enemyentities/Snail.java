@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.enemyentities;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -21,7 +22,7 @@ public class Snail extends Enemy implements Tickable {
      */
     public Snail(float posX, float posY, float posZ, int id) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
-        //this.setTexture("snail"); - TO DO: add the right texture
+        this.setTexture("snail");
         this.level = 1;
         newPos.setX(posX);
         newPos.setY(posY);
@@ -44,6 +45,18 @@ public class Snail extends Enemy implements Tickable {
 
     }
 
+    @Override
+    public void setupLoot() {
+        lootRarity = new HashMap<>();
+
+        lootRarity.put(new LootWrapper("grass_seed"), 1.0);
+
+        checkLootRarity();
+    }
+
+    /**
+     * Sets the tile at the Snail's previous position to be a poison tile.
+     */
     public void setPoisonTrail() {
         // get texture manager
         TextureManager textureManager = (TextureManager) GameManager.get().getManager(TextureManager.class);
@@ -53,6 +66,11 @@ public class Snail extends Enemy implements Tickable {
                 textureManager.getTexture("poisontile"),
                 (TiledMapTileLayer) GameManager.get().getWorld().getMapLayerWithProperty("name", "newSludge"));
     }
+
+    /**
+     * On Tick handler
+     * @param gameTickCount Current game tick
+     */
     @Override
     public void onTick(long gameTickCount) {
         // status should always be 1
@@ -63,14 +81,5 @@ public class Snail extends Enemy implements Tickable {
         // Apply any effects that exist on the entity
         myEffects.apply();
         
-    }
-
-    @Override
-    public void setupLoot() {
-        lootRarity = new HashMap<>();
-
-        lootRarity.put("grass_seed", 1.0);
-
-        checkLootRarity();
     }
 }

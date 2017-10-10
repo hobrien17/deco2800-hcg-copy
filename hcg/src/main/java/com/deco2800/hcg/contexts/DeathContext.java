@@ -53,8 +53,6 @@ public class DeathContext extends UIContext {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                playerManager.removeCurrentPlayer();
-                // TODO: actually end the game
                 for (int i = 0; i < 2; i++) {
                     contextManager.popContext();
                 }

@@ -184,7 +184,7 @@ public class WorldTest extends World{
   @Test
   public void testDeselectAll() {
     
-    World world = new World(null);
+    World world = new World();
     Tower tower = new Tower(0, 0, 0);
 
     world.addEntity(tower);

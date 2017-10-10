@@ -22,7 +22,9 @@ public class InputMessage extends Message {
 	private long tick;
 	private int[] args;
 	
-	public InputMessage() {}
+	public InputMessage() {
+		//deliberately empty
+	}
 	
 	public InputMessage(long tick, int[] args) {
 		super(MessageType.INPUT);
