@@ -234,6 +234,10 @@ public class TextureManager extends Manager {
 			textureMap.put("fertiliser_btn", new Texture("resources/ui/radial_menu/fertiliser.png"));
 			textureMap.put("menuClose", new Texture("resources/ui/radial_menu/menu_close.png"));
 			textureMap.put("radialOutline", new Texture("resources/ui/radial_menu/radialOutline.png"));
+			textureMap.put("seedSelect", new Texture("resources/ui/radial_menu/seed_select.png"));
+			textureMap.put("consumables", new Texture("resources/ui/radial_menu/consumables.png"));
+			textureMap.put("weapsLeft", new Texture("resources/ui/radial_menu/weapsLeft.png"));
+			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapsRight.png"));
 
 			//Perks
 			textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
