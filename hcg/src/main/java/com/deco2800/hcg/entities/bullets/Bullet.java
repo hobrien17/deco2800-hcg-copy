@@ -197,10 +197,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 					// Temporary increase of xp for all enemies killed
 					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
-					if (user instanceof Player) {
-						Player playerUser = (Player) user;
-						playerUser.killLogAdd(target.getID());
-					}
 				} else {
 					// Temporary increase of xp for all enemies killed
 					playerManager.getPlayer().gainXp(50);
