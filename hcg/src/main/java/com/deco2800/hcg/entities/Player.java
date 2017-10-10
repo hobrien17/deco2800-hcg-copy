@@ -27,6 +27,7 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -59,6 +60,7 @@ public class Player extends Character implements Tickable {
 	private PlayerInputManager playerInputManager;
 	private PlayerManager playerManager;
 	private ConversationManager conversationManager;
+	private StopwatchManager stopwatchManager;
 
 	private boolean collided;
 	private boolean onExit = false;
@@ -119,6 +121,9 @@ public class Player extends Character implements Tickable {
 		this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
 		this.conversationManager = new ConversationManager();
+
+		this.stopwatchManager = (StopwatchManager) gameManager.get().getManager(StopwatchManager.class);
+		this.stopwatchManager.resetStopwatch();
 
 		this.id = id;
 		if (id == 0) {
@@ -913,17 +918,25 @@ public class Player extends Character implements Tickable {
 		spriteName.append(direction);
 		if (this.speedX == 0 && this.speedY == 0) {
 			// Player is not moving
+            this.stopwatchManager.resetStopwatch();
 			spriteName.append("_stand");
 		} else {
 			// Player is moving
-			if (this.spriteFrame == 0 || this.spriteFrame == 2) {
-				spriteName.append("_stand");
-			} else if (this.spriteFrame == 1) {
-				spriteName.append("_move1");
-			} else if (this.spriteFrame == 3) {
-				spriteName.append("_move2");
+			if (this.stopwatchManager.getStatus()) {
+				this.stopwatchManager.resetStopwatch();
+				this.stopwatchManager.startTimer(1);
+
+				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
+					spriteName.append("_stand");
+				} else if (this.spriteFrame == 1) {
+					spriteName.append("_move1");
+				} else if (this.spriteFrame == 3) {
+					spriteName.append("_move2");
+				}
+				this.spriteFrame = ++this.spriteFrame % 4;
+			} else {
+				return;
 			}
-			this.spriteFrame = ++this.spriteFrame % 4;
 		}
 		this.setTexture(spriteName.toString());
 	}
