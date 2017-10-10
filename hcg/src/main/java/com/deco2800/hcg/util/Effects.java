@@ -1,5 +1,6 @@
 package com.deco2800.hcg.util;
 
+import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
@@ -230,6 +231,10 @@ public class Effects {
                         GameManager.get().getWorld().addEntity(corpse);
                     }
                     GameManager.get().getWorld().removeEntity(owner);
+                    AbstractEntity creator = effect.getCreator();
+                    if (creator != null && creator instanceof Character) {
+                        ((Character) creator).killAlert(owner);
+                    }
                 }
                 // Handle slows
                 thisCharacter.changeSpeed(effect.getSpeedModifier());
