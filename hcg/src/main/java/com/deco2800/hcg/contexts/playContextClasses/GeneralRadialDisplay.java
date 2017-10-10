@@ -25,6 +25,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.WorldUtil;
 
 
@@ -32,6 +33,7 @@ public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
     private TextureManager textureManager;
     private GameManager gameManager;
+    private SoundManager soundManager;
     
     private List<ImageButton> buttons;
     private ImageButton closeButton;
@@ -66,6 +68,7 @@ public class GeneralRadialDisplay extends Group {
 		gameManager = GameManager.get();
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
+        soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         this.stage = stage;
 		
         setupSprites();
@@ -123,6 +126,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("sunflower", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantSound();
             	plant(new Seed(Seed.Type.SUNFLOWER));
                 display.remove();
             }
@@ -131,6 +135,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("water", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantLilySound();
             	plant(new Seed(Seed.Type.WATER));
                 display.remove();
             }
@@ -139,6 +144,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("ice", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantSound();
             	plant(new Seed(Seed.Type.ICE));
                 display.remove();
             }
@@ -147,7 +153,8 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("fire", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	plant(new Seed(Seed.Type.FIRE));
+				playPlantSound();
+				plant(new Seed(Seed.Type.FIRE));
                 display.remove();
             }
         });
@@ -155,6 +162,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("explosive", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantSound();
             	plant(new Seed(Seed.Type.EXPLOSIVE));
                 display.remove();
             }
@@ -163,6 +171,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("grass", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantSound();
             	plant(new Seed(Seed.Type.GRASS));
                 display.remove();
             }
@@ -285,4 +294,16 @@ public class GeneralRadialDisplay extends Group {
 		return (closestPot.isPresent() && !((Pot)closestPot.get()).isLocked()) || 
 				(closestCorpse.isPresent() && ((Corpse)closestCorpse.get()).isEmpty());
     }
+
+	protected void playPlantSound() {
+		String soundName = "plantingPot";
+		soundManager.stopSound(soundName);
+		soundManager.playSound(soundName);
+	}
+
+	protected void playPlantLilySound() {
+		String soundName = "plantingLily";
+		soundManager.stopSound(soundName);
+		soundManager.playSound(soundName);
+	}
 }
