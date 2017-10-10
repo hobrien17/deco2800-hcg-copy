@@ -5,10 +5,7 @@ import java.util.Random;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.managers.ConversationManager;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
@@ -35,10 +32,10 @@ public class QuestNPC extends NPC {
 	private Boolean astarDebug = true;
 
 	private ConversationManager conversationManager;
-	private TimeManager timemanager = (TimeManager) GameManager.get()
-			.getManager(TimeManager.class);
 	private PlayerManager playerManager = (PlayerManager) GameManager.get()
 			.getManager(PlayerManager.class);
+	private NetworkManager networkManager = (NetworkManager) GameManager.get()
+			.getManager(NetworkManager.class);
 
 	/**
 	 * Constructs a new Quest NPC
@@ -180,11 +177,9 @@ public class QuestNPC extends NPC {
 
 		// Movement Completed (most likely)
 		if (path != null && path.isEmpty()) {
-			Random random = new Random();
-
-			float newGoalX = (random.nextFloat() - 0.5f) * this.boundaryX
+			float newGoalX = ((float) (networkManager.getNextRandomInt(1000)) / 1000.0f - 0.5f) * this.boundaryX
 					+ this.startX;
-			float newGoalY = (random.nextFloat() - 0.5f) * this.boundaryY
+			float newGoalY = ((float) (networkManager.getNextRandomInt(1000)) / 1000.0f - 0.5f) * this.boundaryY
 					+ this.startY;
 
 			this.setGoal(newGoalX, newGoalY);
