@@ -33,8 +33,8 @@ public class ServerBrowserContext extends UIContext {
     private Image separator2;
     private ScrollPane serverListPane;
     private List<String> serverList;
-    private String servers[];
-    private String refreshedServers[];
+    private String[] servers;
+    private String[] refreshedServers;
     private Dialog enterServer;
     private TextButton enterServerAdd;
     private TextButton enterServerExit;
