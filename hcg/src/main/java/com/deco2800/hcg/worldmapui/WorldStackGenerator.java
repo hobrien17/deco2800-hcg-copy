@@ -11,7 +11,7 @@ import com.deco2800.hcg.entities.worldmap.WorldStack;
  * @author Ivo
  */
 public class WorldStackGenerator {
-	private final int NUMBER_OF_WORLDS = 3;
+	private static final int NUMBER_OF_WORLDS = 3;
 	
 	private MapGenerator mapGenerator;
 	

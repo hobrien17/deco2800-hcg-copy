@@ -14,7 +14,7 @@ import com.deco2800.hcg.managers.GameManager;
 public class Explosion extends AbstractEntity implements Tickable {
 	
 	private float change;
-	private final static float MOD = 0.015f;
+	private static final float MOD = 0.015f;
 	
 	/**
 	 * Creates a new explosion at the given co-ordinates

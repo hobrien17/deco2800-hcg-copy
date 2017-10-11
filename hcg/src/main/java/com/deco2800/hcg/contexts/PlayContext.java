@@ -54,7 +54,7 @@ import com.deco2800.hcg.renderers.Renderer;
  */
 public class PlayContext extends Context {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
 
     // Managers used by the game
     private GameManager gameManager;
@@ -161,7 +161,7 @@ public class PlayContext extends Context {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Ensures no duplicate players, please don't delete
-                playerManager.removeCurrentPlayer();
+                playerManager.despawnPlayers();
 
             	// clear old observers (mushroom turret for example)
                 StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
