@@ -1,7 +1,5 @@
 package com.deco2800.hcg.contexts;
 
-import java.util.Arrays;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,8 +7,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -25,7 +29,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.contexts.playContextClasses.ChatStack;
 import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
-import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
@@ -46,7 +49,7 @@ import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-
+import com.deco2800.hcg.shading.ShaderState;
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be
@@ -91,7 +94,7 @@ public class PlayContext extends Context {
     private NetworkManager networkManager;
     private ClockDisplay clockDisplay;
     private ChatStack chatStack;
-    private GeneralRadialDisplay radialDisplay;
+    private RadialDisplay radialDisplay;
 
     private Window window;
     private Window plantWindow;
@@ -129,16 +132,19 @@ public class PlayContext extends Context {
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
-        String[] seeds = {"sunflower", "fire", "explosive", "ice", "water", "grass"};
-        radialDisplay = new GeneralRadialDisplay(stage, Arrays.asList(seeds));
+        radialDisplay = new RadialDisplay(stage);
         createExitWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
         plantWindow = new PlantWindow(skin);
         chatStack = new ChatStack(stage);
 
-        stage.addActor(chatStack);
-        chatStack.setVisible(false);
+        /* Add ParticleEffectActor that controls weather. */
+        stage.addActor(weatherManager.getActor());
+
+        if (networkManager.isInitialised()) {
+            stage.addActor(chatStack);
+        }
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
@@ -147,38 +153,18 @@ public class PlayContext extends Context {
 
         /* Add a quit button to the menu */
         Button button = new TextButton("Quit", skin);
-        Button end = new TextButton("Force quit", skin);
-        
-        end.addListener(new ChangeListener() {
-        	@Override
-        	public void changed(ChangeEvent event, Actor actor) {
-        		throw new NullPointerException("This is not a bug - simply a crude way of forcing the game to end");
-        	}
-        });
 
         /* Add a programmatic listener to the quit button */
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //Ensures no duplicate players, please don't delete
-                playerManager.despawnPlayers();
-
-            	// clear old observers (mushroom turret for example)
-                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-                manager.deleteObservers();
-
-                // stop the old weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                playerManager.removeCurrentPlayer();
                 contextManager.popContext();
             }
         });
 
-        /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
-
         /* Add all buttons to the menu */
         window.add(button);
-        window.add(end);
         window.pack();
         window.setMovable(false); // So it doesn't fly around the screen
 
@@ -304,6 +290,7 @@ public class PlayContext extends Context {
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
         radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        weatherManager.resize();
     }
 
     /**
@@ -361,17 +348,19 @@ public class PlayContext extends Context {
             Item item = new HealthPotion(100);
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
             gameManager.getWorld().addEntity(entity);
-		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
-			radialDisplay.addRadialMenu(stage);
-		} else if (keycode == Input.Keys.T) {
-			chatStack.setVisible(!chatStack.isVisible());
-		}
-	}
+        } else if(keycode == Input.Keys.B) {
+            if(RadialDisplay.plantableNearby()) {
+                radialDisplay.addRadialMenu(stage);
+            }
+        }
+    }
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
         Button yesButton = new TextButton("Yes", skin);
         yesButton.pad(5, 10, 5, 10);
+        Button noButton = new TextButton("No", skin);
+        noButton.pad(5, 10, 5, 10);
 
         /* Add a programmatic listener to the buttons */
         yesButton.addListener(new ChangeListener() {
@@ -396,7 +385,15 @@ public class PlayContext extends Context {
             }
         });
 
+        noButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                exitWindow.remove();
+            }
+        });
+
         exitWindow.add(yesButton);
+        exitWindow.add(noButton);
         exitWindow.pack();
         exitWindow.setMovable(false); // So it doesn't fly around the screen
         exitWindow.setWidth(150);
