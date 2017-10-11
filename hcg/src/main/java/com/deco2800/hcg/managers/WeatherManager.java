@@ -114,7 +114,7 @@ public class WeatherManager extends Manager {
 			break;
 		}
 		
-		soundManager.loopSound(enumToSoundFile(weatherType));
+		soundManager.ambientLoopSound(enumToSoundFile(weatherType));
 		onEffects.add(weatherType);
 	}
 

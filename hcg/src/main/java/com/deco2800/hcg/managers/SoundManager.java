@@ -3,11 +3,18 @@ package com.deco2800.hcg.managers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.TimeUtils;
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * SoundManager Required to play sounds in the game engine.
@@ -55,7 +62,8 @@ public class SoundManager extends Manager {
 			soundMap.put("weatherWind", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherDrought", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/rain-ambient-hardsurface-shortloop.wav")));
-
+			soundMap.put("weatherStormSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree1.wav")));
+			
 			// For gardening
 			soundMap.put("plantingPot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/planting_in_soil_pot.wav")));
 			soundMap.put("bugSpray", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/bugspray.wav")));
@@ -110,6 +118,41 @@ public class SoundManager extends Manager {
 			sound.loop(1f);
 		} else {
 			LOGGER.info(NO_REF + soundString);
+		}
+	}
+	
+	/**
+	 * special loop sound player for weather effects
+	 */
+	public void ambientLoopSound(String soundString) {
+		Sound sound = soundMap.get(soundString);
+		Sound sting = soundMap.get("weatherStormSting");
+		if (sound != null) {
+			LOGGER.info("Playing sound effect, looping : " + soundString);
+			sound.loop(1f);
+
+			Runnable stingSound = new Runnable() {
+			    public void run() {
+			        randomPlaySound(sting);
+			    }
+			};
+
+			ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+			executor.scheduleAtFixedRate(stingSound, 0, 4, TimeUnit.SECONDS);
+
+			
+		} else {
+			LOGGER.info(NO_REF + soundString);
+		}
+	}
+	
+	/*
+	 *  DO THIS 
+	 */
+	private void randomPlaySound(Sound sound) {
+		double random = Math.random();
+		if (random > 0.5) {
+			sound.play();
 		}
 	}
 
