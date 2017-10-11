@@ -25,7 +25,8 @@ public class SoundManager extends Manager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoundManager.class);
 	private Map<String, Sound> soundMap = new HashMap<String, Sound>();
-
+	ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+	
 	// String Constants
 	private static final String NO_REF = "No reference to sound effect: ";
 	/**
@@ -62,7 +63,7 @@ public class SoundManager extends Manager {
 			soundMap.put("weatherWind", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherDrought", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/rain-ambient-hardsurface-shortloop.wav")));
-			soundMap.put("weatherStormSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree1.wav")));
+			soundMap.put("weatherStormSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree2.wav")));
 			
 			// For gardening
 			soundMap.put("plantingPot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/planting_in_soil_pot.wav")));
@@ -109,6 +110,13 @@ public class SoundManager extends Manager {
 	}
 
 	/**
+	 * Stops playing all instances of this sound.
+	 */
+	public void resetLoopedSound() {
+		executor.shutdown();
+	}
+	
+	/**
 	 * continue playing sound is a loop
 	 */
 	public void loopSound(String soundString) {
@@ -137,8 +145,8 @@ public class SoundManager extends Manager {
 			    }
 			};
 
-			ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 			executor.scheduleAtFixedRate(stingSound, 0, 4, TimeUnit.SECONDS);
+			
 
 			
 		} else {
