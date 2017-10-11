@@ -104,7 +104,7 @@ public class ChatStack extends Stack {
 				if (chatString.trim().startsWith("/")) {
 					// split chat string into arguments, collapsing all
 					// whitespace
-					String args[] = chatString.trim().substring(1)
+					String[] args = chatString.trim().substring(1)
 							.replaceAll("\\s+", " ").split(" ");
 					String commandMessage = commandManager.runCommand(args);
 					chatTextArea.appendText(commandMessage + "\n");

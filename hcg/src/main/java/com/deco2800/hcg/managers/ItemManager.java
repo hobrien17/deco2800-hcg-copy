@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.entities.garden_entities.seeds.*;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.stackable.HealthPotion;
 
 /**
  * An class that creates new items based on the inputed parameters
@@ -34,6 +35,8 @@ public class ItemManager extends Manager {
         	 return new Seed(Seed.Type.ICE);
         } else if (name == "water_seed") {
         	 return new Seed(Seed.Type.WATER);
+        } else if (name == "health_potion") {
+        	return new HealthPotion(10);
         }
 
         LOGGER.warn("Unable to find given class, returning null");

@@ -4,10 +4,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.garden_entities.plants.Lootable;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.lootable.LootWrapper;
+import com.deco2800.hcg.items.lootable.Lootable;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effects;
@@ -16,6 +16,7 @@ import com.deco2800.hcg.worlds.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public abstract class Enemy extends Character implements Lootable {
     // Current status of enemy. 1 : New Born, 2 : Chasing 3 : Annoyed
     protected int status;
     protected int id;
-    protected transient Map<String, Double> lootRarity;
+    protected transient Map<LootWrapper, Double> lootRarity;
     protected float speedX;
     protected float speedY;
     protected float randomX;
@@ -168,34 +169,28 @@ public abstract class Enemy extends Character implements Lootable {
     }
 
     @Override
-    public Map<String, Double> getRarity() {
+    public Map<LootWrapper, Double> getRarity() {
         return lootRarity;
     }
 
-    /**
-     * Returns a list of new loot items where 0 <= length(\result) <=
-     * length(this.getLoot()) Loot may vary based on rarity and other factors
-     * Possible to return an empty array
-     * <p>
-     * Currently only supports lists of 1 item
-     *
-     * @return A list of items
-     */
     @Override
-    public Item[] loot() {
-        Item[] arr = new Item[1];
-        arr[0] = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(this.randItem());
-
-        return arr;
+    public List<Item> getLoot() {
+    	List<Item> result = new ArrayList<>();
+    	result.add(randItem().getItem());
+        return result;
     }
 
-    /**
-     * Gets a list of all possible loot dropped by this plant
-     *
-     * @return An array of all possible loot
-     */
-    public String[] getLoot() {
-        return lootRarity.keySet().toArray(new String[lootRarity.size()]);
+    @Override
+	public List<Item> getAllLoot() {
+		List<Item> items = new ArrayList<>(lootRarity.size());
+		for(LootWrapper wrapper : lootRarity.keySet().toArray(new LootWrapper[lootRarity.size()])) {
+			items.add(wrapper.getItem());
+		}
+		return items;
+	}
+    
+    public void loot() {
+    	//TODO implement this
     }
 
     /**
@@ -204,23 +199,19 @@ public abstract class Enemy extends Character implements Lootable {
     abstract void setupLoot();
     //Use this in special enemy classes to set up drops
 
-    /**
-     * Generates a random item based on the loot rarity
-     *
-     * @return A random item string in the plant's loot map
-     */
-    public String randItem() {
-        Double prob = Math.random();
-        Double total = 0.0;
-        for (Map.Entry<String, Double> entry : lootRarity.entrySet()) {
-            total += entry.getValue();
-            if (total > prob) {
-                return entry.getKey();
-            }
-        }
-        LOGGER.warn("No item has been selected, returning null");
-        return null;
-    }
+    @Override
+	public LootWrapper randItem() {
+		Double prob = Math.random();
+		Double total = 0.0;
+		for (Map.Entry<LootWrapper, Double> entry : lootRarity.entrySet()) {
+			total += entry.getValue();
+			if (total > prob) {
+				return entry.getKey();
+			}
+		}
+		LOGGER.warn("No item has been selected, returning null");
+		return null;
+	}
 
     /**
      * Checks that the loot rarity is valid
@@ -361,7 +352,10 @@ public abstract class Enemy extends Character implements Lootable {
         //Get direction of next position. Randomly be chosen between 0 and 360.
         radius = Math.abs(random.nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
-        distance = Math.abs(random.nextFloat()) * this.level * 3;
+        distance = Math.abs(random.nextFloat()) * this.level * 5;
+        if (distance < 3){
+            distance += 3;
+        }
         nextPosX = (float) (currPosX + distance * cos(radius));
         nextPosY = (float) (currPosY + distance * sin(radius));
         tempX = nextPosX;

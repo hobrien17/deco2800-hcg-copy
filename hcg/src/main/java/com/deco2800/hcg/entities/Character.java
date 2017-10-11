@@ -570,6 +570,15 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
         return GameManager.get().getCurrentNode().getNodeID();
     }
 
+    /**
+     * Triggered when an AbstractEntity has died as the result of an effect caused by this character.
+     *
+     * @param victim the character that has died.
+     */
+    public void killAlert(AbstractEntity victim) {
+        // This character has killed some other character.
+    }
+
     @Override
     public void giveEffect(Effect effect) {
         myEffects.addEffect(effect);
