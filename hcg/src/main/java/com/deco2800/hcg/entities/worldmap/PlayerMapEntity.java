@@ -16,7 +16,7 @@ public class PlayerMapEntity extends Actor {
     public PlayerMapEntity() {
         gameManager = GameManager.get();
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
-        playerTexture = textureManager.getTexture("player_0_stand");
+        playerTexture = textureManager.getTexture("player_map");
 
     }
 
@@ -73,9 +73,4 @@ public class PlayerMapEntity extends Actor {
     public Texture getPlayerTexture() {
         return playerTexture;
     }
-
-
-
-
-
 }
