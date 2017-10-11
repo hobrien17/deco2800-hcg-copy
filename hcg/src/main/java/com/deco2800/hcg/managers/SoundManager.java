@@ -126,7 +126,7 @@ public class SoundManager extends Manager {
 	 */
 	public void ambientLoopSound(String soundString) {
 		Sound sound = soundMap.get(soundString);
-		Sound sting = soundMap.get("weatherStormSting");
+		Sound sting = soundMap.get("weatherStormSting"); //change this to unique sounds
 		if (sound != null) {
 			LOGGER.info("Playing sound effect, looping : " + soundString);
 			sound.loop(1f);
@@ -147,12 +147,14 @@ public class SoundManager extends Manager {
 	}
 	
 	/*
-	 *  DO THIS 
+	 *  Helper method that provides a 50:50 chance to play a sound at a 
+	 *  random interval
+	 *  
 	 */
 	private void randomPlaySound(Sound sound) {
 		double random = Math.random();
-		if (random > 0.5) {
-			sound.play();
+		if (random > 0.65) {
+			sound.play((float)random); //varies intensity
 		}
 	}
 
