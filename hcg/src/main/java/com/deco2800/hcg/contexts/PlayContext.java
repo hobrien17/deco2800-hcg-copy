@@ -57,7 +57,7 @@ import com.deco2800.hcg.shading.ShaderState;
  */
 public class PlayContext extends Context {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
 
     // Managers used by the game
     private GameManager gameManager;
