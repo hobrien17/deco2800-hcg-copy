@@ -7,6 +7,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.util.WorldUtil;
 
 /**
@@ -18,7 +19,12 @@ import com.deco2800.hcg.util.WorldUtil;
 public class WaterTurret extends AbstractTurret {
 	
 	private int seconds;
-	private static final int DIE = 30;
+	private int die;
+	private int regen;
+	private static final int NORMAL_DIE = 30;
+	private static final int REDUCED_DIE = 20;
+	private static final int NORMAL_REGEN = 1;
+	private static final int INCREASED_REGEN = 2;
 	private static final int RANGE = 3;
 
 	/**
@@ -29,6 +35,18 @@ public class WaterTurret extends AbstractTurret {
 	 */
 	public WaterTurret(Corpse master) {
 		super(master, "Lily");
+		seconds = 0;
+		
+		if(GameManager.get().getWorld().getWeatherType().equals(Weathers.RAIN)) {
+			die = REDUCED_DIE;
+			regen = INCREASED_REGEN;
+		} else if(GameManager.get().getWorld().getWeatherType().equals(Weathers.DROUGHT)) {
+			die = REDUCED_DIE;
+			regen = NORMAL_REGEN;
+		} else {
+			die = NORMAL_DIE;
+			regen = NORMAL_REGEN;
+		}
 	}
 
 	/**
@@ -42,7 +60,7 @@ public class WaterTurret extends AbstractTurret {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		if(++seconds == DIE) {
+		if(++seconds == die) {
 			GameManager.get().getWorld().removeEntity(master);
 			o.deleteObserver(this);
 			return;
@@ -51,7 +69,7 @@ public class WaterTurret extends AbstractTurret {
 				RANGE, Player.class);
 		for (AbstractEntity entity : players) {
 			Player player = (Player)entity;
-			player.takeDamage(-1);
+			player.takeDamage(regen * -1);
 		}
 		
 

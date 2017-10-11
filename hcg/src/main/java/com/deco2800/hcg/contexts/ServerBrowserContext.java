@@ -33,8 +33,8 @@ public class ServerBrowserContext extends UIContext {
     private Image separator2;
     private ScrollPane serverListPane;
     private List<String> serverList;
-    private String servers[];
-    private String refreshedServers[];
+    private String[] servers;
+    private String[] refreshedServers;
     private Dialog enterServer;
     private TextButton enterServerAdd;
     private TextButton enterServerExit;
@@ -172,16 +172,16 @@ public class ServerBrowserContext extends UIContext {
             public void changed(ChangeEvent event, Actor actor) {
                 String address;
                 address = serverIPTextfield.getText(); //recommended set up public method in networkManager
-                serverIPTextfield.setText("");
-                if(address.trim().length() == 0 || address == "") {
-                    serverStatus.setText("Invalid Server IP");
-                } else {
-                    enterServer.hide();
-                    networkManager.init(false);
-                    networkManager.join(serverIPTextfield.getText());
-                }
-
-            }
+				serverIPTextfield.setText("");
+				if (address.trim().length() == 0 || address == "") {
+					serverStatus.setText("Invalid Server IP");
+					return;
+				}
+				
+				enterServer.hide();
+				networkManager.init(false);
+				networkManager.join(serverIPTextfield.getText());
+			}
         });
     }
 

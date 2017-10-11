@@ -26,10 +26,10 @@ public class Explosion extends AbstractEntity implements Tickable {
 	 * @param posZ
 	 * 			the z position of the explosion
 	 */
-	public Explosion(float posX, float posY, float posZ) {
+	public Explosion(float posX, float posY, float posZ, float change) {
 		super(posX, posY, posZ, 0, 0, 0, 0.01f, 0.01f, true);
 		this.setTexture("explosion");
-		change = 0.3f;
+		this.change = change;
 	}
 	
 	public float getRateOfChange() {

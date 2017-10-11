@@ -19,7 +19,7 @@ public class SunflowerSeed extends Bullet {
 
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 1, 0, 0, 1, 0, user));
 	}
 }
 

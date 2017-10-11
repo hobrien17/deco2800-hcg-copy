@@ -138,7 +138,7 @@ public class ShaderState {
     /**
      * Sets the contrast to resemble how gloomy/overcast the wetaher is
      *
-     * @param gloom
+     * @param contrast
      *          value from 0.0 to 1.0 as a percentage of overcast
      * @throws IllegalArgumentException
      */
@@ -147,5 +147,15 @@ public class ShaderState {
             throw new IllegalArgumentException();
         }
         this.overcast = contrast;
+    }
+
+    /** Sets the day night heat values for shader state
+     *
+     */
+    public void setValues(float contrast, float waves) {
+        setContrast(contrast);
+        this.dayHeat = waves;
+        this.nightHeat = waves;
+
     }
 }

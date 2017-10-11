@@ -1,7 +1,6 @@
 package com.deco2800.hcg.managers;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.worlds.World;
@@ -40,6 +39,22 @@ public class PlayerManager extends Manager {
     			world.addEntity(player);
     			world.addEntity(player.getEquippedWeapon());
     		}
+    }
+
+    /**
+     * Despawns players from the current world. Used for exiting levels.
+     */
+    public void despawnPlayers() {
+        World world = GameManager.get().getWorld();
+        for (Player player : players) {
+            // FIXME Players shouldn't spawn in the same place
+            //player.setPosX(world.getStartingPlayerX());
+            //player.setPosY(world.getStartingPlayerY());
+
+
+            world.removeEntity(player);
+            world.removeEntity(player.getEquippedWeapon());
+        }
     }
     
     /**

@@ -128,8 +128,10 @@ public class WeatherManager extends Manager {
 			break;
 		case DROUGHT:
 			setUp("2dDrought.p");
+			break;
 		case STORM:
 			setUp("2dStorm.p");
+			break;
 		}
 		
 		soundManager.loopSound(enumToSoundFile(weatherType));

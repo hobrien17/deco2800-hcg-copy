@@ -1,6 +1,7 @@
 package com.deco2800.hcg.worlds;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
@@ -23,11 +24,12 @@ import com.deco2800.hcg.entities.terrain_entities.Swing;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
+import com.deco2800.hcg.items.stackable.HealthPotion;
 
 public enum WorldEntities {
 
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
-    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL;
+    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM;
 
     /**
      * Return an instance of the entity at the given position and the selected
@@ -86,6 +88,8 @@ public enum WorldEntities {
                 return new PicketFenceNS(x, y, 0f);
             case CONCRETEWALL:
                 return new ConcreteWall(x, y, 0f);
+            case ITEM:
+            	return new ItemEntity(x, y, 0f, new HealthPotion(10));
             default:
                 return null;
         }

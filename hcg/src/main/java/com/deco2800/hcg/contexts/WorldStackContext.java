@@ -150,13 +150,14 @@ public class WorldStackContext extends UIContext {
 						worldEntry.setWorldTexture(textureManager.getTexture("ws_fungi_completed"));
 					}
 				}
+			} else if (worldEntry.getWorldMap().getWorldType() == 2) {
+				worldEntry.setWorldTexture(
+						textureManager.getTexture("ws_forest_locked"));
 			} else {
-				if(worldEntry.getWorldMap().getWorldType() == 2) {
-					worldEntry.setWorldTexture(textureManager.getTexture("ws_forest_locked"));
-				} else {
-					worldEntry.setWorldTexture(textureManager.getTexture("ws_fungi_locked"));
-				}
+				worldEntry.setWorldTexture(
+						textureManager.getTexture("ws_fungi_locked"));
 			}
+
 			stage.addActor(worldEntry);
 		}
 		stage.addActor(window);
@@ -167,14 +168,19 @@ public class WorldStackContext extends UIContext {
 	 */
 	private void updateUnlockedWorlds() {
 		for (WorldMap world : gameManager.getWorldStack().getWorldStack()) {
-			if (world.isCompleted()) {
-				for(WorldMap otherWorld : gameManager.getWorldStack().getWorldStack()) {
-					if(otherWorld.getWorldPosition() == (world.getWorldPosition() + 1) && !otherWorld.isUnlocked()) {
-						otherWorld.setUnlocked();
-						hiddenWorldMaps.remove(otherWorld);
-					}
+			if (!world.isCompleted()) {
+				continue;
+			}
+			
+			for (WorldMap otherWorld : gameManager.getWorldStack()
+					.getWorldStack()) {
+				if (otherWorld.getWorldPosition() == (world.getWorldPosition() + 1)
+						&& !otherWorld.isUnlocked()) {
+					otherWorld.setUnlocked();
+					hiddenWorldMaps.remove(otherWorld);
 				}
 			}
+
 		}
 	}
 

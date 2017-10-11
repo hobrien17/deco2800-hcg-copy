@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.*;
 import java.util.HashMap;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
  */
 public class Squirrel extends Enemy implements Tickable {
 
+	private int spriteCount;
 	/**
 	 * Constructor for the Squirrel class. Creates a new squirrel at the given
 	 * position.
@@ -20,8 +22,9 @@ public class Squirrel extends Enemy implements Tickable {
 	 */
 	public Squirrel(float posX, float posY, float posZ, int Id) {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, Id);
-		this.setTexture("squirrel");
+		this.setTexture("antSW");
 		this.level = 1;
+		this.spriteCount = 0;
 		this.enemyWeapon = new WeaponBuilder()
 				.setWeaponType(WeaponType.MACHINEGUN)
 				.setUser(this)
@@ -34,9 +37,47 @@ public class Squirrel extends Enemy implements Tickable {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put("gardening_seed", 1.0);
+		lootRarity.put(new LootWrapper("sunflower_seed"), 1.0);
 
 		checkLootRarity();
+	}
+
+	public void updateSprite() {
+		if (spriteCount%4 == 0) {
+			switch (this.direction) {
+				case 1:
+					if (this.getTexture() == "antE") {
+						this.setTexture("antE2");
+					} else {
+						this.setTexture("antE");
+					}
+					break;
+				case 2:
+					if (this.getTexture() == "antN") {
+						this.setTexture("antN2");
+					} else {
+						this.setTexture("antN");
+					}
+					break;
+				case 3:
+					if (this.getTexture() == "antW") {
+						this.setTexture("antW2");
+					} else {
+						this.setTexture("antW");
+					}
+					break;
+				case 4:
+					if (this.getTexture() == "antS") {
+						this.setTexture("antS2");
+					} else {
+						this.setTexture("antS");
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		spriteCount++;
 	}
 
 	/**
@@ -48,7 +89,9 @@ public class Squirrel extends Enemy implements Tickable {
 		if (this.getNumberPlayers() == 1) {
 			this.detectPlayer();//Change status if player detected.
 	        this.setNewPos();//Put new position into Box3D.
+			this.setDirection();
 			this.detectCollision();//Detect collision.
+			this.updateSprite();
 	        this.moveAction();//Move enemy to the position in Box3D.
 			// Apply any effects that exist on the entity
 			myEffects.apply();
@@ -58,7 +101,9 @@ public class Squirrel extends Enemy implements Tickable {
 			// Author - Elvin, Team 9
 			this.detectPlayers(); // Change status when closest player is detected.
 			this.setNewPosMultiplayer(); // Put new position into Box3D
+			this.setDirection();
 			this.detectCollision(); // Detect collisions.
+			this.updateSprite();
 			this.moveAction(); // Move enemy to the position in Box3D
 			myEffects.apply(); // Apply effects
 
