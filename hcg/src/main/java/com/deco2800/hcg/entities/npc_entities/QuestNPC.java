@@ -25,6 +25,7 @@ public class QuestNPC extends NPC {
 	private float goalY;
 	private int moveDirection; // defaults to 0
 	private float speed; // defaults to 1
+	private String texture;
 
 	private PathfindingThread pathfinder;
 	private Thread thread;
@@ -62,6 +63,7 @@ public class QuestNPC extends NPC {
 		this.moveDirection = 0;
 		this.speed = 0.02f;
 		this.conversationManager = new ConversationManager();
+		this.texture = texture;
 
 		this.setGoal(posX, posY);
 	}
@@ -214,6 +216,8 @@ public class QuestNPC extends NPC {
 
 			/* Apply these values to the entity */
 			if (!collided() && !detectPlayer()) {
+				this.setCompassTexture(deltaX, deltaY);
+
 				this.setPosX(newX);
 				this.setPosY(newY);
 			}
@@ -240,6 +244,51 @@ public class QuestNPC extends NPC {
 
 		thread = new Thread(pathfinder);
 		thread.start();
+	}
+
+	/**
+	 * Set the appropriate compass direction texture with respect to movement.
+	 * @param deltaX x-Direction value
+	 * @param deltaY y-Direction value
+	 */
+	private void setCompassTexture(float deltaX, float deltaY) {
+		double angle = Math.atan2(deltaY, deltaX) * 180 / 3.14159f;
+
+		//0 is SouthWest
+
+		if (angle >= -67.5f && angle <= -22.5f) {
+			//South
+			this.setTexture(this.texture + "_South");
+
+		} else if (angle >= 22.5f && angle < 67.5) {
+			//West
+			this.setTexture(this.texture + "_West");
+
+		} else if (angle >= 112.5f && angle <= 157.5f) {
+			//North
+			this.setTexture(this.texture + "_North");
+
+		} else if (angle >= -157.5f && angle <= -112.5f) {
+			//East
+			this.setTexture(this.texture + "_East");
+
+		} else if (angle >= 67.5f && angle <= 112.5f) {
+			//North West
+			this.setTexture(this.texture + "_NorthWest");
+
+		} else if (angle >= -22.5f && angle < 22.5f) {
+			//South West
+			this.setTexture(this.texture + "_SouthWest");
+
+		} else if (angle >= -112.5f && angle <= -67.5f) {
+			//South East
+			this.setTexture(this.texture + "_SouthEast");
+
+		} else if (angle >= 157.5f || angle <= -157.5f) {
+			//North East
+			this.setTexture(this.texture + "_NorthEast");
+
+		}
 	}
 
 }
