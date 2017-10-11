@@ -525,7 +525,7 @@ public class Player extends Character implements Tickable {
 			// damage player
 			if (layer.getProperties().get("damage") != null && damagetype > 0) {
 				myEffects.addEffect(new Effect("Damage", 10,
-						Integer.parseInt((String) layer.getProperties().get("damage")), 1, 0, 1, 0));
+						Integer.parseInt((String) layer.getProperties().get("damage")), 1, 0, 1, 0, null));
 			}
 			// log
 			LOGGER.info(this + " moving on terrain" + name + " withspeed multiplier of " + speed);

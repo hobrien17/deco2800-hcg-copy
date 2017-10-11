@@ -78,7 +78,9 @@ public class Message {
 	 * Processes the received information
 	 * @require <code>unpackData</code> must have been called first
 	 */
-	public void process() {throw new UnsupportedOperationException();}
+	public void process() {
+		// Do nothing
+	}
 	
 	/**
 	 * Gets message ID

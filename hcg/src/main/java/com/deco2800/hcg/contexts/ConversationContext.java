@@ -47,7 +47,7 @@ public class ConversationContext extends UIContext {
 		npcImage = new Image(textureManager.getTexture(npcFace));
 		nodeText = new Label("", skin);
 		npcName = new Label("Angela", skin);
-		
+
 		buttons = new HorizontalGroup();
 		buttons.space(30f);
 		
@@ -57,12 +57,12 @@ public class ConversationContext extends UIContext {
 		
 		table.row().spaceBottom(40);
 		table.add(npcImage);
-		table.row().padBottom(30);
+		table.row().padBottom(80);
 		table.add(npcName);
-		table.row().spaceTop(60);
+		table.row().spaceTop(180);
 		table.add(nodeText).padBottom(50);
 		table.row().space(50, 0, 50, 0);
-		table.add(buttons).padBottom(100);
+		table.add(buttons).padBottom(160);
 		stage.addActor(table);
 	}
 

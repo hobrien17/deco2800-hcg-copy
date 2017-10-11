@@ -177,8 +177,8 @@ public class TextureManager extends Manager {
 			textureMap.put("mushroom_tree_thin", new Texture("resources/terrain_objects/mushroom2.png"));
 
 			//NPCs
-			textureMap.put("character_1", new Texture("resources/sprites/npc/QuestRipped.png"));
-			textureMap.put("character_shop", new Texture("resources/sprites/npc/Shopkeeper.png"));
+			textureMap.put("character_1", new Texture("resources/sprites/npc/Quest_1_SouthEast.png"));
+			textureMap.put("character_shop", new Texture("resources/sprites/npc/Shopkeeper_1.png"));
 
 			//Players
 			textureMap.put("player_0_stand", new Texture("resources/sprites/player/player_0_stand.png"));
@@ -236,6 +236,10 @@ public class TextureManager extends Manager {
 			textureMap.put("fertiliser_btn", new Texture("resources/ui/radial_menu/fertiliser.png"));
 			textureMap.put("menuClose", new Texture("resources/ui/radial_menu/menu_close.png"));
 			textureMap.put("radialOutline", new Texture("resources/ui/radial_menu/radialOutline.png"));
+			textureMap.put("seedSelect", new Texture("resources/ui/radial_menu/seed_select.png"));
+			textureMap.put("consumables", new Texture("resources/ui/radial_menu/consumables.png"));
+			textureMap.put("weapsLeft", new Texture("resources/ui/radial_menu/weapons_left.png"));
+			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapons_right.png"));
 
 			//Perks
 			textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
