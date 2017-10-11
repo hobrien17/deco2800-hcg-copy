@@ -2,8 +2,6 @@ package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.deco2800.hcg.util.MathHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * An 'Observer' class to manage the game's internal system of time. Time is initialised to
@@ -29,9 +27,6 @@ public class TimeManager extends Manager implements TickableManager {
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	private boolean timePaused;
 	private boolean isNight;
-
-	static final Logger LOGGER =
-			LoggerFactory.getLogger(TimeManager.class);
 
 	/**
 	 * Constructor: Initializes day to 01/01/2047 and elapsed time to 0 on
