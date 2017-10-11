@@ -34,6 +34,7 @@ public class Hardcor3Gard3ning extends Game {
 	private StopwatchManager stopwatchManager;
 	private NetworkManager networkManager;
 	private CommandManager commandManager;
+	private WorldManager worldManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -65,9 +66,6 @@ public class Hardcor3Gard3ning extends Game {
 
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
-
-        LevelStore levels = new LevelStore();
-        ArrayList<Level> levelList = levels.getLevels();
         
         /* Create a plant manager. */
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
@@ -85,6 +83,9 @@ public class Hardcor3Gard3ning extends Game {
         /* Create a command manager */
         commandManager = (CommandManager) gameManager.getManager(CommandManager.class);
         
+        /* Create a world manager */
+        worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
+        
         // add echo command
         // note args[0] is the command name, not the first argument
         commandManager.registerCommand("echo", new CommandManager.Command() {
@@ -93,11 +94,8 @@ public class Hardcor3Gard3ning extends Game {
                 return args.length > 1 ? args[1] : "";
             }
         });
-
-        // Procedurally generate the world map and store it.
-        WorldStackGenerator worldStackGenerator = new WorldStackGenerator(levelList);
-        WorldStack worldStack = worldStackGenerator.generateWorldStack();
-        gameManager.setWorldStack(worldStack);
+        
+        worldManager.generateAndSetWorldStack();
         
         contextManager.pushContext(new MainMenuContext());
     }
