@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
+import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.managers.*;
@@ -49,6 +50,7 @@ public class WorldMapContext extends UIContext {
 	private TextureRegion lineTexture;
 	// used for demo purposes
 	private boolean showAllNodes;
+	private PlayerMapEntity playerMapEntity;
 
 
 	/**
@@ -98,7 +100,12 @@ public class WorldMapContext extends UIContext {
 			}
 			allNodes.add(nodeEntry);
 		}
-		
+
+		playerMapEntity = new PlayerMapEntity();
+		// set the playerMapEntity render position to be at the starting node;
+		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0));
+		playerMapEntity.updatePosByNodeEntity(entryMapNode);
+
 		menuStage.addActor(window);
 
 		quitButton.addListener(new ChangeListener() {
@@ -215,7 +222,9 @@ public class WorldMapContext extends UIContext {
                 // add the new weather effects
                 ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
                   setWeather(newWorld.getWeatherType());
-                
+
+                // set the PlayerMapEntity position
+				playerMapEntity.updatePosByNodeEntity(nodeEntity);
 				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
@@ -291,6 +300,11 @@ public class WorldMapContext extends UIContext {
 		batch.draw(node.getNodeTexture(), node.getXPos(), node.getYPos(), node.getWidth(), node.getHeight());
 	}
 
+	private void drawPlayer(SpriteBatch batch, PlayerMapEntity playerEntity) {
+		batch.draw(playerEntity.getPlayerTexture(), playerEntity.getXPos(), playerEntity.getYPos(),
+				playerEntity.getWidth(), playerEntity.getHeight());
+	}
+
 	/**
 	 * Creates separate render batches for the lines and pots, in order to get the layering done correctly.
 	 * @param delta the time step in between stage.act() calls.
@@ -300,6 +314,7 @@ public class WorldMapContext extends UIContext {
 		super.render(delta);
 		Batch lineBatch = new SpriteBatch();
 		SpriteBatch potBatch = new SpriteBatch();
+		SpriteBatch playerBatch = new SpriteBatch();
 
 		// Render all the lines first
 		lineBatch.begin();
@@ -323,9 +338,14 @@ public class WorldMapContext extends UIContext {
 		}
 		potBatch.end();
 
+		playerBatch.begin();
+		drawPlayer(playerBatch, playerMapEntity);
+		playerBatch.end();
+
 		// dispose of the batches to prevent memory leaks
 		lineBatch.dispose();
 		potBatch.dispose();
+		playerBatch.dispose();
 		menuStage.draw();
 	}
 	
