@@ -34,7 +34,7 @@ public final class NetworkManager extends Manager {
 	//       shouldn't be a big issue for the moment
 	private HashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
 	private HashMap<Integer, byte[]> sendQueue;
-	private HashMap<Integer, Long> peerTickCounts;
+	private long[] peerTickCounts;
 	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
 	private boolean host = false;
 	private boolean initialised = false;
@@ -58,7 +58,7 @@ public final class NetworkManager extends Manager {
 	public void init(boolean hostGame) {
 		sockets = new HashMap<>();
 		sendQueue = new HashMap<>();
-		peerTickCounts = new HashMap<>();
+		peerTickCounts = new long[MAX_PLAYERS];
 		processedIds = new ArrayList<>();
 		
 		gameManager = GameManager.get();
@@ -273,7 +273,9 @@ public final class NetworkManager extends Manager {
 		SocketAddress address = null;
 		try {
 			address = channel.receive(receiveBuffer);
-		} catch (IOException e) {}
+		} catch (IOException e) {
+			return;
+		}
 		if (address == null) {
 			// no message received
 			return;
@@ -319,13 +321,10 @@ public final class NetworkManager extends Manager {
 					case CHAT:
 						message = new ChatMessage();
 						break;
-				default:
-					throw new MessageFormatException();
+					default:
+						throw new MessageFormatException();
 				}
-
-				if (messageType == MessageType.ACK) {
-					return;
-				}
+				
 				// unpack message
 				message.unpackData(receiveBuffer);
 
@@ -336,42 +335,26 @@ public final class NetworkManager extends Manager {
 					processedIds.add(messageId);
 					// log
 					LOGGER.debug("RECEIVED: " + messageType.toString());
-
-					// acknowledge that we've received this
-					messageBuffer.clear();
-					// put header
-					messageBuffer.put(MESSAGE_HEADER);
-					// put id
-					messageBuffer.putInt(-1);
-					// put type
-					messageBuffer.put((byte) MessageType.ACK.ordinal());
-					// put number of fields
-					messageBuffer.put((byte) 0);
-					// put ACK id
-					messageBuffer.putInt(messageId);
-					// send ACK to peer
-					messageBuffer.flip();
-				} else {
-					// acknowledge that we've already received this
-					messageBuffer.clear();
-					// put header
-					messageBuffer.put(MESSAGE_HEADER);
-					// put id
-					messageBuffer.putInt(-1);
-					// put type
-					messageBuffer.put((byte) MessageType.ACK.ordinal());
-					// put number of fields
-					messageBuffer.put((byte) 0);
-					// put ACK id
-					messageBuffer.putInt(messageId);
-					// send ACK to peer
-					messageBuffer.flip();
 				}
+				
+				// acknowledge that we've already received this
+				messageBuffer.clear();
+				// put header
+				messageBuffer.put(MESSAGE_HEADER);
+				// put id
+				messageBuffer.putInt(-1);
+				// put type
+				messageBuffer.put((byte) MessageType.ACK.ordinal());
+				// put number of fields
+				messageBuffer.put((byte) 0);
+				// put ACK id
+				messageBuffer.putInt(messageId);
+				// send ACK to peer
+				messageBuffer.flip();
 				
 				try {
 					channel.send(messageBuffer, address);
-				} catch (IOException e) {
-				}
+				} catch (IOException e) {}
 			}
 		} catch (BufferOverflowException | BufferUnderflowException
 				| MessageFormatException e) {
