@@ -1,8 +1,9 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.deco2800.hcg.BaseTest;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.entities.garden_entities.plants.*;
@@ -22,6 +23,7 @@ public class PlantManagerTests extends BaseTest {
     private AbstractGardenPlant water;
     
     private PlantWindow window;
+    private Button windowSwitch;
 
     //Set up
     @Before
@@ -123,6 +125,7 @@ public class PlantManagerTests extends BaseTest {
     //Remove all plants
     @Test
     public void removeAllPlants() {
+        setupPlantWindow();
         plantManager.addPlants(ice);
         plantManager.addPlants(cactus);
         plantManager.addPlants(grass);
@@ -140,6 +143,7 @@ public class PlantManagerTests extends BaseTest {
     //Remove all plants when no plant in manager and add one plant into manager
     @Test
     public void removeAllPlantsTwo() {
+        setupPlantWindow();
         plantManager.removeAll();
         ArrayList<AbstractGardenPlant> expected = new ArrayList<>();
 
@@ -156,6 +160,7 @@ public class PlantManagerTests extends BaseTest {
     //Test all function together
     @Test
     public void complex() {
+        setupPlantWindow();
         plantManager.addPlants(inferno);
         plantManager.addPlants(sunFlower);
         plantManager.addPlants(water);
@@ -192,9 +197,17 @@ public class PlantManagerTests extends BaseTest {
     }
     
     private void setupPlantWindow() {
-    	Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+    	Skin skin = new Skin(Gdx.files.internal("resources/ui/plant_ui/flat-earth-ui.json"));
+        skin.add("cactus",new Texture("resources/ui/plant_ui/cactus.png"));
+        skin.add("grass",new Texture("resources/ui/plant_ui/grass.png"));
+        skin.add("ice",new Texture("resources/ui/plant_ui/ice.png"));
+        skin.add("inferno",new Texture("resources/ui/plant_ui/inferno.png"));
+        skin.add("lily",new Texture("resources/ui/plant_ui/lily.png"));
+        skin.add("sunflower",new Texture("resources/ui/plant_ui/sunflower.png"));
     	window = new PlantWindow(skin);
+    	windowSwitch = new Button();
     	plantManager.setPlantWindow(window, skin);
+    	plantManager.setPlantButton(windowSwitch);
     }
     
     @Test
@@ -210,7 +223,7 @@ public class PlantManagerTests extends BaseTest {
     public void testUpdateEmptyLabel() {
     	setupPlantWindow();
     	
-    	String expectedFirst = "Window$1\n|  Label: Plants";
+    	String expectedFirst = "Window$1\n|  Label: Plants\n|  Button";
     	String expectedSecond = "Table\n|  Label: No plants planted";
     	
     	plantManager.updateLabel();
@@ -224,7 +237,7 @@ public class PlantManagerTests extends BaseTest {
     public void testUpdateNonEmptyLabel() {
     	setupPlantWindow();
     	
-    	String expectedFirst = "Window$1\n|  Label: Plants";
+    	String expectedFirst = "Window$1\n|  Label: Plants\n|  Button";
     	
     	plantManager.addPlants(ice);
     	plantManager.updateLabel();
@@ -233,9 +246,9 @@ public class PlantManagerTests extends BaseTest {
     			window.getChildren().get(0).toString());
     	String result = window.getChildren().get(2).toString();
     	Assert.assertTrue("Window contents should contain plant name", 
-    			result.contains(ice.getName()));
+    			result.contains(ice.getName().toUpperCase()));
     	Assert.assertTrue("Window contents should contain stage of growth", 
-    			result.toString().contains("Stage: Sprout" ));
+    			result.contains("Stage: Sprout" ));
     	Assert.assertTrue("Window contents should contain X and Y co-ordinates", 
     			result.contains(String.format("X:%d   Y:%d", 
     					(int)ice.getPot().getPosX(), (int)ice.getPot().getPosY())));
@@ -245,7 +258,7 @@ public class PlantManagerTests extends BaseTest {
     public void testMultipleLabels() {
     	setupPlantWindow();
     	
-    	String expectedFirst = "Window$1\n|  Label: Plants";
+    	String expectedFirst = "Window$1\n|  Label: Plants\n|  Button";
     	
     	plantManager.addPlants(ice);
     	plantManager.addPlants(inferno);
@@ -255,9 +268,9 @@ public class PlantManagerTests extends BaseTest {
     	Assert.assertEquals("Window title is incorrect", expectedFirst, 
     			window.getChildren().get(0).toString());
     	String result = window.getChildren().get(2).toString();
-    	Assert.assertTrue("Window contents should contain plant name", result.contains(ice.getName()));
-    	Assert.assertTrue("Window contents should contain plant name", result.contains(inferno.getName()));
-    	Assert.assertTrue("Window contents should contain plant name", result.contains(cactus.getName()));
+    	Assert.assertTrue("Window contents should contain plant name", result.contains(ice.getName().toUpperCase()));
+    	Assert.assertTrue("Window contents should contain plant name", result.contains(inferno.getName().toUpperCase()));
+    	Assert.assertTrue("Window contents should contain plant name", result.contains(cactus.getName().toUpperCase()));
     	
     	Assert.assertTrue("Window contents should contain correct stage of growth", result.contains("Stage: Sprout"));
     	Assert.assertFalse("Window contents should contain correct stage of growth", result.contains("Stage: Small"));
