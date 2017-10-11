@@ -130,7 +130,7 @@ public class PlayContext extends Context {
         playerStatus = new PlayerStatusDisplay();
         plantWindow = new PlantWindow(plantSkin);
         chatStack = new ChatStack(stage);
-        plantButton = new Button(plantSkin.getDrawable("button-close"));
+        plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
 
         /* Add ParticleEffectActor that controls weather. */
