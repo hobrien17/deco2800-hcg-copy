@@ -2,6 +2,7 @@ package com.deco2800.hcg.managers;
 
 import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.conversation.ConversationReader;
+import com.deco2800.hcg.entities.npc_entities.NPC;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,14 +43,15 @@ public class ConversationManager extends Manager {
 
     /**
      * Being displaying a stored Conversation
+     * @param talkingTo The NPC the conversation is being had with
      * @param name The name of the conversation to launch
      */
-    public void startConversation(String name, String texture) {
+    public void startConversation(NPC talkingTo, String name) {
         Conversation conversation = conversations.get(name);
         if (conversation == null) {
             throw new IllegalArgumentException("No conversation by the name \""+name+"\" exists!");
         } else {
-            conversation.initiateConversation(texture);
+            conversation.initiateConversation(talkingTo);
         }
     }
 

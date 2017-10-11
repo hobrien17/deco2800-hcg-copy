@@ -38,7 +38,7 @@ public class ConversationOption {
 
         // Execute all attached actions
         for (AbstractConversationAction action : actions) {
-            action.executeAction();
+            action.executeAction(grandparent.getTalkingTo());
         }
 
         // Move to the target Conversation Node
@@ -72,7 +72,7 @@ public class ConversationOption {
      */
     public boolean testCondition() {
         if (condition != null) {
-            return condition.testCondition();
+            return condition.testCondition(grandparent.getTalkingTo());
         } else {
             return true;
         }

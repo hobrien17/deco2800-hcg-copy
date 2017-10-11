@@ -48,7 +48,7 @@ public class ConversationWriter {
 		jNode.addProperty("nodeText", node.getNodeText());
 		
 		JsonArray jOptions = new JsonArray();
-		for (ConversationOption option : node.getOptions()) {
+		for (ConversationOption option : node.getAllOptions()) {
 			jOptions.add(serialiseOption(option, nodes));
 		}
 		jNode.add("options", jOptions);

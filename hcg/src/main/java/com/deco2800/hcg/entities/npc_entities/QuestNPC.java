@@ -70,8 +70,7 @@ public class QuestNPC extends NPC {
 	}
 
 	public void interact() {
-		conversationManager.startConversation(this.getConversation(),
-				this.getFaceImage());
+		conversationManager.startConversation(this, this.getConversation());
 	}
 
 	/**

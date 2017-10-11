@@ -1,6 +1,7 @@
 package com.deco2800.hcg.conversation;
 
 import com.deco2800.hcg.contexts.ConversationContext;
+import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 
@@ -19,6 +20,7 @@ public class Conversation {
 	private ConversationNode currentNode;
 	private ConversationContext conversationContext;
 	private ContextManager contextManager;
+	private NPC talkingTo;
 
 	/**
 	 * No-Argument constructor
@@ -57,10 +59,12 @@ public class Conversation {
 
 	/**
 	 * Begin presenting the conversation to the player
+	 * @param talkingTo reference to the NPC the [player is talking to
 	 */
-	public void initiateConversation(String texture) {
+	public void initiateConversation(NPC talkingTo) {
 		currentNode = initialNode;
-		conversationContext = new ConversationContext(this, texture);
+		this.talkingTo = talkingTo;
+		conversationContext = new ConversationContext(this, talkingTo.getFaceImage());
 		conversationContext.displayNode(currentNode);
 		contextManager.pushContext(conversationContext);
 	}
@@ -80,6 +84,12 @@ public class Conversation {
 		contextManager.popContext();
 		conversationContext = null;
 		currentNode = null;
+		talkingTo = null;
+	}
+
+	// Called by ConversationOptions
+	NPC getTalkingTo() {
+		return talkingTo;
 	}
 	
 	// Needed for serialisation
