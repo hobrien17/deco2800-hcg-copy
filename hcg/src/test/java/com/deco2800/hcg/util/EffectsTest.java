@@ -23,8 +23,8 @@ public class EffectsTest {
 
     @Test
     public void effectsConstructorMergeTest() {
-        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0);
-        Effect effect2 = new Effect("Test2", 3, 5, 0, 500, 2, 0);
+        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0, null);
+        Effect effect2 = new Effect("Test2", 3, 5, 0, 500, 2, 0, null);
 
         Collection<Effect> effectCollection = new HashSet<>();
         effectCollection.add(effect1);
@@ -61,7 +61,7 @@ public class EffectsTest {
 
     @Test
     public void effectsAddEffectTest() {
-        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0);
+        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0, null);
 
         Effects effects = new Effects(entity);
         effects.addEffect(effect1);
@@ -71,7 +71,7 @@ public class EffectsTest {
 
     @Test
     public void effectsRemoveEffectTest() {
-        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0);
+        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0, null);
 
         Effects effects = new Effects(entity);
         effects.removeEffect(effect1);
@@ -81,7 +81,7 @@ public class EffectsTest {
 
     @Test
     public void effectsClearEffectsTest() {
-        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0);
+        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0, null);
 
         Effects effects = new Effects(entity);
         effects.addEffect(effect1);
@@ -92,8 +92,8 @@ public class EffectsTest {
 
     @Test
     public void effectsAddAllEffectsTest() {
-        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0);
-        Effect effect2 = new Effect("Test2", 3, 5, 0, 500, 2, 0);
+        Effect effect1 = new Effect("Test", 3, 5, 0, 500, 2, 0, null);
+        Effect effect2 = new Effect("Test2", 3, 5, 0, 500, 2, 0, null);
 
         Collection<Effect> effectCollection = new HashSet<>();
         effectCollection.add(effect1);

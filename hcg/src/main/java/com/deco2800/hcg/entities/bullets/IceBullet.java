@@ -101,6 +101,6 @@ public class IceBullet extends Bullet {
 	
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Ice", 1, 0, 0, 0, 100, 0));
+		target.giveEffect(new Effect("Ice", 1, 0, 0, 0, 100, 0, user));
 	}
 }

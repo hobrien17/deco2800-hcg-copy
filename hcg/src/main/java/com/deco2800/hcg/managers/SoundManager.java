@@ -56,6 +56,18 @@ public class SoundManager extends Manager {
 			soundMap.put("weatherDrought", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-ambient-semirandom-longloop-spooky.wav")));
 			soundMap.put("weatherStorm", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/rain-ambient-hardsurface-shortloop.wav")));
 
+			// For gardening
+			soundMap.put("plantingPot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/planting_in_soil_pot.wav")));
+			soundMap.put("bugSpray", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/bugspray.wav")));
+			soundMap.put("explosion", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/explosion.wav")));
+			soundMap.put("fertiliser", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fertiliser.wav")));
+			soundMap.put("fireball", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fireball.wav")));
+			soundMap.put("grass", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/grass.wav")));
+			soundMap.put("iceTurret", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/ice_tree.wav")));
+			soundMap.put("plantingCorpse", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/plant_in_enemies.wav")));
+			soundMap.put("plantingLily", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/plant_waterlilly_in_pot.wav")));
+			soundMap.put("shovelTrowel", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/shovel_or_trowel.wav")));
+
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}

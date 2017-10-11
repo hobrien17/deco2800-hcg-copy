@@ -19,7 +19,7 @@ public class MouseHandler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
-	private static String LINE_SEPARATOR = System.getProperty("line.separator");
+	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 	/**
 	 * Constructor for the mouse handler

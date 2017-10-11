@@ -2,10 +2,7 @@ package com.deco2800.hcg.entities.garden_entities.plants;
 
 import java.util.HashMap;
 
-import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.lootable.LootWrapper;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 
 /**
  * Represents the Grass plant which drops random loot
