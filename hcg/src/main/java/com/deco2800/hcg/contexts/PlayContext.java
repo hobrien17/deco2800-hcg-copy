@@ -2,8 +2,6 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.deco2800.hcg.managers.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -345,13 +343,11 @@ public class PlayContext extends Context {
         } else if(keycode == Input.Keys.EQUALS) {
             Item item = new HealthPotion(100);
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
-            gameManager.getWorld().addEntity(entity);
-        } else if(keycode == Input.Keys.B) {
-            if(RadialDisplay.plantableNearby()) {
-                radialDisplay.addRadialMenu(stage);
-            }
-        }
-    }
+			gameManager.getWorld().addEntity(entity);
+		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
+			radialDisplay.addRadialMenu(stage);
+		}
+	}
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
