@@ -26,24 +26,10 @@ public class PlayerMapEntity extends Actor {
      *
      */
     public void updatePosByNodeEntity(MapNodeEntity mapNodeEntity) {
-        // grabing the node, for getting the rows and collumns
-        MapNode node = mapNodeEntity.getNode();
-
-        // pixels padding around each direction of the map
-        int mapPadding = 50;
-
-        // Grab the current viewport dimensions
-        int viewPortX = Gdx.graphics.getWidth();
-        int viewPortY = Gdx.graphics.getHeight();
-
-        // Calculates the spacing between cells
-        int renderableColWidth = (viewPortX - mapPadding) / gameManager.getWorldMap().getWorldColumns();
-        int renderableRowWidth = (viewPortY - mapPadding) / gameManager.getWorldMap().getWorldRows();
-
         // Calculates the nodes position in the grid layout, trying to place center and above the node's rendering
-        xPos = renderableColWidth * node.getNodeColumn() + mapPadding + Math.round(mapNodeEntity.getWidth() / 2) - spriteWidth / 2;
+        xPos =  Math.round(mapNodeEntity.getXPos() + mapNodeEntity.getWidth() / 2 - spriteWidth / 2);
         // move it up horizontally by the node entity sprite height
-        yPos = renderableRowWidth * node.getNodeRow() + mapPadding + Math.round(mapNodeEntity.getHeight() / 2);
+        yPos = Math.round(mapNodeEntity.getYPos() + mapNodeEntity.getHeight() / 2);
         // Calculate the scaling required on the sprite height.
         spriteHeight = playerTexture.getHeight() / (playerTexture.getWidth() / spriteWidth);
     }
