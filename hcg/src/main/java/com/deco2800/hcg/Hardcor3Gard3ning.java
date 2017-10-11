@@ -86,12 +86,13 @@ public class Hardcor3Gard3ning extends Game {
         commandManager = (CommandManager) gameManager.getManager(CommandManager.class);
         
         // add echo command
+        // note args[0] is the command name, not the first argument
         commandManager.registerCommand("echo", new CommandManager.Command() {
-			@Override
-			public String run(String... args) {
-                return args[1];
-			}
-		});
+            @Override
+            public String run(String... args) {
+                return args.length > 1 ? args[1] : "";
+            }
+        });
 
         // Procedurally generate the world map and store it.
         WorldStackGenerator worldStackGenerator = new WorldStackGenerator(levelList);
