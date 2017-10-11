@@ -9,14 +9,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -40,7 +34,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-import com.deco2800.hcg.shading.ShaderState;
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be

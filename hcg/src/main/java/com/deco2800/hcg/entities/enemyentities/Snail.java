@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.lootable.LootWrapper;
