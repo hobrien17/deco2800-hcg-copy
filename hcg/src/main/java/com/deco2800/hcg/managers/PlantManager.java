@@ -1,8 +1,6 @@
 package com.deco2800.hcg.managers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -25,6 +23,7 @@ public class PlantManager extends Manager {
 	private Table windowTable;
 	private Window plantWindow;
 	private Skin skin;
+	private Button plantButton;
 
 	/**
 	 * Creates a new PlantManager
@@ -63,6 +62,7 @@ public class PlantManager extends Manager {
      */
 	public void removeAll() {
 	    plantList.clear();
+	    updateLabel();
     }
 
     /**
@@ -79,15 +79,12 @@ public class PlantManager extends Manager {
      *
 	 * @param plantWindow 
 	 * 			the window to set it to
-	 * @param skin 
-	 * 			the window's skin
 	 */
 	public void setPlantWindow(Window plantWindow, Skin skin) {
 		this.plantWindow = plantWindow;
 		this.skin = skin;
 		plantWindow.row().width(170);
 		windowTable = new Table(skin);
-
 		plantWindow.add(windowTable);
 	}
 
@@ -103,10 +100,27 @@ public class PlantManager extends Manager {
     /**
      * Sets the visibility of the plantWindow
      * 
-     * @param bool if window is set to visible
+     * @param visible if window is set to visible
      */
 	public void setWindowVisible(boolean visible){
 	    this.plantWindow.setVisible(visible);
+	    plantButton.setVisible(!visible);
+    }
+
+    /**
+     * Sets plantButton
+     *
+     * @param button the plant window switch
+     */
+    public void setPlantButton(Button button) {
+	    plantButton = button;
+        plantButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                setWindowVisible(true);
+            }
+        });
+	    plantButton.setVisible(false);
     }
 
     /**
@@ -149,24 +163,18 @@ public class PlantManager extends Manager {
      */
 	private void UIupdate(AbstractGardenPlant plant, String stage){
         StringBuilder currentRow = new StringBuilder();
-        String path = "resources/sprites/plants/icon/"+plant.getName()+".png";
-        Image image = new Image(new
-                Texture(Gdx.files.internal(path)));
-        Button button = new TextButton(plant.getName(),skin);
-        button.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                highLight(plant);
-            }
-        });
+        Button button = new ImageButton(skin.getDrawable(plant.getName()));
+        Label plantName = new Label(plant.getName().toUpperCase(),skin);
         windowTable.add();
-        windowTable.add(button);
+        windowTable.add(plantName);
         windowTable.row();
-        windowTable.add(image);
+        windowTable.add(button);
         currentRow.append("      Stage: ").append(stage).append("  \n")
                 .append("      X:").append((int) plant.getPot().getPosX()).append("   Y:")
                 .append((int) plant.getPot().getPosY());
-        windowTable.add(currentRow);
+        Label info = new Label(currentRow, skin);
+        info.setColor(Color.BLUE);
+        windowTable.add(info);
         windowTable.row();
     }
 }

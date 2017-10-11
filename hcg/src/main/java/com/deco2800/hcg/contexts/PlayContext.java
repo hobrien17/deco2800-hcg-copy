@@ -1,5 +1,7 @@
 package com.deco2800.hcg.contexts;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.deco2800.hcg.managers.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,17 +38,6 @@ import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-import com.deco2800.hcg.managers.ContextManager;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.MessageManager;
-import com.deco2800.hcg.managers.NetworkManager;
-import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.ShaderManager;
-import com.deco2800.hcg.managers.StopwatchManager;
-import com.deco2800.hcg.managers.TextureManager;
-import com.deco2800.hcg.managers.TimeManager;
-import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.shading.ShaderState;
@@ -68,6 +59,7 @@ public class PlayContext extends Context {
     private TimeManager timeManager;
     private PlayerManager playerManager;
     private ShaderManager shaderManager;
+    private PlantManager plantManager;
 
 
     // FIXME mouseHandler is never assigned
@@ -95,6 +87,7 @@ public class PlayContext extends Context {
     private ClockDisplay clockDisplay;
     private ChatStack chatStack;
     private RadialDisplay radialDisplay;
+    private Button plantButton;
 
     private Window window;
     private Window plantWindow;
@@ -108,6 +101,7 @@ public class PlayContext extends Context {
 
     private Stage stage;
     private Skin skin;
+    private Skin plantSkin;
 
     /**
      * Create the PlayContext
@@ -124,6 +118,8 @@ public class PlayContext extends Context {
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
+
         /* Setup the camera and move it to the center of the world */
         GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
         GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
@@ -131,13 +127,22 @@ public class PlayContext extends Context {
         // Setup GUI
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+        plantSkin = new Skin(Gdx.files.internal("resources/ui/plant_ui/flat-earth-ui.json"));
+        plantSkin.add("cactus",new Texture("resources/ui/plant_ui/cactus.png"));
+        plantSkin.add("grass",new Texture("resources/ui/plant_ui/grass.png"));
+        plantSkin.add("ice",new Texture("resources/ui/plant_ui/ice.png"));
+        plantSkin.add("inferno",new Texture("resources/ui/plant_ui/inferno.png"));
+        plantSkin.add("lily",new Texture("resources/ui/plant_ui/lily.png"));
+        plantSkin.add("sunflower",new Texture("resources/ui/plant_ui/sunflower.png"));
 
         radialDisplay = new RadialDisplay(stage);
         createExitWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
-        plantWindow = new PlantWindow(skin);
+        plantWindow = new PlantWindow(plantSkin);
         chatStack = new ChatStack(stage);
+        plantButton = new Button(plantSkin.getDrawable("button-close"));
+        plantManager.setPlantButton(plantButton);
 
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
@@ -148,6 +153,7 @@ public class PlayContext extends Context {
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
+        stage.addActor(plantButton);
 
         window = new Window("Menu", skin);
 
@@ -223,7 +229,7 @@ public class PlayContext extends Context {
             }
         });
 
-        /** set initial time **/
+        /* set initial time */
         timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
     }
 
@@ -288,6 +294,7 @@ public class PlayContext extends Context {
         playerStatus.setPosition(30f, stage.getHeight()-200f);
         clockDisplay.setPosition(stage.getWidth()-220f, 20f);
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+        plantButton.setPosition(stage.getWidth()-26, stage.getHeight()-29);
         radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         weatherManager.resize();
