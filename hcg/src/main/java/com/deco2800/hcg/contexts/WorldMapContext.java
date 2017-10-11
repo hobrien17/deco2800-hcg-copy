@@ -193,19 +193,6 @@ public class WorldMapContext extends UIContext {
                 // add the new weather effects
                 ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
                   setWeather(newWorld.getWeatherType());
-               
-                newWorld.generatePuddles();
-
-
-				// add new tile for poison trail
-				MapProperties mapProperties = new MapProperties();
-				mapProperties.put("name", "newSludge");
-				mapProperties.put("damagetype", "1");
-				mapProperties.put("damage", "1");
-				mapProperties.put("speed", "1.0");
-
-				newWorld.addTiledMapTileLayer("newSludge", mapProperties);
-
 
 				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
