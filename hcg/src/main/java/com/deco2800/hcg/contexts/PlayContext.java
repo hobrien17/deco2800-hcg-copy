@@ -41,8 +41,6 @@ import com.deco2800.hcg.renderers.Renderer;
  */
 public class PlayContext extends Context {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
-
     // Managers used by the game
     private GameManager gameManager;
     private WeatherManager weatherManager;
