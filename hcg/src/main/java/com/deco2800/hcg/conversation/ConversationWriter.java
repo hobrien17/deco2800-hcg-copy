@@ -60,10 +60,21 @@ public class ConversationWriter {
 			List<ConversationNode> nodes) {
 		
 		JsonObject jOption = new JsonObject();
+		JsonArray jConditions = new JsonArray();
+		JsonArray jActions = new JsonArray();
+
+		for (AbstractConversationCondition condition : option.getConditions()) {
+			jConditions.add(condition.toString());
+		}
+		for (AbstractConversationAction action : option.getActions()) {
+			jActions.add(action.toString());
+		}
+
+		jOption.add("conditions", jConditions);
 		jOption.addProperty("optionText", option.getOptionText());
 		jOption.add("target", getID(option.getTarget(), nodes));
-		//TODO add actions
-		
+		jOption.add("actions", jActions);
+
 		return jOption;
 	}
 	

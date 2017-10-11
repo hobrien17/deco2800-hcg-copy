@@ -94,9 +94,9 @@ public class ConversationReader {
 			String targetID = jTarget.getAsString();
 			target = nodes.get(targetID);
 		}
-		AbstractConversationCondition condition = null; 				//TODO read condition from JSON
-		List<AbstractConversationAction> actions = new ArrayList<>();	//TODO read actions from JSON
-		return new ConversationOption(parent, optionText, target, condition, actions);
+		List<AbstractConversationCondition> conditions = new ArrayList<>(); 	//TODO read conditions from JSON
+		List<AbstractConversationAction> actions = new ArrayList<>();			//TODO read actions from JSON
+		return new ConversationOption(parent, conditions, optionText, actions, target);
 	}
 
 }

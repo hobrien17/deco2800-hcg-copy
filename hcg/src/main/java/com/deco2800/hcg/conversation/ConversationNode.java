@@ -71,7 +71,7 @@ public class ConversationNode {
     public List<ConversationOption> getValidOptions() {
         List<ConversationOption> validOptions = new ArrayList<>();
         for (ConversationOption option : options) {
-            if (option.testCondition()) {
+            if (option.testConditions()) {
                 validOptions.add(option);
             }
         }
