@@ -103,14 +103,18 @@ public class Hedgehog extends Enemy implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
-        this.setHedgehogStatus();
-        this.setNewPos();//Put new position into Box3D.
-        this.detectCollision();//Detect collision.
-        if (this.collidedPlayer) {
-            this.setChargeStatus(true);
-        }
-        this.moveAction();//Move enemy to the position in Box3D.
-        myEffects.apply();
+    	if (this.getNumberPlayers() == 1) {
+    		this.setHedgehogStatus();
+            this.setNewPos();//Put new position into Box3D.
+            this.detectCollision();//Detect collision.
+            if (this.collidedPlayer) {
+                this.setChargeStatus(true);
+            }
+            this.moveAction();//Move enemy to the position in Box3D.
+            myEffects.apply();
+    	}
+    	
+        
 
     }
 
