@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -194,7 +195,18 @@ public class WorldMapContext extends UIContext {
                   setWeather(newWorld.getWeatherType());
                
                 newWorld.generatePuddles();
-                
+
+
+				// add new tile for poison trail
+				MapProperties mapProperties = new MapProperties();
+				mapProperties.put("name", "newSludge");
+				mapProperties.put("damagetype", "1");
+				mapProperties.put("damage", "1");
+				mapProperties.put("speed", "1.0");
+
+				newWorld.addTiledMapTileLayer("newSludge", mapProperties);
+
+
 				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
