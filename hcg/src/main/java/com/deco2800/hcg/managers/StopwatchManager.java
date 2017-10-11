@@ -14,8 +14,11 @@ public class StopwatchManager extends Manager implements TickableManager {
 	private int seconds;
 	private int minutes;
 
-	private int delay;
-	private int timedMinutes;
+	private float delay;
+	private float timedMinutes;
+
+	private float secondsFloat;
+	private float minutesFloat;
 
 
 	/**
@@ -34,9 +37,20 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 * Set the time limit for the stopwatch
 	 * 
 	 * @param timeLimit
-	 * 
+	 *
 	 */
 	public void startTimer(int timeLimit) {
+		this.delay = timeLimit;
+		this.timedMinutes = timeLimit;
+	}
+
+	/**
+	 * Set a more precise time limit for the stopwatch
+	 *
+	 * @param timeLimit
+	 *
+	 */
+	public void startTimerFloat(float timeLimit) {
 		this.delay = timeLimit;
 		this.timedMinutes = timeLimit;
 	}
@@ -55,6 +69,8 @@ public class StopwatchManager extends Manager implements TickableManager {
 		this.ticksElapsed = 0;
 		this.minutes = 0;
 		this.seconds = 0;
+		this.minutesFloat = 0;
+		this.secondsFloat = 0;
 		this.timerFinished = false;
 	}
 
@@ -91,6 +107,9 @@ public class StopwatchManager extends Manager implements TickableManager {
 
 		this.ticksElapsed++;
 
+		minutesFloat = ticksElapsed / 50f;
+		secondsFloat = (ticksElapsed / 50f) * 60f;
+
 		// converting 50 tick minutes to 60 seconds
 		float secondsDecimal = ticksElapsed % 50;
 		secondsDecimal = (secondsDecimal / 50) * 60;
@@ -99,7 +118,7 @@ public class StopwatchManager extends Manager implements TickableManager {
 		this.minutes = ticksElapsed / 50;
 		this.seconds = (int) (secondsDecimal);
 
-		if (this.timedMinutes != 0 && this.minutes >= this.timedMinutes) {
+		if (this.timedMinutes != 0 && this.minutesFloat >= this.timedMinutes) {
 			this.timerFinished = true;
 			setChanged();
 			timedMinutes += delay;
