@@ -24,6 +24,8 @@ public class PlayerInventoryContext extends InventoryDisplayContext{
     private Table centreTable;
     private Button playerInventoryTab;
     private Button playerEquipmentTab;
+
+    private static final String SHOP_INVENTORY = "shop_inventory";
     /**
      * Constructor for the Player Inventory Context
      */
@@ -76,15 +78,15 @@ public class PlayerInventoryContext extends InventoryDisplayContext{
 
         //Generate the inner table, this holds the actual item inventory
         Table innerTable = new Table();
-        innerTable.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+        innerTable.setBackground(new Image(textureManager.getTexture(SHOP_INVENTORY)).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
         //Generate the grid to display the item that is clicked
         Table itemDisplay = new Table();
-        itemDisplay.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+        itemDisplay.setBackground(new Image(textureManager.getTexture(SHOP_INVENTORY)).getDrawable());
 
         //Generate the view to display item information
         Table itemInfo = new Table();
-        itemInfo.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+        itemInfo.setBackground(new Image(textureManager.getTexture(SHOP_INVENTORY)).getDrawable());
         Label itemInfoTitle = new Label("Item Info", skin);
         itemInfoTitle.setColor(Color.BLACK);
         itemInfo.add(itemInfoTitle);
@@ -92,7 +94,7 @@ public class PlayerInventoryContext extends InventoryDisplayContext{
 
         //Generate the view to display the player stats
         Table playerInfo = new Table();
-        playerInfo.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+        playerInfo.setBackground(new Image(textureManager.getTexture(SHOP_INVENTORY)).getDrawable());
         innerTable.center();
         //Populate views as needed. This also generates images and adds on click methods
         inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, innerTable);
@@ -125,11 +127,11 @@ public class PlayerInventoryContext extends InventoryDisplayContext{
     private void populatePlayerInfo(Table playerInfo, Skin skin, Player player) {
         Label title = new Label("Player Stats", skin);
         title.setColor(Color.BLACK);
-        Label text1 = new Label(("Health  " + player.getHealthCur()), skin);
+        Label text1 = new Label("Health  " + player.getHealthCur(), skin);
         text1.setColor(Color.BLACK);
-        Label text2 = new Label(("Level " + player.getXp()), skin);
+        Label text2 = new Label("Level " + player.getXp(), skin);
         text2.setColor(Color.BLACK);
-        Label text3 = new Label(("Stamina " + player.getStaminaCur()), skin);
+        Label text3 = new Label("Stamina " + player.getStaminaCur(), skin);
         text3.setColor(Color.BLACK);
         playerInfo.add(title).top();
         playerInfo.row();

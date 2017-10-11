@@ -1,5 +1,7 @@
 package com.deco2800.hcg.util;
 
+import com.deco2800.hcg.entities.AbstractEntity;
+
 /**
  * An effect class to store all the properties of an effect. Effects may be added to an Effects container which
  * each harmable entity has.
@@ -18,6 +20,7 @@ public class Effect {
     private int delay;          // delay until effect is ready for use (in ms)
     private long cooldownTimer; // timer used to keep track of whether effect is on ready to be used
     private float speedModifier;  // amount (in percentage) of slow to apply. 0 is none, 1 is 100% slow effect
+    private AbstractEntity creator; // the character that gave the effect to this owner.
 
     /**
      * Creates a new Effect with the given properties.
@@ -36,7 +39,7 @@ public class Effect {
      * @throws NullPointerException if name is null.
      * @throws IllegalArgumentException if an argument is not valid.
      */
-    public Effect(String name, int level, int damage, float speedModifier, int cooldown, int duration, int delay) {
+    public Effect(String name, int level, int damage, float speedModifier, int cooldown, int duration, int delay, AbstractEntity creator) {
         // Check for valid arguments
         if (name == null) {
             throw new NullPointerException("Effect name cannot be null.");
@@ -49,9 +52,7 @@ public class Effect {
         if (!(level >= 1)) {
             throw new IllegalArgumentException("Level must be a positive integer and at least 1.");
         }
-//        if (!(damage >= 0)) {
-//            throw new IllegalArgumentException("Damage must be a positive integer.");
-//        }
+
         if (!(speedModifier >= 0)) {
             throw new IllegalArgumentException("Slow amount must be >= 0.");
         }
@@ -76,6 +77,7 @@ public class Effect {
 
         // Set the cooldown timer based on the supplied delay value
         this.cooldownTimer = System.currentTimeMillis() - (cooldown - delay);
+        this.creator = creator;
 
         resetUseCounter();
     }
@@ -183,6 +185,15 @@ public class Effect {
     }
 
     /**
+     * Returns the creator.
+     *
+     * @return Returns a Character denoting the effect creator.
+     */
+    public AbstractEntity getCreator() {
+        return creator;
+    }
+
+    /**
      * Decrements the use counter of the effect by one.
      */
     public void decrementUses() {
@@ -198,18 +209,15 @@ public class Effect {
 
         Effect effect = (Effect) o;
 
-        if (level != effect.level)
-          return false;
-        if (damage != effect.damage)
-          return false;
-        if (duration != effect.duration)
-          return false;
-        if (cooldown != effect.cooldown)
-          return false;
-        if (delay != effect.delay)
-          return false;
+		if (level != effect.level 
+				|| damage != effect.damage
+				|| duration != effect.duration 
+				|| cooldown != effect.cooldown
+				|| delay != effect.delay) {
+			return false;
+		}
 
-        return Float.compare(effect.speedModifier, speedModifier) == 0
+		return Float.compare(effect.speedModifier, speedModifier) == 0
                 && (name != null ? name.equals(effect.name) : effect.name == null);
     }
 

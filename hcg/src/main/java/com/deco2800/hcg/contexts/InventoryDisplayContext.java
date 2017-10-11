@@ -26,6 +26,8 @@ import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.managers.TextureManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for displaying items in a player or shopkeeper's inventory. This class holds the methods that are common in the
@@ -35,6 +37,9 @@ import com.deco2800.hcg.managers.TextureManager;
  * @author Group 2
  */
 public abstract class InventoryDisplayContext extends UIContext {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InventoryDisplayContext.class);
+    private static final String SELECTED = "selected";
 
     //Input arguments
     private Skin skin;
@@ -71,6 +76,7 @@ public abstract class InventoryDisplayContext extends UIContext {
         
         ArrayList<String> text = new ArrayList<>();
         text.add(mouseOverItem.getName());
+        text.add("Value: " + Integer.toString(mouseOverItem.getBaseValue()));
         ArrayList<String> information = mouseOverItem.getInformation();
         if(information != null) {
             text.addAll(information);
@@ -167,15 +173,14 @@ public abstract class InventoryDisplayContext extends UIContext {
                 button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
             }
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
-            Label itemLabel = null;
-            commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
+            commonSetup(currentItem, button, stack, clickedImage);
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     itemDisplay.clear();
                     //Show item when clicked
-                    Label itemName = new Label((button.getName()), skin);
+                    Label itemName = new Label(button.getName(), skin);
                     Image image = new Image(button.getImage().getDrawable());
                     itemDisplay.add(image).height(50).width(50);
                     itemDisplay.add(itemName).left();
@@ -193,8 +198,8 @@ public abstract class InventoryDisplayContext extends UIContext {
                     itemInfo.add(itemName).left();
                     ArrayList<String> itemData = currentItem.getInformation();
                     if(itemData != null) {
-                        for(int i = 0; i < itemData.size(); i++) {
-                            Label line = new Label(itemData.get(i), skin);
+                        for(int j = 0; j < itemData.size(); j++) {
+                            Label line = new Label(itemData.get(j), skin);
                             line.setColor(Color.BLACK);
                             itemInfo.row();
                             itemInfo.add(line).left();
@@ -207,18 +212,23 @@ public abstract class InventoryDisplayContext extends UIContext {
                         useButton.addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
-                                System.out.println("Clicked USE");
+                                LOGGER.info("clicked used");
+
                                 if (currentItem instanceof ConsumableItem) {
                                     //Consume Item
                                     ((ConsumableItem) currentItem).consume(player);
                                     player.getInventory().removeItem(currentItem, 1);
                                     inventory.clear();
+                                    itemInfo.clear();
+                                    itemDisplay.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
                                     //Equip the item
                                     player.getEquippedItems().addItem(currentItem);
                                     player.getInventory().removeItem(currentItem);
                                     inventory.clear();
+                                    itemInfo.clear();
+                                    itemDisplay.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 }
 
@@ -280,9 +290,8 @@ public abstract class InventoryDisplayContext extends UIContext {
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
                     .getDrawable());
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
-            Label itemLabel = null;
-            commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
+            commonSetup(currentItem, button, stack, clickedImage);
             //Add listener for this item button
             stack.addListener(new ClickListener() {
                 @Override
@@ -316,13 +325,11 @@ public abstract class InventoryDisplayContext extends UIContext {
      *          The button for the item
      * @param stack
      *          The stack for the item
-     * @param itemLabel
-     *          The label for the item
      * @param clickedImage
      *          The clicked image for the item
      */
 
-    private void commonSetup(Item currentItem, ImageButton button, Stack stack, Label itemLabel, Image clickedImage) {
+    private void commonSetup(Item currentItem, ImageButton button, Stack stack, Image clickedImage) {
         //Get the item to be displayed as a button
         if (currentRow >= maxRow) {
             inventory.row();
@@ -331,6 +338,7 @@ public abstract class InventoryDisplayContext extends UIContext {
         button.setName(currentItem.getName());
 
         //Setup the label
+        Label itemLabel;
         if (currentItem.isStackable()) {
             itemLabel = new Label(""+ currentItem.getStackSize(), skin);
         } else {
@@ -377,7 +385,7 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = playerEquipment;
         for (int i=0; i<player.getEquippedItems().getNumItems(); i++) {
             Item currentItem = player.getEquippedItems().getItem(i);
-            System.out.println(textureManager.getTexture(currentItem.getTexture()));
+            LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
             //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
             ImageButton button;
             if (textureManager.getTexture(currentItem.getTexture()) == null) {
@@ -386,9 +394,8 @@ public abstract class InventoryDisplayContext extends UIContext {
                  button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
             }
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
-            Label itemLabel = null;
-            commonSetup(currentItem, button, stack, itemLabel, clickedImage);
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
+            commonSetup(currentItem, button, stack, clickedImage);
             stack.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {

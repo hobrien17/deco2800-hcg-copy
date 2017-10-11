@@ -1,6 +1,7 @@
 package com.deco2800.hcg.worlds;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
@@ -8,7 +9,6 @@ import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.terrain_entities.Boulder;
 import com.deco2800.hcg.entities.terrain_entities.ConcreteWall;
-import com.deco2800.hcg.entities.terrain_entities.House;
 import com.deco2800.hcg.entities.terrain_entities.House2;
 import com.deco2800.hcg.entities.terrain_entities.HouseWORoof;
 import com.deco2800.hcg.entities.terrain_entities.HouseWRoof;
@@ -24,11 +24,12 @@ import com.deco2800.hcg.entities.terrain_entities.Swing;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
+import com.deco2800.hcg.items.stackable.HealthPotion;
 
 public enum WorldEntities {
 
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
-    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS;
+    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM;
 
     /**
      * Return an instance of the entity at the given position and the selected
@@ -63,8 +64,6 @@ public enum WorldEntities {
                 return new Rock(x, y, 0f);
             case ICEBOULDER:
                 return new IceBoulder(x, y, 0f);
-            case HOUSE:
-                return new House(x, y, 0f);
             case SLUDGEBARREL:
                 return new SludgeBarrel(x, y, 0f);
             case MUSHROOMTREETHICK:
@@ -87,6 +86,10 @@ public enum WorldEntities {
                 return new PicketFenceEW(x, y, 0f);
             case PICKETFENCENS:
                 return new PicketFenceNS(x, y, 0f);
+            case CONCRETEWALL:
+                return new ConcreteWall(x, y, 0f);
+            case ITEM:
+            	return new ItemEntity(x, y, 0f, new HealthPotion(10));
             default:
                 return null;
         }

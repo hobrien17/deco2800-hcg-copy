@@ -4,6 +4,7 @@ import java.util.Observable;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.types.Weathers;
 
 /**
  * Grass Turret
@@ -16,8 +17,11 @@ import com.deco2800.hcg.managers.GameManager;
 public class GrassTurret extends AbstractTurret {
 
 	private int seconds;
-	private final static int GROW = 5;
-	private final static int DISTANCE = 5;
+	private int angleChange;
+	private static final int GROW = 5;
+	private static final int DISTANCE = 5;
+	private static final int NORMAL_ANGLE_CHANGE = 5;
+	private static final int INCREASED_ANGLE_CHANGE = 20;
 	
 	/**
 	 * Creates a new grass turret inside the given corpse
@@ -27,7 +31,16 @@ public class GrassTurret extends AbstractTurret {
 	 */
 	public GrassTurret(Corpse master) {
 		super(master, "Grass");
-		seconds = 0;
+		if(GameManager.get().getWorld().getWeatherType().equals(Weathers.WIND)) {
+			seconds = GROW - 1;
+		} else {
+			seconds = 0;
+		}
+		if(GameManager.get().getWorld().getWeatherType().equals(Weathers.STORM)) {
+			angleChange = INCREASED_ANGLE_CHANGE;
+		} else {
+			angleChange = NORMAL_ANGLE_CHANGE;
+		}
 	}
 
 	/**
@@ -41,9 +54,10 @@ public class GrassTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == GROW) {
-			for(int angle = 0; angle < 360; angle += 5) {
-				double newX = master.getPosX() + DISTANCE*Math.cos(angle);
-				double newY = master.getPosY() + DISTANCE*Math.sin(angle);
+			for(int angle = 0; angle < 360; angle += angleChange) {
+				double radAngle = angle*Math.PI/180;
+				double newX = master.getPosX() + DISTANCE*Math.cos(radAngle);
+				double newY = master.getPosY() + DISTANCE*Math.sin(radAngle);
 				GrassBullet bullet = new GrassBullet(master.getPosX(), master.getPosY(), master.getPosZ(), 
 						(float)newX, (float)newY, 0, master);
 				GameManager.get().getWorld().addEntity(bullet);

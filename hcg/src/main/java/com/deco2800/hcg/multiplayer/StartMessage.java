@@ -22,7 +22,9 @@ public class StartMessage extends Message {
 	
 	private int seed;
 	
-	public StartMessage() {}
+	public StartMessage() {
+		//deliberately empty
+	}
 	
 	public StartMessage(int seed) {
 		super(MessageType.START);

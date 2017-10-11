@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Affine2;
@@ -24,15 +23,16 @@ public class LightBatch implements Batch {
     public static final String LIGHT_COLOR_ATTRIBUTE = "a_lightColor";
     public static final String LIGHT_INTENSITY_ATTRIBUTE = "a_lightIntensity";
     
-    private static int VERTEX_SIZE = 4;
-    private static int SPRITE_SIZE = 4 * VERTEX_SIZE;
+    private static final int VERTEX_SIZE = 4;
+    private static final int SPRITE_SIZE = 4 * VERTEX_SIZE;
     
     private Mesh mesh;
     
     final float[] vertices;
     int idx = 0;
     Texture lastTexture = null;
-    float invTexWidth = 0, invTexHeight = 0;
+    float invTexWidth = 0;
+    float invTexHeight = 0;
     
     boolean drawing = false;
     
@@ -168,133 +168,132 @@ public class LightBatch implements Batch {
             boolean flipY) {
         if(!this.isDrawing()) {
             throw new IllegalStateException("LightBatch must begin before drawing.");
-        } else {
-            float[] vertices = this.vertices;
-            
-            if(texture != this.lastTexture) {
-                // TODO USE NEW TEXTURE
-            } else if(this.idx == vertices.length) {
-                this.flush();
-            }
-            
-            final float worldOriginX = x + originX;
-            final float worldOriginY = y + originY;
-            float fx = -originX;
-            float fy = -originY;
-            float fx2 = width - originX;
-            float fy2 = height - originY;
-            
-            // scale
-            if(scaleX != 1 || scaleY != 1) {
-                fx *= scaleX;
-                fy *= scaleY;
-                fx2 *= scaleX;
-                fy2 *= scaleY;
-            }
-            
-            // construct corner points, start from top left and go counter clockwise
-            final float p1x = fx;
-            final float p1y = fy;
-            final float p2x = fx;
-            final float p2y = fy2;
-            final float p3x = fx2;
-            final float p3y = fy2;
-            final float p4x = fx2;
-            final float p4y = fy;
-            
-            float x1;
-            float y1;
-            float x2;
-            float y2;
-            float x3;
-            float y3;
-            float x4;
-            float y4;
-            
-            // rotate
-            if(rotation != 0) {
-                final float cos = MathUtils.cosDeg(rotation);
-                final float sin = MathUtils.sinDeg(rotation);
-                
-                x1 = cos * p1x - sin * p1y;
-                y1 = sin * p1x + cos * p1y;
-                
-                x2 = cos * p2x - sin * p2y;
-                y2 = sin * p2x + cos * p2y;
-                
-                x3 = cos * p3x - sin * p3y;
-                y3 = sin * p3x + cos * p3y;
-                
-                x4 = x1 + (x3 - x2);
-                y4 = y3 - (y2 - y1);
-            } else {
-                x1 = p1x;
-                y1 = p1y;
-                
-                x2 = p2x;
-                y2 = p2y;
-                
-                x3 = p3x;
-                y3 = p3y;
-                
-                x4 = p4x;
-                y4 = p4y;
-            }
-            
-            x1 += worldOriginX;
-            y1 += worldOriginY;
-            x2 += worldOriginX;
-            y2 += worldOriginY;
-            x3 += worldOriginX;
-            y3 += worldOriginY;
-            x4 += worldOriginX;
-            y4 += worldOriginY;
-            
-            float u = srcX * this.invTexWidth;
-            float v = (srcY + srcHeight) * this.invTexHeight;
-            float u2 = (srcX + srcWidth) * this.invTexWidth;
-            float v2 = srcY * this.invTexHeight;
-            
-            if(flipX) {
-                float tmp = u;
-                u = u2;
-                u2 = tmp;
-            }
-            
-            if(flipY) {
-                float tmp = v;
-                v = v2;
-                v2 = tmp;
-            }
-            
-            float color = this.color;
-            int idx = this.idx;
-            vertices[idx] = x1;
-            vertices[idx + 1] = y1;
-            vertices[idx + 2] = color;
-            vertices[idx + 3] = u;
-            vertices[idx + 4] = v;
-            
-            vertices[idx + 5] = x2;
-            vertices[idx + 6] = y2;
-            vertices[idx + 7] = color;
-            vertices[idx + 8] = u;
-            vertices[idx + 9] = v2;
-            
-            vertices[idx + 10] = x3;
-            vertices[idx + 11] = y3;
-            vertices[idx + 12] = color;
-            vertices[idx + 13] = u2;
-            vertices[idx + 14] = v2;
-            
-            vertices[idx + 15] = x4;
-            vertices[idx + 16] = y4;
-            vertices[idx + 17] = color;
-            vertices[idx + 18] = u2;
-            vertices[idx + 19] = v;
-            this.idx = idx + 20;
+		}
+		float[] vertices = this.vertices;
+
+		if (texture != this.lastTexture) {
+			// TODO USE NEW TEXTURE
+		} else if (this.idx == vertices.length) {
+			this.flush();
+		}
+
+		final float worldOriginX = x + originX;
+		final float worldOriginY = y + originY;
+		float fx = -originX;
+		float fy = -originY;
+		float fx2 = width - originX;
+		float fy2 = height - originY;
+
+		// scale
+		if ((int) scaleX != 1 || (int) scaleY != 1) {
+			fx *= scaleX;
+			fy *= scaleY;
+			fx2 *= scaleX;
+			fy2 *= scaleY;
+		}
+
+		// construct corner points, start from top left and go counter clockwise
+		final float p1x = fx;
+		final float p1y = fy;
+		final float p2x = fx;
+		final float p2y = fy2;
+		final float p3x = fx2;
+		final float p3y = fy2;
+		final float p4x = fx2;
+		final float p4y = fy;
+
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+		float x3;
+		float y3;
+		float x4;
+		float y4;
+
+		// rotate
+		if ((int) rotation != 0) {
+			final float cos = MathUtils.cosDeg(rotation);
+			final float sin = MathUtils.sinDeg(rotation);
+
+			x1 = cos * p1x - sin * p1y;
+			y1 = sin * p1x + cos * p1y;
+
+			x2 = cos * p2x - sin * p2y;
+			y2 = sin * p2x + cos * p2y;
+
+			x3 = cos * p3x - sin * p3y;
+			y3 = sin * p3x + cos * p3y;
+
+			x4 = x1 + (x3 - x2);
+			y4 = y3 - (y2 - y1);
+		} else {
+			x1 = p1x;
+			y1 = p1y;
+
+			x2 = p2x;
+			y2 = p2y;
+
+			x3 = p3x;
+			y3 = p3y;
+
+			x4 = p4x;
+			y4 = p4y;
+		}
+
+		x1 += worldOriginX;
+		y1 += worldOriginY;
+		x2 += worldOriginX;
+		y2 += worldOriginY;
+		x3 += worldOriginX;
+		y3 += worldOriginY;
+		x4 += worldOriginX;
+		y4 += worldOriginY;
+
+		float u = srcX * this.invTexWidth;
+		float v = (srcY + srcHeight) * this.invTexHeight;
+		float u2 = (srcX + srcWidth) * this.invTexWidth;
+		float v2 = srcY * this.invTexHeight;
+
+		if (flipX) {
+			float tmp = u;
+			u = u2;
+			u2 = tmp;
+		}
+
+		if (flipY) {
+			float tmp = v;
+			v = v2;
+			v2 = tmp;
+		}
+
+		float color = this.color;
+		int idx = this.idx;
+		vertices[idx] = x1;
+		vertices[idx + 1] = y1;
+		vertices[idx + 2] = color;
+		vertices[idx + 3] = u;
+		vertices[idx + 4] = v;
+
+		vertices[idx + 5] = x2;
+		vertices[idx + 6] = y2;
+		vertices[idx + 7] = color;
+		vertices[idx + 8] = u;
+		vertices[idx + 9] = v2;
+
+		vertices[idx + 10] = x3;
+		vertices[idx + 11] = y3;
+		vertices[idx + 12] = color;
+		vertices[idx + 13] = u2;
+		vertices[idx + 14] = v2;
+
+		vertices[idx + 15] = x4;
+		vertices[idx + 16] = y4;
+		vertices[idx + 17] = color;
+		vertices[idx + 18] = u2;
+		vertices[idx + 19] = v;
+		this.idx = idx + 20;
         }
-    }
     
     @Override
     public void draw(Texture texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth,

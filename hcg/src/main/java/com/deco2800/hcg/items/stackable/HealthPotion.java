@@ -6,10 +6,14 @@ import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.ItemRarity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HealthPotion extends ConsumableItem {
     //Super simple example class of a health potion
     int healthAmount;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HealthPotion.class);
 
     public HealthPotion(int amount) {
         healthAmount = amount;
@@ -24,7 +28,7 @@ public class HealthPotion extends ConsumableItem {
     public void consume(Character character) {
         //TODO: Update character health
         ((Player)character).setHealthCur(character.getHealthCur() + 100);
-        System.out.println("Health Updated!");
+        LOGGER.info("Health Updated!");
 
     }
 

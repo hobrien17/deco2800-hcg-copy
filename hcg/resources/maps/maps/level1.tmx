@@ -3,7 +3,7 @@
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="15"/>
-  <property name="weather" value="wind"/>
+  <property name="weather" value="rain"/>
  </properties>
  <tileset firstgid="1" source="../tiles/general-tiles.tsx"/>
  <tileset firstgid="11" source="../tiles/sludgebubbling.tsx"/>
@@ -17,7 +17,7 @@
  <tileset firstgid="111" source="../tiles/new-sand.tsx"/>
  <layer name="ground" width="75" height="75">
   <properties>
-   <property name="name" value="ground"/>
+   <property name="name" value="grass"/>
    <property name="speed" value="1.0"/>
   </properties>
   <data encoding="csv">
@@ -241,15 +241,6 @@
   <object id="361" gid="6" x="1210.87" y="1901.86" width="55" height="32"/>
   <object id="362" gid="6" x="1344.36" y="1885.7" width="55" height="32"/>
   <object id="363" gid="6" x="1050.04" y="1886.44" width="55" height="32"/>
- </objectgroup>
- <objectgroup name="house">
-  <properties>
-   <property name="name" value="house"/>
-  </properties>
-  <object id="437" gid="10" x="229.305" y="1475.24" width="55" height="32"/>
-  <object id="438" x="1027.6" y="272.4"/>
-  <object id="439" x="1047.73" y="262.273"/>
-  <object id="440" x="2111.65" y="1334.35"/>
  </objectgroup>
  <layer name="sludge" width="75" height="75">
   <properties>

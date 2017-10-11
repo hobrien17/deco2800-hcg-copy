@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
@@ -11,6 +12,8 @@ public class Hedgehog extends Enemy implements Tickable {
     int walkingRange;
     int chargingRange;
     boolean chargedAtPlayer;
+
+    private static final String HEDGEHOG = "hedgehog";
 
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
@@ -23,7 +26,7 @@ public class Hedgehog extends Enemy implements Tickable {
      */
     public Hedgehog(float posX, float posY, float posZ, int id) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
-        this.setTexture("hedgehog");
+        this.setTexture(HEDGEHOG);
         this.level = 1;
         walkingRange = 30 * this.level;
         chargingRange = 10 * this.level;
@@ -44,7 +47,7 @@ public class Hedgehog extends Enemy implements Tickable {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put("explosive_seed", 1.0);
+        lootRarity.put(new LootWrapper("explosive_seed"), 1.0);
 
         checkLootRarity();
     }
@@ -77,7 +80,7 @@ public class Hedgehog extends Enemy implements Tickable {
             // move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.setTexture("hedgehog");
+            this.setTexture(HEDGEHOG);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else if (!chargedAtPlayer && distance < chargingRange) {
@@ -91,7 +94,7 @@ public class Hedgehog extends Enemy implements Tickable {
             // move randomly
             setSpeed(this.level * 0.03f);
             this.setStatus(3);
-            this.setTexture("hedgehog");
+            this.setTexture(HEDGEHOG);
         }
     }
     /**

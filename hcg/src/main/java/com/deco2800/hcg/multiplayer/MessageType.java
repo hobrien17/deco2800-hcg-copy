@@ -9,6 +9,8 @@ package com.deco2800.hcg.multiplayer;
  */
 public enum MessageType {
 	ACK,	            // sent after receiving message
+	DISCOVERY,      // sent to discover hosts
+	HOST,           // sent after receiving a discover message
 	JOINING,	        // sent from peer when joining host
 	JOINED,         // sent from host when a peer has joined
 	START,          // sent from host when starting game

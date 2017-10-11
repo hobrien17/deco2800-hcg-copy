@@ -1,5 +1,8 @@
 package com.deco2800.hcg.util;
 
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.entities.Character;
 
@@ -76,9 +79,6 @@ public class Effects {
      */
     private void saveOriginalStats() {
         // TODO implement when owner's attributes have been implemented
-//        originalSlow = owner.getSpeed();
-//        originalHealth = owner.getHealth();
-//        originalAttackSpeed = owner.getAttackSpeed();
     }
 
     /**
@@ -102,23 +102,32 @@ public class Effects {
     public boolean addEffect(Effect newEffect) {
         // TODO check to see if effect is already in there, if it is, reset the cooldown?
         // Check for valid arguments
-        if (newEffect == null) throw new NullPointerException("Effect to be added cannot be null.");
+		if (newEffect == null)
+			throw new NullPointerException(
+					"Effect to be added cannot be null.");
 
-        // Do things depending on the level of the new effect, and whether it overrides a current effect.
+		// Do things depending on the level of the new effect, and whether it overrides a current effect.
         for (Effect effect : currentEffects) {
-            // Only do things if the type of effects are the same
-            if (!checkNames(effect.getName(), newEffect.getName())) { continue; }
+			// Only do things if the type of effects are the same
+			if (!checkNames(effect.getName(), newEffect.getName())) {
+				continue;
+			}
 
-            if (newEffect.getLevel() - effect.getLevel() > 0) {         // new effect is stronger
+			if (newEffect.getLevel() - effect.getLevel() > 0) {         // new effect is stronger
                 removeEffect(effect);
-                return addEffect(newEffect);
-            } else if (newEffect.getLevel() - effect.getLevel() == 0) { // effects are the same level
-                effect.resetUseCounter();
+				return addEffect(newEffect);
+			} else if (newEffect.getLevel() - effect.getLevel() == 0) { // effects
+																		// are
+																		// the
+																		// same
+																		// level
+				effect.resetUseCounter();
                 // We only want to reset the cooldowns on effects that don't apply damage, otherwise lots of
                 // extra damage would be added each time the effect is given to the entity.
-                if (effect.getDamage() == 0) effect.resetCooldownTimer();
-                return true;
-            } else {    // new effect is weaker
+				if (effect.getDamage() == 0)
+					effect.resetCooldownTimer();
+				return true;
+			} else { // new effect is weaker
                 return false;
             }
         }
@@ -147,7 +156,7 @@ public class Effects {
      *
      * @throws NullPointerException if effects is null.
      */
-    public boolean addAllEffects(Collection<Effect> effects) {
+	public boolean addAllEffects(Collection<Effect> effects) {
         // TODO check to see if effect is already in there, if it is, reset the cooldown?
         boolean newChange = false;
 
@@ -155,9 +164,10 @@ public class Effects {
         if (effects == null)
           throw new NullPointerException("Effects collection to be added cannot be null.");
 
-        for (Effect effect : effects) {
-            if (addEffect(effect)) newChange = true;
-        }
+		for (Effect effect : effects) {
+			if (addEffect(effect))
+				newChange = true;
+		}
 
         return newChange;
     }
@@ -212,12 +222,19 @@ public class Effects {
             //Only activate while buff is active
             if (!effect.onCooldown()) {
                 effect.startCooldownTimer();
-                //if(owner instanceof Character){ commented out as owner is already of type Character, you will get
-                //  a compiler error if you do this wrong
                 // Handle damage
                 thisCharacter.takeDamage(effect.getDamage());
                 if(thisCharacter.getHealthCur() <= 0){
+                    Double prob = Math.random();
+                    if (prob > 0.3) {
+                        Corpse corpse = new BasicCorpse(owner.getPosX(), owner.getPosY(), 0);
+                        GameManager.get().getWorld().addEntity(corpse);
+                    }
                     GameManager.get().getWorld().removeEntity(owner);
+                    AbstractEntity creator = effect.getCreator();
+                    if (creator != null && creator instanceof Character) {
+                        ((Character) creator).killAlert(owner);
+                    }
                 }
                 // Handle slows
                 thisCharacter.changeSpeed(effect.getSpeedModifier());

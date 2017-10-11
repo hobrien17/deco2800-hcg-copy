@@ -38,7 +38,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected AbstractEntity user;
     protected BulletType bulletType;
     protected int pellets;
-    protected SoundManager soundManager;    
+    protected SoundManager soundManager;
 
     /**
      * Constructor for Weapon objects.
@@ -70,12 +70,12 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         // TODO: Get proper weapon textures
         this.setTexture(texture);
         this.cooldown = cooldown;
-        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);        
+        this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
     }
-    
+
     /**
      * Sets the type of bullet fired
-     * 
+     *
      * @param BulletType bulletType
      */
     public void setBulletType(BulletType bulletType) {
@@ -111,7 +111,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     public void ceaseFire() {
         this.shoot = false;
     }
-    
+
     /**
      * Makes Sound Manager play firing sound for the weapon
      * Stops the sound first if it is already being played
@@ -143,7 +143,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.followX = worldX;
         this.followY = worldY;
     }
-    
+
 
     /**
      * Creates a new bullet at given position
@@ -187,25 +187,25 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         }
         GameManager.get().getWorld().addEntity(bullet);
     }
-    
+
     public void switchBullet() {
         switch (bulletType) {
-        case BASIC:
-            bulletType = BulletType.ICE;
-            break;
-        case ICE:
-            bulletType = BulletType.FIRE;
-            break;
-        case FIRE:
-            bulletType = BulletType.EXPLOSION;
-            break;
-        case EXPLOSION:
-            bulletType = BulletType.BASIC;
-            break;
-        default:
-            bulletType = BulletType.BASIC;
-            break;
-    }
+            case BASIC:
+                bulletType = BulletType.ICE;
+                break;
+            case ICE:
+                bulletType = BulletType.FIRE;
+                break;
+            case FIRE:
+                bulletType = BulletType.EXPLOSION;
+                break;
+            case EXPLOSION:
+                bulletType = BulletType.BASIC;
+                break;
+            default:
+                bulletType = BulletType.BASIC;
+                break;
+        }
     }
 
     /**
@@ -283,4 +283,3 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         return result;
     }
 }
-

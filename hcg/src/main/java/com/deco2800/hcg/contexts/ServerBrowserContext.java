@@ -9,11 +9,15 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * UI for server browser, used for joining a server.
  */
 public class ServerBrowserContext extends UIContext {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerBrowserContext.class);
 
     private ImageButton host;
     private ImageButton refresh;
@@ -29,8 +33,8 @@ public class ServerBrowserContext extends UIContext {
     private Image separator2;
     private ScrollPane serverListPane;
     private List<String> serverList;
-    private String servers[];
-    private String refreshedServers[];
+    private String[] servers;
+    private String[] refreshedServers;
     private Dialog enterServer;
     private TextButton enterServerAdd;
     private TextButton enterServerExit;
@@ -134,13 +138,11 @@ public class ServerBrowserContext extends UIContext {
         		//get the number of servers hosted on lan
         		//set the number of elements in refreshServers to the number of servers
         		//check if the number of servers hosted is > 0, else exception/error?
-        		//int numServers = function that finds servers;
-        		//refreshedServers = new String[numServers];
                 refreshedServers = new String[0];
 
         		for (int i = 0; i < refreshedServers.length; i++) {
         			refreshedServers[i] = "Server: " + i;
-                    System.out.println(refreshedServers[i]);
+                    LOGGER.info(refreshedServers[i]);
                 }
                 serverList.setItems(refreshedServers);
                 serverListTable.clear();
@@ -170,16 +172,16 @@ public class ServerBrowserContext extends UIContext {
             public void changed(ChangeEvent event, Actor actor) {
                 String address;
                 address = serverIPTextfield.getText(); //recommended set up public method in networkManager
-                serverIPTextfield.setText("");
-                if(address.trim().length() == 0 || address == "") {
-                    serverStatus.setText("Invalid Server IP");
-                } else {
-                    enterServer.hide();
-                    networkManager.init(false);
-                    networkManager.join(serverIPTextfield.getText());
-                }
-
-            }
+				serverIPTextfield.setText("");
+				if (address.trim().length() == 0 || address == "") {
+					serverStatus.setText("Invalid Server IP");
+					return;
+				}
+				
+				enterServer.hide();
+				networkManager.init(false);
+				networkManager.join(serverIPTextfield.getText());
+			}
         });
     }
 

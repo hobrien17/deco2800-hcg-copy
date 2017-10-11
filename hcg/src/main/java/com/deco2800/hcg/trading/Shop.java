@@ -80,8 +80,6 @@ public abstract class Shop {
             shopStock.add(item);
         } else {
             shopItem.addToStack(item.getStackSize());
-
-            //shopStock.get(shopStock.indexOf(shopItem)).addToStack(item.getStackSize());
         }
 
     }
@@ -116,22 +114,29 @@ public abstract class Shop {
      * enough currency in player's inventory
      */
     public int buyStock(Item item) {
+
+
         if (!shopStock.contains(item) || (shopStock.get(shopStock.indexOf(item)).getStackSize() == 0)) {
             return 1;
         } else if (!player.getInventory().canInsert(item)) {
             return 2;
         } else if (item instanceof StackableItem) {
+            if (!player.getInventory().containsSingleItem(seed) || (!player.getInventory().removeItem(seed, item
+                    .getBaseValue()+modifier))) {
+                return 3;
+            }
             int temp = item.getStackSize();
             item.setStackSize(1);
             player.getInventory().addItem(item);
             item.setStackSize(temp);
         } else if (item instanceof SingleItem) {
+            if (!player.getInventory().containsSingleItem(seed) || (!player.getInventory().removeItem(seed, item
+                    .getBaseValue()+modifier))) {
+                return 3;
+            }
             player.getInventory().addItem(item);
         }
-        if (!player.getInventory().containsSingleItem(seed) || (!player.getInventory().removeItem(seed, item
-                .getBaseValue()+modifier))) {
-            return 3;
-        }
+
 
         if (item instanceof SingleItem) {
             shopStock.remove(item);
@@ -172,15 +177,18 @@ public abstract class Shop {
     private Item containsItem(Item item) {
         int maxStack = item.getMaxStackSize();
         Item prelim = null;
-        for (Item i: shopStock) {
-            if (i.sameItem(item)) {
-                if (prelim == null) {
-                    prelim = i;
-                } else if ((prelim.getStackSize() == maxStack) && (i.getStackSize() != maxStack)) {
-                        prelim = i;
-                }
-            }
-        }
+		for (Item i : shopStock) {
+			if (!i.sameItem(item)) {
+				continue;
+			}
+			
+			if (prelim == null) {
+				prelim = i;
+			} else if ((prelim.getStackSize() == maxStack)
+					&& (i.getStackSize() != maxStack)) {
+				prelim = i;
+			}
+		}
         return prelim;
     }
 

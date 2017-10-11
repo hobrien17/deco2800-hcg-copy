@@ -8,7 +8,6 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
 
-
 /**
  * The NPC class is to be implemented by Non-Player Characters (NPC) used in game
  *
@@ -18,7 +17,6 @@ import com.deco2800.hcg.util.Box3D;
  */
 public abstract class NPC extends Character implements Tickable {
 
-    //private static final Logger LOGGER = LoggerFactory.getLogger(NPC.class);
     private String fName;
     private String sName;
     private final Box3D INITIAL_POSITION;
@@ -50,6 +48,7 @@ public abstract class NPC extends Character implements Tickable {
         this.contextManager = (ContextManager)GameManager.get().getManager(ContextManager.class);
         this.INITIAL_POSITION = new Box3D(posX, posY, 0, 0, 0, 0);
         setTexture(texture);
+        this.growRender(-0.2f,-0.2f);
         this.conversation = conversation;
         this.faceImage = faceImage;
     }
@@ -61,16 +60,6 @@ public abstract class NPC extends Character implements Tickable {
 	public void setConversation(String convo){
 		this.conversation = convo;
 	}
-
-    /**
-     * On Tick handler
-     *
-     * @param gameTickCount Current game tick
-     */
-    @Override
-	public abstract void onTick(long gameTickCount);
-    
-    protected abstract void move();
     
     /**
      * Returns the NPC's first name

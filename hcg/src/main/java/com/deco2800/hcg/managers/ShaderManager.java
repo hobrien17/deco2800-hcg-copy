@@ -1,6 +1,5 @@
 package com.deco2800.hcg.managers;
 
-import com.deco2800.hcg.renderers.RenderLightmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +16,11 @@ import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.shading.ShaderState;
 
-public class ShaderManager extends Manager {
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+public class ShaderManager extends Manager implements Observer {
     private FileHandle preVertexShader;
     private FileHandle postVertexShader;
     private FileHandle preFragShader;
@@ -35,7 +38,19 @@ public class ShaderManager extends Manager {
     private SpriteBatch preBatch;
     private SpriteBatch postBatch;
     private BatchTiledMapRenderer tileRenderer;
-    
+
+    //Flag for custom overlay renders
+    private ArrayList<customShader> customRenders;
+
+    private class customShader {
+        Float contrast;
+        Float bloom;
+        Float heat;
+        Color color;
+        StopwatchManager duration;
+        int durationTime;
+    }
+
     public ShaderManager() {
         this.preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
         this.postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
@@ -66,6 +81,9 @@ public class ShaderManager extends Manager {
 
         this.state.setHeat(false);
         this.state.setContrast(0.8F);
+        //Max of 5 custom renders
+        customRenders = new ArrayList<>();
+
     }
     
     public boolean shadersCompiled() {
@@ -82,36 +100,19 @@ public class ShaderManager extends Manager {
         this.renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
         this.scene = new TextureRegion(renderTarget.getColorBufferTexture());
         this.scene.flip(false, true);
-        
-        // We tried to do a lightmap but OpenGL is hard. We'll try this again in cp3.
-        /*
-        // Begin lightmap //////////////////////////////////////////////////////////////////////////////////////////
-        
-        this.lightTarget = new FrameBuffer(Format.RGB565, width, height, false);
-        this.lightMap = new TextureRegion(lightTarget.getColorBufferTexture());
-        this.lightMap.flip(false,  true);
-        
-        this.lightBatch = new SpriteBatch();
-        this.lightBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
-        
-        // Draw onto light target //////////////////////////////////////
-        this.lightTarget.begin();
-        Gdx.gl.glClearColor(1, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        
-        this.lightRenderer.render(this.lightBatch);
-        
-        this.lightTarget.end();
-        this.lightBatch.dispose();
-        
-        this.lightTarget.dispose();
-        
-        */
-        
+
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
-            
+        checkCustomDurations();
         this.preShader.setUniformf("u_globalColor", state.getGlobalLightColour());
+        if (customRenders.size() > 0) {
+            Color baseLight = state.getGlobalLightColour();
+            for (int i = 0; i < customRenders.size(); i++) {
+                //this.preShader.setUniformf("u_globalColor", customRenders.get(i).color);
+                baseLight.mul(customRenders.get(i).color);
+            }
+            this.preShader.setUniformf("u_globalColor", baseLight);
+        }
             
         this.preBatch = new SpriteBatch(1001, preShader);
         this.preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
@@ -135,12 +136,26 @@ public class ShaderManager extends Manager {
             
         // Begin post-processing ///////////////////////////////////////////////////////////////////////////////////
         this.postShader.begin();
-            
+
         this.postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
         this.postShader.setUniformf("u_heat", state.getHeat());
         this.postShader.setUniformf("u_bloom", state.getBloom());
         this.postShader.setUniformf("u_contrast", state.getContrast());
-            
+        // Apply custom effects over the top of the regular effects
+        if (customRenders.size() > 0) {
+            float baseHeat = state.getHeat();
+            float baseBloom = state.getBloom();
+            float baseContrast = state.getContrast();
+            for (int i = 0; i < customRenders.size(); i++) {
+                baseContrast += customRenders.get(i).contrast;
+                baseHeat += customRenders.get(i).heat;
+                baseBloom += customRenders.get(i).bloom;
+            }
+            this.postShader.setUniformf("u_heat", baseHeat);
+            this.postShader.setUniformf("u_bloom", baseBloom);
+            this.postShader.setUniformf("u_contrast", baseContrast);
+        }
+
         this.postBatch = new SpriteBatch(1, this.postShader);
             
         // Draw onto screen ///////////////////////////////////////////
@@ -159,4 +174,36 @@ public class ShaderManager extends Manager {
     public void setOvercast(float overcast) {
         state.setContrast(overcast);
     }
+
+    /** Function used for placing overlay effects on the render */
+    public void setCustom(float contrast, float heat, float bloom, Color color, int duration) {
+        customShader shader = new customShader();
+        shader.contrast = contrast;
+        shader.heat = heat;
+        shader.bloom = bloom;
+        shader.color = color;
+        shader.duration = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        shader.duration.addObserver(this);
+        shader.durationTime = duration;
+        shader.duration.startTimer(duration);
+        customRenders.add(shader);
+    }
+
+    public void checkCustomDurations() {
+        for (int i = 0; i < customRenders.size(); i++) {
+            if (customRenders.get(i).durationTime < customRenders.get(i).duration.getStopwatchTime()) {
+                //timer finished. remove
+                System.out.println("Timer ended"+customRenders.get(i).duration.getStopwatchTime());
+                customRenders.remove(i);
+            }
+        }
+    }
+
+    /** Needed for stopwatch manager */
+    @Override
+    public void update(Observable o, Object arg) {
+        int time = (int) (float) arg;
+        //((StopwatchManager) o).onTick(time);
+    }
+
 }

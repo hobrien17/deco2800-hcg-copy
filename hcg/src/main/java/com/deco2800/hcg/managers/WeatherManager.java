@@ -6,8 +6,6 @@ import com.badlogic.gdx.Gdx;
 import java.util.*;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.types.Weathers;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.SoundManager;
 
 /**
  * A class to manage the game's internal system of weather. Weather can be set
@@ -52,47 +50,29 @@ public class WeatherManager extends Manager {
 	private void setUp(String fileName) {
 		weather.load(Gdx.files.internal("resources/particles/" + fileName),
 				Gdx.files.internal("resources/particles/"));
+		this.resize();
+	}
+
+	/**
+	 * Resize the current weather effect to fit the current screen.
+	 */
+	public void resize() {
 		for (int emitter = 0; emitter < weather.getEmitters().size; emitter++) {
 
 			ParticleEmitter newEmitter = weather.getEmitters()
 					.get(emitter);
 			newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
 					Gdx.graphics.getHeight() / 2);
-
-			// Scale is currently hardcoded; TO DO
-			int scale = 9;
-			float heightHighMax;
-			float heightLowMax;
-			float heightHighMin;
-			float heightLowMin;
-			float widthHighMax;
-			float widthLowMax;
-			float widthHighMin;
-			float widthLowMin;
 			
-			heightHighMax = newEmitter.getSpawnHeight().getHighMax();
-			newEmitter.getSpawnHeight().setHighMax(heightHighMax * scale);
+			newEmitter.getSpawnHeight().setHighMax(Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setHighMin(Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setLowMax(0);
+			newEmitter.getSpawnHeight().setLowMin(0);
 
-			heightLowMax = newEmitter.getSpawnHeight().getLowMax();
-			newEmitter.getSpawnHeight().setLowMax(heightLowMax * scale);
-
-			heightHighMin = newEmitter.getSpawnHeight().getHighMin();
-			newEmitter.getSpawnHeight().setHighMin(heightHighMin * scale);
-
-			heightLowMin = newEmitter.getSpawnHeight().getLowMin();
-			newEmitter.getSpawnHeight().setLowMin(heightLowMin * scale);
-
-			widthHighMax = newEmitter.getSpawnWidth().getHighMax();
-			newEmitter.getSpawnWidth().setHighMax(widthHighMax * scale * 2);
-
-			widthLowMax = newEmitter.getSpawnWidth().getLowMax();
-			newEmitter.getSpawnWidth().setLowMax(widthLowMax * scale * 2);
-
-			widthHighMin = newEmitter.getSpawnWidth().getHighMin();
-			newEmitter.getSpawnWidth().setHighMin(widthHighMin * scale * 2);
-
-			widthLowMin = newEmitter.getSpawnWidth().getLowMin();
-			newEmitter.getSpawnWidth().setLowMin(widthLowMin * scale * 2);
+			newEmitter.getSpawnWidth().setHighMax(Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setHighMin(Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setLowMax(0);
+			newEmitter.getSpawnWidth().setLowMin(0);
 		}
 	}
 
@@ -128,11 +108,13 @@ public class WeatherManager extends Manager {
 			break;
 		case DROUGHT:
 			setUp("2dDrought.p");
+			break;
 		case STORM:
 			setUp("2dStorm.p");
+			break;
 		}
 		
-		soundManager.loopSound(enumToSoundFile(weatherType));
+		soundManager.ambientLoopSound(enumToSoundFile(weatherType));
 		onEffects.add(weatherType);
 	}
 

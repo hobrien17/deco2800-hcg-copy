@@ -2,7 +2,6 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -37,13 +36,16 @@ public class LevelUpContext extends CharacterStatsScreen {
         finishButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (skillPoints == 0) {
-                    playerManager.getPlayer().setAttribute("meleeSkill", meleeSkill);
-                    playerManager.getPlayer().setAttribute("gunsSkill", gunsSkill);
-                    playerManager.getPlayer().setAttribute("energyWeaponsSkill", energyWeaponsSkill);
-                    contextManager.popContext();
-                }
-            }
+				if (skillPoints != 0) {
+					return;
+				}
+				playerManager.getPlayer().setAttribute("meleeSkill",
+						meleeSkill);
+				playerManager.getPlayer().setAttribute("gunsSkill", gunsSkill);
+				playerManager.getPlayer().setAttribute("energyWeaponsSkill",
+						energyWeaponsSkill);
+				contextManager.popContext();
+			}
         });
 
         topRowInfoTable.add(finishButton).left().expandX();
@@ -87,16 +89,13 @@ public class LevelUpContext extends CharacterStatsScreen {
                     if ((meleeSkill - 2) >= oldMeleeSkill) {
                         meleeSkill -= 2;
                         skillPoints++;
-                    }
-                } else {
-                    if ((meleeSkill - 1) >= oldMeleeSkill) {
-                        meleeSkill--;
-                        skillPoints++;
-                    }
-                }
-                meleeSkillLabel.setText("Melee Skill: " + meleeSkill);
+					}
+				} else if ((meleeSkill - 1) >= oldMeleeSkill) {
+					meleeSkill--;
+					skillPoints++;
+				}
+				meleeSkillLabel.setText("Melee Skill: " + meleeSkill);
                 skillPointsLabel.setText("Available Points: " + skillPoints);
-
             }
         });
 
@@ -107,13 +106,11 @@ public class LevelUpContext extends CharacterStatsScreen {
                     if ((gunsSkill - 2) >= oldGunsSkill) {
                         gunsSkill -= 2;
                         skillPoints++;
-                    }
-                } else {
-                    if ((gunsSkill - 1) >= oldGunsSkill) {
-                        gunsSkill--;
-                        skillPoints++;
-                    }
-                }
+					}
+				} else if ((gunsSkill - 1) >= oldGunsSkill) {
+					gunsSkill--;
+					skillPoints++;
+				}
                 gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
                 skillPointsLabel.setText("Available Points: " + skillPoints);
 
@@ -128,13 +125,11 @@ public class LevelUpContext extends CharacterStatsScreen {
                         energyWeaponsSkill -= 2;
                         skillPoints++;
                     }
-                } else {
-                    if ((energyWeaponsSkill - 1) >= oldEnergyWeaponsSkill) {
-                        energyWeaponsSkill--;
-                        skillPoints++;
-                    }
-                }
-                energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
+				} else if ((energyWeaponsSkill - 1) >= oldEnergyWeaponsSkill) {
+					energyWeaponsSkill--;
+					skillPoints++;
+				}
+				energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
                 skillPointsLabel.setText("Available Points: " + skillPoints);
             }
         });

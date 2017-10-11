@@ -1,5 +1,6 @@
 package com.deco2800.hcg.observers;
 
+@FunctionalInterface
 public interface MessageObserver {
 
 	/**

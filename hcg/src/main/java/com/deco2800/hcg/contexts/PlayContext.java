@@ -57,7 +57,7 @@ import com.deco2800.hcg.shading.ShaderState;
  */
 public class PlayContext extends Context {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
 
     // Managers used by the game
     private GameManager gameManager;
@@ -139,6 +139,9 @@ public class PlayContext extends Context {
         plantWindow = new PlantWindow(skin);
         chatStack = new ChatStack(stage);
 
+        /* Add ParticleEffectActor that controls weather. */
+        stage.addActor(weatherManager.getActor());
+
         if (networkManager.isInitialised()) {
             stage.addActor(chatStack);
         }
@@ -159,9 +162,6 @@ public class PlayContext extends Context {
                 contextManager.popContext();
             }
         });
-
-        /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
 
         /* Add all buttons to the menu */
         window.add(button);
@@ -290,6 +290,7 @@ public class PlayContext extends Context {
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
         radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        weatherManager.resize();
     }
 
     /**

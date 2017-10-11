@@ -10,11 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.deco2800.hcg.entities.worldmap.MapNode;
-import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
-import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
-import com.deco2800.hcg.entities.worldmap.WorldMap;
-import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
+import com.deco2800.hcg.entities.worldmap.*;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
@@ -78,9 +74,11 @@ public class WorldMapContext extends UIContext {
 
 		Button quitButton = new TextButton("Quit", skin);
 		Button discoveredButton = new TextButton("Show all nodes", skin);
+		Button demoButton = new TextButton("Demo world", skin);
 
 		window.add(quitButton);
 		window.add(discoveredButton);
+		window.add(demoButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight());
@@ -129,6 +127,22 @@ public class WorldMapContext extends UIContext {
 				}
 			}
 		});
+		
+		demoButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				World world = new World("test");
+				Level level = new Level(world, 0, 1, 1);
+
+				
+				((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                setWeather(world.getWeatherType());
+				
+				gameManager.setWorld(world);
+				gameManager.setOccupiedNode(new MapNode(0,0,1,level, true));
+				playerManager.spawnPlayers();
+				contextManager.pushContext(new PlayContext());
+			}
+		});
 
 		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(menuStage); // Add the user options as a processor
@@ -136,44 +150,7 @@ public class WorldMapContext extends UIContext {
 		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
-		//inputManager.addMouseMovedListener(this::handleMouseMoved);
 	}
-
-	/*
-	// when hovering the node, change the mouse cursor, delete if not needed
-	private void handleMouseMoved(int screenX, int screenY){
-
-		Vector2 mouseScreen = new Vector2(screenX, screenY);
-		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
-		for (MapNodeEntity nodeEntity : allNodes) {
-			float nodeStartX = nodeEntity.getXPos();
-			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
-			float nodeStartY = nodeEntity.getYPos();
-			float nodeEndY = nodeEntity.getYPos() + nodeEntity.getHeight();
-			if (mouseStage.x >= nodeStartX && mouseStage.x <= nodeEndX
-					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
-					&& nodeEntity.getNode().isDiscovered()
-					&& !(nodeEntity.getNode().getNodeType() == 2)) {
-
-				// online free png https://dribbble.com/shots/815059-Basic-Cursor-PNG-Pack
-				// for design team: create a 'cursor' png file with:
-				//        a "power of 2" width px (256, 512,...)
-				//        a "RGBA8888" format
-				// otherwise, the code below will break
-
-				Pixmap pixmap = new Pixmap(Gdx.files.internal("resources/cursor-hand.png"));
-				Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0));
-				pixmap.dispose();
-				//Gdx.graphics.setSystemCursor(SystemCursor.Hand);  // according to the library, this only works in LWJG3
-			} else {
-				// this line should set the current cursor back to normal. but I don't know how to do. will look into this
-				// at the moment it's kind of automatically change back to normal when you no longer hovering
-
-				//Gdx.graphics.setSystemCursor(SystemCursor.Arrow);  // according to the library, this only works in LWJG3
-
-			}
-		}
-	}*/
 	
 	/**
 	 * Handles the mouse click up on a node entity. If the node is a clickable entity (not completed or hidden), the
@@ -214,7 +191,6 @@ public class WorldMapContext extends UIContext {
 				// delete stopwatches
                 ((StopwatchManager) GameManager.get().getManager(StopwatchManager.class)).deleteObservers();
                 
-
                 // create new world
 				World newWorld = new World(nodeEntity.getNode()
                     .getNodeLinkedLevel().getWorld().getLoadedFile());
@@ -225,6 +201,8 @@ public class WorldMapContext extends UIContext {
 
                 // set the PlayerMapEntity position
 				playerMapEntity.updatePosByNodeEntity(nodeEntity);
+
+                newWorld.generatePuddles();
 				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
@@ -242,10 +220,12 @@ public class WorldMapContext extends UIContext {
 		hiddenNodes.clear();
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			MapNodeEntity nodeEntry = new MapNodeEntity(node);
-			if (!node.isDiscovered()) {
-				hiddenNodes.add(nodeEntry);
-				nodeEntry.setVisible(false);
+			if (node.isDiscovered()) {
+				continue;
 			}
+			
+			hiddenNodes.add(nodeEntry);
+			nodeEntry.setVisible(false);
 		}
 		menuStage.addActor(window);
 	}

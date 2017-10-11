@@ -38,7 +38,9 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private ImageButton shopExit;
     private Table centreTable;
     private Table buySell;
-    
+    private Image errorImage;
+    private boolean errorImageVisible;
+
     private TextField amount;
     private String amountString;
 
@@ -54,17 +56,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopKeeper.getShop().open(0, player);
         this.player = player;
         this.shopKeeper = shopKeeper;
-        amountString = "1";
-        amount = new TextField(amountString, 
-        		new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
-        
-        draw();
-
-
-
-    }
-
-    public void draw() {
         // Get necessary managers
         gameManager = GameManager.get();
         contextManager = (ContextManager)
@@ -73,6 +64,14 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 gameManager.getManager(TextureManager.class);
         timeManager = (TimeManager)
                 gameManager.getManager(TimeManager.class);
+        amountString = "1";
+        amount = new TextField(amountString,
+                new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
+        errorImageVisible = false;
+        draw();
+    }
+
+    public void draw() {
 
         //stop in-game time while in shop
         timeManager.pauseTime();
@@ -91,13 +90,14 @@ public class ShopMenuContext extends InventoryDisplayContext {
 
         playerInventory = new Table();
         playerInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
-        
+
         //adding the textfield
         amountString = amount.getText();
         amount = new TextField(amountString, skin);
         amount.setWidth(160);
-        
+
         buySell = new Table();
+
 
         buyBag = new Image(new Image(textureManager.getTexture("buy_bag")).getDrawable());
         sellBag = new Image(new Image(textureManager.getTexture("sell_bag")).getDrawable());
@@ -129,14 +129,15 @@ public class ShopMenuContext extends InventoryDisplayContext {
         centreTable.add(playerInventory);
         centreTable.row();
 
-        Image error = new Image(textureManager.getTexture("error_shop"));
-        error.setPosition((stage.getHeight()/2 - error.getHeight()), (stage.getWidth()/2 - error.getWidth()));
-        error.setVisible(false);
+        errorImage = new Image(textureManager.getTexture("error_shop"));
+        errorImage.setPosition(stage.getWidth()/2 - (errorImage.getWidth()/2) ,stage.getHeight()-errorImage.getHeight());
+        errorImage.toFront();
+        errorImage.setVisible(errorImageVisible);
 
         //add table to stage
         stage.addActor(centreTable);
         stage.addActor(shopExit);
-        stage.addActor(error);
+        stage.addActor(errorImage);
 
         //Listeners
         shopExit.addListener(new ClickListener() {
@@ -149,33 +150,40 @@ public class ShopMenuContext extends InventoryDisplayContext {
             }
         });
 
-        shopBuy.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
-                    int number = Integer.parseInt(amount.getText().trim());
-                    for (int i = 0; i < number; i++) {
-                        shopKeeper.getShop().buyStock(selectedItem);
-                    }
-                    //selectedItem = null;
-                    draw();
-                }
-            }
-        });
+		shopBuy.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				errorImageVisible = false;
+				if ((selectedItem != null) && !selectedItem
+						.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
+					int number = Integer.parseInt(amount.getText().trim());
+					for (int i = 0; i < number; i++) {
+						if (shopKeeper.getShop().buyStock(selectedItem) != 0) {
+							errorImageVisible = true;
+						}
+					}
+				}
+				draw();
+			}
+		});
 
-        shopSell.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER)) && !(shopKeeper.getShop().getStock().contains(selectedItem))) {
-                    int number = Integer.parseInt(amount.getText().trim());
-                    for (int i = 0; i < number; i++) {
-                        shopKeeper.getShop().sellStock(selectedItem);
-                    }
-                    //selectedItem = null;
-                    draw();
-                }
-            }
-        });
-    }
-
+		shopSell.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				errorImageVisible = false;
+				int number = Integer.parseInt(amount.getText().trim());
+				if ((selectedItem != null)
+						&& !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))
+						&& !(shopKeeper.getShop().getStock()
+								.contains(selectedItem))) {
+					for (int i = 0; i < number; i++) {
+						if (shopKeeper.getShop().sellStock(selectedItem) != 0) {
+							errorImageVisible = true;
+						}
+					}
+				}
+				draw();
+			}
+		});
+	}
 }

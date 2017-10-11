@@ -16,7 +16,9 @@ public class ChatMessage extends Message {
 	
 	private String string;
 	
-	public ChatMessage() {}
+	public ChatMessage() {
+		//deliberately empty
+	}
 	
 	public ChatMessage(String string) {
 		super(MessageType.CHAT);
@@ -32,7 +34,7 @@ public class ChatMessage extends Message {
 	@Override
 	public void unpackData(ByteBuffer buffer) throws MessageFormatException {
 		super.unpackData(buffer);
-		byte bytes[] = new byte[buffer.remaining()];
+		byte[] bytes = new byte[buffer.remaining()];
 		buffer.get(bytes);
 		string = new String(bytes);
 	}

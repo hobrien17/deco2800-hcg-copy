@@ -12,7 +12,9 @@ public class JoiningMessage extends Message {
 	private final NetworkManager networkManager =
 			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 	
-	public JoiningMessage() {}
+	public JoiningMessage() {
+		//deliberately empty
+	}
 	
 	public JoiningMessage(int id) {
 		super(MessageType.JOINING);

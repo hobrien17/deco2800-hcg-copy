@@ -12,12 +12,15 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Selectable;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.types.Weathers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import com.deco2800.hcg.util.Array2D;
 import org.slf4j.Logger;
@@ -56,8 +59,8 @@ public class World {
 
 		//Create Test Collision Map - with test dimensions
 
-		this.setWidth(1000);
-		this.setLength(1000);
+		this.setWidth(100);
+		this.setLength(100);
 
 		this.collisionMap = new Array2D<> (this.getWidth() + 1, this.getLength() + 1);
 		for (int x = 0; x < this.getWidth() + 1; x++) {
@@ -398,11 +401,13 @@ public class World {
 		//Add to the collision map
 		int[] collisionCoords = makeCollisionCoords(entity);
 
-		//for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
-		//	for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
-		//		collisionMap.get(x, y).add(entity);
-		//	}
-		//}
+		for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
+			for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
+				if (x >= 0 && x < this.getWidth() && y >= 0 && y < this.getLength()) {
+					collisionMap.get(x, y).add(entity);
+				}
+			}
+		}
 	}
 
 	/**
@@ -427,10 +432,10 @@ public class World {
 		//Remove from collision map
 		int[] collisionCoords = makeCollisionCoords(entity);
 
-		int x_val = collisionCoords[0];
-		int y_val = collisionCoords[2];
+		int xVal = collisionCoords[0];
+		int yVal = collisionCoords[2];
 
-		if (x_val > 0 && x_val < this.getWidth() && y_val > 0 && y_val < this.getLength()) {
+		if (xVal > 0 && xVal < this.getWidth() && yVal > 0 && yVal < this.getLength()) {
 			for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
 				for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
 					collisionMap.get(x, y).remove(entity);
@@ -518,6 +523,16 @@ public class World {
 	public Weathers getWeatherType() {
 		return weather;
 	}
+	
+	/**
+	 * Sets the weather of the world to newWeather
+	 * 
+	 * @param newWeather
+	 * 			the world's new weather type
+	 */
+	public void setWeather(Weathers newWeather) {
+		weather = newWeather;
+	}
 
 	/**
 	 * Returns the starting X for the player
@@ -535,4 +550,126 @@ public class World {
 	public float getStartingPlayerY() {
 		return startingPlayerY;
 	}
+
+	/**
+	 * Makes a few puddles at the world. Will add rainpuddle if weather is rain, 
+	 * icepuddle if weather is snow and none otherwise.
+	 */
+  public void generatePuddles() {
+    
+    MapProperties mapProperties = new MapProperties();
+    
+    // get texture manager
+    TextureManager textureManager = (TextureManager) 
+        GameManager.get().getManager(TextureManager.class);
+    
+    String layerName = "";
+    String texture = "";
+    
+    switch(this.weather) {
+      case RAIN:
+        // lets make a rain puddle!
+        layerName = "puddle";
+        texture = "rainpuddle";
+        break;
+        
+      case SNOW:
+        // lets make an ice puddle!
+        layerName = "icepuddle";
+        texture = "icepuddle";
+        break;
+        
+      default:
+        return;
+    }
+    
+    mapProperties.put("name", layerName);
+    mapProperties.put("speed", "1");
+    
+    this.addTiledMapTileLayer(layerName, mapProperties);
+    
+    Random rand = new Random();
+    
+    int successes = -3 - rand.nextInt(2);
+    
+    // checked tiles list. there will only be at most our number of tiles created * 10^2 of these
+    List<String> tilesTaken = new ArrayList<String>((0 - successes) * 10 * 10);
+    
+    // pick a random square on the map, check its surroundings are not null
+    // we will time out after 200 attempts
+    for (int i = 0; i < 200; i++) {
+      
+      // pick a random pair of numbers  
+      int X = 5 + rand.nextInt(this.getWidth() - 10);
+      int Y = 5 + rand.nextInt(this.getLength() - 10);
+
+      Boolean success = true;
+      List<String> tilesSuccess = new ArrayList<String>(10 * 10);
+      
+      // check that we have chosen a valid tile (i.e. enough space around it
+      for (int x = X - 5; x < X + 5; x++) {
+        for (int y = Y - 5; y < Y + 5; y++) {
+          if (this.getTiledMapTileLayerAtPos(y, x) == null) {
+            success = false;
+            break;
+            
+          } else if (tilesTaken.contains(String.format("%d,%d", y, x))){
+            success = false;
+            break;
+            
+          } else {
+            // make sure we aren't on an exit tile! this would be bad
+            if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("name") != null) {
+              if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("name").equals("exit")) {
+                success = false;
+                break;
+              }
+              // we don't want to be on deep water either
+              if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("name").equals("deep-water")) {
+                success = false;
+                break;
+              }
+
+            }
+            // make sure we aren't on an damage tile either
+            if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("damage") != null) {
+              success = false;
+              break;
+            }
+            // make sure we aren't on top of a slippery tile too
+            if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("slippery") != null) {
+              success = false;
+              break;
+            }
+
+            tilesSuccess.add(String.format("%d,%d", y, x));
+          }
+          
+        }
+        if (!success) {
+          break;
+        }
+      }
+      
+      if (success) {
+        // add tile
+        this.newTileAtPos((int) X, (int) Y, textureManager.getTexture(texture),
+           (TiledMapTileLayer) this.getMapLayerWithProperty("name", layerName));
+        
+        // add to successful blocks created. If we've made enough then break
+        successes++;
+        if (successes > 0) {
+          break;
+        }
+
+        // add all the tiles used in this puddle creation to the tilesTaken list
+        for (String str : tilesSuccess) {
+          tilesTaken.add(str);
+        }
+        
+      }
+      
+    }    
+
+  }
 }

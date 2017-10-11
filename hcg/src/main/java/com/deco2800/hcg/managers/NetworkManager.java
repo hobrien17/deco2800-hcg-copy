@@ -27,14 +27,14 @@ import com.deco2800.hcg.multiplayer.*;
 public final class NetworkManager extends Manager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NetworkManager.class);
 	private static final byte[] MESSAGE_HEADER = "H4RDC0R3".getBytes();
-	private static int MAX_PLAYERS = 4; // maybe 5?
+	private static final int MAX_PLAYERS = 4; // maybe 5?
 
 	private DatagramChannel channel;
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
 	private HashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
 	private HashMap<Integer, byte[]> sendQueue;
-	private HashMap<Integer, Long> peerTickCounts;
+	private long[] peerTickCounts;
 	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
 	private boolean host = false;
 	private boolean initialised = false;
@@ -58,7 +58,7 @@ public final class NetworkManager extends Manager {
 	public void init(boolean hostGame) {
 		sockets = new HashMap<>();
 		sendQueue = new HashMap<>();
-		peerTickCounts = new HashMap<>();
+		peerTickCounts = new long[MAX_PLAYERS];
 		processedIds = new ArrayList<>();
 		
 		gameManager = GameManager.get();
@@ -177,7 +177,7 @@ public final class NetworkManager extends Manager {
 		byte[] bytes = new byte[messageBuffer.remaining()];
 		messageBuffer.get(bytes);
 		// add byte array to queue
-		return (sendQueue.put(message.getId(), bytes) == null);
+		return sendQueue.put(message.getId(), bytes) == null;
 	}
 
 	/**
@@ -273,7 +273,9 @@ public final class NetworkManager extends Manager {
 		SocketAddress address = null;
 		try {
 			address = channel.receive(receiveBuffer);
-		} catch (IOException e) {}
+		} catch (IOException e) {
+			return;
+		}
 		if (address == null) {
 			// no message received
 			return;
@@ -323,58 +325,41 @@ public final class NetworkManager extends Manager {
 						throw new MessageFormatException();
 				}
 				
-				if (messageType != MessageType.ACK) {
-					// unpack message
-					message.unpackData(receiveBuffer);
+				// unpack message
+				message.unpackData(receiveBuffer);
 
-					if (!processedIds.contains(messageId)) {
-						// process message
-						message.process();
-						// make sure we don't process this again
-						processedIds.add(messageId);
-						// log
-						LOGGER.debug("RECEIVED: " + messageType.toString());
-
-						// acknowledge that we've received this
-						messageBuffer.clear();
-						// put header
-						messageBuffer.put(MESSAGE_HEADER);
-						// put id
-						messageBuffer.putInt(-1);
-						// put type
-						messageBuffer.put((byte) MessageType.ACK.ordinal());
-						// put number of fields
-						messageBuffer.put((byte) 0);
-						// put ACK id
-						messageBuffer.putInt(messageId);
-						// send ACK to peer
-						messageBuffer.flip();
-						try {
-							channel.send(messageBuffer, address);
-						} catch (IOException e) {}
-					} else {
-						// acknowledge that we've already received this
-						messageBuffer.clear();
-						// put header
-						messageBuffer.put(MESSAGE_HEADER);
-						// put id
-						messageBuffer.putInt(-1);
-						// put type
-						messageBuffer.put((byte) MessageType.ACK.ordinal());
-						// put number of fields
-						messageBuffer.put((byte) 0);
-						// put ACK id
-						messageBuffer.putInt(messageId);
-						// send ACK to peer
-						messageBuffer.flip();
-						try {
-							channel.send(messageBuffer, address);
-						} catch (IOException e) {}
-					}
+				if (!processedIds.contains(messageId)) {
+					// process message
+					message.process();
+					// make sure we don't process this again
+					processedIds.add(messageId);
+					// log
+					LOGGER.debug("RECEIVED: " + messageType.toString());
 				}
+				
+				// acknowledge that we've already received this
+				messageBuffer.clear();
+				// put header
+				messageBuffer.put(MESSAGE_HEADER);
+				// put id
+				messageBuffer.putInt(-1);
+				// put type
+				messageBuffer.put((byte) MessageType.ACK.ordinal());
+				// put number of fields
+				messageBuffer.put((byte) 0);
+				// put ACK id
+				messageBuffer.putInt(messageId);
+				// send ACK to peer
+				messageBuffer.flip();
+				
+				try {
+					channel.send(messageBuffer, address);
+				} catch (IOException e) {}
 			}
-		} catch (BufferOverflowException|BufferUnderflowException|MessageFormatException e) {
-			// we don't care if a datagram is invalid, only that we don't try to read it any further
+		} catch (BufferOverflowException | BufferUnderflowException
+				| MessageFormatException e) {
+			// we don't care if a datagram is invalid, only that we don't try to
+			// read it any further
 			// TODO Implement a timeout so we can get away with this
 		}
 	}

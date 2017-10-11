@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities.bullets;
 
-import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -14,7 +13,6 @@ import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.bullets.BulletType;
 
 import java.util.List;
 
@@ -59,7 +57,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float xd, float yd,
-			AbstractEntity user, int hitCount) {
+				  AbstractEntity user, int hitCount) {
 		this(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
@@ -86,7 +84,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
-			float newZ, AbstractEntity user, int hitCount) {
+				  float newZ, AbstractEntity user, int hitCount) {
 		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
@@ -119,14 +117,14 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
-			float newZ, float xLength, float yLength, float zLength,
-			AbstractEntity user, int hitCount) {
+				  float newZ, float xLength, float yLength, float zLength,
+				  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		this.setTexture("battle_seed");
 		this.bulletType = BulletType.BASIC;
 
-        this.goalX = newX;
-        this.goalY = newY;
+		this.goalX = newX;
+		this.goalY = newY;
 
 		float deltaX = getPosX() - (goalX - this.getXLength()/2);
 		float deltaY = getPosY() - (goalY - this.getYLength()/2);
@@ -141,17 +139,17 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
-	
+
 	/**
 	 * Return BulletType
-	 * 
+	 *
 	 * @return bulletType
 	 *             Type of Bullet Enum
 	 */
 	public BulletType getBulletType() {
-	    return this.bulletType;
+		return this.bulletType;
 	}
-	
+
 	/**
 	 * On Tick handler
 	 *
@@ -160,12 +158,12 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-	    entityHit();
-	    
-        if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
-                - Math.abs(goalX)) < 0.5
-                && Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
-                - Math.abs(goalY)) < 0.5) {
+		entityHit();
+
+		if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
+				- Math.abs(goalX)) < 0.5
+				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
+				- Math.abs(goalY)) < 0.5) {
 			GameManager.get().getWorld().removeEntity(this);
 		}
 		setPosX(getPosX() + changeX);
@@ -183,65 +181,49 @@ public class Bullet extends AbstractEntity implements Tickable {
 		List<AbstractEntity> entities = GameManager.get().getWorld()
 				.getEntities();
 		for (AbstractEntity entity : entities) {
-			if (this.collidesWith(entity)) {
-				// Collision with enemy
-				if (entity instanceof Enemy
-						&& (user instanceof Player || user instanceof Corpse)) {
-					Enemy target = (Enemy) entity;
-					if (target instanceof MushroomTurret) {
-						MushroomTurret turret = (MushroomTurret) target;
-						turret.removeObserver();
-						GameManager.get().getWorld().removeEntity(turret);
+			if (!this.collidesWith(entity)) {
+				continue;
+			}
+			// Collision with enemy
+			if (entity instanceof Enemy
+					&& (user instanceof Player || user instanceof Corpse)) {
+				Enemy target = (Enemy) entity;
+				if (target instanceof MushroomTurret) {
+					MushroomTurret turret = (MushroomTurret) target;
+					turret.removeObserver();
+					GameManager.get().getWorld().removeEntity(turret);
 
-					} else if (target.getHealthCur() <= 0) {
-						//Temporary increase of xp for all enemies killed
-						playerManager.getPlayer().gainXp(50);
-						Double prob = Math.random();
-						if (prob > 0.3) {
-							Corpse corpse = new BasicCorpse(target.getPosX(), target.getPosY(), 0);
-							GameManager.get().getWorld().addEntity(corpse);
-						}
-						applyEffect(target);
-						if (user instanceof Player) {
-							Player playerUser = (Player) user;
-							playerUser.killLogAdd(target.getID());
-						}
-					} else {
-						//Temporary increase of xp for all enemies killed
-						playerManager.getPlayer().gainXp(50);
-						applyEffect(target);
-					}
-					hitCount--;
+				} else if (target.getHealthCur() <= 0) {
+					// Temporary increase of xp for all enemies killed
+					playerManager.getPlayer().gainXp(50);
+					applyEffect(target);
+				} else {
+					// Temporary increase of xp for all enemies killed
+					playerManager.getPlayer().gainXp(50);
+					applyEffect(target);
 				}
+				hitCount--;
+			}
 
-				// Collision with destructable tree
-				if (entity instanceof DestructableTree && user instanceof Player && !(this instanceof GrassBullet)) {
-					DestructableTree tree = (DestructableTree) entity;
-					applyEffect(tree);
-					hitCount--;
-				}
+			// Collision with destructable tree
+			if (entity instanceof DestructableTree && user instanceof Player
+					&& !(this instanceof GrassBullet)) {
+				DestructableTree tree = (DestructableTree) entity;
+				applyEffect(tree);
+				hitCount--;
+			}
 
-				// Collision with player
-				if (entity instanceof Player && user instanceof Enemy) {
-					// add code to apply effect to player here
-					Enemy enemyUser = (Enemy) user;
-					enemyUser.causeDamage((Player) entity);
-					hitCount--;
-				}
+			// Collision with player
+			if (entity instanceof Player && user instanceof Enemy) {
+				// add code to apply effect to player here
+				Enemy enemyUser = (Enemy) user;
+				enemyUser.causeDamage((Player) entity);
+				hitCount--;
+			}
 
-				// Collision with corpse
-				/*
-				if (entity instanceof Corpse && user instanceof Player) {
-					Corpse corpse = (Corpse) entity;
-					//corpse.plantInside(this); //commented out because this is immediately spawning sunflower turrets
-					hitCount = 0;
-				}
-				*/
-
-				if (hitCount == 0) {
-					GameManager.get().getWorld().removeEntity(this);
-					break;
-				}
+			if (hitCount == 0) {
+				GameManager.get().getWorld().removeEntity(this);
+				break;
 			}
 		}
 	}
@@ -255,11 +237,10 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0, user));
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
-		String soundName;
 		if (bulletType instanceof Grenade) {
 			soundManager.stopSound("bullet-grenade-explode");
 			soundManager.playSound("bullet-grenade-explode");

@@ -27,6 +27,9 @@ import java.util.List;
  */
 public class CharacterCreationContext extends CharacterContext{
 
+    private static final String FEMALE = "Female";
+    private static final String MALE = "Male";
+
     private Label strengthLabel;
     private Label vitalityLabel;
     private Label agilityLabel;
@@ -61,13 +64,12 @@ public class CharacterCreationContext extends CharacterContext{
     private Window characterPreviewWindow;
     private Window selectedDescriptionWindow;
 
-    private String[] sexes = new String[]{"Male", "Female"};
+    private String[] sexes = new String[]{MALE, FEMALE};
 
     // Placeholder for setting what skills are specialised because I'm a data structures n00b
     private List<String> SPECIALISED_SKILLS = Arrays.asList( "meleeSkill", "gunsSkill", "energyWeaponsSkill");
     private Map<String, Boolean> specialisedSkills;
 
-    //private int[] specialisedSkills = new int[3];
 
     private int strength = 5; 
     private int vitality = 5;
@@ -96,7 +98,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture female1;
     private Texture female2;
     private Texture female3;
-    private Texture blank_window_background;
+    private Texture blankWindowBackground;
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray;
@@ -132,7 +134,7 @@ public class CharacterCreationContext extends CharacterContext{
         female1 = textureManager.getTexture("ccFemale1");
         female2 = textureManager.getTexture("ccFemale2");
         female3 = textureManager.getTexture("ccFemale3");
-        blank_window_background = textureManager.getTexture("ccWindow_BorderSmaller_White");
+        blankWindowBackground = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
 
@@ -140,7 +142,6 @@ public class CharacterCreationContext extends CharacterContext{
     private void initSubTables() {
         topRowInfoTable = new Table(skin);
         attributesWindow = new Window("Attributes", skin);
-        //attributesWindow.setBackground();
         skillsWindow = new Window("Skills", skin);
         statsWindow = new Window("Stats", skin);
         characterPreviewWindow = new Window("Character Preview", skin);
@@ -153,22 +154,10 @@ public class CharacterCreationContext extends CharacterContext{
         characterPreviewWindow.setMovable(false);
         selectedDescriptionWindow.setMovable(false);
 
-        attributesWindow.setBackground(new Image(blank_window_background).getDrawable());
-        skillsWindow.setBackground(new Image(blank_window_background).getDrawable());
-        statsWindow.setBackground(new Image(blank_window_background).getDrawable());
-        characterPreviewWindow.setBackground(new Image(blank_window_background).getDrawable());
-
-
-        /* Need to find a way to do this without overwriting the button and label listeners.
-        attributesWindow.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Attributes:\n Attributes are set at the start of the game and" +
-                        "may only be modified through special perks, items, or consumables. Since your attributes can" +
-                        "not be changed easily, be sure to choose wisely. Click on an attribute to" +
-                        " find out what it does.");
-            }
-        });*/
+        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
     }
 
     //Setting up top row info
@@ -202,8 +191,11 @@ public class CharacterCreationContext extends CharacterContext{
                 if (attributePoints == 0 && specializedSkillsPoints == 0) {
                     contextManager.pushContext(new WorldStackContext());
                     /* Create new player */
-                    createPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill, energyWeaponsSkill,
-                            characterName.getText(), charTextureArray[textureCount].toString());
+                    /* Also check to see if player already exists */
+                    if (playerManager.getPlayer() == null) {
+                        createPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill, energyWeaponsSkill,
+                                characterName.getText(), charTextureArray[textureCount].toString());
+                    }
                 } else {
                     selectedDescriptionText.setText("Please distribute all skill points and choose your specialised" +
                             " skills");
@@ -217,8 +209,10 @@ public class CharacterCreationContext extends CharacterContext{
             public void changed(ChangeEvent event, Actor actor) {
                 contextManager.pushContext(new WorldStackContext());
                 /* Create new player with default values. */
-                createPlayer(5, 5, 5, 5, 5, meleeSkill, gunsSkill, energyWeaponsSkill,
-                        characterName.getText(), charTextureArray[textureCount].toString());
+                if (playerManager.getPlayer() == null) {
+                    createPlayer(5, 5, 5, 5, 5, meleeSkill, gunsSkill, energyWeaponsSkill,
+                            characterName.getText(), charTextureArray[textureCount].toString());
+                }
             }
         });
 
@@ -226,14 +220,14 @@ public class CharacterCreationContext extends CharacterContext{
         characterSex.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (characterSex.getSelected() == "Male") {
-                    textureCount = 0;
-                    characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else {
-                    textureCount = 3;
-                    characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                }
-            }
+				if (characterSex.getSelected() == MALE) {
+					textureCount = 0;
+				} else {
+					textureCount = 3;
+				}
+				characterPreviewImage.setDrawable(new SpriteDrawable(
+						new Sprite(charTextureArray[textureCount])));
+			}
         });
     }
 
@@ -564,22 +558,20 @@ public class CharacterCreationContext extends CharacterContext{
             public void clicked(InputEvent event, float x, float y){
                 if (gunsSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
-                    gunsSkill -= 10;
-                    gunsSkillSpecialise.setChecked(false);
-                    gunsSkillSpecialiseChecked = false;
-                    specialisedSkills.replace("gunsSkill", false);
-                } else {
-                    if (specializedSkillsPoints > 0) {
-                        specializedSkillsPoints--;
-                        gunsSkill += 10;
-                        gunsSkillSpecialise.setChecked(true);
-                        gunsSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("gunsSkill", true);
-                    } else {
-                        gunsSkillSpecialise.setChecked(false);
-                        gunsSkillSpecialiseChecked = false;
-                    }
-                }
+					gunsSkill -= 10;
+					gunsSkillSpecialise.setChecked(false);
+					gunsSkillSpecialiseChecked = false;
+					specialisedSkills.replace("gunsSkill", false);
+				} else if (specializedSkillsPoints > 0) {
+					specializedSkillsPoints--;
+					gunsSkill += 10;
+					gunsSkillSpecialise.setChecked(true);
+					gunsSkillSpecialiseChecked = true;
+					specialisedSkills.replace("gunsSkill", true);
+				} else {
+					gunsSkillSpecialise.setChecked(false);
+					gunsSkillSpecialiseChecked = false;
+				}
                 gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
                 selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
@@ -595,19 +587,17 @@ public class CharacterCreationContext extends CharacterContext{
                     energyWeaponsSkill -= 10;
                     energyWeaponsSkillSpecialise.setChecked(false);
                     energyWeaponsSkillSpecialiseChecked = false;
-                    specialisedSkills.replace("energyWeaponsSkill", false);
-                } else {
-                    if (specializedSkillsPoints > 0) {
-                        specializedSkillsPoints--;
-                        energyWeaponsSkill += 10;
-                        energyWeaponsSkillSpecialise.setChecked(true);
-                        energyWeaponsSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("energyWeaponsSkill", true);
-                    } else {
-                        energyWeaponsSkillSpecialise.setChecked(false);
-                        energyWeaponsSkillSpecialiseChecked = false;
-                    }
-                }
+					specialisedSkills.replace("energyWeaponsSkill", false);
+				} else if (specializedSkillsPoints > 0) {
+					specializedSkillsPoints--;
+					energyWeaponsSkill += 10;
+					energyWeaponsSkillSpecialise.setChecked(true);
+					energyWeaponsSkillSpecialiseChecked = true;
+					specialisedSkills.replace("energyWeaponsSkill", true);
+				} else {
+					energyWeaponsSkillSpecialise.setChecked(false);
+					energyWeaponsSkillSpecialiseChecked = false;
+				}
                 energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
                 selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
@@ -672,16 +662,16 @@ public class CharacterCreationContext extends CharacterContext{
         next.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (characterSex.getSelected().equals("Male") && textureCount < 2) {
+                if (characterSex.getSelected().equals(MALE) && textureCount < 2) {
                     textureCount++;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected().equals("Male") && textureCount == 2) {
+                } else if (characterSex.getSelected().equals(MALE) && textureCount == 2) {
                     textureCount = 0;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected().equals("Female") && textureCount < 5) {
+                } else if (characterSex.getSelected().equals(FEMALE) && textureCount < 5) {
                     textureCount++;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
-                } else if (characterSex.getSelected().equals("Female") && textureCount == 5) {
+                } else if (characterSex.getSelected().equals(FEMALE) && textureCount == 5) {
                     textureCount = 3;
                     characterPreviewImage.setDrawable(new SpriteDrawable(new Sprite(charTextureArray[textureCount])));
                 }
@@ -723,7 +713,7 @@ public class CharacterCreationContext extends CharacterContext{
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
         Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
-        startingSeeds.setStackSize(100);
+        startingSeeds.setStackSize(50);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);

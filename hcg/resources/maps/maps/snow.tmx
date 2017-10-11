@@ -15,7 +15,7 @@
  <tileset firstgid="31" source="../tiles/misc1.tsx"/>
  <layer name="snow" width="100" height="100">
   <properties>
-   <property name="name" value="ground"/>
+   <property name="name" value="snow"/>
    <property name="speed" value="0.7"/>
   </properties>
   <data encoding="csv">
@@ -607,10 +607,9 @@
   <object id="1654" gid="32" x="1939.83" y="2598.84" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
-    <property name="conversation" value="test_conversation_01"/>
-    <property name="fName" value="Angela"/>
+    <property name="fName" value="General"/>
     <property name="faceImage" value="npc_face"/>
-    <property name="sName" value="Rob"/>
+    <property name="sName" value="George"/>
     <property name="texture" value="character_shop"/>
    </properties>
   </object>

@@ -11,7 +11,9 @@ public class MessageManager extends Manager {
 	/**
 	 * Constructor for the MessageManager
 	 */
-	public MessageManager() {}
+	public MessageManager() {
+		//deliberately empty
+	}
 	
 	/**
 	 * Adds a chat Message listener

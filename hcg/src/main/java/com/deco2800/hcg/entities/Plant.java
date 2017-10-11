@@ -28,6 +28,6 @@ public class Plant extends AbstractEntity implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
-
+        throw new UnsupportedOperationException();
     }
 }

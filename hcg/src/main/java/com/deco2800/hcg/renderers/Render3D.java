@@ -13,7 +13,6 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.HasProgress;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
-import com.deco2800.hcg.shading.LightEmitter;
 
 /**
  * A simple isometric renderer for DECO2800 games

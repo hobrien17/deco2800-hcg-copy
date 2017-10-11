@@ -10,6 +10,8 @@ import com.deco2800.hcg.conversation.ConversationOption;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Used in order to display conversations
@@ -24,6 +26,7 @@ public class ConversationContext extends UIContext {
     private Skin skin; //The skin
     private Image npcImage; //image of the NPC
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConversationContext.class);
 	
     /**
      * Intialises the conversation context with a given conversation
@@ -44,7 +47,7 @@ public class ConversationContext extends UIContext {
 		npcImage = new Image(textureManager.getTexture(npcFace));
 		nodeText = new Label("", skin);
 		npcName = new Label("Angela", skin);
-		
+
 		buttons = new HorizontalGroup();
 		buttons.space(30f);
 		
@@ -54,12 +57,12 @@ public class ConversationContext extends UIContext {
 		
 		table.row().spaceBottom(40);
 		table.add(npcImage);
-		table.row().padBottom(30);
+		table.row().padBottom(80);
 		table.add(npcName);
-		table.row().spaceTop(60);
+		table.row().spaceTop(180);
 		table.add(nodeText).padBottom(50);
 		table.row().space(50, 0, 50, 0);
-		table.add(buttons).padBottom(100);
+		table.add(buttons).padBottom(160);
 		stage.addActor(table);
 	}
 
@@ -70,13 +73,13 @@ public class ConversationContext extends UIContext {
     public void displayNode(ConversationNode node) {
 
 		// Clear old buttons & replace text
-		System.err.println(node.getNodeText()); //DEBUG
+		LOGGER.error(this + node.getNodeText()); //DEBUG
     	nodeText.setText(node.getNodeText());
 		buttons.clearChildren();
 
 		// Add new buttons
 		for (ConversationOption option : node.getValidOptions()) {
-			System.err.println(" * " + option.getOptionText()); //DEBUG
+			LOGGER.error(this + " * " + option.getOptionText()); //DEBUG
 			TextButton button = new TextButton(option.getOptionText(), skin);
 			button.pad(20);
 			button.addListener(new ChangeListener() {
