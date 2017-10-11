@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.enemyentities;
 
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.WeaponBuilder;
@@ -97,6 +98,46 @@ public class Hedgehog extends Enemy implements Tickable {
             this.setTexture(HEDGEHOG);
         }
     }
+    
+    /**
+     * Changes the hedgehog's speed & status with respects to multiple players
+     */
+    public void setHedgehogStatusMultiplayer() {
+    	float distance;
+    	Player closestPlayer = this.getClosestPlayer();
+    	
+    	this.detectPlayers();
+    	distance = this.distance(closestPlayer);
+    	
+    	if (chargedAtPlayer && distance > chargingRange) {
+    		this.setChargeStatus(false);    	
+    	} 
+    	
+    	if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange) {
+    		// move slowly to player
+            setSpeed(this.level * 0.01f);
+            this.setStatus(2);
+            this.setTexture(HEDGEHOG);
+            this.lastPlayerX = closestPlayer.getPosX();
+            this.lastPlayerY = closestPlayer.getPosY();
+    	} else if (!chargedAtPlayer && distance < chargingRange) {
+            // charge at player
+            setSpeed(this.level * 0.05f);
+            this.setStatus(2);
+            this.setTexture("hedgeball");
+            this.lastPlayerX = closestPlayer.getPosX();
+            this.lastPlayerY = closestPlayer.getPosY();
+        } else {
+            // move randomly
+            setSpeed(this.level * 0.03f);
+            this.setStatus(3);
+            this.setTexture(HEDGEHOG);
+        }
+    	
+    }
+    
+    
+    
     /**
      * On Tick handler
      * @param gameTickCount Current game tick
@@ -112,10 +153,16 @@ public class Hedgehog extends Enemy implements Tickable {
             }
             this.moveAction();//Move enemy to the position in Box3D.
             myEffects.apply();
+    	} else if (this.getNumberPlayers() > 1) {
+    		this.setHedgehogStatusMultiplayer();
+    		this.setNewPosMultiplayer();
+    		this.detectCollision();
+    		if (this.collidedPlayer) {
+    			this.setChargeStatus(true);
+    		}
+    		this.moveAction();
+    		myEffects.apply();
     	}
-    	
-        
-
     }
 
 }
