@@ -21,6 +21,8 @@ public class PlayerEquipmentContext extends InventoryDisplayContext {
     private Button playerEquipmentTab;
     private ImageButton shopExit;
 
+    private static final String SHOP_INVENTORY = "shop_inventory";
+
     public PlayerEquipmentContext(Player player){
         //Note that the player inventory context must take a reference to the exact player the context is being shown for
         GameManager gameManager = GameManager.get();
@@ -69,16 +71,16 @@ public class PlayerEquipmentContext extends InventoryDisplayContext {
 
         //Generate the inner table, this holds the actual item inventory
         Table innerTable = new Table();
-        innerTable.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+        innerTable.setBackground(new Image(textureManager.getTexture(SHOP_INVENTORY)).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
         //Generate the grid to display the item that is clicked
         Table itemDisplay = new Table();
-        itemDisplay.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+        itemDisplay.setBackground(new Image(textureManager.getTexture(SHOP_INVENTORY)).getDrawable());
 
         //Generate the view to display item information
         Table itemInfo = new Table();
         Table playerEquipment = new Table();
-        playerEquipment.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+        playerEquipment.setBackground(new Image(textureManager.getTexture(SHOP_INVENTORY)).getDrawable());
         //Populate views as needed. This also generates images and adds on click methods
         inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, innerTable);
         equipmentDisplay(textureManager,player,skin,playerEquipment);

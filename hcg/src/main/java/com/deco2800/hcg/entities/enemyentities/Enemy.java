@@ -8,7 +8,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.items.lootable.Lootable;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effects;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -354,7 +352,10 @@ public abstract class Enemy extends Character implements Lootable {
         //Get direction of next position. Randomly be chosen between 0 and 360.
         radius = Math.abs(random.nextFloat()) * 400 % 360;
         //Get distance to next position which is no more than maximum.
-        distance = Math.abs(random.nextFloat()) * this.level * 3;
+        distance = Math.abs(random.nextFloat()) * this.level * 5;
+        if (distance < 3){
+            distance += 3;
+        }
         nextPosX = (float) (currPosX + distance * cos(radius));
         nextPosY = (float) (currPosY + distance * sin(radius));
         tempX = nextPosX;

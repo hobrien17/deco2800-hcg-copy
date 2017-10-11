@@ -197,10 +197,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 					// Temporary increase of xp for all enemies killed
 					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
-					if (user instanceof Player) {
-						Player playerUser = (Player) user;
-						playerUser.killLogAdd(target.getID());
-					}
 				} else {
 					// Temporary increase of xp for all enemies killed
 					playerManager.getPlayer().gainXp(50);
@@ -241,7 +237,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0, user));
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {

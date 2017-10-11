@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 public abstract class InventoryDisplayContext extends UIContext {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InventoryDisplayContext.class);
+    private static final String SELECTED = "selected";
 
     //Input arguments
     private Skin skin;
@@ -172,7 +173,7 @@ public abstract class InventoryDisplayContext extends UIContext {
                 button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
             }
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
             commonSetup(currentItem, button, stack, clickedImage);
             stack.addListener(new ClickListener() {
                 @Override
@@ -218,12 +219,16 @@ public abstract class InventoryDisplayContext extends UIContext {
                                     ((ConsumableItem) currentItem).consume(player);
                                     player.getInventory().removeItem(currentItem, 1);
                                     inventory.clear();
+                                    itemInfo.clear();
+                                    itemDisplay.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
                                     //Equip the item
                                     player.getEquippedItems().addItem(currentItem);
                                     player.getInventory().removeItem(currentItem);
                                     inventory.clear();
+                                    itemInfo.clear();
+                                    itemDisplay.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 }
 
@@ -285,7 +290,7 @@ public abstract class InventoryDisplayContext extends UIContext {
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
                     .getDrawable());
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
             commonSetup(currentItem, button, stack, clickedImage);
             //Add listener for this item button
             stack.addListener(new ClickListener() {
@@ -389,7 +394,7 @@ public abstract class InventoryDisplayContext extends UIContext {
                  button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
             }
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
             commonSetup(currentItem, button, stack, clickedImage);
             stack.addListener(new ClickListener() {
                 @Override
