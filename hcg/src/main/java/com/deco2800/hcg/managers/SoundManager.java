@@ -109,12 +109,6 @@ public class SoundManager extends Manager {
 		}
 	}
 
-	/**
-	 * Stops playing all instances of this sound.
-	 */
-	public void resetLoopedSound() {
-		executor.shutdown();
-	}
 	
 	/**
 	 * continue playing sound is a loop
@@ -146,8 +140,6 @@ public class SoundManager extends Manager {
 			};
 
 			executor.scheduleAtFixedRate(stingSound, 0, 4, TimeUnit.SECONDS);
-			
-
 			
 		} else {
 			LOGGER.info(NO_REF + soundString);
