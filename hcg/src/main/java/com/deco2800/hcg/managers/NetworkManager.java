@@ -27,7 +27,7 @@ import com.deco2800.hcg.multiplayer.*;
 public final class NetworkManager extends Manager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NetworkManager.class);
 	private static final byte[] MESSAGE_HEADER = "H4RDC0R3".getBytes();
-	private static int MAX_PLAYERS = 4; // maybe 5?
+	private static final int MAX_PLAYERS = 4; // maybe 5?
 
 	private DatagramChannel channel;
 	// TODO: a HashMap is probably not the best collection for the lobby

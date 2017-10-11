@@ -23,8 +23,8 @@ public class LightBatch implements Batch {
     public static final String LIGHT_COLOR_ATTRIBUTE = "a_lightColor";
     public static final String LIGHT_INTENSITY_ATTRIBUTE = "a_lightIntensity";
     
-    private static int VERTEX_SIZE = 4;
-    private static int SPRITE_SIZE = 4 * VERTEX_SIZE;
+    private static final int VERTEX_SIZE = 4;
+    private static final int SPRITE_SIZE = 4 * VERTEX_SIZE;
     
     private Mesh mesh;
     
