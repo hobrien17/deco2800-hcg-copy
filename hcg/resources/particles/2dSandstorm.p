@@ -69,8 +69,8 @@ timeline1: 0.80136985
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 10.0
-highMax: 19.0
+highMin: 2.0
+highMax: 4.0
 relative: false
 scalingCount: 2
 scaling0: 1.0
@@ -104,7 +104,7 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 45.0
+highMin: 90.0
 highMax: 0.0
 relative: false
 scalingCount: 3
@@ -168,4 +168,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-sandstorm_cluster.png
+sandstorm_individual.png
