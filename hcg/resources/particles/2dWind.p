@@ -1,17 +1,17 @@
-Wind
+leaves
 - Delay -
 active: false
 - Duration - 
-lowMin: 100.0
-lowMax: 100.0
+lowMin: 1000.0
+lowMax: 1000.0
 - Count - 
-min: 600
-max: 700
+min: 500
+max: 1500
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 650.0
-highMax: 650.0
+highMin: 1000.0
+highMax: 1000.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -45,10 +45,10 @@ active: false
 - Spawn Shape - 
 shape: square
 - Spawn Width - 
-lowMin: 0.0
-lowMax: 0.0
-highMin: 300.0
-highMax: -300.0
+lowMin: -100.0
+lowMax: -100.0
+highMin: 100.0
+highMax: 100.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -69,15 +69,15 @@ timeline1: 0.7876712
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 10.0
+highMin: 5.0
 highMax: 10.0
 relative: false
 scalingCount: 2
 scaling0: 1.0
-scaling1: 0.627451
+scaling1: 0.33333334
 timelineCount: 2
 timeline0: 0.0
-timeline1: 0.9931507
+timeline1: 1.0
 - Velocity - 
 active: true
 lowMin: 10.0
@@ -106,19 +106,17 @@ lowMin: 0.0
 lowMax: 0.0
 highMin: 0.0
 highMax: 180.0
-relative: true
-scalingCount: 2
+relative: false
+scalingCount: 1
 scaling0: 1.0
-scaling1: 0.3529412
-timelineCount: 2
+timelineCount: 1
 timeline0: 0.0
-timeline1: 0.9794521
 - Wind - 
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 50.0
-highMax: 20.0
+highMin: 8.0
+highMax: 0.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -128,8 +126,8 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: -22.0
-highMax: 10.0
+highMin: 5.0
+highMax: -15.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -137,9 +135,9 @@ timelineCount: 1
 timeline0: 0.0
 - Tint - 
 colorsCount: 3
-colors0: 0.101960786
-colors1: 0.22745098
-colors2: 0.08627451
+colors0: 0.06666667
+colors1: 0.8745098
+colors2: 0.039215688
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -149,15 +147,15 @@ highMin: 1.0
 highMax: 1.0
 relative: false
 scalingCount: 4
-scaling0: 0.8596491
+scaling0: 0.0
 scaling1: 0.877193
 scaling2: 0.8245614
-scaling3: 0.36842105
+scaling3: 0.47368422
 timelineCount: 4
 timeline0: 0.0
 timeline1: 0.36301368
 timeline2: 0.6849315
-timeline3: 0.9931507
+timeline3: 0.9726027
 - Options - 
 attached: false
 continuous: true
