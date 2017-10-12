@@ -617,7 +617,7 @@ public class Player extends Character implements Tickable {
 	/**
 	 *  Cease player movement. Used for stopping movement for context witching
 	 */
-	private void ceaseMovement() {
+	public void ceaseMovement() {
 		movementDirection.put("up", false);
 		movementDirection.put("down", false);
 		movementDirection.put("left", false);
