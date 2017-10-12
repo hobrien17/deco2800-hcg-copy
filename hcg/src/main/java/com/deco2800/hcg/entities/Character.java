@@ -9,6 +9,7 @@ import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 
 
 /**
