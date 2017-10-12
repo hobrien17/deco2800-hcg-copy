@@ -83,7 +83,7 @@ public class World {
 		// attempt to load the given file
 		try {
 			if ("test".equals(file)){ // for WorldTest
-				file = "resources/maps/maps/initial-map-test.tmx";
+				file = "resources/maps/maps/test.tmx";
 			}
 			this.map = new TmxMapLoader().load(file);
 			loadedFile = file;
@@ -203,6 +203,17 @@ public class World {
 			map.getLayers().remove(layer);
 
 		}
+
+        // add new tile for poison trail
+        MapProperties mapProperties = new MapProperties();
+        mapProperties.put("name", "newSludge");
+        mapProperties.put("damagetype", "1");
+        mapProperties.put("damage", "1");
+        mapProperties.put("speed", "1.0");
+
+        this.addTiledMapTileLayer("newSludge", mapProperties);
+
+        this.generatePuddles();
 
 	}
 

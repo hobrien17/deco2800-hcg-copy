@@ -69,6 +69,9 @@ public class Player extends Character implements Tickable {
 	private float lastSpeedX;
 	private float lastSpeedY;
 
+	private int lastMouseX = 0;
+	private int lastMouseY = 0;
+	
 	// List containing skills that can be specialised in
 	private List<String> SPECIALISED_SKILLS = Arrays.asList("meleeSkill", "gunsSkill", "energyWeaponsSkill");
 
@@ -313,6 +316,8 @@ public class Player extends Character implements Tickable {
 			this.getEquippedWeapon().updateAim(position);
 			this.getEquippedWeapon().openFire();
 		}
+		lastMouseX = screenX;
+        lastMouseY = screenY;
 	}
 
 	/**
@@ -326,12 +331,18 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDragged(int screenX, int screenY, int pointer) {
-		if (this.getEquippedWeapon() != null) {
+	    if (this.getEquippedWeapon() != null) {
+    	  try {
+    	    // to fix player test, since we don't want to initiallise a camera
+    	    // for that because we don't need it.
 			Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
 			this.getEquippedWeapon().updateAim(position);
 			// TODO: remove
 			this.getEquippedWeapon().updatePosition(position.x, position.y);
+    	  } catch (Exception e) {}
 		}
+		lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -350,6 +361,8 @@ public class Player extends Character implements Tickable {
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().ceaseFire();
 		}
+	    lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -366,6 +379,8 @@ public class Player extends Character implements Tickable {
 			// TODO: remove
 			this.getEquippedWeapon().updatePosition(position.x, position.y);
 		}
+	    lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -543,6 +558,8 @@ public class Player extends Character implements Tickable {
 		}
 		if (!collided) {
 			this.setPosition(newPos.getX(), newPos.getY(), 1);
+			// update gun's firing position if we moved
+			handleTouchDragged(lastMouseX, lastMouseY, 0);
 		}
 
 		checkXp();

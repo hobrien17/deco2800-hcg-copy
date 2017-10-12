@@ -93,7 +93,17 @@ public class Hardcor3Gard3ning extends Game {
             public String run(String... args) {
                 return args.length > 1 ? args[1] : "";
             }
+            
         });
+        
+        //stopped weather
+		commandManager.registerCommand("stopWweather", new CommandManager.Command() {
+			@Override
+			public String run(String... args) {
+				weatherManager.stopAllEffect();
+				return "weather stoped";
+			}
+		});
         
         worldManager.generateAndSetWorldStack();
         
