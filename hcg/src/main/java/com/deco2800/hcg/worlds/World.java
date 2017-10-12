@@ -83,7 +83,7 @@ public class World {
 		// attempt to load the given file
 		try {
 			if ("test".equals(file)){ // for WorldTest
-				file = "resources/maps/maps/grass_safeZone_02.tmx";
+				file = "resources/maps/maps/test.tmx";
 			}
 			this.map = new TmxMapLoader().load(file);
 			loadedFile = file;

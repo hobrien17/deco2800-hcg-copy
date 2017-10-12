@@ -128,7 +128,7 @@ public class WorldMapContext extends UIContext {
 		
 		demoButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				World world = new World("test");
+				World world = new World("resources/maps/maps/grass_safeZone_02.tmx");
 				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
