@@ -77,7 +77,7 @@ public class WorldMapContext extends UIContext {
 
 		Button quitButton = new TextButton("Quit", skin);
 		Button discoveredButton = new TextButton("Show all nodes", skin);
-		Button demoButton = new TextButton("Demo world", skin);
+		Button demoButton = new TextButton("Safehaven", skin);
 
 		window.add(quitButton);
 		window.add(discoveredButton);

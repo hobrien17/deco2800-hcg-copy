@@ -148,6 +148,7 @@ public class PlayContext extends Context {
 
         /* Add a quit button to the menu */
         Button button = new TextButton("Quit", skin);
+        Button die = new TextButton("Force quit", skin);
 
         /* Add a programmatic listener to the quit button */
         button.addListener(new ChangeListener() {
@@ -157,9 +158,17 @@ public class PlayContext extends Context {
                 contextManager.popContext();
             }
         });
+        
+        die.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                throw new NullPointerException("This is not a bug - simply a crude way of quitting the game");
+            }
+        });
 
         /* Add all buttons to the menu */
         window.add(button);
+        window.add(die);
         window.pack();
         window.setMovable(false); // So it doesn't fly around the screen
 
