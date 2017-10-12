@@ -440,11 +440,13 @@ public class Player extends Character implements Tickable {
 	private void NPCInteraction(AbstractEntity npc) {
 		if (npc instanceof QuestNPC) {
 			((QuestNPC) npc).interact();
+			this.ceaseMovement();
 			LOGGER.info("Quest NPC Interaction Started");
 			;
 		} else if (npc instanceof ShopNPC) {
 			LOGGER.info("Shop NPC Interaction Started");
 			((ShopNPC) npc).interact();
+			this.ceaseMovement();
 		} else {
 			LOGGER.info("Other NPC Interaction Started");
 		}
@@ -610,6 +612,16 @@ public class Player extends Character implements Tickable {
 		// change box coords
 		newPos.setX(this.getPosX() + lastSpeedX);
 		newPos.setY(this.getPosY() + lastSpeedY);
+	}
+
+	/**
+	 *  Cease player movement. Used for stopping movement for context witching
+	 */
+	private void ceaseMovement() {
+		movementDirection.put("up", false);
+		movementDirection.put("down", false);
+		movementDirection.put("left", false);
+		movementDirection.put("right", false);
 	}
 
 	/**
