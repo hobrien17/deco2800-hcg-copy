@@ -5,6 +5,7 @@ import com.google.gson.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class ConversationWriter {
 
@@ -27,14 +28,20 @@ public class ConversationWriter {
 	public static JsonObject serialiseConversation(Conversation conversation) {
 		
 		List<ConversationNode> nodes = conversation.getConversationNodes();
-		
-		JsonObject jConversation = new JsonObject();
-		jConversation.add("initialNode", getID(conversation.getInitialNode(), nodes));
-		
+
 		JsonArray jNodes = new JsonArray();
 		for (ConversationNode node : nodes) {
 			jNodes.add(serialiseNode(node, nodes));
 		}
+
+		JsonObject jRelationshipNodes = new JsonObject();
+		for (Map.Entry<String, ConversationNode> entry : conversation.getRelationshipNodes().entrySet()) {
+			jRelationshipNodes.add(entry.getKey(), getID(entry.getValue(), nodes));
+		}
+
+		JsonObject jConversation = new JsonObject();
+		jConversation.addProperty("initialRelationship", conversation.getInitialRelationship());
+		jConversation.add("relationshipNodes", jRelationshipNodes);
 		jConversation.add("nodes", jNodes);
 		
 		return jConversation;

@@ -25,6 +25,7 @@ public class ConversationManager extends Manager {
         conversations = new HashMap<>();
         try {
             loadConversation("test_conversation_01", "resources/conversations/test_conversation_01.json");
+            loadConversation("test_conversation_02", "resources/conversations/test_conversation_02.json");
         } catch (IOException e) {
             throw new ResourceLoadException(e);
         }

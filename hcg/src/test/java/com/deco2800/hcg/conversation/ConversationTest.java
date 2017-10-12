@@ -1,11 +1,14 @@
 package com.deco2800.hcg.conversation;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.deco2800.hcg.managers.ResourceLoadException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Tests for the Conversation System
@@ -14,7 +17,9 @@ import org.junit.Test;
 public class ConversationTest {
 
 	// JSON test data & associated Conversation
-	private String JsonConversationA = "{\"initialNode\":\"0\",\"nodes\":[{\"id\":\"0\",\"nodeText\":\"Foo\",\"options\":[{\"optionText\":\"to Bar\",\"target\":\"1\"},{\"optionText\":\"to Baz\",\"target\":\"2\"}]},{\"id\":\"1\",\"nodeText\":\"Bar\",\"options\":[{\"optionText\":\"to Baz\",\"target\":\"2\"},{\"optionText\":\"quit\",\"target\":null}]},{\"id\":\"2\",\"nodeText\":\"Baz\",\"options\":[{\"optionText\":\"back to Foo\",\"target\":\"0\"}]}]}";
+	private String JsonConversationA = "{\"initialRelationship\":\"neutral\",\"relationshipNodes\":{\"neutral\":\"0\"},\"nodes\":[{\"id\":\"0\",\"nodeText\":\"Foo\",\"options\":[{\"conditions\":[],\"optionText\":\"to Bar\",\"target\":\"1\",\"actions\":[]},{\"conditions\":[],\"optionText\":\"to Baz\",\"target\":\"2\",\"actions\":[]}]},{\"id\":\"1\",\"nodeText\":\"Bar\",\"options\":[{\"conditions\":[],\"optionText\":\"to Baz\",\"target\":\"2\",\"actions\":[]},{\"conditions\":[],\"optionText\":\"quit\",\"target\":null,\"actions\":[]}]},{\"id\":\"2\",\"nodeText\":\"Baz\",\"options\":[{\"conditions\":[],\"optionText\":\"back to Foo\",\"target\":\"0\",\"actions\":[]}]}]}";
+	private String JsonConversationB = "{\"initialNode\":\"0\",\"nodes\":[{\"id\":\"0\",\"nodeText\":\"Foo\",\"options\":[{\"optionText\":\"to Bar\",\"target\":\"1\"},{\"optionText\":\"to Baz\",\"target\":\"2\"}]},{\"id\":\"1\",\"nodeText\":\"Bar\",\"options\":[{\"optionText\":\"to Baz\",\"target\":\"2\"},{\"optionText\":\"quit\",\"target\":null}]},{\"id\":\"2\",\"nodeText\":\"Baz\",\"options\":[{\"optionText\":\"back to Foo\",\"target\":\"0\"}]}]}";
+	private String JsonConversationC = "{{{{{{{{{{{";
 	private Conversation conversationA;
 	
 	@Before
@@ -39,18 +44,17 @@ public class ConversationTest {
 		List<ConversationOption> bazOptions = new ArrayList<>();
 		bazOptions.add(new ConversationOption(foo, new ArrayList<>(),"back to Foo", new ArrayList<>(), foo));
 		baz.setup(bazOptions);
-		conversationA.setup(nodes, foo);
+		Map<String, ConversationNode> startMap = new HashMap<>();
+		startMap.put("neutral", foo);
+		conversationA.setup("neutral", startMap, nodes);
 	}
 
-	// Tempory test to stand in for testExport
-	@Test
-	public void testTempExport() {
+	//@Test Not a real test, but often handy
+	public void testPrintExport() {
 		String text = ConversationWriter.exportConversation(conversationA);
 		System.out.println(text);
 	}
 
-	//FIXME Conversation JSON format is currently unstable
-	/*
 	@Test
 	public void testExport() {
 		String text = ConversationWriter.exportConversation(conversationA);
@@ -64,5 +68,15 @@ public class ConversationTest {
 		Assert.assertEquals(3, nodes.size());
 		//TODO more testing
 	}
-	*/
+
+	@Test(expected = ResourceLoadException.class)
+	public void testInvalidImport() {
+		Conversation conversation = ConversationReader.importConversation(JsonConversationB);
+	}
+
+	@Test(expected = ResourceLoadException.class)
+	public void testMalformedJsonImport() {
+		Conversation conversation = ConversationReader.importConversation(JsonConversationC);
+	}
+
 }

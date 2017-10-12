@@ -1,0 +1,48 @@
+{
+	"initialRelationship": "neutral",
+	"relationshipNodes": {  "neutral": "hello", "negative": "go away"  },
+	"nodes": [
+		{
+			"id": "hello",
+			"nodeText": "Hello, how are you?",
+			"options": [
+				{
+					"conditions": [],
+					"optionText": "Sorry, I'm busy now.",
+					"actions": [],
+					"target": null
+				},
+				{
+					"conditions": [],
+					"optionText": "Good, thanks. And you?",
+					"actions": [],
+					"target": "im"
+				}
+			]
+		},
+		{
+			"id": "im",
+			"nodeText": "I'm actually doing well.",
+			"options": [
+				{
+					"conditions": [],
+					"optionText": "Goodbye!",
+					"actions": [],
+					"target": null
+				}
+			]
+		},
+		{
+			"id": "go away",
+			"nodeText": "I don't want to talk to you.",
+			"options": [
+				{
+					"conditions": [],
+					"optionText": "Okay then.",
+					"actions": [],
+					"target": null
+				}
+			]
+		}
+	]
+}

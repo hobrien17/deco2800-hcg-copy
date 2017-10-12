@@ -1,5 +1,6 @@
 package com.deco2800.hcg.conversation;
 
+import com.deco2800.hcg.managers.ResourceLoadException;
 import com.google.gson.*;
 
 import java.io.BufferedReader;
@@ -26,18 +27,26 @@ public class ConversationReader {
 
 	// Read a Conversation from a file
 	public static Conversation readConversation(String filename) throws IOException {
-		JsonParser parser = new JsonParser();
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
-		JsonObject jConversation = (JsonObject) parser.parse(reader);
-		reader.close();
-		return deserialiseConversation(jConversation);
+		try {
+			JsonParser parser = new JsonParser();
+			BufferedReader reader = new BufferedReader(new FileReader(filename));
+			JsonObject jConversation = (JsonObject) parser.parse(reader);
+			reader.close();
+			return deserialiseConversation(jConversation);
+		} catch (JsonSyntaxException | IOException | ResourceLoadException e) {
+			throw new ResourceLoadException("Unable to load conversation: " + filename, e);
+		}
 	}
 
 	// Import a Conversation from a String
-	public static Conversation importConversation(String TextConversation) {
-		JsonParser parser = new JsonParser();
-		JsonObject jConversation = (JsonObject) parser.parse(TextConversation);
-		return deserialiseConversation(jConversation);
+	public static Conversation importConversation(String textConversation) {
+		try {
+			JsonParser parser = new JsonParser();
+			JsonObject jConversation = (JsonObject) parser.parse(textConversation);
+			return deserialiseConversation(jConversation);
+		} catch (JsonSyntaxException | ResourceLoadException e) {
+			throw new ResourceLoadException("Unable to parse conversation: " + textConversation, e);
+		}
 	}
 
 	//TODO safety checks
@@ -49,22 +58,35 @@ public class ConversationReader {
 		List<intermediateStageNode> intermediateStageNodes = new ArrayList<>();
 		Map<String, ConversationNode> nodes = new HashMap<>();
 
-		// First pass
-		for (JsonElement jNode : jConversation.getAsJsonArray("nodes")) {
-			intermediateStageNode iNode = deserialiseNode((JsonObject) jNode, conversation);
-			intermediateStageNodes.add(iNode);
-			nodes.put(iNode.nodeID, iNode.node);
+		try {
+
+			// First pass
+			for (JsonElement jNode : jConversation.getAsJsonArray("nodes")) {
+				intermediateStageNode iNode = deserialiseNode((JsonObject) jNode, conversation);
+				intermediateStageNodes.add(iNode);
+				nodes.put(iNode.nodeID, iNode.node);
+			}
+
+			// Second pass
+			for (intermediateStageNode iNode : intermediateStageNodes) {
+				List<ConversationOption> options = deserialiseNodeOptions(iNode, nodes);
+				iNode.node.setup(options);
+			}
+
+			// Relationship starting nodes
+			Map<String, ConversationNode> relationshipNodes = new HashMap<>();
+			for (Map.Entry<String, JsonElement> entry : jConversation.getAsJsonObject("relationshipNodes").entrySet()) {
+				String nodeName = entry.getValue().getAsString();
+				relationshipNodes.put(entry.getKey(), nodes.get(nodeName));
+			}
+
+			String initialRelationship = jConversation.get("initialRelationship").getAsString();
+			conversation.setup(initialRelationship, relationshipNodes, new ArrayList<>(nodes.values()));
+
+		} catch (NullPointerException e) {
+			throw new ResourceLoadException(e);
 		}
 
-		// Second pass
-		for (intermediateStageNode iNode : intermediateStageNodes) {
-			List<ConversationOption> options = deserialiseNodeOptions(iNode, nodes);
-			iNode.node.setup(options);
-		}
-
-		String initialNodeID = jConversation.get("initialNode").getAsString();
-		ConversationNode initialNode = nodes.get(initialNodeID);
-		conversation.setup(new ArrayList<>(nodes.values()), initialNode);
 		return conversation;
 	}
 

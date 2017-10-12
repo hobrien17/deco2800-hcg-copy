@@ -7,6 +7,7 @@ import com.deco2800.hcg.managers.GameManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Basic data structure to hold conversations that will be utilised by the NPC class and the UI
@@ -15,8 +16,9 @@ import java.util.List;
  */
 public class Conversation {
 
+	private String initialRelationship;
+	private Map<String, ConversationNode> relationshipNodes;
 	private List<ConversationNode> conversationNodes;  // this must not contain duplicates
-	private ConversationNode initialNode;
 	private ConversationNode currentNode;
 	private ConversationContext conversationContext;
 	private ContextManager contextManager;
@@ -35,34 +37,37 @@ public class Conversation {
 
 	/**
 	 * Full constructor
-	 * initialNode MUST be in conversationNodes
+	 * relationshipNodes.values() MUST be in conversationNodes
+	 * @param initialRelationship default relationship level
+	 * @param relationshipNodes mapping from relationship levels to starting nodes
 	 * @param conversationNodes list of all nodes in this conversation
-	 * @param initialNode reference to the first node to display
 	 */
-	public Conversation(List<ConversationNode> conversationNodes,
-			ConversationNode initialNode) {
+	public Conversation(String initialRelationship, Map<String, ConversationNode> relationshipNodes,
+						List<ConversationNode> conversationNodes) {
 		this();
-		setup(conversationNodes, initialNode);
+		setup(initialRelationship, relationshipNodes, conversationNodes);
 	}
 
 	/**
 	 * Initialise references to conversationNodes
 	 * This should be called once after using the no-argument constructor
+	 * @param initialRelationship default relationship level
+	 * @param relationshipNodes mapping from relationship levels to starting nodes
 	 * @param conversationNodes list of all nodes in this conversation
-	 * @param initialNode reference to the first node to display
 	 */
-	public void setup(List<ConversationNode> conversationNodes,
-			ConversationNode initialNode) {
+	public void setup(String initialRelationship, Map<String, ConversationNode> relationshipNodes,
+					  List<ConversationNode> conversationNodes) {
+		this.initialRelationship = initialRelationship;
+		this.relationshipNodes = relationshipNodes;
 		this.conversationNodes = new ArrayList<>(conversationNodes);
-		this.initialNode = initialNode;
 	}
 
 	/**
 	 * Begin presenting the conversation to the player
-	 * @param talkingTo reference to the NPC the [player is talking to
+	 * @param talkingTo reference to the NPC the player is talking to
 	 */
 	public void initiateConversation(NPC talkingTo) {
-		currentNode = initialNode;
+		currentNode = relationshipNodes.get(initialRelationship); //TODO get NPC relationship state
 		this.talkingTo = talkingTo;
 		conversationContext = new ConversationContext(this, talkingTo.getFaceImage());
 		conversationContext.displayNode(currentNode);
@@ -93,8 +98,13 @@ public class Conversation {
 	}
 	
 	// Needed for serialisation
-	ConversationNode getInitialNode() {
-		return initialNode;
+	String getInitialRelationship() {
+		return initialRelationship;
+	}
+
+	// Needed for serialisation
+	Map<String, ConversationNode> getRelationshipNodes() {
+		return relationshipNodes;
 	}
 	
 	// Needed for serialisation
