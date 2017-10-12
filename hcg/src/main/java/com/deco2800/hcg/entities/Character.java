@@ -8,6 +8,7 @@ import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 
 
 /**
@@ -576,7 +577,10 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * @param victim the character that has died.
      */
     public void killAlert(AbstractEntity victim) {
-        // This character has killed some other character.
+        if(victim instanceof Enemy) {
+        	Enemy enemyVictim = (Enemy) victim;
+        	this.killLogAdd(enemyVictim.getID());
+        }
     }
 
     @Override

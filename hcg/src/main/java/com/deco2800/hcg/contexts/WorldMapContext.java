@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
@@ -127,12 +128,13 @@ public class WorldMapContext extends UIContext {
 		
 		demoButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				World world = new World("test");
-				
+				World world = new World("safezone_2.tmx");
 				((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
                 setWeather(world.getWeatherType());
+				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
+				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}
