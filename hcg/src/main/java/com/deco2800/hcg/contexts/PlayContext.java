@@ -1,9 +1,7 @@
 package com.deco2800.hcg.contexts;
 
-import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.badlogic.gdx.graphics.Texture;
+import com.deco2800.hcg.managers.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -25,7 +23,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.contexts.playContextClasses.ChatStack;
 import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
-import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
@@ -33,28 +30,14 @@ import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-import com.deco2800.hcg.managers.ContextManager;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.MessageManager;
-import com.deco2800.hcg.managers.NetworkManager;
-import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.ShaderManager;
-import com.deco2800.hcg.managers.StopwatchManager;
-import com.deco2800.hcg.managers.TextureManager;
-import com.deco2800.hcg.managers.TimeManager;
-import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be
  * instantiated once.
  */
 public class PlayContext extends Context {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
 
     // Managers used by the game
     private GameManager gameManager;
@@ -65,6 +48,7 @@ public class PlayContext extends Context {
     private TimeManager timeManager;
     private PlayerManager playerManager;
     private ShaderManager shaderManager;
+    private PlantManager plantManager;
 
 
     // FIXME mouseHandler is never assigned
@@ -91,7 +75,8 @@ public class PlayContext extends Context {
     private NetworkManager networkManager;
     private ClockDisplay clockDisplay;
     private ChatStack chatStack;
-    private GeneralRadialDisplay radialDisplay;
+    private RadialDisplay radialDisplay;
+    private Button plantButton;
 
     private Window window;
     private Window plantWindow;
@@ -105,6 +90,7 @@ public class PlayContext extends Context {
 
     private Stage stage;
     private Skin skin;
+    private Skin plantSkin;
 
     /**
      * Create the PlayContext
@@ -121,6 +107,8 @@ public class PlayContext extends Context {
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
+
         /* Setup the camera and move it to the center of the world */
         GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
         GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
@@ -128,57 +116,50 @@ public class PlayContext extends Context {
         // Setup GUI
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+        plantSkin = new Skin(Gdx.files.internal("resources/ui/plant_ui/flat-earth-ui.json"));
+        plantSkin.add("cactus",new Texture("resources/ui/plant_ui/cactus.png"));
+        plantSkin.add("grass",new Texture("resources/ui/plant_ui/grass.png"));
+        plantSkin.add("ice",new Texture("resources/ui/plant_ui/ice.png"));
+        plantSkin.add("inferno",new Texture("resources/ui/plant_ui/inferno.png"));
+        plantSkin.add("lily",new Texture("resources/ui/plant_ui/lily.png"));
+        plantSkin.add("sunflower",new Texture("resources/ui/plant_ui/sunflower.png"));
 
-        String[] seeds = {"sunflower", "fire", "explosive", "ice", "water", "grass"};
-        radialDisplay = new GeneralRadialDisplay(stage, Arrays.asList(seeds));
+        radialDisplay = new RadialDisplay(stage);
         createExitWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
-        plantWindow = new PlantWindow(skin);
+        plantWindow = new PlantWindow(plantSkin);
         chatStack = new ChatStack(stage);
+        plantButton = new Button(plantSkin.getDrawable("checkbox"));
+        plantManager.setPlantButton(plantButton);
 
-        stage.addActor(chatStack);
-        chatStack.setVisible(false);
+        /* Add ParticleEffectActor that controls weather. */
+        stage.addActor(weatherManager.getActor());
+
+        if (networkManager.isInitialised()) {
+            stage.addActor(chatStack);
+        }
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
+        stage.addActor(plantButton);
 
         window = new Window("Menu", skin);
 
         /* Add a quit button to the menu */
         Button button = new TextButton("Quit", skin);
-        Button end = new TextButton("Force quit", skin);
-        
-        end.addListener(new ChangeListener() {
-        	@Override
-        	public void changed(ChangeEvent event, Actor actor) {
-        		throw new NullPointerException("This is not a bug - simply a crude way of forcing the game to end");
-        	}
-        });
 
         /* Add a programmatic listener to the quit button */
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //Ensures no duplicate players, please don't delete
-                playerManager.despawnPlayers();
-
-            	// clear old observers (mushroom turret for example)
-                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-                manager.deleteObservers();
-
-                // stop the old weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                playerManager.removeCurrentPlayer();
                 contextManager.popContext();
             }
         });
 
-        /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
-
         /* Add all buttons to the menu */
         window.add(button);
-        window.add(end);
         window.pack();
         window.setMovable(false); // So it doesn't fly around the screen
 
@@ -237,7 +218,7 @@ public class PlayContext extends Context {
             }
         });
 
-        /** set initial time **/
+        /* set initial time */
         timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
     }
 
@@ -302,8 +283,10 @@ public class PlayContext extends Context {
         playerStatus.setPosition(30f, stage.getHeight()-200f);
         clockDisplay.setPosition(stage.getWidth()-220f, 20f);
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
+        plantButton.setPosition(stage.getWidth()-26, stage.getHeight()-29);
         radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        weatherManager.resize();
     }
 
     /**
@@ -360,11 +343,9 @@ public class PlayContext extends Context {
         } else if(keycode == Input.Keys.EQUALS) {
             Item item = new HealthPotion(100);
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
-            gameManager.getWorld().addEntity(entity);
+			gameManager.getWorld().addEntity(entity);
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
-		} else if (keycode == Input.Keys.T) {
-			chatStack.setVisible(!chatStack.isVisible());
 		}
 	}
 
@@ -372,6 +353,8 @@ public class PlayContext extends Context {
         exitWindow = new Window("Complete Level?", skin);
         Button yesButton = new TextButton("Yes", skin);
         yesButton.pad(5, 10, 5, 10);
+        Button noButton = new TextButton("No", skin);
+        noButton.pad(5, 10, 5, 10);
 
         /* Add a programmatic listener to the buttons */
         yesButton.addListener(new ChangeListener() {
@@ -396,7 +379,15 @@ public class PlayContext extends Context {
             }
         });
 
+        noButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                exitWindow.remove();
+            }
+        });
+
         exitWindow.add(yesButton);
+        exitWindow.add(noButton);
         exitWindow.pack();
         exitWindow.setMovable(false); // So it doesn't fly around the screen
         exitWindow.setWidth(150);

@@ -5,6 +5,7 @@ import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
+import com.deco2800.hcg.entities.enemyentities.Snail;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.terrain_entities.Boulder;
@@ -29,7 +30,7 @@ import com.deco2800.hcg.items.stackable.HealthPotion;
 public enum WorldEntities {
 
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
-    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM;
+    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM, SNAIL;
 
     /**
      * Return an instance of the entity at the given position and the selected
@@ -46,6 +47,8 @@ public enum WorldEntities {
                 return new WallBlock(x, y, 0f);
             case TREE:
                 return new Tree(x, y, 0f, true);
+            case SNAIL:
+                return new Snail(x, y, 0f, index);
             case SQUIRREL:
                 return new Squirrel(x, y, 0f, index);
             case HEDGEHOG:

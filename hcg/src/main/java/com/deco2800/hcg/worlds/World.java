@@ -204,6 +204,17 @@ public class World {
 
 		}
 
+        // add new tile for poison trail
+        MapProperties mapProperties = new MapProperties();
+        mapProperties.put("name", "newSludge");
+        mapProperties.put("damagetype", "1");
+        mapProperties.put("damage", "1");
+        mapProperties.put("speed", "1.0");
+
+        this.addTiledMapTileLayer("newSludge", mapProperties);
+
+        this.generatePuddles();
+
 	}
 
 
