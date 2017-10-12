@@ -162,7 +162,7 @@ public class PlayContext extends Context {
         die.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                throw new NullPointerException("This is not a bug - simply a crude way of quitting the game");
+                System.exit(0);
             }
         });
 
