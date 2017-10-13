@@ -219,30 +219,35 @@ public class Effects {
                 effect.decrementUses();
             }
 
-            //Only activate while buff is active
-            if (!effect.onCooldown()) {
-                effect.startCooldownTimer();
-                // Handle damage
-                thisCharacter.takeDamage(effect.getDamage());
-                if(thisCharacter.getHealthCur() <= 0){
-                    Double prob = Math.random();
-                    if (prob > 0.3) {
-                        Corpse corpse = new BasicCorpse(owner.getPosX(), owner.getPosY(), 0);
-                        GameManager.get().getWorld().addEntity(corpse);
-                    }
-                    GameManager.get().getWorld().removeEntity(owner);
-                    AbstractEntity creator = effect.getCreator();
-                    if (creator != null && creator instanceof Character) {
-                        ((Character) creator).killAlert(owner);
-                    }
-                }
-                // Handle slows
-                thisCharacter.changeSpeed(effect.getSpeedModifier());
+			// Only activate while buff is active
+			if (effect.onCooldown()) {
+				return;
+			}
+			
+			effect.startCooldownTimer();
+			// Handle damage
+			thisCharacter.takeDamage(effect.getDamage());
+			if (thisCharacter.getHealthCur() > 0) {
+				thisCharacter.changeSpeed(effect.getSpeedModifier());
+				return;
+			}
+			Double prob = Math.random();
+			if (prob > 0.3) {
+				Corpse corpse = new BasicCorpse(owner.getPosX(),
+						owner.getPosY(), 0);
+				GameManager.get().getWorld().addEntity(corpse);
+			}
+			GameManager.get().getWorld().removeEntity(owner);
+			AbstractEntity creator = effect.getCreator();
+			if (creator != null && creator instanceof Character) {
+				((Character) creator).killAlert(owner);
+			}
+			// Handle slows
+			thisCharacter.changeSpeed(effect.getSpeedModifier());
 
-                // Handle damage reduction, fire rate reduction, etc.
-            }
-        }
-    }
+			// Handle damage reduction, fire rate reduction, etc.
+		}
+	}
 
     @Override
     public boolean equals(Object o) {
