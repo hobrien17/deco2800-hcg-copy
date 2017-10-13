@@ -13,7 +13,7 @@ import com.deco2800.hcg.managers.GameManager;
 
 public class Seed extends StackableItem {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Seed.class);
 
 	/**
 	 * Stores the many different types of seeds in the game *
@@ -101,7 +101,7 @@ public class Seed extends StackableItem {
 			return type.getPlant().getDeclaredConstructor(Pot.class).newInstance(pot);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex) {
-			LOGGER.error("Error creating new object: " + ex.getStackTrace());
+			LOGGER.error("Error creating new object: ", ex);
 			return null;
 		}
 	}
@@ -117,7 +117,7 @@ public class Seed extends StackableItem {
 			return type.getTurret().getDeclaredConstructor(Corpse.class).newInstance(corpse);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex) {
-			LOGGER.error("Error creating new object: " + ex.getStackTrace());
+			LOGGER.error("Error creating new object: ", ex);
 			return null;
 		}
 	}

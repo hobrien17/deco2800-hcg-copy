@@ -159,6 +159,8 @@ public abstract class Enemy extends Character implements Lootable {
         return this.collided;
     }
 
+    
+    
     /**
      * Attack the player
      *
@@ -259,6 +261,15 @@ public abstract class Enemy extends Character implements Lootable {
         numPlayers = playerManager.getPlayers().size();
         return numPlayers;
     }
+    
+    /**
+     * Returns the player entity that is nearest to the enemy entity
+     * 
+     * @return Player object with the smallest distance
+     */
+    public Player getClosestPlayer() {
+    	return closestPlayer;	
+    }
 
     /**
      * Changes status of enemy based on the closest player's position via least distance.
@@ -309,7 +320,7 @@ public abstract class Enemy extends Character implements Lootable {
         }
 
     }
-
+        
 
     /**
      * To detect player's position and set enemy's status.

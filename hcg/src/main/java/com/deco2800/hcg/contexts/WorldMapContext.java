@@ -10,7 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.deco2800.hcg.entities.worldmap.*;
+import com.deco2800.hcg.entities.worldmap.Level;
+import com.deco2800.hcg.entities.worldmap.MapNode;
+import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
+import com.deco2800.hcg.entities.worldmap.WorldMap;
+import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
@@ -73,7 +77,7 @@ public class WorldMapContext extends UIContext {
 
 		Button quitButton = new TextButton("Quit", skin);
 		Button discoveredButton = new TextButton("Show all nodes", skin);
-		Button demoButton = new TextButton("Demo world", skin);
+		Button demoButton = new TextButton("Safehaven", skin);
 
 		window.add(quitButton);
 		window.add(discoveredButton);
@@ -124,15 +128,12 @@ public class WorldMapContext extends UIContext {
 		
 		demoButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				World world = new World("test");
+				World world = new World("resources/maps/maps/grass_safeZone_02.tmx");
 				Level level = new Level(world, 0, 1, 1);
-
-				
-				((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
-                setWeather(world.getWeatherType());
 				
 				gameManager.setWorld(world);
-				gameManager.setOccupiedNode(new MapNode(0,0,1,level, true));
+
+				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}
@@ -192,9 +193,7 @@ public class WorldMapContext extends UIContext {
                 // add the new weather effects
                 ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
                   setWeather(newWorld.getWeatherType());
-               
-                newWorld.generatePuddles();
-                
+
 				gameManager.setWorld(newWorld);
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());

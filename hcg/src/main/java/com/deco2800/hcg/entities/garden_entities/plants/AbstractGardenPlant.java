@@ -249,7 +249,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 		for (Double rarity : lootRarity.values()) {
 			if (rarity < 0.0 || rarity > 1.0) {
 				LOGGER.error("Rarity should be between 0 and 1");
-				System.out.println("inv");
 				return false;
 			}
 			sum += rarity;

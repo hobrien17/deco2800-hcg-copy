@@ -1,5 +1,8 @@
 package com.deco2800.hcg.multiplayer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -12,6 +15,7 @@ import java.util.Arrays;
  */
 public class Message {
 	private static final byte[] HEADER = "H4RDC0R3".getBytes();
+	private static final Logger LOGGER = LoggerFactory.getLogger(Message.class);
 	
 	private static int sequenceNumber = 0;
 	
@@ -70,6 +74,7 @@ public class Message {
 			// get number of entries
 			entries = buffer.get();
 		} catch (BufferUnderflowException|BufferOverflowException e) {
+			LOGGER.error("Invalid Message",e);
 			throw new MessageFormatException();
 		}
 	}
