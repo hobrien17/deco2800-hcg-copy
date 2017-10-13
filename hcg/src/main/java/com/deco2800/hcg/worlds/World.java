@@ -89,7 +89,7 @@ public class World {
 			loadedFile = file;
 
 		} catch (Exception e) {
-			LOGGER.error(e.toString());
+			LOGGER.error(String.valueOf(e));
 			return;
 		}
 
@@ -245,6 +245,7 @@ public class World {
 		try {
 			return this.collisionMap.get(x, y);
 		} catch (IndexOutOfBoundsException e) {
+			LOGGER.error("Invalid Tile Coordinate", e);
 			throw new IndexOutOfBoundsException("Invalid tile coordinate.");
 		}
 	}

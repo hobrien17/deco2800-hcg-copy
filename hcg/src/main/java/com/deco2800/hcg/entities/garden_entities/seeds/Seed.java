@@ -101,7 +101,7 @@ public class Seed extends StackableItem {
 			return type.getPlant().getDeclaredConstructor(Pot.class).newInstance(pot);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex) {
-			LOGGER.error("Error creating new object: " + ex.getStackTrace());
+			LOGGER.error("Error creating new object: ", ex);
 			return null;
 		}
 	}
@@ -117,7 +117,7 @@ public class Seed extends StackableItem {
 			return type.getTurret().getDeclaredConstructor(Corpse.class).newInstance(corpse);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex) {
-			LOGGER.error("Error creating new object: " + ex.getStackTrace());
+			LOGGER.error("Error creating new object: ", ex);
 			return null;
 		}
 	}
