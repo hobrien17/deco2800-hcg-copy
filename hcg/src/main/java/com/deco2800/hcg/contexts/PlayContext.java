@@ -157,7 +157,7 @@ public class PlayContext extends Context {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                playerManager.removeCurrentPlayer();
+                playerManager.despawnPlayers();
                 contextManager.popContext();
             }
         });

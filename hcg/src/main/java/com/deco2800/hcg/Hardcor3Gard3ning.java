@@ -6,15 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.deco2800.hcg.contexts.MainMenuContext;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.worldmap.Level;
-import com.deco2800.hcg.entities.worldmap.WorldStack;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
-import com.deco2800.hcg.worldmapui.LevelStore;
-import com.deco2800.hcg.worldmapui.WorldStackGenerator;
-
-import java.util.ArrayList;
 
 /**
  * Handles the creation of the world and rendering.
