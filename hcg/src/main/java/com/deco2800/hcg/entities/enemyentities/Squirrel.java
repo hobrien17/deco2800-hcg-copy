@@ -86,26 +86,13 @@ public class Squirrel extends Enemy implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		if (this.getNumberPlayers() == 1) {
-			this.detectPlayer();//Change status if player detected.
-	        this.setNewPos();//Put new position into Box3D.
-			this.setDirection();
-			this.detectCollision();//Detect collision.
-			this.updateSprite();
-	        this.moveAction();//Move enemy to the position in Box3D.
-			// Apply any effects that exist on the entity
-			myEffects.apply();
-		} else if (this.getNumberPlayers() > 1) {
-			// Runs when multiple players exist. 
-			// Code modified from above to move enemies when there are multiple players present
-			// Author - Elvin, Team 9
-			this.detectPlayers(); // Change status when closest player is detected.
-			this.setNewPosMultiplayer(); // Put new position into Box3D
-			this.setDirection();
-			this.detectCollision(); // Detect collisions.
-			this.updateSprite();
-			this.moveAction(); // Move enemy to the position in Box3D
-			myEffects.apply(); // Apply effects
-		} 
+		this.detectPlayers();//Change status if player detected.
+		this.setNewPos();//Put new position into Box3D.
+		this.setDirection();
+		this.detectCollision();//Detect collision.
+		this.updateSprite();
+		this.moveAction();//Move enemy to the position in Box3D.
+		// Apply any effects that exist on the entity
+		myEffects.apply();
 	}
 }

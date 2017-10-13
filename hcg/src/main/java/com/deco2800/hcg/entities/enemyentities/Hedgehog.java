@@ -136,8 +136,6 @@ public class Hedgehog extends Enemy implements Tickable {
     	
     }
     
-    
-    
     /**
      * On Tick handler
      * @param gameTickCount Current game tick
