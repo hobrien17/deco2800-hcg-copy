@@ -9,7 +9,7 @@ public class Key extends StackableItem {
 		this.baseValue = 1;
         this.itemWeight = 1;
         this.itemName = "Key";
-        //this.texture = "key";
+        this.texture = "key";
         this.currentStackSize = 1;
         this.maxStackSize = 100;
 	}

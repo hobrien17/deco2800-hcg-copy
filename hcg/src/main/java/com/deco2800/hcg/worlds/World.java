@@ -50,6 +50,8 @@ public class World {
 
 	//Store Collisions
 	protected Array2D<List<AbstractEntity>> collisionMap;
+	
+	public final static World SAFEZONE = new World("resources/maps/maps/grass_safeZone_02.tmx");
 
 	/**
 	 * Empty abstract world, for testing

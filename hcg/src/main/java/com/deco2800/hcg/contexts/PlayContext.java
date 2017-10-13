@@ -297,7 +297,7 @@ public class PlayContext extends Context {
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
         plantButton.setPosition(stage.getWidth()-26, stage.getHeight()-29);
         radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
-        potUnlock.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
+        potUnlock.setPosition(stage.getWidth() / 2f-150f, stage.getHeight() / 2f+100f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         weatherManager.resize();
     }
@@ -349,7 +349,6 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
-    	potUnlock.close();
     	if(keycode == Input.Keys.U && potUnlock.isOpen()) {
     		potUnlock.close();
     	} else if(keycode == Input.Keys.U) {

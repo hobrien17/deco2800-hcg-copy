@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -27,13 +28,15 @@ import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.util.WorldUtil;
 
-public class PotUnlockDisplay extends Dialog {
+public class PotUnlockDisplay extends Window {
 	
 	private GameManager gameManager;
 	private PlayerManager playerManager;
+	private SoundManager soundManager;
 	private Inventory inventory;
 	
 	private Stage stage;
@@ -41,6 +44,9 @@ public class PotUnlockDisplay extends Dialog {
 	private boolean open;
 	
 	private Table infoTbl;
+	private Table btns;
+	private Table containerL;
+	private Table containerR;
 	private Label infoLbl;
 	private Label titleLbl;
 	private Label xLbl;
@@ -56,6 +62,7 @@ public class PotUnlockDisplay extends Dialog {
 		this.skin = skin;
 		gameManager = GameManager.get();
 		playerManager = (PlayerManager)gameManager.getManager(PlayerManager.class);
+		soundManager = (SoundManager)gameManager.getManager(SoundManager.class);
 		inventory = playerManager.getPlayer().getInventory();
         this.setMovable(false);
         this.setWidth(WIDTH);
@@ -79,12 +86,13 @@ public class PotUnlockDisplay extends Dialog {
 		infoLbl = new Label("", bold);
 		titleLbl = new Label("", normal);
 		xLbl = new Label("x", normal);
-		this.getContentTable().add(infoTbl);
+		this.add(infoTbl);
 		infoTbl.add(keyImage).size(50, 50);
 		infoTbl.add(xLbl);
 		infoTbl.add(infoLbl);
-		this.getContentTable().row();
-		this.getContentTable().add(titleLbl);
+		this.row();
+		this.add(titleLbl);
+		this.row();
 		
 		conf = new TextButton("Open", skin);
 		cancel = new TextButton("Cancel", skin);
@@ -102,20 +110,29 @@ public class PotUnlockDisplay extends Dialog {
                 Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(playerManager.getPlayer().getPosX(), 
                 		playerManager.getPlayer().getPosY(), 1.5f, Pot.class);
                 if(closest.isPresent()) {
+                	soundManager.playSound("key");
                 	((Pot)closest.get()).unlock();
                 	inventory.removeItem(new Key());
+                	close();
                 }
             }
         });
 		
-		this.button(conf);
-		this.button(cancel);
+		btns = new Table();
+		this.row();
+		this.add(btns).pad(15).width(270);
+		containerL = new Table();
+		containerR = new Table();
+		btns.add(containerL).width(133).align(Align.left);
+		btns.add(containerR).width(135).align(Align.right);
+		containerL.add(conf);
+		containerR.add(cancel);
 		
 		Button closeButton = new Button(skin.getDrawable("button-close"));
         closeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                close();
+            	close();
             }
         });
         closeButton.setColor(Color.GREEN);
@@ -135,18 +152,17 @@ public class PotUnlockDisplay extends Dialog {
 			titleLbl.setText("Open pot by using key?");
 			this.getTitleLabel().setText("Open pot?");
 			conf.setVisible(true);
-			cancel.setVisible(true);
 		} else {
 			titleLbl.setText("No keys in inventory!");
 			this.getTitleLabel().setText("No keys!");
 			conf.setVisible(false);
-			cancel.setVisible(false);
 		}
 	}
 	
 	public void open() {
-		if(WorldUtil.closestEntityToPosition(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 
-				1.5f, Pot.class).isPresent()) {
+		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(playerManager.getPlayer().getPosX(), 
+				playerManager.getPlayer().getPosY(), 1.5f, Pot.class);
+		if (closest.isPresent() && ((Pot)closest.get()).isLocked()) {
 			update();
 			stage.addActor(this);
 			open = true;
@@ -156,14 +172,6 @@ public class PotUnlockDisplay extends Dialog {
 	public void close() {
 		this.remove();
 		open = false;
-	}
-	
-	public void change() {
-		if(open) {
-			close();
-		} else {
-			open();
-		}
 	}
 	
 	public boolean isOpen() {
