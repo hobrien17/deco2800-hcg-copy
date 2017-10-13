@@ -25,6 +25,7 @@ import com.deco2800.hcg.contexts.playContextClasses.ChatStack;
 import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
+import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
 import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
@@ -76,6 +77,7 @@ public class PlayContext extends Context {
     private ClockDisplay clockDisplay;
     private ChatStack chatStack;
     private RadialDisplay radialDisplay;
+    private PotUnlockDisplay potUnlock;
     private Button plantButton;
 
     private Window window;
@@ -132,6 +134,7 @@ public class PlayContext extends Context {
         chatStack = new ChatStack(stage);
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
+        potUnlock = new PotUnlockDisplay(stage, plantSkin);
 
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
@@ -294,6 +297,7 @@ public class PlayContext extends Context {
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
         plantButton.setPosition(stage.getWidth()-26, stage.getHeight()-29);
         radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
+        potUnlock.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         weatherManager.resize();
     }
@@ -345,6 +349,14 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
+    	potUnlock.close();
+    	if(keycode == Input.Keys.U && potUnlock.isOpen()) {
+    		potUnlock.close();
+    	} else if(keycode == Input.Keys.U) {
+    		potUnlock.open();
+    	} else {
+    		potUnlock.close();
+    	}
         if(keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
         } else if(keycode == Input.Keys.N) {

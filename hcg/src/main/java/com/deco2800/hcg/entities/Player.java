@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -181,6 +182,8 @@ public class Player extends Character implements Tickable {
 
 		//REMOVE THIS - JUST ADDED FOR TESTING
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new Key());
+		inventory.addItem(new Key());
 	}
 
 	/**
@@ -807,16 +810,8 @@ public class Player extends Character implements Tickable {
 			LOGGER.info("Access player inventory");
 			contextManager.pushContext(new PlayerInventoryContext(this));
 			break;
-		case Input.Keys.U:
-			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
-					Pot.class);
-			if (closest.isPresent()) {
-				Pot pot = (Pot) closest.get();
-				pot.unlock();
-			}
-			break;
 		case Input.Keys.L:
-			closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
+			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
 					Pot.class);
 			if (closest.isPresent()) {
 				Pot pot = (Pot) closest.get();
