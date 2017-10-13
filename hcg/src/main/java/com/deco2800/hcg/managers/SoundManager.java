@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,7 +24,9 @@ public class SoundManager extends Manager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoundManager.class);
 	private Map<String, Sound> soundMap = new HashMap<String, Sound>();
+	
 	ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+	ScheduledFuture<?> randomLoop;
 	
 	// String Constants
 	private static final String NO_REF = "No reference to sound effect: ";
@@ -138,7 +141,12 @@ public class SoundManager extends Manager {
 			    }
 			};
 
-			executor.scheduleAtFixedRate(stingSound, 0, 4, TimeUnit.SECONDS);
+			try {
+				randomLoop.cancel(true);
+			} catch (NullPointerException e) {
+				LOGGER.info("No sting playing yet");
+			}
+			randomLoop = executor.scheduleAtFixedRate(stingSound, 0, 4, TimeUnit.SECONDS);
 			
 		} else {
 			LOGGER.info(NO_REF + soundString);
@@ -146,7 +154,7 @@ public class SoundManager extends Manager {
 	}
 	
 	/*
-	 *  Helper method that provides a 50:50 chance to play a sound at a 
+	 *  Helper method that provides a chance to play a sound at a 
 	 *  random interval
 	 *  
 	 */
