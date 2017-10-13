@@ -274,6 +274,7 @@ public final class NetworkManager extends Manager {
 		try {
 			address = channel.receive(receiveBuffer);
 		} catch (IOException e) {
+			LOGGER.error("Failed to receive message", e);
 			return;
 		}
 		if (address == null) {
@@ -354,13 +355,14 @@ public final class NetworkManager extends Manager {
 				
 				try {
 					channel.send(messageBuffer, address);
-				} catch (IOException e) {}
+				} catch (IOException e) {LOGGER.error("Failed to send ACK message", e);}
 			}
 		} catch (BufferOverflowException | BufferUnderflowException
 				| MessageFormatException e) {
 			// we don't care if a datagram is invalid, only that we don't try to
 			// read it any further
 			// TODO Implement a timeout so we can get away with this
+			LOGGER.error("Invalid Datagram", e);
 		}
 	}
 }

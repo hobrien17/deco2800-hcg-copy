@@ -13,7 +13,7 @@ import com.deco2800.hcg.managers.GameManager;
 
 public class Seed extends StackableItem {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Seed.class);
 
 	/**
 	 * Stores the many different types of seeds in the game *
