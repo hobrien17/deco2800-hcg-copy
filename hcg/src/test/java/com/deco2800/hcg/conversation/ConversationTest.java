@@ -17,7 +17,7 @@ import java.util.Map;
 public class ConversationTest {
 
 	// JSON test data & associated Conversation
-	private String JsonConversationA = "{\"initialRelationship\":\"neutral\",\"relationshipNodes\":{\"neutral\":\"0\"},\"nodes\":[{\"id\":\"0\",\"nodeText\":\"Foo\",\"options\":[{\"conditions\":[],\"optionText\":\"to Bar\",\"target\":\"1\",\"actions\":[]},{\"conditions\":[],\"optionText\":\"to Baz\",\"target\":\"2\",\"actions\":[]}]},{\"id\":\"1\",\"nodeText\":\"Bar\",\"options\":[{\"conditions\":[],\"optionText\":\"to Baz\",\"target\":\"2\",\"actions\":[]},{\"conditions\":[],\"optionText\":\"quit\",\"target\":null,\"actions\":[]}]},{\"id\":\"2\",\"nodeText\":\"Baz\",\"options\":[{\"conditions\":[],\"optionText\":\"back to Foo\",\"target\":\"0\",\"actions\":[]}]}]}";
+	private String JsonConversationA = "{\"initialRelationship\":\"neutral\",\"relationshipMap\":{\"neutral\":\"0\"},\"nodes\":[{\"id\":\"0\",\"nodeText\":\"Foo\",\"options\":[{\"conditions\":[],\"optionText\":\"to Bar\",\"target\":\"1\",\"actions\":[]},{\"conditions\":[],\"optionText\":\"to Baz\",\"target\":\"2\",\"actions\":[]}]},{\"id\":\"1\",\"nodeText\":\"Bar\",\"options\":[{\"conditions\":[],\"optionText\":\"to Baz\",\"target\":\"2\",\"actions\":[]},{\"conditions\":[],\"optionText\":\"quit\",\"target\":null,\"actions\":[]}]},{\"id\":\"2\",\"nodeText\":\"Baz\",\"options\":[{\"conditions\":[],\"optionText\":\"back to Foo\",\"target\":\"0\",\"actions\":[]}]}]}";
 	private String JsonConversationB = "{\"initialNode\":\"0\",\"nodes\":[{\"id\":\"0\",\"nodeText\":\"Foo\",\"options\":[{\"optionText\":\"to Bar\",\"target\":\"1\"},{\"optionText\":\"to Baz\",\"target\":\"2\"}]},{\"id\":\"1\",\"nodeText\":\"Bar\",\"options\":[{\"optionText\":\"to Baz\",\"target\":\"2\"},{\"optionText\":\"quit\",\"target\":null}]},{\"id\":\"2\",\"nodeText\":\"Baz\",\"options\":[{\"optionText\":\"back to Foo\",\"target\":\"0\"}]}]}";
 	private String JsonConversationC = "{{{{{{{{{{{";
 	private Conversation conversationA;
@@ -62,11 +62,14 @@ public class ConversationTest {
 	}
 	
 	@Test
-	public void testImport() {
+	public void testValidImport() {
 		Conversation conversation = ConversationReader.importConversation(JsonConversationA);
 		List<ConversationNode> nodes = conversation.getConversationNodes();
 		Assert.assertEquals(3, nodes.size());
-		//TODO more testing
+		String initialRelationship = conversation.getInitialRelationship();
+		Assert.assertEquals("neutral", initialRelationship);
+		ConversationNode initialNode = conversation.getRelationshipMap().get(initialRelationship);
+		Assert.assertEquals("Foo", initialNode.getNodeText());
 	}
 
 	@Test(expected = ResourceLoadException.class)
@@ -79,4 +82,16 @@ public class ConversationTest {
 		Conversation conversation = ConversationReader.importConversation(JsonConversationC);
 	}
 
+	@Test
+	public void testRelationshipMap()  {
+		Conversation conv = ConversationReader.readConversation("resources/conversations/test_conversation_02.json");
+		Assert.assertEquals(3, conv.getConversationNodes().size());
+		Assert.assertEquals("neutral", conv.getInitialRelationship());
+		Map<String, ConversationNode> relMap = conv.getRelationshipMap();
+		Assert.assertEquals(2, relMap.size());
+		Assert.assertNotNull(relMap.get("neutral"));
+		Assert.assertEquals("Hello, how are you?", relMap.get("neutral").getNodeText());
+		Assert.assertNotNull(relMap.get("negative"));
+		Assert.assertEquals("I don't want to talk to you.", relMap.get("negative").getNodeText());
+	}
 }

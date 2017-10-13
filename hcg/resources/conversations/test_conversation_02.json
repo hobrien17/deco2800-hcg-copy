@@ -1,6 +1,6 @@
 {
 	"initialRelationship": "neutral",
-	"relationshipNodes": {  "neutral": "hello", "negative": "go away"  },
+	"relationshipMap": {  "neutral": "hello", "negative": "go away"  },
 	"nodes": [
 		{
 			"id": "hello",

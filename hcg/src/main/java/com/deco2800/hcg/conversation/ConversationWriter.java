@@ -34,14 +34,14 @@ public class ConversationWriter {
 			jNodes.add(serialiseNode(node, nodes));
 		}
 
-		JsonObject jRelationshipNodes = new JsonObject();
-		for (Map.Entry<String, ConversationNode> entry : conversation.getRelationshipNodes().entrySet()) {
-			jRelationshipNodes.add(entry.getKey(), getID(entry.getValue(), nodes));
+		JsonObject jRelationshipMap = new JsonObject();
+		for (Map.Entry<String, ConversationNode> entry : conversation.getRelationshipMap().entrySet()) {
+			jRelationshipMap.add(entry.getKey(), getID(entry.getValue(), nodes));
 		}
 
 		JsonObject jConversation = new JsonObject();
 		jConversation.addProperty("initialRelationship", conversation.getInitialRelationship());
-		jConversation.add("relationshipNodes", jRelationshipNodes);
+		jConversation.add("relationshipMap", jRelationshipMap);
 		jConversation.add("nodes", jNodes);
 		
 		return jConversation;

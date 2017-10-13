@@ -26,7 +26,7 @@ public class ConversationReader {
 	}
 
 	// Read a Conversation from a file
-	public static Conversation readConversation(String filename) throws IOException {
+	public static Conversation readConversation(String filename) {
 		try {
 			JsonParser parser = new JsonParser();
 			BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -74,14 +74,14 @@ public class ConversationReader {
 			}
 
 			// Relationship starting nodes
-			Map<String, ConversationNode> relationshipNodes = new HashMap<>();
-			for (Map.Entry<String, JsonElement> entry : jConversation.getAsJsonObject("relationshipNodes").entrySet()) {
+			Map<String, ConversationNode> relationshipMap = new HashMap<>();
+			for (Map.Entry<String, JsonElement> entry : jConversation.getAsJsonObject("relationshipMap").entrySet()) {
 				String nodeName = entry.getValue().getAsString();
-				relationshipNodes.put(entry.getKey(), nodes.get(nodeName));
+				relationshipMap.put(entry.getKey(), nodes.get(nodeName));
 			}
 
 			String initialRelationship = jConversation.get("initialRelationship").getAsString();
-			conversation.setup(initialRelationship, relationshipNodes, new ArrayList<>(nodes.values()));
+			conversation.setup(initialRelationship, relationshipMap, new ArrayList<>(nodes.values()));
 
 		} catch (NullPointerException e) {
 			throw new ResourceLoadException(e);

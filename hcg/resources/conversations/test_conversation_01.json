@@ -1,6 +1,6 @@
 {
   "initialRelationship": "neutral",
-  "relationshipNodes": {
+  "relationshipMap": {
     "neutral": "0"
   },
   "nodes": [

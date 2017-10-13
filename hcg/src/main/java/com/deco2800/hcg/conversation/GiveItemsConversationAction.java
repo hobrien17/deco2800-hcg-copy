@@ -1,6 +1,6 @@
 package com.deco2800.hcg.conversation;
 
-import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 
 public class GiveItemsConversationAction extends AbstractConversationAction {
 
@@ -13,7 +13,7 @@ public class GiveItemsConversationAction extends AbstractConversationAction {
     }
 
     @Override
-    void executeAction(NPC talkingTo) {
+    void executeAction(QuestNPC talkingTo) {
         throw new UnsupportedOperationException();  //TODO
     }
 
