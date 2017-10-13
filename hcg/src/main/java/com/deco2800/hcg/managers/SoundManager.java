@@ -74,7 +74,8 @@ public class SoundManager extends Manager {
 			soundMap.put("plantingCorpse", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/plant_in_enemies.wav")));
 			soundMap.put("plantingLily", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/plant_waterlilly_in_pot.wav")));
 			soundMap.put("shovelTrowel", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/shovel_or_trowel.wav")));
-
+			soundMap.put("key", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/key.wav")));
+			
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}

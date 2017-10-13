@@ -29,7 +29,7 @@ import com.deco2800.hcg.items.stackable.HealthPotion;
 
 public enum WorldEntities {
 
-    WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
+    WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, UPOT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
     GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM, SNAIL;
 
     /**
@@ -55,6 +55,10 @@ public enum WorldEntities {
                 return new Hedgehog(x, y, 0f, index);
             case POT:
                 return new Pot(x, y, 0f);
+            case UPOT:
+            	Pot pot = new Pot(x, y, 0f);
+            	pot.unlock();
+            	return pot;
             case MUSHROOMTURRET:
                 return new MushroomTurret(x, y, 0f, index);
             case CORPSE:
