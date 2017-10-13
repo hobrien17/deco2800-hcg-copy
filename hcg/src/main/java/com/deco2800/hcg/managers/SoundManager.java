@@ -28,7 +28,7 @@ public class SoundManager extends Manager {
 	ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 	ScheduledFuture<?> randomLoop;
 
-	ArrayList<Sound> currentlyLooping = new ArrayList<Sound>();
+	ArrayList<Sound> weatherSounds = new ArrayList<Sound>();
 
 	// String Constants
 	private static final String NO_REF = "No reference to sound effect: ";
@@ -134,7 +134,9 @@ public class SoundManager extends Manager {
 	 * continue playing sound is a loop
 	 */
 	public void loopSound(String soundString) {
+
 		Sound sound = soundMap.get(soundString);
+
 		if (sound != null) {
 			LOGGER.info("Playing sound effect, looping : " + soundString);
 			sound.loop(1f);
@@ -144,21 +146,34 @@ public class SoundManager extends Manager {
 	}
 
 	/**
+	 * stops all playing weather sounds
+	 */
+	public void stopWeatherSounds() {
+
+		for (Sound playing : weatherSounds) {
+			playing.stop();
+		}
+
+		weatherSounds.clear();
+
+	}
+
+	/**
 	 * special loop sound player for weather effects
 	 */
 	public void ambientLoopSound(String soundString) {
 
-		for (Sound playing : currentlyLooping) {
+		for (Sound playing : weatherSounds) {
 			playing.stop();
 		}
-		
-		currentlyLooping.clear();
+
+		weatherSounds.clear();
 
 		Sound sound = soundMap.get(soundString);
 		Sound sting = soundMap.get("weatherStormSting"); // change this to unique sounds
 
-		currentlyLooping.add(sound);
-		currentlyLooping.add(sting);
+		weatherSounds.add(sound);
+		weatherSounds.add(sting);
 
 		if (sound != null) {
 			LOGGER.info("Playing sound effect, looping : " + soundString);
