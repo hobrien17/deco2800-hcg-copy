@@ -159,7 +159,13 @@ public abstract class Enemy extends Character implements Lootable {
         return this.collided;
     }
 
-    
+    /**
+     * Return collision of player status.
+     * @return
+     */
+    public boolean getPlayerCollided(){
+        return this.collidedPlayer;
+    }
     
     /**
      * Attack the player
@@ -275,7 +281,7 @@ public abstract class Enemy extends Character implements Lootable {
      * Changes status of enemy based on the closest player's position via least distance.
      * Used when there are multiple players in the same game.
      *
-     * Meraged with detecPlayer()
+     * Meraged with detectPlayer()
      *
      * @author Elvin - Team 9
      */
@@ -289,7 +295,7 @@ public abstract class Enemy extends Character implements Lootable {
         float[] distances = new float[numPlayers];
         float closestDistance;
 
-        getNumberPlayers();
+        //getNumberPlayers();
         players = playerManager.getPlayers();
         if (this.getNumberPlayers() > 1) {
             //Iterates through all players and puts distance from enemy to each player into an array
@@ -494,11 +500,26 @@ public abstract class Enemy extends Character implements Lootable {
                     this.setCollidedPlayer(true);
                 }
                 this.setCollided(true);
+                this.detour();
             }
         }
     }
 
 
+    /**
+     * Generate new random pos when collied with non-player
+     *
+     */
+    void detour(){
+        do {
+            if (this.getCollided() && !this.getPlayerCollided()){
+                newPos = this.getRandomPos();
+            }
+        } while (this.getCollided() && !this.getPlayerCollided());
+        if (!this.getPlayerCollided()){
+            this.setCollided(false);
+        }
+    }
     /**
      * Set new position by different situation.
      *
@@ -543,6 +564,56 @@ public abstract class Enemy extends Character implements Lootable {
         enemyWeapon.updateAim(new Vector3(playerManager.getPlayer().getPosX(), playerManager.getPlayer().getPosY(), 0));
         enemyWeapon.openFire();
     }
+
+    /**
+     *  Logic for Crab
+     *
+     */
+    void crab(){
+        List<Player> players;
+        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
+        int playerCount = 0;
+        float[] distances = new float[numPlayers];
+        float closestDistance;
+        this.setStatus(2);
+        this.setMovementSpeed((float) (this.movementSpeed*0.1));
+        if (this.getHealthCur() <= this.getHealthMax()*0.5){
+            this.setMovementSpeed((this.movementSpeed*5));
+        }
+        players = playerManager.getPlayers();
+        //Detect players
+        if (this.getNumberPlayers() > 1) {
+            //Iterates through all players and puts distance from enemy to each player into an array
+            //Puts all players and their respective distances into a hash map
+            for (Player player : players) {
+                distances[playerCount] = this.distance(player);
+                playerHashMap.put(distances[playerCount], player);
+                playerCount++;
+            }
+
+            //Finds the smallest distance in the distance array
+            closestDistance = distances[0];
+            for (int j = 0; j < distances.length; j++) {
+                if (distances[j] < closestDistance) {
+                    closestDistance = distances[j];
+                }
+            }
+
+            //Gets the player with closest distance from the enemy and assigns to variable
+            this.closestPlayer = playerHashMap.get(closestDistance);
+            this.lastPlayerX = closestPlayer.getPosX();
+            this.lastPlayerY = closestPlayer.getPosY();
+
+        } else {
+        this.lastPlayerX = playerManager.getPlayer().getPosX();
+        this.lastPlayerY = playerManager.getPlayer().getPosY();
+        }
+        //Set new position
+        newPos = this.getToPlayerPos(closestPlayer);
+        this.detectCollision();
+        this.moveAction();
+    }
+
 
     @Override
     public boolean equals(Object obj) {
