@@ -339,7 +339,7 @@ public class Player extends Character implements Tickable {
 			this.getEquippedWeapon().updateAim(position);
 			// TODO: remove
 			this.getEquippedWeapon().updatePosition(position.x, position.y);
-    	  } catch (Exception e) {}
+    	  } catch (Exception e) {LOGGER.error(String.valueOf(e));}
 		}
 		lastMouseX = screenX;
 	    lastMouseY = screenY;
