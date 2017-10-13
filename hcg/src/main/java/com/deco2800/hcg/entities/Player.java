@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -69,6 +70,9 @@ public class Player extends Character implements Tickable {
 	private float lastSpeedX;
 	private float lastSpeedY;
 
+	private int lastMouseX = 0;
+	private int lastMouseY = 0;
+	
 	// List containing skills that can be specialised in
 	private List<String> SPECIALISED_SKILLS = Arrays.asList("meleeSkill", "gunsSkill", "energyWeaponsSkill");
 
@@ -178,6 +182,8 @@ public class Player extends Character implements Tickable {
 
 		//REMOVE THIS - JUST ADDED FOR TESTING
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new Key());
+		inventory.addItem(new Key());
 	}
 
 	/**
@@ -313,6 +319,8 @@ public class Player extends Character implements Tickable {
 			this.getEquippedWeapon().updateAim(position);
 			this.getEquippedWeapon().openFire();
 		}
+		lastMouseX = screenX;
+        lastMouseY = screenY;
 	}
 
 	/**
@@ -326,12 +334,18 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDragged(int screenX, int screenY, int pointer) {
-		if (this.getEquippedWeapon() != null) {
+	    if (this.getEquippedWeapon() != null) {
+    	  try {
+    	    // to fix player test, since we don't want to initiallise a camera
+    	    // for that because we don't need it.
 			Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
 			this.getEquippedWeapon().updateAim(position);
 			// TODO: remove
 			this.getEquippedWeapon().updatePosition(position.x, position.y);
+    	  } catch (Exception e) {LOGGER.error(String.valueOf(e));}
 		}
+		lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -350,6 +364,8 @@ public class Player extends Character implements Tickable {
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().ceaseFire();
 		}
+	    lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -366,6 +382,8 @@ public class Player extends Character implements Tickable {
 			// TODO: remove
 			this.getEquippedWeapon().updatePosition(position.x, position.y);
 		}
+	    lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -425,11 +443,13 @@ public class Player extends Character implements Tickable {
 	private void NPCInteraction(AbstractEntity npc) {
 		if (npc instanceof QuestNPC) {
 			((QuestNPC) npc).interact();
+			this.ceaseMovement();
 			LOGGER.info("Quest NPC Interaction Started");
 			;
 		} else if (npc instanceof ShopNPC) {
 			LOGGER.info("Shop NPC Interaction Started");
 			((ShopNPC) npc).interact();
+			this.ceaseMovement();
 		} else {
 			LOGGER.info("Other NPC Interaction Started");
 		}
@@ -543,6 +563,8 @@ public class Player extends Character implements Tickable {
 		}
 		if (!collided) {
 			this.setPosition(newPos.getX(), newPos.getY(), 1);
+			// update gun's firing position if we moved
+			handleTouchDragged(lastMouseX, lastMouseY, 0);
 		}
 
 		checkXp();
@@ -593,6 +615,16 @@ public class Player extends Character implements Tickable {
 		// change box coords
 		newPos.setX(this.getPosX() + lastSpeedX);
 		newPos.setY(this.getPosY() + lastSpeedY);
+	}
+
+	/**
+	 *  Cease player movement. Used for stopping movement for context witching
+	 */
+	public void ceaseMovement() {
+		movementDirection.put("up", false);
+		movementDirection.put("down", false);
+		movementDirection.put("left", false);
+		movementDirection.put("right", false);
 	}
 
 	/**
@@ -790,16 +822,8 @@ public class Player extends Character implements Tickable {
 			LOGGER.info("Access player inventory");
 			contextManager.pushContext(new PlayerInventoryContext(this));
 			break;
-		case Input.Keys.U:
-			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
-					Pot.class);
-			if (closest.isPresent()) {
-				Pot pot = (Pot) closest.get();
-				pot.unlock();
-			}
-			break;
 		case Input.Keys.L:
-			closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
+			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
 					Pot.class);
 			if (closest.isPresent()) {
 				Pot pot = (Pot) closest.get();

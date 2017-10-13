@@ -3,7 +3,6 @@ package com.deco2800.hcg.managers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.TimeUtils;
 
 
 import org.slf4j.Logger;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +74,8 @@ public class SoundManager extends Manager {
 			soundMap.put("plantingCorpse", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/plant_in_enemies.wav")));
 			soundMap.put("plantingLily", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/plant_waterlilly_in_pot.wav")));
 			soundMap.put("shovelTrowel", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/shovel_or_trowel.wav")));
-
+			soundMap.put("key", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/key.wav")));
+			
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="1845">
+<map version="1.0" tiledversion="2017.07.25" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="1845">
  <properties>
   <property name="PlayerX" value="50"/>
   <property name="PlayerY" value="50"/>
@@ -558,7 +558,7 @@
   <properties>
    <property name="name" value="ice"/>
    <property name="slippery" value="1"/>
-   <property name="speed" value="10"/>
+   <property name="speed" value="5"/>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
