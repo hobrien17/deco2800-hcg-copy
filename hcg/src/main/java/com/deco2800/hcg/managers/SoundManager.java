@@ -25,6 +25,8 @@ public class SoundManager extends Manager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoundManager.class);
 	private Map<String, Sound> soundMap = new HashMap<String, Sound>();
+	
+	private ArrayList<String> onWeatherSounds = new ArrayList<String>();
 
 	ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 	ScheduledFuture<?> randomLoop;
@@ -113,6 +115,9 @@ public class SoundManager extends Manager {
 		if (sound != null) {
 			LOGGER.info("Playing sound effect: " + soundString);
 			sound.play(1f);
+			if (soundString.contains("weather")){
+				onWeatherSounds.add(soundString);
+			}
 		} else {
 			LOGGER.info(NO_REF + soundString);
 		}
@@ -126,6 +131,9 @@ public class SoundManager extends Manager {
 		if (sound != null) {
 			LOGGER.info("Stop sound effect: " + soundString);
 			sound.stop();
+			if (soundString.contains("weather")){
+				onWeatherSounds.remove(soundString);
+			}
 		} else {
 			LOGGER.info(NO_REF + soundString);
 		}
@@ -136,8 +144,12 @@ public class SoundManager extends Manager {
 	 */
 	public void stopAll() {
 		for (Entry<String, Sound> entry : soundMap.entrySet()){
-			Sound sound = soundMap.get(entry.getKey());
+			Sound sound = entry.getValue();
 			sound.stop();
+			
+			if (entry.getKey().contains("weather")){
+				onWeatherSounds.remove(entry.getKey());
+			}
 		}
 	}
 
@@ -166,7 +178,6 @@ public class SoundManager extends Manager {
 		}
 
 		weatherSounds.clear();
-
 	}
 
 	/**
@@ -219,4 +230,21 @@ public class SoundManager extends Manager {
 		}
 	}
 
+	/** pauses weather sounds which can be useful when going to menu
+	 * 
+	 */
+	public void pauseWeatherSounds(){
+		for (String weatherSound : onWeatherSounds) {
+			stopSound(weatherSound);
+		}
+	}
+	
+	/** pauses weather sounds which can be useful when going to menu
+	 * 
+	 */
+	public void unpauseWeatherSounds(){
+		for (String weatherSound : onWeatherSounds) {
+			playSound(weatherSound);
+		}
+	}
 }
