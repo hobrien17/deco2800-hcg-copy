@@ -71,7 +71,7 @@ public class Message {
 			// get number of entries
 			entries = buffer.get();
 		} catch (BufferUnderflowException|BufferOverflowException e) {
-			throw new MessageFormatException();
+			throw new MessageFormatException(e);
 		}
 	}
 	

@@ -25,6 +25,7 @@ import com.deco2800.hcg.contexts.playContextClasses.ChatStack;
 import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
+import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
 import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
@@ -74,8 +75,10 @@ public class PlayContext extends Context {
     private PlayerStatusDisplay playerStatus;
     private NetworkManager networkManager;
     private ClockDisplay clockDisplay;
+    private SoundManager soundManager;
     private ChatStack chatStack;
     private RadialDisplay radialDisplay;
+    private PotUnlockDisplay potUnlock;
     private Button plantButton;
 
     private Window window;
@@ -107,6 +110,7 @@ public class PlayContext extends Context {
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+        soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
 
         /* Setup the camera and move it to the center of the world */
@@ -132,6 +136,7 @@ public class PlayContext extends Context {
         chatStack = new ChatStack(stage);
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
+        potUnlock = new PotUnlockDisplay(stage, plantSkin);
 
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
@@ -154,7 +159,7 @@ public class PlayContext extends Context {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                playerManager.removeCurrentPlayer();
+                playerManager.despawnPlayers();
                 contextManager.popContext();
             }
         });
@@ -294,6 +299,7 @@ public class PlayContext extends Context {
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
         plantButton.setPosition(stage.getWidth()-26, stage.getHeight()-29);
         radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
+        potUnlock.setPosition(stage.getWidth() / 2f-150f, stage.getHeight() / 2f+100f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         weatherManager.resize();
     }
@@ -322,6 +328,7 @@ public class PlayContext extends Context {
     public void pause() {
         if (!networkManager.isMultiplayerGame()) {
             unpaused = false;
+            soundManager.pauseWeatherSounds();
         }
     }
 
@@ -329,6 +336,7 @@ public class PlayContext extends Context {
     public void resume() {
         if (!networkManager.isMultiplayerGame()) {
             unpaused = true;
+            soundManager.unpauseWeatherSounds();
         }
     }
 
@@ -345,8 +353,16 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
+    	if(keycode == Input.Keys.U && potUnlock.isOpen()) {
+    		potUnlock.close();
+    	} else if(keycode == Input.Keys.U) {
+    		potUnlock.open();
+    	} else {
+    		potUnlock.close();
+    	}
         if(keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
+            soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
         } else if(keycode == Input.Keys.EQUALS) {
@@ -406,11 +422,13 @@ public class PlayContext extends Context {
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
+            soundManager.pauseWeatherSounds();
         }
     }
 
     public void removeExitWindow() {
         exitWindow.remove();
+        soundManager.unpauseWeatherSounds();
     }
 
     public void addParticleEffect(ParticleEffectActor actor) {

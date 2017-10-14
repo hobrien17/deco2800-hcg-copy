@@ -8,6 +8,8 @@ import java.nio.ByteBuffer;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class represents a message to be sent when a player has performed an input.
@@ -15,6 +17,8 @@ import com.deco2800.hcg.managers.PlayerInputManager;
  * @author Max Crofts
  */
 public class InputMessage extends Message {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(InputMessage.class);
 	private static final NetworkManager networkManager =
 			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 	private static final PlayerInputManager playerInputManager =
@@ -54,6 +58,7 @@ public class InputMessage extends Message {
 				args[i] = buffer.getInt();
 			}
 		} catch (ArrayIndexOutOfBoundsException|BufferUnderflowException|BufferOverflowException e) {
+			LOGGER.error(String.valueOf(e));
 			throw new MessageFormatException();
 		}
 	}
@@ -119,6 +124,6 @@ public class InputMessage extends Message {
 				break;
 			}
 			networkManager.updatePeerTickCount(0, tick);
-		} catch (ArrayIndexOutOfBoundsException e) {}
+		} catch (ArrayIndexOutOfBoundsException e) {LOGGER.error(String.valueOf(e));}
 	}
 }

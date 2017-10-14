@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -27,7 +28,10 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.util.Box3D;
@@ -36,7 +40,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
@@ -181,6 +184,8 @@ public class Player extends Character implements Tickable {
 
 		//REMOVE THIS - JUST ADDED FOR TESTING
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new Key());
+		inventory.addItem(new Key());
 	}
 
 	/**
@@ -339,7 +344,7 @@ public class Player extends Character implements Tickable {
 			this.getEquippedWeapon().updateAim(position);
 			// TODO: remove
 			this.getEquippedWeapon().updatePosition(position.x, position.y);
-    	  } catch (Exception e) {}
+    	  } catch (Exception e) {LOGGER.error(String.valueOf(e));}
 		}
 		lastMouseX = screenX;
 	    lastMouseY = screenY;
@@ -440,11 +445,13 @@ public class Player extends Character implements Tickable {
 	private void NPCInteraction(AbstractEntity npc) {
 		if (npc instanceof QuestNPC) {
 			((QuestNPC) npc).interact();
+			this.ceaseMovement();
 			LOGGER.info("Quest NPC Interaction Started");
 			;
 		} else if (npc instanceof ShopNPC) {
 			LOGGER.info("Shop NPC Interaction Started");
 			((ShopNPC) npc).interact();
+			this.ceaseMovement();
 		} else {
 			LOGGER.info("Other NPC Interaction Started");
 		}
@@ -515,9 +522,19 @@ public class Player extends Character implements Tickable {
 
 			// if current tile is a gateway, load new map
 			if (layer.getProperties().get("newMap") != null) {
-				GameManager.get().setWorld(new World((String) layer.getProperties().get("newMap")));
+                // create new world
+				System.out.print((String) layer.getProperties().get("newMap"));
+				World newWorld = new World("resources/maps/maps/" +(String) layer.getProperties().get("newMap"));
+				
+				// add the new weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                  setWeather(newWorld.getWeatherType());
+                
+				GameManager.get().setWorld(newWorld);
 				playerManager.spawnPlayers();
+				updateCamera();
 				this.setPosition(oldPosX, oldPosY, 1);
+				
 			}
 
 			// see if current tile is slippery. Save the slippery value if it is
@@ -613,6 +630,16 @@ public class Player extends Character implements Tickable {
 	}
 
 	/**
+	 *  Cease player movement. Used for stopping movement for context witching
+	 */
+	public void ceaseMovement() {
+		movementDirection.put("up", false);
+		movementDirection.put("down", false);
+		movementDirection.put("left", false);
+		movementDirection.put("right", false);
+	}
+
+	/**
 	 * handle terrain effects on player
 	 */
 	private void handleTerrain(String terrain) {
@@ -665,7 +692,7 @@ public class Player extends Character implements Tickable {
 			speedX = 0;
 			speedY = 0;
 			move = 0;
-			soundStop(name);
+			soundManager.stopAll();
 			this.contextManager.pushContext(new DeathContext());
 			healthCur = healthMax;
 		}
@@ -807,16 +834,8 @@ public class Player extends Character implements Tickable {
 			LOGGER.info("Access player inventory");
 			contextManager.pushContext(new PlayerInventoryContext(this));
 			break;
-		case Input.Keys.U:
-			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
-					Pot.class);
-			if (closest.isPresent()) {
-				Pot pot = (Pot) closest.get();
-				pot.unlock();
-			}
-			break;
 		case Input.Keys.L:
-			closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
+			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
 					Pot.class);
 			if (closest.isPresent()) {
 				Pot pot = (Pot) closest.get();
