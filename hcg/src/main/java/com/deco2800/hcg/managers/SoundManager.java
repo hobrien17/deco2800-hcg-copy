@@ -107,6 +107,16 @@ public class SoundManager extends Manager {
 			LOGGER.info(NO_REF + soundString);
 		}
 	}
+	
+	/**
+	 * Stops playing all sounds in the soundMap, for player death and eixt level.
+	 */
+	public void stopAll() {
+		for (String soundString : soundMap.keySet()){
+			Sound sound = soundMap.get(soundString);
+			sound.stop();
+		}
+	}
 
 	/**
 	 * Stops playing all instances of this sound.
