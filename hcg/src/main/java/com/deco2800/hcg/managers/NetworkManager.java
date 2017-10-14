@@ -244,6 +244,7 @@ public final class NetworkManager extends Manager {
 		try {
 			channel.socket().setBroadcast(true);
 		} catch (SocketException e) {
+			LOGGER.error("Could not set socket broadcast flag", e);
 			return;
 		}
 		
@@ -262,15 +263,21 @@ public final class NetworkManager extends Manager {
 						// send discovery message
 						SocketAddress socketAddress = new InetSocketAddress(broadcastAddress, 1337);
 						sendOnce(new DiscoveryMessage(getNextRandomInt()), socketAddress);
-					} catch (IOException e) {}
+					} catch (IOException e) {
+						LOGGER.error("Failed to send discovery message", e);
+					}
 				}
 			}
-		} catch (SocketException e) {}
+		} catch (SocketException e) {
+			LOGGER.error("Could not get network interfaces", e);
+		}
 		
-		// try to unset broadcast flag
+		// try to clear broadcast flag
 		try {
 			channel.socket().setBroadcast(false);
-		} catch (SocketException e) {}
+		} catch (SocketException e) {
+			LOGGER.error("Could not clear socket broadcast flag", e);
+		}
 	}
 	
 	/**
