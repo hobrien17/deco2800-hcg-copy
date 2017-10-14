@@ -141,9 +141,8 @@ public class PlayContext extends Context {
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
-        if (networkManager.isMultiplayerGame()) {
-            stage.addActor(chatStack);
-        }
+        stage.addActor(chatStack);
+        chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
@@ -371,6 +370,8 @@ public class PlayContext extends Context {
 			gameManager.getWorld().addEntity(entity);
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
+		} else if (keycode == Input.Keys.T) {
+			chatStack.setVisible(!chatStack.isVisible());
 		}
 	}
 
