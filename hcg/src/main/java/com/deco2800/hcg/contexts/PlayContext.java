@@ -136,7 +136,7 @@ public class PlayContext extends Context {
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
-        if (networkManager.isInitialised()) {
+        if (networkManager.isMultiplayerGame()) {
             stage.addActor(chatStack);
         }
         stage.addActor(clockDisplay);
@@ -320,14 +320,14 @@ public class PlayContext extends Context {
 
     @Override
     public void pause() {
-        if (!networkManager.isInitialised()) {
+        if (!networkManager.isMultiplayerGame()) {
             unpaused = false;
         }
     }
 
     @Override
     public void resume() {
-        if (!networkManager.isInitialised()) {
+        if (!networkManager.isMultiplayerGame()) {
             unpaused = true;
         }
     }

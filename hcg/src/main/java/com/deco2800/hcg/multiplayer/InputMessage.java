@@ -1,5 +1,6 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -58,7 +59,7 @@ public class InputMessage extends Message {
 	}
 	
 	@Override
-	public void process() {
+	public void process(SocketAddress address) {
 		try {
 			InputType inputType = InputType.values()[args[0]];
 			// TODO: handle input for more than one player

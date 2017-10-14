@@ -1,5 +1,6 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -76,9 +77,10 @@ public class Message {
 	
 	/**
 	 * Processes the received information
+	 * @param address The address from which the message was received
 	 * @require <code>unpackData</code> must have been called first
 	 */
-	public void process() {
+	public void process(SocketAddress address) {
 		// Do nothing
 	}
 	
@@ -96,6 +98,14 @@ public class Message {
 	 */
 	public MessageType getType() {
 		return type;
+	}
+	
+	/**
+	 * Gets whether message should be acknowledged
+	 * @return <code>true</code> if message should be acknowledged
+	 */
+	public boolean shouldAck() {
+		return true;
 	}
 	
 	/**
