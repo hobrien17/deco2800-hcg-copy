@@ -13,6 +13,8 @@ varying vec2 v_texCoords;
 // The texture to be sampled
 uniform sampler2D u_texture;
 
+uniform sampler2D u_lightmap;
+
 uniform float u_time;
 
 uniform float u_heat;
@@ -105,6 +107,10 @@ vec4 getVignette(vec2 tc) {
 	return texColor;
 }
 
+vec4 getLight(vec2 tex) {
+	return texture2D(u_lightmap, tex);
+}
+
 void main() {
     // Set the colour of this pixel to its base colour value multiplied
     // by the colour found in the texture at the given texture coordinates
@@ -115,7 +121,7 @@ void main() {
         tex_final.x = tex_final.x + getHeatDistortion(u_time, tex_final);
     }
 
-    vec4 final = v_color * getVignette(tex_final);
+    vec4 final = v_color * getLight(tex_final) * getVignette(tex_final);
 
     // Apply bloom
     if(u_bloom > 0.0) {

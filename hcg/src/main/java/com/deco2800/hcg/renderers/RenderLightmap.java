@@ -77,8 +77,8 @@ public class RenderLightmap implements Renderer {
             
             batch.setColor(colour);
             
-            batch.draw(lightMap, isoX, isoY, tileWidth * entity.getXRenderLength(),
-                    (lightMap.getHeight() / aspect) * entity.getYRenderLength());
+            batch.draw(lightMap, isoX, isoY, intensity * tileWidth * entity.getXRenderLength(),
+                    intensity * (lightMap.getHeight() / aspect) * entity.getYRenderLength());
         }
         
         batch.end();
