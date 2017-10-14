@@ -74,7 +74,7 @@ public class ServerBrowserContext extends UIContext {
         
         serverMap = new HashMap<>();
         serverList = new List<String>(skin);
-        serverList.setItems(serverMap.keySet().toArray(new String[0]));
+		networkManager.refreshLocalServers();
         serverListPane = new ScrollPane(serverList);
         serverListPane.setSmoothScrolling(false);
         serverListPane.setDebug(false);
