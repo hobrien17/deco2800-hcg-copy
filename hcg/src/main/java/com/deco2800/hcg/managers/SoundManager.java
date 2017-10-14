@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -134,8 +135,8 @@ public class SoundManager extends Manager {
 	 * Stops playing all sounds in the soundMap, for player death and eixt level.
 	 */
 	public void stopAll() {
-		for (String soundString : soundMap.keySet()){
-			Sound sound = soundMap.get(soundString);
+		for (Entry<String, Sound> entry : soundMap.entrySet()){
+			Sound sound = soundMap.get(entry.getKey());
 			sound.stop();
 		}
 	}
