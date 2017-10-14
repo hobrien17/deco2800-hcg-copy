@@ -75,6 +75,7 @@ public class PlayContext extends Context {
     private PlayerStatusDisplay playerStatus;
     private NetworkManager networkManager;
     private ClockDisplay clockDisplay;
+    private SoundManager soundManager;
     private ChatStack chatStack;
     private RadialDisplay radialDisplay;
     private PotUnlockDisplay potUnlock;
@@ -109,6 +110,7 @@ public class PlayContext extends Context {
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+        soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
 
         /* Setup the camera and move it to the center of the world */
@@ -326,6 +328,7 @@ public class PlayContext extends Context {
     public void pause() {
         if (!networkManager.isInitialised()) {
             unpaused = false;
+            soundManager.pauseWeatherSounds();
         }
     }
 
@@ -333,6 +336,7 @@ public class PlayContext extends Context {
     public void resume() {
         if (!networkManager.isInitialised()) {
             unpaused = true;
+            soundManager.unpauseWeatherSounds();
         }
     }
 
@@ -358,6 +362,7 @@ public class PlayContext extends Context {
     	}
         if(keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
+            soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
         } else if(keycode == Input.Keys.EQUALS) {
@@ -417,11 +422,13 @@ public class PlayContext extends Context {
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
+            soundManager.pauseWeatherSounds();
         }
     }
 
     public void removeExitWindow() {
         exitWindow.remove();
+        soundManager.unpauseWeatherSounds();
     }
 
     public void addParticleEffect(ParticleEffectActor actor) {
