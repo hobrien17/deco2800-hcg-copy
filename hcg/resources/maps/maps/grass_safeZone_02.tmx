@@ -384,7 +384,7 @@
   <object id="380" gid="57" x="255.791" y="170.709" width="55" height="32">
    <properties>
     <property name="Type" value="Quest"/>
-    <property name="conversation" value="test_conversation_02"/>
+    <property name="conversation" value="james_test"/>
     <property name="fName" value="James"/>
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="TestNPC"/>

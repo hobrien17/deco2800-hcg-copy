@@ -6,10 +6,7 @@ import com.google.gson.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConversationReader {
 
@@ -108,6 +105,7 @@ public class ConversationReader {
 
 	private static ConversationOption deserialiseOption(JsonObject jOption, ConversationNode parent, Map<String, ConversationNode> nodes) {
 		String optionText = jOption.get("optionText").getAsString();
+
 		ConversationNode target;
 		JsonElement jTarget = jOption.get("target");
 		if (jTarget instanceof JsonNull) {
@@ -116,9 +114,101 @@ public class ConversationReader {
 			String targetID = jTarget.getAsString();
 			target = nodes.get(targetID);
 		}
-		List<AbstractConversationCondition> conditions = new ArrayList<>(); 	//TODO read conditions from JSON
-		List<AbstractConversationAction> actions = new ArrayList<>();			//TODO read actions from JSON
+
+		List<AbstractConversationCondition> conditions = new ArrayList<>();
+		if (jOption.has("conditions")) {
+			for (JsonElement jCondition : jOption.getAsJsonArray("conditions")) {
+				conditions.add(deserialiseOptionCondition(jCondition));
+			}
+		}
+
+		List<AbstractConversationAction> actions = new ArrayList<>();
+		if (jOption.has("actions")) {
+			for (JsonElement jAction : jOption.getAsJsonArray("actions")) {
+				actions.add(deserialiseOptionAction(jAction));
+			}
+		}
+
 		return new ConversationOption(parent, conditions, optionText, actions, target);
+	}
+
+	// Parse a JSON condition into a Condition object
+	private static AbstractConversationCondition deserialiseOptionCondition(JsonElement jCondition) {
+
+		// Collect options and arguments
+		String condition = jCondition.getAsString();
+		Scanner scanner = new Scanner(condition).useDelimiter("\\|");
+		String command = scanner.next();
+		boolean negate = false;
+		if (command.charAt(0) == '!') {
+			command = command.substring(1);
+			negate = true;
+		}
+		List<String> args = new ArrayList<>();
+		while (scanner.hasNext()) {
+			args.add(scanner.next());
+		}
+
+		// Generate the appropriate condition object
+		switch (command) {
+
+			case "checkRelationship":
+				if (args.size() != 1) {
+					throw new ResourceLoadException("Wrong number of args in condition: " + condition);
+				}
+				return new CheckRelationshipCondition(negate, args.get(0));
+
+			case "healthPercentBelow":
+				if (args.size() != 1) {
+					throw new ResourceLoadException("Wrong number of args in condition: " + condition);
+				}
+				try {
+					return new HealthPercentBelowCondition(negate, Integer.parseInt(args.get(0)));
+				} catch (NumberFormatException e) {
+					throw new ResourceLoadException("Unparsable int in condition: " + condition, e);
+				}
+
+			default:
+				throw new ResourceLoadException("No such condition: " + condition);
+		}
+
+	}
+
+	// Parse a JSON action into a Action object
+	private static AbstractConversationAction deserialiseOptionAction(JsonElement jCondition) {
+
+		// Collect options and arguments
+		String action = jCondition.getAsString();
+		Scanner scanner = new Scanner(action).useDelimiter("\\|");
+		String command = scanner.next();
+		List<String> args = new ArrayList<>();
+		while (scanner.hasNext()) {
+			args.add(scanner.next());
+		}
+
+		// Generate the appropriate action object
+		switch (command) {
+
+			case "setRelationship":
+				if (args.size() != 1) {
+					throw new ResourceLoadException("Wrong number of args in action: " + action);
+				}
+				return new SetRelationshipAction(args.get(0));
+
+			case "giveItems":
+				if (args.size() != 2) {
+					throw new ResourceLoadException("Wrong number of args in action: " + action);
+				}
+				try {
+					return new GiveItemsAction(args.get(0), Integer.parseInt(args.get(1)));
+				} catch (NumberFormatException e) {
+					throw new ResourceLoadException("Unparsable int in action: " + action, e);
+				}
+
+			default:
+				throw new ResourceLoadException("No such action: " + action);
+		}
+
 	}
 
 }
