@@ -782,7 +782,7 @@ public class Player extends Character implements Tickable {
 	private void handleKeyDown(int keycode) {
 
 		switch (keycode) {
-		case Input.Keys.T:
+		case Input.Keys.X:
 			this.getEquippedWeapon().switchBullet();
 			break;
 		case Input.Keys.P:
