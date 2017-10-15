@@ -69,7 +69,7 @@ public class Conversation {
 	public void initiateConversation(QuestNPC talkingTo) {
 		currentNode = relationshipMap.get(talkingTo.getRelationship()); //TODO get NPC relationship state
 		this.talkingTo = talkingTo;
-		conversationContext = new ConversationContext(this, talkingTo.getFaceImage());
+		conversationContext = new ConversationContext(this,talkingTo.getFirstName(), talkingTo.getFaceImage());
 		conversationContext.displayNode(currentNode);
 		contextManager.pushContext(conversationContext);
 	}
