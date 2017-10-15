@@ -29,10 +29,14 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected float angle;
 	protected float changeX;
 	protected float changeY;
+	protected float deltaX;
+	protected float deltaY;
 
 	protected AbstractEntity user;
 	protected int hitCount;
 	protected BulletType bulletType;
+
+	protected int distanceTravelled;
 
 	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
@@ -158,16 +162,22 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
+		distanceTravelled += 1;
+		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
+			specialAbility();
+		}
 		entityHit();
-
 		if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
 				- Math.abs(goalX)) < 0.5
 				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
 				- Math.abs(goalY)) < 0.5) {
-			GameManager.get().getWorld().removeEntity(this);
+			//GameManager.get().getWorld().removeEntity(this);
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
+		if (distanceTravelled >= 100) {
+			GameManager.get().getWorld().removeEntity(this);
+		}
 	}
 
 	/**
@@ -226,6 +236,25 @@ public class Bullet extends AbstractEntity implements Tickable {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Method to overwrite in the grassBullet and trackingBullet class.
+	 * Called in the onTick method.
+	 */
+	protected void specialAbility() {
+		return;
+	}
+
+	/**
+	 * Updates the angle (direction) that the bullet travels too.
+	 *
+	 * @param changeAngle: The value to change the angle by
+	 */
+	public void updateAngle(int changeAngle) {
+		this.angle += changeAngle;
+		this.changeX = (float) (speed * Math.cos(angle));
+		this.changeY = (float) (speed * Math.sin(angle));
 	}
 
 	/**
