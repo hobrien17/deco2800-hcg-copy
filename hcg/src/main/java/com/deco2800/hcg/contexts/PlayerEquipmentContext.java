@@ -82,7 +82,7 @@ public class PlayerEquipmentContext extends InventoryDisplayContext {
         Table playerEquipment = new Table();
         playerEquipment.setBackground(new Image(textureManager.getTexture(SHOP_INVENTORY)).getDrawable());
         //Populate views as needed. This also generates images and adds on click methods
-        inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, innerTable);
+        inventoryDisplay(itemDisplay, itemInfo, playerEquipment, textureManager, player, skin, innerTable);
         equipmentDisplay(textureManager,player,skin,playerEquipment);
         //Add all these elements to the main table view (centreTable)
         centreTable.row();
