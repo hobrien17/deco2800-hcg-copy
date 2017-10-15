@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.TextureManager;
 
 /**
@@ -33,6 +34,8 @@ public class MainMenuContext extends UIContext {
                 gameManager.getManager(ContextManager.class);
 		TextureManager textureManager = (TextureManager) 
 				gameManager.getManager(TextureManager.class);
+		NetworkManager networkManager = (NetworkManager) 
+				gameManager.getManager(NetworkManager.class);
 
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
@@ -60,6 +63,7 @@ public class MainMenuContext extends UIContext {
 		newGame.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				networkManager.setMultiplayerGame(false);
 				contextManager.pushContext(new CharacterCreationContext());
 			}
 		});
@@ -67,6 +71,7 @@ public class MainMenuContext extends UIContext {
 		multiplayer.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				networkManager.setMultiplayerGame(true);
 				contextManager.pushContext(new ServerBrowserContext());
 			}
 		});

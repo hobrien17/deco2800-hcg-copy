@@ -1,5 +1,7 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
+
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 
@@ -21,7 +23,9 @@ public class JoiningMessage extends Message {
 	}
 	
 	@Override
-	public void process() {
+	public void process(SocketAddress address) {
+		// add peer to lobby
+		networkManager.addPeer(address);
 		// send joined message
 		networkManager.queueMessage(new JoinedMessage(networkManager.getNextRandomInt()));
 	}

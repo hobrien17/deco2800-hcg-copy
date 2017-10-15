@@ -2,21 +2,13 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.deco2800.hcg.managers.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -33,6 +25,7 @@ import com.deco2800.hcg.contexts.playContextClasses.ChatStack;
 import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
+import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
 import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
@@ -40,15 +33,12 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.renderers.Render3D;
 import com.deco2800.hcg.renderers.Renderer;
-import com.deco2800.hcg.shading.ShaderState;
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be
  * instantiated once.
  */
 public class PlayContext extends Context {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlayContext.class);
 
     // Managers used by the game
     private GameManager gameManager;
@@ -85,8 +75,10 @@ public class PlayContext extends Context {
     private PlayerStatusDisplay playerStatus;
     private NetworkManager networkManager;
     private ClockDisplay clockDisplay;
+    private SoundManager soundManager;
     private ChatStack chatStack;
     private RadialDisplay radialDisplay;
+    private PotUnlockDisplay potUnlock;
     private Button plantButton;
 
     private Window window;
@@ -118,6 +110,7 @@ public class PlayContext extends Context {
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+        soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
 
         /* Setup the camera and move it to the center of the world */
@@ -141,15 +134,15 @@ public class PlayContext extends Context {
         playerStatus = new PlayerStatusDisplay();
         plantWindow = new PlantWindow(plantSkin);
         chatStack = new ChatStack(stage);
-        plantButton = new Button(plantSkin.getDrawable("button-close"));
+        plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
+        potUnlock = new PotUnlockDisplay(stage, plantSkin);
 
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
-        if (networkManager.isInitialised()) {
-            stage.addActor(chatStack);
-        }
+        stage.addActor(chatStack);
+        chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
@@ -159,18 +152,27 @@ public class PlayContext extends Context {
 
         /* Add a quit button to the menu */
         Button button = new TextButton("Quit", skin);
+        Button die = new TextButton("Force quit", skin);
 
         /* Add a programmatic listener to the quit button */
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                playerManager.removeCurrentPlayer();
+                playerManager.despawnPlayers();
                 contextManager.popContext();
+            }
+        });
+        
+        die.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.exit(0);
             }
         });
 
         /* Add all buttons to the menu */
         window.add(button);
+        window.add(die);
         window.pack();
         window.setMovable(false); // So it doesn't fly around the screen
 
@@ -296,6 +298,7 @@ public class PlayContext extends Context {
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
         plantButton.setPosition(stage.getWidth()-26, stage.getHeight()-29);
         radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
+        potUnlock.setPosition(stage.getWidth() / 2f-150f, stage.getHeight() / 2f+100f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         weatherManager.resize();
     }
@@ -322,15 +325,17 @@ public class PlayContext extends Context {
 
     @Override
     public void pause() {
-        if (!networkManager.isInitialised()) {
+        if (!networkManager.isMultiplayerGame()) {
             unpaused = false;
+            soundManager.pauseWeatherSounds();
         }
     }
 
     @Override
     public void resume() {
-        if (!networkManager.isInitialised()) {
+        if (!networkManager.isMultiplayerGame()) {
             unpaused = true;
+            soundManager.unpauseWeatherSounds();
         }
     }
 
@@ -347,20 +352,28 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
+    	if(keycode == Input.Keys.U && potUnlock.isOpen()) {
+    		potUnlock.close();
+    	} else if(keycode == Input.Keys.U) {
+    		potUnlock.open();
+    	} else {
+    		potUnlock.close();
+    	}
         if(keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
+            soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
         } else if(keycode == Input.Keys.EQUALS) {
             Item item = new HealthPotion(100);
             ItemEntity entity = new ItemEntity(20, 20, 0, item);
-            gameManager.getWorld().addEntity(entity);
-        } else if(keycode == Input.Keys.B) {
-            if(RadialDisplay.plantableNearby()) {
-                radialDisplay.addRadialMenu(stage);
-            }
-        }
-    }
+			gameManager.getWorld().addEntity(entity);
+		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
+			radialDisplay.addRadialMenu(stage);
+		} else if (keycode == Input.Keys.T) {
+			chatStack.setVisible(!chatStack.isVisible());
+		}
+	}
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
@@ -410,11 +423,13 @@ public class PlayContext extends Context {
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
+            soundManager.pauseWeatherSounds();
         }
     }
 
     public void removeExitWindow() {
         exitWindow.remove();
+        soundManager.unpauseWeatherSounds();
     }
 
     public void addParticleEffect(ParticleEffectActor actor) {

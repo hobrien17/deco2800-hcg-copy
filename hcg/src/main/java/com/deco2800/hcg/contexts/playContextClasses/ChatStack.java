@@ -65,7 +65,7 @@ public class ChatStack extends Stack {
         chatButton.addListener(new ChangeListener() {
             @Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (!networkManager.isInitialised()) {
+				if (!networkManager.isMultiplayerGame()) {
 					return;
 				}
 				
@@ -108,7 +108,7 @@ public class ChatStack extends Stack {
 							.replaceAll("\\s+", " ").split(" ");
 					String commandMessage = commandManager.runCommand(args);
 					chatTextArea.appendText(commandMessage + "\n");
-				} else if (networkManager.isInitialised()) {
+				} else if (networkManager.isMultiplayerGame()) {
 					if (chatString.trim().length() > 0) {
 						networkManager.queueMessage(
 								new ChatMessage(chatTextField.getText()));

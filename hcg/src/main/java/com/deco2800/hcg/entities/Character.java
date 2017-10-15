@@ -7,9 +7,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
-import com.deco2800.hcg.entities.Harmable;
-import com.deco2800.hcg.entities.Tickable;
-
 
 /**
  * The Character abstract class is to be extended by all Characters, both

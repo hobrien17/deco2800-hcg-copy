@@ -119,6 +119,7 @@
  <layer name="lava" width="40" height="40">
   <properties>
    <property name="damage" value="1"/>
+   <property name="damagetype" value="1"/>
    <property name="name" value="lava"/>
    <property name="speed" value="1.0"/>
   </properties>

@@ -47,11 +47,7 @@ public class PlayerManager extends Manager {
     public void despawnPlayers() {
         World world = GameManager.get().getWorld();
         for (Player player : players) {
-            // FIXME Players shouldn't spawn in the same place
-            //player.setPosX(world.getStartingPlayerX());
-            //player.setPosY(world.getStartingPlayerY());
-
-
+            player.ceaseMovement();
             world.removeEntity(player);
             world.removeEntity(player.getEquippedWeapon());
         }

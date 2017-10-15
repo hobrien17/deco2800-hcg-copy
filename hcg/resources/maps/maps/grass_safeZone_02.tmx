@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="327">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="380">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
@@ -339,42 +339,27 @@
   <object id="288" gid="58" x="720.821" y="685.596" width="55" height="32"/>
   <object id="289" gid="58" x="783.607" y="681.84" width="55" height="32"/>
   <object id="290" gid="58" x="845.856" y="619.59" width="55" height="32"/>
-  <object id="291" gid="58" x="906.731" y="562.405" width="55" height="32"/>
   <object id="292" gid="58" x="353.596" y="687.575" width="55" height="32"/>
   <object id="293" gid="58" x="290.34" y="684.422" width="55" height="32"/>
   <object id="294" gid="58" x="228.627" y="687.105" width="55" height="32"/>
   <object id="295" gid="58" x="145.952" y="625.896" width="55" height="32"/>
-  <object id="296" gid="58" x="81.992" y="553.349" width="55" height="32"/>
-  <object id="297" gid="58" x="84.6752" y="491.637" width="55" height="32"/>
-  <object id="298" gid="58" x="82.1262" y="420.399" width="55" height="32"/>
-  <object id="299" gid="58" x="80.6505" y="348.087" width="55" height="32"/>
-  <object id="300" gid="58" x="81.0194" y="277.62" width="55" height="32"/>
-  <object id="301" gid="58" x="80.3151" y="208.227" width="55" height="32"/>
-  <object id="302" gid="58" x="81.925" y="147.587" width="55" height="32"/>
-  <object id="303" gid="58" x="97.3532" y="87.8869" width="55" height="32"/>
-  <object id="304" gid="58" x="912.164" y="490.563" width="55" height="32"/>
-  <object id="305" gid="58" x="909.615" y="419.325" width="55" height="32"/>
-  <object id="306" gid="58" x="912.298" y="357.612" width="55" height="32"/>
-  <object id="307" gid="58" x="908.844" y="298.348" width="55" height="32"/>
-  <object id="308" gid="58" x="911.527" y="236.635" width="55" height="32"/>
-  <object id="309" gid="58" x="914.21" y="174.922" width="55" height="32"/>
-  <object id="310" gid="58" x="909.38" y="120.722" width="55" height="32"/>
-  <object id="311" gid="58" x="845.32" y="88.8596" width="55" height="32"/>
-  <object id="312" gid="58" x="767.944" y="88.7589" width="55" height="32"/>
-  <object id="313" gid="58" x="684.732" y="87.1155" width="55" height="32"/>
-  <object id="314" gid="58" x="611.817" y="93.6222" width="55" height="32"/>
-  <object id="315" gid="58" x="531.523" y="92.7501" width="55" height="32"/>
-  <object id="316" gid="58" x="453.074" y="93.7228" width="55" height="32"/>
-  <object id="317" gid="58" x="383.681" y="93.0185" width="55" height="32"/>
-  <object id="318" gid="58" x="313.214" y="93.3874" width="55" height="32"/>
-  <object id="319" gid="58" x="248.114" y="88.39" width="55" height="32"/>
-  <object id="320" gid="58" x="169.363" y="93.3539" width="55" height="32"/>
+  <object id="311" gid="58" x="846.02" y="72.7602" width="55" height="32"/>
+  <object id="312" gid="58" x="765.599" y="71.8545" width="55" height="32"/>
+  <object id="313" gid="58" x="676.052" y="64.9963" width="55" height="32"/>
+  <object id="314" gid="58" x="602.805" y="62.2109" width="55" height="32"/>
+  <object id="315" gid="58" x="523.806" y="71.5934" width="55" height="32"/>
+  <object id="316" gid="58" x="447.754" y="68.2438" width="55" height="32"/>
+  <object id="317" gid="58" x="379.166" y="70.5843" width="55" height="32"/>
+  <object id="318" gid="58" x="311.097" y="66.6309" width="55" height="32"/>
+  <object id="319" gid="58" x="248.166" y="67.1633" width="55" height="32"/>
+  <object id="320" gid="58" x="164.533" y="75.0846" width="55" height="32"/>
   <object id="321" gid="58" x="402.932" y="258.235" width="55" height="32"/>
   <object id="322" gid="58" x="321.565" y="258.436" width="55" height="32"/>
   <object id="323" gid="58" x="241.272" y="257.564" width="55" height="32"/>
   <object id="324" gid="58" x="585.623" y="256.323" width="55" height="32"/>
   <object id="325" gid="58" x="674.201" y="252.6" width="55" height="32"/>
   <object id="326" gid="58" x="762.477" y="252.868" width="55" height="32"/>
+  <object id="379" gid="58" x="95.1599" y="78.8569" width="55" height="32"/>
  </objectgroup>
  <objectgroup name="NPC">
   <properties>
@@ -396,5 +381,40 @@
     <property name="texture" value="character_shop"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup name="Pot">
+  <properties>
+   <property name="name" value="pot"/>
+  </properties>
+  <object id="337" x="96" y="512" width="32" height="32"/>
+  <object id="338" x="96.7672" y="447.51" width="32" height="32"/>
+  <object id="340" x="96" y="384" width="32" height="32"/>
+  <object id="342" x="96" y="320" width="32" height="32"/>
+  <object id="343" x="98.2021" y="257.432" width="32" height="32"/>
+  <object id="344" x="95.8747" y="192.387" width="32" height="32"/>
+  <object id="345" x="96" y="128" width="32" height="32"/>
+  <object id="356" x="896.802" y="128.707" width="32" height="32"/>
+  <object id="357" x="896" y="192" width="32" height="32"/>
+  <object id="358" x="896" y="256" width="32" height="32"/>
+  <object id="359" x="896" y="320" width="32" height="32"/>
+  <object id="360" x="896" y="384" width="32" height="32"/>
+  <object id="361" x="896" y="448" width="32" height="32"/>
+  <object id="362" x="896" y="512" width="32" height="32"/>
+  <object id="364" x="800" y="96" width="32" height="32"/>
+  <object id="365" x="736" y="96" width="32" height="32"/>
+  <object id="366" x="672" y="96" width="32" height="32"/>
+  <object id="367" x="608" y="96" width="32" height="32"/>
+  <object id="371" x="352" y="96" width="32" height="32"/>
+  <object id="372" x="288" y="96" width="32" height="32"/>
+  <object id="373" x="224" y="96" width="32" height="32"/>
+  <object id="374" x="160" y="96" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="UPot">
+  <properties>
+   <property name="name" value="upot"/>
+  </properties>
+  <object id="375" x="416" y="96" width="32" height="32"/>
+  <object id="376" x="480" y="96" width="32" height="32"/>
+  <object id="377" x="544" y="96" width="32" height="32"/>
  </objectgroup>
 </map>

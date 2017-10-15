@@ -95,6 +95,7 @@ public class PlantManager extends Manager {
 	    windowTable.clear();
 	    contents();
 		plantWindow.pack();
+		plantWindow.setPosition(6000,6000);
 	}
 
     /**
