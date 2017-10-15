@@ -75,6 +75,7 @@ public class PlayContext extends Context {
     private PlayerStatusDisplay playerStatus;
     private NetworkManager networkManager;
     private ClockDisplay clockDisplay;
+    private SoundManager soundManager;
     private ChatStack chatStack;
     private RadialDisplay radialDisplay;
     private PotUnlockDisplay potUnlock;
@@ -109,6 +110,7 @@ public class PlayContext extends Context {
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+        soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
 
         /* Setup the camera and move it to the center of the world */
@@ -139,9 +141,8 @@ public class PlayContext extends Context {
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
-        if (networkManager.isInitialised()) {
-            stage.addActor(chatStack);
-        }
+        stage.addActor(chatStack);
+        chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
@@ -165,7 +166,7 @@ public class PlayContext extends Context {
         die.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                throw new NullPointerException("This is not a bug - simply a crude way of quitting the game");
+                System.exit(0);
             }
         });
 
@@ -324,15 +325,17 @@ public class PlayContext extends Context {
 
     @Override
     public void pause() {
-        if (!networkManager.isInitialised()) {
+        if (!networkManager.isMultiplayerGame()) {
             unpaused = false;
+            soundManager.pauseWeatherSounds();
         }
     }
 
     @Override
     public void resume() {
-        if (!networkManager.isInitialised()) {
+        if (!networkManager.isMultiplayerGame()) {
             unpaused = true;
+            soundManager.unpauseWeatherSounds();
         }
     }
 
@@ -358,6 +361,7 @@ public class PlayContext extends Context {
     	}
         if(keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext());
+            soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
         } else if(keycode == Input.Keys.EQUALS) {
@@ -366,6 +370,8 @@ public class PlayContext extends Context {
 			gameManager.getWorld().addEntity(entity);
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
+		} else if (keycode == Input.Keys.T) {
+			chatStack.setVisible(!chatStack.isVisible());
 		}
 	}
 
@@ -417,11 +423,13 @@ public class PlayContext extends Context {
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
+            soundManager.pauseWeatherSounds();
         }
     }
 
     public void removeExitWindow() {
         exitWindow.remove();
+        soundManager.unpauseWeatherSounds();
     }
 
     public void addParticleEffect(ParticleEffectActor actor) {

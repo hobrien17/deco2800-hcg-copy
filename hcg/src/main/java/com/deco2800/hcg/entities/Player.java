@@ -28,7 +28,10 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.util.Box3D;
@@ -37,7 +40,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
@@ -520,9 +522,19 @@ public class Player extends Character implements Tickable {
 
 			// if current tile is a gateway, load new map
 			if (layer.getProperties().get("newMap") != null) {
-				GameManager.get().setWorld(new World((String) layer.getProperties().get("newMap")));
+                // create new world
+				System.out.print((String) layer.getProperties().get("newMap"));
+				World newWorld = new World("resources/maps/maps/" +(String) layer.getProperties().get("newMap"));
+				
+				// add the new weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                  setWeather(newWorld.getWeatherType());
+                
+				GameManager.get().setWorld(newWorld);
 				playerManager.spawnPlayers();
+				updateCamera();
 				this.setPosition(oldPosX, oldPosY, 1);
+				
 			}
 
 			// see if current tile is slippery. Save the slippery value if it is
@@ -680,7 +692,7 @@ public class Player extends Character implements Tickable {
 			speedX = 0;
 			speedY = 0;
 			move = 0;
-			soundStop(name);
+			soundManager.stopAll();
 			this.contextManager.pushContext(new DeathContext());
 			healthCur = healthMax;
 		}

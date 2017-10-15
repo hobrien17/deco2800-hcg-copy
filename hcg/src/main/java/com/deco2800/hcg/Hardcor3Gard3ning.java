@@ -71,8 +71,9 @@ public class Hardcor3Gard3ning extends Game {
         stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
         stopwatchManager.startTimer(1);
         
-        /* Create a network manager */
+        /* Setup network manager */
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+        networkManager.init(false);
         
         /* Create a command manager */
         commandManager = (CommandManager) gameManager.getManager(CommandManager.class);

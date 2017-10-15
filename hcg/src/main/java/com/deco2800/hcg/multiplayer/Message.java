@@ -1,8 +1,6 @@
 package com.deco2800.hcg.multiplayer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.net.SocketAddress;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -15,7 +13,6 @@ import java.util.Arrays;
  */
 public class Message {
 	private static final byte[] HEADER = "H4RDC0R3".getBytes();
-	private static final Logger LOGGER = LoggerFactory.getLogger(Message.class);
 	
 	private static int sequenceNumber = 0;
 	
@@ -74,16 +71,16 @@ public class Message {
 			// get number of entries
 			entries = buffer.get();
 		} catch (BufferUnderflowException|BufferOverflowException e) {
-			LOGGER.error("Invalid Message",e);
-			throw new MessageFormatException();
+			throw new MessageFormatException(e);
 		}
 	}
 	
 	/**
 	 * Processes the received information
+	 * @param address The address from which the message was received
 	 * @require <code>unpackData</code> must have been called first
 	 */
-	public void process() {
+	public void process(SocketAddress address) {
 		// Do nothing
 	}
 	
@@ -101,6 +98,14 @@ public class Message {
 	 */
 	public MessageType getType() {
 		return type;
+	}
+	
+	/**
+	 * Gets whether message should be acknowledged
+	 * @return <code>true</code> if message should be acknowledged
+	 */
+	public boolean shouldAck() {
+		return true;
 	}
 	
 	/**
