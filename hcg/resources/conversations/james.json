@@ -1,0 +1,81 @@
+{
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "hello",
+    "helped":  "did"
+  },
+
+  "nodes": [
+    {
+      "id": "hello",
+      "nodeText": "Hello, how are you?",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Sorry, I'm busy now.",
+          "actions": [
+          ],
+          "target": null
+        },
+        {
+          "conditions": [],
+          "optionText": "Good, thanks. And you?",
+          "actions": [],
+          "target": "im"
+        },
+        {
+          "conditions": ["healthPercentBelow|50"],
+          "optionText": "Not good.",
+          "actions": [],
+          "target": "here"
+        }
+      ]
+    },
+
+    {
+      "id": "im",
+      "nodeText": "I'm actually doing well.",
+      "options": [
+        {
+          "conditions": ["checkRelationship|neutral"],
+          "optionText": "Goodbye.",
+          "actions": [],
+          "target": null
+        },
+        {
+          "conditions": ["!checkRelationship|neutral"],
+          "optionText": "Goodbye, and thanks!",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+
+    {
+      "id": "here",
+      "nodeText": "Here, have a potion.",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Thanks!",
+          "actions": ["giveItems|health_potion|1", "setRelationship|helped"],
+          "target": null
+        }
+      ]
+    },
+
+    {
+      "id": "did",
+      "nodeText": "Did that help?",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Yes. How are you doing?",
+          "actions": [],
+          "target": "im"
+        }
+      ]
+    }
+
+  ]
+}

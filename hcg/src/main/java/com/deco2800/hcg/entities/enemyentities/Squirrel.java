@@ -106,12 +106,6 @@ public class Squirrel extends Enemy implements Tickable {
 			this.updateSprite();
 			this.moveAction(); // Move enemy to the position in Box3D
 			myEffects.apply(); // Apply effects
-
-		} else {
-			//do nothing, maybe throw error? or could just ensure you can't have more than 4 players in networkmanager
-		}
-		
-		
-		
+		} 
 	}
 }
