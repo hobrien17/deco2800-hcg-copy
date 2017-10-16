@@ -48,6 +48,7 @@ public class PlayContext extends Context {
     private TextureManager textureManager;
     private TimeManager timeManager;
     private PlayerManager playerManager;
+    private PlayerInputManager playerInputManager;
     private ShaderManager shaderManager;
     private PlantManager plantManager;
 
@@ -109,6 +110,7 @@ public class PlayContext extends Context {
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+        playerInputManager = (PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
@@ -233,6 +235,9 @@ public class PlayContext extends Context {
 
         /* set initial time */
         timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
+        
+        /* reset input tick */
+        playerInputManager.resetInputTick();
     }
 
     /**

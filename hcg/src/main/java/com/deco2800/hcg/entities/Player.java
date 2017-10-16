@@ -258,8 +258,7 @@ public class Player extends Character implements Tickable {
 	 *            the y position of mouse movement on the screen
 	 */
 	private void handleLocalMouseMoved(int screenX, int screenY) {
-		// FIXME: mouse inputs currently saturate the server
-		handleMouseMoved(screenX, screenY);
+		playerInputManager.setLocalMousePosition(screenX, screenY);
 	}
 
 	/**
