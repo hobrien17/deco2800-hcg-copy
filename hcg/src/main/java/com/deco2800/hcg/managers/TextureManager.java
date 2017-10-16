@@ -102,6 +102,10 @@ public class TextureManager extends Manager {
 			textureMap.put("sunflower_alt", new Texture("resources/sprites/plants/sunflower_alt.png"));
 			textureMap.put("fertiliser", new Texture("resources/sprites/gardentools/fertiliser.png"));
 			textureMap.put("bug_spray", new Texture("resources/sprites/gardentools/bugspray.png"));
+			textureMap.put("trowel", new Texture("resources/sprites/gardentools/trowel.png"));
+			textureMap.put("trowel_mid", new Texture("resources/sprites/gardentools/trowel_dirty.png"));
+			textureMap.put("trowel_broken", new Texture("resources/sprites/gardentools/trowel_dirty_2.png"));
+			textureMap.put("shovel", new Texture("resources/sprites/gardentools/shovel.png"));
 			textureMap.put("key", new Texture("resources/sprites/plants/key.png"));
 
 			// Enemy textures
