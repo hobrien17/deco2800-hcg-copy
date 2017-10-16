@@ -27,7 +27,7 @@ uniform vec4 u_globalColor;
 
 void main() {
     // Send colour information through the pipeline to frag shader
-    v_color = u_globalColor * a_color;
+    v_color = /*u_globalColor * */a_color;
     v_color.a = v_color.a * (255.0/254.0);
 	// Send texture information through the pipeline to frag shader
 	v_texCoords = a_texCoord0;
