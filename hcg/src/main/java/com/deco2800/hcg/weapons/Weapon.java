@@ -183,6 +183,10 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                     bullet = new GrassBullet(posX, posY, posZ,
                             goalX, goalY, this.user, 1);
                     break;
+                case HOMING:
+                    bullet = new HomingBullet(posX, posY, posZ,
+                            goalX, goalY, this.user, 1);
+                    break;
                 default:
                     bullet = new Bullet(posX, posY, posZ,
                             goalX, goalY, this.user, 1);
@@ -207,6 +211,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                 bulletType = BulletType.GRASS;
                 break;
             case GRASS:
+                bulletType = BulletType.HOMING;
+                break;
+            case HOMING:
                 bulletType = BulletType.BASIC;
                 break;
             default:

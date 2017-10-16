@@ -171,7 +171,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 				- Math.abs(goalX)) < 0.5
 				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
 				- Math.abs(goalY)) < 0.5) {
-			//GameManager.get().getWorld().removeEntity(this);
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);

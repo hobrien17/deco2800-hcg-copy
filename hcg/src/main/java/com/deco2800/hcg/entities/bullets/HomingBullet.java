@@ -1,23 +1,23 @@
 package com.deco2800.hcg.entities.bullets;
 
-import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.util.WorldUtil;
+import java.util.Optional;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.util.Effect;
 
 /**
- * Grass bullet class
- * This bullet will create normal bullets to its left and right at regylar intervals until
- * it flies its maximum distance or it hits an enemy.
+ * Homing bullet class
+ * This bullet will lock on to the closest enemy, 20 ticks after it is fired, and change its trajectory
+ * to fly towards its target.
  *
- * @author Henry O'Brien/Yuki Nakazawa
+ * @author Yuki Nakazawa
  *
  */
-public class GrassBullet extends Bullet {
+public class HomingBullet extends Bullet {
 
-	private float xd;
-	private float yd;
 	private AbstractEntity user;
 
 	/**
@@ -38,19 +38,17 @@ public class GrassBullet extends Bullet {
 	 * @param hitCount
 	 *            the total number of enemies that can be hit
 	 */
-	public GrassBullet(float posX, float posY, float posZ, float xd, float yd,
+	public HomingBullet(float posX, float posY, float posZ, float xd, float yd,
 					  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
-		this.xd = xd;
-		this.yd = yd;
 		this.user = user;
-		this.setTexture("battle_seed_green");
-		this.bulletType = BulletType.GRASS;
+		this.setTexture("battle_seed");
+		this.bulletType = BulletType.HOMING;
 	}
 
 	/**
-	 * Creates a new grass bullet moving towards the given co-ordinates
+	 * Creates a new homing bullet moving towards the given co-ordinates
 	 * 
 	 * @param posX
 	 * 			the bullet's starting x position
@@ -67,23 +65,27 @@ public class GrassBullet extends Bullet {
 	 * @param user
 	 * 			the entity who shot the bullet
 	 */
-	public GrassBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
+	public HomingBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
-		this.setTexture("battle_seed_green");
-		this.bulletType = BulletType.GRASS;
+		this.setTexture("battle_seed");
+		this.bulletType = BulletType.HOMING;
 	}
 
 	/**
-	 * Creates the two bullets that are created on eitehr side of the main bullet
+	 * Locates the closest enemy within the range of 10 and creates a new bullet aimed at
+	 * that target. The original bullet is removed.
 	 */
 	@Override
 	protected void specialAbility() {
-		Bullet bulletLeft = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), this.xd, this.yd, this.user, 1);
-		Bullet bulletRight = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), this.xd, this.yd, this.user, 1);
-		bulletLeft.updateAngle(-80);
-		bulletRight.updateAngle(80);
-		GameManager.get().getWorld().addEntity(bulletLeft);
-		GameManager.get().getWorld().addEntity(bulletRight);
+		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(),
+				this.getPosY(), 10, Enemy.class);
+		if (closest.isPresent()) {
+			Enemy enemy = (Enemy) closest.get();
+			Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+					enemy.getPosX(), enemy.getPosY(), enemy.getPosZ(), user, 1);
+			GameManager.get().getWorld().addEntity(bullet);
+			GameManager.get().getWorld().removeEntity(this);
+		}
 	}
 
 	protected void applyEffect(Harmable target) {
