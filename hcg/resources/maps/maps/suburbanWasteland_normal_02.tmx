@@ -5,8 +5,8 @@
   <property name="PlayerY" value="65"/>
   <property name="weather" value="snow"/>
  </properties>
- <tileset firstgid="1" source="../tiles/concrete.tsx"/>
- <tileset firstgid="46" source="../tiles/dry-grass.tsx"/>
+ <tileset firstgid="1" source="../tiles/suburban_wasteland_concrete.tsx"/>
+ <tileset firstgid="46" source="../tiles/deprecated/dry-grass.tsx"/>
  <layer name="generalTerrain" width="75" height="75">
   <properties>
    <property name="name" value="ground"/>

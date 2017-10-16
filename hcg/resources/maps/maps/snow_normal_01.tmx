@@ -5,11 +5,11 @@
   <property name="PlayerY" value="50"/>
   <property name="weather" value="snow"/>
  </properties>
- <tileset firstgid="1" source="../tiles/grass.tsx"/>
- <tileset firstgid="2" source="../tiles/charcoal.tsx"/>
- <tileset firstgid="3" source="../tiles/ice.tsx"/>
+ <tileset firstgid="1" source="../tiles/deprecated/grass.tsx"/>
+ <tileset firstgid="2" source="../tiles/deprecated/charcoal.tsx"/>
+ <tileset firstgid="3" source="../tiles/deprecated/ice.tsx"/>
  <tileset firstgid="4" source="../tiles/spikes-large.tsx"/>
- <tileset firstgid="5" source="../tiles/placeholder.tsx"/>
+ <tileset firstgid="5" source="../tiles/deprecated/placeholder.tsx"/>
  <tileset firstgid="7" source="../tiles/exit.tsx"/>
  <layer name="Ground" width="100" height="100">
   <properties>

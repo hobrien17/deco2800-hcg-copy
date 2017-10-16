@@ -55,8 +55,8 @@ public class TextureManager extends Manager {
 		textureMap.put("lightmap", new Texture("resources/sprites/light/lightmap.png"));
 
 		try {
-			textureMap.put("grass", new Texture("resources/maps/textures/grass.png"));
-			textureMap.put("ground", new Texture("resources/maps/textures/ground.png"));
+			textureMap.put("grass", new Texture("resources/maps/textures/deprecated/grass.png"));
+			textureMap.put("ground", new Texture("resources/maps/textures/deprecated/ground.png"));
 			textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
 			textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
 			textureMap.put("hcg_character_sink", new Texture("resources/sprites/player/hcg_character_hat_sink.png"));
@@ -161,7 +161,7 @@ public class TextureManager extends Manager {
 			textureMap.put("picketFenceEW", new Texture("resources/terrain_objects/picket_fence_eastwest.png"));
 
 			// terrain tiles
-			textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
+			textureMap.put("poisontile", new Texture("resources/maps/textures/deprecated/sludgebubbling1.png"));
             textureMap.put("rainpuddle", new Texture("resources/maps/textures/rain-puddle.png"));
             textureMap.put("icepuddle", new Texture("resources/maps/textures/ice-puddle.png"));
 
