@@ -101,21 +101,27 @@ public class WeatherManager extends Manager {
 		switch (weatherType) {
 		case RAIN:
 			setUp("2dRain.p");
+			shaderManager.setOvercast(0.3f);
 			break;
 		case SNOW:
 			setUp("2dSnow.p");
+			shaderManager.setOvercast(0.2f);
 			break;
 		case SANDSTORM:
 			setUp("2dSandstorm.p");
+			shaderManager.setOvercast(0f);
 			break;
 		case WIND:
 			setUp("2dWind.p");
+			shaderManager.setOvercast(0f);
 			break;
 		case DROUGHT:
 			setUp("2dDrought.p");
+			shaderManager.setOvercast(0f);
 			break;
 		case STORM:
 			setUp("2dStorm.p");
+			shaderManager.setOvercast(0.9f);
 			break;
 		}
 		
