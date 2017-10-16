@@ -21,7 +21,7 @@ public class WorldStackMapEntity extends Actor {
 
     private WorldMap worldMap;
 
-    private float spriteWidth = 350; // Used to scale the drawing of the mapNodes. (pixels)
+    private float spriteWidth = Gdx.graphics.getWidth() / 4; // Used to scale the drawing of the mapNodes. (pixels)
     private float spriteHeight; // Will be calculated based on the above width
     
     public WorldStackMapEntity(WorldMap worldMap) {
@@ -32,12 +32,12 @@ public class WorldStackMapEntity extends Actor {
         //Assign texture
         updateTexture();
         
-        // pixels padding around each direction of the map
-     	int mapPadding = 50;
-
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
         int viewPortY = Gdx.graphics.getHeight();
+        
+        // pixels padding around each direction of the map
+     	int mapPadding = (int) (0.05 * viewPortX);
 
         // Calculates the spacing between cells
         int renderableColWidth = (viewPortX - mapPadding) / gameManager.getWorldStack().getNumberOfWorlds();

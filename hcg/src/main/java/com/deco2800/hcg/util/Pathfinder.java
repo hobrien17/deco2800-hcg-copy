@@ -151,7 +151,7 @@ public class Pathfinder {
                 }
             }
         } catch (Exception e) {
-            LOGGER.info(e.toString());
+            LOGGER.info(String.valueOf(e));
             return Collections.emptyList();
         }
 

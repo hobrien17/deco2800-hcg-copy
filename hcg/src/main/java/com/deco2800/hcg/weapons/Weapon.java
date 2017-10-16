@@ -179,6 +179,14 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                     bullet = new ExplosionBullet(posX, posY, posZ,
                             goalX, goalY, this.user, 1);
                     break;
+                case GRASS:
+                    bullet = new GrassBullet(posX, posY, posZ,
+                            goalX, goalY, this.user, 1);
+                    break;
+                case HOMING:
+                    bullet = new HomingBullet(posX, posY, posZ,
+                            goalX, goalY, this.user, 1);
+                    break;
                 default:
                     bullet = new Bullet(posX, posY, posZ,
                             goalX, goalY, this.user, 1);
@@ -200,6 +208,12 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
                 bulletType = BulletType.EXPLOSION;
                 break;
             case EXPLOSION:
+                bulletType = BulletType.GRASS;
+                break;
+            case GRASS:
+                bulletType = BulletType.HOMING;
+                break;
+            case HOMING:
                 bulletType = BulletType.BASIC;
                 break;
             default:
@@ -282,4 +296,5 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         result = 31 * result + super.hashCode();
         return result;
     }
+
 }
