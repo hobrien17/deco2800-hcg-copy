@@ -924,7 +924,7 @@ public class Player extends Character implements Tickable {
 			// Player is moving
 			if (this.stopwatchManager.getStatus()) {
 				this.stopwatchManager.resetStopwatch();
-				this.stopwatchManager.startTimerFloat(0.1f);
+				this.stopwatchManager.startTimerFloat(0.02f / this.movementSpeed);
 
 				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
 					spriteName.append("_stand");
