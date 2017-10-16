@@ -76,7 +76,8 @@ public class Seed extends StackableItem {
 		this.texture = type.getTexture();
 		this.baseValue = 1;
 		this.itemWeight = 0;
-		this.itemName = type.toString().toLowerCase();
+		this.itemName = type.toString().toLowerCase() + " Seed";
+		this.itemName = this.itemName.substring(0, 1).toUpperCase() + this.itemName.substring(1);
 		this.maxStackSize = 256;
 		this.currentStackSize = 1;
 	}
@@ -141,7 +142,7 @@ public class Seed extends StackableItem {
 	
 	@Override
 	public String getName() {
-		return type.toString().toLowerCase();
+		return this.itemName;
 	}
 
 
