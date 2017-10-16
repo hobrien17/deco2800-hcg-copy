@@ -51,7 +51,7 @@ public abstract class Enemy extends Character implements Lootable {
     private Player closestPlayer;
 
     protected Box3D prevPos;
-
+    protected boolean boss;
     protected Weapon enemyWeapon;
 
     /**
@@ -100,6 +100,13 @@ public abstract class Enemy extends Character implements Lootable {
         // Effects container
         myEffects = new Effects(this);
     }
+
+    /**
+     * Checks whether the enemy is a boss or not
+     *
+     * @return true or false depending on whether the enemy is a boss
+     */
+    public boolean isBoss() { return boss; }
 
     /**
      * Gets the enemy ID
