@@ -1,5 +1,7 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
+
 import com.deco2800.hcg.contexts.LobbyContext;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -22,7 +24,7 @@ public class JoinedMessage extends Message {
 	}
 	
 	@Override
-	public void process() {
+	public void process(SocketAddress address) {
 		// TODO we need to communicate how many other players are already in the
 		//      game as well as their state
 		contextManager.pushContext(new LobbyContext());

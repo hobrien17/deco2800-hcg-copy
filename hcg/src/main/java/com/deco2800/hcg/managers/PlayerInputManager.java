@@ -212,9 +212,9 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	 * @param args the action arguments
 	 */
 	public void queueLocalAction(int... args) {
-		long tick = gameTickCount + (networkManager.isInitialised() ? 3 : 1);
+		long tick = gameTickCount + (networkManager.isMultiplayerGame() ? 3 : 1);
 		
-		if (networkManager.isInitialised()) {
+		if (networkManager.isMultiplayerGame()) {
 			networkManager.queueMessage(new InputMessage(tick, args));
 		}
 		

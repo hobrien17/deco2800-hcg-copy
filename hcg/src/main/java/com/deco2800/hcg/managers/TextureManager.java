@@ -274,15 +274,16 @@ public class TextureManager extends Manager {
 			textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node_small.png"));
 			textureMap.put("safe_node", new Texture("resources/worldmap/safe_node_small.png"));
 			textureMap.put("black_px", new Texture("resources/worldmap/black_px.png"));
-			textureMap.put("ws_forest", new Texture("resources/worldmap/ws_forest_small.png"));
-			textureMap.put("ws_fungi", new Texture("resources/worldmap/ws_fungi_small.png"));
-			textureMap.put("ws_urban", new Texture("resources/worldmap/ws_urban_small.png"));
-			textureMap.put("ws_forest_locked", new Texture("resources/worldmap/ws_forest_locked_small.png"));
-			textureMap.put("ws_fungi_locked", new Texture("resources/worldmap/ws_fungi_locked_small.png"));
-			textureMap.put("ws_forest_completed", new Texture("resources/worldmap/ws_forest_completed_small.png"));
-			textureMap.put("ws_fungi_completed", new Texture("resources/worldmap/ws_fungi_completed_small.png"));
-			textureMap.put("ws_urban_completed", new Texture("resources/worldmap/ws_urban_completed_small.png"));
+			textureMap.put("ws_forest", new Texture("resources/worldmap/ws_forest.png"));
+			textureMap.put("ws_fungi", new Texture("resources/worldmap/ws_fungi.png"));
+			textureMap.put("ws_urban", new Texture("resources/worldmap/ws_urban.png"));
+			textureMap.put("ws_forest_locked", new Texture("resources/worldmap/ws_forest_locked.png"));
+			textureMap.put("ws_fungi_locked", new Texture("resources/worldmap/ws_fungi_locked.png"));
+			textureMap.put("ws_forest_completed", new Texture("resources/worldmap/ws_forest_completed.png"));
+			textureMap.put("ws_fungi_completed", new Texture("resources/worldmap/ws_fungi_completed.png"));
+			textureMap.put("ws_urban_completed", new Texture("resources/worldmap/ws_urban_completed.png"));
 			textureMap.put("ws_purp_bg", new Texture("resources/worldmap/ws_purp_background.png"));
+			textureMap.put("player_map", new Texture("resources/worldmap/player_map.png"));
 
 			//Item textures
 			textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
