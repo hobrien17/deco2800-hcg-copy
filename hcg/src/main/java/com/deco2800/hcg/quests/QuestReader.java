@@ -2,6 +2,8 @@ package com.deco2800.hcg.quests;
 
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ResourceLoadException;
+import com.deco2800.hcg.managers.ItemManager;
+import com.deco2800.hcg.managers.GameManager
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -89,6 +91,9 @@ public class QuestReader {
     }
 
     private HashMap<Item,Integer> parseItemQuantityHashMap(String title, JsonObject iqMap) throws ResourceLoadException {
+        //Create Instance of the Item Manager class for checking valid items
+        ItemManager itemManager = (ItemManager) GameManager.get().getManager(ItemManager.class);
+
         HashMap<Item,Integer> returnMap = new HashMap<>();
         if (iqMap.entrySet().size() > 0) {
             for (Map.Entry i:iqMap.entrySet()) {
@@ -115,16 +120,20 @@ public class QuestReader {
                 //Make sure the amount of the item is an integer
                 int count;
                 try {
-                    count = Integer.parseUnsignedInt(i.getKey().toString());
+                    count = Integer.parseUnsignedInt(i.getValue().toString());
                 } catch (NumberFormatException e) {
                     throw new ResourceLoadException("Can't add a non positive integer item requirement amount for quest (" +
                             title + ")");
                 }
-                //The item key must be an actual item
-                //TODO make sure the item exists in the possible items index
 
-                //Todo Add to the map
-                //returnMap.put(entryItem,Integer.parseUnsignedInt(i.getValue().toString()));
+                //The item key must be an actual item
+                if (itemManager.getNew(i.getKey().toString()) == null) {
+                    throw new ResourceLoadException("Can't add an item which currently does not exist in the Item Manager");
+                }
+
+                //Create new instance of valid item
+                Item entryItem = itemManager.getNew(i.getKey().toString());
+                returnMap.put(entryItem,Integer.parseUnsignedInt(i.getValue().toString()));
             }
         }
         return returnMap;
