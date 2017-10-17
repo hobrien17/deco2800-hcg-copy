@@ -38,12 +38,12 @@ public class MapNodeEntity extends Actor {
 
 		updateTexture();
 
-		// pixels padding around each direction of the map
-		int mapPadding = 50;
-
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
         int viewPortY = Gdx.graphics.getHeight();
+        
+        // pixels padding around each direction of the map
+        int mapPadding = (int) (0.05 * viewPortX);
 
         // Calculates the spacing between cells
         int renderableColWidth = (viewPortX - mapPadding) / gameManager.getWorldMap().getWorldColumns();

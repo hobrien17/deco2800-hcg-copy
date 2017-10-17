@@ -4,10 +4,10 @@
   <property name="PlayerX" value="39"/>
   <property name="PlayerY" value="10"/>
  </properties>
- <tileset firstgid="1" source="../tiles/new-grass.tsx"/>
+ <tileset firstgid="1" source="../tiles/grass_base_tiles_2.tsx"/>
  <tileset firstgid="29" source="../tiles/invisible-tile.tsx"/>
  <tileset firstgid="30" source="../tiles/new-sludge.tsx"/>
- <tileset firstgid="58" source="../tiles/misc1.tsx"/>
+ <tileset firstgid="58" source="../tiles/deprecated/misc1.tsx"/>
  <layer name="grass" width="40" height="40">
   <properties>
    <property name="name" value="grass"/>

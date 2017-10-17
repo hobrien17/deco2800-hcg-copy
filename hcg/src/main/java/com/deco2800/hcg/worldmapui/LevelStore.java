@@ -34,7 +34,7 @@ public class LevelStore {
 		//(map needs redo) levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_02.tmx"), 2, 5, 1));
 
 		
-		// Boss levels (there should only be six! (one for each biome))
+		// Boss levels (there should only be three! (one for each main biome))
 		// Ensure they are in ascending biome order
 	}
 	

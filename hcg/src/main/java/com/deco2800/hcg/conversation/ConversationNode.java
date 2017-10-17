@@ -60,7 +60,7 @@ public class ConversationNode {
      * Return all dialog options associated with this node unconditionally
      * @return List of Conversation Options
      */
-    public List<ConversationOption> getOptions() {
+    public List<ConversationOption> getAllOptions() {
         return options;
     }
 
@@ -71,10 +71,10 @@ public class ConversationNode {
     public List<ConversationOption> getValidOptions() {
         List<ConversationOption> validOptions = new ArrayList<>();
         for (ConversationOption option : options) {
-            if (option.testCondition()) {
+            if (option.testConditions()) {
                 validOptions.add(option);
             }
         }
-        return options;
+        return validOptions;
     }
 }

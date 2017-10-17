@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.turrets;
 import java.util.List;
 import java.util.Observable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
@@ -62,20 +63,24 @@ public class IceTurret extends AbstractTurret {
 			for(AbstractEntity entity : near) {
 				Enemy enemy = (Enemy)entity;
 				enemy.setSpeed(0);
+				enemy.setTint(Color.ROYAL);
 			}
 			for(AbstractEntity entity : far) {
 				Enemy enemy = (Enemy)entity;
 				enemy.changeSpeed(0.5f);
+				enemy.setTint(Color.CYAN);
 			}
 		}
 		if(seconds == RESET) {
 			for(AbstractEntity entity : near) {
 				Enemy enemy = (Enemy)entity;
 				enemy.resetSpeed();
+				enemy.removeTint();
 			}
 			for(AbstractEntity entity : far) {
 				Enemy enemy = (Enemy)entity;
 				enemy.resetSpeed();
+				enemy.removeTint();
 			}
 			GameManager.get().getWorld().removeEntity(master);
 		}

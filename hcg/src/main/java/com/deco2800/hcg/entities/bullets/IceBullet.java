@@ -38,7 +38,7 @@ public class IceBullet extends Bullet {
 				  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
-		this.setTexture("battle_seed_red");
+		this.setTexture("battle_seed_green");
 		this.bulletType = BulletType.ICE;
 	}
 	

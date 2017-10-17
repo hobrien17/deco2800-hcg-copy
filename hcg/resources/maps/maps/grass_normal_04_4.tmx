@@ -4,8 +4,8 @@
   <property name="PlayerX" value="5"/>
   <property name="PlayerY" value="5"/>
  </properties>
- <tileset firstgid="1" source="../tiles/new-water.tsx"/>
- <tileset firstgid="29" source="../tiles/general-tiles.tsx"/>
+ <tileset firstgid="1" source="../tiles/any_water_base_tiles.tsx"/>
+ <tileset firstgid="29" source="../tiles/deprecated/general-tiles.tsx"/>
  <tileset firstgid="39" source="../tiles/health.tsx"/>
  <tileset firstgid="40" source="../tiles/invisible-tile.tsx"/>
  <layer name="water-deep" width="50" height="50">
