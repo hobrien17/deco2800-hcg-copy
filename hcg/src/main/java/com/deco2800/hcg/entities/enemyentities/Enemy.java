@@ -511,7 +511,8 @@ public abstract class Enemy extends Character implements Lootable {
     public void moveAction(){
         if (!this.getCollided()) {
             this.setMove(newPos.getX(), newPos.getY());
-            enemyWeapon.updatePosition((int)this.getPosX(), (int)this.getPosY());
+            Vector3 position = new Vector3(this.getPosX(), this.getPosY(), 0);
+            enemyWeapon.updatePosition(position);
         }
     }
 

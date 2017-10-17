@@ -175,14 +175,15 @@ public class Player extends Character implements Tickable {
 
 		// Add weapons to inventory
 		Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN).setUser(this).setRadius(0.7).build();
-		Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL).setUser(this).setRadius(0.7).build();
+		Weapon stargun = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(this).setRadius(0.7).build();
 		Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
 				.build();
-		Weapon grenadelauncher = new WeaponBuilder().setWeaponType(WeaponType.GRENADELAUNCHER).setUser(this)
-				.setRadius(0.7).build();
+		Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(this).setRadius(0.7)
+		        .setArc((float) Math.PI / 2f).setPellets(9).build();
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
-		equippedItems.addItem(new WeaponItem(grenadelauncher, "Grenade Launcher", 10));
-		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
+		equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
+		equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
 
 		//REMOVE THIS - JUST ADDED FOR TESTING
 		inventory.addItem(new MagicMushroom());
@@ -341,8 +342,7 @@ public class Player extends Character implements Tickable {
     	    // for that because we don't need it.
 			Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
 			this.getEquippedWeapon().updateAim(position);
-			// TODO: remove
-			this.getEquippedWeapon().updatePosition(position.x, position.y);
+			this.getEquippedWeapon().updatePosition(position);
     	  } catch (Exception e) {LOGGER.error(String.valueOf(e));}
 		}
 		lastMouseX = screenX;
@@ -365,8 +365,6 @@ public class Player extends Character implements Tickable {
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().ceaseFire();
 		}
-	    lastMouseX = screenX;
-	    lastMouseY = screenY;
 	}
 
 	/**
@@ -380,11 +378,10 @@ public class Player extends Character implements Tickable {
 	private void handleMouseMoved(int screenX, int screenY) {
 		if (this.getEquippedWeapon() != null) {
 			Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
-			// TODO: remove
-			this.getEquippedWeapon().updatePosition(position.x, position.y);
+			this.getEquippedWeapon().updatePosition(position);
 		}
-	    lastMouseX = screenX;
-	    lastMouseY = screenY;
+        lastMouseX = screenX;
+        lastMouseY = screenY;
 	}
 
 	/**
@@ -818,6 +815,7 @@ public class Player extends Character implements Tickable {
 			break;
 		case Input.Keys.R:
 			if (this.getEquippedWeapon() != null) {
+			    this.getEquippedWeapon().ceaseFire();
 				GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
 			}
 			this.equippedItems.cycleEquippedSlot();
