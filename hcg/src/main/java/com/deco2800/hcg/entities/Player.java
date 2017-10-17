@@ -230,7 +230,7 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
-		playerInputManager.queueLocalAction(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
+	    playerInputManager.setLocalMousePosition(screenX, screenY);
 	}
 
 	/**
