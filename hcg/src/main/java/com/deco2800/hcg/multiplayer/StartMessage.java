@@ -1,5 +1,6 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 
 import com.deco2800.hcg.contexts.CharacterCreationContext;
@@ -51,7 +52,7 @@ public class StartMessage extends Message {
 	}
 	
 	@Override
-	public void process() {
+	public void process(SocketAddress address) {
 		networkManager.setSeed((long) seed);
 		
 		worldManager.setGeneratorSeed(networkManager.getNextRandomInt(Integer.MAX_VALUE));

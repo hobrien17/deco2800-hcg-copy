@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="75" height="75" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="447">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="75" height="75" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="448">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="15"/>
   <property name="weather" value="rain"/>
  </properties>
- <tileset firstgid="1" source="../tiles/general-tiles.tsx"/>
- <tileset firstgid="11" source="../tiles/sludgebubbling.tsx"/>
- <tileset firstgid="19" source="../tiles/placeholder.tsx"/>
+ <tileset firstgid="1" source="../tiles/deprecated/general-tiles.tsx"/>
+ <tileset firstgid="11" source="../tiles/any_sludge_animated.tsx"/>
+ <tileset firstgid="19" source="../tiles/deprecated/placeholder.tsx"/>
  <tileset firstgid="21" source="../tiles/health.tsx"/>
  <tileset firstgid="22" source="../tiles/exit.tsx"/>
  <tileset firstgid="23" source="../tiles/new-sludge.tsx"/>
- <tileset firstgid="51" source="../tiles/new-grass.tsx"/>
- <tileset firstgid="79" source="../tiles/wateranimated.tsx"/>
- <tileset firstgid="83" source="../tiles/new-water.tsx"/>
- <tileset firstgid="111" source="../tiles/new-sand.tsx"/>
+ <tileset firstgid="51" source="../tiles/grass_base_tiles_2.tsx"/>
+ <tileset firstgid="79" source="../tiles/any_water_animated.tsx"/>
+ <tileset firstgid="83" source="../tiles/any_water_base_tiles.tsx"/>
+ <tileset firstgid="111" source="../tiles/desert_base_tiles_2.tsx"/>
  <layer name="ground" width="75" height="75">
   <properties>
    <property name="name" value="grass"/>
@@ -426,6 +426,12 @@
     <property name="name" value="rock"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup name="hedghog">
+  <properties>
+   <property name="name" value="hedgehog"/>
+  </properties>
+  <object id="447" gid="4" x="79.2044" y="1219.46" width="55" height="32"/>
  </objectgroup>
  <objectgroup name="rock">
   <properties>

@@ -7,28 +7,27 @@ public class ConversationOption {
 
     private ConversationNode parent;
     private Conversation grandparent;
+    private List<AbstractConversationCondition> conditions;    // empty if the option is always displayed
     private String optionText;
-    private ConversationNode target;    // null if this option will end the Conversation
-    private AbstractConversationCondition condition;    // null if the option is always displayed
     private List<AbstractConversationAction> actions;
+    private ConversationNode target;    // null if this option will end the Conversation
 
     /**
      * Constructor for ConversationOptions
      * @param parent ConversationNode which contains this Option
      * @param optionText Text to display on this Option
      * @param target The node that clicking this ption will take the player to
-     * @param condition A condition object which decides whether this Option is visible, or null
+     * @param conditions A list of condition objects which decide whether this Option is visible, or null
      * @param actions A list of actions to take when this option is selected
      */
-    public ConversationOption(ConversationNode parent, String optionText,
-                ConversationNode target, AbstractConversationCondition condition,
-                List<AbstractConversationAction> actions) {
+    public ConversationOption(ConversationNode parent, List<AbstractConversationCondition> conditions,
+                              String optionText, List<AbstractConversationAction> actions, ConversationNode target) {
         this.parent = parent;
         this.grandparent = parent.getParent();
+        this.conditions = conditions;
         this.optionText = optionText;
-        this.target = target;
-        this.condition = condition;
         this.actions = new ArrayList<>(actions);
+        this.target = target;
     }
 
     /**
@@ -38,7 +37,7 @@ public class ConversationOption {
 
         // Execute all attached actions
         for (AbstractConversationAction action : actions) {
-            action.executeAction();
+            action.executeAction(grandparent.getTalkingTo());
         }
 
         // Move to the target Conversation Node
@@ -67,15 +66,17 @@ public class ConversationOption {
     }
 
     /**
-     * Call .testCondition() on this Option's condition and return the result
+     * Call .testCondition() on this Option's conditions and return the combined result
      * @return whether this node should be visible
      */
-    public boolean testCondition() {
-        if (condition != null) {
-            return condition.testCondition();
-        } else {
-            return true;
+    public boolean testConditions() {
+        boolean result = true;
+        for (AbstractConversationCondition condition : conditions) {
+            if (!condition.testCondition(grandparent.getTalkingTo())) {
+                return false;
+            }
         }
+        return true;
     }
 
     // Needed for serialisation
@@ -84,8 +85,8 @@ public class ConversationOption {
 	}
 
     // Needed for serialisation
-    AbstractConversationCondition getCondition() {
-        return condition;
+    List<AbstractConversationCondition> getConditions() {
+        return new ArrayList<>(conditions);
     }
 
     // Needed for serialisation

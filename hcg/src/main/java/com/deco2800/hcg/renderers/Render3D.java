@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -69,6 +70,13 @@ public class Render3D implements Renderer {
         
         /* Render each entity (backwards) in order to retain objects at the front */
         for (int index = 0; index < entities.size(); index++) {
+        	Color tint;
+        	if((tint = entities.get(index).getTint()) != null) {
+        		batch.setColor(tint);
+        	} else {
+        		batch.setColor(Color.WHITE);
+        	}
+        	
             Renderable entity = entities.get(index);
 
             String textureString = entity.getTexture();

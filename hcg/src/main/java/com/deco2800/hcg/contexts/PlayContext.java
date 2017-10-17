@@ -48,6 +48,7 @@ public class PlayContext extends Context {
     private TextureManager textureManager;
     private TimeManager timeManager;
     private PlayerManager playerManager;
+    private PlayerInputManager playerInputManager;
     private ShaderManager shaderManager;
     private PlantManager plantManager;
 
@@ -109,6 +110,7 @@ public class PlayContext extends Context {
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+        playerInputManager = (PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
@@ -141,9 +143,8 @@ public class PlayContext extends Context {
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
-        if (networkManager.isInitialised()) {
-            stage.addActor(chatStack);
-        }
+        stage.addActor(chatStack);
+        chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
@@ -167,7 +168,7 @@ public class PlayContext extends Context {
         die.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                throw new NullPointerException("This is not a bug - simply a crude way of quitting the game");
+                System.exit(0);
             }
         });
 
@@ -234,6 +235,9 @@ public class PlayContext extends Context {
 
         /* set initial time */
         timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
+        
+        /* reset input tick */
+        playerInputManager.resetInputTick();
     }
 
     /**
@@ -326,7 +330,7 @@ public class PlayContext extends Context {
 
     @Override
     public void pause() {
-        if (!networkManager.isInitialised()) {
+        if (!networkManager.isMultiplayerGame()) {
             unpaused = false;
             soundManager.pauseWeatherSounds();
         }
@@ -334,7 +338,7 @@ public class PlayContext extends Context {
 
     @Override
     public void resume() {
-        if (!networkManager.isInitialised()) {
+        if (!networkManager.isMultiplayerGame()) {
             unpaused = true;
             soundManager.unpauseWeatherSounds();
         }
@@ -371,6 +375,8 @@ public class PlayContext extends Context {
 			gameManager.getWorld().addEntity(entity);
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
+		} else if (keycode == Input.Keys.T) {
+			chatStack.setVisible(!chatStack.isVisible());
 		}
 	}
 
@@ -378,8 +384,6 @@ public class PlayContext extends Context {
         exitWindow = new Window("Complete Level?", skin);
         Button yesButton = new TextButton("Yes", skin);
         yesButton.pad(5, 10, 5, 10);
-        Button noButton = new TextButton("No", skin);
-        noButton.pad(5, 10, 5, 10);
 
         /* Add a programmatic listener to the buttons */
         yesButton.addListener(new ChangeListener() {
@@ -403,16 +407,7 @@ public class PlayContext extends Context {
                 ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
             }
         });
-
-        noButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                exitWindow.remove();
-            }
-        });
-
         exitWindow.add(yesButton);
-        exitWindow.add(noButton);
         exitWindow.pack();
         exitWindow.setMovable(false); // So it doesn't fly around the screen
         exitWindow.setWidth(150);

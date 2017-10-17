@@ -16,7 +16,6 @@ public class BasicCorpse extends Corpse {
     	} else {
     		this.setTexture(turret.getThisTexture());
     	}
-
     }
 
     @Override

@@ -140,19 +140,17 @@ public class WorldStackContext extends UIContext {
 		for(WorldStackMapEntity worldEntry : allWorldMaps) {
 			if(worldEntry.getWorldMap().isUnlocked()) {
 				worldEntry.updateTexture();
-				if (!worldEntry.getWorldMap().isCompleted()) {
-					continue;
-				}
-				
-				if (worldEntry.getWorldMap().getWorldType() == 1) {
-					worldEntry.setWorldTexture(
-							textureManager.getTexture("ws_urban_completed"));
-				} else if (worldEntry.getWorldMap().getWorldType() == 2) {
-					worldEntry.setWorldTexture(
-							textureManager.getTexture("ws_forest_completed"));
-				} else {
-					worldEntry.setWorldTexture(
-							textureManager.getTexture("ws_fungi_completed"));
+				if(worldEntry.getWorldMap().isCompleted()) {
+					if (worldEntry.getWorldMap().getWorldType() == 1) {
+						worldEntry.setWorldTexture(
+								textureManager.getTexture("ws_urban_completed"));
+					} else if (worldEntry.getWorldMap().getWorldType() == 2) {
+						worldEntry.setWorldTexture(
+								textureManager.getTexture("ws_forest_completed"));
+					} else {
+						worldEntry.setWorldTexture(
+								textureManager.getTexture("ws_fungi_completed"));
+					}
 				}
 			} else if (worldEntry.getWorldMap().getWorldType() == 2) {
 				worldEntry.setWorldTexture(

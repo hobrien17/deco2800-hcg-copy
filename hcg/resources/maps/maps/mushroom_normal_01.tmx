@@ -5,9 +5,9 @@
   <property name="PlayerY" value="40"/>
   <property name="weather" value="rain"/>
  </properties>
- <tileset firstgid="1" source="../tiles/misc1.tsx"/>
- <tileset firstgid="7" source="../tiles/general-tiles.tsx"/>
- <tileset firstgid="17" source="../tiles/wateranimated.tsx"/>
+ <tileset firstgid="1" source="../tiles/deprecated/misc1.tsx"/>
+ <tileset firstgid="7" source="../tiles/deprecated/general-tiles.tsx"/>
+ <tileset firstgid="17" source="../tiles/any_water_animated.tsx"/>
  <tileset firstgid="21" source="../tiles/exit.tsx"/>
  <layer name="grass" width="100" height="100">
   <properties>
