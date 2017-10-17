@@ -154,12 +154,10 @@ public class TextureManager extends Manager {
 			textureMap.put("iceboulder", new Texture("resources/terrain_objects/iceboulder.png"));
 			textureMap.put("house", new Texture("resources/terrain_objects/house.png"));
 			textureMap.put("sludgebarrel", new Texture("resources/terrain_objects/sludge-barrel.png"));
-			textureMap.put("house2", new Texture("resources/terrain_objects/house2.png"));
-			textureMap.put("house2destroyed", new Texture("resources/terrain_objects/house2destroyed.png"));
 			textureMap.put("concretewall", new Texture("resources/terrain_objects/concretewall.png"));
 			textureMap.put("largeTree", new Texture("resources/terrain_objects/tree_dead_01.png"));
 			textureMap.put("houseWRoof", new Texture("resources/terrain_objects/abandoned_house_01.png"));
-			textureMap.put("houseWORood", new Texture("resources/terrain_objects/busted_house_01.png"));
+			textureMap.put("houseWORoof", new Texture("resources/terrain_objects/busted_house_01.png"));
 			textureMap.put("swing", new Texture("resources/terrain_objects/broken_swing.png"));
 			textureMap.put("picketFenceNS", new Texture("resources/terrain_objects/picket_fence_northsouth.png"));
 			textureMap.put("picketFenceEW", new Texture("resources/terrain_objects/picket_fence_eastwest.png"));
@@ -248,6 +246,10 @@ public class TextureManager extends Manager {
 
 			//Perks
 			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("perk_border_inactive", new Texture("resources/ui/perks/perk_border_inactive.png"));
+
+
 
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
