@@ -26,6 +26,9 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.WorldUtil;
+import com.deco2800.hcg.weapons.Weapon;
+import com.deco2800.hcg.weapons.WeaponType;
+import com.deco2800.hcg.entities.bullets.BulletType;
 
 
 public class GeneralRadialDisplay extends Group {
@@ -33,6 +36,9 @@ public class GeneralRadialDisplay extends Group {
     private TextureManager textureManager;
     private GameManager gameManager;
     private SoundManager soundManager;
+    private Weapon weapon;
+    private boolean active;
+    private BulletType bulletType;
     
     private List<ImageButton> buttons;
     private ImageButton closeButton;
@@ -69,11 +75,15 @@ public class GeneralRadialDisplay extends Group {
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         this.stage = stage;
+		this.active = false;
+		this.weapon = weapon;
+		this.bulletType = BulletType.BASIC;
 		
         setupSprites();
         setupListeners();
         
         display = new Group();
+
         outline = getImage("outline");
         closeButton = new ImageButton(getImage("close").getDrawable());
         
@@ -98,6 +108,7 @@ public class GeneralRadialDisplay extends Group {
 		closeButton.setPosition(display.getWidth()/2f - X_SIZE_MAX/2f, 
 				display.getHeight()/2f - Y_SIZE_MAX/2f);
 		display.addActor(closeButton);
+
 		
 		closeButton.addListener(new ChangeListener() {
 	            @Override
@@ -115,8 +126,21 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("explosive", "explosive_btn");
 		sprites.put("fire", "fire_btn");
 		sprites.put("grass", "grass_btn");
+		sprites.put("sunflowerC", "sunflower_btn");
+		sprites.put("waterC", "water_btn");
+		sprites.put("iceC", "ice_btn");
+		sprites.put("explosiveC", "explosive_btn");
+		sprites.put("fireC", "fire_btn");
+		sprites.put("grassC", "grass_btn");
 		sprites.put("outline", "radialOutline");
 		sprites.put("close", "menuClose");
+		sprites.put("grenadeLauncher", "grenadeLauncher");
+		sprites.put("machineGun", "machineGun");
+		sprites.put("shotgun", "shotgun");
+		sprites.put("starfall", "starfall");
+		sprites.put("fertiliser", "fertiliser_btn");
+		sprites.put("bugSpray", "bugspray_btn");
+		sprites.put("healthPotion", "healthPotion");
 	}
 	
 	private void setupListeners() {
@@ -175,8 +199,124 @@ public class GeneralRadialDisplay extends Group {
                 display.remove();
             }
         });
+
+		listeners.put("sunflowerC", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				bulletType = BulletType.BASIC;
+				weapon.setBulletType(bulletType);
+				weapon.switchBullet();
+				display.remove();
+			}
+		});
+
+		listeners.put("waterC", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				bulletType = BulletType.BASIC;
+				weapon.setBulletType(bulletType);
+				weapon.switchBullet();
+				display.remove();
+			}
+		});
+
+		listeners.put("iceC", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				bulletType = BulletType.ICE;
+				weapon.setBulletType(bulletType);
+				weapon.switchBullet();
+				display.remove();
+			}
+		});
+
+		listeners.put("fireC", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				bulletType = BulletType.FIRE;
+				weapon.setBulletType(bulletType);
+				weapon.switchBullet();
+				display.remove();
+			}
+		});
+
+		listeners.put("explosiveC", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				bulletType = BulletType.EXPLOSION;
+				weapon.setBulletType(bulletType);
+				weapon.switchBullet();
+				display.remove();
+			}
+		});
+
+		listeners.put("grassC", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				bulletType = BulletType.BASIC;
+				weapon.setBulletType(bulletType);
+				weapon.switchBullet();
+				display.remove();
+			}
+		});
+
+		listeners.put("grenadeLauncher", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				display.remove();
+			}
+		});
+
+		listeners.put("machineGun", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				display.remove();
+			}
+		});
+
+		listeners.put("shotgun", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				display.remove();
+			}
+		});
+
+		listeners.put("starfall", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				display.remove();
+			}
+		});
+
+		listeners.put("fertiliser", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				addFertiliser();
+				display.remove();
+			}
+		});
+
+		listeners.put("bugSpray", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				addBugSpray();
+				display.remove();
+			}
+		});
+
+		listeners.put("healthPotion", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				display.remove();
+			}
+		});
 	}
-	
+
 	private Image getImage(String name) {
 		String sprite = sprites.get(name);
 		if(sprite == null) {
@@ -200,11 +340,20 @@ public class GeneralRadialDisplay extends Group {
 		float angle = (float)(getAngle(index) * Math.PI / 180.0);
 		return (float)(display.getHeight()/2f - xSize/2f + DISTANCE*Math.sin(angle));
 	}
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean input) {
+		this.active = input;
+	}
 	
 	public void addRadialMenu(Stage stage) {
         stage.addActor(display);
+        this.setActive(true);
     }
-	
+
 	/**
      * Plants the given seed inside a nearby pot or corpse
      * 
@@ -305,4 +454,24 @@ public class GeneralRadialDisplay extends Group {
 		soundManager.stopSound(soundName);
 		soundManager.playSound(soundName);
 	}
+
+	//public void updateCount(Item item) {
+	//	int itemCount = 0;
+	//	for(int i = 0; i < inventory.getNumItems(); i++) {
+	//		if(inventory.getItem(i) instanceof item) {
+	//			keyCount += inventory.getItem(i).getStackSize();
+	//		}
+	//	}
+	//	infoLbl.setText(String.format("%d", seedCount));
+//
+//		if(keyCount > 0) {
+//			titleLbl.setText("Open pot by using key?");
+//			this.getTitleLabel().setText("Open pot?");
+//			conf.setVisible(true);
+//		} else {
+//			titleLbl.setText("No keys in inventory!");
+//			this.getTitleLabel().setText("No keys!");
+//			conf.setVisible(false);
+//		}
+	//}
 }
