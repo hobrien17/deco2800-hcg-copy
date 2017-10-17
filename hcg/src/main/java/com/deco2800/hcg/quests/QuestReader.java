@@ -14,6 +14,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * Quest reader handles quest loading from files
+ *
+ * @author Harry Guthrie
+ */
 public class QuestReader {
     /**
      *  A function which loads all the quests into the quest manager, this utalizes the loadQuest function, and it then

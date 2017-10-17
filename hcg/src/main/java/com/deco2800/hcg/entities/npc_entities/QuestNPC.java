@@ -50,13 +50,13 @@ public class QuestNPC extends NPC {
 	 * @param posX
 	 *            X Position of the NPC
 	 * @param posY
-	 *            Y positon of the NPC
+	 *            Y Position of the NPC
 	 * @param fName
-	 *            first name of NPC
+	 *            First name of NPC
 	 * @param sName
-	 *            last name of NPC
+	 *            Last name of NPC
 	 * @param texture
-	 *            texture of NPC
+	 *            Texture of NPC
 	 */
 	public QuestNPC(float posX, float posY, String fName, String sName,
 			String texture, String conversation, String faceImage) {

@@ -1,19 +1,53 @@
 package com.deco2800.hcg.quests;
 
+import com.deco2800.hcg.conversation.GiveItemsAction;
 import com.deco2800.hcg.managers.ResourceLoadException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * Quest manager handles quest interaction in the game
+ *
+ * @author Harry Guthrie
+ */
 public class QuestManager {
     HashMap<String,Quest> quests;
+
+    ArrayList<QuestArchive> questLog;
 
     /**
      *  Creates a new quest manager
      */
     public QuestManager() {
         quests = new HashMap<>();
+        questLog = new ArrayList<>();
     }
+
+    /**
+     * Returns the loaded Quest associated with the Quest Name
+     *
+     * @param questName - name of the quest in the .json file
+     * @return the Quest object if it exists if not null
+     */
+    public Quest getQuest(String questName) {
+        return quests.getOrDefault(questName, null);
+    }
+
+    public void completeQuest(String questName) {
+        Quest q = quests.getOrDefault(questName, null);
+        if (q == null) {
+            //Do nothing if the quest dosen't exist
+            return;
+        }
+
+
+
+
+
+    }
+
+
 
 
 
