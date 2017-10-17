@@ -10,7 +10,6 @@ import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.terrain_entities.Boulder;
 import com.deco2800.hcg.entities.terrain_entities.ConcreteWall;
-import com.deco2800.hcg.entities.terrain_entities.House2;
 import com.deco2800.hcg.entities.terrain_entities.HouseWORoof;
 import com.deco2800.hcg.entities.terrain_entities.HouseWRoof;
 import com.deco2800.hcg.entities.terrain_entities.IceBoulder;
@@ -30,7 +29,7 @@ import com.deco2800.hcg.items.stackable.HealthPotion;
 public enum WorldEntities {
 
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, UPOT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
-    GREENTREE, HOUSE2, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM, SNAIL;
+    GREENTREE, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM, SNAIL, LEAFLESSTREE;
 
     /**
      * Return an instance of the entity at the given position and the selected
@@ -65,6 +64,8 @@ public enum WorldEntities {
                 return new BasicCorpse(x, y, 0f);
             case ICETREE:
                 return new Tree(x, y, 0f, TreeType.SNOWY);
+            case LEAFLESSTREE:
+              return new Tree(x, y, 0f, TreeType.LEAFLESS);
             case BOULDER:
                 return new Boulder(x, y, 0f);
             case ROCK:
@@ -79,8 +80,6 @@ public enum WorldEntities {
                 return new MushroomTreeThin(x, y, 0f);
             case GREENTREE:
                 return new Tree(x, y, 0f, TreeType.LEAFY);
-            case HOUSE2:
-                return new House2(x, y, 0f);
             case LARGETREE:
                 return new LargeTree(x, y, 0f);
             case SWING:
