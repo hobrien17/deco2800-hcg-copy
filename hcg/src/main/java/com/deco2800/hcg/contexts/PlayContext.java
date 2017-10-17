@@ -377,8 +377,29 @@ public class PlayContext extends Context {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.T) {
 			chatStack.setVisible(!chatStack.isVisible());
-		}
+		} else if ((exitWindow.isVisible() == true) && (keycode == Input.Keys.Y)) {
+    	    exit();
+        }
 	}
+
+	private void exit() {
+        if(gameManager.getCurrentNode().getNodeType() != 3) {
+            gameManager.getCurrentNode().changeNodeType(2);
+            gameManager.getMapContext().updateMapDisplay();
+            contextManager.popContext();
+        } else {
+            gameManager.getCurrentNode().changeNodeType(2);
+            gameManager.getMapContext().updateMapDisplay();
+            gameManager.getMapContext().addEndOfContext();
+            contextManager.popContext();
+        }
+        // clear old observers (mushroom turret for example)
+        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager.deleteObservers();
+
+        // stop the old weather effects
+        ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+    }
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
@@ -389,22 +410,7 @@ public class PlayContext extends Context {
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(gameManager.getCurrentNode().getNodeType() != 3) {
-                    gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
-                    contextManager.popContext();
-                } else {
-                    gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
-                    gameManager.getMapContext().addEndOfContext();
-                    contextManager.popContext();
-                }
-                // clear old observers (mushroom turret for example)
-                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-                manager.deleteObservers();
-
-                // stop the old weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                exit();
             }
         });
         exitWindow.add(yesButton);
@@ -414,6 +420,7 @@ public class PlayContext extends Context {
     }
 
     public void addExitWindow() {
+        exitWindow.setVisible(true);
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
@@ -422,6 +429,7 @@ public class PlayContext extends Context {
     }
 
     public void removeExitWindow() {
+        exitWindow.setVisible(false);
         exitWindow.remove();
         soundManager.unpauseWeatherSounds();
     }
