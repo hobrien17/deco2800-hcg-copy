@@ -321,15 +321,12 @@ public abstract class Enemy extends Character implements Lootable {
      * @author Elvin - Team 9
      */
     public void detectPlayers() {
-
-        List<Player> players;
-        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
-
-        int playerCount = 0;
-        float distance = this.distance(playerManager.getPlayer());
-        float[] distances = new float[numPlayers];
-        float closestDistance;
         if (this.getNumberPlayers() > 1) {
+            List<Player> players;
+            HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
+            int playerCount = 0;
+            float[] distances = new float[numPlayers];
+            float closestDistance;
             players = playerManager.getPlayers();
             //Iterates through all players and puts distance from enemy to each player into an array
             //Puts all players and their respective distances into a hash map
@@ -361,6 +358,7 @@ public abstract class Enemy extends Character implements Lootable {
                 this.setStatus(1);
             }
         } else {
+            float distance = this.distance(playerManager.getPlayer());
             this.closestPlayer = playerManager.getPlayer();
             if(distance <= 5 * this.level){
                 //Annoyed by player.
