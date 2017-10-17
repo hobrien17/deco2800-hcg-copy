@@ -305,6 +305,14 @@ public abstract class Enemy extends Character implements Lootable {
     }
 
     /**
+     * Returns the player entity that is nearest to the enemy entity
+     *
+     * @return Player object with the smallest distance
+     */
+    public void setClosestPlayer(Player closestPlayer) {this.closestPlayer = closestPlayer; }
+
+
+    /**
      * Changes status of enemy based on the closest player's position via least distance.
      * Used when there are multiple players in the same game.
      *

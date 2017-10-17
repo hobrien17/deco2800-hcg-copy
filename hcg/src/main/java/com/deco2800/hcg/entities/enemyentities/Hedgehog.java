@@ -32,9 +32,9 @@ public class Hedgehog extends Enemy implements Tickable {
         this.boss = false;
         this.setTexture(HEDGEHOG);
         this.level = 1;
-        walkingRange = 30 * this.level;
-        chargingRange = 10 * this.level;
-        chargedAtPlayer = false;
+        this.walkingRange = 30 * this.level;
+        this.chargingRange = 10 * this.level;
+        this.setChargeStatus(false);
         newPos.setX(posX);
         newPos.setY(posY);
         newPos.setZ(posZ);
@@ -79,26 +79,27 @@ public class Hedgehog extends Enemy implements Tickable {
      */
     public void setHedgehogStatus() {
         float distance = this.distance(playerManager.getPlayer());
+        this.setClosestPlayer(playerManager.getPlayer());
         if (chargedAtPlayer && distance > chargingRange){
             this.setChargeStatus(false);
         }
         if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange) {
             // move slowly to player
-            setSpeed(this.level * 0.01f);
+            this.setSpeed(this.level * 0.01f);
             this.setStatus(2);
             this.setTexture(HEDGEHOG);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else if (!chargedAtPlayer && distance < chargingRange) {
             // charge at player
-            setSpeed(this.level * 0.05f);
+            this.setSpeed(this.level * 0.05f);
             this.setStatus(2);
             this.setTexture("hedgeball");
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else {
             // move randomly
-            setSpeed(this.level * 0.03f);
+            this.setSpeed(this.level * 0.03f);
             this.setStatus(3);
             this.setTexture(HEDGEHOG);
         }
@@ -151,12 +152,10 @@ public class Hedgehog extends Enemy implements Tickable {
     	this.setNewPos();//Put new position into Box3D.
         this.setDirection();
     	this.detectCollision();//Detect collision.
-    	if (this.collidedPlayer) {
-    		this.setChargeStatus(true);
-    	}
         if (this.counter < this.delay) {
             this.counter++;
         } else if (this.collidedPlayer) {
+            this.setChargeStatus(true);
             this.causeDamage(this.getTarget());
             this.counter = 0;
         }
