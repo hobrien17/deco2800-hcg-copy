@@ -12,9 +12,9 @@ import java.util.HashMap;
 
 public class Quest {
 	private String title; //Name of the quest to be displayed
-	private HashMap<Item,Integer> rewards; // items to amount for reward
+	private HashMap<String,Integer> rewards; // items to amount for reward
 	private HashMap<Integer,HashMap<Integer, Integer>> killRequirement; //Kills for enemy ID required
-	private HashMap<Item, Integer> itemRequirement; //Item required to complete quest
+	private HashMap<String, Integer> itemRequirement; //Item required to complete quest
 	private String description;
 
 	/**
@@ -24,8 +24,8 @@ public class Quest {
 	 * @param killRequirement
 	 * @param itemRequirement
 	 */
-	public Quest(String title, HashMap<Item, Integer> rewards, HashMap<Integer,
-			HashMap<Integer, Integer>> killRequirement, HashMap<Item, Integer> itemRequirement) {
+	public Quest(String title, HashMap<String, Integer> rewards, HashMap<Integer,
+			HashMap<Integer, Integer>> killRequirement, HashMap<String, Integer> itemRequirement) {
 
 		this.title = title;
 		this.rewards = rewards;
@@ -43,7 +43,7 @@ public class Quest {
 		return title;
 	}
 
-	public HashMap<Item, Integer> getRewards() {
+	public HashMap<String, Integer> getRewards() {
 		return rewards;
 	}
 
@@ -51,7 +51,7 @@ public class Quest {
 		return killRequirement;
 	}
 
-	public HashMap<Item, Integer> getItemRequirement() {
+	public HashMap<String, Integer> getItemRequirement() {
 		return itemRequirement;
 	}
 
@@ -91,8 +91,8 @@ public class Quest {
 				desc = "Collect";
 			}
 
-			for (Item i: itemRequirement.keySet()) {
-				desc += " " + itemRequirement.get(i).toString() + i.getName() + ",";
+			for (String i: itemRequirement.keySet()) {
+				desc += " " + itemRequirement.get(i).toString() + i + ",";
 			}
 			desc = desc.substring(0,desc.length() - 1); //Remove the trailing ','
 			desc += ".";

@@ -61,9 +61,9 @@ public class QuestReader {
 
         //Containers for the information in the quest
         String title; //Name of the quest to be displayed
-        HashMap<Item,Integer> rewards = new HashMap<>(); // items to amount for reward
+        HashMap<String,Integer> rewards = new HashMap<>(); // items to amount for reward
         HashMap<Integer,HashMap<Integer, Integer>> killRequirement = new HashMap<>(); //Kills for enemy ID required
-        HashMap<Item, Integer> itemRequirement = new HashMap<>(); //Item required to complete quest
+        HashMap<String, Integer> itemRequirement = new HashMap<>(); //Item required to complete quest
         String description;
 
         //Get the inital json obj
@@ -96,11 +96,11 @@ public class QuestReader {
         return new Quest(title,rewards,killRequirement,itemRequirement);
     }
 
-    private HashMap<Item,Integer> parseItemQuantityHashMap(String title, JsonObject iqMap) throws ResourceLoadException {
+    private HashMap<String,Integer> parseItemQuantityHashMap(String title, JsonObject iqMap) throws ResourceLoadException {
         //Create Instance of the Item Manager class for checking valid items
         ItemManager itemManager = (ItemManager) GameManager.get().getManager(ItemManager.class);
 
-        HashMap<Item,Integer> returnMap = new HashMap<>();
+        HashMap<String,Integer> returnMap = new HashMap<>();
         if (iqMap.entrySet().size() > 0) {
             for (Map.Entry i:iqMap.entrySet()) {
                 //For each entry in the item req obj make sure it is valid
@@ -141,9 +141,15 @@ public class QuestReader {
                     throw new ResourceLoadException("Can't add an item which currently does not exist in the Item Manager");
                 }
 
-                //Create new instance of valid item
+                //Create new instance of valid item - catch if fails (invalid)
                 Item entryItem = itemManager.getNew(i.getKey().toString());
-                returnMap.put(entryItem,Integer.parseUnsignedInt(i.getValue().toString()));
+                if (entryItem == null) {
+                    throw new ResourceLoadException("Item (" + i.getKey().toString() +
+                                                    ") is not a valid item in quest (" +
+                                                    title + ")");
+                }
+
+                returnMap.put(i.getKey().toString(),Integer.parseUnsignedInt(i.getValue().toString()));
             }
         }
         return returnMap;
@@ -159,7 +165,7 @@ public class QuestReader {
             for (Map.Entry node: krmMap.entrySet()) {
                 //Check for valid world node
                 if (!gameManager.getWorldMap().getContainedNodes().contains(node)) {
-                    throw new ResourceLoadException("Can't add invalid worlds node.")
+                    throw new ResourceLoadException("Can't add invalid worlds node.");
                 }
                 
                 //Make sure there are no duplicate nodes IDs

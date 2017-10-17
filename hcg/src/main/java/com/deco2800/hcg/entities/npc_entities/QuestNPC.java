@@ -6,6 +6,8 @@ import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.quests.Quest;
+import com.deco2800.hcg.quests.QuestManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
@@ -40,6 +42,8 @@ public class QuestNPC extends NPC {
 			.getManager(TimeManager.class);
 	private PlayerManager playerManager = (PlayerManager) GameManager.get()
 			.getManager(PlayerManager.class);
+	private QuestManager questManager = (QuestManager)  GameManager.get()
+			.getManager(QuestManager.class);
 
 	private String relationship;
 	private String conversation;
@@ -81,6 +85,18 @@ public class QuestNPC extends NPC {
 
 	public void setConversation(String convo){
 		this.conversation = convo;
+	}
+
+	public void completeQuest() {
+		questManager.completeQuest(this);
+	}
+
+	public void addQuest(String questName) {
+		questManager.addQuest(this,questName);
+	}
+
+	public Quest getQuest() {
+		return questManager.getActiveNPCQuest(this);
 	}
 
 	public void interact() {

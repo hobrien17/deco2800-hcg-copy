@@ -1,27 +1,39 @@
 package com.deco2800.hcg.quests;
 
 import com.deco2800.hcg.conversation.GiveItemsAction;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.Manager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.ResourceLoadException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Quest manager handles quest interaction in the game
  *
  * @author Harry Guthrie
  */
-public class QuestManager {
+public class QuestManager extends Manager {
     HashMap<String,Quest> quests;
+    HashMap<QuestNPC,Quest> questLog;
+    HashMap<QuestNPC,ArrayList<Quest>> completedLog;
 
-    ArrayList<QuestArchive> questLog;
+    private PlayerManager playerManager = (PlayerManager) GameManager.get()
+            .getManager(PlayerManager.class);
 
     /**
      *  Creates a new quest manager
      */
     public QuestManager() {
         quests = new HashMap<>();
-        questLog = new ArrayList<>();
+        questLog = new HashMap<>();
+        completedLog = new HashMap<>();
+        loadAllQuests();
     }
 
     /**
@@ -34,18 +46,68 @@ public class QuestManager {
         return quests.getOrDefault(questName, null);
     }
 
-    public void completeQuest(String questName) {
-        Quest q = quests.getOrDefault(questName, null);
-        if (q == null) {
-            //Do nothing if the quest dosen't exist
-            return;
-        }
-
-
-
-
-
+    public Quest getActiveNPCQuest(QuestNPC npc) {
+        return questLog.getOrDefault(npc, null);
     }
+
+    public void addQuest(QuestNPC npc, String questName) throws ResourceLoadException {
+        if (!quests.containsKey(questName)) {
+            throw new ResourceLoadException(""); //todo write a proper exception
+        }
+        questLog.put(npc,quests.get(questName));
+    }
+
+    public void completeQuest(QuestNPC npc) {
+        if (!questLog.containsKey(npc)) {
+            throw new ResourceLoadException(""); //todo write a proper exception
+        }
+        //Give the player the reward
+        GiveItemsAction gia = new GiveItemsAction(questLog.get(npc).getRewards());
+
+        //Set the quest to complete
+        completedLog.putIfAbsent(npc,new ArrayList<>());
+        completedLog.get(npc).add(questLog.get(npc));
+        questLog.remove(npc);
+    }
+
+
+    /**
+     * ------------------------------------- Functions for the quest UI -------------------------------------
+     */
+    public HashMap<QuestNPC,ArrayList<Quest>> getCompletedQuests() {
+        return completedLog;
+    }
+
+    public HashMap<QuestNPC,Quest> getCompleteableQuests() {
+        HashMap<QuestNPC,Quest> completeableLog = new HashMap<>();
+        for (Map.Entry<QuestNPC,Quest> entry: questLog.entrySet()) {
+            if (canQuestBeCompleted(entry.getValue())) {
+                completeableLog.put(entry.getKey(),entry.getValue());
+            }
+        }
+        return completeableLog;
+    }
+
+    public HashMap<QuestNPC,Quest> getUnCompleteableQuests() {
+        HashMap<QuestNPC,Quest> unCompleteableLog = new HashMap<>();
+        for (Map.Entry<QuestNPC,Quest> entry: questLog.entrySet()) {
+            if (!canQuestBeCompleted(entry.getValue())) {
+                unCompleteableLog.put(entry.getKey(),entry.getValue());
+            }
+        }
+        return unCompleteableLog;
+    }
+
+    private boolean canQuestBeCompleted(Quest q) {
+        
+
+
+
+
+        return true;
+    }
+
+
 
 
 
