@@ -199,7 +199,7 @@ public class MapGenerator {
 					nodeType = 0; //node will be a safenode
 					safeNodeInColumn = true;
 					columnsSinceSafeNode = 0;
-					MapNode safeNode = new MapNode(i, nodeRow, nodeType, safeLevel,false);
+					MapNode safeNode = new MapNode(i, nodeRow, nodeType, safeLevel, false);
 					nodeList.add(safeNode);
 				} else {
 					nodeType = 1;  // in the future, will add different node types in here

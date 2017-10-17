@@ -15,8 +15,9 @@ public class LevelStore {
 		levelList = new ArrayList<>();
 
 		// Safe Zone levels
-		levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_01.tmx"), 0, 1, 0));
-		levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_02.tmx"), 0, 1, 1));
+		//levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_01.tmx"), 0, 1, 0));
+		// map above needs to be redone! Does not have an exit tile!
+		levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_02.tmx"), 0, 1, 0));
 
 		// Normal Levels
 		levelList.add(new Level(new World("resources/maps/maps/grass_normal_01.tmx"), 0, 1, 1));

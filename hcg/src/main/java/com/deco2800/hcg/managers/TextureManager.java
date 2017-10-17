@@ -269,6 +269,15 @@ public class TextureManager extends Manager {
 			textureMap.put("discovered_node", new Texture("resources/worldmap/discovered_node_small.png"));
 			textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node_small.png"));
 			textureMap.put("safe_node", new Texture("resources/worldmap/safe_node_small.png"));
+			textureMap.put("forest_completed_node", new Texture("resources/worldmap/forest_completed_node_small.png"));
+			textureMap.put("forest_discovered_node",
+					new Texture("resources/worldmap/forest_discovered_node_small.png"));
+			textureMap.put("forest_boss_node", new Texture("resources/worldmap/forest_boss_node_small.png"));
+			textureMap.put("forest_safe_node", new Texture("resources/worldmap/forest_safe_node_small.png"));
+			textureMap.put("waste_completed_node", new Texture("resources/worldmap/waste_completed_node_small.png"));
+			textureMap.put("waste_discovered_node", new Texture("resources/worldmap/waste_discovered_node_small.png"));
+			textureMap.put("waste_boss_node", new Texture("resources/worldmap/waste_boss_node_small.png"));
+			textureMap.put("waste_safe_node", new Texture("resources/worldmap/waste_safe_node_small.png"));
 			textureMap.put("black_px", new Texture("resources/worldmap/black_px.png"));
 			textureMap.put("ws_forest", new Texture("resources/worldmap/ws_forest.png"));
 			textureMap.put("ws_fungi", new Texture("resources/worldmap/ws_fungi.png"));

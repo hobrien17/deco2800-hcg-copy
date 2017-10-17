@@ -360,7 +360,7 @@ public class PlayContext extends Context {
     		potUnlock.close();
     	}
         if(keycode == Input.Keys.M) {
-            contextManager.pushContext(new WorldMapContext());
+            contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
             soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
@@ -386,11 +386,11 @@ public class PlayContext extends Context {
             public void changed(ChangeEvent event, Actor actor) {
                 if(gameManager.getCurrentNode().getNodeType() != 3) {
                     gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
+                    gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
                     contextManager.popContext();
                 } else {
                     gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
+                    gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
                     gameManager.getMapContext().addEndOfContext();
                     contextManager.popContext();
                 }
