@@ -43,7 +43,7 @@ public class InputMessage extends Message {
 		buffer.putLong(tick);
 		buffer.put((byte) args.length);
 		for (int i = 0; i < args.length; i++) {
-			buffer.putInt(args[i]);
+			buffer.putShort((short) args[i]);
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class InputMessage extends Message {
 			byte length = buffer.get();
 			args = new int[length];
 			for (int i = 0; i < length; i++) {
-				args[i] = buffer.getInt();
+				args[i] = (int) buffer.getShort();
 			}
 		} catch (ArrayIndexOutOfBoundsException|BufferUnderflowException|BufferOverflowException e) {
 			throw new MessageFormatException(e);

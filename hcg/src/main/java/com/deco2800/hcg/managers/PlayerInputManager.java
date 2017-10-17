@@ -10,8 +10,10 @@ import java.util.HashMap;
 
 public class PlayerInputManager extends Manager implements TickableManager {
 	
-	private ContextManager contextManager = (ContextManager) GameManager.get().getManager(ContextManager.class);
-	private NetworkManager networkManager = (NetworkManager) GameManager.get().getManager(NetworkManager.class);
+	private ContextManager contextManager =
+			(ContextManager) GameManager.get().getManager(ContextManager.class);
+	private NetworkManager networkManager =
+			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 
     private HashMap<Integer, KeyDownObserver> keyDownListeners = new HashMap<>();
     private HashMap<Integer, KeyUpObserver> keyUpListeners = new HashMap<>();
@@ -298,7 +300,10 @@ public class PlayerInputManager extends Manager implements TickableManager {
 			return;
 		}
 		
-		ArrayList<int[]> actions = actionQueue.get(inputTickCount);
+		// queue mouse input
+		queueLocalAction(InputType.MOUSE_MOVED.ordinal(), screenX, screenY);
+		
+		ArrayList<int[]> actions = actionQueue.get(++inputTickCount);
 		if (actions == null) {
 			return;
 		}

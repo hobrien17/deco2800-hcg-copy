@@ -321,28 +321,19 @@ public final class NetworkManager extends Manager {
 	 * @return <code>true</code> if it is not safe to proceed
 	 */
 	public boolean shouldBlock() {
-		if (!(contextManager.currentContext() instanceof PlayContext)) {
+		if (!multiplayerGame || !(contextManager.currentContext() instanceof PlayContext)) {
 			return false;
 		}
 		
-		if (multiplayerGame) {
-			if (playerInputManager.getInputTick() > 0 && peerTickCounts.isEmpty()) {
-				playerInputManager.queueLocalAction(InputType.MOUSE_MOVED.ordinal(),
-						playerInputManager.getLocalMouseX(), playerInputManager.getLocalMouseY());
-				return true;
-			}
-
-			for (long tick : peerTickCounts.values()) {
-				if (tick <= playerInputManager.getInputTick()) {
-					return true;
-				}
-			}
+		if (playerInputManager.getInputTick() > 0 && peerTickCounts.isEmpty()) {
+			return true;
 		}
 
-		// TODO Should these next lines be somewhere else?
-		playerInputManager.queueLocalAction(InputType.MOUSE_MOVED.ordinal(),
-				playerInputManager.getLocalMouseX(), playerInputManager.getLocalMouseY());
-		playerInputManager.incrementInputTick();
+		for (long tick : peerTickCounts.values()) {
+			if (tick <= playerInputManager.getInputTick()) {
+				return true;
+			}
+		}
 		
 		return false;
 	}
@@ -455,8 +446,9 @@ public final class NetworkManager extends Manager {
 				MessageType messageType = Message.getType(receiveBuffer);
 				
 				if (messageType == MessageType.ACK) {
-					receiveBuffer.position(14);
-					acked = receiveBuffer.getInt();
+					if (messageId > acked) {
+						acked = messageId;
+					}
 					return;
 				}
 				
@@ -506,14 +498,10 @@ public final class NetworkManager extends Manager {
 			messageBuffer.clear();
 			// put header
 			messageBuffer.put(MESSAGE_HEADER);
-			// put id
-			messageBuffer.putInt(-1);
-			// put type
-			messageBuffer.put((byte) MessageType.ACK.ordinal());
-			// put number of fields
-			messageBuffer.put((byte) 0);
 			// put ACK id
 			messageBuffer.putInt(peerSequenceNumbers.get(0));
+			// put type
+			messageBuffer.put((byte) MessageType.ACK.ordinal());
 			// send ACK to peer
 			messageBuffer.flip();
 			try {
