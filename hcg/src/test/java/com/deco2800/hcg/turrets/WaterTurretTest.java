@@ -93,4 +93,10 @@ public class WaterTurretTest extends TurretBaseTest {
 		}
 		assertFalse("Turret should have been destroyed", world.containsEntity(corpse));
 	}
+	
+	@Test
+	public void testSprite() {
+		setupNoWeather();
+		assertEquals("Sprite is incorrect", "water_corpse", corpse.getTexture());
+	}
 }

@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
-import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.GrassTurret;
 import com.deco2800.hcg.types.Weathers;
 
@@ -73,5 +72,12 @@ public class GrassTurretTest extends TurretBaseTest {
 			}
 		}
 		assertEquals("Exactly 18 grass bullets should have spawned in a storm", counter, 18);
+	}
+	
+	@Test
+	public void testSprite() {
+		setupNoWeather();
+		corpse.setThisTexture();
+		assertEquals("Sprite is incorrect", "grass_corpse", corpse.getTexture());
 	}
 }
