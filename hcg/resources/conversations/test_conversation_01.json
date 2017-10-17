@@ -1,5 +1,8 @@
 {
-  "initialNode": "0",
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "0"
+  },
   "nodes": [
     {
       "id": "0",

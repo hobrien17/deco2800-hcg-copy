@@ -55,8 +55,8 @@ public class TextureManager extends Manager {
 		textureMap.put("lightmap", new Texture("resources/sprites/light/lightmap.png"));
 
 		try {
-			textureMap.put("grass", new Texture("resources/maps/textures/grass.png"));
-			textureMap.put("ground", new Texture("resources/maps/textures/ground.png"));
+			textureMap.put("grass", new Texture("resources/maps/textures/deprecated/grass.png"));
+			textureMap.put("ground", new Texture("resources/maps/textures/deprecated/ground.png"));
 			textureMap.put("hcg_character", new Texture("resources/sprites/player/hcg_character_hat_logo.png"));
 			textureMap.put("hcg_character_swim", new Texture("resources/sprites/player/hcg_character_hat_swim.png"));
 			textureMap.put("hcg_character_sink", new Texture("resources/sprites/player/hcg_character_hat_sink.png"));
@@ -102,6 +102,10 @@ public class TextureManager extends Manager {
 			textureMap.put("sunflower_alt", new Texture("resources/sprites/plants/sunflower_alt.png"));
 			textureMap.put("fertiliser", new Texture("resources/sprites/gardentools/fertiliser.png"));
 			textureMap.put("bug_spray", new Texture("resources/sprites/gardentools/bugspray.png"));
+			textureMap.put("trowel", new Texture("resources/sprites/gardentools/trowel.png"));
+			textureMap.put("trowel_mid", new Texture("resources/sprites/gardentools/trowel_dirty.png"));
+			textureMap.put("trowel_broken", new Texture("resources/sprites/gardentools/trowel_dirty_2.png"));
+			textureMap.put("shovel", new Texture("resources/sprites/gardentools/shovel.png"));
 			textureMap.put("key", new Texture("resources/sprites/plants/key.png"));
 
 			// Enemy textures
@@ -161,7 +165,7 @@ public class TextureManager extends Manager {
 			textureMap.put("picketFenceEW", new Texture("resources/terrain_objects/picket_fence_eastwest.png"));
 
 			// terrain tiles
-			textureMap.put("poisontile", new Texture("resources/maps/textures/sludgebubbling1.png"));
+			textureMap.put("poisontile", new Texture("resources/maps/textures/deprecated/sludgebubbling1.png"));
             textureMap.put("rainpuddle", new Texture("resources/maps/textures/rain-puddle.png"));
             textureMap.put("icepuddle", new Texture("resources/maps/textures/ice-puddle.png"));
 
@@ -270,15 +274,16 @@ public class TextureManager extends Manager {
 			textureMap.put("fungi_node", new Texture("resources/worldmap/fungi_node_small.png"));
 			textureMap.put("safe_node", new Texture("resources/worldmap/safe_node_small.png"));
 			textureMap.put("black_px", new Texture("resources/worldmap/black_px.png"));
-			textureMap.put("ws_forest", new Texture("resources/worldmap/ws_forest_small.png"));
-			textureMap.put("ws_fungi", new Texture("resources/worldmap/ws_fungi_small.png"));
-			textureMap.put("ws_urban", new Texture("resources/worldmap/ws_urban_small.png"));
-			textureMap.put("ws_forest_locked", new Texture("resources/worldmap/ws_forest_locked_small.png"));
-			textureMap.put("ws_fungi_locked", new Texture("resources/worldmap/ws_fungi_locked_small.png"));
-			textureMap.put("ws_forest_completed", new Texture("resources/worldmap/ws_forest_completed_small.png"));
-			textureMap.put("ws_fungi_completed", new Texture("resources/worldmap/ws_fungi_completed_small.png"));
-			textureMap.put("ws_urban_completed", new Texture("resources/worldmap/ws_urban_completed_small.png"));
+			textureMap.put("ws_forest", new Texture("resources/worldmap/ws_forest.png"));
+			textureMap.put("ws_fungi", new Texture("resources/worldmap/ws_fungi.png"));
+			textureMap.put("ws_urban", new Texture("resources/worldmap/ws_urban.png"));
+			textureMap.put("ws_forest_locked", new Texture("resources/worldmap/ws_forest_locked.png"));
+			textureMap.put("ws_fungi_locked", new Texture("resources/worldmap/ws_fungi_locked.png"));
+			textureMap.put("ws_forest_completed", new Texture("resources/worldmap/ws_forest_completed.png"));
+			textureMap.put("ws_fungi_completed", new Texture("resources/worldmap/ws_fungi_completed.png"));
+			textureMap.put("ws_urban_completed", new Texture("resources/worldmap/ws_urban_completed.png"));
 			textureMap.put("ws_purp_bg", new Texture("resources/worldmap/ws_purp_background.png"));
+			textureMap.put("player_map", new Texture("resources/worldmap/player_map.png"));
 
 			//Item textures
 			textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));

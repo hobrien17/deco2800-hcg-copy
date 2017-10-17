@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
 import java.util.*;
 
-import com.badlogic.gdx.graphics.g3d.Shader;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.types.Weathers;
 

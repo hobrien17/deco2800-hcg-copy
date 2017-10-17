@@ -5,16 +5,16 @@
   <property name="PlayerY" value="15"/>
   <property name="weather" value="rain"/>
  </properties>
- <tileset firstgid="1" source="../tiles/general-tiles.tsx"/>
- <tileset firstgid="11" source="../tiles/sludgebubbling.tsx"/>
- <tileset firstgid="19" source="../tiles/placeholder.tsx"/>
+ <tileset firstgid="1" source="../tiles/deprecated/general-tiles.tsx"/>
+ <tileset firstgid="11" source="../tiles/any_sludge_animated.tsx"/>
+ <tileset firstgid="19" source="../tiles/deprecated/placeholder.tsx"/>
  <tileset firstgid="21" source="../tiles/health.tsx"/>
  <tileset firstgid="22" source="../tiles/exit.tsx"/>
  <tileset firstgid="23" source="../tiles/new-sludge.tsx"/>
- <tileset firstgid="51" source="../tiles/new-grass.tsx"/>
- <tileset firstgid="79" source="../tiles/wateranimated.tsx"/>
- <tileset firstgid="83" source="../tiles/new-water.tsx"/>
- <tileset firstgid="111" source="../tiles/new-sand.tsx"/>
+ <tileset firstgid="51" source="../tiles/grass_base_tiles_2.tsx"/>
+ <tileset firstgid="79" source="../tiles/any_water_animated.tsx"/>
+ <tileset firstgid="83" source="../tiles/any_water_base_tiles.tsx"/>
+ <tileset firstgid="111" source="../tiles/desert_base_tiles_2.tsx"/>
  <layer name="ground" width="75" height="75">
   <properties>
    <property name="name" value="grass"/>

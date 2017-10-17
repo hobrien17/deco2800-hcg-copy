@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="380">
+<map version="1.0" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="381">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
   <property name="weather" value="wind"/>
  </properties>
- <tileset firstgid="1" source="../tiles/new-grass.tsx"/>
+ <tileset firstgid="1" source="../tiles/grass_base_tiles_2.tsx"/>
  <tileset firstgid="29" source="../tiles/new-sludge.tsx"/>
- <tileset firstgid="57" source="../tiles/placeholder.tsx"/>
+ <tileset firstgid="57" source="../tiles/deprecated/placeholder.tsx"/>
  <tileset firstgid="59" source="../tiles/exit.tsx"/>
- <tileset firstgid="60" source="../tiles/dirt.tsx"/>
+ <tileset firstgid="60" source="../tiles/deprecated/dirt.tsx"/>
  <tileset firstgid="63" source="../tiles/health.tsx"/>
  <layer name="Ground" width="30" height="30">
   <properties>
@@ -379,6 +379,16 @@
     <property name="fName" value="General"/>
     <property name="sName" value="George"/>
     <property name="texture" value="character_shop"/>
+   </properties>
+  </object>
+  <object id="380" gid="57" x="255.791" y="170.709" width="55" height="32">
+   <properties>
+    <property name="Type" value="Quest"/>
+    <property name="conversation" value="james_test"/>
+    <property name="fName" value="James"/>
+    <property name="faceImage" value="npc_face"/>
+    <property name="sName" value="TestNPC"/>
+    <property name="texture" value="character_1"/>
    </properties>
   </object>
  </objectgroup>

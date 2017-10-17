@@ -33,7 +33,7 @@ public class ConversationContext extends UIContext {
      * @param conversation to display
      * @param npcFace the texture that textureManager will use to get the npcFace image
      */
-    public ConversationContext(Conversation conversation, String npcFace){
+    public ConversationContext(Conversation conversation, String npcFName, String npcFace){
 		super();
 
 		GameManager gameManager = GameManager.get();
@@ -46,7 +46,7 @@ public class ConversationContext extends UIContext {
 		
 		npcImage = new Image(textureManager.getTexture(npcFace));
 		nodeText = new Label("", skin);
-		npcName = new Label("Angela", skin);
+		npcName = new Label(npcFName, skin);
 
 		buttons = new HorizontalGroup();
 		buttons.space(30f);

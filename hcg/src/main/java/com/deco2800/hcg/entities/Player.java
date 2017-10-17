@@ -8,7 +8,6 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -31,7 +30,6 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
-import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.util.Box3D;
@@ -62,6 +60,7 @@ public class Player extends Character implements Tickable {
 	private PlayerInputManager playerInputManager;
 	private PlayerManager playerManager;
 	private ConversationManager conversationManager;
+	private StopwatchManager stopwatchManager;
 
 	private boolean collided;
 	private boolean onExit = false;
@@ -126,6 +125,9 @@ public class Player extends Character implements Tickable {
 
 		this.conversationManager = new ConversationManager();
 
+		this.stopwatchManager = (StopwatchManager) gameManager.get().getManager(StopwatchManager.class);
+		this.stopwatchManager.resetStopwatch();
+
 		this.id = id;
 		if (id == 0) {
 			InputManager localInput = (InputManager) GameManager.get().getManager(InputManager.class);
@@ -184,8 +186,6 @@ public class Player extends Character implements Tickable {
 
 		//REMOVE THIS - JUST ADDED FOR TESTING
 		inventory.addItem(new MagicMushroom());
-		inventory.addItem(new Key());
-		inventory.addItem(new Key());
 	}
 
 	/**
@@ -781,7 +781,7 @@ public class Player extends Character implements Tickable {
 	private void handleKeyDown(int keycode) {
 
 		switch (keycode) {
-		case Input.Keys.T:
+		case Input.Keys.X:
 			this.getEquippedWeapon().switchBullet();
 			break;
 		case Input.Keys.P:
@@ -948,17 +948,25 @@ public class Player extends Character implements Tickable {
 		spriteName.append(direction);
 		if (this.speedX == 0 && this.speedY == 0) {
 			// Player is not moving
+            this.stopwatchManager.resetStopwatch();
 			spriteName.append("_stand");
 		} else {
 			// Player is moving
-			if (this.spriteFrame == 0 || this.spriteFrame == 2) {
-				spriteName.append("_stand");
-			} else if (this.spriteFrame == 1) {
-				spriteName.append("_move1");
-			} else if (this.spriteFrame == 3) {
-				spriteName.append("_move2");
+			if (this.stopwatchManager.getStatus()) {
+				this.stopwatchManager.resetStopwatch();
+				this.stopwatchManager.startTimerFloat(0.02f / this.movementSpeed);
+
+				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
+					spriteName.append("_stand");
+				} else if (this.spriteFrame == 1) {
+					spriteName.append("_move1");
+				} else if (this.spriteFrame == 3) {
+					spriteName.append("_move2");
+				}
+				this.spriteFrame = ++this.spriteFrame % 4;
+			} else {
+				return;
 			}
-			this.spriteFrame = ++this.spriteFrame % 4;
 		}
 		this.setTexture(spriteName.toString());
 	}

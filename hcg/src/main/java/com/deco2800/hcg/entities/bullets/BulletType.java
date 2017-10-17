@@ -7,5 +7,6 @@ public enum BulletType {
     GRASS,
     GRENADE,
     ICE,
+    HOMING,
     SUNFLOWER;
 }
