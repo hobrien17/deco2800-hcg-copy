@@ -329,10 +329,8 @@ public abstract class Enemy extends Character implements Lootable {
         float distance = this.distance(playerManager.getPlayer());
         float[] distances = new float[numPlayers];
         float closestDistance;
-
-        //getNumberPlayers();
-        players = playerManager.getPlayers();
         if (this.getNumberPlayers() > 1) {
+            players = playerManager.getPlayers();
             //Iterates through all players and puts distance from enemy to each player into an array
             //Puts all players and their respective distances into a hash map
             for (Player player : players) {
