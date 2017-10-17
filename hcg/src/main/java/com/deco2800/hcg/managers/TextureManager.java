@@ -248,6 +248,10 @@ public class TextureManager extends Manager {
 
 			//Perks
 			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("perk_border_inactive", new Texture("resources/ui/perks/perk_border_inactive.png"));
+
+
 
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
