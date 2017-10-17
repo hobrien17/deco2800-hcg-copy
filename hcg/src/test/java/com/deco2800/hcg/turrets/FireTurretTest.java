@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.Fireball;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.turrets.Explosion;
 import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.types.Weathers;
@@ -113,8 +115,15 @@ public class FireTurretTest extends TurretBaseTest {
 	}
 	
 	@Test
-	public void testSprite() {
-		setupNoWeather();
-		assertEquals("Sprite is incorrect", "fire_corpse", corpse.getTexture());
+	public void testSandstormExplosion() {
+		setupWeather(Weathers.SANDSTORM);
+		Enemy closeEnemy = new Squirrel(6, 5, 0, 1);
+		world.addEntity(closeEnemy);
+		
+		for (int i = 1; i <= 6; i++) {
+			assertTrue("Close enemy should still be in world", world.containsEntity(closeEnemy));
+			turret.update(sw, i);
+		}
+		assertFalse("Close enemy should be destroyed", world.containsEntity(closeEnemy));
 	}
 }

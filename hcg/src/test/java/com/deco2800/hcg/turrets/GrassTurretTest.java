@@ -73,11 +73,4 @@ public class GrassTurretTest extends TurretBaseTest {
 		}
 		assertEquals("Exactly 18 grass bullets should have spawned in a storm", counter, 18);
 	}
-	
-	@Test
-	public void testSprite() {
-		setupNoWeather();
-		corpse.setThisTexture();
-		assertEquals("Sprite is incorrect", "grass_corpse", corpse.getTexture());
-	}
 }

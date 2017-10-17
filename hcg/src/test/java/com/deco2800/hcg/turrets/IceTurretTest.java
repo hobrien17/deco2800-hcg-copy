@@ -100,18 +100,4 @@ public class IceTurretTest extends TurretBaseTest {
 		assertEquals("The enemy should be slower than normal", 0.5f, enemy.getMovementSpeed(), 0);
 		assertEquals("The second enemy should be slower than normal", 0.5f, farEnemy.getMovementSpeed(), 0);
 	}
-	
-	@Test
-	public void testSprite() {
-		setupNoWeather();
-		turret.update(sw, 0);
-		assertEquals("Sprite is incorrect", "ice_corpse_01", corpse.getTexture());
-		System.out.println(corpse.getTexture());
-		turret.update(sw, 1);
-		turret.update(sw, 2);
-		turret.update(sw, 3);
-		assertEquals("Sprite is incorrect", "ice_corpse_02", corpse.getTexture());
-		turret.update(sw, 4);
-		assertEquals("Sprite is incorrect", "ice_corpse_03", corpse.getTexture());
-	}
 }

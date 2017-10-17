@@ -41,7 +41,6 @@ public class SunflowerTurret extends AbstractTurret {
 		super(master, "Sunflower");
 		rand = new Random();
 		if(GameManager.get().getWorld().getWeatherType().equals(Weathers.WIND)) {
-			System.out.println("wind");
 			ammo = REDUCED_AMMO;
 		} else if(GameManager.get().getWorld().getWeatherType().equals(Weathers.STORM)) {
 			ammo = INCREASED_AMMO;
@@ -85,7 +84,6 @@ public class SunflowerTurret extends AbstractTurret {
 
 	@Override
 	public String getThisTexture() {
-		// TODO Auto-generated method stub
 		return "sunflower_corpse";
 	}
 
