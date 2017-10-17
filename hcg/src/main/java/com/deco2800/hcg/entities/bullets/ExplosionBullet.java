@@ -11,8 +11,6 @@ import com.deco2800.hcg.util.WorldUtil;
 /**
  * Explosion bullet
  * Deals a set amount of damage to all enemies in a specific radius
- *
- * EXPLOOOOSION
  * 
  * @author Yuki Nakazawa
  *

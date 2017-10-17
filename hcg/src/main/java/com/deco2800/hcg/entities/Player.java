@@ -28,6 +28,7 @@ import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -37,7 +38,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
@@ -71,6 +71,9 @@ public class Player extends Character implements Tickable {
 	private float lastSpeedX;
 	private float lastSpeedY;
 
+	private int lastMouseX = 0;
+	private int lastMouseY = 0;
+	
 	// List containing skills that can be specialised in
 	private List<String> SPECIALISED_SKILLS = Arrays.asList("meleeSkill", "gunsSkill", "energyWeaponsSkill");
 
@@ -318,6 +321,8 @@ public class Player extends Character implements Tickable {
 			this.getEquippedWeapon().updateAim(position);
 			this.getEquippedWeapon().openFire();
 		}
+		lastMouseX = screenX;
+        lastMouseY = screenY;
 	}
 
 	/**
@@ -331,12 +336,18 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleTouchDragged(int screenX, int screenY, int pointer) {
-		if (this.getEquippedWeapon() != null) {
+	    if (this.getEquippedWeapon() != null) {
+    	  try {
+    	    // to fix player test, since we don't want to initiallise a camera
+    	    // for that because we don't need it.
 			Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
 			this.getEquippedWeapon().updateAim(position);
 			// TODO: remove
 			this.getEquippedWeapon().updatePosition(position.x, position.y);
+    	  } catch (Exception e) {LOGGER.error(String.valueOf(e));}
 		}
+		lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -355,6 +366,8 @@ public class Player extends Character implements Tickable {
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().ceaseFire();
 		}
+	    lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -371,6 +384,8 @@ public class Player extends Character implements Tickable {
 			// TODO: remove
 			this.getEquippedWeapon().updatePosition(position.x, position.y);
 		}
+	    lastMouseX = screenX;
+	    lastMouseY = screenY;
 	}
 
 	/**
@@ -430,11 +445,13 @@ public class Player extends Character implements Tickable {
 	private void NPCInteraction(AbstractEntity npc) {
 		if (npc instanceof QuestNPC) {
 			((QuestNPC) npc).interact();
+			this.ceaseMovement();
 			LOGGER.info("Quest NPC Interaction Started");
 			;
 		} else if (npc instanceof ShopNPC) {
 			LOGGER.info("Shop NPC Interaction Started");
 			((ShopNPC) npc).interact();
+			this.ceaseMovement();
 		} else {
 			LOGGER.info("Other NPC Interaction Started");
 		}
@@ -505,9 +522,19 @@ public class Player extends Character implements Tickable {
 
 			// if current tile is a gateway, load new map
 			if (layer.getProperties().get("newMap") != null) {
-				GameManager.get().setWorld(new World((String) layer.getProperties().get("newMap")));
+                // create new world
+				System.out.print((String) layer.getProperties().get("newMap"));
+				World newWorld = new World("resources/maps/maps/" +(String) layer.getProperties().get("newMap"));
+				
+				// add the new weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                  setWeather(newWorld.getWeatherType());
+                
+				GameManager.get().setWorld(newWorld);
 				playerManager.spawnPlayers();
+				updateCamera();
 				this.setPosition(oldPosX, oldPosY, 1);
+				
 			}
 
 			// see if current tile is slippery. Save the slippery value if it is
@@ -548,6 +575,8 @@ public class Player extends Character implements Tickable {
 		}
 		if (!collided) {
 			this.setPosition(newPos.getX(), newPos.getY(), 1);
+			// update gun's firing position if we moved
+			handleTouchDragged(lastMouseX, lastMouseY, 0);
 		}
 
 		checkXp();
@@ -598,6 +627,16 @@ public class Player extends Character implements Tickable {
 		// change box coords
 		newPos.setX(this.getPosX() + lastSpeedX);
 		newPos.setY(this.getPosY() + lastSpeedY);
+	}
+
+	/**
+	 *  Cease player movement. Used for stopping movement for context witching
+	 */
+	public void ceaseMovement() {
+		movementDirection.put("up", false);
+		movementDirection.put("down", false);
+		movementDirection.put("left", false);
+		movementDirection.put("right", false);
 	}
 
 	/**
@@ -653,7 +692,7 @@ public class Player extends Character implements Tickable {
 			speedX = 0;
 			speedY = 0;
 			move = 0;
-			soundStop(name);
+			soundManager.stopAll();
 			this.contextManager.pushContext(new DeathContext());
 			healthCur = healthMax;
 		}
@@ -743,7 +782,7 @@ public class Player extends Character implements Tickable {
 	private void handleKeyDown(int keycode) {
 
 		switch (keycode) {
-		case Input.Keys.T:
+		case Input.Keys.X:
 			this.getEquippedWeapon().switchBullet();
 			break;
 		case Input.Keys.P:
@@ -795,16 +834,8 @@ public class Player extends Character implements Tickable {
 			LOGGER.info("Access player inventory");
 			contextManager.pushContext(new PlayerInventoryContext(this));
 			break;
-		case Input.Keys.U:
-			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
-					Pot.class);
-			if (closest.isPresent()) {
-				Pot pot = (Pot) closest.get();
-				pot.unlock();
-			}
-			break;
 		case Input.Keys.L:
-			closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
+			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
 					Pot.class);
 			if (closest.isPresent()) {
 				Pot pot = (Pot) closest.get();
