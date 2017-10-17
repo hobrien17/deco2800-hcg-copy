@@ -144,12 +144,18 @@ public class QuestReader {
     }
 
     private HashMap<Integer,HashMap<Integer, Integer>> parseKillReqMap(String title, JsonObject krmMap) {
+        GameManager gameManager = GameManager.get();
+
         HashMap<Integer,HashMap<Integer, Integer>> returnKRM = new HashMap<>();
         HashMap<Integer, Integer> killCount;
 
         if (krmMap.entrySet().size() > 0) {
             for (Map.Entry node: krmMap.entrySet()) {
-                //Todo - For each node check it is a valid node - Note assumed numeric, change as needed
+                //Check for valid world node
+                if (!gameManager.getWorldMap().getContainedNodes().contains(node)) {
+                    throw new ResourceLoadException("Can't add invalid worlds node.")
+                }
+                
                 //Make sure there are no duplicate nodes IDs
                 if (returnKRM.containsKey(node.getKey())) {
                     throw new ResourceLoadException("Can't add the same key (" +
