@@ -110,7 +110,7 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
-        networkManager.tick(); // It's important that this is called before fireTicks()
+        networkManager.tick();
         fireTicks();
         clearScreen();
         super.render(); // Will render current context
@@ -139,7 +139,9 @@ public class Hardcor3Gard3ning extends Game {
      */
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
-        	if (! contextManager.ticksRunning()) {
+        	if (networkManager.shouldBlock()) {
+        		return;
+        	} else if (!contextManager.ticksRunning()) {
         		// Schedule next tick
         		nextGameTick += gameTickPeriod;
         		return;

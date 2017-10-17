@@ -9,7 +9,6 @@ import com.deco2800.hcg.entities.garden_entities.plants.*;
 import com.deco2800.hcg.entities.turrets.*;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.StackableItem;
-import com.deco2800.hcg.managers.GameManager;
 
 public class Seed extends StackableItem {
 
