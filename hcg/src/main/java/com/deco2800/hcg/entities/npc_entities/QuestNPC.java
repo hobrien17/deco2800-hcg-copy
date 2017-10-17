@@ -42,6 +42,7 @@ public class QuestNPC extends NPC {
 			.getManager(PlayerManager.class);
 
 	private String relationship;
+	private String conversation;
 
 	/**
 	 * Constructs a new Quest NPC
@@ -59,7 +60,7 @@ public class QuestNPC extends NPC {
 	 */
 	public QuestNPC(float posX, float posY, String fName, String sName,
 			String texture, String conversation, String faceImage) {
-		super(posX, posY, fName, sName, texture, conversation, faceImage);
+		super(posX, posY, fName, sName, texture, faceImage);
 
 		this.startX = posX;
 		this.startY = posY;
@@ -67,9 +68,19 @@ public class QuestNPC extends NPC {
 		this.boundaryY = 10;
 		this.moveDirection = 0;
 		this.speed = 0.02f;
-		this.relationship = conversationManager.getDefaultRelationship(this.getConversation());
+		this.conversation = conversation;
+		this.relationship = conversationManager.getDefaultRelationship(conversation);
+
 
 		this.setGoal(posX, posY);
+	}
+
+	public String getConversation(){
+		return conversation;
+	}
+
+	public void setConversation(String convo){
+		this.conversation = convo;
 	}
 
 	public void interact() {

@@ -23,7 +23,7 @@ public class ShopNPC extends NPC {
 	 * @param sName last name of NPC
 	 * @param texture texture of NPC
 	 */
-	public ShopNPC(float posX, float posY, String fName, String sName, String texture, String conversation, String faceImage) {
+	public ShopNPC(float posX, float posY, String fName, String sName, String texture, String faceImage) {
 		super(posX, posY, fName, sName, texture, null, faceImage);
 		switch(sName) {
 			case "George":
