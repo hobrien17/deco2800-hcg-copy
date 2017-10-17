@@ -38,7 +38,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 	protected int distanceTravelled;
 
-	//private SoundManager soundManager;
+	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 	//private ParticleEffectActor particleEffectActor;
