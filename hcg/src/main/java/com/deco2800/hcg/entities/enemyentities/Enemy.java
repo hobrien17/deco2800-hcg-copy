@@ -45,13 +45,15 @@ public abstract class Enemy extends Character implements Lootable {
     protected boolean collidedPlayer;
     protected Box3D newPos;
     protected int direction;
+    protected boolean boss;
+
+    private Player target;
 
     //Multiple players
     private int numPlayers;
     private Player closestPlayer;
 
     protected Box3D prevPos;
-    protected boolean boss;
     protected Weapon enemyWeapon;
 
     /**
@@ -96,6 +98,7 @@ public abstract class Enemy extends Character implements Lootable {
         this.setCollidedPlayer(false);
         this.newPos = getBox3D();
         this.prevPos = getBox3D();
+        this.target = null;
 
         // Effects container
         myEffects = new Effects(this);
@@ -173,14 +176,31 @@ public abstract class Enemy extends Character implements Lootable {
     public boolean getPlayerCollided(){
         return this.collidedPlayer;
     }
-    
+
+    /**
+     * Set player target for the enemy
+     * @param target
+     */
+    public void setTarget(Player target){
+        this.target = target;
+    }
+
+    /**
+     * Return player target for the enemy
+     * @return
+     */
+    public Player getTarget(){
+        return this.target;
+    }
+
+
     /**
      * Attack the player
      *
      */
     public void causeDamage(Player player) {
         //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
-        player.takeDamage(1);
+        player.takeDamage(10);
     }
 
     @Override
@@ -503,7 +523,8 @@ public abstract class Enemy extends Character implements Lootable {
         for (AbstractEntity entity : entities) {
             if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
                 if(entity instanceof Player) {
-                    this.causeDamage((Player)entity);
+                    //this.causeDamage((Player)entity);
+                    this.setTarget((Player)entity);
                     this.setCollidedPlayer(true);
                 }
                 this.setCollided(true);

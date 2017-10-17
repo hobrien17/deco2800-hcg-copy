@@ -13,6 +13,8 @@ public class Hedgehog extends Enemy implements Tickable {
     int walkingRange;
     int chargingRange;
     boolean chargedAtPlayer;
+    private int counter;
+    private int delay;
 
     private static final String HEDGEHOG = "hedgehog";
 
@@ -36,6 +38,8 @@ public class Hedgehog extends Enemy implements Tickable {
         newPos.setX(posX);
         newPos.setY(posY);
         newPos.setZ(posZ);
+        this.delay = 20;
+        this.counter = 20;
         this.enemyWeapon = new WeaponBuilder()
                 .setWeaponType(WeaponType.MACHINEGUN)
                 .setUser(this)
@@ -150,6 +154,12 @@ public class Hedgehog extends Enemy implements Tickable {
     	if (this.collidedPlayer) {
     		this.setChargeStatus(true);
     	}
+        if (this.counter < this.delay) {
+            this.counter++;
+        } else if (this.collidedPlayer) {
+            this.causeDamage(this.getTarget());
+            this.counter = 0;
+        }
     	this.moveAction();//Move enemy to the position in Box3D.
     	myEffects.apply();
     }
