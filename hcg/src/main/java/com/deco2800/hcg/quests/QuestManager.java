@@ -15,15 +15,15 @@ public class QuestManager {
     public void loadAllQuests() {
         HashMap<String,Quest> tmpQ = new HashMap<>();
         QuestReader qr = new QuestReader();
-        tmpQ = qr.loadAllQuests();
-
+        quests = qr.loadAllQuests();
     }
 
     public void loadQuest(String fp) {
-        HashMap<String,Quest> tmpQ = new HashMap<>();
         QuestReader qr = new QuestReader();
-        qr.loadQuest(fp);
-
+        Quest tmpQ = qr.loadQuest(fp);
+        if (quests.containsKey(tmpQ.getTitle())) {
+            throw new ResourceLoadException("Quest (" + tmpQ.getTitle() + ") already added from fp (" + fp + ")");
+        }
     }
 
 

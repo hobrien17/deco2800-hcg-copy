@@ -3,7 +3,7 @@ package com.deco2800.hcg.quests;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ResourceLoadException;
 import com.deco2800.hcg.managers.ItemManager;
-import com.deco2800.hcg.managers.GameManager
+import com.deco2800.hcg.managers.GameManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
