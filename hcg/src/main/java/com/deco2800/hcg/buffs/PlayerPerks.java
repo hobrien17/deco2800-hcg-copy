@@ -17,7 +17,7 @@ public class PlayerPerks {
      * Prevents runtime errors as enum can be used to obtain instance of Perk from PlayerPerks class instead of
      * typing in a string name.
      */
-    public enum perk {
+    public enum Perks {
         I_AM_GROOT("I am groot", 1, 2),
         SPLINTER_IS_COMING("Splinter is coming", 2, 3),
         FULL_PETAL_ALCHEMIST("Full-Petal Alchemist", 5, 1),
@@ -35,7 +35,7 @@ public class PlayerPerks {
         private final String name;
         private final int levelRequirement, maxLevel;
 
-        perk(String name, int levelRequirement, int maxLevel) {
+        Perks(String name, int levelRequirement, int maxLevel) {
             this.name = name;
             this.levelRequirement = levelRequirement;
             this.maxLevel = maxLevel;
@@ -61,14 +61,14 @@ public class PlayerPerks {
      */
     private class Perk {
         private String name;
-        private perk enumPerk;
+        private Perks enumPerk;
         private int levelRequired;
         private int currentLevel;
         private int maxLevel;
         private boolean unlocked;
         private boolean maxed;
 
-        private Perk(perk enumPerk) {
+        private Perk(Perks enumPerk) {
             this.enumPerk = enumPerk;
             this.name = enumPerk.getName();
             this.levelRequired = enumPerk.getLevelRequirement();
@@ -124,7 +124,7 @@ public class PlayerPerks {
         this.player = playerManager.getPlayer();
         perks = new ArrayList<>();
 
-        for (perk enumPerk : perk.values()) {
+        for (Perks enumPerk : Perks.values()) {
             perks.add(new Perk(enumPerk));
         }
     }
@@ -134,7 +134,7 @@ public class PlayerPerks {
      * @param enumPerk
      * @return a vald instance of perk
      */
-    public Perk getPerk(perk enumPerk) {
+    public Perk getPerk(Perks enumPerk) {
         for (Perk playerPerk : perks) {
             if (playerPerk.enumPerk == enumPerk) {
                 return playerPerk;
