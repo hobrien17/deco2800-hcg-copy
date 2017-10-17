@@ -8,9 +8,7 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
-import com.deco2800.hcg.items.tools.Trowel;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import org.slf4j.Logger;
@@ -29,10 +27,8 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
-import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
-import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.util.Box3D;
@@ -44,7 +40,6 @@ import com.deco2800.hcg.worlds.World;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
-import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 
 /**
  * Entity for the playable character.
