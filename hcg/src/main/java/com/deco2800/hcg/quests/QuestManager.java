@@ -3,6 +3,7 @@ package com.deco2800.hcg.quests;
 import com.deco2800.hcg.conversation.GiveItemsAction;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.Manager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -91,15 +92,28 @@ public class QuestManager extends Manager {
     public HashMap<QuestNPC,Quest> getUnCompleteableQuests() {
         HashMap<QuestNPC,Quest> unCompleteableLog = new HashMap<>();
         for (Map.Entry<QuestNPC,Quest> entry: questLog.entrySet()) {
-            if (!canQuestBeCompleted(entry.getValue())) {
+            if (!canQuestBeCompleted(entry.getKey())) {
                 unCompleteableLog.put(entry.getKey(),entry.getValue());
             }
         }
         return unCompleteableLog;
     }
 
-    private boolean canQuestBeCompleted(Quest q) {
-        
+    private boolean canQuestBeCompleted(QuestNPC npc) {
+        //Get the quest
+        Quest q = questLog.get(npc);
+
+        //This can be done by storing the kill log when the quest is first activated to check the difference
+        //TODO check the kill log requirement
+
+
+        //Todo check the inventory requirement
+        int counter = 0; //To keep track of amount of each item
+        for (Map.Entry entry: q.getItemRequirement().entrySet()) {
+            Inventory inv = playerManager.getPlayer().getInventory();
+
+        }
+
 
 
 
