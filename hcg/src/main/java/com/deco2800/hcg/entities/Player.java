@@ -44,7 +44,6 @@ public class Player extends Character implements Tickable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
 	// string to contain filepath for character's HUD display
-	private String displayImage;
 
 	private GameManager gameManager;
 	private SoundManager soundManager;
@@ -62,16 +61,16 @@ public class Player extends Character implements Tickable {
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
-	private ArrayList<Perk> perks;
-
+	private String displayImage;
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
 	
 	// List containing skills that can be specialised in
 	private List<String> SPECIALISED_SKILLS = Arrays.asList("meleeSkill", "gunsSkill", "energyWeaponsSkill");
 
-	// Specialised skills map
+	// Specialised skills map and perks array
 	private Map<String, Boolean> specialisedSkills;
+	private ArrayList<Perk> perks;
 
 	// Records the current frame number for player's move animation
 	private int spriteFrame;
@@ -197,6 +196,23 @@ public class Player extends Character implements Tickable {
 	public Player(float posX, float posY, float posZ) {
 		// 0 is local player
 		this(0, posX, posY, posZ);
+	}
+
+	/**
+	 * Method to return a  set Perk  from the perks array, based on its associated enum value.
+	 *
+	 * @param enumPerk
+	 * 				is one of the enum values in the Perk.perk enum.
+	 *
+	 * @return the Perk class instance associated to that enum
+	 */
+	public Perk getPerk(Perk.perk enumPerk) {
+		for (Perk playerPerk: perks) {
+			if (playerPerk.getEnumPerk() == enumPerk){
+				return playerPerk;
+			}
+		}
+		return null;
 	}
 
 	/**
