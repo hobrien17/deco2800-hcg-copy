@@ -73,9 +73,13 @@ public class LootWrapper {
 		System.out.println("eq");
 		if(o instanceof LootWrapper) {
 			LootWrapper wrapper = (LootWrapper)o;
-			System.out.println(getName());
 			return wrapper.getName().equals(this.getName());
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
 	}
 }
