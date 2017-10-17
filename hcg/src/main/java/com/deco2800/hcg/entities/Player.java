@@ -70,6 +70,7 @@ public class Player extends Character implements Tickable {
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
+	private long lastTick = 0;
 
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
@@ -124,9 +125,6 @@ public class Player extends Character implements Tickable {
 		this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
 		this.conversationManager = new ConversationManager();
-
-		this.stopwatchManager = (StopwatchManager) gameManager.get().getManager(StopwatchManager.class);
-		this.stopwatchManager.resetStopwatch();
 
 		this.id = id;
 		if (id == 0) {
@@ -577,6 +575,27 @@ public class Player extends Character implements Tickable {
 			// update gun's firing position if we moved
 			handleTouchDragged(lastMouseX, lastMouseY, 0);
 		}
+		
+		//update walking animation
+		if(gameTickCount - lastTick >= 5) {
+			StringBuilder spriteName = new StringBuilder("player_");
+			spriteName.append(direction);
+			if (this.speedX == 0 && this.speedY == 0) {
+				// Player is not moving
+				spriteName.append("_stand");
+			} else {
+				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
+					spriteName.append("_stand");
+				} else if (this.spriteFrame == 1) {
+					spriteName.append("_move1");
+				} else if (this.spriteFrame == 3) {
+					spriteName.append("_move2");
+				}
+				this.spriteFrame = ++this.spriteFrame % 4;
+			}
+			this.setTexture(spriteName.toString());
+			lastTick = gameTickCount;
+		}
 
 		checkXp();
 		this.checkDeath();
@@ -657,7 +676,6 @@ public class Player extends Character implements Tickable {
 					exitMessageDisplayed = true;
 				}
 		default:
-			updateSprite(this.direction);
 			onExit = false;
 			break;
 		}
@@ -935,40 +953,6 @@ public class Player extends Character implements Tickable {
 			move = 1;
 			this.direction = 3;
 		}
-	}
-
-	/**
-	 * Updates the player's sprite based on its direction.
-	 * 
-	 * @param direction
-	 *            Direction the player is facing. Integer between 0 and 3.
-	 */
-	private void updateSprite(int direction) {
-		StringBuilder spriteName = new StringBuilder("player_");
-		spriteName.append(direction);
-		if (this.speedX == 0 && this.speedY == 0) {
-			// Player is not moving
-            this.stopwatchManager.resetStopwatch();
-			spriteName.append("_stand");
-		} else {
-			// Player is moving
-			if (this.stopwatchManager.getStatus()) {
-				this.stopwatchManager.resetStopwatch();
-				this.stopwatchManager.startTimerFloat(0.02f / this.movementSpeed);
-
-				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
-					spriteName.append("_stand");
-				} else if (this.spriteFrame == 1) {
-					spriteName.append("_move1");
-				} else if (this.spriteFrame == 3) {
-					spriteName.append("_move2");
-				}
-				this.spriteFrame = ++this.spriteFrame % 4;
-			} else {
-				return;
-			}
-		}
-		this.setTexture(spriteName.toString());
 	}
 
 	/**

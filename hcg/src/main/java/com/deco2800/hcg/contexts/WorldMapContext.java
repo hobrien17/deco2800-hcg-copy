@@ -80,10 +80,12 @@ public class WorldMapContext extends UIContext {
 		Button quitButton = new TextButton("Quit", skin);
 		Button discoveredButton = new TextButton("Show all nodes", skin);
 		Button demoButton = new TextButton("Safehaven", skin);
+		Button testButton = new TextButton("UI Test", skin);
 
 		window.add(quitButton);
 		window.add(discoveredButton);
 		window.add(demoButton);
+		window.add(testButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight());
@@ -136,6 +138,19 @@ public class WorldMapContext extends UIContext {
 		demoButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				World world = World.SAFEZONE;
+				Level level = new Level(world, 0, 1, 1);
+				
+				gameManager.setWorld(world);
+
+				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
+				playerManager.spawnPlayers();
+				contextManager.pushContext(new PlayContext());
+			}
+		});
+
+		testButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				World world = new World("resources/maps/maps/grass_normal_01.tmx");
 				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
