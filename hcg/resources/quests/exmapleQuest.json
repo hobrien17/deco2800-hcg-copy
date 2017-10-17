@@ -1,0 +1,43 @@
+{
+  "title":"My Title",
+  
+"iReq": {
+
+    "Item_ID_1": 1,
+    
+"Item_ID_1": 2,
+    
+"Item_ID_1": 3
+  },
+  
+"kReq": {
+    
+"Node 1": {
+      "Enemy_ID_1": 1,
+
+      "Enemy_ID_2": 1,
+      "Enemy_ID_3": 1,
+      },
+    
+"Node 2": {
+      
+"Enemy_ID_1": 1,
+      "Enemy_ID_2": 1,
+      "Enemy_ID_3": 1
+      },
+    "Node 3": {
+
+        "Enemy_ID_1": 1,
+        "Enemy_ID_2": 1,
+        
+"Enemy_ID_3": 1}
+    
+},
+  },    
+  "rewards": {
+    "Item_ID_1": 1,
+    "Item_ID_1": 2,
+    "Item_ID_1": 3
+  },
+  "optDesc": ""
+}
