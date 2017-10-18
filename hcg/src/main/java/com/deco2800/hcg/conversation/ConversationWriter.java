@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class ConversationWriter {
 
+	private ConversationWriter() {} // This should never be instantiated
+
 	// Save a Conversation to a file
 	public static void writeConversation(Conversation conversation,
 			String filename) throws IOException {
@@ -90,7 +92,7 @@ public class ConversationWriter {
 		if (index == -1) {
 			return new JsonNull();
 		} else {
-			return new JsonPrimitive(""+index);
+			return new JsonPrimitive(Integer.toString(index));
 		}
 	}
 }

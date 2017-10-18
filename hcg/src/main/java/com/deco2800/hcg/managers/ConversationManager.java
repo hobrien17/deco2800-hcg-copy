@@ -80,10 +80,10 @@ public class ConversationManager extends Manager {
 
     /**
      * Get the default relationship string for a particular Conversation
-     * @param ConversationName The name of the conversation
+     * @param conversationName The name of the conversation
      * @return Default relationship status
      */
-    public String getDefaultRelationship(String ConversationName) {
-        return getConversation(ConversationName).getInitialRelationship();
+    public String getDefaultRelationship(String conversationName) {
+        return getConversation(conversationName).getInitialRelationship();
     }
 }
