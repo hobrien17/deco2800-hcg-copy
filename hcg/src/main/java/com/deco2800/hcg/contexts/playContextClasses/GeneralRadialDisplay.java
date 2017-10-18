@@ -37,7 +37,9 @@ public class GeneralRadialDisplay extends Group {
     private TextureManager textureManager;
     private GameManager gameManager;
     private SoundManager soundManager;
+
     private Weapon weapon;
+    private WeaponType weaponType;
     private boolean active;
     private Player player;
     private BulletType bulletType;
@@ -78,9 +80,11 @@ public class GeneralRadialDisplay extends Group {
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         this.stage = stage;
-		this.active = false;
+
+        this.active = false;
 		this.player = player;
 		this.weapon = weapon;
+		this.weaponType = weaponType;
 		this.bulletType = BulletType.BASIC;
 		this.healthPotion = healthPotion;
 		
@@ -208,9 +212,9 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("sunflowerC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				bulletType = BulletType.BASIC;
-				weapon.setBulletType(bulletType);
-				weapon.switchBullet();
+				//bulletType = BulletType.BASIC;
+				//weapon.setBulletType(bulletType);
+				//weapon.switchBullet();
 				display.remove();
 			}
 		});
@@ -218,9 +222,9 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("waterC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				bulletType = BulletType.BASIC;
-				weapon.setBulletType(bulletType);
-				weapon.switchBullet();
+				//bulletType = BulletType.BASIC;
+				//weapon.setBulletType(bulletType);
+				//weapon.switchBullet();
 				display.remove();
 			}
 		});
@@ -228,9 +232,9 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("iceC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				bulletType = BulletType.ICE;
-				weapon.setBulletType(bulletType);
-				weapon.switchBullet();
+				//bulletType = BulletType.ICE;
+				//weapon.setBulletType(bulletType);
+				//weapon.switchBullet();
 				display.remove();
 			}
 		});
@@ -238,9 +242,9 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("fireC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				bulletType = BulletType.FIRE;
-				weapon.setBulletType(bulletType);
-				weapon.switchBullet();
+				//bulletType = BulletType.FIRE;
+				//weapon.setBulletType(bulletType);
+				//weapon.switchBullet();
 				display.remove();
 			}
 		});
@@ -248,9 +252,9 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("explosiveC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				bulletType = BulletType.EXPLOSION;
-				weapon.setBulletType(bulletType);
-				weapon.switchBullet();
+				//bulletType = BulletType.EXPLOSION;
+				//weapon.setBulletType(bulletType);
+				//weapon.switchBullet();
 				display.remove();
 			}
 		});
@@ -258,9 +262,9 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("grassC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				bulletType = BulletType.BASIC;
-				weapon.setBulletType(bulletType);
-				weapon.switchBullet();
+				//bulletType = BulletType.BASIC;
+				//weapon.setBulletType(bulletType);
+				//weapon.switchBullet();
 				display.remove();
 			}
 		});
@@ -268,7 +272,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("grenadeLauncher", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
+				//weaponType = weaponType.GRENADELAUNCHER;
 				display.remove();
 			}
 		});
@@ -276,7 +280,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("machineGun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
+				//weaponType = weaponType.MACHINEGUN;
 				display.remove();
 			}
 		});
@@ -284,7 +288,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("shotgun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
+				//weaponType = weaponType.SHOTGUN;
 				display.remove();
 			}
 		});
@@ -292,7 +296,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("starfall", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
+				//weaponType = weaponType.STARFALL;
 				display.remove();
 			}
 		});
@@ -313,10 +317,10 @@ public class GeneralRadialDisplay extends Group {
 			}
 		});
 
-		listeners.put("healthPotion", new ChangeListener() {
+		listeners.put("Health Potion", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				healthPotion.consume(player);
+				//healthPotion.consume(player);
 				display.remove();
 			}
 		});
@@ -461,22 +465,22 @@ public class GeneralRadialDisplay extends Group {
 	}
 
 	//public void updateCount(Item item) {
-	//	int itemCount = 0;
-	//	for(int i = 0; i < inventory.getNumItems(); i++) {
-	//		if(inventory.getItem(i) instanceof item) {
-	//			keyCount += inventory.getItem(i).getStackSize();
-	//		}
-	//	}
-	//	infoLbl.setText(String.format("%d", seedCount));
-//
-//		if(keyCount > 0) {
-//			titleLbl.setText("Open pot by using key?");
-//			this.getTitleLabel().setText("Open pot?");
-//			conf.setVisible(true);
-//		} else {
-//			titleLbl.setText("No keys in inventory!");
-//			this.getTitleLabel().setText("No keys!");
-//			conf.setVisible(false);
-//		}
-	//}
+		//int itemCount = 0;
+		//for(int i = 0; i < inventory.getNumItems(); i++) {
+			//if(inventory.getItem(i) instanceof item) {
+				//itemCount += inventory.getItem(i).getStackSize();
+			//}
+		//}
+		//infoLbl.setText(String.format("%d", itemCount));
+
+		//if(keyCount > 0) {
+			//titleLbl.setText("Open pot by using key?");
+			//this.getTitleLabel().setText("Open pot?");
+			//conf.setVisible(true);
+		//} else {
+			//titleLbl.setText("No keys in inventory!");
+			//this.getTitleLabel().setText("No keys!");
+			//conf.setVisible(false);
+		//}
+    //}
 }
