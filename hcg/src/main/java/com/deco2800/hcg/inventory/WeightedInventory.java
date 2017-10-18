@@ -271,4 +271,19 @@ public class WeightedInventory implements Inventory {
 
 		return builder.toString();
 	}
+
+	@Override
+	public int numberOf(String itemName) {
+		int total = 0;
+		for (int i = 0; i < items.size(); i++) {
+			if (items.get(i).getName() == itemName) {
+				if (items.get(i).isStackable()) {
+					total += items.get(i).getStackSize();
+				} else {
+					total++;
+				}
+			}
+		}
+		return total;
+	}
 }
