@@ -64,6 +64,10 @@ public class LootWrapper {
 		return item;
 	}
 	
+	public void modAmount(float mod) {
+		amount *= mod;
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		System.out.println("eq");

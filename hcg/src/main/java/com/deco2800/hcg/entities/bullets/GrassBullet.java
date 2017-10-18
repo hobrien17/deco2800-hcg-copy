@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities.bullets;
 
-import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;

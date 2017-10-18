@@ -5,10 +5,10 @@
   <property name="PlayerY" value="118"/>
   <property name="weather" value="wind"/>
  </properties>
- <tileset firstgid="1" source="../tiles/misc1.tsx"/>
- <tileset firstgid="7" source="../tiles/wateranimated.tsx"/>
+ <tileset firstgid="1" source="../tiles/deprecated/misc1.tsx"/>
+ <tileset firstgid="7" source="../tiles/any_water_animated.tsx"/>
  <tileset firstgid="11" source="../tiles/exit.tsx"/>
- <tileset firstgid="12" source="../tiles/placeholder.tsx"/>
+ <tileset firstgid="12" source="../tiles/deprecated/placeholder.tsx"/>
  <tileset firstgid="14" source="../tiles/health.tsx"/>
  <layer name="Ground" width="300" height="300">
   <properties>

@@ -51,7 +51,7 @@ public class World {
 	//Store Collisions
 	protected Array2D<List<AbstractEntity>> collisionMap;
 	
-	public final static World SAFEZONE = new World("resources/maps/maps/grass_safeZone_02.tmx");
+	public static final World SAFEZONE = new World("resources/maps/maps/grass_safeZone_02.tmx");
 
 	/**
 	 * Empty abstract world, for testing
@@ -190,8 +190,7 @@ public class World {
 
 					// otherwise, our entity is definately in our enum! so call
 					// in the spawn method
-					this.addEntity(WorldEntities.valueOf(layerName).spawn(x, y,
-							i + 1));
+					this.addEntity(WorldEntities.valueOf(layerName).spawn(x, y));
 
 				}
 

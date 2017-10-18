@@ -4,7 +4,7 @@
   <property name="PlayerX" value="10"/>
   <property name="PlayerY" value="10"/>
  </properties>
- <tileset firstgid="1" source="../tiles/new-grass.tsx"/>
+ <tileset firstgid="1" source="../tiles/grass_base_tiles_2.tsx"/>
  <tileset firstgid="29" source="../tiles/invisible-tile.tsx"/>
  <tileset firstgid="30" source="../tiles/new-sludge.tsx"/>
  <tileset firstgid="58" source="../tiles/exit.tsx"/>

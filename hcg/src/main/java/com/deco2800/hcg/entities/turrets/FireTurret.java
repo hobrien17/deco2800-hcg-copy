@@ -68,8 +68,9 @@ public class FireTurret extends AbstractTurret {
 					GameManager.get().getWorld().removeEntity(entity);
 				}
 			}
+			o.deleteObserver(this);
 			GameManager.get().getWorld().removeEntity(master);
-		} else if (seconds > 0 && seconds < 5) {
+		} else if (seconds > 0) {
 			Fireball fire = new Fireball(master.getPosX(), master.getPosY(), master.getPosZ(), pos[seconds - 1][0],
 					pos[seconds - 1][1], master.getPosZ(), master);
 			GameManager.get().getWorld().addEntity(fire);

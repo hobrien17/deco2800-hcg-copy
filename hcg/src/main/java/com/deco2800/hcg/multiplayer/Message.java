@@ -18,7 +18,6 @@ public class Message {
 	
 	private int id;
 	private MessageType type;
-	private byte entries = 0; // FIXME Currently unused
 	
 	/**
 	 * Constructs an empty message
@@ -47,8 +46,6 @@ public class Message {
 		buffer.putInt(id);
 		// put type
 		buffer.put((byte) type.ordinal());
-		// put number of entries
-		buffer.put((byte) entries);
 	}
 	
 	/**
@@ -68,8 +65,6 @@ public class Message {
 			id = buffer.getInt();
 			// get type
 			type = MessageType.values()[buffer.get()];
-			// get number of entries
-			entries = buffer.get();
 		} catch (BufferUnderflowException|BufferOverflowException e) {
 			throw new MessageFormatException(e);
 		}
