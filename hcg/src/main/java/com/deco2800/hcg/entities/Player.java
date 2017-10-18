@@ -702,7 +702,11 @@ public class Player extends Character implements Tickable {
 			move = 0;
 			soundManager.stopAll();
 			this.contextManager.pushContext(new DeathContext());
-			healthCur = healthMax;
+			this.healthCur = healthMax;
+			this.movementDirection.put("up", false);
+			this.movementDirection.put("down", false);
+			this.movementDirection.put("left", false);
+			this.movementDirection.put("right", false);
 		}
 	}
 
@@ -821,6 +825,9 @@ public class Player extends Character implements Tickable {
 			break;
 		case Input.Keys.D:
 			movementDirection.put("right", true);
+			break;
+		case Input.Keys.Q:
+			this.contextManager.pushContext(new QuestMenuContext());
 			break;
 		case Input.Keys.E:
 			checkForInteraction();
