@@ -49,6 +49,7 @@ public abstract class Enemy extends Character implements Lootable {
     protected int direction;
     protected boolean boss;
     protected float defaultSpeed;
+    protected EnemyType enemyType;
     private Player target;
 
     //Multiple players
@@ -72,7 +73,7 @@ public abstract class Enemy extends Character implements Lootable {
      * @param id the enemy ID
      */
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
-                 int health, int strength, int id) {
+                 int health, int strength, int id, EnemyType enemyType) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         status = 1;
@@ -81,6 +82,7 @@ public abstract class Enemy extends Character implements Lootable {
         } else {
             throw new IllegalArgumentException();
         }
+        this.enemyType = enemyType;
         this.healthCur = health;
         this.attributes.put("strength", strength);
         this.attributes.put("vitality", 1);
@@ -752,5 +754,25 @@ public abstract class Enemy extends Character implements Lootable {
             this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
             this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
         }
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Enemy)) {
+            return false;
+        }
+        Enemy anotherEnemy = (Enemy) object;
+        if (this.id == anotherEnemy.id) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31; // an odd base prime
+        int result = 1; // the hash code under construction
+        result = prime * result + this.id;
+        return result;
     }
 }
