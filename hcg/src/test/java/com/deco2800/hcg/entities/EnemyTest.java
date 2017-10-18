@@ -110,10 +110,10 @@ public class EnemyTest {
         Player player = new Player(0, 0, 0);
         gameManager.getWorld().addEntity(player);
         playerManager.setPlayer(player);
-        //enemy.onTick(0);
-        //assertThat("Status was not status given", enemy.getStatus(), is(equalTo(2)));
-        //assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0.0f)));
-        //assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0.0f)));
+        enemy.onTick(0);
+        assertThat("Status was not status given", enemy.getStatus(), is(equalTo(2)));
+        assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0.0f)));
+        assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0.0f)));
     }
     
     @Test
