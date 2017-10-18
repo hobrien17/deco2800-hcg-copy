@@ -123,4 +123,15 @@ public class EnemyTest {
         Squirrel enemy2 = new Squirrel(5.0f,5.0f,0.0f, 0);
         assertTrue("The same enemies are not equal", enemy.equals(enemy2));
     }
+    
+    @Test
+    public void testBoss() {
+        assertFalse("IsBoss test failed", enemy.isBoss());
+    }
+    
+    @Test
+    public void testGetPlayerCollided() {
+        enemy.setCollidedPlayer(true);
+        assertThat("GetCollidedPlayer test failed", enemy.getPlayerCollided(), is(equalTo(true)));
+    }
 }
