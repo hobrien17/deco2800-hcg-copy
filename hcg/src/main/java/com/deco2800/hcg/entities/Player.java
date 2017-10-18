@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.deco2800.hcg.buffs.Perk;
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.bullets.Bullet;
@@ -21,11 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
@@ -42,6 +38,7 @@ import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
 
 import java.util.*;
+import java.util.List;
 
 /**
  * Entity for the playable character.
@@ -58,6 +55,7 @@ public class Player extends Character implements Tickable {
 	private SoundManager soundManager;
 	private ContextManager contextManager;
 	private PlayerInputManager playerInputManager;
+	private TextureManager textureManager;
 	private PlayerManager playerManager;
 	private ConversationManager conversationManager;
 	private StopwatchManager stopwatchManager;
@@ -124,6 +122,7 @@ public class Player extends Character implements Tickable {
 		this.conversationManager = new ConversationManager();
 		this.stopwatchManager = (StopwatchManager) gameManager.get().getManager(StopwatchManager.class);
 		this.stopwatchManager.resetStopwatch();
+		this.textureManager = (TextureManager) GameManager.get().getManager(TextureManager.class);
 
 		// Set up specialised skills map
 		this.specialisedSkills = new HashMap<String, Boolean>();
@@ -1142,18 +1141,20 @@ public class Player extends Character implements Tickable {
 	}
 	
 	private void createPauseWindow() {
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
-		pauseMenu = new Window("Pause", skin);
-		Button yesButton = new TextButton("Yes", skin);
-		yesButton.pad(5, 10, 5, 10);
-
-		/* Add a programmatic listener to the buttons */
-		yesButton.addListener(new ChangeListener() {
+		pauseMenu = new Table();
+		ImageButton quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
+		quit.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				//pop ALL the contexts
+				contextManager.popContext();
+				contextManager.popContext();
+				contextManager.popContext();
+				contextManager.popContext();
+				contextManager.popContext();
 			}
 		});
-		pauseMenu.add(yesButton);
+		pauseMenu.add(quit);
 		pauseMenu.pack();
 		//pauseMenu.setMovable(false); // So it doesn't fly around the screen
 		pauseMenu.setWidth(150);
