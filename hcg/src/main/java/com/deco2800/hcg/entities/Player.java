@@ -662,7 +662,7 @@ public class Player extends Character implements Tickable {
 			this.setTexture("hcg_character_sink");
 			break;
 		case "exit":
-			if (!onExit) {
+			if (this == playerManager.getPlayer() && !onExit) {
 					PlayContext play = (PlayContext) contextManager.currentContext();
 					play.addExitWindow();
 					onExit = true;

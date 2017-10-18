@@ -44,7 +44,7 @@ public class WorldManager extends Manager {
 	 *     The new node index.
 	 */
 	public void selectNode(int index) {
-		MapNode node = gameManager.getWorldMap().getContainedNodes().get(index);	
+		MapNode node = gameManager.getWorldMap().getContainedNodes().get(index);
 		gameManager.setOccupiedNode(node);
 		
 		/*
@@ -69,6 +69,28 @@ public class WorldManager extends Manager {
 		gameManager.setWorld(newWorld);
 		playerManager.spawnPlayers();
 		contextManager.pushContext(new PlayContext());
+	}
+	
+	/**
+	 * Ends the current level
+	 */
+	public void completeLevel() {
+        if(gameManager.getCurrentNode().getNodeType() != 3) {
+            gameManager.getCurrentNode().changeNodeType(2);
+            gameManager.getMapContext().updateMapDisplay();
+            contextManager.popContext();
+        } else {
+            gameManager.getCurrentNode().changeNodeType(2);
+            gameManager.getMapContext().updateMapDisplay();
+            gameManager.getMapContext().addEndOfContext();
+            contextManager.popContext();
+        }
+        // clear old observers (mushroom turret for example)
+        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager.deleteObservers();
+
+        // stop the old weather effects
+        ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
 	}
 	
 }
