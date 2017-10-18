@@ -18,7 +18,7 @@ public class WaitHostContext extends UIContext{
     private TextButton cancel;
     private Label waitHost;
 
-    public WaitHostContext() {
+    public WaitHostContext(int toggle) {
 
         GameManager gameManager = GameManager.get();
         ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
@@ -32,7 +32,12 @@ public class WaitHostContext extends UIContext{
         main.setBackground(new Image(textureManager.getTexture("multi_menu_background")).getDrawable());
         main.setDebug(false); //display lines for debugging
         cancel = new TextButton("cancel", skin);
-        waitHost = new Label("Waiting for host...", skin);
+        waitHost = new Label("", skin);
+        if (toggle == 1) {
+            waitHost.setText("Waiting for other players...");
+        } else if (toggle == 0) {
+            waitHost.setText("Waiting for Host...");
+        }
         waitHost.setSize(100, 50);
 
         main.row();
