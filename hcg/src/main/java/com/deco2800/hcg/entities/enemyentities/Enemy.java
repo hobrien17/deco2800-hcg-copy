@@ -646,26 +646,4 @@ public abstract class Enemy extends Character implements Lootable {
         this.detectCollision();
         this.moveAction();
     }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Enemy)) {
-            return false;
-        }
-        Enemy anotherEnemy = (Enemy) obj;
-        if (this.id == anotherEnemy.id) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        // We create a polynomial hash-code based on start, end and capacity
-        final int prime = 31; // an odd base prime
-        int result = 1; // the hash code under construction
-        result = prime * result + this.id;
-        return result;
-    }
 }
