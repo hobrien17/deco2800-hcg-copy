@@ -43,7 +43,7 @@ public class HomingBullet extends Bullet {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
 		this.user = user;
-		this.setTexture("battle_seed");
+		this.setTexture("battle_seed_white");
 		this.bulletType = BulletType.HOMING;
 	}
 
@@ -67,7 +67,7 @@ public class HomingBullet extends Bullet {
 	 */
 	public HomingBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
-		this.setTexture("battle_seed");
+		this.setTexture("battle_seed_white");
 		this.bulletType = BulletType.HOMING;
 	}
 

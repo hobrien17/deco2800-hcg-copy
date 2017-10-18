@@ -18,6 +18,7 @@ public class GrassBullet extends Bullet {
 	private float xd;
 	private float yd;
 	private AbstractEntity user;
+	private int numberOfSpawns = 2;
 
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
@@ -77,12 +78,15 @@ public class GrassBullet extends Bullet {
 	 */
 	@Override
 	protected void specialAbility() {
-		Bullet bulletLeft = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), this.xd, this.yd, this.user, 1);
-		Bullet bulletRight = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), this.xd, this.yd, this.user, 1);
-		bulletLeft.updateAngle(-80);
-		bulletRight.updateAngle(80);
-		GameManager.get().getWorld().addEntity(bulletLeft);
-		GameManager.get().getWorld().addEntity(bulletRight);
+		if (numberOfSpawns > 0) {
+			Bullet bulletLeft = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), this.xd, this.yd, this.user, 1);
+			Bullet bulletRight = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), this.xd, this.yd, this.user, 1);
+			bulletLeft.updateAngle(-80);
+			bulletRight.updateAngle(80);
+			GameManager.get().getWorld().addEntity(bulletLeft);
+			GameManager.get().getWorld().addEntity(bulletRight);
+		}
+		numberOfSpawns--;
 	}
 
 	protected void applyEffect(Harmable target) {
