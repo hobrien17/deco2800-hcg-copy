@@ -15,8 +15,7 @@ public class Hedgehog extends Enemy implements Tickable {
     boolean chargedAtPlayer;
     private int counter;
     private int delay;
-
-    private static final String HEDGEHOG = "hedgehog";
+    private int spriteCount;
 
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
@@ -30,7 +29,7 @@ public class Hedgehog extends Enemy implements Tickable {
     public Hedgehog(float posX, float posY, float posZ, int id) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
         this.boss = false;
-        this.setTexture(HEDGEHOG);
+        this.setTexture("hedgehogW1");
         this.level = 1;
         this.walkingRange = 30 * this.level;
         this.chargingRange = 10 * this.level;
@@ -87,21 +86,21 @@ public class Hedgehog extends Enemy implements Tickable {
             // move slowly to player
             this.setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.setTexture(HEDGEHOG);
+            this.updateStandingSprite();
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else if (!chargedAtPlayer && distance < chargingRange) {
             // charge at player
             this.setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.setTexture("hedgeball");
+            this.updateBallSprite();
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else {
             // move randomly
             this.setSpeed(this.level * 0.03f);
             this.setStatus(3);
-            this.setTexture(HEDGEHOG);
+            this.updateStandingSprite();
         }
     }
     
@@ -123,23 +122,98 @@ public class Hedgehog extends Enemy implements Tickable {
     		// move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.setTexture(HEDGEHOG);
+            this.updateStandingSprite();
             this.lastPlayerX = closestPlayer.getPosX();
             this.lastPlayerY = closestPlayer.getPosY();
     	} else if (!chargedAtPlayer && distance < chargingRange) {
             // charge at player
             setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.setTexture("hedgeball");
+            this.updateBallSprite();
             this.lastPlayerX = closestPlayer.getPosX();
             this.lastPlayerY = closestPlayer.getPosY();
         } else {
             // move randomly
             setSpeed(this.level * 0.03f);
             this.setStatus(3);
-            this.setTexture(HEDGEHOG);
+            this.updateStandingSprite();
         }
     	
+    }
+
+    public void updateBallSprite() {
+        if (spriteCount%4 == 0) {
+            switch (this.direction) {
+                case 1:
+                    if (this.getTexture() == "hedgeballWE1") {
+                        this.setTexture("hedgeballWE2");
+                    } else {
+                        this.setTexture("hedgeballWE1");
+                    }
+                    break;
+                case 2:
+                    if (this.getTexture() == "hedgeballNS1") {
+                        this.setTexture("hedgeballNS2");
+                    } else {
+                        this.setTexture("hedgeballNS1");
+                    }
+                    break;
+                case 3:
+                    if (this.getTexture() == "hedgeballWE1") {
+                        this.setTexture("hedgeballWE2");
+                    } else {
+                        this.setTexture("hedgeballWE1");
+                    }
+                    break;
+                case 4:
+                    if (this.getTexture() == "hedgeballNS1") {
+                        this.setTexture("hedgeballNS2");
+                    } else {
+                        this.setTexture("hedgeballNS1");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        spriteCount++;
+    }
+
+    public void updateStandingSprite() {
+        if (spriteCount%4 == 0) {
+            switch (this.direction) {
+                case 1:
+                    if (this.getTexture() == "hedgehogE1") {
+                        this.setTexture("hedgehogE2");
+                    } else {
+                        this.setTexture("hedgehogE1");
+                    }
+                case 2:
+                    if (this.getTexture() == "hedgehogN1") {
+                        this.setTexture("hedgehogN2");
+                    } else {
+                        this.setTexture("hedgehogN1");
+                    }
+                    break;
+                case 3:
+                    if (this.getTexture() == "hedgehogW1") {
+                        this.setTexture("hedgehogW2");
+                    } else {
+                        this.setTexture("hedgehogW1");
+                    }
+                    break;
+                case 4:
+                    if (this.getTexture() == "hedgehogS1") {
+                        this.setTexture("hedgehogS2");
+                    } else {
+                        this.setTexture("hedgehogS1");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        spriteCount++;
     }
     
     /**

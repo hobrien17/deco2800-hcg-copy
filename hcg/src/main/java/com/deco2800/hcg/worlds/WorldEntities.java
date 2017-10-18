@@ -42,18 +42,18 @@ public enum WorldEntities {
      * @param index - the index
      * @return the entity
      */
-    AbstractEntity spawn(float x, float y, int index) {
+    AbstractEntity spawn(float x, float y) {
         switch (this) {
             case WALL:
                 return new WallBlock(x, y, 0f);
             case TREE:
                 return new Tree(x, y, 0f, true);
             case SNAIL:
-                return new Snail(x, y, 0f, index);
+                return new Snail(x, y, 0f, 1);
             case SQUIRREL:
-                return new Squirrel(x, y, 0f, index);
+                return new Squirrel(x, y, 0f, 2);
             case HEDGEHOG:
-                return new Hedgehog(x, y, 0f, index);
+                return new Hedgehog(x, y, 0f, 3);
             case POT:
                 return new Pot(x, y, 0f);
             case UPOT:
@@ -61,7 +61,7 @@ public enum WorldEntities {
             	pot.unlock();
             	return pot;
             case MUSHROOMTURRET:
-                return new MushroomTurret(x, y, 0f, index);
+                return new MushroomTurret(x, y, 0f, 4);
             case CORPSE:
                 return new BasicCorpse(x, y, 0f);
             case ICETREE:
