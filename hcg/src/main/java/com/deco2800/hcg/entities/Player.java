@@ -19,6 +19,7 @@ import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.util.Box3D;
@@ -180,8 +181,9 @@ public class Player extends Character implements Tickable {
 		equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
 		equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
 
-		//REMOVE THIS - JUST ADDED FOR TESTING
+		//Add some default items
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new SpeedPotion());
 	}
 
 	/**
