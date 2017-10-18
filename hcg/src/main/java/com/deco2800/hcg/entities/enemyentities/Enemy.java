@@ -651,6 +651,10 @@ public abstract class Enemy extends Character implements Lootable {
         this.moveAction();
     }
 
+    /**
+     *  Logic for Squirrel
+     *
+     */
     void squrrel(){
         this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.5));
         this.defaultSpeed = this.getMovementSpeed();
@@ -713,6 +717,11 @@ public abstract class Enemy extends Character implements Lootable {
 
     }
 
+
+    /**
+     *  Logic for Tree
+     *
+     */
     void tree(){
         this.setMovementSpeed(0);
         this.defaultSpeed = 0;
@@ -731,14 +740,14 @@ public abstract class Enemy extends Character implements Lootable {
         } else if ((this.getHealthCur() < this.getHealthMax()*0.6) && (this.getHealthCur() > this.getHealthMax()*0.4)){
             //right
             this.setPosX(GameManager.get().getWorld().getWidth());
-            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5)));
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
         } else if ((this.getHealthCur() < this.getHealthMax()*0.4) && (this.getHealthCur() > this.getHealthMax()*0.2)){
             //top
             this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
             this.setPosY(GameManager.get().getWorld().getLength());
         } else {
             //middle
-            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5)));
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
             this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
         }
     }
