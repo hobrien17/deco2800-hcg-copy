@@ -20,7 +20,6 @@ public class LevelStore {
 		levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_02.tmx"), 0, 1, 0));
 
 		// Normal Levels
-		levelList.add(new Level(new World("resources/maps/maps/tutorial_map.tmx"), 1, 1, 1));
 		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_01.tmx"), 1, 3, 1));
 		levelList.add(new Level(new World("resources/maps/maps/grass_normal_01.tmx"), 2, 4, 1));
 		levelList.add(new Level(new World("resources/maps/maps/grass_normal_02.tmx"), 2, 4, 1));
