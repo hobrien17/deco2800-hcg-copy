@@ -1,19 +1,15 @@
 package com.deco2800.hcg.contexts;
 
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.deco2800.hcg.managers.*;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -89,6 +85,7 @@ public class PlayContext extends Context {
     private ShaderProgram shader;
     private ShaderProgram postShader;
     private boolean useShaders = true;
+    private boolean exitDisplayed = false;
 
     private Window exitWindow;
 
@@ -376,9 +373,9 @@ public class PlayContext extends Context {
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.T) {
-			chatStack.setVisible(!chatStack.isVisible());
-		} else if ((exitWindow.isVisible() == true) && (keycode == Input.Keys.Y)) {
-    	    exit();
+            chatStack.setVisible(!chatStack.isVisible());
+        } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
+            exit();
         }
 	}
 
@@ -393,6 +390,7 @@ public class PlayContext extends Context {
             gameManager.getMapContext().addEndOfContext();
             contextManager.popContext();
         }
+        exitDisplayed = false;
         // clear old observers (mushroom turret for example)
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.deleteObservers();
@@ -420,17 +418,17 @@ public class PlayContext extends Context {
     }
 
     public void addExitWindow() {
-        exitWindow.setVisible(true);
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
+            exitDisplayed = true;
             soundManager.pauseWeatherSounds();
         }
     }
 
     public void removeExitWindow() {
-        exitWindow.setVisible(false);
         exitWindow.remove();
+        exitDisplayed = false;
         soundManager.unpauseWeatherSounds();
     }
 
