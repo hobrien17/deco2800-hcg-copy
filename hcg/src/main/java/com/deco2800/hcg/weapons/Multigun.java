@@ -1,5 +1,8 @@
 package com.deco2800.hcg.weapons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
 
@@ -9,6 +12,7 @@ import com.deco2800.hcg.entities.Tickable;
 public class Multigun extends Weapon implements Tickable {
     
     private float arc;
+    private ArrayList<Integer> ignoredBullets = new ArrayList<Integer>();
     
     /**
      * Creates a new Stargun at the given position
@@ -42,6 +46,14 @@ public class Multigun extends Weapon implements Tickable {
         soundManager.playSound(soundName);
     }
     
+    public void ignoreBullet(int bullet) {
+        ignoredBullets.add(Integer.valueOf(bullet));
+    }
+    
+    public void resetBullets() {
+        ignoredBullets.clear();
+    }
+    
     @Override
     protected void fireWeapon() {
         float deltaX = getPosX() - this.follow.x;
@@ -49,11 +61,13 @@ public class Multigun extends Weapon implements Tickable {
         float angle = ((float) (Math.atan2(deltaY, deltaX)) + (float) (Math.PI)) - arc/2f;
         float shotAngle = arc / (pellets - 1);
         for(int i = 0; i < this.pellets; i++) {
-            shootBullet(this.getPosX(),
-                    this.getPosY(),
-                    this.getPosZ(),
-                    (float) (this.getPosX() + 10 * Math.cos(angle)),
-                    (float) (this.getPosY() + 10 * Math.sin(angle)));
+            if(!ignoredBullets.contains(Integer.valueOf(i))) {
+                shootBullet(this.getPosX(),
+                        this.getPosY(),
+                        this.getPosZ(),
+                        (float) (this.getPosX() + 10 * Math.cos(angle)),
+                        (float) (this.getPosY() + 10 * Math.sin(angle)));
+            }
             angle = angle + shotAngle;
         }
         playFireSound();
