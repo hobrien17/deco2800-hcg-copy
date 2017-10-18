@@ -59,7 +59,6 @@ public class MapNodeEntity extends Actor {
         // Pass the center point of the sprite back the the MapNode
 		node.setXPos(xPos + spriteWidth/2);
 		node.setYPos(yPos + spriteHeight/2);
-		System.out.println("completed node generate");
     }
 
 	/**
@@ -80,7 +79,6 @@ public class MapNodeEntity extends Actor {
 					nodeTexture = textureManager.getTexture("discovered_node");
 			}
 		} else if(currentWorld.getWorldType() == 2) {
-			System.out.println("Goes in here.");
 			switch (node.getNodeType()) {
 				case 0: nodeTexture = textureManager.getTexture("forest_safe_node");
 					break;
