@@ -66,44 +66,50 @@ public class WeatherManager extends Manager {
 	 */
 	public void resize() {
 		for (int emitter = 0; emitter < weather.getEmitters().size; emitter++) {
-
 			World world = GameManager.get().getWorld();
+
+			int width = 100; // default values in case world == null
+			int height = 100; // default values in case world == null
+
+			if (world == null) {
+				System.out.println("woops");
+			} else {
+				width = (world.getWidth());
+				height = (world.getLength());
+				System.out.println(width); // in case we're curious
+				System.out.println(height);
+			}
 
 			ParticleEmitter newEmitter = weather.getEmitters()
 					.get(emitter);
-			newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
-					Gdx.graphics.getHeight() / 2);
+			//newEmitter.setPosition(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2);
+			newEmitter.setPosition(0,0); // I figure the world map probably gets put at 0,0 right?
+
+			// idk what these do but MAGIC NUMBERS EVERYWHERE TAKE THAT JOEL FENWICK >:D
+			newEmitter.getSpawnHeight().setLowMax(3000);
+			newEmitter.getSpawnHeight().setLowMin(1000);
+			newEmitter.getSpawnWidth().setLowMax(2000);
+			newEmitter.getSpawnWidth().setLowMin(4000);
+
+			// how to set min/max particles: DO YOUR BEST
+			// max ~ 6000 is light, max ~ 12000 is heavy (this is right anymore idk??)
+
+			// these values are (really) arbitrary and need to be tweaked
+			newEmitter.setMaxParticleCount(height*400 + 10000);
+			newEmitter.setMinParticleCount(height*400/6 + 8000);
+
+			// just a thought what is the size of each tile?!?!?! because i feel like world.getWidth
+			// gives you the tile width? which would make all sporadic math redundant
+			// whats the difference between min and max
+			newEmitter.getSpawnWidth().setHighMax(width*400);
+			newEmitter.getSpawnWidth().setHighMin(width*400/6);
+
+			// whats the difference between min and max
+			newEmitter.getSpawnHeight().setHighMax(height*400);
+			newEmitter.getSpawnHeight().setHighMin(height*400/6);
 
 
-			newEmitter.getSpawnHeight().setLowMax(0);
-			newEmitter.getSpawnHeight().setLowMin(0);
 
-			if (world == null) {
-				System.out.println("null");
-			} else {
-				//Integer width = (Integer) world.getMap().getProperties().get("width");
-				//Integer height = (Integer) world.getMap().getProperties().get("length");
-				//System.out.println(width.toString());
-				//System.out.println(height.toString());
-			}
-
-
-			// how to set min/max particles: min = 1/3 * max
-			// max ~ 6000 is light, max ~ 12000 is heavy
-			// currently all hardcoded to 12000
-			newEmitter.setMinParticleCount(12000);
-			newEmitter.setMaxParticleCount(12000);
-
-
-			newEmitter.getSpawnWidth().setHighMax(5000);
-			newEmitter.getSpawnWidth().setHighMin(5000);
-
-			newEmitter.getSpawnHeight().setHighMax(5000);
-			newEmitter.getSpawnHeight().setHighMin(5000);
-
-			 
-			newEmitter.getSpawnWidth().setLowMax(0);
-			newEmitter.getSpawnWidth().setLowMin(0);
 		}
 	}
 
