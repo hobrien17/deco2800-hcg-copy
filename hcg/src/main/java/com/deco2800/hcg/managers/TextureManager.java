@@ -125,10 +125,28 @@ public class TextureManager extends Manager {
 			textureMap.put("antSE2", new Texture("resources/sprites/enemies/ant_SE_2.png"));
 			textureMap.put("antSW2", new Texture("resources/sprites/enemies/ant_SW_2.png"));
 			textureMap.put("antW2", new Texture("resources/sprites/enemies/ant_W_2.png"));
-			textureMap.put("mushroom", new Texture("resources/sprites/enemies/mushy.png"));
-			textureMap.put("hedgehog", new Texture("resources/sprites/enemies/hedgehog.png"));
-			textureMap.put("hedgeball", new Texture("resources/sprites/enemies/hedgeball_1.png"));
-			textureMap.put("snail", new Texture("resources/sprites/enemies/snail.png"));
+			textureMap.put("mushroom0", new Texture("resources/sprites/enemies/Mushroom_0.png"));
+			textureMap.put("mushroom1", new Texture("resources/sprites/enemies/Mushroom_1.png"));
+			textureMap.put("mushroom2", new Texture("resources/sprites/enemies/Mushroom_2.png"));
+			textureMap.put("mushroom3", new Texture("resources/sprites/enemies/Mushroom_3.png"));
+			textureMap.put("mushroom4", new Texture("resources/sprites/enemies/Mushroom_4.png"));
+			textureMap.put("mushroom5", new Texture("resources/sprites/enemies/Mushroom_5.png"));
+			textureMap.put("hedgehogS1", new Texture("resources/sprites/enemies/armadillo_S_1.png"));
+			textureMap.put("hedgehogS2", new Texture("resources/sprites/enemies/armadillo_S_2.png"));
+			textureMap.put("hedgehogE1", new Texture("resources/sprites/enemies/armadillo_E_1.png"));
+			textureMap.put("hedgehogE2", new Texture("resources/sprites/enemies/armadillo_E_2.png"));
+			textureMap.put("hedgehogW1", new Texture("resources/sprites/enemies/armadillo_W_1.png"));
+			textureMap.put("hedgehogW2", new Texture("resources/sprites/enemies/armadillo_W_2.png"));
+			textureMap.put("hedgehogN1", new Texture("resources/sprites/enemies/armadillo_N_1.png"));
+			textureMap.put("hedgehogN2", new Texture("resources/sprites/enemies/armadillo_N_2.png"));
+			textureMap.put("hedgeballNS1", new Texture("resources/sprites/enemies/armaball_NS_1.png"));
+			textureMap.put("hedgeballNS2", new Texture("resources/sprites/enemies/armaball_NS_2.png"));
+			textureMap.put("hedgeballWE1", new Texture("resources/sprites/enemies/armaball_WE_1.png"));
+			textureMap.put("hedgeballWE2", new Texture("resources/sprites/enemies/armaball_WE_2.png"));
+			textureMap.put("snailE", new Texture("resources/sprites/enemies/snail_E.png"));
+			textureMap.put("snailN", new Texture("resources/sprites/enemies/snail_N.png"));
+			textureMap.put("snailS", new Texture("resources/sprites/enemies/snail_S.png"));
+			textureMap.put("snailW", new Texture("resources/sprites/enemies/snail_W.png"));
 
 			// Corpse textures
 			textureMap.put("corpse", new Texture("resources/sprites/dead_enemies/deadant.png"));
