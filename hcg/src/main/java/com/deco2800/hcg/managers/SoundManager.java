@@ -83,6 +83,9 @@ public class SoundManager extends Manager {
 					Gdx.files.internal("resources/sounds/environmental/rain-ambient-hardsurface-shortloop.wav")));
 			soundMap.put("weatherStormSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree2.wav")));
 
+			// For ambient music
+			soundMap.put("ambientMusic", Gdx.audio.newSound(
+					Gdx.files.internal("resources/sounds/music.wav")));
 			
 			// For gardening (careful with your variable name pls, two grass exist)
 			soundMap.put("plantingPot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/planting_in_soil_pot.wav")));

@@ -13,6 +13,8 @@ import com.deco2800.hcg.worlds.World;
 public class WorldManager extends Manager {
 	
 	GameManager gameManager = GameManager.get();
+	SoundManager soundManager = (SoundManager) GameManager.get()
+	.getManager(SoundManager.class);
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 	private ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 	
@@ -64,6 +66,10 @@ public class WorldManager extends Manager {
         // add the new weather effects
         ((WeatherManager) gameManager.getManager(WeatherManager.class)).
           setWeather(newWorld.getWeatherType());
+        
+        // play ambient music
+        soundManager.stopSound("ambientMusic");
+        soundManager.loopSound("ambientMusic");
 
         newWorld.generatePuddles();
 		gameManager.setWorld(newWorld);
