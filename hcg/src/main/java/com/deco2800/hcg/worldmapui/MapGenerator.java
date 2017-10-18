@@ -70,12 +70,12 @@ public class MapGenerator {
 	}
 	
 	/**
-	 * Removes the map generator's seed.
+	 * Gets the current MapGenerator seed.
+	 * @return
+	 *     Returns the current seed
 	 */
-	public void removeGeneratorSeed() {
-		Random seedGenerator = new Random();
-		seedValue = Math.abs(seedGenerator.nextInt(999));
-		mainGenerator = new Random(seedValue);
+	public int getSeedValue() {
+		return seedValue;
 	}
 	
 	/**

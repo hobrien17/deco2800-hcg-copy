@@ -64,11 +64,12 @@ public class WorldStackGenerator {
 		for(Integer i = 0; i < NUMBER_OF_WORLDS; i++) {
 			if(rowNumber == 0 && columnNumber == 0) {
 				if(i == 0) {
+					int seed = mapGenerator.getSeedValue();
 					mapGenerator.setGeneratorSeed(31);
 					WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
 					worldMap.setPosition(i);
 					worldStack.addWorldToStack(worldMap);
-					mapGenerator.removeGeneratorSeed();
+					mapGenerator.setGeneratorSeed(seed);
 				} else {
 					WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
 					worldMap.setPosition(i);
@@ -76,11 +77,12 @@ public class WorldStackGenerator {
 				}
 			} else {
 				if(i == 0) {
+					int seed = mapGenerator.getSeedValue();
 					mapGenerator.setGeneratorSeed(31);
 					WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
 					worldMap.setPosition(i);
 					worldStack.addWorldToStack(worldMap);
-					mapGenerator.removeGeneratorSeed();
+					mapGenerator.setGeneratorSeed(seed);
 				} else {
 					WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
 					worldMap.setPosition(i);
