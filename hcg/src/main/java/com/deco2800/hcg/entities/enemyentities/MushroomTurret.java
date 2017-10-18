@@ -29,7 +29,7 @@ public class MushroomTurret extends Enemy implements Observer {
      */
     public MushroomTurret(float posX, float posY, float posZ, int ID) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
-        //testing with tower sprite
+        this.boss = false;
         this.setTexture("mushroom");
         this.level = 1;
         seconds = 0;
