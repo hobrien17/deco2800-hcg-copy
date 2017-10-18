@@ -135,6 +135,7 @@ public class Player extends Character implements Tickable {
 			perks.add(new Perk(enumPerk));
 		}
 
+		createPauseWindow();
 		this.id = id;
 		if (id == 0) {
 			InputManager localInput = (InputManager) GameManager.get().getManager(InputManager.class);
@@ -152,8 +153,6 @@ public class Player extends Character implements Tickable {
 		playerInputManager.addTouchDraggedListener(id, this::handleTouchDragged);
 		playerInputManager.addTouchUpListener(id, this::handleTouchUp);
 		playerInputManager.addMouseMovedListener(id, this::handleMouseMoved);
-		
-		createPauseWindow();
 
 		this.myEffects = new Effects(this);
 
