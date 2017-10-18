@@ -215,13 +215,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
 				}
-                ParticleEffect hitEffect = new ParticleEffect();
-                hitEffect.load(Gdx.files.internal("resources/particles/hitPuff.p"),
-                Gdx.files.internal("resources/particles/"));
-                Vector3 position = gameManager.worldToScreen(new Vector3(target.getPosX(), target.getPosY(), 0));
-                hitEffect.setPosition(position.x, position.y);
-                hitEffect.start();
-                ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(hitEffect, target);
+                spawnParticles(entity, "hitPuff.p");
 				hitCount--;
 			}
 
@@ -229,6 +223,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			if (entity instanceof DestructableTree && user instanceof Player
 					&& !(this instanceof GrassBullet)) {
 				DestructableTree tree = (DestructableTree) entity;
+				spawnParticles(entity, "hitPuff.p");
 				applyEffect(tree);
 				hitCount--;
 			}
@@ -237,6 +232,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			if (entity instanceof Player && user instanceof Enemy) {
 				// add code to apply effect to player here
 				Enemy enemyUser = (Enemy) user;
+				spawnParticles(entity, "hitPuff.p");
 				enemyUser.causeDamage((Player) entity);
 				hitCount--;
 			}
@@ -281,5 +277,15 @@ public class Bullet extends AbstractEntity implements Tickable {
 
 	protected void playCollisionSound(Bullet bulletType) {
 	    return;
+	}
+	
+	protected void spawnParticles(AbstractEntity entity, String particleFile) {
+	    ParticleEffect hitEffect = new ParticleEffect();
+        hitEffect.load(Gdx.files.internal("resources/particles/" + particleFile),
+        Gdx.files.internal("resources/particles/"));
+        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
+        hitEffect.setPosition(position.x, position.y);
+        hitEffect.start();
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, hitEffect);
 	}
 }

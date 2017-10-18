@@ -47,7 +47,7 @@ public class ParticleEffectManager extends Manager {
         return particleEffectActor;
     }
     
-    public void addEffect(ParticleEffect effect, AbstractEntity entity) {
-        particleEffectActor.add(effect, entity);
+    public void addEffect(AbstractEntity entity, ParticleEffect effect) {
+        particleEffectActor.add(entity, effect);
     }
 }
