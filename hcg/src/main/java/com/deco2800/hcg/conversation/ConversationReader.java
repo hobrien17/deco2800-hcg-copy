@@ -168,6 +168,24 @@ public class ConversationReader {
 					throw new ResourceLoadException("Unparsable int in condition: " + condition, e);
 				}
 
+			case "questNotStarted":
+				if (args.size() != 1) {
+					throw new ResourceLoadException("Wrong number of args in condition: " + condition);
+				}
+				return new QuestNotStartedCondition(negate, args.get(0));
+				
+			case "questActive":
+				if (args.size() != 1) {
+					throw new ResourceLoadException("Wrong number of args in condition: " + condition);
+				}
+				return new QuestActiveCondition(negate, args.get(0));
+				
+			case "questCompleted":
+				if (args.size() != 1) {
+					throw new ResourceLoadException("Wrong number of args in condition: " + condition);
+				}
+				return new QuestCompletedCondition(negate, args.get(0));
+
 			default:
 				throw new ResourceLoadException("No such condition: " + condition);
 		}
@@ -204,6 +222,18 @@ public class ConversationReader {
 				} catch (NumberFormatException e) {
 					throw new ResourceLoadException("Unparsable int in action: " + action, e);
 				}
+				
+			case "startQuest":
+				if (args.size() != 1) {
+					throw new ResourceLoadException("Wrong number of args in action: " + action);
+				}
+				return new StartQuestAction(args.get(0));
+				
+			case "finishCurrentQuest":
+				if (args.size() != 0) {
+					throw new ResourceLoadException("Wrong number of args in action: " + action);
+				}
+				return new FinishQuestAction();
 
 			default:
 				throw new ResourceLoadException("No such action: " + action);

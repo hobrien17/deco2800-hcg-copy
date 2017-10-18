@@ -12,11 +12,7 @@ import com.deco2800.hcg.worlds.World;
 
 import java.util.HashMap;
 
-/**
- *
- *
- * Updated by Harry Guthrie 17/10/17 - to allow class to handle a map of items to amounts
- */
+
 public class GiveItemsAction extends AbstractConversationAction {
 
     private Integer itemsQuantity;
