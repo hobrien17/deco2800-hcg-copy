@@ -69,10 +69,9 @@ public class QuestArchive {
         }
     }
 
-    public String getQuestGiverName() {
-        return (questGiver.getFirstName() + " " + questGiver.getSurname());
+    public NPC getQuestGiver() {
+        return questGiver;
     }
-
 
     public Boolean currentlyCompletable() {
         return (getKillReqCompleted() && getItemReqCompleted());

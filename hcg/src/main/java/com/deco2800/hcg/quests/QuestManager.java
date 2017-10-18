@@ -72,6 +72,32 @@ public class QuestManager extends Manager {
         questLog.remove(npc);
     }
 
+    //Bools for use during conversation
+    public Boolean isQuestNotStarted (QuestNPC npc, String questName) {
+        if (questLog.containsKey(npc)) {
+            return true;
+        } else {
+            for (QuestArchive qa: completedLog) {
+                if (qa.getQuestGiver().equals(npc) && qa.getQuest().getTitle().equals(questName)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    public Boolean isQuestActive (QuestNPC npc, String questName) {
+        return (questLog.containsKey(npc));
+    }
+    public Boolean isQuestCompleted (QuestNPC npc, String questName)  {
+        for (QuestArchive qa: completedLog) {
+            if (qa.getQuestGiver().equals(npc) && qa.getQuest().getTitle().equals(questName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * ------------------------------------- Functions for the quest UI -------------------------------------

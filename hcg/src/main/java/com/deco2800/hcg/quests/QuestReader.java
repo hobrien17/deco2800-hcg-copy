@@ -32,7 +32,7 @@ public class QuestReader {
         Quest q;
         for (String fp: jQuestFile.list()) {
             try {
-                q = loadQuest(fp);
+                q = loadQuest(questsFolder + fp);
                 if (quests.containsKey(q.getTitle())) {
                     throw new ResourceLoadException("Quest title is a duplicate (" + q.getTitle() + ") in file (" +
                             fp +")");
@@ -55,7 +55,7 @@ public class QuestReader {
      */
     public Quest loadQuest(String fp) throws ResourceLoadException {
         //Make sure the file is a json file
-        if (fp.substring(fp.length() - ".json".length(),fp.length()) != ".json") {
+        if (!fp.substring(fp.length() - ".json".length(),fp.length()).equals(".json")) {
             throw new ResourceLoadException("All files in the quest resources files must be .json files");
         }
 
@@ -74,7 +74,7 @@ public class QuestReader {
             jQuest = (JsonObject) parser.parse(reader);
             reader.close();
         } catch (JsonSyntaxException | IOException | ResourceLoadException e){
-            throw new ResourceLoadException("Unable to load and parse Quest File", e);
+            throw new ResourceLoadException("Unable to load and parse Quest File - invalid JSON file is likely cause", e);
         }
 
         //Validate the json obj

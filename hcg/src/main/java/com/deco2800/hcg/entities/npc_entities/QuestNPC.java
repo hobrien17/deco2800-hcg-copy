@@ -87,11 +87,28 @@ public class QuestNPC extends NPC {
 		this.conversation = convo;
 	}
 
-	public void completeQuest() {
+
+	public Boolean isQuestNotStarted(String questName) {
+		return questManager.isQuestNotStarted(this, questName);
+	}
+
+	public Boolean isQuestActive(String questName) {
+		return questManager.isQuestActive(this, questName);
+	}
+
+	public Boolean isQuestCompleted(String questName) {
+		return questManager.isQuestCompleted(this, questName);
+	}
+
+	public void finishQuest() {
 		questManager.completeQuest(this);
 	}
 
-	public void addQuest(String questName) {
+	/**
+	 * Used by the conversation to start a new quest with a given name
+	 * @param questName
+	 */
+	public void startQuest(String questName) {
 		questManager.addQuest(this,questName);
 	}
 
@@ -293,4 +310,14 @@ public class QuestNPC extends NPC {
 		thread.start();
 	}
 
+
+	@Override
+	public boolean equals(Object object) {
+		return super.equals(object);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }
