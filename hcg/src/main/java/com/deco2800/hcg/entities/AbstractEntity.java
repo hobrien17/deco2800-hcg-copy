@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities;
 
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.util.Box3D;
@@ -25,6 +26,8 @@ public abstract class AbstractEntity implements Renderable,
     private static float floatEpsilon = 0.0001f;
 
     private String texture = "error_box";
+    
+    private Color tint = null;
 
     /**
      * Creates a new AbstractEntity at the given position with the given size
@@ -353,5 +356,31 @@ public abstract class AbstractEntity implements Renderable,
      */
     public void setCentered() {
         this.centered = true;
+    }
+    
+    /**
+     * Sets a tint colour for this entity
+     * 
+     * @param tint
+     * 			the colour to set the tint to
+     */
+    public void setTint(Color tint) {
+    	this.tint = tint;
+    }
+    
+    /**
+     * Removes any tint this entity may have
+     */
+    public void removeTint() {
+    	this.tint = null;
+    }
+    
+    /**
+     * Gets the tint of this entity
+     * 
+     * @return the tint colour, null if there is none
+     */
+    public Color getTint() {
+    	return tint;
     }
 }

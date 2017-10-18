@@ -115,12 +115,4 @@ public class EnemyTest {
         assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0.0f)));
         assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0.0f)));
     }
-    
-    @Test
-    public void testEquals() {
-        Squirrel anotherEnemy = new Squirrel(10.0f,10.0f,0.0f, 1);
-        assertFalse("Two different enemies are equal", enemy.equals(anotherEnemy));
-        Squirrel enemy2 = new Squirrel(5.0f,5.0f,0.0f, 0);
-        assertTrue("The same enemies are not equal", enemy.equals(enemy2));
-    }
 }

@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.lootable.LootWrapper;
@@ -22,6 +21,7 @@ public class Snail extends Enemy implements Tickable {
      */
     public Snail(float posX, float posY, float posZ, int id) {
         super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
+        this.boss = false;
         this.setTexture("snail");
         this.level = 1;
         newPos.setX(posX);
@@ -33,15 +33,6 @@ public class Snail extends Enemy implements Tickable {
                 .setCooldown(50)
                 .setTexture("fire_seed")
                 .build();
-
-        // add new tile for poison trail
-        MapProperties mapProperties = new MapProperties();
-        mapProperties.put("name", "newSludge");
-        mapProperties.put("damagetype", "1");
-        mapProperties.put("damage", "1");
-        mapProperties.put("speed", "1.0");
-
-        GameManager.get().getWorld().addTiledMapTileLayer("newSludge", mapProperties);
 
     }
 
@@ -62,7 +53,7 @@ public class Snail extends Enemy implements Tickable {
         TextureManager textureManager = (TextureManager) GameManager.get().getManager(TextureManager.class);
 
         // add tile
-        GameManager.get().getWorld().newTileAtPos((int) prevPos.getX(), (int) prevPos.getY(),
+        GameManager.get().getWorld().newTileAtPos((int) this.getPosX(), (int) this.getPosY(),
                 textureManager.getTexture("poisontile"),
                 (TiledMapTileLayer) GameManager.get().getWorld().getMapLayerWithProperty("name", "newSludge"));
     }
@@ -76,10 +67,10 @@ public class Snail extends Enemy implements Tickable {
         // status should always be 1
         this.setNewPos();//Put new position into Box3D.
         this.setPoisonTrail();//Set poison trail
+        this.setDirection();
         this.detectCollision();//Detect collision.
         this.moveAction();//Move enemy to the position in Box3D.
         // Apply any effects that exist on the entity
         myEffects.apply();
-        
     }
 }

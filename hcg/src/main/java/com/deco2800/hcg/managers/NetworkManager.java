@@ -1,15 +1,24 @@
 package com.deco2800.hcg.managers;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -18,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.multiplayer.*;
+import com.deco2800.hcg.observers.ServerObserver;
 
 /**
  * Lockstep UDP network manager.
@@ -27,21 +37,24 @@ import com.deco2800.hcg.multiplayer.*;
 public final class NetworkManager extends Manager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NetworkManager.class);
 	private static final byte[] MESSAGE_HEADER = "H4RDC0R3".getBytes();
-	private static final int MAX_PLAYERS = 4; // maybe 5?
+	
+	private ArrayList<ServerObserver> serverListeners = new ArrayList<>();
 
 	private DatagramChannel channel;
 	// TODO: a HashMap is probably not the best collection for the lobby
 	//       shouldn't be a big issue for the moment
 	private HashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
 	private HashMap<Integer, byte[]> sendQueue;
-	private long[] peerTickCounts;
-	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
+	private HashMap<Integer, Long> peerTickCounts;
+	private int acked;
+	private HashMap<Integer, Integer> peerSequenceNumbers;
 	private boolean host = false;
-	private boolean initialised = false;
+	private boolean multiplayerGame = false;
 	
 	private GameManager gameManager;
 	private ContextManager contextManager;
 	private PlayerManager playerManager;
+	private PlayerInputManager playerInputManager;
 	
 	private ByteBuffer messageBuffer;
 	private ByteBuffer sendBuffer;
@@ -58,15 +71,19 @@ public final class NetworkManager extends Manager {
 	public void init(boolean hostGame) {
 		sockets = new HashMap<>();
 		sendQueue = new HashMap<>();
-		peerTickCounts = new long[MAX_PLAYERS];
-		processedIds = new ArrayList<>();
+		peerTickCounts = new HashMap<>();
+		peerSequenceNumbers = new HashMap<>();
 		
 		gameManager = GameManager.get();
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+		playerInputManager = (PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
 		
 		// initialise channel
 		try {
+			if (channel != null) {
+				channel.close();
+			}
 			channel = DatagramChannel.open();
 			if (hostGame) {
 				channel.socket().bind(new InetSocketAddress(1337));
@@ -85,7 +102,6 @@ public final class NetworkManager extends Manager {
 		receiveBuffer = ByteBuffer.allocateDirect(1400).order(ByteOrder.LITTLE_ENDIAN);
 
 		host = hostGame;
-		initialised = true;
 	}
 	
 	/**
@@ -143,15 +159,25 @@ public final class NetworkManager extends Manager {
 	 * @param tick Tick count
 	 */
 	public void updatePeerTickCount(int peer, long tick) {
-		// FIXME
+		if (peerTickCounts.get(peer) == null || tick > peerTickCounts.get(peer)) {
+			peerTickCounts.put(peer, tick);
+		}
+	}
+	
+	/**
+	 * Sets the multiplayer game flag
+	 * @param multiplayerGame Boolean indicating if the user is in a multiplayer game
+	 */
+	public void setMultiplayerGame(boolean multiplayerGame) {
+		this.multiplayerGame = multiplayerGame;
 	}
 
 	/**
-	 * Checks if network state is initialised
-	 * @return Boolean indicating if network state has been initialised
+	 * Checks if user is in a multiplayer game
+	 * @return <code>true</code> if user is in a multiplayer game
 	 */
-	public boolean isInitialised() {
-		return initialised;
+	public boolean isMultiplayerGame() {
+		return multiplayerGame;
 	}
 	
 	/**
@@ -179,10 +205,89 @@ public final class NetworkManager extends Manager {
 		// add byte array to queue
 		return sendQueue.put(message.getId(), bytes) == null;
 	}
+	
+	/**
+	 * Adds a server listener
+	 * @param observer The ServerObserver to be added
+	 */
+	public void addServerListener(ServerObserver observer) {
+		serverListeners.add(observer);
+	}
 
 	/**
-	 * Join server
-	 * @param hostname Hostname of server
+	 * Removes the specified listener from the list of server listeners
+	 * @param observer The ServerObserver to be removed
+	 */
+	public void removeServerListener(ServerObserver observer) {
+		serverListeners.remove(observer);
+	}
+	
+	/**
+	 * Called when a server is found
+	 * @param lobbyName The server's lobby name
+	 * @param hostName The server's host name
+	 */
+	public void serverFound(String lobbyName, String hostName) {
+		for (ServerObserver observer : serverListeners) {
+			observer.notifyServerFound(lobbyName, hostName);
+		}
+	}
+	
+	/**
+	 * Adds peer to lobby
+	 * @param address The peer's address
+	 */
+	public void addPeer(SocketAddress address) {
+		sockets.put(sockets.size(), address);
+	}
+	
+	/**
+	 * Sends discovery messages to all broadcast interfaces
+	 */
+	public void refreshLocalServers() {
+		// try to set broadcast flag
+		try {
+			channel.socket().setBroadcast(true);
+		} catch (SocketException e) {
+			LOGGER.error("Could not set socket broadcast flag", e);
+			return;
+		}
+		
+		try {
+			// iterate over all network interfaces
+			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+			for (NetworkInterface networkInterface : Collections.list(networkInterfaces)) {
+				for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+					// get interface's broadcast address
+					InetAddress broadcastAddress = interfaceAddress.getBroadcast();
+					if (broadcastAddress == null) {
+						continue;
+					}
+
+					try {
+						// send discovery message
+						SocketAddress socketAddress = new InetSocketAddress(broadcastAddress, 1337);
+						sendOnce(new DiscoveryMessage(getNextRandomInt()), socketAddress);
+					} catch (IOException e) {
+						LOGGER.error("Failed to send discovery message", e);
+					}
+				}
+			}
+		} catch (SocketException e) {
+			LOGGER.error("Could not get network interfaces", e);
+		}
+		
+		// try to clear broadcast flag
+		try {
+			channel.socket().setBroadcast(false);
+		} catch (SocketException e) {
+			LOGGER.error("Could not clear socket broadcast flag", e);
+		}
+	}
+	
+	/**
+	 * Joins server
+	 * @param hostname Host name of server to join
 	 */
 	public void join(String hostname) {
 		SocketAddress socketAddress = new InetSocketAddress(hostname, 1337);
@@ -194,6 +299,10 @@ public final class NetworkManager extends Manager {
 
 	/**
 	 * Starts a co-op game
+	 * 
+	 * <p>
+	 * Note that this method should only be called by the host
+	 * </p>
 	 */
 	public void startGame() {
 		int seed = getNextRandomInt();
@@ -211,38 +320,64 @@ public final class NetworkManager extends Manager {
 	 * Determines whether NetworkManager is properly in sync with other clients
 	 * @return <code>true</code> if it is not safe to proceed
 	 */
-	private boolean shouldBlock() {
-		// TODO
+	public boolean shouldBlock() {
+		if (!multiplayerGame || !(contextManager.currentContext() instanceof PlayContext)) {
+			return false;
+		}
+		
+		if (playerInputManager.getInputTick() > 0 && peerTickCounts.isEmpty()) {
+			return true;
+		}
+
+		for (long tick : peerTickCounts.values()) {
+			if (tick <= playerInputManager.getInputTick()) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
 	/**
-	 * Performs send and receive, blocking if necessary
+	 * Performs send and receive
 	 */
 	public void tick() {
-		if (initialised) {
-			do {
-				send(0);
-				receive();
-			} while (shouldBlock());
+		if (multiplayerGame) {
+			send(sendQueue.entrySet().iterator());
+			receive();
 		}
 	}
 
 	/**
 	 * Recurses over messages that are queued and sends them using the smallest number of packets
-	 * @param index Index to start at
+	 * @param messageIterator Message entry set iterator
 	 */
-	private void send(int index) {
+	private void send(Iterator<Entry<Integer, byte[]>> messageIterator) {
 		sendBuffer.clear();
-		// convert queue values to array
-		byte[][] toSend = sendQueue.values().toArray(new byte[0][0]);
-		// iterate through queued messages messages
-		for (; index < toSend.length; index++) {
-			// make sure we don't exceed 1400
-			if (toSend[index].length <= sendBuffer.remaining()) {
-				sendBuffer.put(toSend[index]);
-			}
+		
+		if (!messageIterator.hasNext()) {
+			return;
 		}
+		
+		// iterate through queued messages
+		do {
+			Entry<Integer, byte[]> next = messageIterator.next();
+			int id = next.getKey();
+			byte[] bytes = next.getValue();
+			
+			// remove message if it has been acked
+			if (id <= acked) {
+				messageIterator.remove();
+				continue;
+			}
+			
+			// make sure we don't exceed 1400 bytes
+			if (bytes.length <= sendBuffer.remaining()) {
+				sendBuffer.put(bytes);
+			} else {
+				break;
+			}
+		} while (messageIterator.hasNext());
 		
 		sendBuffer.flip();
 		// if not empty...
@@ -259,9 +394,25 @@ public final class NetworkManager extends Manager {
 		}
 		
 		// if we have more to send...
-		if (index != toSend.length) {
-			send(index - 1);
-		}
+		send(messageIterator);
+	}
+	
+	/**
+	 * Sends a single message exactly once
+	 * 
+	 * <p>
+	 * Note that the message is unreliable and may never be received
+	 * </p>
+	 * 
+	 * @param message Message to be sent
+	 * @param address Address to send to
+	 * @throws IOException If an IO error occurs
+	 */
+	public void sendOnce(Message message, SocketAddress address) throws IOException {
+		sendBuffer.clear();
+		message.packData(sendBuffer);
+		sendBuffer.flip();
+		channel.send(sendBuffer, address);
 	}
 
 	/**
@@ -274,6 +425,7 @@ public final class NetworkManager extends Manager {
 		try {
 			address = channel.receive(receiveBuffer);
 		} catch (IOException e) {
+			LOGGER.error("Failed to receive message", e);
 			return;
 		}
 		if (address == null) {
@@ -294,20 +446,23 @@ public final class NetworkManager extends Manager {
 				MessageType messageType = Message.getType(receiveBuffer);
 				
 				if (messageType == MessageType.ACK) {
-					// remove message from queue
-					receiveBuffer.position(14);
-					int removeId = receiveBuffer.getInt();
-					sendQueue.remove(removeId);
+					if (messageId > acked) {
+						acked = messageId;
+					}
 					return;
 				}
 				
 				// get message
 				Message message;
 				switch (messageType) {
+					case DISCOVERY:
+						message = new DiscoveryMessage();
+						break;
+					case HOST:
+						message = new HostMessage();
+						break;
 					case JOINING:
 						message = new JoiningMessage();
-						// add peer to lobby
-						sockets.put(sockets.size() - 1, address);
 						break;
 					case JOINED:
 						message = new JoinedMessage();
@@ -328,39 +483,41 @@ public final class NetworkManager extends Manager {
 				// unpack message
 				message.unpackData(receiveBuffer);
 
-				if (!processedIds.contains(messageId)) {
+				if (peerSequenceNumbers.get(0) == null
+						|| messageId > peerSequenceNumbers.get(0).intValue()) {
 					// process message
-					message.process();
+					message.process(address);
 					// make sure we don't process this again
-					processedIds.add(messageId);
+					peerSequenceNumbers.put(0, messageId);
 					// log
-					LOGGER.debug("RECEIVED: " + messageType.toString());
+					LOGGER.debug("PROCESS: " + messageType.toString());
 				}
-				
-				// acknowledge that we've already received this
-				messageBuffer.clear();
-				// put header
-				messageBuffer.put(MESSAGE_HEADER);
-				// put id
-				messageBuffer.putInt(-1);
-				// put type
-				messageBuffer.put((byte) MessageType.ACK.ordinal());
-				// put number of fields
-				messageBuffer.put((byte) 0);
-				// put ACK id
-				messageBuffer.putInt(messageId);
-				// send ACK to peer
-				messageBuffer.flip();
-				
-				try {
-					channel.send(messageBuffer, address);
-				} catch (IOException e) {}
+			}
+			
+			// acknowledge that we've successfully received this
+			messageBuffer.clear();
+			// put header
+			messageBuffer.put(MESSAGE_HEADER);
+			// put ACK id
+			messageBuffer.putInt(peerSequenceNumbers.get(0));
+			// put type
+			messageBuffer.put((byte) MessageType.ACK.ordinal());
+			// send ACK to peer
+			messageBuffer.flip();
+			try {
+				channel.send(messageBuffer, address);
+			} catch (IOException e) {
+				LOGGER.error("Failed to send ACK message", e);
 			}
 		} catch (BufferOverflowException | BufferUnderflowException
 				| MessageFormatException e) {
 			// we don't care if a datagram is invalid, only that we don't try to
 			// read it any further
 			// TODO Implement a timeout so we can get away with this
+			LOGGER.error("Invalid datagram received", e);
 		}
+		
+		// receive the next message (if there is one)
+		receive();
 	}
 }

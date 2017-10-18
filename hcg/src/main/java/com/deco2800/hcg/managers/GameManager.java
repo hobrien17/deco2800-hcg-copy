@@ -21,8 +21,7 @@ import java.util.List;
  */
 public class GameManager implements TickableManager {
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(GameManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
     private static GameManager instance = null;
 
@@ -102,7 +101,7 @@ public class GameManager implements TickableManager {
             this.addManager((Manager) ctor.newInstance());
         } catch (Exception e) {
             // Gotta catch 'em all
-            LOGGER.error(e.toString());
+            LOGGER.error(String.valueOf(e));
         }
 
 		/* And then return it */

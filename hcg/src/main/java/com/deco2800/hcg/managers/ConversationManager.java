@@ -2,6 +2,7 @@ package com.deco2800.hcg.managers;
 
 import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.conversation.ConversationReader;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.Set;
  */
 public class ConversationManager extends Manager {
 
-    // All loaded Conversations are refereced by name
+    // All loaded Conversations are referenced by name
     HashMap<String,Conversation> conversations;
 
     /**
@@ -24,6 +25,8 @@ public class ConversationManager extends Manager {
         conversations = new HashMap<>();
         try {
             loadConversation("test_conversation_01", "resources/conversations/test_conversation_01.json");
+            loadConversation("test_conversation_02", "resources/conversations/test_conversation_02.json");
+            loadConversation("james_test", "resources/conversations/james.json");
         } catch (IOException e) {
             throw new ResourceLoadException(e);
         }
@@ -40,17 +43,23 @@ public class ConversationManager extends Manager {
         conversations.put(name, newConversation);
     }
 
-    /**
-     * Being displaying a stored Conversation
-     * @param name The name of the conversation to launch
-     */
-    public void startConversation(String name, String texture) {
+    // Fetch a conversation, or throw an exception if it cannot be found
+    private Conversation getConversation(String name) {
         Conversation conversation = conversations.get(name);
         if (conversation == null) {
             throw new IllegalArgumentException("No conversation by the name \""+name+"\" exists!");
         } else {
-            conversation.initiateConversation(texture);
+            return conversation;
         }
+    }
+
+    /**
+     * Being displaying a stored Conversation
+     * @param talkingTo The NPC the conversation is being had with
+     * @param name The name of the conversation to launch
+     */
+    public void startConversation(QuestNPC talkingTo, String name) {
+        getConversation(name).initiateConversation(talkingTo);
     }
 
     /**
@@ -67,5 +76,14 @@ public class ConversationManager extends Manager {
      */
     public int getConversationCount() {
         return conversations.size();
+    }
+
+    /**
+     * Get the default relationship string for a particular Conversation
+     * @param ConversationName The name of the conversation
+     * @return Default relationship status
+     */
+    public String getDefaultRelationship(String ConversationName) {
+        return getConversation(ConversationName).getInitialRelationship();
     }
 }

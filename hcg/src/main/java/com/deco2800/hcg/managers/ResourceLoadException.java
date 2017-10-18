@@ -1,12 +1,10 @@
 package com.deco2800.hcg.managers;
 
-import com.badlogic.gdx.utils.GdxRuntimeException;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
 /**
- * An extension of UncheckedIOException, which can serve as a wrapper around both IOExceptions and GdxRuntimeExceptions
+ * An extension of UncheckedIOException, which can serve as a wrapper around other exceptions
  * @author Richy McGregor
  */
 public class ResourceLoadException extends UncheckedIOException {
@@ -28,10 +26,10 @@ public class ResourceLoadException extends UncheckedIOException {
     }
 
     /**
-     * Create a ResourceLoadException from a GdxRuntimeException
+     * Create a ResourceLoadException from some Exception
      * @param cause The GdxRuntimeException which triggered this exception
      */
-    public ResourceLoadException(GdxRuntimeException cause) {
+    public ResourceLoadException(Exception cause) {
         super(new IOException(cause));
     }
 
@@ -45,11 +43,11 @@ public class ResourceLoadException extends UncheckedIOException {
     }
 
     /**
-     * Create a ResourceLoadException from a GdxRuntimeException and a description of the failure.
+     * Create a ResourceLoadException from some Exception and a description of the failure.
      * @param message What went wrong
      * @param cause The GdxRuntimeException which triggered this exception
      */
-    public ResourceLoadException(String message, GdxRuntimeException cause) {
+    public ResourceLoadException(String message, Exception cause) {
         super(message, new IOException(cause));
     }
 

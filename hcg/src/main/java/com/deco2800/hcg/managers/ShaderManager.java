@@ -97,7 +97,8 @@ public class ShaderManager extends Manager implements Observer {
         this.state.setBloom(true);
 
         this.state.setHeat(false);
-        this.state.setContrast(0.8F);
+        this.state.setContrast(0.2F);
+
         //Max of 5 custom renders
         customRenders = new ArrayList<>();
         

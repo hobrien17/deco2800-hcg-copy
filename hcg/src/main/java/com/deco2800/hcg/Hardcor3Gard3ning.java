@@ -6,15 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.deco2800.hcg.contexts.MainMenuContext;
 import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.worldmap.Level;
-import com.deco2800.hcg.entities.worldmap.WorldStack;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.renderers.Renderable;
-import com.deco2800.hcg.worldmapui.LevelStore;
-import com.deco2800.hcg.worldmapui.WorldStackGenerator;
-
-import java.util.ArrayList;
 
 /**
  * Handles the creation of the world and rendering.
@@ -35,6 +29,7 @@ public class Hardcor3Gard3ning extends Game {
 	private NetworkManager networkManager;
 	private CommandManager commandManager;
 	private ShaderManager shaderManager;
+	private WorldManager worldManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -66,9 +61,6 @@ public class Hardcor3Gard3ning extends Game {
 
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
-
-        LevelStore levels = new LevelStore();
-        ArrayList<Level> levelList = levels.getLevels();
         
         /* Create a plant manager. */
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
@@ -80,8 +72,9 @@ public class Hardcor3Gard3ning extends Game {
         stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
         stopwatchManager.startTimer(1);
         
-        /* Create a network manager */
+        /* Setup network manager */
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+        networkManager.init(false);
         
         /* Create a command manager */
         commandManager = (CommandManager) gameManager.getManager(CommandManager.class);
@@ -89,11 +82,25 @@ public class Hardcor3Gard3ning extends Game {
 
         /* Create a command manager */
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+
+        /* Create a world manager */
+        worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
         // add echo command
+        // note args[0] is the command name, not the first argument
         commandManager.registerCommand("echo", new CommandManager.Command() {
+            @Override
+            public String run(String... args) {
+                return args.length > 1 ? args[1] : "";
+            }
+            
+        });
+        
+        //stopped weather
+		commandManager.registerCommand("stopWweather", new CommandManager.Command() {
 			@Override
 			public String run(String... args) {
-                return args[1];
+				weatherManager.stopAllEffect();
+				return "weather stoped";
 			}
 		});
 
@@ -115,10 +122,10 @@ public class Hardcor3Gard3ning extends Game {
         });
 
         // Procedurally generate the world map and store it.
-        WorldStackGenerator worldStackGenerator = new WorldStackGenerator(levelList);
-        WorldStack worldStack = worldStackGenerator.generateWorldStack();
-        gameManager.setWorldStack(worldStack);
-        
+
+
+        worldManager.generateAndSetWorldStack();
+
         contextManager.pushContext(new MainMenuContext());
     }
 
@@ -127,7 +134,7 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
-        networkManager.tick(); // It's important that this is called before fireTicks()
+        networkManager.tick();
         fireTicks();
         clearScreen();
         super.render(); // Will render current context
@@ -156,7 +163,9 @@ public class Hardcor3Gard3ning extends Game {
      */
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
-        	if (! contextManager.ticksRunning()) {
+        	if (networkManager.shouldBlock()) {
+        		return;
+        	} else if (!contextManager.ticksRunning()) {
         		// Schedule next tick
         		nextGameTick += gameTickPeriod;
         		return;

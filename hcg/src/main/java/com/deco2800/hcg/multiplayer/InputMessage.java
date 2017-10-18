@@ -1,5 +1,6 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -7,6 +8,8 @@ import java.nio.ByteBuffer;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class represents a message to be sent when a player has performed an input.
@@ -14,6 +17,8 @@ import com.deco2800.hcg.managers.PlayerInputManager;
  * @author Max Crofts
  */
 public class InputMessage extends Message {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(InputMessage.class);
 	private static final NetworkManager networkManager =
 			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 	private static final PlayerInputManager playerInputManager =
@@ -37,8 +42,9 @@ public class InputMessage extends Message {
 		super.packData(buffer);
 		buffer.putLong(tick);
 		buffer.put((byte) args.length);
-		buffer.asIntBuffer().put(args);
-		buffer.position(buffer.position() + args.length * 4);
+		for (int i = 0; i < args.length; i++) {
+			buffer.putShort((short) args[i]);
+		}
 	}
 	
 	@Override
@@ -50,15 +56,15 @@ public class InputMessage extends Message {
 			byte length = buffer.get();
 			args = new int[length];
 			for (int i = 0; i < length; i++) {
-				args[i] = buffer.getInt();
+				args[i] = (int) buffer.getShort();
 			}
 		} catch (ArrayIndexOutOfBoundsException|BufferUnderflowException|BufferOverflowException e) {
-			throw new MessageFormatException();
+			throw new MessageFormatException(e);
 		}
 	}
 	
 	@Override
-	public void process() {
+	public void process(SocketAddress address) {
 		try {
 			InputType inputType = InputType.values()[args[0]];
 			// TODO: handle input for more than one player
@@ -117,7 +123,13 @@ public class InputMessage extends Message {
 			default:
 				break;
 			}
-			networkManager.updatePeerTickCount(0, tick);
-		} catch (ArrayIndexOutOfBoundsException e) {}
+			
+			// MOUSE_MOVED messages will always be the last input sent for a given tick
+			if (inputType == InputType.MOUSE_MOVED) {
+				networkManager.updatePeerTickCount(0, tick);
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			LOGGER.error(String.valueOf(e));
+		}
 	}
 }

@@ -25,11 +25,14 @@ public class ClockDisplay extends Group {
         super();
         gameManager = GameManager.get();
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
-        skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("resources/ui/clockskin.json"));
 
         /* Add clock. */
         Image clockImage = new Image(new
-                Texture(Gdx.files.internal("resources/ui/clock_outline.png")));
+                Texture(Gdx.files.internal("resources/ui/clock_outline_small.png")));
+        clockImage.setWidth(150f);
+        clockImage.setHeight(150f);
+        clockImage.setPosition(58, 20);
         clockLabel = new Label(timeManager.getTime(), skin);
         dateLabel = new Label(timeManager.getDate(), skin);
         timeManager.setTimeLabel(clockLabel);
@@ -37,10 +40,10 @@ public class ClockDisplay extends Group {
 
         /* Create clock GUI and add it to the stage */
         this.addActor(clockImage);
-        clockLabel.setPosition(58, 95);
-        clockLabel.setFontScale((float)2.1);
-        dateLabel.setPosition(65, 60);
-        dateLabel.setFontScale((float)0.9);
+        clockLabel.setPosition(85, 90);
+        clockLabel.setFontScale((float)1);
+        dateLabel.setPosition(85, 60);
+        dateLabel.setFontScale((float)0.55);
         this.addActor(clockLabel);
         this.addActor(dateLabel);
 
