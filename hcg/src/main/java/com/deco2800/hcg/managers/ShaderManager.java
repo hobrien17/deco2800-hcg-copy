@@ -169,9 +169,6 @@ public class ShaderManager extends Manager implements Observer {
             
         this.preShader.end();
         this.preBatch.dispose();
-        
-        Gdx.gl.glActiveTexture(1);
-        this.lightMap.getTexture().bind();
             
         // Begin post-processing ///////////////////////////////////////////////////////////////////////////////////
         this.postShader.begin();
@@ -203,19 +200,23 @@ public class ShaderManager extends Manager implements Observer {
             this.postShader.setUniformf("u_bloom", baseBloom);
             this.postShader.setUniformf("u_contrast", baseContrast);
         }
+
+        this.postShader.end();
         
-        Gdx.gl.glActiveTexture(0);
         this.postBatch = new SpriteBatch(1, this.postShader);
             
         // Draw onto screen ///////////////////////////////////////////
         postBatch.begin();
+        
+        Gdx.gl.glActiveTexture(1);
+        this.lightMap.getTexture().bind();
+        Gdx.gl.glActiveTexture(0);
           
         postBatch.draw(scene, 0, 0, width, height);
             
         postBatch.end();
         // Finish drawing onto screen /////////////////////////////////
             
-        this.postShader.end();
         this.postBatch.dispose();
         this.renderTarget.dispose();
         this.lightTarget.dispose();
