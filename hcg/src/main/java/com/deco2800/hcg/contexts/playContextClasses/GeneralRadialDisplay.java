@@ -358,6 +358,16 @@ public class GeneralRadialDisplay extends Group {
 		this.active = input;
 	}
 	
+	public void hide() {
+		display.setVisible(false);
+		this.setActive(false);
+	}
+	
+	public void show() {
+		display.setVisible(true);
+		this.setActive(true);
+	}
+	
 	public void addRadialMenu(Stage stage) {
         stage.addActor(display);
         this.setActive(true);

@@ -170,6 +170,13 @@ public class PlayContext extends Context {
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
         stage.addActor(plantButton);
+        
+        weaponRadialDisplay.addRadialMenu(stage);
+        seedRadialDisplay.addRadialMenu(stage);
+        consumableRadialDisplay.addRadialMenu(stage);
+        weaponRadialDisplay.hide();
+        seedRadialDisplay.hide();
+        consumableRadialDisplay.hide();
 
         window = new Window("Menu", skin);
 
@@ -400,23 +407,19 @@ public class PlayContext extends Context {
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.X) {
-            weaponRadialDisplay.addRadialMenu(stage);
+            weaponRadialDisplay.show();
         } else if (keycode == Input.Keys.Q && weaponRadialDisplay.getActive() == true) {
-            this.removeWeaponRadialMenu();
-            weaponRadialDisplay.setActive(false);
-            seedRadialDisplay.addRadialMenu(stage);
+            weaponRadialDisplay.hide();
+            seedRadialDisplay.show();
         } else if (keycode == Input.Keys.E && weaponRadialDisplay.getActive() == true) {
-            this.removeWeaponRadialMenu();
-            weaponRadialDisplay.setActive(false);
-            consumableRadialDisplay.addRadialMenu(stage);
+            weaponRadialDisplay.hide();
+            consumableRadialDisplay.show();
         } else if (keycode == Input.Keys.Q && consumableRadialDisplay.getActive() == true) {
-            this.removeConsumableRadialMenu();
-            consumableRadialDisplay.setActive(false);
-            weaponRadialDisplay.addRadialMenu(stage);
+        	consumableRadialDisplay.hide();
+            weaponRadialDisplay.show();
         } else if (keycode == Input.Keys.Q && seedRadialDisplay.getActive() == true) {
-            this.removeSeedRadialMenu();
-            seedRadialDisplay.setActive(false);
-            weaponRadialDisplay.addRadialMenu(stage);
+        	seedRadialDisplay.hide();
+            weaponRadialDisplay.show();
 		} else if (keycode == Input.Keys.T) {
 			chatStack.setVisible(!chatStack.isVisible());
 		}
@@ -473,11 +476,13 @@ public class PlayContext extends Context {
     }
 
     public void removeWeaponRadialMenu() {
-        weaponRadialDisplay.remove();
+    	//weaponRadialDisplay.setVisible(false);
+        weaponRadialDisplay.hide();
     }
 
     public void removeSeedRadialMenu() {
-        seedRadialDisplay.remove();
+    	//weaponRadialDisplay.setVisible(false);
+        seedRadialDisplay.hide();
     }
 
     public void addParticleEffect(ParticleEffectActor actor) {
