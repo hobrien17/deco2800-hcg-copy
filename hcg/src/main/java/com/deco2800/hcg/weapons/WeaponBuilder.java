@@ -1,5 +1,7 @@
 package com.deco2800.hcg.weapons;
 
+import java.math.BigDecimal;
+
 import com.deco2800.hcg.entities.AbstractEntity;
 
 
@@ -232,7 +234,7 @@ public class WeaponBuilder {
                 pellets = 3;
             }
             
-            if(arc == 0) {
+            if(Math.abs(arc) <= 1 || Math.abs(arc - 2 * Math.PI) > 0) {
                 arc = (float) (Math.PI / 4f);
             }
             
