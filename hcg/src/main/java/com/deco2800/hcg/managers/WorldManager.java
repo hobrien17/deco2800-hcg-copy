@@ -2,6 +2,7 @@ package com.deco2800.hcg.managers;
 
 import com.deco2800.hcg.contexts.PlayContext;
 import com.deco2800.hcg.entities.worldmap.MapNode;
+import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStack;
 import com.deco2800.hcg.worldmapui.LevelStore;
 import com.deco2800.hcg.worldmapui.WorldStackGenerator;
@@ -36,6 +37,16 @@ public class WorldManager extends Manager {
 	public void generateAndSetWorldStack() {
         WorldStack worldStack = worldStackGenerator.generateWorldStack();
         gameManager.setWorldStack(worldStack);
+	}
+	
+	/**
+	 * Sets the specified world map.
+	 * @param index
+	 *     The new world map index.
+	 */
+	public void setWorldMap(int index) {
+		WorldMap map = gameManager.getWorldStack().getWorldStack().get(index);
+		gameManager.setWorldMap(map);
 	}
 	
 	/**

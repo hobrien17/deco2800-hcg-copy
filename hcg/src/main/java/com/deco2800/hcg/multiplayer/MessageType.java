@@ -14,6 +14,7 @@ public enum MessageType {
 	JOINING,	        // sent from peer when joining host
 	JOINED,         // sent from host when a peer has joined
 	START,          // sent from host when starting game
+	WORLD_MAP,
 	LEVEL_START,
 	LEVEL_END,
 	INPUT,          // sent after input
