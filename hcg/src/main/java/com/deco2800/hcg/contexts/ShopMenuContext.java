@@ -9,6 +9,7 @@ import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.TimeManager;
 
@@ -25,6 +26,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private ContextManager contextManager;
     private TextureManager textureManager;
     private TimeManager timeManager;
+    private SoundManager soundManager;
 
     private Skin skin;
     private Image shopTitle;
@@ -64,6 +66,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 gameManager.getManager(TextureManager.class);
         timeManager = (TimeManager)
                 gameManager.getManager(TimeManager.class);
+        soundManager = (SoundManager)
+        		gameManager.getManager(SoundManager.class);
         amountString = "1";
         amount = new TextField(amountString,
                 new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
@@ -162,6 +166,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 							errorImageVisible = true;
 						}
 					}
+					soundManager.playSound("loot");
 				}
 				draw();
 			}
@@ -181,6 +186,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 							errorImageVisible = true;
 						}
 					}
+					soundManager.playSound("loot2");
 				}
 				draw();
 			}
