@@ -130,7 +130,6 @@ public class ShaderManager extends Manager implements Observer {
         this.lightBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
         
         this.lightTarget.begin();
-        Color globalLight = this.state.getGlobalLightColour();
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         this.lightBatch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_SRC_ALPHA);
@@ -178,7 +177,8 @@ public class ShaderManager extends Manager implements Observer {
         // Begin post-processing ///////////////////////////////////////////////////////////////////////////////////
         this.postShader.begin();
         
-        this.postShader.setUniformi("u_lightmap", 1);
+        int location = this.postShader.getUniformLocation("u_lightmap");
+        this.postShader.setUniformi(location, 1);
         this.postShader.setUniformf("u_globalLight", this.state.getGlobalLightColour());
         this.postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
         this.postShader.setUniformf("u_heat", state.getHeat());
