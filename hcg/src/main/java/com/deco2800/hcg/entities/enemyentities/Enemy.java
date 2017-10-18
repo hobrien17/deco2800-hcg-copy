@@ -651,6 +651,62 @@ public abstract class Enemy extends Character implements Lootable {
         this.moveAction();
     }
 
+    void squrrel(){
+        this.setMovementSpeed(this.getMovementSpeed() * 10);
+        this.defaultSpeed = this.getMovementSpeed();
+        List<Player> players;
+        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
+        int playerCount = 0;
+        float[] distances = new float[numPlayers];
+        float closestDistance;
+        //Detect players
+        if (this.getNumberPlayers() > 1) {
+            players = playerManager.getPlayers();
+            //Iterates through all players and puts distance from enemy to each player into an array
+            //Puts all players and their respective distances into a hash map
+            for (Player player : players) {
+                distances[playerCount] = this.distance(player);
+                playerHashMap.put(distances[playerCount], player);
+                playerCount++;
+            }
+
+            //Finds the smallest distance in the distance array
+            closestDistance = distances[0];
+            for (int j = 0; j < distances.length; j++) {
+                if (distances[j] < closestDistance) {
+                    closestDistance = distances[j];
+                }
+            }
+
+            //Gets the player with closest distance from the enemy and assigns to variable
+            this.closestPlayer = playerHashMap.get(closestDistance);
+            if (closestDistance <= 10 * this.level){
+                newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
+                newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
+                if (this.getHealthCur() < this.getHealthMax()){
+                    this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.8));
+
+                }
+            } else {
+                newPos = this.getRandomPos();
+            }
+
+        } else {
+            this.closestPlayer = playerManager.getPlayer();
+            float distance = this.distance(playerManager.getPlayer());
+            if (distance <= 10 * this.level){
+                newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
+                newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
+            } else {
+                newPos = this.getRandomPos();
+            }
+        }
+        //Set new position
+        //newPos = this.getToPlayerPos(closestPlayer);
+        this.detectCollision();
+        this.moveAction();
+
+    }
 
     @Override
     public boolean equals(Object obj) {
