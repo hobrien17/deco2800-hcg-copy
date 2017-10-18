@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
 import java.util.*;
+import com.badlogic.gdx.graphics.g2d.*;
 
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.types.Weathers;
@@ -66,25 +67,31 @@ public class WeatherManager extends Manager {
 	public void resize() {
 		for (int emitter = 0; emitter < weather.getEmitters().size; emitter++) {
 
+			World world = GameManager.get().getWorld();
+
 			ParticleEmitter newEmitter = weather.getEmitters()
 					.get(emitter);
 			newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
 					Gdx.graphics.getHeight() / 2);
 
-			newEmitter.getSpawnHeight().setHighMax(Gdx.graphics.getHeight());
-			newEmitter.getSpawnHeight().setHighMin(Gdx.graphics.getHeight());
+
 			newEmitter.getSpawnHeight().setLowMax(0);
 			newEmitter.getSpawnHeight().setLowMin(0);
 
-			newEmitter.getSpawnWidth().setHighMax(Gdx.graphics.getWidth());
-			newEmitter.getSpawnWidth().setHighMin(Gdx.graphics.getWidth());
-			// World world = GameManager.get().getWorld();
-			// if (world == null) {
-			// 	System.out.println("null");
-			// } else {
-			// 	newEmitter.getSpawnWidth().setHighMax(world.getMap().getProperties().get("width", Integer.class));
-			// 	newEmitter.getSpawnWidth().setHighMin(world.getMap().getProperties().get("width", Integer.class));
-			// }
+			newEmitter.getSpawnWidth().setHighMax(5000);
+			newEmitter.getSpawnWidth().setHighMin(5000);
+
+			newEmitter.getSpawnHeight().setHighMax(5000);
+			newEmitter.getSpawnHeight().setHighMin(5000);
+
+			 if (world == null) {
+			 	System.out.println("null");
+			 } else {
+			 	//newEmitter.getSpawnWidth().setHighMax((int) world.getMap().getProperties().get("width"));
+			 	//newEmitter.getSpawnWidth().setHighMin((int) world.getMap().getProperties().get("width"));
+			 	//newEmitter.getSpawnHeight().setHighMax((int) world.getMap().getProperties().get("length"));
+			 	//newEmitter.getSpawnHeight().setHighMin((int) world.getMap().getProperties().get("length"));
+			}
 			newEmitter.getSpawnWidth().setLowMax(0);
 			newEmitter.getSpawnWidth().setLowMin(0);
 		}
