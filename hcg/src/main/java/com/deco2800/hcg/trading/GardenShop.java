@@ -15,7 +15,7 @@ import com.deco2800.hcg.weapons.WeaponType;
 public class GardenShop extends Shop{
     public GardenShop() {
 
-        Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL).setUser(player).setRadius(0.7).build();
+        Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(player).setRadius(0.7).build();
         Item starfallItem = new WeaponItem(starfall, "stardall", 0);
         addStock(starfallItem);
 
