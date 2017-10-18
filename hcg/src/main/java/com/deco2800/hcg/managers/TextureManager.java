@@ -205,7 +205,19 @@ public class TextureManager extends Manager {
 
 			//NPCs
 			textureMap.put("character_1", new Texture("resources/sprites/npc/Quest_1_SouthEast.png"));
+
+			textureMap.put("character_1_SouthEast", new Texture("resources/sprites/npc/Quest_1_SouthEast.png"));
+			textureMap.put("character_1_South", new Texture("resources/sprites/npc/Quest_1_South.png"));
+			textureMap.put("character_1_SouthWest", new Texture("resources/sprites/npc/Quest_1_SouthWest.png"));
+			textureMap.put("character_1_West", new Texture("resources/sprites/npc/Quest_1_West.png"));
+			textureMap.put("character_1_NorthWest", new Texture("resources/sprites/npc/Quest_1_NorthWest.png"));
+			textureMap.put("character_1_North", new Texture("resources/sprites/npc/Quest_1_North.png"));
+			textureMap.put("character_1_NorthEast", new Texture("resources/sprites/npc/Quest_1_NorthEast.png"));
+			textureMap.put("character_1_East", new Texture("resources/sprites/npc/Quest_1_East.png"));
+
 			textureMap.put("character_shop", new Texture("resources/sprites/npc/Shopkeeper_1.png"));
+			textureMap.put("character_shop_2", new Texture("resources/sprites/npc/Shopkeeper_2.png"));
+			textureMap.put("character_shop_3", new Texture("resources/sprites/npc/Shopkeeper_3.png"));
 
 			//Players
 			textureMap.put("player_0_stand", new Texture("resources/sprites/player/player_0_stand.png"));
