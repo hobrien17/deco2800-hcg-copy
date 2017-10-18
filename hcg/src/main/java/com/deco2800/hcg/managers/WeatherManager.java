@@ -78,20 +78,30 @@ public class WeatherManager extends Manager {
 			newEmitter.getSpawnHeight().setLowMax(0);
 			newEmitter.getSpawnHeight().setLowMin(0);
 
+			if (world == null) {
+				System.out.println("null");
+			} else {
+				//Integer width = (Integer) world.getMap().getProperties().get("width");
+				//Integer height = (Integer) world.getMap().getProperties().get("length");
+				//System.out.println(width.toString());
+				//System.out.println(height.toString());
+			}
+
+
+			// how to set min/max particles: min = 1/3 * max
+			// max ~ 6000 is light, max ~ 12000 is heavy
+			// currently all hardcoded to 12000
+			newEmitter.setMinParticleCount(12000);
+			newEmitter.setMaxParticleCount(12000);
+
+
 			newEmitter.getSpawnWidth().setHighMax(5000);
 			newEmitter.getSpawnWidth().setHighMin(5000);
 
 			newEmitter.getSpawnHeight().setHighMax(5000);
 			newEmitter.getSpawnHeight().setHighMin(5000);
 
-			 if (world == null) {
-			 	System.out.println("null");
-			 } else {
-			 	//newEmitter.getSpawnWidth().setHighMax((int) world.getMap().getProperties().get("width"));
-			 	//newEmitter.getSpawnWidth().setHighMin((int) world.getMap().getProperties().get("width"));
-			 	//newEmitter.getSpawnHeight().setHighMax((int) world.getMap().getProperties().get("length"));
-			 	//newEmitter.getSpawnHeight().setHighMin((int) world.getMap().getProperties().get("length"));
-			}
+			 
 			newEmitter.getSpawnWidth().setLowMax(0);
 			newEmitter.getSpawnWidth().setLowMin(0);
 		}
