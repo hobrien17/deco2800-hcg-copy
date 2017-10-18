@@ -770,6 +770,9 @@ public class Player extends Character implements Tickable {
 		case Input.Keys.D:
 			movementDirection.put("right", true);
 			break;
+		case Input.Keys.Q:
+			this.contextManager.pushContext(new QuestMenuContext());
+			break;
 		case Input.Keys.E:
 			checkForInteraction();
 			break;
