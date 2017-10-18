@@ -26,6 +26,7 @@ public class ShaderState {
     
     private float dayHeat;
     private float nightHeat;
+    private float sick;
     
     private float dayBloom;
     private float nightBloom;
@@ -50,7 +51,8 @@ public class ShaderState {
     public ShaderState(Color sunColour, Color moonColour) {
         this.sunColour = sunColour;
         this.moonColour = moonColour;
-        
+
+        this.sick = 0.0F;
         this.dayBloom = 1.0F;
         this.nightBloom = 0.0F;
         
@@ -114,7 +116,15 @@ public class ShaderState {
     public float getContrast() {
         return this.overcast;
     }
-    
+
+    /**
+     *
+     *
+     * @return
+     */
+    public float getSick() {
+        return this.sick;
+    }
     /**
      * Sets whether or not heat distortion should be applied.
      * 
@@ -157,5 +167,18 @@ public class ShaderState {
         this.dayHeat = waves;
         this.nightHeat = waves;
 
+    }
+
+    /**
+     *
+     *
+     * @param sick
+     */
+    public void setSick(boolean sick) {
+        if (sick) {
+            this.sick = 1.0F;
+        } else {
+            this.sick = 0.0F;
+        }
     }
 }

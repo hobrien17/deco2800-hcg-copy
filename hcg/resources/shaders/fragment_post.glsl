@@ -14,7 +14,8 @@ varying vec2 v_texCoords;
 uniform sampler2D u_texture;
 
 uniform float u_time;
-
+uniform float u_health;
+uniform float u_sick;
 uniform float u_heat;
 uniform float u_bloom;
 uniform float u_contrast;
@@ -68,6 +69,9 @@ vec4 getVignette(vec2 tc) {
 
     //sepia colour, adjust to taste
     const vec3 SEPIA = vec3(1.2, 1.0, 0.8);
+    const vec3 RED = vec3(1.0, 0.0, 0.0);
+    const vec3 SICK = vec3(0.1, 1.0, 0.0);
+
 
 
 	//sample our texture
@@ -87,6 +91,8 @@ vec4 getVignette(vec2 tc) {
 	//apply the vignette with 50% opacity
 	texColor.rgb = mix(texColor.rgb, getBlur(tc).rgb * vignette, 1.0);
 	texColor.rgb = mix(texColor.rgb, texColor.rgb * vignette, 0.5);
+	texColor.rgb = mix(texColor.rgb , RED * vignette, u_health);
+	texColor.rgb = mix(texColor.rgb, SICK * vignette, u_sick);
 
 	//2. GRAYSCALE
 
@@ -99,7 +105,7 @@ vec4 getVignette(vec2 tc) {
 	vec3 sepiaColor = vec3(gray);
 
 	//again we'll use mix so that the sepia effect is at 75%
-	texColor.rgb = mix(texColor.rgb, sepiaColor, u_contrast*0.5);
+	texColor.rgb = mix(texColor.rgb, sepiaColor, u_contrast*0.7);
 
 	//final colour, multiplied by vertex colour
 	return texColor;

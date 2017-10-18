@@ -39,8 +39,13 @@ public class ShaderManager extends Manager implements Observer {
     private SpriteBatch postBatch;
     private BatchTiledMapRenderer tileRenderer;
 
+    private GameManager gameManager;
+    private PlayerManager playerManager;
+
     //Flag for custom overlay renders
     private ArrayList<customShader> customRenders;
+
+    private float health;
 
     private class customShader {
         Float contrast;
@@ -59,6 +64,9 @@ public class ShaderManager extends Manager implements Observer {
 
         this.preShader = new ShaderProgram(preVertexShader, preFragShader);
         this.postShader = new ShaderProgram(postVertexShader, postFragShader);
+
+        this.gameManager = GameManager.get();
+        this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
         LOGGER = LoggerFactory.getLogger(ShaderManager.class);
         if (!preShader.isCompiled()) {
@@ -141,6 +149,12 @@ public class ShaderManager extends Manager implements Observer {
         this.postShader.setUniformf("u_heat", state.getHeat());
         this.postShader.setUniformf("u_bloom", state.getBloom());
         this.postShader.setUniformf("u_contrast", state.getContrast());
+        this.postShader.setUniformf("u_sick", state.getSick());
+
+
+        this.health = ((float) playerManager.getPlayer().getHealthCur())
+                / ((float) playerManager.getPlayer().getHealthMax());
+        this.postShader.setUniformf("u_health", this.health);
         // Apply custom effects over the top of the regular effects
         if (customRenders.size() > 0) {
             float baseHeat = state.getHeat();
