@@ -1,19 +1,15 @@
 package com.deco2800.hcg.contexts;
 
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.deco2800.hcg.managers.*;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -43,6 +39,7 @@ public class PlayContext extends Context {
     // Managers used by the game
     private GameManager gameManager;
     private WeatherManager weatherManager;
+    private ParticleEffectManager particleManager;
     private ContextManager contextManager;
     private MessageManager messageManager;
     private TextureManager textureManager;
@@ -89,6 +86,7 @@ public class PlayContext extends Context {
     private ShaderProgram shader;
     private ShaderProgram postShader;
     private boolean useShaders = true;
+    private boolean exitDisplayed = false;
 
     private Window exitWindow;
 
@@ -105,6 +103,7 @@ public class PlayContext extends Context {
         // Set up managers for this game
         gameManager = GameManager.get();
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
+        particleManager = (ParticleEffectManager) gameManager.getManager(ParticleEffectManager.class);
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
@@ -145,13 +144,18 @@ public class PlayContext extends Context {
         plantManager.setPlantButton(plantButton);
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
 
+
         stage.addActor(chatStack);
         chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
         stage.addActor(plantButton);
-
+        
+        /* Add ParticleEffectActor that controls weather. */
+        stage.addActor(weatherManager.getActor());
+        stage.addActor(particleManager.getActor());
+        
         window = new Window("Menu", skin);
 
         /* Add a quit button to the menu */
@@ -368,8 +372,9 @@ public class PlayContext extends Context {
     	} else {
     		potUnlock.close();
     	}
+
         if(keycode == Input.Keys.M || keycode == Input.Keys.ESCAPE) {
-            contextManager.pushContext(new WorldMapContext());
+        	contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
             soundManager.stopSound("ambientMusic");
             soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
@@ -381,9 +386,33 @@ public class PlayContext extends Context {
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.T) {
-			chatStack.setVisible(!chatStack.isVisible());
-		}
+            chatStack.setVisible(!chatStack.isVisible());
+        } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
+            exit();
+        }
 	}
+
+	private void exit() {
+		if(gameManager.getCurrentNode().getNodeType() != 3) {
+            gameManager.getCurrentNode().changeNodeType(2);
+            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
+            contextManager.popContext();
+        } else {
+            gameManager.getCurrentNode().changeNodeType(2);
+            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
+            gameManager.getMapContext().addEndOfContext();
+            contextManager.popContext();
+        }
+        exitDisplayed = false;
+        // clear old observers (mushroom turret for example)
+        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager.deleteObservers();
+        
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();;
+
+        // stop the old weather effects
+        ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+    }
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
@@ -394,22 +423,7 @@ public class PlayContext extends Context {
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(gameManager.getCurrentNode().getNodeType() != 3) {
-                    gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
-                    contextManager.popContext();
-                } else {
-                    gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
-                    gameManager.getMapContext().addEndOfContext();
-                    contextManager.popContext();
-                }
-                // clear old observers (mushroom turret for example)
-                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-                manager.deleteObservers();
-
-                // stop the old weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                exit();
             }
         });
         exitWindow.add(yesButton);
@@ -422,12 +436,14 @@ public class PlayContext extends Context {
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
+            exitDisplayed = true;
             soundManager.pauseWeatherSounds();
         }
     }
 
     public void removeExitWindow() {
         exitWindow.remove();
+        exitDisplayed = false;
         soundManager.unpauseWeatherSounds();
     }
 

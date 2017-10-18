@@ -2,8 +2,8 @@ sand
 - Delay -
 active: false
 - Duration - 
-lowMin: 1000.0
-lowMax: 1000.0
+lowMin: 5000.0
+lowMax: 5000.0
 - Count - 
 min: 2000
 max: 6000
@@ -20,8 +20,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 1000.0
-highMax: 1000.0
+highMin: 5000.0
+highMax: 5000.0
 relative: false
 scalingCount: 1
 scaling0: 1.0

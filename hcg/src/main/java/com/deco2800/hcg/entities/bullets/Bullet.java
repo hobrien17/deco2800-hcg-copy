@@ -2,10 +2,14 @@ package com.deco2800.hcg.entities.bullets;
 
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
@@ -211,6 +215,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
 				}
+                spawnParticles(entity, "hitPuff.p");
 				hitCount--;
 			}
 
@@ -218,6 +223,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			if (entity instanceof DestructableTree && user instanceof Player
 					&& !(this instanceof GrassBullet)) {
 				DestructableTree tree = (DestructableTree) entity;
+				spawnParticles(entity, "hitPuff.p");
 				applyEffect(tree);
 				hitCount--;
 			}
@@ -226,6 +232,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			if (entity instanceof Player && user instanceof Enemy) {
 				// add code to apply effect to player here
 				Enemy enemyUser = (Enemy) user;
+				spawnParticles(entity, "hitPuff.p");
 				enemyUser.causeDamage((Player) entity);
 				hitCount--;
 			}
@@ -269,9 +276,16 @@ public class Bullet extends AbstractEntity implements Tickable {
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
-		if (bulletType instanceof Grenade) {
-			soundManager.stopSound("bullet-grenade-explode");
-			soundManager.playSound("bullet-grenade-explode");
-		}
+	    return;
+	}
+	
+	protected void spawnParticles(AbstractEntity entity, String particleFile) {
+	    ParticleEffect hitEffect = new ParticleEffect();
+        hitEffect.load(Gdx.files.internal("resources/particles/" + particleFile),
+        Gdx.files.internal("resources/particles/"));
+        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
+        hitEffect.setPosition(position.x, position.y);
+        hitEffect.start();
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, hitEffect);
 	}
 }

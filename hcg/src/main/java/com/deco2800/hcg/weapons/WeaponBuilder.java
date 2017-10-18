@@ -24,6 +24,7 @@ public class WeaponBuilder {
     private String texture = "";
     private int cooldown = -1;
     private int pellets = -1;
+    private float arc = 0;
 
     /**
      * Initialises a new WeaponBuilder
@@ -152,6 +153,15 @@ public class WeaponBuilder {
         return this;
     }
     
+    /**
+     * Sets the pellets of the weapon builder
+     * @param pellets the pellet type to set it to
+     * @return the weapon builder
+     */
+    public WeaponBuilder setArc(float arc) {
+        this.arc = arc;
+        return this;
+    }
     
     /**
      * Call this method after setting desired values to return
@@ -192,7 +202,7 @@ public class WeaponBuilder {
             
             return new Shotgun(posX, posY, posZ, xLength, yLength, zLength,
                     weaponType, user, radius, texture, cooldown, pellets);
-        } else if(weaponType == WeaponType.STARFALL) {
+        } else if(weaponType == WeaponType.STARGUN) {
             if(texture.equals("")) {
                 //TODO: Get proper texture
                 texture = "battle_seed";
@@ -208,18 +218,26 @@ public class WeaponBuilder {
             
             return new Stargun(posX, posY, posZ, xLength, yLength, zLength,
                     weaponType, user, radius, texture, cooldown, pellets);
-        } else if(weaponType == WeaponType.GRENADELAUNCHER) {
+        } else if(weaponType == WeaponType.MULTIGUN) {
             if(texture.equals("")) {
                 //TODO: Get proper texture
                 texture = "battle_seed";
             }
             
             if(cooldown == -1) {
-                cooldown = 30;
+                cooldown = 20;
             }
             
-            return new Grenadelauncher(posX, posY, posZ, xLength, yLength, zLength,
-                    weaponType, user, radius, texture, cooldown);
+            if(pellets == -1) {
+                pellets = 3;
+            }
+            
+            if(arc <= 0.5 || arc >= 2 * Math.PI) {
+                arc = (float) (Math.PI / 4f);
+            }
+            
+            return new Multigun(posX, posY, posZ, xLength, yLength, zLength,
+                    weaponType, user, radius, texture, cooldown, pellets, arc);
         }
         
         return null;

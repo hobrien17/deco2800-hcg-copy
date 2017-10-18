@@ -19,7 +19,8 @@ public class Crab extends Enemy implements Tickable {
      * @param id the ID of the Hedgehog Enemy
      */
     public Crab(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 10000, 10, id);
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 10000, 10, id, EnemyType.CRAB);
+
         this.boss = true;
         // set texture
         this.level = 1;
@@ -32,6 +33,10 @@ public class Crab extends Enemy implements Tickable {
                 .setCooldown(50)
                 .setTexture("battle_seed")
                 .build();
+        this.setStatus(2);
+        this.setMovementSpeed((float) (this.movementSpeed*0.1));
+        this.defaultSpeed = this.getMovementSpeed();
+
     }
 
 
@@ -44,12 +49,17 @@ public class Crab extends Enemy implements Tickable {
         checkLootRarity();
     }
 
+
+
     /**
      * On Tick handler
      * @param gameTickCount Current game tick
      */
     @Override
     public void onTick(long gameTickCount) {
-
+        if (this.getHealthCur() <= this.getHealthMax()*0.5){
+            this.setMovementSpeed((this.defaultSpeed *3));
+        }
+        this.crab();
     }
 }
