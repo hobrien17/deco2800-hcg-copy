@@ -79,7 +79,8 @@ public class ShaderState {
      * @return The current ambient light value.
      */
     public Color getGlobalLightColour() {
-        return moonColour.lerp(sunColour, dayAmount);
+        Color colour = new Color(this.moonColour);
+        return colour.lerp(sunColour, dayAmount);
     }
     
     /**

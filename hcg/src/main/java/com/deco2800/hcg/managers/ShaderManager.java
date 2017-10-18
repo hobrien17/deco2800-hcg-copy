@@ -1,5 +1,9 @@
 package com.deco2800.hcg.managers;
 
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +17,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
+import com.deco2800.hcg.renderers.RenderLightmap;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.shading.ShaderState;
-
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 public class ShaderManager extends Manager implements Observer {
     private FileHandle preVertexShader;
@@ -32,6 +33,11 @@ public class ShaderManager extends Manager implements Observer {
     private Logger LOGGER;
 
     private ShaderState state;
+    
+    private FrameBuffer lightTarget;
+    private TextureRegion lightMap;
+    private SpriteBatch lightBatch;
+    private RenderLightmap lightRenderer;
 
     private FrameBuffer renderTarget;
     private TextureRegion scene;
@@ -59,6 +65,7 @@ public class ShaderManager extends Manager implements Observer {
     public ShaderManager() {
         this.preVertexShader = Gdx.files.internal("resources/shaders/vertex_pre.glsl");
         this.postVertexShader = Gdx.files.internal("resources/shaders/vertex_post.glsl");
+        
         this.preFragShader = Gdx.files.internal("resources/shaders/fragment_pre.glsl");
         this.postFragShader = Gdx.files.internal("resources/shaders/fragment_post.glsl");
 
@@ -69,20 +76,22 @@ public class ShaderManager extends Manager implements Observer {
         this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
         LOGGER = LoggerFactory.getLogger(ShaderManager.class);
-        if (!preShader.isCompiled()) {
+        if(!preShader.isCompiled()) {
             LOGGER.error("Shader failed to compile.");
+            System.out.println(preShader.getLog());
             LOGGER.error(preShader.getLog());
-
+            
             preShader = null;
         }
-
-        if (!this.postShader.isCompiled()) {
-            LOGGER.error("Post preShader failed to compile");
+        
+        if(!this.postShader.isCompiled()) {
+            LOGGER.error("Post shader failed to compile");
+            System.out.println(postShader.getLog());
             LOGGER.error(this.postShader.getLog());
-
+            
             this.postShader = null;
         }
-
+        
         this.state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
 
         this.state.setBloom(true);
@@ -91,6 +100,8 @@ public class ShaderManager extends Manager implements Observer {
         this.state.setContrast(0.8F);
         //Max of 5 custom renders
         customRenders = new ArrayList<>();
+        
+        this.lightRenderer = new RenderLightmap();
 
     }
     
@@ -108,20 +119,38 @@ public class ShaderManager extends Manager implements Observer {
         this.renderTarget = new FrameBuffer(Format.RGB565, width, height, false);
         this.scene = new TextureRegion(renderTarget.getColorBufferTexture());
         this.scene.flip(false, true);
+        
+        // Begin lightmap //////////////////////////////////////////////////////////////////////////////////////////
+        this.lightTarget = new FrameBuffer(Format.RGB888, width, height, false);
+        this.lightMap = new TextureRegion(lightTarget.getColorBufferTexture());
+        this.lightMap.flip(false, true);
+        
+        this.lightBatch = new SpriteBatch();
+        this.lightBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
+        
+        this.lightTarget.begin();
+        Color globalLight = this.state.getGlobalLightColour();
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        this.lightBatch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_SRC_ALPHA);
+        
+        this.lightRenderer.render(this.lightBatch);
+        
+        this.lightTarget.end();
+        this.lightBatch.dispose();
 
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
         checkCustomDurations();
-        this.preShader.setUniformf("u_globalColor", state.getGlobalLightColour());
+        //this.preShader.setUniformf("u_globalColor", state.getGlobalLightColour());
         if (customRenders.size() > 0) {
             Color baseLight = state.getGlobalLightColour();
             for (int i = 0; i < customRenders.size(); i++) {
                 //this.preShader.setUniformf("u_globalColor", customRenders.get(i).color);
                 baseLight.mul(customRenders.get(i).color);
             }
-            this.preShader.setUniformf("u_globalColor", baseLight);
+            //this.preShader.setUniformf("u_globalColor", baseLight);
         }
-            
         this.preBatch = new SpriteBatch(1001, preShader);
         this.preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
             
@@ -141,10 +170,15 @@ public class ShaderManager extends Manager implements Observer {
             
         this.preShader.end();
         this.preBatch.dispose();
+        
+        Gdx.gl.glActiveTexture(1);
+        this.lightMap.getTexture().bind();
             
         // Begin post-processing ///////////////////////////////////////////////////////////////////////////////////
         this.postShader.begin();
-
+        
+        this.postShader.setUniformi("u_lightmap", 1);
+        this.postShader.setUniformf("u_globalLight", this.state.getGlobalLightColour());
         this.postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
         this.postShader.setUniformf("u_heat", state.getHeat());
         this.postShader.setUniformf("u_bloom", state.getBloom());
@@ -169,12 +203,13 @@ public class ShaderManager extends Manager implements Observer {
             this.postShader.setUniformf("u_bloom", baseBloom);
             this.postShader.setUniformf("u_contrast", baseContrast);
         }
-
+        
+        Gdx.gl.glActiveTexture(0);
         this.postBatch = new SpriteBatch(1, this.postShader);
             
         // Draw onto screen ///////////////////////////////////////////
         postBatch.begin();
-            
+          
         postBatch.draw(scene, 0, 0, width, height);
             
         postBatch.end();
@@ -183,6 +218,7 @@ public class ShaderManager extends Manager implements Observer {
         this.postShader.end();
         this.postBatch.dispose();
         this.renderTarget.dispose();
+        this.lightTarget.dispose();
     }
 
     public void setOvercast(float overcast) {
