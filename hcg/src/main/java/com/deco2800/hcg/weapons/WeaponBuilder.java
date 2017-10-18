@@ -232,7 +232,7 @@ public class WeaponBuilder {
                 pellets = 3;
             }
             
-            if(arc == 0) {
+            if(arc <= 0.5 || arc >= 2 * Math.PI) {
                 arc = (float) (Math.PI / 4f);
             }
             

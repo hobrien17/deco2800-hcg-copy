@@ -39,6 +39,7 @@ public class PlayContext extends Context {
     // Managers used by the game
     private GameManager gameManager;
     private WeatherManager weatherManager;
+    private ParticleEffectManager particleManager;
     private ContextManager contextManager;
     private MessageManager messageManager;
     private TextureManager textureManager;
@@ -101,6 +102,7 @@ public class PlayContext extends Context {
         // Set up managers for this game
         gameManager = GameManager.get();
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
+        particleManager = (ParticleEffectManager) gameManager.getManager(ParticleEffectManager.class);
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
@@ -140,6 +142,7 @@ public class PlayContext extends Context {
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
+        stage.addActor(particleManager.getActor());
         stage.addActor(chatStack);
         chatStack.setVisible(false);
         stage.addActor(clockDisplay);
@@ -362,7 +365,7 @@ public class PlayContext extends Context {
     		potUnlock.close();
     	}
         if(keycode == Input.Keys.M) {
-            contextManager.pushContext(new WorldMapContext());
+            contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
             soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
@@ -380,13 +383,13 @@ public class PlayContext extends Context {
 	}
 
 	private void exit() {
-        if(gameManager.getCurrentNode().getNodeType() != 3) {
+		if(gameManager.getCurrentNode().getNodeType() != 3) {
             gameManager.getCurrentNode().changeNodeType(2);
-            gameManager.getMapContext().updateMapDisplay();
+            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
             contextManager.popContext();
         } else {
             gameManager.getCurrentNode().changeNodeType(2);
-            gameManager.getMapContext().updateMapDisplay();
+            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
             gameManager.getMapContext().addEndOfContext();
             contextManager.popContext();
         }
@@ -394,6 +397,8 @@ public class PlayContext extends Context {
         // clear old observers (mushroom turret for example)
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.deleteObservers();
+        
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();;
 
         // stop the old weather effects
         ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();

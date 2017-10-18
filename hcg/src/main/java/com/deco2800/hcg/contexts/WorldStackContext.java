@@ -124,7 +124,7 @@ public class WorldStackContext extends UIContext {
 				 * to fix that problem.
 				 */
 				gameManager.setWorldMap(worldEntity.getWorldMap());
-				contextManager.pushContext(new WorldMapContext());
+				contextManager.pushContext(new WorldMapContext(worldEntity.getWorldMap()));
 			}
 		}
 	}

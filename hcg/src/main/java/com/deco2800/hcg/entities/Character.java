@@ -317,7 +317,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
     * 
     * @param stamina The value to set current stamina to
     */
-    protected void setStaminaCur(int stamina) {
+    public void setStaminaCur(int stamina) {
         if (stamina < 0) {
             this.staminaCur = 0;
         } else if (stamina > this.staminaMax) {
