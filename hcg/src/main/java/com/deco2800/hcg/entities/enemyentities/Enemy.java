@@ -520,7 +520,8 @@ public abstract class Enemy extends Character implements Lootable {
     public void moveAction(){
         if (!this.getCollided()) {
             this.setMove(newPos.getX(), newPos.getY());
-            enemyWeapon.updatePosition((int)this.getPosX(), (int)this.getPosY());
+            Vector3 position = new Vector3(this.getPosX(), this.getPosY(), 0);
+            enemyWeapon.updatePosition(position);
         }
     }
 
@@ -656,7 +657,7 @@ public abstract class Enemy extends Character implements Lootable {
      *  Logic for Squirrel
      *
      */
-    void squrrel(){
+    void squirrel(){
         this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.5));
         this.defaultSpeed = this.getMovementSpeed();
         List<Player> players;
@@ -751,26 +752,5 @@ public abstract class Enemy extends Character implements Lootable {
             this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
             this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
         }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Enemy)) {
-            return false;
-        }
-        Enemy anotherEnemy = (Enemy) obj;
-        if (this.id == anotherEnemy.id) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        // We create a polynomial hash-code based on start, end and capacity
-        final int prime = 31; // an odd base prime
-        int result = 1; // the hash code under construction
-        result = prime * result + this.id;
-        return result;
     }
 }

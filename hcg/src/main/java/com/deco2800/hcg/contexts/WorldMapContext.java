@@ -36,6 +36,7 @@ public class WorldMapContext extends UIContext {
 	private GameManager gameManager;
 	private PlayerManager playerManager;
 	private ContextManager contextManager;
+	private WorldManager worldManager;
 
 	private InputMultiplexer inputMultiplexer;
 
@@ -67,6 +68,8 @@ public class WorldMapContext extends UIContext {
 				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
+		worldManager = (WorldManager) gameManager
+				.getManager(WorldManager.class);
 		InputManager inputManager = new InputManager();
 
 		showAllNodes = false;
@@ -171,7 +174,8 @@ public class WorldMapContext extends UIContext {
 		Vector2 mouseScreen = new Vector2(screenX, screenY);
 		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
 
-		for (MapNodeEntity nodeEntity : allNodes) {
+		for (int i = 0; i < allNodes.size(); i++) {
+			MapNodeEntity nodeEntity = allNodes.get(i);
 			float nodeStartX = nodeEntity.getXPos();
 			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
 			float nodeStartY = nodeEntity.getYPos();
@@ -180,34 +184,10 @@ public class WorldMapContext extends UIContext {
 					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
 					&& nodeEntity.getNode().isDiscovered()
 					&& !(nodeEntity.getNode().getNodeType() == 2)) {
-				gameManager.setOccupiedNode(nodeEntity.getNode());
-				
-				/*
-				 * Simply loading in the world file caused bugs with movement
-				 * due to the same world being loaded multiple times. This seems
-				 * to fix that problem.
-				 */
-
-				gameManager.setOccupiedNode(nodeEntity.getNode());
-
-				// delete stopwatches
-                ((StopwatchManager) GameManager.get().getManager(StopwatchManager.class)).deleteObservers();
-                
-                // create new world
-				World newWorld = new World(nodeEntity.getNode()
-                    .getNodeLinkedLevel().getWorld().getLoadedFile());
-				
-                // add the new weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
-                  setWeather(newWorld.getWeatherType());
-
                 // set the PlayerMapEntity position
 				playerMapEntity.updatePosByNodeEntity(nodeEntity);
-
-                newWorld.generatePuddles();
-				gameManager.setWorld(newWorld);
-				playerManager.spawnPlayers();
-				contextManager.pushContext(new PlayContext());
+				// select the current node
+				worldManager.selectNode(i);
 			}
 		}
 	}

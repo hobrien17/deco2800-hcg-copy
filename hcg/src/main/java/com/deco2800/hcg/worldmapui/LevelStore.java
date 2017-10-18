@@ -26,12 +26,12 @@ public class LevelStore {
 	    
 	    levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_01.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_02.tmx"), 3, 8, 1));
-		levelList.add(new Level(new World("resources/maps/maps/snow_normal_01.tmx"), 1, 3, 1));
-		levelList.add(new Level(new World("resources/maps/maps/snow_normal_02.tmx"), 1, 3, 1));
 		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_01.tmx"), 4, 3, 1));
-		//levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02.tmx"), 0, 1, 0));
+        levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 3, 1));
+	    levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 3, 1));
 		levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_01.tmx"), 2, 5, 1));
 		//(map needs redo) levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_02.tmx"), 2, 5, 1));
+        //levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02.tmx"), 0, 1, 0));
 
 		
 		// Boss levels (there should only be three! (one for each main biome))

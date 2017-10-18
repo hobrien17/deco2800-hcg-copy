@@ -41,6 +41,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+	//private ParticleEffectActor particleEffectActor;
 
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
@@ -142,6 +143,10 @@ public class Bullet extends AbstractEntity implements Tickable {
 		this.hitCount = hitCount;
 
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
+		
+		/*this.particleEffectActor = new ParticleEffectActor();
+		PlayContext playContext = (PlayContext) ((ContextManager) gameManager.getManager(ContextManager.class)).currentContext();
+		playContext.addParticleEffect(particleEffectActor);*/
 	}
 
 	/**
@@ -231,6 +236,13 @@ public class Bullet extends AbstractEntity implements Tickable {
 			}
 
 			if (hitCount == 0) {
+			    /*ParticleEffect hitEffect = new ParticleEffect();
+                hitEffect.load(Gdx.files.internal("resources/particles/hitPuff.p"),
+                Gdx.files.internal("resources/particles/"));
+                hitEffect.setPosition(this.getPosX(), this.getPosY());
+                hitEffect.start();
+                particleEffectActor.add(hitEffect, false);
+                */
 				GameManager.get().getWorld().removeEntity(this);
 				break;
 			}
@@ -269,9 +281,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
-		if (bulletType instanceof Grenade) {
-			soundManager.stopSound("bullet-grenade-explode");
-			soundManager.playSound("bullet-grenade-explode");
-		}
+	    return;
 	}
 }
