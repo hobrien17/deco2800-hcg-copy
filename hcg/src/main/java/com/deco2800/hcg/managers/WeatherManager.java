@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
 import java.util.*;
+
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.types.Weathers;
 
@@ -18,8 +19,10 @@ import com.deco2800.hcg.types.Weathers;
 public class WeatherManager extends Manager {
 
 	SoundManager soundManager;
+	ShaderManager shaderManager;
 	ParticleEffect weather;
 	ParticleEffectActor weatherActor;
+
 
 	// onEffects: a list of effects that are currently on in the game.
 	ArrayList<Weathers> onEffects;
@@ -30,6 +33,7 @@ public class WeatherManager extends Manager {
 	public WeatherManager() {
 		soundManager = (SoundManager) GameManager.get()
 				.getManager(SoundManager.class);
+		shaderManager = (ShaderManager) GameManager.get().getManager(ShaderManager.class);
 
 		onEffects = new ArrayList<Weathers>();
 		weather = new ParticleEffect();

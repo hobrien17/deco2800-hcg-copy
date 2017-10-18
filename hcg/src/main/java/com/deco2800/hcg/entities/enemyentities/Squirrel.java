@@ -11,6 +11,9 @@ import java.util.HashMap;
 public class Squirrel extends Enemy implements Tickable {
 
 	private int spriteCount;
+	private int counter;
+	private int delay;
+
 	/**
 	 * Constructor for the Squirrel class. Creates a new squirrel at the given
 	 * position.
@@ -22,9 +25,12 @@ public class Squirrel extends Enemy implements Tickable {
 	 */
 	public Squirrel(float posX, float posY, float posZ, int Id) {
 		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, Id);
+		this.boss = false;
 		this.setTexture("antSW");
 		this.level = 1;
 		this.spriteCount = 0;
+		this.delay = 20;
+		this.counter = 20;
 		this.enemyWeapon = new WeaponBuilder()
 				.setWeaponType(WeaponType.MACHINEGUN)
 				.setUser(this)
@@ -86,26 +92,19 @@ public class Squirrel extends Enemy implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		if (this.getNumberPlayers() == 1) {
-			this.detectPlayer();//Change status if player detected.
-	        this.setNewPos();//Put new position into Box3D.
-			this.setDirection();
-			this.detectCollision();//Detect collision.
-			this.updateSprite();
-	        this.moveAction();//Move enemy to the position in Box3D.
-			// Apply any effects that exist on the entity
-			myEffects.apply();
-		} else if (this.getNumberPlayers() > 1) {
-			// Runs when multiple players exist. 
-			// Code modified from above to move enemies when there are multiple players present
-			// Author - Elvin, Team 9
-			this.detectPlayers(); // Change status when closest player is detected.
-			this.setNewPosMultiplayer(); // Put new position into Box3D
-			this.setDirection();
-			this.detectCollision(); // Detect collisions.
-			this.updateSprite();
-			this.moveAction(); // Move enemy to the position in Box3D
-			myEffects.apply(); // Apply effects
-		} 
+		this.detectPlayers();//Change status if player detected.
+		this.setNewPos();//Put new position into Box3D.
+		this.setDirection();
+		this.detectCollision();//
+		if (this.counter < this.delay) {
+			this.counter++;
+		} else if (this.collidedPlayer) {
+			this.causeDamage(this.getTarget());
+			this.counter = 0;
+		}
+		this.updateSprite();
+		this.moveAction();//Move enemy to the position in Box3D.
+		// Apply any effects that exist on the entity
+		myEffects.apply();
 	}
 }

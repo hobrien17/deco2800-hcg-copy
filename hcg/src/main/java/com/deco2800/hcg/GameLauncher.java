@@ -22,7 +22,7 @@ public class GameLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "DECO2800 2017: Hardcor3Gard3ning";
         config.fullscreen = true;
-        //Gets width and height from desktop resoulution. May reduce performance for higher resolution displays
+        //Gets width and height from desktop resolution. May reduce performance for higher resolution displays
         config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
         @SuppressWarnings("unused")
         LwjglApplication game = new LwjglApplication(new Hardcor3Gard3ning(), config);

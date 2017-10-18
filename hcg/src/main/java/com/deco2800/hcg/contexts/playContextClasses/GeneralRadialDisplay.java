@@ -29,7 +29,8 @@ import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.entities.bullets.BulletType;
-
+import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.items.stackable.MagicMushroom;
 
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
@@ -38,7 +39,9 @@ public class GeneralRadialDisplay extends Group {
     private SoundManager soundManager;
     private Weapon weapon;
     private boolean active;
+    private Player player;
     private BulletType bulletType;
+    private HealthPotion healthPotion;
     
     private List<ImageButton> buttons;
     private ImageButton closeButton;
@@ -76,8 +79,10 @@ public class GeneralRadialDisplay extends Group {
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         this.stage = stage;
 		this.active = false;
+		this.player = player;
 		this.weapon = weapon;
 		this.bulletType = BulletType.BASIC;
+		this.healthPotion = healthPotion;
 		
         setupSprites();
         setupListeners();
@@ -140,7 +145,7 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
 		sprites.put("bugSpray", "bugspray_btn");
-		sprites.put("healthPotion", "healthPotion");
+		sprites.put("Health Potion", "healthPotion");
 	}
 	
 	private void setupListeners() {
@@ -311,7 +316,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("healthPotion", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
+				healthPotion.consume(player);
 				display.remove();
 			}
 		});

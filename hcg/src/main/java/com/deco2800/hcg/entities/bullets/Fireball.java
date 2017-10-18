@@ -1,6 +1,7 @@
 package com.deco2800.hcg.entities.bullets;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.managers.GameManager;
 
 /**
  * Fireball class
@@ -99,6 +100,23 @@ public class Fireball extends FireBullet {
 			ret[1] = 1f;
 		}
 		return ret;
+	}
+	
+	@Override
+	public void onTick(long gameTickCount) {
+		distanceTravelled += 1;
+		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
+			specialAbility();
+		}
+		entityHit();
+		if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
+				- Math.abs(goalX)) < 0.5
+				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
+				- Math.abs(goalY)) < 0.5) {
+			GameManager.get().getWorld().removeEntity(this);
+		}
+		setPosX(getPosX() + changeX);
+		setPosY(getPosY() + changeY);
 	}
 
 }

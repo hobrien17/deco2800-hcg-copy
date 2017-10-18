@@ -8,7 +8,6 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -28,6 +27,8 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -37,7 +38,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
@@ -60,6 +60,7 @@ public class Player extends Character implements Tickable {
 	private PlayerInputManager playerInputManager;
 	private PlayerManager playerManager;
 	private ConversationManager conversationManager;
+	private StopwatchManager stopwatchManager;
 
 	private boolean collided;
 	private boolean onExit = false;
@@ -69,6 +70,7 @@ public class Player extends Character implements Tickable {
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
+	private long lastTick = 0;
 
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
@@ -182,8 +184,6 @@ public class Player extends Character implements Tickable {
 
 		//REMOVE THIS - JUST ADDED FOR TESTING
 		inventory.addItem(new MagicMushroom());
-		inventory.addItem(new Key());
-		inventory.addItem(new Key());
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
-		playerInputManager.queueLocalAction(InputType.TOUCH_DRAGGED.ordinal(), screenX, screenY, pointer);
+	    playerInputManager.setLocalMousePosition(screenX, screenY);
 	}
 
 	/**
@@ -256,8 +256,7 @@ public class Player extends Character implements Tickable {
 	 *            the y position of mouse movement on the screen
 	 */
 	private void handleLocalMouseMoved(int screenX, int screenY) {
-		// FIXME: mouse inputs currently saturate the server
-		handleMouseMoved(screenX, screenY);
+		playerInputManager.setLocalMousePosition(screenX, screenY);
 	}
 
 	/**
@@ -520,9 +519,19 @@ public class Player extends Character implements Tickable {
 
 			// if current tile is a gateway, load new map
 			if (layer.getProperties().get("newMap") != null) {
-				GameManager.get().setWorld(new World((String) layer.getProperties().get("newMap")));
+                // create new world
+				System.out.print((String) layer.getProperties().get("newMap"));
+				World newWorld = new World("resources/maps/maps/" +(String) layer.getProperties().get("newMap"));
+				
+				// add the new weather effects
+                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
+                  setWeather(newWorld.getWeatherType());
+                
+				GameManager.get().setWorld(newWorld);
 				playerManager.spawnPlayers();
+				updateCamera();
 				this.setPosition(oldPosX, oldPosY, 1);
+				
 			}
 
 			// see if current tile is slippery. Save the slippery value if it is
@@ -565,6 +574,27 @@ public class Player extends Character implements Tickable {
 			this.setPosition(newPos.getX(), newPos.getY(), 1);
 			// update gun's firing position if we moved
 			handleTouchDragged(lastMouseX, lastMouseY, 0);
+		}
+		
+		//update walking animation
+		if(gameTickCount - lastTick >= 5) {
+			StringBuilder spriteName = new StringBuilder("player_");
+			spriteName.append(direction);
+			if (this.speedX == 0 && this.speedY == 0) {
+				// Player is not moving
+				spriteName.append("_stand");
+			} else {
+				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
+					spriteName.append("_stand");
+				} else if (this.spriteFrame == 1) {
+					spriteName.append("_move1");
+				} else if (this.spriteFrame == 3) {
+					spriteName.append("_move2");
+				}
+				this.spriteFrame = ++this.spriteFrame % 4;
+			}
+			this.setTexture(spriteName.toString());
+			lastTick = gameTickCount;
 		}
 
 		checkXp();
@@ -646,7 +676,6 @@ public class Player extends Character implements Tickable {
 					exitMessageDisplayed = true;
 				}
 		default:
-			updateSprite(this.direction);
 			onExit = false;
 			break;
 		}
@@ -680,7 +709,7 @@ public class Player extends Character implements Tickable {
 			speedX = 0;
 			speedY = 0;
 			move = 0;
-			soundStop(name);
+			soundManager.stopAll();
 			this.contextManager.pushContext(new DeathContext());
 			healthCur = healthMax;
 		}
@@ -770,7 +799,7 @@ public class Player extends Character implements Tickable {
 	private void handleKeyDown(int keycode) {
 
 		switch (keycode) {
-		case Input.Keys.T:
+		case Input.Keys.X:
 			this.getEquippedWeapon().switchBullet();
 			break;
 		case Input.Keys.P:
@@ -924,32 +953,6 @@ public class Player extends Character implements Tickable {
 			move = 1;
 			this.direction = 3;
 		}
-	}
-
-	/**
-	 * Updates the player's sprite based on its direction.
-	 * 
-	 * @param direction
-	 *            Direction the player is facing. Integer between 0 and 3.
-	 */
-	private void updateSprite(int direction) {
-		StringBuilder spriteName = new StringBuilder("player_");
-		spriteName.append(direction);
-		if (this.speedX == 0 && this.speedY == 0) {
-			// Player is not moving
-			spriteName.append("_stand");
-		} else {
-			// Player is moving
-			if (this.spriteFrame == 0 || this.spriteFrame == 2) {
-				spriteName.append("_stand");
-			} else if (this.spriteFrame == 1) {
-				spriteName.append("_move1");
-			} else if (this.spriteFrame == 3) {
-				spriteName.append("_move2");
-			}
-			this.spriteFrame = ++this.spriteFrame % 4;
-		}
-		this.setTexture(spriteName.toString());
 	}
 
 	/**

@@ -69,10 +69,11 @@ public class Hardcor3Gard3ning extends Game {
         
         /* Setup stopwatch manager */
         stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
-        stopwatchManager.startTimer(1);
+        stopwatchManager.startTimer(-1);
         
-        /* Create a network manager */
+        /* Setup network manager */
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
+        networkManager.init(false);
         
         /* Create a command manager */
         commandManager = (CommandManager) gameManager.getManager(CommandManager.class);
@@ -109,7 +110,7 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
-        networkManager.tick(); // It's important that this is called before fireTicks()
+        networkManager.tick();
         fireTicks();
         clearScreen();
         super.render(); // Will render current context
@@ -138,7 +139,9 @@ public class Hardcor3Gard3ning extends Game {
      */
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
-        	if (! contextManager.ticksRunning()) {
+        	if (networkManager.shouldBlock()) {
+        		return;
+        	} else if (!contextManager.ticksRunning()) {
         		// Schedule next tick
         		nextGameTick += gameTickPeriod;
         		return;
