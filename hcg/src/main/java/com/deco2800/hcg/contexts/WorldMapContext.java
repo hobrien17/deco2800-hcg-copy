@@ -17,6 +17,7 @@ import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.multiplayer.LevelStartMessage;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
 
@@ -36,6 +37,8 @@ public class WorldMapContext extends UIContext {
 	private GameManager gameManager;
 	private PlayerManager playerManager;
 	private ContextManager contextManager;
+	private WorldManager worldManager;
+	private NetworkManager networkManager;
 
 	private InputMultiplexer inputMultiplexer;
 
@@ -67,6 +70,10 @@ public class WorldMapContext extends UIContext {
 				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
+		worldManager = (WorldManager) gameManager
+				.getManager(WorldManager.class);
+		networkManager = (NetworkManager) gameManager
+				.getManager(NetworkManager.class);
 		InputManager inputManager = new InputManager();
 
 		showAllNodes = false;
@@ -171,7 +178,8 @@ public class WorldMapContext extends UIContext {
 		Vector2 mouseScreen = new Vector2(screenX, screenY);
 		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
 
-		for (MapNodeEntity nodeEntity : allNodes) {
+		for (int i = 0; i < allNodes.size(); i++) {
+			MapNodeEntity nodeEntity = allNodes.get(i);
 			float nodeStartX = nodeEntity.getXPos();
 			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
 			float nodeStartY = nodeEntity.getYPos();
@@ -180,34 +188,15 @@ public class WorldMapContext extends UIContext {
 					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
 					&& nodeEntity.getNode().isDiscovered()
 					&& !(nodeEntity.getNode().getNodeType() == 2)) {
-				gameManager.setOccupiedNode(nodeEntity.getNode());
-				
-				/*
-				 * Simply loading in the world file caused bugs with movement
-				 * due to the same world being loaded multiple times. This seems
-				 * to fix that problem.
-				 */
-
-				gameManager.setOccupiedNode(nodeEntity.getNode());
-
-				// delete stopwatches
-                ((StopwatchManager) GameManager.get().getManager(StopwatchManager.class)).deleteObservers();
-                
-                // create new world
-				World newWorld = new World(nodeEntity.getNode()
-                    .getNodeLinkedLevel().getWorld().getLoadedFile());
-				
-                // add the new weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
-                  setWeather(newWorld.getWeatherType());
-
                 // set the PlayerMapEntity position
 				playerMapEntity.updatePosByNodeEntity(nodeEntity);
-
-                newWorld.generatePuddles();
-				gameManager.setWorld(newWorld);
-				playerManager.spawnPlayers();
-				contextManager.pushContext(new PlayContext());
+				// send to peers
+				if (networkManager.isMultiplayerGame()) {
+					networkManager.queueMessage(new LevelStartMessage(i));
+				}
+				// select the current node
+				worldManager.selectNode(i);
+				return;
 			}
 		}
 	}
@@ -215,7 +204,7 @@ public class WorldMapContext extends UIContext {
 	/**
 	 * Updates the display of the nodes on the world map. Handles making hidden nodes not visible to the user.
 	 */
-	void updateMapDisplay() {
+	public void updateMapDisplay() {
 		updateNodesDisplayed();
 		stage.clear();
 		stage.addActor(new WorldMapEntity());

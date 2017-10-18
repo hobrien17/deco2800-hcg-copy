@@ -2,10 +2,10 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -39,15 +39,11 @@ public class PerksSelectionScreen extends UIContext{
 
         masterTable = new Table(skin);
         masterTable.setFillParent(true);
-        masterTable.setBackground("white");
+        masterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 
         branch1 = new Table(skin);
         branch2 = new Table(skin);
         branch3 = new Table(skin);
-
-        branch1.setBackground(new Image(textureManager.getTexture("red_tree_path")).getDrawable());
-        branch2.setBackground(new Image(textureManager.getTexture("green_tree_path")).getDrawable());
-        branch3.setBackground(new Image(textureManager.getTexture("purple_tree_path")).getDrawable());
 
         quitButton1 = new ImageButton(new Image(textureManager.getTexture("perk_place_holder")).getDrawable());
 

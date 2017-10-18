@@ -247,9 +247,6 @@ public class TextureManager extends Manager {
 			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapons_right.png"));
 
 			//Perks
-			textureMap.put("green_tree_path", new Texture("resources/ui/perks/green_tree_path.png"));
-			textureMap.put("red_tree_path", new Texture("resources/ui/perks/red_tree_path.png"));
-			textureMap.put("purple_tree_path", new Texture("resources/ui/perks/purple_tree_path.png"));
 			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
 
 			//Shop textures
@@ -348,8 +345,7 @@ public class TextureManager extends Manager {
 		}
 
 	}
-
-
+	
 	/**
 	 * Saves a texture with a given id
 	 *

@@ -470,6 +470,15 @@ public final class NetworkManager extends Manager {
 					case START:
 						message = new StartMessage();
 						break;
+					case WORLD_MAP:
+						message = new WorldMapMessage();
+						break;
+					case LEVEL_START:
+						message = new LevelStartMessage();
+						break;
+					case LEVEL_END:
+						message = new LevelEndMessage();
+						break;
 					case INPUT:
 						message = new InputMessage();
 						break;

@@ -2,7 +2,8 @@ package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.deco2800.hcg.managers.*;
-
+import com.deco2800.hcg.multiplayer.LevelEndMessage;
+import com.deco2800.hcg.multiplayer.LevelStartMessage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -51,6 +52,7 @@ public class PlayContext extends Context {
     private PlayerInputManager playerInputManager;
     private ShaderManager shaderManager;
     private PlantManager plantManager;
+    private WorldManager worldManager;
 
 
     // FIXME mouseHandler is never assigned
@@ -114,6 +116,7 @@ public class PlayContext extends Context {
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
+        worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
 
         /* Setup the camera and move it to the center of the world */
         GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -389,22 +392,10 @@ public class PlayContext extends Context {
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(gameManager.getCurrentNode().getNodeType() != 3) {
-                    gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
-                    contextManager.popContext();
-                } else {
-                    gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
-                    gameManager.getMapContext().addEndOfContext();
-                    contextManager.popContext();
-                }
-                // clear old observers (mushroom turret for example)
-                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-                manager.deleteObservers();
-
-                // stop the old weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+            	if (networkManager.isMultiplayerGame()) {
+				networkManager.queueMessage(new LevelEndMessage(0));
+			}
+            	worldManager.completeLevel();
             }
         });
         exitWindow.add(yesButton);
