@@ -713,6 +713,36 @@ public abstract class Enemy extends Character implements Lootable {
 
     }
 
+    void tree(){
+        this.setMovementSpeed(0);
+        this.defaultSpeed = 0;
+
+        GameManager.get().getWorld().getWidth();
+        GameManager.get().getWorld().getLength();
+        if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.8)){
+            //bottom
+
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
+            this.setPosY(0);
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.8) && (this.getHealthCur() > this.getHealthMax()*0.6)){
+            //left
+            this.setPosX(0);
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.6) && (this.getHealthCur() > this.getHealthMax()*0.4)){
+            //right
+            this.setPosX(GameManager.get().getWorld().getWidth());
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5)));
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.4) && (this.getHealthCur() > this.getHealthMax()*0.2)){
+            //top
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
+            this.setPosY(GameManager.get().getWorld().getLength());
+        } else {
+            //middle
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5)));
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Enemy)) {
