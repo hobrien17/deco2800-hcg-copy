@@ -13,24 +13,33 @@ import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
-import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.util.Effect;
-import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -62,6 +71,10 @@ public class Player extends Character implements Tickable {
 	private float lastSpeedX;
 	private float lastSpeedY;
 	private String displayImage;
+
+	private boolean pauseDisplayed;
+	private Table pauseMenu;
+
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
 	
@@ -140,6 +153,8 @@ public class Player extends Character implements Tickable {
 		playerInputManager.addTouchDraggedListener(id, this::handleTouchDragged);
 		playerInputManager.addTouchUpListener(id, this::handleTouchUp);
 		playerInputManager.addMouseMovedListener(id, this::handleMouseMoved);
+		
+		createPauseWindow();
 
 		this.myEffects = new Effects(this);
 
@@ -788,7 +803,12 @@ public class Player extends Character implements Tickable {
 	 * possible actions on key press. Such as NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
-
+		if(pauseDisplayed){
+			if(keycode == Input.Keys.ESCAPE){
+				removePauseWindow();
+			} 
+			return;
+		}
 		switch (keycode) {
 		case Input.Keys.X:
 			this.getEquippedWeapon().switchBullet();
@@ -836,7 +856,7 @@ public class Player extends Character implements Tickable {
 			}
 			break;
 		case Input.Keys.ESCAPE:
-			contextManager.popContext();
+			addPauseWindow();
 			break;
 		case Input.Keys.I:
 			// Display Inventory
@@ -1119,5 +1139,40 @@ public class Player extends Character implements Tickable {
 
 	public List<String> getSpecialisedSkillsList() {
 		return SPECIALISED_SKILLS;
+	}
+	
+	private void createPauseWindow() {
+		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		pauseMenu = new Window("Pause", skin);
+		Button yesButton = new TextButton("Yes", skin);
+		yesButton.pad(5, 10, 5, 10);
+
+		/* Add a programmatic listener to the buttons */
+		yesButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+			}
+		});
+		pauseMenu.add(yesButton);
+		pauseMenu.pack();
+		//pauseMenu.setMovable(false); // So it doesn't fly around the screen
+		pauseMenu.setWidth(150);
+		pauseDisplayed = false;
+	}
+
+	public void addPauseWindow() {
+		if ((pauseMenu.getStage() == null) && (this == playerManager.getPlayer())){
+			/* Add the window to the stage */
+			PlayContext context = (PlayContext) contextManager.currentContext();
+			context.getStage().addActor(pauseMenu);
+			pauseDisplayed = true;
+			soundManager.pauseWeatherSounds();
+		}
+	}
+
+	public void removePauseWindow() {
+		pauseMenu.remove();
+		pauseDisplayed = false;
+		soundManager.unpauseWeatherSounds();
 	}
 }

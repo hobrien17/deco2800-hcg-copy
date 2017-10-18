@@ -435,4 +435,8 @@ public class PlayContext extends Context {
     public void addParticleEffect(ParticleEffectActor actor) {
         stage.addActor(actor);
     }
+    
+    public Stage getStage(){
+    	return stage;
+    }
 }
