@@ -57,8 +57,6 @@ public class MapGenerator {
 		Random seedGenerator = new Random();
 		seedValue = Math.abs(seedGenerator.nextInt(999));
 		mainGenerator = new Random(seedValue);
-		//used in case there is no safe level present (REMOVE ONCE SAFE LEVEL IS ADDED)
-		safeLevel = levelsMaster.get(0);
 	}
 	
 	/**
@@ -68,6 +66,15 @@ public class MapGenerator {
 	 */
 	public void setGeneratorSeed(int seed) {
 		seedValue = seed;
+		mainGenerator = new Random(seedValue);
+	}
+	
+	/**
+	 * Removes the map generator's seed.
+	 */
+	public void removeGeneratorSeed() {
+		Random seedGenerator = new Random();
+		seedValue = Math.abs(seedGenerator.nextInt(999));
 		mainGenerator = new Random(seedValue);
 	}
 	

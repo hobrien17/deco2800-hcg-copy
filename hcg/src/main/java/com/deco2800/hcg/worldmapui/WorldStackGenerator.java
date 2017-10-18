@@ -63,13 +63,29 @@ public class WorldStackGenerator {
 		WorldStack worldStack = new WorldStack();
 		for(Integer i = 0; i < NUMBER_OF_WORLDS; i++) {
 			if(rowNumber == 0 && columnNumber == 0) {
-				WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
-				worldMap.setPosition(i);
-				worldStack.addWorldToStack(worldMap);
+				if(i == 0) {
+					mapGenerator.setGeneratorSeed(31);
+					WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
+					worldMap.setPosition(i);
+					worldStack.addWorldToStack(worldMap);
+					mapGenerator.removeGeneratorSeed();
+				} else {
+					WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
+					worldMap.setPosition(i);
+					worldStack.addWorldToStack(worldMap);
+				}
 			} else {
-				WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
-				worldMap.setPosition(i);
-				worldStack.addWorldToStack(worldMap);
+				if(i == 0) {
+					mapGenerator.setGeneratorSeed(31);
+					WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
+					worldMap.setPosition(i);
+					worldStack.addWorldToStack(worldMap);
+					mapGenerator.removeGeneratorSeed();
+				} else {
+					WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
+					worldMap.setPosition(i);
+					worldStack.addWorldToStack(worldMap);
+				}
 			}
 			worldStack.incrementNumberOfWorlds();	
 		}
