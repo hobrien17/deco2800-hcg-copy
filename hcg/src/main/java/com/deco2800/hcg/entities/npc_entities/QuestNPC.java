@@ -1,8 +1,5 @@
 package com.deco2800.hcg.entities.npc_entities;
 
-import java.util.List;
-import java.util.Random;
-
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -12,6 +9,9 @@ import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Concrete class of a Quest NPC entity
@@ -34,11 +34,14 @@ public class QuestNPC extends NPC {
 	private List<Point> path;
 	private Boolean astarDebug = true;
 
-	private ConversationManager conversationManager;
+	private ConversationManager conversationManager = (ConversationManager) GameManager.get()
+			.getManager(ConversationManager.class);
 	private TimeManager timemanager = (TimeManager) GameManager.get()
 			.getManager(TimeManager.class);
 	private PlayerManager playerManager = (PlayerManager) GameManager.get()
 			.getManager(PlayerManager.class);
+
+	private String relationship;
 
 	/**
 	 * Constructs a new Quest NPC
@@ -64,14 +67,30 @@ public class QuestNPC extends NPC {
 		this.boundaryY = 10;
 		this.moveDirection = 0;
 		this.speed = 0.02f;
-		this.conversationManager = new ConversationManager();
+		this.relationship = conversationManager.getDefaultRelationship(this.getConversation());
 
 		this.setGoal(posX, posY);
 	}
 
 	public void interact() {
-		conversationManager.startConversation(this.getConversation(),
-				this.getFaceImage());
+		conversationManager.startConversation(this, this.getConversation());
+	}
+
+	/**
+	 * Get the NPC's current relationship state
+	 * Be aware this can change mid-conversation!
+	 * @return relationship state String
+	 */
+	public String getRelationship(){
+		return relationship;
+	}
+
+	/**
+	 * Set the NPC's relationship state
+	 * @param relationship new relationship state String
+	 */
+	public void setRelationship(String relationship){
+		this.relationship = relationship;
 	}
 
 	/**

@@ -45,13 +45,15 @@ public abstract class Enemy extends Character implements Lootable {
     protected boolean collidedPlayer;
     protected Box3D newPos;
     protected int direction;
+    protected boolean boss;
+
+    private Player target;
 
     //Multiple players
     private int numPlayers;
     private Player closestPlayer;
 
     protected Box3D prevPos;
-
     protected Weapon enemyWeapon;
 
     /**
@@ -96,10 +98,18 @@ public abstract class Enemy extends Character implements Lootable {
         this.setCollidedPlayer(false);
         this.newPos = getBox3D();
         this.prevPos = getBox3D();
+        this.target = null;
 
         // Effects container
         myEffects = new Effects(this);
     }
+
+    /**
+     * Checks whether the enemy is a boss or not
+     *
+     * @return true or false depending on whether the enemy is a boss
+     */
+    public boolean isBoss() { return boss; }
 
     /**
      * Gets the enemy ID
@@ -160,12 +170,37 @@ public abstract class Enemy extends Character implements Lootable {
     }
 
     /**
+     * Return collision of player status.
+     * @return
+     */
+    public boolean getPlayerCollided(){
+        return this.collidedPlayer;
+    }
+
+    /**
+     * Set player target for the enemy
+     * @param target
+     */
+    public void setTarget(Player target){
+        this.target = target;
+    }
+
+    /**
+     * Return player target for the enemy
+     * @return
+     */
+    public Player getTarget(){
+        return this.target;
+    }
+
+
+    /**
      * Attack the player
      *
      */
     public void causeDamage(Player player) {
         //we have to use this because at the moment the Player class has no takeDamage method yet. We are advised that they will implement it soon
-        player.takeDamage(1);
+        player.takeDamage(10);
     }
 
     @Override
@@ -259,77 +294,88 @@ public abstract class Enemy extends Character implements Lootable {
         numPlayers = playerManager.getPlayers().size();
         return numPlayers;
     }
+    
+    /**
+     * Returns the player entity that is nearest to the enemy entity
+     * 
+     * @return Player object with the smallest distance
+     */
+    public Player getClosestPlayer() {
+    	return closestPlayer;	
+    }
+
+    /**
+     * Returns the player entity that is nearest to the enemy entity
+     *
+     * @return Player object with the smallest distance
+     */
+    public void setClosestPlayer(Player closestPlayer) {this.closestPlayer = closestPlayer; }
+
 
     /**
      * Changes status of enemy based on the closest player's position via least distance.
      * Used when there are multiple players in the same game.
      *
+     * Meraged with detectPlayer()
+     *
      * @author Elvin - Team 9
      */
     public void detectPlayers() {
-
-        List<Player> players;
-        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
-
-        int playerCount = 0;
-        float[] distances = new float[numPlayers];
-        float closestDistance;
-
-        getNumberPlayers();
-        players = playerManager.getPlayers();
-
-        //Iterates through all players and puts distance from enemy to each player into an array
-        //Puts all players and their respective distances into a hash map
-        for (Player player : players) {
-            distances[playerCount] = this.distance(player);
-            playerHashMap.put(distances[playerCount], player);
-            playerCount++;
-        }
-
-        //Finds the smallest distance in the distance array
-        closestDistance = distances[0];
-        for (int j = 0; j < distances.length; j++) {
-            if (distances[j] < closestDistance) {
-                closestDistance = distances[j];
+        if (this.getNumberPlayers() > 1) {
+            List<Player> players;
+            HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
+            int playerCount = 0;
+            float[] distances = new float[numPlayers];
+            float closestDistance;
+            players = playerManager.getPlayers();
+            //Iterates through all players and puts distance from enemy to each player into an array
+            //Puts all players and their respective distances into a hash map
+            for (Player player : players) {
+                distances[playerCount] = this.distance(player);
+                playerHashMap.put(distances[playerCount], player);
+                playerCount++;
             }
-        }
 
-        //Gets the player with closest distance from the enemy and assigns to variable
-        closestPlayer = playerHashMap.get(closestDistance);
+            //Finds the smallest distance in the distance array
+            closestDistance = distances[0];
+            for (int j = 0; j < distances.length; j++) {
+                if (distances[j] < closestDistance) {
+                    closestDistance = distances[j];
+                }
+            }
 
-        //Following is a modification of detectPlayer
-        if (closestDistance <= 5 * this.level) {
-            this.setStatus(2);
-            this.lastPlayerX = closestPlayer.getPosX();
-            this.lastPlayerY = closestPlayer.getPosY();
-        } else if (this.getStatus() == 2){
-            this.setStatus(3);
-        } else {
-            this.setStatus(1);
-        }
+            //Gets the player with closest distance from the enemy and assigns to variable
+            this.closestPlayer = playerHashMap.get(closestDistance);
 
-    }
-
-
-    /**
-     * To detect player's position and set enemy's status.
-     *
-     */
-    public void detectPlayer(){
-        float distance = this.distance(playerManager.getPlayer());
-        if(distance <= 5 * this.level){
-            //Annoyed by player.
-            this.setStatus(2);
-            this.lastPlayerX = playerManager.getPlayer().getPosX();
-            this.lastPlayerY = playerManager.getPlayer().getPosY();
-        }else{
-            if (this.getStatus() == 2){
+            //Following is a modification of detectPlayer
+            if (closestDistance <= 5 * this.level) {
+                this.setStatus(2);
+                this.lastPlayerX = closestPlayer.getPosX();
+                this.lastPlayerY = closestPlayer.getPosY();
+            } else if (this.getStatus() == 2) {
                 this.setStatus(3);
             } else {
                 this.setStatus(1);
             }
+        } else {
+            float distance = this.distance(playerManager.getPlayer());
+            this.closestPlayer = playerManager.getPlayer();
+            if(distance <= 5 * this.level){
+                //Annoyed by player.
+                this.setStatus(2);
+                this.lastPlayerX = playerManager.getPlayer().getPosX();
+                this.lastPlayerY = playerManager.getPlayer().getPosY();
+            }else{
+                if (this.getStatus() == 2){
+                    //Lost player
+                    this.setStatus(3);
+                } else {
+                    this.setStatus(1);
+                }
+            }
         }
     }
+        
 
     /**
      * Randomly go to next position which is inside the circle(Maximum distance depends on enemy level.)
@@ -394,44 +440,10 @@ public abstract class Enemy extends Character implements Lootable {
 
     /**
      * Move enemy to player.
-     *
-     */
-    public Box3D getToPlayerPos(){
-        float currPosX = this.getPosX();
-        float currPosY = this.getPosY();
-        prevPos.setX(currPosX);
-        prevPos.setY(currPosY);
-        if((abs(this.getPosX() - playerManager.getPlayer().getPosX()) > 1)||
-                (abs(this.getPosY() - playerManager.getPlayer().getPosY()) > 1)){
-            this.setCollided(false);
-            this.setCollidedPlayer(false);
-        }
-        if(this.getPosX() < playerManager.getPlayer().getPosX()){
-            currPosX += movementSpeed;
-        }
-        else if(this.getPosX() > playerManager.getPlayer().getPosX()){
-            currPosX -= movementSpeed;
-        }
-        if(this.getPosY() < playerManager.getPlayer().getPosY()){
-            currPosY += movementSpeed;
-        }
-        else if(this.getPosY() > playerManager.getPlayer().getPosY()){
-            currPosY -= movementSpeed;
-        }
-        newPos.setX(currPosX);
-        newPos.setY(currPosY);
-        return newPos;
-    }
-
-    /**
-     * Copied and modified from getToPlayerPos().
-     * Added an input argument to allow function to work on any player passed in, rather than the single
-     * 'hard coded' player in playerManager.
-     *
+     * Modified for multiplayer by Elvin - Team 9
      * @return Box3D
-     * @author Elvin - Team 9
      */
-    public Box3D moveToPlayer(Player player){
+    public Box3D getToPlayerPos(Player player){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
         if((abs(this.getPosX() - player.getPosX()) > 1)||
@@ -499,7 +511,8 @@ public abstract class Enemy extends Character implements Lootable {
     public void moveAction(){
         if (!this.getCollided()) {
             this.setMove(newPos.getX(), newPos.getY());
-            enemyWeapon.updatePosition((int)this.getPosX(), (int)this.getPosY());
+            Vector3 position = new Vector3(this.getPosX(), this.getPosY(), 0);
+            enemyWeapon.updatePosition(position);
         }
     }
 
@@ -515,17 +528,35 @@ public abstract class Enemy extends Character implements Lootable {
         for (AbstractEntity entity : entities) {
             if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
                 if(entity instanceof Player) {
-                    this.causeDamage((Player)entity);
+                    //this.causeDamage((Player)entity);
+                    this.setTarget((Player)entity);
                     this.setCollidedPlayer(true);
                 }
                 this.setCollided(true);
+                this.detour();
             }
         }
     }
 
 
     /**
+     * Generate new random pos when collied with non-player
+     *
+     */
+    void detour(){
+        do {
+            if (this.getCollided() && !this.getPlayerCollided()){
+                newPos = this.getRandomPos();
+            }
+        } while (this.getCollided() && !this.getPlayerCollided());
+        if (!this.getPlayerCollided()){
+            this.setCollided(false);
+        }
+    }
+    /**
      * Set new position by different situation.
+     *
+     * Modified for multiplayer by Elvin - Team 9
      */
     public void setNewPos(){
         switch(this.getStatus()){
@@ -533,7 +564,7 @@ public abstract class Enemy extends Character implements Lootable {
                 newPos = this.getRandomPos();
                 break;
             case 2://Status: Chasing player
-                newPos = this.getToPlayerPos();
+                newPos = this.getToPlayerPos(closestPlayer);
                 this.shoot();
                 break;
             case 3://Status: Annoyed/Lost player
@@ -559,30 +590,6 @@ public abstract class Enemy extends Character implements Lootable {
     }
 
     /**
-     * Set new position by different situations, modified for multiple players
-     *
-     * @author Elvin - Team 9
-     */
-    public void setNewPosMultiplayer() {
-        switch(this.getStatus()) {
-            case 1: //Status: New born enemy
-                newPos = this.getRandomPos();
-                break;
-            case 2: //Status: Chasing closest player
-                newPos = this.moveToPlayer(closestPlayer);
-                this.shoot();
-                break;
-            case 3: //Status: Annoyed/Lost player
-                newPos = this.getMoveToPos(this.getLastPlayerX(), this.getLastPlayerY());
-                break;
-            default:
-                newPos = this.getRandomPos();
-                break;
-        }
-
-    }
-
-    /**
      * Shoot the entity
      *
      */
@@ -591,24 +598,52 @@ public abstract class Enemy extends Character implements Lootable {
         enemyWeapon.openFire();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Enemy)) {
-            return false;
+    /**
+     *  Logic for Crab
+     *
+     */
+    void crab(){
+        List<Player> players;
+        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
+        int playerCount = 0;
+        float[] distances = new float[numPlayers];
+        float closestDistance;
+        this.setStatus(2);
+        this.setMovementSpeed((float) (this.movementSpeed*0.1));
+        if (this.getHealthCur() <= this.getHealthMax()*0.5){
+            this.setMovementSpeed((this.movementSpeed*5));
         }
-        Enemy anotherEnemy = (Enemy) obj;
-        if (this.id == anotherEnemy.id) {
-            return true;
-        }
-        return false;
-    }
+        players = playerManager.getPlayers();
+        //Detect players
+        if (this.getNumberPlayers() > 1) {
+            //Iterates through all players and puts distance from enemy to each player into an array
+            //Puts all players and their respective distances into a hash map
+            for (Player player : players) {
+                distances[playerCount] = this.distance(player);
+                playerHashMap.put(distances[playerCount], player);
+                playerCount++;
+            }
 
-    @Override
-    public int hashCode() {
-        // We create a polynomial hash-code based on start, end and capacity
-        final int prime = 31; // an odd base prime
-        int result = 1; // the hash code under construction
-        result = prime * result + this.id;
-        return result;
+            //Finds the smallest distance in the distance array
+            closestDistance = distances[0];
+            for (int j = 0; j < distances.length; j++) {
+                if (distances[j] < closestDistance) {
+                    closestDistance = distances[j];
+                }
+            }
+
+            //Gets the player with closest distance from the enemy and assigns to variable
+            this.closestPlayer = playerHashMap.get(closestDistance);
+            this.lastPlayerX = closestPlayer.getPosX();
+            this.lastPlayerY = closestPlayer.getPosY();
+
+        } else {
+        this.lastPlayerX = playerManager.getPlayer().getPosX();
+        this.lastPlayerY = playerManager.getPlayer().getPosY();
+        }
+        //Set new position
+        newPos = this.getToPlayerPos(closestPlayer);
+        this.detectCollision();
+        this.moveAction();
     }
 }

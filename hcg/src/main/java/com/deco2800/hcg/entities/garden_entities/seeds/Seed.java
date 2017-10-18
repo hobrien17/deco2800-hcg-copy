@@ -9,11 +9,10 @@ import com.deco2800.hcg.entities.garden_entities.plants.*;
 import com.deco2800.hcg.entities.turrets.*;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.StackableItem;
-import com.deco2800.hcg.managers.GameManager;
 
 public class Seed extends StackableItem {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Seed.class);
 
 	/**
 	 * Stores the many different types of seeds in the game *
@@ -76,7 +75,8 @@ public class Seed extends StackableItem {
 		this.texture = type.getTexture();
 		this.baseValue = 1;
 		this.itemWeight = 0;
-		this.itemName = type.toString().toLowerCase();
+		this.itemName = type.toString().toLowerCase() + " Seed";
+		this.itemName = this.itemName.substring(0, 1).toUpperCase() + this.itemName.substring(1);
 		this.maxStackSize = 256;
 		this.currentStackSize = 1;
 	}
@@ -101,7 +101,7 @@ public class Seed extends StackableItem {
 			return type.getPlant().getDeclaredConstructor(Pot.class).newInstance(pot);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex) {
-			LOGGER.error("Error creating new object: " + ex.getStackTrace());
+			LOGGER.error("Error creating new object: ", ex);
 			return null;
 		}
 	}
@@ -117,7 +117,7 @@ public class Seed extends StackableItem {
 			return type.getTurret().getDeclaredConstructor(Corpse.class).newInstance(corpse);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex) {
-			LOGGER.error("Error creating new object: " + ex.getStackTrace());
+			LOGGER.error("Error creating new object: ", ex);
 			return null;
 		}
 	}
@@ -141,7 +141,7 @@ public class Seed extends StackableItem {
 	
 	@Override
 	public String getName() {
-		return type.toString().toLowerCase();
+		return this.itemName;
 	}
 
 

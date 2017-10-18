@@ -38,7 +38,7 @@ public class WeaponTest {
                 .setZLength(20)
                 .build();
         Weapon star = new WeaponBuilder()
-                .setWeaponType(WeaponType.STARFALL)
+                .setWeaponType(WeaponType.STARGUN)
                 .setUser(player)
                 .setRadius(10)
                 .build();
@@ -49,7 +49,7 @@ public class WeaponTest {
         assertEquals(weapon2.cooldown, 10);
         //assertEquals(weapon.aimX, 0);
         //assertEquals(weapon.aimY, 0);
-        assertTrue(weapon.followX == weapon2.followX);
+        assertTrue(weapon.follow.x == weapon2.follow.x);
         assertTrue(weapon.radius == 0);
         assertEquals(weapon.shoot, false);
         assertEquals(weapon.user, player);

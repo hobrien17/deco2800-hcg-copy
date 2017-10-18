@@ -29,14 +29,19 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected float angle;
 	protected float changeX;
 	protected float changeY;
+	protected float deltaX;
+	protected float deltaY;
 
 	protected AbstractEntity user;
 	protected int hitCount;
 	protected BulletType bulletType;
 
+	protected int distanceTravelled;
+
 	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+	//private ParticleEffectActor particleEffectActor;
 
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
@@ -138,6 +143,10 @@ public class Bullet extends AbstractEntity implements Tickable {
 		this.hitCount = hitCount;
 
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
+		
+		/*this.particleEffectActor = new ParticleEffectActor();
+		PlayContext playContext = (PlayContext) ((ContextManager) gameManager.getManager(ContextManager.class)).currentContext();
+		playContext.addParticleEffect(particleEffectActor);*/
 	}
 
 	/**
@@ -158,16 +167,21 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
+		distanceTravelled += 1;
+		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
+			specialAbility();
+		}
 		entityHit();
-
 		if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
 				- Math.abs(goalX)) < 0.5
 				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
 				- Math.abs(goalY)) < 0.5) {
-			GameManager.get().getWorld().removeEntity(this);
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
+		if (distanceTravelled >= 100) {
+			GameManager.get().getWorld().removeEntity(this);
+		}
 	}
 
 	/**
@@ -222,10 +236,36 @@ public class Bullet extends AbstractEntity implements Tickable {
 			}
 
 			if (hitCount == 0) {
+			    /*ParticleEffect hitEffect = new ParticleEffect();
+                hitEffect.load(Gdx.files.internal("resources/particles/hitPuff.p"),
+                Gdx.files.internal("resources/particles/"));
+                hitEffect.setPosition(this.getPosX(), this.getPosY());
+                hitEffect.start();
+                particleEffectActor.add(hitEffect, false);
+                */
 				GameManager.get().getWorld().removeEntity(this);
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Method to overwrite in the grassBullet and trackingBullet class.
+	 * Called in the onTick method.
+	 */
+	protected void specialAbility() {
+		return;
+	}
+
+	/**
+	 * Updates the angle (direction) that the bullet travels too.
+	 *
+	 * @param changeAngle: The value to change the angle by
+	 */
+	public void updateAngle(int changeAngle) {
+		this.angle += changeAngle;
+		this.changeX = (float) (speed * Math.cos(angle));
+		this.changeY = (float) (speed * Math.sin(angle));
 	}
 
 	/**
@@ -241,9 +281,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
-		if (bulletType instanceof Grenade) {
-			soundManager.stopSound("bullet-grenade-explode");
-			soundManager.playSound("bullet-grenade-explode");
-		}
+	    return;
 	}
 }

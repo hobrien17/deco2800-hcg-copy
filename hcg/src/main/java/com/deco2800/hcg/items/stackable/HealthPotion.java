@@ -29,7 +29,6 @@ public class HealthPotion extends ConsumableItem {
         //TODO: Update character health
         ((Player)character).setHealthCur(character.getHealthCur() + 100);
         LOGGER.info("Health Updated!");
-
     }
 
     @Override
