@@ -13,25 +13,29 @@ public class LevelStore {
 		 * https://github.com/UQdeco2800/deco2800-2017-hardcor3gard3ning/wiki/Creating-Maps
 		 */
 		levelList = new ArrayList<>();
-        // Test levels for now. Eventually this will contain all the playable game levels
-		levelList.add(new Level(new World("resources/maps/maps/safezone_2.tmx"), 0, 1, 0));
 
-		// Safe node level (there should only be one!)
-		// Add safe node level here
+		// Safe Zone levels
+		levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_01.tmx"), 0, 1, 0));
+		levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_02.tmx"), 0, 1, 1));
+
+		// Normal Levels
+		levelList.add(new Level(new World("resources/maps/maps/grass_normal_01.tmx"), 0, 1, 1));
+		levelList.add(new Level(new World("resources/maps/maps/grass_normal_02.tmx"), 0, 1, 1));
+	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_03.tmx"), 0, 1, 1));
+	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_04.tmx"), 0, 3, 1));
+	    
+	    levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_01.tmx"), 3, 8, 1));
+		levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_02.tmx"), 3, 8, 1));
+		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_01.tmx"), 4, 3, 1));
+        levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 3, 1));
+	    levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 3, 1));
+		levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_01.tmx"), 2, 5, 1));
+		//(map needs redo) levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_02.tmx"), 2, 5, 1));
+        //levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02.tmx"), 0, 1, 0));
+
 		
-		// Boss levels (there should only be three! (one for each biome)) Ensure they are in ascending biome order
-		
-        // All standard levels (do not need any order; just add to the bottom)
-		levelList.add(new Level(new World("resources/maps/maps/level1.tmx"), 0, 1, 1));
-        levelList.add(new Level(new World("resources/maps/maps/initial-map-test.tmx"), 0, 1, 1));
-        levelList.add(new Level(new World("resources/maps/maps/snow.tmx"), 0, 1, 1));
-		levelList.add(new Level(new World("resources/maps/maps/dark_forest.tmx"), 2, 8, 1));
-        levelList.add(new Level(new World("resources/maps/maps/simons-level1.tmx"), 0, 4, 1));
-        levelList.add(new Level(new World("resources/maps/maps/simons-level3.tmx"), 0, 3, 1));
-        levelList.add(new Level(new World("resources/maps/maps/simons-level2.tmx"), 0, 4, 1));
-		levelList.add(new Level(new World("resources/maps/maps/mushroom_map_1.tmx"), 3, 1, 1));
-        levelList.add(new Level(new World("resources/maps/maps/maze.tmx"), 0, 1, 1));
-		levelList.add(new Level(new World("resources/maps/maps/icepath.tmx"), 0, 1, 1));
+		// Boss levels (there should only be three! (one for each main biome))
+		// Ensure they are in ascending biome order
 	}
 	
 	public ArrayList<Level> getLevels() {

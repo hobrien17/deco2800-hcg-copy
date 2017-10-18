@@ -1,19 +1,18 @@
 package com.deco2800.hcg.entities;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class NPCTest {
     private GameManager gameManager;
@@ -65,7 +64,7 @@ public class NPCTest {
 
         //Create NPC
         //QuestNPC testNPC = new QuestNPC(20,20,"Jane","Jensen","character_1","",  "character_1");
-        QuestNPC testNPC = new QuestNPC(20.0f, 20.0f, "Jane", "Jensen","character_1", "", "");
+        QuestNPC testNPC = new QuestNPC(20.0f, 20.0f, "Jane", "Jensen","character_1", "test_conversation_01", "");
         gameManager.getWorld().addEntity(testNPC);
 
         //Check for movement outside of 5x5 grid

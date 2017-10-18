@@ -2,13 +2,11 @@ package com.deco2800.hcg.entities;
 
 import java.util.*;
 
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
-import com.deco2800.hcg.entities.Harmable;
-import com.deco2800.hcg.entities.Tickable;
-
 
 /**
  * The Character abstract class is to be extended by all Characters, both
@@ -568,6 +566,18 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      */
     private int getCurrentNodeID() {
         return GameManager.get().getCurrentNode().getNodeID();
+    }
+
+    /**
+     * Triggered when an AbstractEntity has died as the result of an effect caused by this character.
+     *
+     * @param victim the character that has died.
+     */
+    public void killAlert(AbstractEntity victim) {
+        if (victim instanceof Enemy) {
+            Enemy enemyVictim = (Enemy) victim;
+            this.killLogAdd(enemyVictim.getID());
+        }
     }
 
     @Override

@@ -38,7 +38,7 @@ public class IceBullet extends Bullet {
 				  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
-		this.setTexture("battle_seed_red");
+		this.setTexture("battle_seed_green");
 		this.bulletType = BulletType.ICE;
 	}
 	
@@ -101,6 +101,6 @@ public class IceBullet extends Bullet {
 	
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Ice", 1, 0, 0, 0, 100, 0));
+		target.giveEffect(new Effect("Ice", 1, 0, 0, 0, 100, 0, user));
 	}
 }

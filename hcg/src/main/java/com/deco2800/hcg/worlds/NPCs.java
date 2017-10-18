@@ -22,7 +22,7 @@ public enum NPCs {
       case SHOP:
         return new ShopNPC(x, y, fName, sName, texture, null, faceImage);     
       case QUEST:
-        return new QuestNPC(x, y, fName, sName, texture, "test_conversation_01", faceImage);     
+        return new QuestNPC(x, y, fName, sName, texture, conversation, faceImage);
       default:
           return null;
     }

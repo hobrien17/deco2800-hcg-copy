@@ -14,7 +14,7 @@ import com.deco2800.hcg.managers.GameManager;
 public class Explosion extends AbstractEntity implements Tickable {
 	
 	private float change;
-	private final static float MOD = 0.015f;
+	private static final float MOD = 0.015f;
 	
 	/**
 	 * Creates a new explosion at the given co-ordinates
@@ -25,6 +25,8 @@ public class Explosion extends AbstractEntity implements Tickable {
 	 * 			the y position of the explosion
 	 * @param posZ
 	 * 			the z position of the explosion
+	 * @param change
+	 * 			the explosion's rate of change
 	 */
 	public Explosion(float posX, float posY, float posZ, float change) {
 		super(posX, posY, posZ, 0, 0, 0, 0.01f, 0.01f, true);
@@ -32,6 +34,11 @@ public class Explosion extends AbstractEntity implements Tickable {
 		this.change = change;
 	}
 	
+	/**
+	 * Returns the rate at which the explosion grows at
+	 * 
+	 * @return the explosion's rate of change
+	 */
 	public float getRateOfChange() {
 	    return this.change;
 	}

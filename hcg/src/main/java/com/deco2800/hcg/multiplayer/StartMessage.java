@@ -1,5 +1,6 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 
 import com.deco2800.hcg.contexts.CharacterCreationContext;
@@ -8,6 +9,7 @@ import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.WorldManager;
 
 /**
  * This class represents a message to be sent when the host starts the game.
@@ -19,6 +21,7 @@ public class StartMessage extends Message {
 	private final ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 	private final NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 	private final PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+	private final WorldManager worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
 	
 	private int seed;
 	
@@ -29,6 +32,11 @@ public class StartMessage extends Message {
 	public StartMessage(int seed) {
 		super(MessageType.START);
 		this.seed = seed;
+		
+		networkManager.setSeed((long) seed);
+		
+		worldManager.setGeneratorSeed(networkManager.getNextRandomInt(Integer.MAX_VALUE));
+		worldManager.generateAndSetWorldStack();
 	}
 	
 	@Override
@@ -44,8 +52,11 @@ public class StartMessage extends Message {
 	}
 	
 	@Override
-	public void process() {
+	public void process(SocketAddress address) {
 		networkManager.setSeed((long) seed);
+		
+		worldManager.setGeneratorSeed(networkManager.getNextRandomInt(Integer.MAX_VALUE));
+		worldManager.generateAndSetWorldStack();
 		
 		// TODO: we need to support more (4?) players
 		// FIXME

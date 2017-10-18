@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.worldmap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -27,6 +28,9 @@ public class WorldMapEntity extends Actor {
 
     @Override
     public void draw(Batch batch, float alpha){
-        batch.draw(mapBackground,0,0);
+    	// Grab the current viewport dimensions
+    	int viewPortX = Gdx.graphics.getWidth();
+        int viewPortY = Gdx.graphics.getHeight();
+        batch.draw(mapBackground, 0, 0, viewPortX, viewPortY);
     }
 }

@@ -1,5 +1,6 @@
 package com.deco2800.hcg.multiplayer;
 
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 
 import com.deco2800.hcg.managers.GameManager;
@@ -34,13 +35,13 @@ public class ChatMessage extends Message {
 	@Override
 	public void unpackData(ByteBuffer buffer) throws MessageFormatException {
 		super.unpackData(buffer);
-		byte bytes[] = new byte[buffer.remaining()];
+		byte[] bytes = new byte[buffer.remaining()];
 		buffer.get(bytes);
 		string = new String(bytes);
 	}
 	
 	@Override
-	public void process() {
+	public void process(SocketAddress address) {
 		messageManager.chatMessageReceieved(string);
 	}
 }

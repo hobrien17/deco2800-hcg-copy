@@ -7,15 +7,12 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.items.lootable.Lootable;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.WeatherManager;
-import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.util.WorldUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -53,7 +50,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	private int lastGrow;
 
 	protected Map<LootWrapper, Double> lootRarity;
-	private int numLoot;
+	protected int numLoot;
 
 	/**
 	 * Creates a new plant in the given pot with the given growth delay.
@@ -252,7 +249,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 		for (Double rarity : lootRarity.values()) {
 			if (rarity < 0.0 || rarity > 1.0) {
 				LOGGER.error("Rarity should be between 0 and 1");
-				System.out.println("inv");
 				return false;
 			}
 			sum += rarity;
@@ -304,6 +300,31 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 
 		checkLootRarity(); // will display a warning if the loot rarity goes
 							// above 1
+	}
+	
+	/**
+	 * Loots the plant at any stage of growth
+	 * Smaller plants will drop less loot
+	 * 
+	 */
+	public void harvest() {
+		if(stage == Stage.LARGE) {
+			loot();
+			return;
+		}
+		for (Map.Entry<LootWrapper, Double> entry : lootRarity.entrySet()) {
+			if(stage == Stage.SPROUT) {
+				entry.getKey().modAmount(0.1f);
+			} else if(stage == Stage.SMALL) {
+				entry.getKey().modAmount(0.3f);
+			}
+		}
+		stage = Stage.LARGE;
+		loot();
+	}
+	
+	public void modNumLoot(float mod) {
+		numLoot *= mod;
 	}
 
 }

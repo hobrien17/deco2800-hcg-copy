@@ -10,10 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
+import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class WorldMapContext extends UIContext {
 	private GameManager gameManager;
 	private PlayerManager playerManager;
 	private ContextManager contextManager;
+	private WorldManager worldManager;
 
 	private InputMultiplexer inputMultiplexer;
 
@@ -49,6 +52,7 @@ public class WorldMapContext extends UIContext {
 	private TextureRegion lineTexture;
 	// used for demo purposes
 	private boolean showAllNodes;
+	private PlayerMapEntity playerMapEntity;
 
 
 	/**
@@ -64,6 +68,8 @@ public class WorldMapContext extends UIContext {
 				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
+		worldManager = (WorldManager) gameManager
+				.getManager(WorldManager.class);
 		InputManager inputManager = new InputManager();
 
 		showAllNodes = false;
@@ -76,7 +82,7 @@ public class WorldMapContext extends UIContext {
 
 		Button quitButton = new TextButton("Quit", skin);
 		Button discoveredButton = new TextButton("Show all nodes", skin);
-		Button demoButton = new TextButton("Demo world", skin);
+		Button demoButton = new TextButton("Safehaven", skin);
 
 		window.add(quitButton);
 		window.add(discoveredButton);
@@ -100,7 +106,12 @@ public class WorldMapContext extends UIContext {
 			}
 			allNodes.add(nodeEntry);
 		}
-		
+
+		playerMapEntity = new PlayerMapEntity();
+		// set the playerMapEntity render position to be at the starting node;
+		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0));
+		playerMapEntity.updatePosByNodeEntity(entryMapNode);
+
 		menuStage.addActor(window);
 
 		quitButton.addListener(new ChangeListener() {
@@ -127,12 +138,12 @@ public class WorldMapContext extends UIContext {
 		
 		demoButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				World world = new World("test");
-				
-				((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
-                setWeather(world.getWeatherType());
+				World world = World.SAFEZONE;
+				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
+
+				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
 				playerManager.spawnPlayers();
 				contextManager.pushContext(new PlayContext());
 			}
@@ -163,7 +174,8 @@ public class WorldMapContext extends UIContext {
 		Vector2 mouseScreen = new Vector2(screenX, screenY);
 		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
 
-		for (MapNodeEntity nodeEntity : allNodes) {
+		for (int i = 0; i < allNodes.size(); i++) {
+			MapNodeEntity nodeEntity = allNodes.get(i);
 			float nodeStartX = nodeEntity.getXPos();
 			float nodeEndX = nodeEntity.getXPos() + nodeEntity.getWidth();
 			float nodeStartY = nodeEntity.getYPos();
@@ -172,32 +184,10 @@ public class WorldMapContext extends UIContext {
 					&& mouseStage.y >= nodeStartY && mouseStage.y <= nodeEndY
 					&& nodeEntity.getNode().isDiscovered()
 					&& !(nodeEntity.getNode().getNodeType() == 2)) {
-				gameManager.setOccupiedNode(nodeEntity.getNode());
-				
-				/*
-				 * Simply loading in the world file caused bugs with movement
-				 * due to the same world being loaded multiple times. This seems
-				 * to fix that problem.
-				 */
-
-				gameManager.setOccupiedNode(nodeEntity.getNode());
-
-				// delete stopwatches
-                ((StopwatchManager) GameManager.get().getManager(StopwatchManager.class)).deleteObservers();
-                
-                // create new world
-				World newWorld = new World(nodeEntity.getNode()
-                    .getNodeLinkedLevel().getWorld().getLoadedFile());
-				
-                // add the new weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).
-                  setWeather(newWorld.getWeatherType());
-               
-                newWorld.generatePuddles();
-                
-				gameManager.setWorld(newWorld);
-				playerManager.spawnPlayers();
-				contextManager.pushContext(new PlayContext());
+                // set the PlayerMapEntity position
+				playerMapEntity.updatePosByNodeEntity(nodeEntity);
+				// select the current node
+				worldManager.selectNode(i);
 			}
 		}
 	}
@@ -272,6 +262,11 @@ public class WorldMapContext extends UIContext {
 		batch.draw(node.getNodeTexture(), node.getXPos(), node.getYPos(), node.getWidth(), node.getHeight());
 	}
 
+	private void drawPlayer(SpriteBatch batch, PlayerMapEntity playerEntity) {
+		batch.draw(playerEntity.getPlayerTexture(), playerEntity.getXPos(), playerEntity.getYPos(),
+				playerEntity.getWidth(), playerEntity.getHeight());
+	}
+
 	/**
 	 * Creates separate render batches for the lines and pots, in order to get the layering done correctly.
 	 * @param delta the time step in between stage.act() calls.
@@ -281,6 +276,7 @@ public class WorldMapContext extends UIContext {
 		super.render(delta);
 		Batch lineBatch = new SpriteBatch();
 		SpriteBatch potBatch = new SpriteBatch();
+		SpriteBatch playerBatch = new SpriteBatch();
 
 		// Render all the lines first
 		lineBatch.begin();
@@ -304,9 +300,14 @@ public class WorldMapContext extends UIContext {
 		}
 		potBatch.end();
 
+		playerBatch.begin();
+		drawPlayer(playerBatch, playerMapEntity);
+		playerBatch.end();
+
 		// dispose of the batches to prevent memory leaks
 		lineBatch.dispose();
 		potBatch.dispose();
+		playerBatch.dispose();
 		menuStage.draw();
 	}
 	

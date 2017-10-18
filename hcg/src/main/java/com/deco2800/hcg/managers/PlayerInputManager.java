@@ -1,5 +1,6 @@
 package com.deco2800.hcg.managers;
 
+import com.deco2800.hcg.contexts.PlayContext;
 import com.deco2800.hcg.multiplayer.InputMessage;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.observers.*;
@@ -9,7 +10,10 @@ import java.util.HashMap;
 
 public class PlayerInputManager extends Manager implements TickableManager {
 	
-	private NetworkManager networkManager = (NetworkManager) GameManager.get().getManager(NetworkManager.class);
+	private ContextManager contextManager =
+			(ContextManager) GameManager.get().getManager(ContextManager.class);
+	private NetworkManager networkManager =
+			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 
     private HashMap<Integer, KeyDownObserver> keyDownListeners = new HashMap<>();
     private HashMap<Integer, KeyUpObserver> keyUpListeners = new HashMap<>();
@@ -21,7 +25,10 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	
 	private HashMap<Long, ArrayList<int[]>> actionQueue = new HashMap<>();
 	
-	private long gameTickCount = 0;
+	private int screenX;
+	private int screenY;
+	
+	private long inputTickCount = 0;
 	
 	/**
 	 * Adds a key down listener to the list of key down listeners
@@ -212,9 +219,9 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	 * @param args the action arguments
 	 */
 	public void queueLocalAction(int... args) {
-		long tick = gameTickCount + (networkManager.isInitialised() ? 3 : 1);
+		long tick = inputTickCount + (networkManager.isMultiplayerGame() ? 3 : 1);
 		
-		if (networkManager.isInitialised()) {
+		if (networkManager.isMultiplayerGame()) {
 			networkManager.queueMessage(new InputMessage(tick, args));
 		}
 		
@@ -238,11 +245,65 @@ public class PlayerInputManager extends Manager implements TickableManager {
 		}
 		actionQueue.get(tick).add(args);
 	}
+	
+	/**
+	 * Sets the local player's mouse position
+	 * @param screenX The x position of mouse movement on the screen
+	 * @param screenY The y position of mouse movement on the screen
+	 */
+	public void setLocalMousePosition(int screenX, int screenY) {
+		this.screenX = screenX;
+		this.screenY = screenY;
+	}
+	
+	/**
+	 * Gets the x coordinate of the local player's mouse
+	 * @return The x position of mouse movement on the screen
+	 */
+	public int getLocalMouseX() {
+		return screenX;
+	}
+	
+	/**
+	 * Gets the y coordinate of the local player's mouse
+	 * @return The y position of mouse movement on the screen
+	 */
+	public int getLocalMouseY() {
+		return screenY;
+	}
+	
+	/**
+	 * Resets the input tick
+	 */
+	public void resetInputTick() {
+		inputTickCount = 0;
+	}
+	
+	/**
+	 * Increments the input tick
+	 */
+	public void incrementInputTick() {
+		inputTickCount++;
+	}
+	
+	/**
+	 * Gets the input tick
+	 * @return The current input tick count
+	 */
+	long getInputTick() {
+		return inputTickCount;
+	}
 
 	@Override
 	public void onTick(long totalTickCount) {
-		this.gameTickCount++;
-		ArrayList<int[]> actions = actionQueue.get(gameTickCount);
+		if (!(contextManager.currentContext() instanceof PlayContext)) {
+			return;
+		}
+		
+		// queue mouse input
+		queueLocalAction(InputType.MOUSE_MOVED.ordinal(), screenX, screenY);
+		
+		ArrayList<int[]> actions = actionQueue.get(++inputTickCount);
 		if (actions == null) {
 			return;
 		}
@@ -275,6 +336,6 @@ public class PlayerInputManager extends Manager implements TickableManager {
 				
 			}
 		}
-		actionQueue.remove(gameTickCount);
+		actionQueue.remove(inputTickCount);
 	}
 }

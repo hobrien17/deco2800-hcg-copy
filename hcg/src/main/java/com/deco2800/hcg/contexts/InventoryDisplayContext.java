@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 public abstract class InventoryDisplayContext extends UIContext {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InventoryDisplayContext.class);
+    private static final String SELECTED = "selected";
 
     //Input arguments
     private Skin skin;
@@ -148,6 +149,125 @@ public abstract class InventoryDisplayContext extends UIContext {
      *          The item display table
      * @param itemInfo
      *          The item info table
+     * @param equipmentTable
+     *          The table showing current equipped items
+     * @param textureManager
+     *          The texture manager
+     * @param player
+     *          The player
+     * @param skin
+     *          The UI skin
+     * @param inventory
+     *          The player inventory table
+     */
+    public void inventoryDisplay(Table itemDisplay, Table itemInfo, Table equipmentTable, TextureManager textureManager, Player player,
+                                 Skin skin, Table inventory) {
+        this.skin = skin;
+        this.inventory = inventory;
+        this.textureManager = textureManager;
+        currentRow = 0;
+        for (int i=0; i<player.getInventory().getNumItems(); i++) {
+            Item currentItem = player.getInventory().getItem(i);
+            ImageButton button;
+            if (textureManager.getTexture(currentItem.getTexture()) == null) {
+                button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+            } else {
+                button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
+            }
+            Stack stack = new Stack();
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
+            commonSetup(currentItem, button, stack, clickedImage);
+            stack.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    itemDisplay.clear();
+                    //Show item when clicked
+                    Label itemName = new Label(button.getName(), skin);
+                    Image image = new Image(button.getImage().getDrawable());
+                    itemDisplay.add(image).height(50).width(50);
+                    itemDisplay.add(itemName).left();
+                    itemDisplay.row();
+                    //Populate item info when clicked
+                    itemInfo.clear();
+                    itemInfo.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
+                    Label title = new Label("Item Info", skin);
+                    title.setColor(Color.BLACK);
+                    title.setFontScale(1.5f);
+                    itemName.setColor(currentItem.getRarity().colour);
+                    itemName.setFontScale(1.2f);
+                    itemInfo.add(title).top();
+                    itemInfo.row();
+                    itemInfo.add(itemName).left();
+                    ArrayList<String> itemData = currentItem.getInformation();
+                    if(itemData != null) {
+                        for(int j = 0; j < itemData.size(); j++) {
+                            Label line = new Label(itemData.get(j), skin);
+                            line.setColor(Color.BLACK);
+                            itemInfo.row();
+                            itemInfo.add(line).left();
+                        }
+                    }
+                    //If the item is consumable or stackable or equipablle, show use button
+                    if (currentItem instanceof ConsumableItem || currentItem.isEquippable() || currentItem.isWearable()) {
+                        //Add the button to use the consumable
+                        Button useButton = new Button(skin);
+                        useButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                LOGGER.info("clicked used");
+
+                                if (currentItem instanceof ConsumableItem) {
+                                    //Consume Item
+                                    ((ConsumableItem) currentItem).consume(player);
+                                    player.getInventory().removeItem(currentItem, 1);
+                                    inventory.clear();
+                                    itemInfo.clear();
+                                    itemDisplay.clear();
+                                    inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
+                                    equipmentDisplay(textureManager, player, skin, equipmentTable);
+                                } else if (currentItem.isEquippable()) {
+                                    //Equip the item
+                                    player.getEquippedItems().addItem(currentItem);
+                                    player.getInventory().removeItem(currentItem);
+                                    inventory.clear();
+                                    itemInfo.clear();
+                                    itemDisplay.clear();
+                                    inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
+                                    equipmentDisplay(textureManager, player, skin, equipmentTable);
+                                }
+
+                            }
+                        });
+                        useButton.add("USE");
+                        itemDisplay.add(useButton).pad(15);
+                    }
+                }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = true;
+                    mouseOverItem = currentItem;
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = false;
+                    mouseOverItem = null;
+                }
+            });
+            currentRow++;
+        }
+
+    }
+
+    /**
+     * Inventory display method when called by the PlayerInventory. It has less arguments as less tables are required
+     * to be updated
+     *
+     * @param itemDisplay
+     *          The item display table
+     * @param itemInfo
+     *          The item info table
      * @param textureManager
      *          The texture manager
      * @param player
@@ -172,7 +292,7 @@ public abstract class InventoryDisplayContext extends UIContext {
                 button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
             }
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
             commonSetup(currentItem, button, stack, clickedImage);
             stack.addListener(new ClickListener() {
                 @Override
@@ -289,7 +409,7 @@ public abstract class InventoryDisplayContext extends UIContext {
             ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
                     .getDrawable());
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
             commonSetup(currentItem, button, stack, clickedImage);
             //Add listener for this item button
             stack.addListener(new ClickListener() {
@@ -384,16 +504,17 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = playerEquipment;
         for (int i=0; i<player.getEquippedItems().getNumItems(); i++) {
             Item currentItem = player.getEquippedItems().getItem(i);
-            LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
-            //TODO: We need sprites for all items, weapons currently dont have sprites hence this falls with a nullpointer.
             ImageButton button;
+            //Safety check incase a item has a null texture.
             if (textureManager.getTexture(currentItem.getTexture()) == null) {
                  button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
+                 LOGGER.info(textureManager.getTexture("error").toString());
             } else {
                  button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
+                 LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
             }
             Stack stack = new Stack();
-            Image clickedImage = new Image(textureManager.getTexture("selected"));
+            Image clickedImage = new Image(textureManager.getTexture(SELECTED));
             commonSetup(currentItem, button, stack, clickedImage);
             stack.addListener(new ClickListener() {
                 @Override
