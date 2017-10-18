@@ -90,12 +90,18 @@ vec4 getVignette(vec2 tc) {
 
 	//use smoothstep to create a smooth vignette
 	float vignette = smoothstep(RADIUS, RADIUS-SOFTNESS, len);
+    float centre = 1.0 - vignette;
 
 	//apply the vignette with 50% opacity
-	texColor.rgb = mix(texColor.rgb, getBlur(tc).rgb * vignette, 1.0);
-	texColor.rgb = mix(texColor.rgb, texColor.rgb * vignette, 0.5);
-	texColor.rgb = mix(texColor.rgb , RED * vignette, u_health);
-	texColor.rgb = mix(texColor.rgb, SICK * vignette, u_sick);
+	texColor.rgb = mix(texColor.rgb, getBlur(tc).rgb * centre, 1.0);
+
+	if (u_sick == 1.0) {
+	    texColor.rgb = mix(texColor.rgb , texColor.rgb * RED * centre, u_health);
+	} else if (u_health < 1.0) {
+	    texColor.rgb = mix(texColor.rgb, SICK * centre, u_sick);
+	} else {
+	    texColor.rgb = mix(texColor.rgb, texColor.rgb * vignette, 0.5);
+	}
 
 	//2. GRAYSCALE
 
