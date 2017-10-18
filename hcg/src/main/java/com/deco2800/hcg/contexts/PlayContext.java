@@ -3,6 +3,7 @@ package com.deco2800.hcg.contexts;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.deco2800.hcg.managers.*;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,10 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.actors.ParticleEffectActor;
@@ -47,6 +44,8 @@ public class PlayContext extends Context {
     private PlayerInputManager playerInputManager;
     private ShaderManager shaderManager;
     private PlantManager plantManager;
+
+    private Table pauseMenu;
 
 
     // FIXME mouseHandler is never assigned
@@ -129,6 +128,7 @@ public class PlayContext extends Context {
 
         radialDisplay = new RadialDisplay(stage);
         createExitWindow();
+        createPauseWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
         plantWindow = new PlantWindow(plantSkin);
@@ -354,6 +354,12 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
+        if (playerManager.getPlayer().getPauseDisplayed()) {
+            if (keycode == Input.Keys.ESCAPE) {
+                removePauseWindow();
+            }
+            return;
+        }
     	if(keycode == Input.Keys.U && potUnlock.isOpen()) {
     		potUnlock.close();
     	} else if(keycode == Input.Keys.U) {
@@ -376,6 +382,8 @@ public class PlayContext extends Context {
             chatStack.setVisible(!chatStack.isVisible());
         } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
             exit();
+        } else if(keycode == Input.Keys.ESCAPE) {
+    	    addPauseWindow();
         }
 	}
 
@@ -435,8 +443,40 @@ public class PlayContext extends Context {
     public void addParticleEffect(ParticleEffectActor actor) {
         stage.addActor(actor);
     }
-    
-    public Stage getStage(){
-    	return stage;
+
+    private void createPauseWindow() {
+        pauseMenu = new Table();
+        ImageButton quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
+        quit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //pop ALL the contexts
+                contextManager.popContext();
+                contextManager.popContext();
+                contextManager.popContext();
+                contextManager.popContext();
+                contextManager.popContext();
+            }
+        });
+        pauseMenu.add(quit);
+        pauseMenu.setWidth(150);
+        playerManager.getPlayer().setPauseDisplayed(false);
+
+    }
+
+    public void addPauseWindow() {
+        if (pauseMenu.getStage() == null){
+			/* Add the window to the stage */
+            PlayContext context = (PlayContext) contextManager.currentContext();
+            stage.addActor(pauseMenu);
+            playerManager.getPlayer().setPauseDisplayed(true);
+            soundManager.pauseWeatherSounds();
+        }
+    }
+
+    public void removePauseWindow() {
+        pauseMenu.remove();
+        playerManager.getPlayer().setPauseDisplayed(false);
+        soundManager.unpauseWeatherSounds();
     }
 }

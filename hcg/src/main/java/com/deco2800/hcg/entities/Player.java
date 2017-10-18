@@ -3,7 +3,6 @@ package com.deco2800.hcg.entities;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.deco2800.hcg.buffs.Perk;
 import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.bullets.Bullet;
@@ -19,10 +18,6 @@ import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
@@ -71,7 +66,7 @@ public class Player extends Character implements Tickable {
 	private String displayImage;
 
 	private boolean pauseDisplayed;
-	private Table pauseMenu;
+
 
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
@@ -135,7 +130,7 @@ public class Player extends Character implements Tickable {
 			perks.add(new Perk(enumPerk));
 		}
 
-		createPauseWindow();
+
 		this.id = id;
 		if (id == 0) {
 			InputManager localInput = (InputManager) GameManager.get().getManager(InputManager.class);
@@ -802,9 +797,6 @@ public class Player extends Character implements Tickable {
 	 */
 	private void handleKeyDown(int keycode) {
 		if(pauseDisplayed){
-			if(keycode == Input.Keys.ESCAPE){
-				removePauseWindow();
-			} 
 			return;
 		}
 		switch (keycode) {
@@ -852,9 +844,6 @@ public class Player extends Character implements Tickable {
 			if (this.getEquippedWeapon() != null) {
 				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 			}
-			break;
-		case Input.Keys.ESCAPE:
-			addPauseWindow();
 			break;
 		case Input.Keys.I:
 			// Display Inventory
@@ -1138,41 +1127,13 @@ public class Player extends Character implements Tickable {
 	public List<String> getSpecialisedSkillsList() {
 		return SPECIALISED_SKILLS;
 	}
-	
-	private void createPauseWindow() {
-		pauseMenu = new Table();
-		ImageButton quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
-		quit.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				//pop ALL the contexts
-				contextManager.popContext();
-				contextManager.popContext();
-				contextManager.popContext();
-				contextManager.popContext();
-				contextManager.popContext();
-			}
-		});
-		pauseMenu.add(quit);
-		pauseMenu.pack();
-		//pauseMenu.setMovable(false); // So it doesn't fly around the screen
-		pauseMenu.setWidth(150);
-		pauseDisplayed = false;
+
+	public void setPauseDisplayed(boolean value) {
+		pauseDisplayed = value;
 	}
 
-	public void addPauseWindow() {
-		if ((pauseMenu.getStage() == null) && (this == playerManager.getPlayer())){
-			/* Add the window to the stage */
-			PlayContext context = (PlayContext) contextManager.currentContext();
-			context.getStage().addActor(pauseMenu);
-			pauseDisplayed = true;
-			soundManager.pauseWeatherSounds();
-		}
+	public boolean getPauseDisplayed() {
+		return pauseDisplayed;
 	}
 
-	public void removePauseWindow() {
-		pauseMenu.remove();
-		pauseDisplayed = false;
-		soundManager.unpauseWeatherSounds();
-	}
 }
