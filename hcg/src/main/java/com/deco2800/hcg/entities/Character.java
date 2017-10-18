@@ -553,6 +553,10 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
         return killLog.get(nodeID).containsKey(enemyID);
     }
 
+    public boolean killLogContainsNode(int nodeID) {
+        return killLog.containsKey(nodeID);
+    }
+
     /**
      * Used to tell the quest log that things have changed. Which will be useful if 'notifications'
      * are enabled to tell the player that they have competed a quest.

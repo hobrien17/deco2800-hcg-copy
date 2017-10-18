@@ -23,9 +23,9 @@ public class QuestTest {
 	
 	@Before
 	public void initialiseConstructor(){
-	    requiredItems = new HashMap<String,Integer>();
-	    rewards = new HashMap<String,Integer>();
-	    globalKillRequirement = new HashMap<Integer,HashMap<Integer,Integer>>();
+	    requiredItems = new HashMap<>();
+	    rewards = new HashMap<>();
+	    globalKillRequirement = new HashMap<>();
 	    
 	    String title = "Quest Title";
         String key = "Key";

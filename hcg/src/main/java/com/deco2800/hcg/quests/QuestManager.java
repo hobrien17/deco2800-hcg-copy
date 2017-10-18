@@ -21,8 +21,9 @@ import java.util.Map;
  */
 public class QuestManager extends Manager {
     HashMap<String,Quest> quests;
-    HashMap<QuestNPC,Quest> questLog;
-    HashMap<QuestNPC,ArrayList<Quest>> completedLog;
+
+    HashMap<QuestNPC,QuestArchive> questLog;
+    ArrayList<QuestArchive> completedLog;
 
     private PlayerManager playerManager = (PlayerManager) GameManager.get()
             .getManager(PlayerManager.class);
@@ -33,8 +34,7 @@ public class QuestManager extends Manager {
     public QuestManager() {
         quests = new HashMap<>();
         questLog = new HashMap<>();
-        completedLog = new HashMap<>();
-        loadAllQuests();
+        completedLog = new ArrayList<>();
     }
 
     /**
@@ -48,26 +48,27 @@ public class QuestManager extends Manager {
     }
 
     public Quest getActiveNPCQuest(QuestNPC npc) {
-        return questLog.getOrDefault(npc, null);
+        if (questLog.containsKey(npc)) {
+            return questLog.get(npc).getQuest();
+        }
+        return null;
     }
 
     public void addQuest(QuestNPC npc, String questName) throws ResourceLoadException {
         if (!quests.containsKey(questName)) {
             throw new ResourceLoadException(""); //todo write a proper exception
         }
-        questLog.put(npc,quests.get(questName));
+        QuestArchive qa = new QuestArchive(quests.get(questName),npc);
+        questLog.put(npc,qa);
     }
 
     public void completeQuest(QuestNPC npc) {
         if (!questLog.containsKey(npc)) {
             throw new ResourceLoadException(""); //todo write a proper exception
         }
-        //Give the player the reward
-        GiveItemsAction gia = new GiveItemsAction(questLog.get(npc).getRewards());
-
-        //Set the quest to complete
-        completedLog.putIfAbsent(npc,new ArrayList<>());
-        completedLog.get(npc).add(questLog.get(npc));
+        //Complete the quest - note does not check if completable
+        questLog.get(npc).completeQuest();
+        completedLog.add(questLog.get(npc));
         questLog.remove(npc);
     }
 
@@ -75,23 +76,23 @@ public class QuestManager extends Manager {
     /**
      * ------------------------------------- Functions for the quest UI -------------------------------------
      */
-    public HashMap<QuestNPC,ArrayList<Quest>> getCompletedQuests() {
+    public ArrayList<QuestArchive> getCompletedQuests() {
         return completedLog;
     }
 
-    public HashMap<QuestNPC,Quest> getCompleteableQuests() {
-        HashMap<QuestNPC,Quest> completeableLog = new HashMap<>();
-        for (Map.Entry<QuestNPC,Quest> entry: questLog.entrySet()) {
-            if (canQuestBeCompleted(entry.getValue())) {
+    public HashMap<QuestNPC,QuestArchive> getCompleteableQuests() {
+        HashMap<QuestNPC,QuestArchive> completeableLog = new HashMap<>();
+        for (Map.Entry<QuestNPC,QuestArchive> entry: questLog.entrySet()) {
+            if (canQuestBeCompleted(entry.getKey())) {
                 completeableLog.put(entry.getKey(),entry.getValue());
             }
         }
         return completeableLog;
     }
 
-    public HashMap<QuestNPC,Quest> getUnCompleteableQuests() {
-        HashMap<QuestNPC,Quest> unCompleteableLog = new HashMap<>();
-        for (Map.Entry<QuestNPC,Quest> entry: questLog.entrySet()) {
+    public HashMap<QuestNPC,QuestArchive> getUnCompleteableQuests() {
+        HashMap<QuestNPC,QuestArchive> unCompleteableLog = new HashMap<>();
+        for (Map.Entry<QuestNPC,QuestArchive> entry: questLog.entrySet()) {
             if (!canQuestBeCompleted(entry.getKey())) {
                 unCompleteableLog.put(entry.getKey(),entry.getValue());
             }
@@ -100,41 +101,8 @@ public class QuestManager extends Manager {
     }
 
     private boolean canQuestBeCompleted(QuestNPC npc) {
-        //Get the quest
-        Quest q = questLog.get(npc);
-
-        //This can be done by storing the kill log when the quest is first activated to check the difference
-        //TODO check the kill log requirement
-
-
-        //Todo check the inventory requirement
-        int counter = 0; //To keep track of amount of each item
-        for (Map.Entry entry: q.getItemRequirement().entrySet()) {
-            Inventory inv = playerManager.getPlayer().getInventory();
-
-        }
-
-
-
-
-
-        return true;
+        return questLog.get(npc).currentlyCompletable();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      *  ----------------------------- Functions for the initial load of quests -----------------------------

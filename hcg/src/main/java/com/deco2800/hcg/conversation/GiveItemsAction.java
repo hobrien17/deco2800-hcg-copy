@@ -11,7 +11,6 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -20,14 +19,12 @@ import java.util.Map;
  */
 public class GiveItemsAction extends AbstractConversationAction {
 
-    private HashMap<String,Integer> items;
+    private Integer itemsQuantity;
+    private String itemName;
 
     public GiveItemsAction(String itemName, int itemQuantity) {
-        this.items.put(itemName,itemQuantity);
-    }
-
-    public GiveItemsAction(HashMap<String,Integer> items) {
-        this.items = items;
+        this.itemName = itemName;
+        this.itemsQuantity = itemQuantity;
     }
 
     @Override
@@ -45,28 +42,19 @@ public class GiveItemsAction extends AbstractConversationAction {
 
         // Create each new item, and either place it in the player inventory or
         // (if it doesn't fit) onto the ground
-        for (Map.Entry entry: items.entrySet()) {
-            for (int i = 0; i < (int)entry.getValue(); i++) {
-                Item newItem = itemManager.getNew((String)entry.getKey());
-                if (!playerInventory.addItem(newItem)) {
-                    world.addEntity(new ItemEntity(playerPosX, playerPosY, playerPosZ, newItem));
-                }
+        for (int i = 0; i < itemsQuantity; i++) {
+            Item newItem = itemManager.getNew(itemName);
+            if (!playerInventory.addItem(newItem)) {
+                world.addEntity(new ItemEntity(playerPosX, playerPosY, playerPosZ, newItem));
             }
         }
-
-
-
-
     }
 
     @Override
     public String toString() {
-        String tS = "Give item ";
-        for (Map.Entry entry: items.entrySet()) {
-            tS += (entry.getKey() + " in quantity " + entry.getValue() + ",");
-        }
-        //Remove the trailing "," and replace with
-        return tS.substring(tS.length() - 1, tS.length()).replace(",",".");
+        String tS = "giveItems";
+
+        return "giveItems" + '|' + itemName + '|' + itemsQuantity;
     }
 
 }
