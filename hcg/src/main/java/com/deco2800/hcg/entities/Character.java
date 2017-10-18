@@ -196,7 +196,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * 
      * @param health The value to set maximum health to
      */
-    protected void setHealthMax(int health) {
+    public void setHealthMax(int health) {
         if (health < 0) {
             this.healthMax = 0;
         } else {
@@ -302,7 +302,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
     * 
     * @param stamina The value to set maximum stamina to
     */
-    protected void setStaminaMax(int stamina) {
+    public void setStaminaMax(int stamina) {
         if (stamina < 0) {
             this.staminaMax = 0;
         } else {
