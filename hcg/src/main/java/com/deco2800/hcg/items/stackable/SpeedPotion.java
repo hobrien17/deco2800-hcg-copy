@@ -4,15 +4,22 @@ import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.ItemRarity;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.StopwatchManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class SpeedPotion extends ConsumableItem {
+public class SpeedPotion extends ConsumableItem implements Observer {
     int staminaAmount;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(HealthPotion.class);
+    int startTime;
+    int endTime;
+    Character usingCharacter;
+    StopwatchManager manager;
 
     public SpeedPotion() {
         this.baseValue = 15;
@@ -21,11 +28,19 @@ public class SpeedPotion extends ConsumableItem {
         this.texture = "purple_potion";
         this.currentStackSize = 1;
         this.maxStackSize = 5;
+        startTime = 0;
+        endTime = 0;
     }
     @Override
     public void consume(Character character) {
-        ((Player)character).setSpeed(0.6f);
+        //((Player)character).setSpeed(0.6f);
+        usingCharacter = character;
+        ((Player)character).setStaminaCur(character.getStaminaMax());
+        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager.addObserver(this);
         LOGGER.info("Stamina Updated!");
+        startTime = (int)manager.getStopwatchTime();
+        endTime = startTime + 100;
     }
 
     @Override
@@ -58,7 +73,7 @@ public class SpeedPotion extends ConsumableItem {
     @Override
     public ArrayList<String> getInformation() {
         ArrayList<String> list = new ArrayList<>();
-        list.add("Gives you boosted speed\nuntil you sprint or are slowed down");
+        list.add("Unlimited stamina for 20s");
         return list;
     }
 
@@ -66,5 +81,20 @@ public class SpeedPotion extends ConsumableItem {
     public ItemRarity getRarity() {
         return ItemRarity.UNCOMMON;
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        int time = (int) (float) arg;
+        endTime--;
+        if (time - startTime > endTime) {
+            //Time is done
+            //Persons stamina is no longer going to be set to max
+        } else {
+            //Potion is not finished - set stamina to max
+            usingCharacter.setStaminaCur(usingCharacter.getStaminaMax());
+        }
+
+    }
+
 }
 
