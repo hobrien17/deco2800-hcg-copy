@@ -40,13 +40,15 @@ public abstract class Enemy extends Character implements Lootable {
     protected float randomY;
     protected float lastPlayerX;
     protected float lastPlayerY;
+    protected float lostPlayerX;
+    protected float lostPlayerY;
     protected Random random;
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
     protected int direction;
     protected boolean boss;
-
+    protected float defaultSpeed;
     private Player target;
 
     //Multiple players
@@ -368,7 +370,14 @@ public abstract class Enemy extends Character implements Lootable {
             }else{
                 if (this.getStatus() == 2){
                     //Lost player
+                    this.lostPlayerX = this.getLastPlayerX();
+                    this.lostPlayerY = this.getLastPlayerY();
                     this.setStatus(3);
+                } else if(this.getStatus() == 3){
+                    if ((abs(this.lostPlayerX - this.getPosX()) < 1) && (abs(this.lostPlayerY - this.getPosY()) < 1)){
+                        this.setStatus(1);
+                    }
+
                 } else {
                     this.setStatus(1);
                 }
@@ -567,7 +576,8 @@ public abstract class Enemy extends Character implements Lootable {
                 this.shoot();
                 break;
             case 3://Status: Annoyed/Lost player
-                newPos = this.getMoveToPos(this.getLastPlayerX(), this.getLastPlayerY());
+
+                newPos = this.getMoveToPos(this.lostPlayerX, this.lostPlayerY);
                 break;
             default:
                 newPos = this.getRandomPos();
@@ -607,14 +617,9 @@ public abstract class Enemy extends Character implements Lootable {
         int playerCount = 0;
         float[] distances = new float[numPlayers];
         float closestDistance;
-        this.setStatus(2);
-        this.setMovementSpeed((float) (this.movementSpeed*0.1));
-        if (this.getHealthCur() <= this.getHealthMax()*0.5){
-            this.setMovementSpeed((this.movementSpeed*5));
-        }
-        players = playerManager.getPlayers();
         //Detect players
         if (this.getNumberPlayers() > 1) {
+            players = playerManager.getPlayers();
             //Iterates through all players and puts distance from enemy to each player into an array
             //Puts all players and their respective distances into a hash map
             for (Player player : players) {
@@ -637,8 +642,8 @@ public abstract class Enemy extends Character implements Lootable {
             this.lastPlayerY = closestPlayer.getPosY();
 
         } else {
-        this.lastPlayerX = playerManager.getPlayer().getPosX();
-        this.lastPlayerY = playerManager.getPlayer().getPosY();
+            this.lastPlayerX = playerManager.getPlayer().getPosX();
+            this.lastPlayerY = playerManager.getPlayer().getPosY();
         }
         //Set new position
         newPos = this.getToPlayerPos(closestPlayer);
