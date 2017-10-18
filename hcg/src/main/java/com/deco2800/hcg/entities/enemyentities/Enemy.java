@@ -652,8 +652,12 @@ public abstract class Enemy extends Character implements Lootable {
         this.moveAction();
     }
 
+    /**
+     *  Logic for Squirrel
+     *
+     */
     void squrrel(){
-        this.setMovementSpeed(this.getMovementSpeed() * 10);
+        this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.5));
         this.defaultSpeed = this.getMovementSpeed();
         List<Player> players;
         HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
@@ -684,9 +688,14 @@ public abstract class Enemy extends Character implements Lootable {
             if (closestDistance <= 10 * this.level){
                 newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
                 newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
-                if (this.getHealthCur() < this.getHealthMax()){
-                    this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.8));
-
+                if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.85)){
+                    this.setMovementSpeed((float) (this.defaultSpeed * 1.2));
+                } else if ((this.getHealthCur() < this.getHealthMax()*0.85) && (this.getHealthCur() > this.getHealthMax()*0.5)){
+                    this.setMovementSpeed((float) (this.defaultSpeed * 1.4));
+                } else if ((this.getHealthCur() < this.getHealthMax()*0.5) && (this.getHealthCur() > this.getHealthMax()*0.25)){
+                    this.setMovementSpeed((float) (this.defaultSpeed * 1.6));
+                } else {
+                    this.setMovementSpeed((float) (this.defaultSpeed * 1.8));
                 }
             } else {
                 newPos = this.getRandomPos();
@@ -707,6 +716,41 @@ public abstract class Enemy extends Character implements Lootable {
         this.detectCollision();
         this.moveAction();
 
+    }
+
+
+    /**
+     *  Logic for Tree
+     *
+     */
+    void tree(){
+        this.setMovementSpeed(0);
+        this.defaultSpeed = 0;
+
+        GameManager.get().getWorld().getWidth();
+        GameManager.get().getWorld().getLength();
+        if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.8)){
+            //bottom
+
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
+            this.setPosY(0);
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.8) && (this.getHealthCur() > this.getHealthMax()*0.6)){
+            //left
+            this.setPosX(0);
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.6) && (this.getHealthCur() > this.getHealthMax()*0.4)){
+            //right
+            this.setPosX(GameManager.get().getWorld().getWidth());
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.4) && (this.getHealthCur() > this.getHealthMax()*0.2)){
+            //top
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
+            this.setPosY(GameManager.get().getWorld().getLength());
+        } else {
+            //middle
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
+        }
     }
 
     @Override
