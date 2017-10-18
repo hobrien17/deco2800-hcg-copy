@@ -2,10 +2,14 @@ package com.deco2800.hcg.entities.bullets;
 
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
@@ -41,7 +45,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
-	//private ParticleEffectActor particleEffectActor;
 
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
@@ -143,10 +146,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 		this.hitCount = hitCount;
 
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
-		
-		/*this.particleEffectActor = new ParticleEffectActor();
-		PlayContext playContext = (PlayContext) ((ContextManager) gameManager.getManager(ContextManager.class)).currentContext();
-		playContext.addParticleEffect(particleEffectActor);*/
 	}
 
 	/**
@@ -216,6 +215,13 @@ public class Bullet extends AbstractEntity implements Tickable {
 					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
 				}
+                ParticleEffect hitEffect = new ParticleEffect();
+                hitEffect.load(Gdx.files.internal("resources/particles/hitPuff.p"),
+                Gdx.files.internal("resources/particles/"));
+                Vector3 position = gameManager.worldToScreen(new Vector3(target.getPosX(), target.getPosY(), 0));
+                hitEffect.setPosition(position.x, position.y);
+                hitEffect.start();
+                ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(hitEffect, target);
 				hitCount--;
 			}
 
@@ -236,13 +242,6 @@ public class Bullet extends AbstractEntity implements Tickable {
 			}
 
 			if (hitCount == 0) {
-			    /*ParticleEffect hitEffect = new ParticleEffect();
-                hitEffect.load(Gdx.files.internal("resources/particles/hitPuff.p"),
-                Gdx.files.internal("resources/particles/"));
-                hitEffect.setPosition(this.getPosX(), this.getPosY());
-                hitEffect.start();
-                particleEffectActor.add(hitEffect, false);
-                */
 				GameManager.get().getWorld().removeEntity(this);
 				break;
 			}
