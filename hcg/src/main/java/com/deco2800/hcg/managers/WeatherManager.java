@@ -7,6 +7,9 @@ import java.util.*;
 
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.types.Weathers;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.worlds.World;
+
 
 /**
  * A class to manage the game's internal system of weather. Weather can be set
@@ -67,7 +70,7 @@ public class WeatherManager extends Manager {
 					.get(emitter);
 			newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
 					Gdx.graphics.getHeight() / 2);
-			
+
 			newEmitter.getSpawnHeight().setHighMax(Gdx.graphics.getHeight());
 			newEmitter.getSpawnHeight().setHighMin(Gdx.graphics.getHeight());
 			newEmitter.getSpawnHeight().setLowMax(0);
@@ -75,6 +78,13 @@ public class WeatherManager extends Manager {
 
 			newEmitter.getSpawnWidth().setHighMax(Gdx.graphics.getWidth());
 			newEmitter.getSpawnWidth().setHighMin(Gdx.graphics.getWidth());
+			// World world = GameManager.get().getWorld();
+			// if (world == null) {
+			// 	System.out.println("null");
+			// } else {
+			// 	newEmitter.getSpawnWidth().setHighMax(world.getMap().getProperties().get("width", Integer.class));
+			// 	newEmitter.getSpawnWidth().setHighMin(world.getMap().getProperties().get("width", Integer.class));
+			// }
 			newEmitter.getSpawnWidth().setLowMax(0);
 			newEmitter.getSpawnWidth().setLowMin(0);
 		}

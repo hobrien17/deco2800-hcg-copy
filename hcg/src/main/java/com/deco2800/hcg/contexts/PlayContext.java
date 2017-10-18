@@ -93,6 +93,7 @@ public class PlayContext extends Context {
     private Window exitWindow;
 
     private Stage stage;
+    private Stage weatherStage;
     private Skin skin;
     private Skin plantSkin;
 
@@ -119,6 +120,10 @@ public class PlayContext extends Context {
         GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
         GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
 
+        /* Add ParticleEffectActor that controls weather. */
+        weatherStage = new Stage(new ScreenViewport());
+        weatherStage.addActor(weatherManager.getActor());
+
         // Setup GUI
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -139,9 +144,6 @@ public class PlayContext extends Context {
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
-
-        /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
 
         stage.addActor(chatStack);
         chatStack.setVisible(false);
@@ -278,6 +280,8 @@ public class PlayContext extends Context {
         }
 
         // Update and draw the stage
+        weatherStage.act();
+        weatherStage.draw();
         stage.act();
         stage.draw();
     }

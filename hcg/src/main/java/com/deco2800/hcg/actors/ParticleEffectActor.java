@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 
+import com.deco2800.hcg.managers.GameManager;
+
 public class ParticleEffectActor extends Actor {
 	Map<ParticleEffect, Boolean> effects;
 	SpriteBatch batch;
@@ -37,6 +39,7 @@ public class ParticleEffectActor extends Actor {
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.draw(batch);
 		}
@@ -69,6 +72,7 @@ public class ParticleEffectActor extends Actor {
 	 */
 	public void render() {
 		batch = new SpriteBatch();
+		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
 		batch.begin();
 
 		for(Map.Entry<ParticleEffect, Boolean> entry : effects.entrySet()) {
