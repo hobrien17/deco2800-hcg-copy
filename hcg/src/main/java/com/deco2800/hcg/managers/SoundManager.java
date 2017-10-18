@@ -179,6 +179,12 @@ public class SoundManager extends Manager {
 		for (Sound playing : weatherSounds) {
 			playing.stop();
 		}
+		
+		try {
+			randomLoop.cancel(true);
+		} catch (NullPointerException e) {
+			LOGGER.info("No sting playing yet");
+		}
 
 		weatherSounds.clear();
 	}

@@ -368,8 +368,9 @@ public class PlayContext extends Context {
     	} else {
     		potUnlock.close();
     	}
-        if(keycode == Input.Keys.M) {
+        if(keycode == Input.Keys.M || keycode == Input.Keys.ESCAPE) {
             contextManager.pushContext(new WorldMapContext());
+            soundManager.stopSound("ambientMusic");
             soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
