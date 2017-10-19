@@ -17,6 +17,7 @@ import com.deco2800.hcg.managers.TextureManager;
  */
 public abstract class CharacterContext extends UIContext {
 
+    protected Table superMasterTable;
     protected Table masterTable;
     protected Table topRowInfoTable;
 
@@ -35,11 +36,16 @@ public abstract class CharacterContext extends UIContext {
     }
 
     protected void initMasterTable() {
+        superMasterTable = new Table(skin);
+        superMasterTable.setFillParent(true);
+        superMasterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
+        stage.addActor(superMasterTable);
+        
         masterTable = new Table(skin);
         masterTable.setFillParent(true);
         masterTable.pad(100);
-        masterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
-        stage.addActor(masterTable);
+        
+        superMasterTable.add(masterTable).top().left().expandX().fillX();
     }
 
 }
