@@ -37,6 +37,7 @@ public abstract class CharacterContext extends UIContext {
     protected void initMasterTable() {
         masterTable = new Table(skin);
         masterTable.setFillParent(true);
+        masterTable.pad(100);
         masterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
         stage.addActor(masterTable);
     }

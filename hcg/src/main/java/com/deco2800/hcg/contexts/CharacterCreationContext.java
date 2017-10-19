@@ -62,7 +62,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Window skillsWindow;
     private Window statsWindow;
     private Window characterPreviewWindow;
-    private Window selectedDescriptionWindow;
+    //private Window selectedDescriptionWindow;
 
     private String[] sexes = new String[]{MALE, FEMALE};
 
@@ -123,7 +123,7 @@ public class CharacterCreationContext extends CharacterContext{
         setupSkillsWindow();
         setupStatsWindow();
         setupCharacterPreviewWindow();
-        setupSelectedDescriptionWindow();
+        //setupSelectedDescriptionWindow();
         addSubtables();
     }
 
@@ -145,14 +145,14 @@ public class CharacterCreationContext extends CharacterContext{
         skillsWindow = new Window("Skills", skin);
         statsWindow = new Window("Stats", skin);
         characterPreviewWindow = new Window("Character Preview", skin);
-        selectedDescriptionWindow = new Window("Click on an attribute or skill to find out what it does!", skin);
+        //selectedDescriptionWindow = new Window("Click on an attribute or skill to find out what it does!", skin);
 
         // Set windows as non-movable
         attributesWindow.setMovable(false);
         skillsWindow.setMovable(false);
         statsWindow.setMovable(false);
         characterPreviewWindow.setMovable(false);
-        selectedDescriptionWindow.setMovable(false);
+        //selectedDescriptionWindow.setMovable(false);
 
         attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
@@ -683,7 +683,7 @@ public class CharacterCreationContext extends CharacterContext{
         selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
         selectedDescriptionText.setDisabled(true);
         selectedDescriptionText.setColor(Color.WHITE);
-        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
+        //selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
     }
 
     private void addSubtables() {
@@ -695,7 +695,7 @@ public class CharacterCreationContext extends CharacterContext{
         masterTable.add(statsWindow).top().left().expandX().fillX().fillY().padBottom(15);
         masterTable.add(characterPreviewWindow).top().right().expandX().fillX().padBottom(15);
         masterTable.row();
-        masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
+        //masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
 
 
