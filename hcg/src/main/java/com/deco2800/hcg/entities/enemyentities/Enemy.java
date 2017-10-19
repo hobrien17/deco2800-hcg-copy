@@ -720,8 +720,8 @@ public abstract class Enemy extends Character implements Lootable {
             this.closestPlayer = playerManager.getPlayer();
             float distance = this.distance(playerManager.getPlayer());
             if (distance <= 10 * this.level){
-                newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
-                newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
+                newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
+                newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
             } else {
                 newPos = this.getRandomPos();
             }
