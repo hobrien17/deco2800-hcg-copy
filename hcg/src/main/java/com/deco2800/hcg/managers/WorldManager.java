@@ -88,11 +88,15 @@ public class WorldManager extends Manager {
 	public void completeLevel() {
         if(gameManager.getCurrentNode().getNodeType() != 3) {
             gameManager.getCurrentNode().changeNodeType(2);
-            gameManager.getMapContext().updateMapDisplay();
+            if (gameManager.getMapContext() != null) {
+                gameManager.getMapContext().updateMapDisplay();
+            }
             contextManager.popContext();
         } else {
             gameManager.getCurrentNode().changeNodeType(2);
-            gameManager.getMapContext().updateMapDisplay();
+            if (gameManager.getMapContext() != null) {
+                gameManager.getMapContext().updateMapDisplay();
+            }
             gameManager.getMapContext().addEndOfContext();
             contextManager.popContext();
         }
