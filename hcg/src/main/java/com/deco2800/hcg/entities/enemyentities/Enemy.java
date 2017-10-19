@@ -123,6 +123,14 @@ public abstract class Enemy extends Character implements Lootable {
     public int getID() { return id; }
 
     /**
+     * Gets the enemy type
+     *
+     * @return the integer ID of the enemy
+     */
+    public EnemyType getEnemyType() { return enemyType; }
+
+
+    /**
      * Gets the last position X of player.
      *
      * @return the last position X of player

@@ -203,7 +203,7 @@ public class ShaderManager extends Manager implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         int time = (int) (float) arg;
-        //((StopwatchManager) o).onTick(time);
+
     }
 
 }

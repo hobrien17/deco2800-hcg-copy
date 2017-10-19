@@ -53,12 +53,14 @@ public class WorldMapContext extends UIContext {
 	// used for demo purposes
 	private boolean showAllNodes;
 	private PlayerMapEntity playerMapEntity;
+	
+	private WorldMap currentWorld;
 
 
 	/**
 	 * Constructor to create a new WorldMapContext
 	 */
-	public WorldMapContext() {
+	public WorldMapContext(WorldMap worldMap) {
 		gameManager = GameManager.get();
 		gameManager.setMapContext(this);
 		
@@ -71,6 +73,8 @@ public class WorldMapContext extends UIContext {
 		worldManager = (WorldManager) gameManager
 				.getManager(WorldManager.class);
 		InputManager inputManager = new InputManager();
+		
+		currentWorld = worldMap;
 
 		showAllNodes = false;
 		
@@ -99,7 +103,7 @@ public class WorldMapContext extends UIContext {
 		hiddenNodes = new ArrayList<>();
 		
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
-			MapNodeEntity nodeEntry = new MapNodeEntity(node);
+			MapNodeEntity nodeEntry = new MapNodeEntity(node, worldMap);
 			if (!node.isDiscovered()) {
 				hiddenNodes.add(nodeEntry);
 				nodeEntry.setVisible(false);
@@ -109,7 +113,7 @@ public class WorldMapContext extends UIContext {
 
 		playerMapEntity = new PlayerMapEntity();
 		// set the playerMapEntity render position to be at the starting node;
-		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0));
+		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0), worldMap);
 		playerMapEntity.updatePosByNodeEntity(entryMapNode);
 
 		menuStage.addActor(window);
@@ -195,13 +199,13 @@ public class WorldMapContext extends UIContext {
 	/**
 	 * Updates the display of the nodes on the world map. Handles making hidden nodes not visible to the user.
 	 */
-	void updateMapDisplay() {
+	void updateMapDisplay(WorldMap currentWorld) {
 		updateNodesDisplayed();
 		stage.clear();
 		stage.addActor(new WorldMapEntity());
 		hiddenNodes.clear();
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
-			MapNodeEntity nodeEntry = new MapNodeEntity(node);
+			MapNodeEntity nodeEntry = new MapNodeEntity(node, currentWorld);
 			if (node.isDiscovered()) {
 				continue;
 			}
@@ -294,7 +298,7 @@ public class WorldMapContext extends UIContext {
 		potBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
 			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
-				nodeEntity.updateTexture();
+				nodeEntity.updateTexture(currentWorld);
 				drawPot(potBatch, nodeEntity);
 			}
 		}
