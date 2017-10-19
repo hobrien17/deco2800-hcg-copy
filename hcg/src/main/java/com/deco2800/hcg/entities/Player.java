@@ -513,8 +513,12 @@ public class Player extends Character implements Tickable {
 			// set the layer, and get the speed of the tile on the layer. Also
 			// name for logging.
 			layer = world.getTiledMapTileLayerAtPos((int) oldPosY, (int) oldPosX);
-			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
-
+			if (layer.getProperties().get("speed") != null) {
+			  speed = Float.parseFloat((String) layer.getProperties().get("speed"));
+			} else {
+			  speed = 1.0f;
+			}
+			
 			// see if current tile is a Gateway
 			if (layer.getProperties().get("PlayerX") != null && layer.getProperties().get("PlayerY") != null) {
 				oldPosX = Float.parseFloat((String) layer.getProperties().get("PlayerX"));
@@ -533,7 +537,6 @@ public class Player extends Character implements Tickable {
 			// if current tile is a gateway, load new map
 			if (layer.getProperties().get("newMap") != null) {
                 // create new world
-				System.out.print((String) layer.getProperties().get("newMap"));
 				World newWorld = new World("resources/maps/maps/" +(String) layer.getProperties().get("newMap"));
 				
 				// add the new weather effects
