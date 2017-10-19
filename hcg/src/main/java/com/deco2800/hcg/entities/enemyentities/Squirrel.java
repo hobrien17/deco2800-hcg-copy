@@ -23,8 +23,8 @@ public class Squirrel extends Enemy implements Tickable {
 	 * @param posZ the x position
 	 * @param Id the ID of the squirrel
 	 */
-	public Squirrel(float posX, float posY, float posZ, int Id) {
-		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, Id, EnemyType.SQUIRREL);
+	public Squirrel(float posX, float posY, float posZ, int id) {
+		super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id, EnemyType.SQUIRREL);
 		this.boss = false;
 		this.setTexture("antSW");
 		this.level = 1;

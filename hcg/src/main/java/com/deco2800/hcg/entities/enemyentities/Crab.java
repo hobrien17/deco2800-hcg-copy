@@ -58,7 +58,7 @@ public class Crab extends Enemy implements Tickable {
     @Override
     public void onTick(long gameTickCount) {
         if (this.getHealthCur() <= this.getHealthMax()*0.5){
-            this.setMovementSpeed((this.defaultSpeed *3));
+            this.setMovementSpeed(this.defaultSpeed *3);
         }
         this.crab();
     }
