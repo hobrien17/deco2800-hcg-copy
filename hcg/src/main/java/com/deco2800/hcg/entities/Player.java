@@ -61,7 +61,7 @@ import com.deco2800.hcg.worlds.World;
  *
  * @author leggy
  */
-public class Player extends Character implements Tickable, LightEmitter {
+public class Player extends Character implements Tickable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
@@ -1148,14 +1148,4 @@ public class Player extends Character implements Tickable, LightEmitter {
 	public List<String> getSpecialisedSkillsList() {
 		return SPECIALISED_SKILLS;
 	}
-
-    @Override
-    public Color getLightColour() {
-        return Color.ORANGE;
-    }
-
-    @Override
-    public float getLightPower() {
-        return 5;
-    }
 }

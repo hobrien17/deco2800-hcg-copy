@@ -97,12 +97,12 @@ public class Render3DLights implements Renderer {
 
             // We want to keep the aspect ratio of the image so...
             float aspect = (float) (tex.getWidth()) / (float) (tileWidth);
+
+            ShaderProgram shader = batch.getShader();
+            Color preColour = batch.getColor();
             
             if(entity instanceof LightEmitter) {
-                ShaderProgram shader = batch.getShader();
                 shaders.bindLightShader(batch);
-                Color preColour = batch.getColor();
-
                 Color colour = ((LightEmitter)entity).getLightColour();
                 float intensity = ((LightEmitter)entity).getLightPower();
                 
@@ -112,14 +112,10 @@ public class Render3DLights implements Renderer {
                 float lightHeight = intensity * (lightMap.getHeight() / lightAspect) * entity.getYRenderLength();
                 
                 float width = tileWidth * entity.getXRenderLength();
-                float height = (tex.getHeight() / aspect) * entity.getYRenderLength();
                 batch.draw(lightMap, 
                         isoX - (lightWidth / 2) + (width / 2), 
                         isoY - (lightHeight / 2),
                         lightWidth, lightHeight);
-                
-                batch.setColor(preColour);
-                batch.setShader(shader);
             }
             
             if(entity instanceof CustomRenderable) {
@@ -128,6 +124,9 @@ public class Render3DLights implements Renderer {
                 batch.draw(tex, isoX, isoY, tileWidth * entity.getXRenderLength(),
                         (tex.getHeight() / aspect) * entity.getYRenderLength());
             }
+            
+            batch.setColor(preColour);
+            batch.setShader(shader);
         }
 
         for (int index = 0; index < entities.size(); index++) {
@@ -146,24 +145,7 @@ public class Render3DLights implements Renderer {
                         isoX + tileWidth / 2 - 5, isoY + 50);
             }
         }
-
-//        /*
-//        Timmy approves this commented out code. Shut up sonar!
-//        Leaving this here.
-//        It renders the rendering order onto entites so you can see what gets rendered when
-//
-//         */
-//        for (int index = 0; index < entities.size(); index++) {
-//            Renderable entity = entities.get(index);
-//            float cartX = entity.getPosX();
-//            float cartY = (worldWidth-1) - entity.getPosY();
-//
-//            float isoX = baseX + ((cartX - cartY) / 2.0f * tileWidth);
-//            float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
-//
-//            font.draw(batch, String.format("%d", index), isoX + 32, isoY + 32);
-//        }
-
+        
         batch.end();
 
     }

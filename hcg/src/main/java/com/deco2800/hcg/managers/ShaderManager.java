@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
-import com.deco2800.hcg.renderers.RenderLightmap;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.shading.ShaderState;
 
@@ -35,11 +34,6 @@ public class ShaderManager extends Manager implements Observer {
     private Logger LOGGER;
 
     private ShaderState state;
-    
-    private FrameBuffer lightTarget;
-    private TextureRegion lightMap;
-    private SpriteBatch lightBatch;
-    private RenderLightmap lightRenderer;
 
     private FrameBuffer renderTarget;
     private TextureRegion scene;
@@ -114,8 +108,6 @@ public class ShaderManager extends Manager implements Observer {
 
         //Max of 5 custom renders
         customRenders = new ArrayList<>();
-        
-        this.lightRenderer = new RenderLightmap();
 
     }
     
@@ -134,25 +126,6 @@ public class ShaderManager extends Manager implements Observer {
         this.scene = new TextureRegion(renderTarget.getColorBufferTexture());
         this.scene.flip(false, true);
         
-        // Begin lightmap //////////////////////////////////////////////////////////////////////////////////////////
-        this.lightTarget = new FrameBuffer(Format.RGB888, width, height, false);
-        this.lightMap = new TextureRegion(lightTarget.getColorBufferTexture());
-        this.lightMap.flip(false, true);
-        
-        this.lightBatch = new SpriteBatch();
-        this.lightBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
-        
-        this.lightTarget.begin();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        //this.lightBatch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_SRC_ALPHA);
-        this.lightBatch.enableBlending();
-        
-        this.lightRenderer.render(this.lightBatch);
-        
-        this.lightTarget.end();
-        this.lightBatch.dispose();
-
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
         checkCustomDurations();
@@ -198,7 +171,6 @@ public class ShaderManager extends Manager implements Observer {
         this.postShader.setUniformf("u_contrast", state.getContrast());
         this.postShader.setUniformf("u_sick", state.getSick());
 
-
         this.health = ((float) playerManager.getPlayer().getHealthCur())
                 / ((float) playerManager.getPlayer().getHealthMax());
         this.postShader.setUniformf("u_health", this.health);
@@ -224,11 +196,6 @@ public class ShaderManager extends Manager implements Observer {
         // Draw onto screen ///////////////////////////////////////////
         postBatch.begin();
         
-        Gdx.gl.glActiveTexture(1);
-        this.lightMap.getTexture().bind();
-        Gdx.gl.glActiveTexture(0);
-        
-        //postBatch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_SRC_ALPHA);
         postBatch.enableBlending();
           
         postBatch.draw(scene, 0, 0, width, height);
@@ -238,7 +205,6 @@ public class ShaderManager extends Manager implements Observer {
             
         this.postBatch.dispose();
         this.renderTarget.dispose();
-        this.lightTarget.dispose();
     }
 
     public void setOvercast(float overcast) {
