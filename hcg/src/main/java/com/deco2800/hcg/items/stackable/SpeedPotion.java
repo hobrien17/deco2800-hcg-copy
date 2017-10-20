@@ -79,7 +79,7 @@ public class SpeedPotion extends ConsumableItem implements Observer {
 
     @Override
     public ItemRarity getRarity() {
-        return ItemRarity.UNCOMMON;
+        return ItemRarity.RARE;
     }
 
     @Override

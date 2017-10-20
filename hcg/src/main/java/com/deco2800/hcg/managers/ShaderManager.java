@@ -232,9 +232,8 @@ public class ShaderManager extends Manager implements Observer {
 
     public void checkCustomDurations() {
         for (int i = 0; i < customRenders.size(); i++) {
-            if (customRenders.get(i).durationTime < customRenders.get(i).duration.getStopwatchTime()) {
-                //timer finished. remove
-                System.out.println("Timer ended"+customRenders.get(i).duration.getStopwatchTime());
+            if (customRenders.get(i).durationTime < 0) {
+                //Shader is finished
                 customRenders.remove(i);
             }
         }
@@ -244,6 +243,9 @@ public class ShaderManager extends Manager implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         int time = (int) (float) arg;
+        for (int i = 0; i < customRenders.size(); i++) {
+            customRenders.get(i).durationTime--;
+        }
 
     }
     
