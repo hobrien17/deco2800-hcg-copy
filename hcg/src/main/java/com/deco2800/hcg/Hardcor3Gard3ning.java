@@ -147,7 +147,7 @@ public class Hardcor3Gard3ning extends Game {
         commandManager.registerCommand("toggleShaders", new CommandManager.Command() {
             @Override
             public String run(String... args) {
-                ShaderManager manager = ((ShaderManager)GameManager.get().getManager(ShaderManager.class));
+                ShaderManager manager = (ShaderManager)GameManager.get().getManager(ShaderManager.class);
                 manager.toggleShaders();
                 return String.format("Shaders %s", manager.shadersEnabled() ? "enabled" : "disabled");
             }
