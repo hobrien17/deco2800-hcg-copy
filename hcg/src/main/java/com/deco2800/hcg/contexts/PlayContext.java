@@ -60,8 +60,6 @@ public class PlayContext extends Context {
     private WeatherManager weatherManager;
     private ParticleEffectManager particleManager;
     private ContextManager contextManager;
-    private MessageManager messageManager;
-    private TextureManager textureManager;
     private TimeManager timeManager;
     private PlayerManager playerManager;
     private PlayerInputManager playerInputManager;
@@ -103,8 +101,6 @@ public class PlayContext extends Context {
     private Window plantWindow;
 
     // TODO make sure this doesn't stay here.
-    private ShaderProgram shader;
-    private ShaderProgram postShader;
     private boolean useShaders = true;
     private boolean exitDisplayed = false;
 
@@ -124,8 +120,6 @@ public class PlayContext extends Context {
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
         particleManager = (ParticleEffectManager) gameManager.getManager(ParticleEffectManager.class);
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
-        messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
-        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);

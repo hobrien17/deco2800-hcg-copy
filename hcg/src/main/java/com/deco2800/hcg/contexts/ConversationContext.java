@@ -37,8 +37,6 @@ public class ConversationContext extends UIContext {
 		super();
 
 		GameManager gameManager = GameManager.get();
-		ContextManager contextManager = (ContextManager)
-	            gameManager.getManager(ContextManager.class);
 		TextureManager textureManager = (TextureManager) 
 				gameManager.getManager(TextureManager.class);
 		

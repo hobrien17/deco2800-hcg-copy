@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ServerBrowserContext extends UIContext {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerBrowserContext.class);
-
     private ImageButton host;
     private ImageButton refresh;
     private ImageButton join;
@@ -50,7 +48,6 @@ public class ServerBrowserContext extends UIContext {
         GameManager gameManager = GameManager.get();
         ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
-        PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
