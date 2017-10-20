@@ -29,6 +29,7 @@ import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
@@ -386,11 +387,7 @@ public class PlayContext extends Context {
             soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
-        } else if(keycode == Input.Keys.EQUALS) {
-            Item item = new HealthPotion(100);
-            ItemEntity entity = new ItemEntity(20, 20, 0, item);
-			gameManager.getWorld().addEntity(entity);
-		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
+        } else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.T) {
             chatStack.setVisible(!chatStack.isVisible());

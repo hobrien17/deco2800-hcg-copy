@@ -103,19 +103,6 @@ public class Render3DLights implements Renderer {
             
             if(entity instanceof LightEmitter && ((LightEmitter)entity).getLightPower() > 0) {
                 shaders.bindLightShader(batch);
-                /*Color colour = ((LightEmitter)entity).getLightColour();
-                float intensity = ((LightEmitter)entity).getLightPower();
-                
-                batch.setColor(colour);
-                
-                float lightWidth = intensity * tileWidth * entity.getXRenderLength();
-                float lightHeight = intensity * (lightMap.getHeight() / lightAspect) * entity.getYRenderLength();
-                
-                float width = tileWidth * entity.getXRenderLength();
-                batch.draw(lightMap, 
-                        isoX - (lightWidth / 2) + (width / 2), 
-                        isoY - (lightHeight / 2),
-                        lightWidth, lightHeight);*/
             }
                
             batch.setColor(Color.WHITE);

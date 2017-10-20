@@ -58,34 +58,6 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
 				break;
 			}
 		}
-		
-        /*World world = GameManager.get().getWorld();
-        for(AbstractEntity entity : world.getEntities()) {
-            
-            // Allow players to pick items up
-			if (entity instanceof Player && this.distance(entity) <= 1.2
-					& ((Player) entity).addItemToInventory(this.getItem())) {
-				world.removeEntity(this);
-				break;
-			}
-
-            // Check to see if we're colliding with any other item entities and try
-            // and merge with them if we can
-			if (this.item.isStackable() && entity instanceof ItemEntity
-					&& this.distance(entity) <= 1.5 && entity != this) {
-				ItemEntity otherItem = (ItemEntity) entity;
-
-				if (!this.getItem().sameItem(otherItem.getItem())) {
-					continue;
-				}
-
-				if (otherItem.getItem()
-						.addToStack(this.getItem().getStackSize())) {
-					world.removeEntity(this);
-					break;
-				}
-			}
-		}*/
 	}
 
 	@Override
@@ -116,8 +88,7 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
             Color colour = this.getItem().getRarity().colour;
             batch.setColor(colour);
     
-            batch.draw(beam, posX, posY, tileWidth * this.getXRenderLength(),
-                    (beam.getHeight() / aspect) * this.getYRenderLength());
+            batch.draw(beam, posX, posY, tileWidth / 2, beam.getHeight() / 3);
             
             batch.setColor(precolour);
         }

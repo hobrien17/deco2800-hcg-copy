@@ -52,7 +52,7 @@ public class RenderLightmap implements Renderer {
         List<AbstractEntity> lights = new ArrayList<>();
 
         for (Renderable r : renderables) {
-            if (r instanceof LightEmitter) {
+            if (r instanceof LightEmitter && ((LightEmitter)r).getLightPower() > 0) {
                 lights.add((AbstractEntity) r);
             }
         }
