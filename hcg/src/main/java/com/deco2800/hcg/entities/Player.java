@@ -455,7 +455,7 @@ public class Player extends Character implements Tickable {
 			// if player is moving
 			if (!terrain.equals(name)) {
 				// if player moved to a different tile
-				if (!name.equals("")) {
+				if (!"".equals(name)) {
 					// stop old sound effect if there were
 					soundStop(name);
 				}
