@@ -339,7 +339,10 @@ public final class NetworkManager extends Manager {
 		// queue mouse input
 		int x = playerInputManager.getLocalMouseX();
 		int y = playerInputManager.getLocalMouseY();
-		playerInputManager.queueLocalAction(InputType.MOUSE_MOVED.ordinal(), x, y);
+		playerInputManager.queueLocalInput(
+				InputType.MOUSE_MOVED,
+				new int[] {x, y},
+				null);
 		// increment input tick
 		playerInputManager.incrementInputTick();
 		

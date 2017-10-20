@@ -251,7 +251,10 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
-		playerInputManager.queueLocalAction(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+		playerInputManager.queueLocalInput(
+				InputType.TOUCH_DOWN,
+				new int[] {screenX, screenY, pointer, button},
+				null);
 	}
 
 	/**
@@ -281,7 +284,10 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchUp(int screenX, int screenY, int pointer, int button) {
-		playerInputManager.queueLocalAction(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+		playerInputManager.queueLocalInput(
+				InputType.TOUCH_UP,
+				new int[] {screenX, screenY, pointer, button},
+				null);
 	}
 
 	/**
@@ -303,7 +309,10 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key pressed
 	 */
 	private void handleLocalKeyDown(int keycode) {
-		playerInputManager.queueLocalAction(InputType.KEY_DOWN.ordinal(), keycode);
+		playerInputManager.queueLocalInput(
+				InputType.KEY_DOWN,
+				new int[] {keycode},
+				null);
 	}
 
 	/**
@@ -313,7 +322,10 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key released
 	 */
 	private void handleLocalKeyUp(int keycode) {
-		playerInputManager.queueLocalAction(InputType.KEY_UP.ordinal(), keycode);
+		playerInputManager.queueLocalInput(
+				InputType.KEY_UP,
+				new int[] {keycode},
+				null);
 	}
 
 	/**

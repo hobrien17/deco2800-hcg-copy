@@ -23,7 +23,7 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	private HashMap<Integer, MouseMovedObserver> mouseMovedListeners = new HashMap<>();
 	private HashMap<Integer, ScrollObserver> scrollListeners = new HashMap<>();
 	
-	private HashMap<Long, ArrayList<int[]>> actionQueue = new HashMap<>();
+	private HashMap<Long, ArrayList<Input>> inputQueue = new HashMap<>();
 	
 	private int screenX;
 	private int screenY;
@@ -215,35 +215,32 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	}
 	
 	/**
-	 * Queues a local action
-	 * @param args the action arguments
+	 * Queues a local input
 	 */
-	public void queueLocalAction(int... args) {
+	public void queueLocalInput(InputType type, int[] ints, float[] floats) {
 		long tick = inputTickCount + (networkManager.isMultiplayerGame() ? 3 : 1);
+		Input input = new Input(type, 0, ints, floats);
 		
 		if (networkManager.isMultiplayerGame()) {
-			networkManager.queueMessage(new InputMessage(tick, args));
+			networkManager.queueMessage(new InputMessage(tick, input));
 		}
 		
-		if (!actionQueue.containsKey(tick)) {
-			actionQueue.put(tick, new ArrayList<>());
+		if (!inputQueue.containsKey(tick)) {
+			inputQueue.put(tick, new ArrayList<>());
 		}
-		int[] localArgs = new int[args.length + 1];
-		localArgs[0] = 0;
-		System.arraycopy(args, 0, localArgs, 1, args.length);
-		actionQueue.get(tick).add(localArgs);
+		inputQueue.get(tick).add(input);
 	}
 	
 	/**
-	 * Queues an action
-	 * @param tick the tick on which the action should take place
-	 * @param args the action arguments
+	 * Queues an input
+	 * @param tick the tick on which the input should be performed
+	 * @param input the input to be queued
 	 */
-	public void queueAction(long tick, int... args) {
-		if (!actionQueue.containsKey(tick)) {
-			actionQueue.put(tick, new ArrayList<>());
+	public void queueInput(long tick, Input input) {
+		if (!inputQueue.containsKey(tick)) {
+			inputQueue.put(tick, new ArrayList<>());
 		}
-		actionQueue.get(tick).add(args);
+		inputQueue.get(tick).add(input);
 	}
 	
 	/**
@@ -300,39 +297,67 @@ public class PlayerInputManager extends Manager implements TickableManager {
 			return;
 		}
 		
-		ArrayList<int[]> actions = actionQueue.get(inputTickCount);
-		if (actions == null) {
+		ArrayList<Input> inputs = inputQueue.get(inputTickCount);
+		if (inputs == null) {
 			return;
 		}
-		for (int[] action : actions) {
-			InputType inputType = InputType.values()[action[1]];
-			switch (inputType) {
+		for (Input input : inputs) {
+			input.perform();
+		}
+		inputQueue.remove(inputTickCount);
+	}
+	
+	public class Input {
+		private InputType type;
+		private int playerId;
+		private int[] ints;
+		private float[] floats;
+		
+		public Input(InputType type, int playerId, int[] ints, float[] floats) {
+			this.type = type;
+			this.playerId = playerId;
+			this.ints = ints;
+			this.floats = floats;
+		}
+		
+		public InputType getType() {
+			return type;
+		}
+		
+		public int[] getInts() {
+			return ints != null ? ints : new int[0];
+		}
+		
+		public float[] getFloats() {
+			return floats != null ? floats : new float[0];
+		}
+		
+		private void perform() {
+			switch (type) {
 			case KEY_DOWN:
-				keyDown(action[0], action[2]);
+				keyDown(playerId, ints[0]);
 				break;
 			case KEY_UP:
-				keyUp(action[0], action[2]);
+				keyUp(playerId, ints[0]);
 				break;
 			case MOUSE_MOVED:
-				mouseMoved(action[0], action[2], action[3]);
+				mouseMoved(playerId, ints[0], ints[1]);
 				break;
 			case SCROLL:
-				scrolled(action[0], action[2]);
+				scrolled(playerId, ints[0]);
 				break;
 			case TOUCH_DOWN:
-				touchDown(action[0], action[2], action[3], action[4], action[5]);
+				touchDown(playerId, ints[0], ints[1], ints[2], ints[3]);
 				break;
 			case TOUCH_DRAGGED:
-				touchDragged(action[0], action[2], action[3], action[4]);
+				touchDragged(playerId, ints[0], ints[1], ints[2]);
 				break;
 			case TOUCH_UP:
-				touchUp(action[0], action[2], action[3], action[4], action[5]);
+				touchUp(playerId, ints[0], ints[1], ints[2], ints[3]);
 				break;
 			default:
-				break;
-				
+				break;	
 			}
 		}
-		actionQueue.remove(inputTickCount);
 	}
 }
