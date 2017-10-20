@@ -250,4 +250,19 @@ public class FixedSizeInventory implements Inventory {
         
         return builder.toString();
     }
+
+    @Override
+    public int numberOf(String itemName) {
+        int total = 0;
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].getName() == itemName) {
+                if (items[i].isStackable()) {
+                    total += items[i].getStackSize();
+                } else {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
 }

@@ -190,8 +190,7 @@ public class World {
 
 					// otherwise, our entity is definately in our enum! so call
 					// in the spawn method
-					this.addEntity(WorldEntities.valueOf(layerName).spawn(x, y,
-							i + 1));
+					this.addEntity(WorldEntities.valueOf(layerName).spawn(x, y, i + 1));
 
 				}
 

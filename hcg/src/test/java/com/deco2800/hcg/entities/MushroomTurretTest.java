@@ -47,9 +47,10 @@ public class MushroomTurretTest {
         TimeManager timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         gameManager.getWorld().addEntity(enemy);
         for (int i = 0; i < 4; i++) {
-            assertThat("MushroomTurret texture incorrect.", enemy.getTexture(), is(equalTo("mushroom")));
+            String name = "mushroom" + i;
+            assertThat("MushroomTurret texture incorrect.", enemy.getTexture(), is(equalTo(name)));
             enemy.update(stopwatchManager, i);
         }
-        assertThat("MushroomTurret texture incorrect.", enemy.getTexture(), is(equalTo("tower")));
+        assertThat("MushroomTurret texture incorrect.", enemy.getTexture(), is(equalTo("mushroom4")));
     }
 }

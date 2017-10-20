@@ -1,10 +1,15 @@
 package com.deco2800.hcg.entities.bullets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
+import com.deco2800.hcg.entities.turrets.Explosion;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.WorldUtil;
 
@@ -17,6 +22,8 @@ import com.deco2800.hcg.util.WorldUtil;
  */
 public class ExplosionBullet extends Bullet {
 
+    private Explosion explosion;
+    
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
 	 *
@@ -39,7 +46,7 @@ public class ExplosionBullet extends Bullet {
 					 AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount);
-		this.setTexture("battle_seed_red");
+		this.setTexture("battle_seed_grey");
 		this.bulletType = BulletType.EXPLOSION;
 	}
 	
@@ -63,7 +70,7 @@ public class ExplosionBullet extends Bullet {
 	 */
 	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(posX, posY, posZ, newX, newY, newZ, user, 1);
-		this.setTexture("battle_seed_red");
+		this.setTexture("battle_seed_grey");
 	    this.bulletType = BulletType.EXPLOSION;
 	}
 	
@@ -96,17 +103,23 @@ public class ExplosionBullet extends Bullet {
 	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
 			float yLength, float zLength, AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount);
-		this.setTexture("battle_seed_red");
+		this.setTexture("battle_seed_grey");
 		this.bulletType = BulletType.EXPLOSION;
 	}
 	
 	@Override
 	protected void applyEffect(Harmable target) {
+        explosion = new Explosion(this.getPosX(), this.getPosY(), this.getPosZ(), 0.3f);
+        GameManager.get().getWorld().addEntity(explosion);
 		AbstractEntity entity = (AbstractEntity)target;
-		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 5, Enemy.class);
-		target.giveEffect(new Effect("Explosion", 1, 1000, 0, 0, 1, 0, user));
+		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 2.5f, Enemy.class);
+		target.giveEffect(new Effect("Explosion", 1, 1000, 1, 0, 1, 0, user));
+		ArrayList<Player> players = ((PlayerManager) (GameManager.get().getManager(PlayerManager.class))).getPlayers();
 		for(AbstractEntity close : closest) {
-			((Enemy)close).giveEffect(new Effect("Explosion", 1, 1000, 1, 0, 1, 0, user));
+		    if(close instanceof Player && players.contains(close)) {
+		    } else {
+		        ((Enemy)close).giveEffect(new Effect("Explosion", 1, 1000, 1, 0, 1, 0, user));
+		    }
 		}
 	}
 }
