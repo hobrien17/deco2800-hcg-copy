@@ -1,5 +1,7 @@
 package com.deco2800.hcg.managers;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.contexts.PlayContext;
 import com.deco2800.hcg.multiplayer.InputMessage;
 import com.deco2800.hcg.multiplayer.InputType;
@@ -19,14 +21,14 @@ public class PlayerInputManager extends Manager implements TickableManager {
     private HashMap<Integer, KeyUpObserver> keyUpListeners = new HashMap<>();
     private HashMap<Integer, TouchDownObserver> touchDownListeners = new HashMap<>();
     private HashMap<Integer, TouchUpObserver> touchUpListeners = new HashMap<>();
-    private HashMap<Integer, TouchDraggedObserver> touchDragegdListeners = new HashMap<>();
+    private HashMap<Integer, TouchDraggedObserver> touchDraggedListeners = new HashMap<>();
 	private HashMap<Integer, MouseMovedObserver> mouseMovedListeners = new HashMap<>();
 	private HashMap<Integer, ScrollObserver> scrollListeners = new HashMap<>();
 	
-	private HashMap<Long, ArrayList<int[]>> actionQueue = new HashMap<>();
+	private HashMap<Long, ArrayList<Input>> inputQueue = new HashMap<>();
 	
-	private int screenX;
-	private int screenY;
+	private float mouseX;
+	private float mouseY;
 	
 	private long inputTickCount = 0;
 	
@@ -99,7 +101,7 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	 * @param observer the touch dragged observer to add
 	 */
 	public void addTouchDraggedListener(Integer player, TouchDraggedObserver observer) {
-		touchDragegdListeners.put(player, observer);
+		touchDraggedListeners.put(player, observer);
 	}
 
 	/**
@@ -107,7 +109,7 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	 * @param observer the touch dragged observer to remove
 	 */
 	public void removeTouchDraggedListener(Integer player, TouchDraggedObserver observer) {
-		touchDragegdListeners.remove(player, observer);
+		touchDraggedListeners.remove(player, observer);
 	}
 
 	/**
@@ -192,7 +194,7 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	 * @param pointer unknown
 	 */
 	public void touchDragged(Integer player, int screenX, int screenY, int pointer) {
-		touchDragegdListeners.get(player).notifyTouchDragged(screenX, screenY, pointer);
+		touchDraggedListeners.get(player).notifyTouchDragged(screenX, screenY, pointer);
 	}
 
 	/**
@@ -215,61 +217,58 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	}
 	
 	/**
-	 * Queues a local action
-	 * @param args the action arguments
+	 * Queues a local input
 	 */
-	public void queueLocalAction(int... args) {
+	public void queueLocalInput(InputType type, int[] ints, float[] floats) {
 		long tick = inputTickCount + (networkManager.isMultiplayerGame() ? 3 : 1);
+		Input input = new Input(type, 0, ints, floats);
 		
 		if (networkManager.isMultiplayerGame()) {
-			networkManager.queueMessage(new InputMessage(tick, args));
+			networkManager.queueMessage(new InputMessage(tick, input));
 		}
 		
-		if (!actionQueue.containsKey(tick)) {
-			actionQueue.put(tick, new ArrayList<>());
+		if (!inputQueue.containsKey(tick)) {
+			inputQueue.put(tick, new ArrayList<>());
 		}
-		int[] localArgs = new int[args.length + 1];
-		localArgs[0] = 0;
-		System.arraycopy(args, 0, localArgs, 1, args.length);
-		actionQueue.get(tick).add(localArgs);
+		inputQueue.get(tick).add(input);
 	}
 	
 	/**
-	 * Queues an action
-	 * @param tick the tick on which the action should take place
-	 * @param args the action arguments
+	 * Queues an input
+	 * @param tick the tick on which the input should be performed
+	 * @param input the input to be queued
 	 */
-	public void queueAction(long tick, int... args) {
-		if (!actionQueue.containsKey(tick)) {
-			actionQueue.put(tick, new ArrayList<>());
+	public void queueInput(long tick, Input input) {
+		if (!inputQueue.containsKey(tick)) {
+			inputQueue.put(tick, new ArrayList<>());
 		}
-		actionQueue.get(tick).add(args);
+		inputQueue.get(tick).add(input);
 	}
 	
 	/**
 	 * Sets the local player's mouse position
-	 * @param screenX The x position of mouse movement on the screen
-	 * @param screenY The y position of mouse movement on the screen
+	 * @param worldX The x position of mouse movement in the world
+	 * @param worldY The y position of mouse movement in the world
 	 */
-	public void setLocalMousePosition(int screenX, int screenY) {
-		this.screenX = screenX;
-		this.screenY = screenY;
+	public void setLocalMousePosition(float worldX, float worldY) {
+		mouseX = worldX;
+		mouseY = worldY;
 	}
 	
 	/**
 	 * Gets the x coordinate of the local player's mouse
-	 * @return The x position of mouse movement on the screen
+	 * @return The x position of mouse movement in the world
 	 */
-	public int getLocalMouseX() {
-		return screenX;
+	public float getLocalMouseX() {
+		return mouseX;
 	}
 	
 	/**
 	 * Gets the y coordinate of the local player's mouse
-	 * @return The y position of mouse movement on the screen
+	 * @return The y position of mouse movement in the world
 	 */
-	public int getLocalMouseY() {
-		return screenY;
+	public float getLocalMouseY() {
+		return mouseY;
 	}
 	
 	/**
@@ -300,42 +299,76 @@ public class PlayerInputManager extends Manager implements TickableManager {
 			return;
 		}
 		
-		// queue mouse input
-		queueLocalAction(InputType.MOUSE_MOVED.ordinal(), screenX, screenY);
-		
-		ArrayList<int[]> actions = actionQueue.get(++inputTickCount);
-		if (actions == null) {
+		ArrayList<Input> inputs = inputQueue.get(inputTickCount);
+		if (inputs == null) {
 			return;
 		}
-		for (int[] action : actions) {
-			InputType inputType = InputType.values()[action[1]];
-			switch (inputType) {
+		for (Input input : inputs) {
+			input.perform();
+		}
+		inputQueue.remove(inputTickCount);
+	}
+	
+	public class Input {
+		private InputType type;
+		private int playerId;
+		private int[] ints;
+		private float[] floats;
+		
+		public Input(InputType type, int playerId, int[] ints, float[] floats) {
+			this.type = type;
+			this.playerId = playerId;
+			this.ints = ints;
+			this.floats = floats;
+		}
+		
+		public InputType getType() {
+			return type;
+		}
+		
+		public int[] getInts() {
+			return ints != null ? ints : new int[0];
+		}
+		
+		public float[] getFloats() {
+			return floats != null ? floats : new float[0];
+		}
+		
+		private void perform() {
+			int x = 0;
+			int y = 0;
+			
+			if (floats != null && floats.length >= 2) {
+				Vector3 screenCoords = GameManager.get().worldToScreen(new Vector3(floats[0], floats[1], 0));
+				x = (int) screenCoords.x;
+				y = (int) -screenCoords.y + Gdx.graphics.getHeight();
+			}
+			
+			switch (type) {
 			case KEY_DOWN:
-				keyDown(action[0], action[2]);
+				keyDown(playerId, ints[0]);
 				break;
 			case KEY_UP:
-				keyUp(action[0], action[2]);
+				keyUp(playerId, ints[0]);
 				break;
 			case MOUSE_MOVED:
-				mouseMoved(action[0], action[2], action[3]);
+				mouseMoved(playerId, x, y);
 				break;
 			case SCROLL:
-				scrolled(action[0], action[2]);
+				scrolled(playerId, ints[0]);
 				break;
 			case TOUCH_DOWN:
-				touchDown(action[0], action[2], action[3], action[4], action[5]);
+				touchDown(playerId, x, y, ints[0], ints[1]);
 				break;
 			case TOUCH_DRAGGED:
-				touchDragged(action[0], action[2], action[3], action[4]);
+				touchDragged(playerId, x, y, ints[0]);
 				break;
 			case TOUCH_UP:
-				touchUp(action[0], action[2], action[3], action[4], action[5]);
+				touchUp(playerId, x, y, ints[0], ints[1]);
 				break;
 			default:
-				break;
-				
+				break;	
 			}
 		}
-		actionQueue.remove(inputTickCount);
 	}
 }

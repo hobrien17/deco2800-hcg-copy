@@ -388,6 +388,17 @@ public class TextureManager extends Manager {
 			textureMap.put("server_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
 			textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
 			textureMap.put("transparentUI", new Texture("resources/ui/multiplayer_ui/transparentUI.png"));
+			textureMap.put("MPcharacter_title", new Texture("resources/ui/multiplayer_ui/MPcharacter_title.png"));
+			textureMap.put("player1", new Texture("resources/ui/multiplayer_ui/player1.png"));
+			textureMap.put("player1head", new Texture("resources/ui/multiplayer_ui/player1head.png"));
+			textureMap.put("player2", new Texture("resources/ui/multiplayer_ui/player2.png"));
+			textureMap.put("player2head", new Texture("resources/ui/multiplayer_ui/player2head.png"));
+			textureMap.put("player3", new Texture("resources/ui/multiplayer_ui/player3.png"));
+			textureMap.put("player3head", new Texture("resources/ui/multiplayer_ui/player3head.png"));
+			textureMap.put("player4", new Texture("resources/ui/multiplayer_ui/player4.png"));
+			textureMap.put("player4head", new Texture("resources/ui/multiplayer_ui/player4head.png"));
+			textureMap.put("player5", new Texture("resources/ui/multiplayer_ui/player5.png"));
+			textureMap.put("player5head", new Texture("resources/ui/multiplayer_ui/player5head.png"));
 
 			//Conversation textures
 			textureMap.put("conversation_context", new Texture("resources/ui/conversations/conversation_context.png"));

@@ -49,6 +49,8 @@ public class ShaderManager extends Manager implements Observer {
 
     //Flag for custom overlay renders
     private ArrayList<customShader> customRenders;
+    
+    private boolean enabled = true;
 
     private float health;
 
@@ -251,5 +253,13 @@ public class ShaderManager extends Manager implements Observer {
     
     public void bindLightShader(SpriteBatch batch) {
         batch.setShader(this.lightShader);
+    }
+    
+    public boolean shadersEnabled() {
+        return this.enabled;
+    }
+    
+    public void toggleShaders() {
+        this.enabled = !this.enabled;
     }
 }

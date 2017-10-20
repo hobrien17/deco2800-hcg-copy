@@ -2,6 +2,7 @@ package com.deco2800.hcg.managers;
 
 import com.deco2800.hcg.contexts.PlayContext;
 import com.deco2800.hcg.entities.worldmap.MapNode;
+import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStack;
 import com.deco2800.hcg.worldmapui.LevelStore;
 import com.deco2800.hcg.worldmapui.WorldStackGenerator;
@@ -39,12 +40,22 @@ public class WorldManager extends Manager {
 	}
 	
 	/**
+	 * Sets the specified world map.
+	 * @param index
+	 *     The new world map index.
+	 */
+	public void setWorldMap(int index) {
+		WorldMap map = gameManager.getWorldStack().getWorldStack().get(index);
+		gameManager.setWorldMap(map);
+	}
+	
+	/**
 	 * Selects the specified node.
 	 * @param index
 	 *     The new node index.
 	 */
 	public void selectNode(int index) {
-		MapNode node = gameManager.getWorldMap().getContainedNodes().get(index);	
+		MapNode node = gameManager.getWorldMap().getContainedNodes().get(index);
 		gameManager.setOccupiedNode(node);
 		
 		/*
@@ -69,6 +80,34 @@ public class WorldManager extends Manager {
 		gameManager.setWorld(newWorld);
 		playerManager.spawnPlayers();
 		contextManager.pushContext(new PlayContext());
+	}
+	
+	/**
+	 * Ends the current level
+	 */
+	public void completeLevel() {
+        if(gameManager.getCurrentNode().getNodeType() != 3) {
+            gameManager.getCurrentNode().changeNodeType(2);
+            if (gameManager.getMapContext() != null) {
+                gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
+            }
+            contextManager.popContext();
+        } else {
+            gameManager.getCurrentNode().changeNodeType(2);
+            if (gameManager.getMapContext() != null) {
+                gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
+            }
+            gameManager.getMapContext().addEndOfContext();
+            contextManager.popContext();
+        }
+        // clear old observers (mushroom turret for example)
+        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager.deleteObservers();
+        
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();
+
+        // stop the old weather effects
+        ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
 	}
 	
 }
