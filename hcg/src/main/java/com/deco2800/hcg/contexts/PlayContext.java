@@ -95,11 +95,7 @@ public class PlayContext extends Context {
 
     private Window window;
     private Window plantWindow;
-
-    // TODO make sure this doesn't stay here.
-    private ShaderProgram shader;
-    private ShaderProgram postShader;
-    private boolean useShaders = true;
+    
     private boolean exitDisplayed = false;
 
     private Window exitWindow;
@@ -134,6 +130,7 @@ public class PlayContext extends Context {
 
         // Setup GUI
         stage = new Stage(new ScreenViewport());
+        stage.getBatch().enableBlending();
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
         plantSkin = new Skin(Gdx.files.internal("resources/ui/plant_ui/flat-earth-ui.json"));
         plantSkin.add("cactus",new Texture("resources/ui/plant_ui/cactus.png"));
@@ -274,7 +271,7 @@ public class PlayContext extends Context {
          */
         GameManager.get().getCamera().update();
 
-        if(!shaderManager.shadersCompiled() || !useShaders) {
+        if(!shaderManager.shadersCompiled() || !shaderManager.shadersEnabled()) {
             // Default drawing behaviour. Default to this if any shaders fail to compile.
             SpriteBatch batch = new SpriteBatch();
 
@@ -381,8 +378,6 @@ public class PlayContext extends Context {
         if(keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
             soundManager.stopWeatherSounds();
-        } else if(keycode == Input.Keys.N) {
-            useShaders = !useShaders;
         } else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.T) {
