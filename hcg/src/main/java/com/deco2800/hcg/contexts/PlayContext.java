@@ -34,6 +34,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.MessageManager;
 import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.buffs.Perk;
@@ -36,7 +35,7 @@ import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
-<<<<<<< HEAD
+import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -46,11 +45,7 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.WeatherManager;
-=======
-import com.deco2800.hcg.items.stackable.SpeedPotion;
->>>>>>> 9dbd87da2fbf13d8e4b10e511e3816075eee23a2
 import com.deco2800.hcg.multiplayer.InputType;
-import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
