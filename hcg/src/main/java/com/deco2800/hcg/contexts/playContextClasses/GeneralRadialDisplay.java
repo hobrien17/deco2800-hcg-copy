@@ -38,9 +38,14 @@ import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.items.stackable.SmallMushroom;
+import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.items.tools.Fertiliser;
+import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.inventory.PlayerEquipment;
+import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 //import com.deco2800.hcg.shading.GrayScaleShader;
 
 public class GeneralRadialDisplay extends Group {
@@ -97,7 +102,6 @@ public class GeneralRadialDisplay extends Group {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/plant_ui/basic_font.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		BitmapFont font = generator.generateFont(parameter);
-		LabelStyle normal = new LabelStyle(font, Color.valueOf("#004000"));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/plant_ui/basic_bold.ttf"));
 		font = generator.generateFont(parameter);
 		LabelStyle bold = new LabelStyle(font, Color.valueOf("#004000"));
@@ -114,7 +118,6 @@ public class GeneralRadialDisplay extends Group {
         display = new Group();
 
         outline = getImage("outline");
-        closeButton = new ImageButton(getImage("close").getDrawable());
         
         outline.setSize(OUTLINE_SIZE, OUTLINE_SIZE);
         outline.setPosition(display.getWidth() / 2f - outline.getWidth() / 2f, 
@@ -132,20 +135,8 @@ public class GeneralRadialDisplay extends Group {
 			display.addActor(button);
 			display.addActor(infoLbl);
 		}
-		
-		closeButton = new ImageButton(getImage("close").getDrawable());
-		closeButton.setSize(X_SIZE_MAX, Y_SIZE_MAX);
-		closeButton.setPosition(display.getWidth()/2f - X_SIZE_MAX/2f, 
-				display.getHeight()/2f - Y_SIZE_MAX/2f);
-		display.addActor(closeButton);
 
-		
-		closeButton.addListener(new ChangeListener() {
-	            @Override
-	            public void changed(ChangeEvent event, Actor actor) {
-	                display.remove();
-	            }
-	        });
+
 	}
 	
 	private void setupSprites() {
@@ -163,13 +154,16 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("fireC", "fire_btn");
 		sprites.put("grassC", "grass_btn");
 		sprites.put("outline", "radialOutline");
-		sprites.put("close", "menuClose");
 		sprites.put("machineGun", "machineGun");
 		sprites.put("shotgun", "shotgun");
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
 		sprites.put("bugSpray", "bugspray_btn");
-		sprites.put("Health Potion", "healthPotion");
+		sprites.put("healthPotion", "healthPotion");
+		sprites.put("speedPotion", "speedPotion");
+		sprites.put("magicMushroom", "magicMushroom");
+		sprites.put("smallMushroom", "smallMushroom");
+		sprites.put("key", "key");
 	}
 	
 	private void setupListeners() {
@@ -178,17 +172,21 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("sunflower", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
-            	plant(new Seed(Seed.Type.SUNFLOWER));
-                display.remove();
+				plant(new Seed(Seed.Type.SUNFLOWER));
+				if(plantableNearby()) {
+					playPlantSound();
+				}
+				display.remove();
             }
         });
 		
 		listeners.put("water", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantLilySound();
             	plant(new Seed(Seed.Type.WATER));
+				if(plantableNearby()) {
+					playPlantLilySound();
+				}
                 display.remove();
             }
         });
@@ -196,8 +194,10 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("ice", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
             	plant(new Seed(Seed.Type.ICE));
+				if(plantableNearby()) {
+					playPlantSound();
+				}
                 display.remove();
             }
         });
@@ -205,8 +205,10 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("fire", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
 				plant(new Seed(Seed.Type.FIRE));
+				if(plantableNearby()) {
+					playPlantSound();
+				}
                 display.remove();
             }
         });
@@ -214,8 +216,10 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("explosive", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
             	plant(new Seed(Seed.Type.EXPLOSIVE));
+				if(plantableNearby()) {
+					playPlantSound();
+				}
                 display.remove();
             }
         });
@@ -223,8 +227,10 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("grass", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
             	plant(new Seed(Seed.Type.GRASS));
+				if(plantableNearby()) {
+					playPlantSound();
+				}
                 display.remove();
             }
         });
@@ -342,10 +348,42 @@ public class GeneralRadialDisplay extends Group {
 			}
 		});
 
-		listeners.put("Health Potion", new ChangeListener() {
+		listeners.put("healthPotion", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//HealthPotion.consume(Player);
+
+				display.remove();
+			}
+		});
+
+		listeners.put("speedPotion", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				display.remove();
+			}
+		});
+
+		listeners.put("magicMushroom", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				display.remove();
+			}
+		});
+
+		listeners.put("smallMushroom", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				display.remove();
+			}
+		});
+
+		listeners.put("key", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				//PotUnlockDisplay.open();
 				display.remove();
 			}
 		});

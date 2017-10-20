@@ -29,8 +29,8 @@ import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
-import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
+import com.deco2800.hcg.items.tools.Shovel;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -70,6 +70,8 @@ public class PlayContext extends Context {
     private ShaderManager shaderManager;
     private PlantManager plantManager;
 
+    private static final float X_SIZE_MAX = 80f;
+    private static final float Y_SIZE_MAX = 80f;
 
     // FIXME mouseHandler is never assigned
     private MouseHandler mouseHandler;
@@ -99,16 +101,14 @@ public class PlayContext extends Context {
     private GeneralRadialDisplay weaponRadialDisplay;
     private GeneralRadialDisplay seedRadialDisplay;
     private GeneralRadialDisplay consumableRadialDisplay;
-    private RadialDisplay radialDisplay;
+    private GeneralRadialDisplay plantRadialDisplay;
     private PotUnlockDisplay potUnlock;
     private Button plantButton;
     private String[] weaponItems;
     private String[] seedItems;
     private String[] consumableItems;
-    private ImageButton seedMenu;
-    private ImageButton consumableMenu;
-    private ImageButton weaponLeft;
-    private ImageButton weaponRight;
+    private String[] plantItems;
+    private ImageButton shovelButton;
 
     private Window window;
     private Window plantWindow;
@@ -160,17 +160,35 @@ public class PlayContext extends Context {
         plantSkin.add("lily",new Texture("resources/ui/plant_ui/lily.png"));
         plantSkin.add("sunflower",new Texture("resources/ui/plant_ui/sunflower.png"));
 
+        //shovelButton = new ImageButton( new Image (textureManager.getTexture("shovel")).getDrawable());
+        //shovelButton.setSize(X_SIZE_MAX, Y_SIZE_MAX);
+        //shovelButton.setPosition(plantRadialDisplay.getWidth()/2f - X_SIZE_MAX/2f,
+        //        plantRadialDisplay.getHeight()/2f - Y_SIZE_MAX/2f);
+        //plantRadialDisplay.addActor(shovelButton);
+
+
+        //shovelButton.addListener(new ChangeListener() {
+        //    @Override
+        //    public void changed(ChangeEvent event, Actor actor) {
+                //Shovel.use();
+        //        plantRadialDisplay.remove();
+        //    }
+        //});
+
+        plantItems = new String[]{"sunflower", "water", "ice", "explosive","fire","grass"};
+        List plantList = Arrays.asList(plantItems);
         seedItems = new String[]{"sunflowerC", "waterC", "iceC", "explosiveC","fireC","grassC"};
         List seedList = Arrays.asList(seedItems);
         weaponItems = new String[]{"machineGun", "shotgun", "starfall"};
         List weapList = Arrays.asList(weaponItems);
-        consumableItems = new String[]{"fertiliser", "bugSpray", "Health Potion"};
+        consumableItems = new String[]{"fertiliser", "bugSpray", "healthPotion", "speedPotion",
+                "magicMushroom", "smallMushroom", "key"};
         List consumableList = Arrays.asList(consumableItems);
 
-        radialDisplay = new RadialDisplay(stage);
         weaponRadialDisplay = new GeneralRadialDisplay(stage, weapList);
         seedRadialDisplay = new GeneralRadialDisplay(stage, seedList);
         consumableRadialDisplay = new GeneralRadialDisplay(stage, consumableList);
+        plantRadialDisplay = new GeneralRadialDisplay(stage, plantList);
         createExitWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
@@ -179,21 +197,6 @@ public class PlayContext extends Context {
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
-
-        ImageButton seedMenu = new ImageButton( new Image (textureManager.getTexture("seedSelect")).getDrawable());
-        ImageButton consumableMenu = new ImageButton( new Image (textureManager.getTexture("consumables")).getDrawable());
-        ImageButton weaponLeft = new ImageButton( new Image (textureManager.getTexture("weapsLeft")).getDrawable());
-        ImageButton weaponRight = new ImageButton( new Image (textureManager.getTexture("weapsRight")).getDrawable());
-
-        seedMenu.setSize(80, 100);
-        consumableMenu.setSize(80, 100);
-        weaponLeft.setSize(80, 100);
-        weaponRight.setSize(80, 100);
-
-        seedMenu.setPosition(0, stage.getHeight() / 2f - seedMenu.getHeight() / 2f);
-        consumableMenu.setPosition(stage.getWidth(), stage.getHeight() / 2f - consumableMenu.getHeight() / 2f);
-        weaponLeft.setPosition(0, stage.getHeight() / 2f - weaponLeft.getHeight() / 2f);
-        weaponRight.setPosition(stage.getWidth(), stage.getHeight() / 2f - weaponRight.getHeight() / 2f);
 
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
@@ -254,6 +257,7 @@ public class PlayContext extends Context {
         inputMultiplexer.addProcessor(input);
 
         input.addKeyDownListener(this::handleKeyDown);
+        input.addKeyUpListener(this::handleKeyUp);
 
         /*
          * Set up some input handlers for panning with dragging.
@@ -365,13 +369,13 @@ public class PlayContext extends Context {
         clockDisplay.setPosition(stage.getWidth()-220f, 20f);
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
         plantButton.setPosition(stage.getWidth()-26, stage.getHeight()-29);
-        radialDisplay.setPosition(stage.getWidth() / 2f, stage.getHeight() / 2f);
         potUnlock.setPosition(stage.getWidth() / 2f-150f, stage.getHeight() / 2f+100f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         weatherManager.resize();
         seedRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         weaponRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         consumableRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        plantRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
     }
 
     /**
@@ -435,31 +439,70 @@ public class PlayContext extends Context {
             soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
-        } else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
-			radialDisplay.addRadialMenu(stage);
-		} else if (keycode == Input.Keys.X) {
+		} else if (keycode == Input.Keys.K && weaponRadialDisplay.getActive() == false) {
             weaponRadialDisplay.addRadialMenu(stage);
-            //weaponRadialDisplay.addActor(seedMenu);
-            //weaponRadialDisplay.addActor(consumableMenu);
+            seedRadialDisplay.hide();
+            consumableRadialDisplay.hide();
+            plantRadialDisplay.hide();
             weaponRadialDisplay.show();
-        } else if (keycode == Input.Keys.Q && weaponRadialDisplay.getActive() == true) {
+        } else if (keycode == Input.Keys.K && weaponRadialDisplay.getActive() == true) {
+            seedRadialDisplay.hide();
+            consumableRadialDisplay.hide();
+            plantRadialDisplay.hide();
+            weaponRadialDisplay.show();
+        } else if (keycode == Input.Keys.J && seedRadialDisplay.getActive() == false) {
+            seedRadialDisplay.addRadialMenu(stage);
             weaponRadialDisplay.hide();
+            consumableRadialDisplay.hide();
+            plantRadialDisplay.hide();
             seedRadialDisplay.show();
-        } else if (keycode == Input.Keys.E && weaponRadialDisplay.getActive() == true) {
+        } else if (keycode == Input.Keys.J && seedRadialDisplay.getActive() == true) {
             weaponRadialDisplay.hide();
+            consumableRadialDisplay.hide();
+            plantRadialDisplay.hide();
+            seedRadialDisplay.show();
+        } else if (keycode == Input.Keys.L && consumableRadialDisplay.getActive() == false) {
+            consumableRadialDisplay.addRadialMenu(stage);
+            weaponRadialDisplay.hide();
+            seedRadialDisplay.hide();
+            plantRadialDisplay.hide();
             consumableRadialDisplay.show();
-        } else if (keycode == Input.Keys.Q && consumableRadialDisplay.getActive() == true) {
-        	consumableRadialDisplay.hide();
-            weaponRadialDisplay.show();
-        } else if (keycode == Input.Keys.Q && seedRadialDisplay.getActive() == true) {
-        	seedRadialDisplay.hide();
-            weaponRadialDisplay.show();
+        } else if (keycode == Input.Keys.L && consumableRadialDisplay.getActive() == true) {
+            weaponRadialDisplay.hide();
+            seedRadialDisplay.hide();
+            plantRadialDisplay.hide();
+            consumableRadialDisplay.show();
+        } else if (keycode == Input.Keys.H && GeneralRadialDisplay.plantableNearby()
+                && plantRadialDisplay.getActive() == false) {
+            plantRadialDisplay.addRadialMenu(stage);
+            seedRadialDisplay.hide();
+            consumableRadialDisplay.hide();
+            weaponRadialDisplay.hide();
+            plantRadialDisplay.show();
+        } else if (keycode == Input.Keys.H && GeneralRadialDisplay.plantableNearby()
+                && plantRadialDisplay.getActive() == true) {
+            seedRadialDisplay.hide();
+            consumableRadialDisplay.hide();
+            weaponRadialDisplay.hide();
+            plantRadialDisplay.show();
 		} else if (keycode == Input.Keys.T) {
             chatStack.setVisible(!chatStack.isVisible());
         } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
             exit();
         }
 	}
+
+	private void handleKeyUp(int keycode) {
+        if(keycode == Input.Keys.J) {
+            seedRadialDisplay.hide();
+        } else if(keycode == Input.Keys.K) {
+            weaponRadialDisplay.hide();
+        } else if(keycode == Input.Keys.L) {
+            consumableRadialDisplay.hide();
+        } else if(keycode == Input.Keys.H) {
+            plantRadialDisplay.hide();
+        }
+    }
 
 	private void exit() {
 		if(gameManager.getCurrentNode().getNodeType() != 3) {
