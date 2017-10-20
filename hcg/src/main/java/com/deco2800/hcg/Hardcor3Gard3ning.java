@@ -130,12 +130,12 @@ public class Hardcor3Gard3ning extends Game {
         commandManager.registerCommand("shader", new CommandManager.Command() {
             @Override
             public String run(String... args) {
-                if (args[1].equals("set")) {
-                    if (args[2].equals("contrast")) {
+                if ("set".equals(args[1])) {
+                    if ("contrast".equals(args[2])) {
                         shaderManager.setOvercast(Float.parseFloat(args[3]));
                         return "Success!";
                     }
-                } else if (args[1].equals("get")) {
+                } else if ("get".equals(args[1])) {
 
                 } else {
                     return "Invalid option";
