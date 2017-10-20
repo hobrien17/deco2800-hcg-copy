@@ -412,16 +412,16 @@ public class PlayContext extends Context {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.X) {
             weaponRadialDisplay.show();
-        } else if (keycode == Input.Keys.Q && weaponRadialDisplay.getActive() == true) {
+        } else if (keycode == Input.Keys.Q && weaponRadialDisplay.getActive()) {
             weaponRadialDisplay.hide();
             seedRadialDisplay.show();
-        } else if (keycode == Input.Keys.E && weaponRadialDisplay.getActive() == true) {
+        } else if (keycode == Input.Keys.E && weaponRadialDisplay.getActive()) {
             weaponRadialDisplay.hide();
             consumableRadialDisplay.show();
-        } else if (keycode == Input.Keys.Q && consumableRadialDisplay.getActive() == true) {
+        } else if (keycode == Input.Keys.Q && consumableRadialDisplay.getActive()) {
         	consumableRadialDisplay.hide();
             weaponRadialDisplay.show();
-        } else if (keycode == Input.Keys.Q && seedRadialDisplay.getActive() == true) {
+        } else if (keycode == Input.Keys.Q && seedRadialDisplay.getActive()) {
         	seedRadialDisplay.hide();
             weaponRadialDisplay.show();
 		} else if (keycode == Input.Keys.T) {
