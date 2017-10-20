@@ -175,7 +175,13 @@ public class ShopMenuContext extends InventoryDisplayContext {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				errorImageVisible = false;
-				int number = Integer.parseInt(amount.getText().trim());
+				int number = 0;
+                try {
+                    Integer.parseInt(amount.getText().trim());
+                } catch(NumberFormatException e) {
+                    amount.setText("NaN");
+                }
+                
 				if ((selectedItem != null)
 						&& !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))
 						&& !(shopKeeper.getShop().getStock()
