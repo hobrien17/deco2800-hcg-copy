@@ -47,7 +47,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private Player player;
     private ShopNPC shopKeeper;
 
-    private ShopMenuContext thisContext = this;
 
     /**
      * Constructor for the ShopMenuContext
@@ -156,7 +155,12 @@ public class ShopMenuContext extends InventoryDisplayContext {
 				errorImageVisible = false;
 				if ((selectedItem != null) && !selectedItem
 						.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
-					int number = Integer.parseInt(amount.getText().trim());
+					int number = 0;
+					try {
+					    number = Integer.parseInt(amount.getText().trim());
+					} catch(NumberFormatException e) {
+					    amount.setText("NaN");
+					}
 					for (int i = 0; i < number; i++) {
 						if (shopKeeper.getShop().buyStock(selectedItem) != 0) {
 							errorImageVisible = true;
@@ -171,7 +175,13 @@ public class ShopMenuContext extends InventoryDisplayContext {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				errorImageVisible = false;
-				int number = Integer.parseInt(amount.getText().trim());
+				int number = 0;
+                try {
+                    number = Integer.parseInt(amount.getText().trim());
+                } catch(NumberFormatException e) {
+                    amount.setText("NaN");
+                }
+                
 				if ((selectedItem != null)
 						&& !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))
 						&& !(shopKeeper.getShop().getStock()

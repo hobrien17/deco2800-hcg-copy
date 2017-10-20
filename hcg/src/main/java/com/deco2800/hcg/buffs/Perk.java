@@ -117,7 +117,7 @@ public class Perk {
     }
 
     public boolean isAvaliable() {
-        return (player.getLevel() >= enumPerk.getLevelRequirement());
+        return player.getLevel() >= enumPerk.getLevelRequirement();
     }
 
     public boolean isMaxed() {

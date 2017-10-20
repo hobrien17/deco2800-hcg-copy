@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.enemyentities;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
+import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.lootable.LootWrapper;
@@ -106,6 +107,7 @@ public abstract class Enemy extends Character implements Lootable {
 
         // Effects container
         myEffects = new Effects(this);
+        this.setupLoot();
     }
 
     /**
@@ -237,7 +239,9 @@ public abstract class Enemy extends Character implements Lootable {
 	}
     
     public void loot() {
-    	//TODO implement this
+    	Item drop = this.getLoot().get(0);
+        ItemEntity itemEntity = new ItemEntity(this.getPosX(), this.getPosY(), 0f, drop);
+        GameManager.get().getWorld().addEntity(itemEntity);
     }
 
     /**
@@ -365,35 +369,39 @@ public abstract class Enemy extends Character implements Lootable {
                 this.lastPlayerX = closestPlayer.getPosX();
                 this.lastPlayerY = closestPlayer.getPosY();
             } else if (this.getStatus() == 2) {
-                this.setStatus(3);
-            } else {
-                this.setStatus(1);
-            }
-        } else {
-            float distance = this.distance(playerManager.getPlayer());
-            this.closestPlayer = playerManager.getPlayer();
-            if(distance <= 5 * this.level){
-                //Annoyed by player.
-                this.setStatus(2);
-                this.lastPlayerX = playerManager.getPlayer().getPosX();
-                this.lastPlayerY = playerManager.getPlayer().getPosY();
-            }else{
-                if (this.getStatus() == 2){
-                    //Lost player
-                    this.lostPlayerX = this.getLastPlayerX();
-                    this.lostPlayerY = this.getLastPlayerY();
-                    this.setStatus(3);
-                } else if(this.getStatus() == 3){
-                    if ((abs(this.lostPlayerX - this.getPosX()) < 1) && (abs(this.lostPlayerY - this.getPosY()) < 1)){
-                        this.setStatus(1);
-                    }
+				this.setStatus(3);
+			} else {
+				this.setStatus(1);
+			}
 
-                } else {
-                    this.setStatus(1);
-                }
-            }
-        }
-    }
+			return;
+		}
+        
+		float distance = this.distance(playerManager.getPlayer());
+		this.closestPlayer = playerManager.getPlayer();
+		if (distance <= 5 * this.level) {
+			// Annoyed by player.
+			this.setStatus(2);
+			this.lastPlayerX = playerManager.getPlayer().getPosX();
+			this.lastPlayerY = playerManager.getPlayer().getPosY();
+			return;
+		}
+		
+		if (this.getStatus() == 2) {
+			// Lost player
+			this.lostPlayerX = this.getLastPlayerX();
+			this.lostPlayerY = this.getLastPlayerY();
+			this.setStatus(3);
+		} else if (this.getStatus() == 3) {
+			if ((abs(this.lostPlayerX - this.getPosX()) < 1)
+					&& (abs(this.lostPlayerY - this.getPosY()) < 1)) {
+				this.setStatus(1);
+			}
+
+		} else {
+			this.setStatus(1);
+		}
+	}
         
 
     /**
@@ -716,8 +724,8 @@ public abstract class Enemy extends Character implements Lootable {
             this.closestPlayer = playerManager.getPlayer();
             float distance = this.distance(playerManager.getPlayer());
             if (distance <= 10 * this.level){
-                newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
-                newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
+                newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
+                newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
             } else {
                 newPos = this.getRandomPos();
             }

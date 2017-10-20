@@ -1,7 +1,6 @@
 package com.deco2800.hcg.items.tools;
 
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.items.SingleItem;
 import com.deco2800.hcg.items.StackableItem;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
