@@ -11,6 +11,7 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.observers.ServerObserver;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,6 +133,7 @@ public class ServerBrowserContext extends UIContext {
         	public void changed(ChangeEvent event, Actor actor) {
         		serverMap.clear();
         		networkManager.refreshLocalServers();
+        		contextManager.pushContext(new MultiplayerCharaterContext());
         	}
         });
         
