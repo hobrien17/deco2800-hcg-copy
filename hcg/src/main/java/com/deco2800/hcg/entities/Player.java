@@ -1,39 +1,60 @@
 package com.deco2800.hcg.entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.enemyentities.Hedgehog;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.items.stackable.Key;
+import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.buffs.Perk;
-import com.deco2800.hcg.contexts.*;
+import com.deco2800.hcg.contexts.CharacterStatsContext;
+import com.deco2800.hcg.contexts.DeathContext;
+import com.deco2800.hcg.contexts.LevelUpContext;
+import com.deco2800.hcg.contexts.PerksSelectionScreen;
+import com.deco2800.hcg.contexts.PlayContext;
+import com.deco2800.hcg.contexts.PlayerInventoryContext;
+import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
-import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
-import com.deco2800.hcg.entities.npc_entities.NPC;
-import com.deco2800.hcg.entities.npc_entities.QuestNPC;
-import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
-import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.items.stackable.SpeedPotion;
-import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.ConversationManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.util.Effect;
-import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 /**
  * Entity for the playable character.
@@ -52,7 +73,6 @@ public class Player extends Character implements Tickable {
 	private PlayerInputManager playerInputManager;
 	private PlayerManager playerManager;
 	private ConversationManager conversationManager;
-	private StopwatchManager stopwatchManager;
 
 	private boolean collided;
 	private boolean onExit = false;
@@ -62,6 +82,7 @@ public class Player extends Character implements Tickable {
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
+	private long lastTick = 0;
 	private String displayImage;
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
@@ -110,8 +131,7 @@ public class Player extends Character implements Tickable {
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 		this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		this.conversationManager = new ConversationManager();
-		this.stopwatchManager = (StopwatchManager) gameManager.get().getManager(StopwatchManager.class);
-		this.stopwatchManager.resetStopwatch();
+
 
 		// Set up specialised skills map
 		this.specialisedSkills = new HashMap<String, Boolean>();
@@ -183,6 +203,8 @@ public class Player extends Character implements Tickable {
 
 		//Add some default items
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new Key());
+		inventory.addItem(new Key());
 		inventory.addItem(new SpeedPotion());
 	}
 
@@ -231,7 +253,11 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
-		playerInputManager.queueLocalAction(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.queueLocalInput(
+				InputType.TOUCH_DOWN,
+				new int[] {pointer, button},
+				new float[] {position.x, position.y});
 	}
 
 	/**
@@ -245,7 +271,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
-	    playerInputManager.setLocalMousePosition(screenX, screenY);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.setLocalMousePosition(position.x, position.y);
 	}
 
 	/**
@@ -261,7 +288,11 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchUp(int screenX, int screenY, int pointer, int button) {
-		playerInputManager.queueLocalAction(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.queueLocalInput(
+				InputType.TOUCH_UP,
+				new int[] {pointer, button},
+				new float[] {position.x, position.y});
 	}
 
 	/**
@@ -273,7 +304,8 @@ public class Player extends Character implements Tickable {
 	 *            the y position of mouse movement on the screen
 	 */
 	private void handleLocalMouseMoved(int screenX, int screenY) {
-		playerInputManager.setLocalMousePosition(screenX, screenY);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.setLocalMousePosition(position.x, position.y);
 	}
 
 	/**
@@ -283,7 +315,10 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key pressed
 	 */
 	private void handleLocalKeyDown(int keycode) {
-		playerInputManager.queueLocalAction(InputType.KEY_DOWN.ordinal(), keycode);
+		playerInputManager.queueLocalInput(
+				InputType.KEY_DOWN,
+				new int[] {keycode},
+				null);
 	}
 
 	/**
@@ -293,7 +328,10 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key released
 	 */
 	private void handleLocalKeyUp(int keycode) {
-		playerInputManager.queueLocalAction(InputType.KEY_UP.ordinal(), keycode);
+		playerInputManager.queueLocalInput(
+				InputType.KEY_UP,
+				new int[] {keycode},
+				null);
 	}
 
 	/**
@@ -513,8 +551,12 @@ public class Player extends Character implements Tickable {
 			// set the layer, and get the speed of the tile on the layer. Also
 			// name for logging.
 			layer = world.getTiledMapTileLayerAtPos((int) oldPosY, (int) oldPosX);
-			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
-
+			if (layer.getProperties().get("speed") != null) {
+			  speed = Float.parseFloat((String) layer.getProperties().get("speed"));
+			} else {
+			  speed = 1.0f;
+			}
+			
 			// see if current tile is a Gateway
 			if (layer.getProperties().get("PlayerX") != null && layer.getProperties().get("PlayerY") != null) {
 				oldPosX = Float.parseFloat((String) layer.getProperties().get("PlayerX"));
@@ -533,7 +575,6 @@ public class Player extends Character implements Tickable {
 			// if current tile is a gateway, load new map
 			if (layer.getProperties().get("newMap") != null) {
                 // create new world
-				System.out.print((String) layer.getProperties().get("newMap"));
 				World newWorld = new World("resources/maps/maps/" +(String) layer.getProperties().get("newMap"));
 				
 				// add the new weather effects
@@ -587,6 +628,27 @@ public class Player extends Character implements Tickable {
 			this.setPosition(newPos.getX(), newPos.getY(), 1);
 			// update gun's firing position if we moved
 			handleTouchDragged(lastMouseX, lastMouseY, 0);
+		}
+		
+		//update walking animation
+		if(gameTickCount - lastTick >= 5) {
+			StringBuilder spriteName = new StringBuilder("player_");
+			spriteName.append(direction);
+			if (this.speedX == 0 && this.speedY == 0) {
+				// Player is not moving
+				spriteName.append("_stand");
+			} else {
+				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
+					spriteName.append("_stand");
+				} else if (this.spriteFrame == 1) {
+					spriteName.append("_move1");
+				} else if (this.spriteFrame == 3) {
+					spriteName.append("_move2");
+				}
+				this.spriteFrame = ++this.spriteFrame % 4;
+			}
+			this.setTexture(spriteName.toString());
+			lastTick = gameTickCount;
 		}
 
 		checkXp();
@@ -661,14 +723,13 @@ public class Player extends Character implements Tickable {
 			this.setTexture("hcg_character_sink");
 			break;
 		case "exit":
-			if (!onExit) {
+			if (this == playerManager.getPlayer() && !onExit) {
 					PlayContext play = (PlayContext) contextManager.currentContext();
 					play.addExitWindow();
 					onExit = true;
 					exitMessageDisplayed = true;
 				}
 		default:
-			updateSprite(this.direction);
 			onExit = false;
 			break;
 		}
@@ -953,41 +1014,6 @@ public class Player extends Character implements Tickable {
 		}
 	}
 
-	/**
-	 * Updates the player's sprite based on its direction.
-	 * 
-	 * @param direction
-	 *            Direction the player is facing. Integer between 0 and 3.
-	 */
-	private void updateSprite(int direction) {
-		StringBuilder spriteName = new StringBuilder("player_");
-		spriteName.append(direction);
-		if (this.speedX == 0 && this.speedY == 0) {
-			// Player is not moving
-            this.stopwatchManager.resetStopwatch();
-			spriteName.append("_stand");
-			// To set timer finished status to true
-			this.stopwatchManager.startTimerFloat(0.001f);
-		} else {
-			// Player is moving
-			if (this.stopwatchManager.getStatus()) {
-				this.stopwatchManager.resetStopwatch();
-				this.stopwatchManager.startTimerFloat(0.04f / this.movementSpeed);
-
-				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
-					spriteName.append("_stand");
-				} else if (this.spriteFrame == 1) {
-					spriteName.append("_move1");
-				} else if (this.spriteFrame == 3) {
-					spriteName.append("_move2");
-				}
-				this.spriteFrame = ++this.spriteFrame % 4;
-			} else {
-				return;
-			}
-		}
-		this.setTexture(spriteName.toString());
-	}
 
 	/**
 	 * Sets the player's movement speed to zero and Set move to false if no keys
@@ -1102,6 +1128,10 @@ public class Player extends Character implements Tickable {
 	@Override
 	public Item getCurrentEquippedItem() {
 		return this.equippedItems.getCurrentEquippedItem();
+	}
+	
+	public void setEquipped(int index) {
+		this.equippedItems.setEquippedSlot(index);
 	}
 
 	/**

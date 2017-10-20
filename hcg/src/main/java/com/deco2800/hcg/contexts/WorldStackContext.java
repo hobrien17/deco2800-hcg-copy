@@ -17,7 +17,10 @@ import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.WorldManager;
+import com.deco2800.hcg.multiplayer.WorldMapMessage;
 
 /**
  * Holds the WorldStackContext information. Used to navigate and view the WorldStack when the player is in the game.
@@ -29,6 +32,8 @@ public class WorldStackContext extends UIContext {
 	private GameManager gameManager;
 	private ContextManager contextManager;
 	private TextureManager textureManager;
+	private WorldManager worldManager;
+	private NetworkManager networkManager;
 
 	private InputMultiplexer inputMultiplexer;
 
@@ -50,6 +55,8 @@ public class WorldStackContext extends UIContext {
 		textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
+		worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
+		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 		InputManager inputManager = new InputManager();
 
 		// Setup UI + Buttons
@@ -109,7 +116,8 @@ public class WorldStackContext extends UIContext {
 		Vector2 mouseScreen = new Vector2(screenX, screenY);
 		Vector2 mouseStage = stage.screenToStageCoordinates(mouseScreen);
 
-		for (WorldStackMapEntity worldEntity : allWorldMaps) {
+		for (int i = 0; i < allWorldMaps.size(); i++) {
+			WorldStackMapEntity worldEntity = allWorldMaps.get(i);
 			float worldStartX = worldEntity.getXPos();
 			float worldEndX = worldEntity.getXPos() + worldEntity.getWidth();
 			float worldStartY = worldEntity.getYPos();
@@ -118,12 +126,16 @@ public class WorldStackContext extends UIContext {
 					&& mouseStage.y >= worldStartY && mouseStage.y <= worldEndY
 					&& worldEntity.getWorldMap().isUnlocked()
 					&& !(worldEntity.getWorldMap().isCompleted())) {
+				// send to peers
+				if (networkManager.isMultiplayerGame()) {
+					networkManager.queueMessage(new WorldMapMessage(i));
+				}
 				/*
 				 * Simply loading in the world file caused bugs with movement
 				 * due to the same world being loaded multiple times. This seems
 				 * to fix that problem.
 				 */
-				gameManager.setWorldMap(worldEntity.getWorldMap());
+				worldManager.setWorldMap(i);
 				contextManager.pushContext(new WorldMapContext(worldEntity.getWorldMap()));
 			}
 		}

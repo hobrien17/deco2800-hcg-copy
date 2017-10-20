@@ -76,11 +76,12 @@ public abstract class InventoryDisplayContext extends UIContext {
         
         ArrayList<String> text = new ArrayList<>();
         text.add(mouseOverItem.getName());
-        text.add("Value: " + Integer.toString(mouseOverItem.getBaseValue()));
         ArrayList<String> information = mouseOverItem.getInformation();
         if(information != null) {
             text.addAll(information);
         }
+        text.add("");
+        text.add(String.format("Value: %d", mouseOverItem.getBaseValue()));
 
         GlyphLayout layout = new GlyphLayout();
         float width = 0;

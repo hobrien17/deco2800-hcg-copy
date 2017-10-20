@@ -13,24 +13,15 @@ public class StopwatchManager extends Manager implements TickableManager {
 
 	private int seconds;
 	private int minutes;
+	private int lastTick;
 
-	private float delay;
-	private float timedMinutes;
-
-	private float minutesFloat;
-
-	static final double EPS = 0.000001;
+	private int timedMinutes;
 
 	/**
 	 * Constructor: Initializes the stopwatch with no time limit.
 	 */
 	public StopwatchManager() {
-		this.minutes = 0;
-		this.seconds = 0;
-
-		this.timedMinutes = 0;
-		this.timerFinished = false;
-		this.ticksElapsed = 0;
+		resetStopwatch();
 	}
 
 	/**
@@ -40,19 +31,8 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 *
 	 */
 	public void startTimer(int timeLimit) {
-		this.delay = timeLimit;
 		this.timedMinutes = timeLimit;
-	}
-
-	/**
-	 * Set a more precise time limit for the stopwatch
-	 *
-	 * @param timeLimit
-	 *
-	 */
-	public void startTimerFloat(float timeLimit) {
-		this.delay = timeLimit;
-		this.timedMinutes = timeLimit;
+		this.timerFinished = false;
 	}
 
 	/**
@@ -60,17 +40,19 @@ public class StopwatchManager extends Manager implements TickableManager {
 	 */
 	public void stopTimer() {
 		this.timedMinutes = 0;
+		this.timerFinished = true;
 	}
 
 	/**
 	 * Resets the stopwatch
 	 */
 	public void resetStopwatch() {
-		this.ticksElapsed = 0;
 		this.minutes = 0;
+		this.lastTick = 0;
 		this.seconds = 0;
-		this.minutesFloat = 0;
+		this.timedMinutes = -1;
 		this.timerFinished = false;
+		this.ticksElapsed = 0;
 	}
 
 	/**
@@ -106,8 +88,6 @@ public class StopwatchManager extends Manager implements TickableManager {
 
 		this.ticksElapsed++;
 
-		minutesFloat = ticksElapsed / 25f;
-
 		// converting 50 tick minutes to 60 seconds
 		float secondsDecimal = ticksElapsed % 25;
 		secondsDecimal = (secondsDecimal / 25) * 60;
@@ -116,11 +96,13 @@ public class StopwatchManager extends Manager implements TickableManager {
 		this.minutes = ticksElapsed / 25;
 		this.seconds = (int) (secondsDecimal);
 
-		if (((this.timedMinutes >= EPS) || (this.timedMinutes <= -EPS)) 
-				&& this.minutesFloat > this.timedMinutes) {
-			this.timerFinished = true;
+		if (this.timedMinutes != 0 && this.minutes > this.lastTick) {
+			this.timedMinutes--;
+			this.lastTick = this.minutes;
 			setChanged();
-			timedMinutes += delay;
+		} 
+		if(this.timedMinutes == 0 && !timerFinished) {
+			this.timerFinished = true;
 		}
 
 		if (hasChanged()) {
