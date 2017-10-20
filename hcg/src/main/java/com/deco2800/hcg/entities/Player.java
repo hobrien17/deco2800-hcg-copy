@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -178,12 +179,14 @@ public class Player extends Character implements Tickable {
 				.build();
 		Weapon grenadelauncher = new WeaponBuilder().setWeaponType(WeaponType.GRENADELAUNCHER).setUser(this)
 				.setRadius(0.7).build();
-		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
-		equippedItems.addItem(new WeaponItem(grenadelauncher, "Grenade Launcher", 10));
-		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10)); //1
+		equippedItems.addItem(new WeaponItem(grenadelauncher, "Grenade Launcher", 10)); //2
+		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10)); //3
 
 		//REMOVE THIS - JUST ADDED FOR TESTING
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new Key());
+		inventory.addItem(new Key());
 	}
 
 	/**
@@ -1068,6 +1071,10 @@ public class Player extends Character implements Tickable {
 	@Override
 	public Item getCurrentEquippedItem() {
 		return this.equippedItems.getCurrentEquippedItem();
+	}
+	
+	public void setEquipped(int index) {
+		this.equippedItems.setEquippedSlot(index);
 	}
 
 	/**

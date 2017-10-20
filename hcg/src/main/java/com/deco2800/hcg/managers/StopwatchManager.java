@@ -100,10 +100,10 @@ public class StopwatchManager extends Manager implements TickableManager {
 
 		if (this.timedMinutes != 0 && this.minutes > this.lastTick) {
 			this.timedMinutes--;
-			this.timerFinished = true;
 			this.lastTick = this.minutes;
 			setChanged();
-		} else if(this.timedMinutes == 0) {
+		} 
+		if(this.timedMinutes == 0 && !timerFinished) {
 			this.timerFinished = true;
 		}
 		

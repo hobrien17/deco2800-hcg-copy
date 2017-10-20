@@ -296,7 +296,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("starfall", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//weaponType = weaponType.STARFALL;
+				player.setEquipped(1);
 				display.remove();
 			}
 		});
