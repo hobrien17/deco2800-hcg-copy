@@ -19,7 +19,7 @@ public class Crab extends Enemy implements Tickable {
      * @param id the ID of the Hedgehog Enemy
      */
     public Crab(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 10000, 10, id, EnemyType.CRAB);
+        super(posX, posY, posZ, 1f, 1f, 1, false, 10000, 10, id, EnemyType.CRAB);
 
         this.boss = true;
         // set texture
