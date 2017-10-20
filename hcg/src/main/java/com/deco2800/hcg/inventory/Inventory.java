@@ -152,4 +152,10 @@ public interface Inventory extends Iterable<Item> {
      * @return Whether or not it was found in the inventory
      */
     boolean containsSingleItem(Item item);
+
+    /**
+     * Returns the total number of items with the supplied name that are contained in the inventory
+     *
+     */
+    int numberOf(String itemName);
 }

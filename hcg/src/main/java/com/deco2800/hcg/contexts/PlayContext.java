@@ -1,8 +1,9 @@
 package com.deco2800.hcg.contexts;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.deco2800.hcg.managers.*;
+import java.util.List;
+import java.util.Arrays;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -27,12 +28,26 @@ import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
-import com.deco2800.hcg.entities.ItemEntity;
+import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
 import com.deco2800.hcg.handlers.MouseHandler;
-import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.items.stackable.HealthPotion;
-import com.deco2800.hcg.renderers.Render3D;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.MessageManager;
+import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
+import com.deco2800.hcg.managers.PlantManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.ShaderManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.managers.WeatherManager;
+import com.deco2800.hcg.renderers.Render3DLights;
 import com.deco2800.hcg.renderers.Renderer;
+
 /**
  * Context representing the playable game itself. Most of the code here was
  * lifted directly out of Hardcor3Gard3ning.java PlayContext should only be
@@ -43,11 +58,13 @@ public class PlayContext extends Context {
     // Managers used by the game
     private GameManager gameManager;
     private WeatherManager weatherManager;
+    private ParticleEffectManager particleManager;
     private ContextManager contextManager;
     private MessageManager messageManager;
     private TextureManager textureManager;
     private TimeManager timeManager;
     private PlayerManager playerManager;
+    private PlayerInputManager playerInputManager;
     private ShaderManager shaderManager;
     private PlantManager plantManager;
 
@@ -66,7 +83,7 @@ public class PlayContext extends Context {
      * Check the documentation for each renderer to see how it handles WorldEntity
      * coordinates
      */
-    private Renderer renderer = new Render3D();
+    private Renderer renderer = new Render3DLights();
 
     // Stage and actors for game UI
     // TODO Game UI should probably be moved to a separate file
@@ -77,9 +94,15 @@ public class PlayContext extends Context {
     private ClockDisplay clockDisplay;
     private SoundManager soundManager;
     private ChatStack chatStack;
+    private GeneralRadialDisplay weaponRadialDisplay;
+    private GeneralRadialDisplay seedRadialDisplay;
+    private GeneralRadialDisplay consumableRadialDisplay;
     private RadialDisplay radialDisplay;
     private PotUnlockDisplay potUnlock;
     private Button plantButton;
+    private String[] weaponItems;
+    private String[] seedItems;
+    private String[] consumableItems;
 
     private Window window;
     private Window plantWindow;
@@ -88,6 +111,7 @@ public class PlayContext extends Context {
     private ShaderProgram shader;
     private ShaderProgram postShader;
     private boolean useShaders = true;
+    private boolean exitDisplayed = false;
 
     private Window exitWindow;
 
@@ -103,12 +127,14 @@ public class PlayContext extends Context {
         // Set up managers for this game
         gameManager = GameManager.get();
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
+        particleManager = (ParticleEffectManager) gameManager.getManager(ParticleEffectManager.class);
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
         timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+        playerInputManager = (PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
         shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
@@ -128,7 +154,17 @@ public class PlayContext extends Context {
         plantSkin.add("lily",new Texture("resources/ui/plant_ui/lily.png"));
         plantSkin.add("sunflower",new Texture("resources/ui/plant_ui/sunflower.png"));
 
+        seedItems = new String[]{"sunflowerC", "waterC", "iceC", "explosiveC","fireC","grassC"};
+        List seedList = Arrays.asList(seedItems);
+        weaponItems = new String[]{"grenadeLauncher", "machineGun", "shotgun", "starfall"};
+        List weapList = Arrays.asList(weaponItems);
+        consumableItems = new String[]{"fertiliser", "bugSpray", "Health Potion"};
+        List consumableList = Arrays.asList(consumableItems);
+
         radialDisplay = new RadialDisplay(stage);
+        weaponRadialDisplay = new GeneralRadialDisplay(stage, weapList);
+        seedRadialDisplay = new GeneralRadialDisplay(stage, seedList);
+        consumableRadialDisplay = new GeneralRadialDisplay(stage, consumableList);
         createExitWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
@@ -141,12 +177,20 @@ public class PlayContext extends Context {
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
+        stage.addActor(particleManager.getActor());
         stage.addActor(chatStack);
         chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
         stage.addActor(plantWindow);
         stage.addActor(plantButton);
+        
+        weaponRadialDisplay.addRadialMenu(stage);
+        seedRadialDisplay.addRadialMenu(stage);
+        consumableRadialDisplay.addRadialMenu(stage);
+        weaponRadialDisplay.hide();
+        seedRadialDisplay.hide();
+        consumableRadialDisplay.hide();
 
         window = new Window("Menu", skin);
 
@@ -233,6 +277,9 @@ public class PlayContext extends Context {
 
         /* set initial time */
         timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
+        
+        /* reset input tick */
+        playerInputManager.resetInputTick();
     }
 
     /**
@@ -301,6 +348,9 @@ public class PlayContext extends Context {
         potUnlock.setPosition(stage.getWidth() / 2f-150f, stage.getHeight() / 2f+100f);
         exitWindow.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         weatherManager.resize();
+        seedRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        weaponRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        consumableRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
     }
 
     /**
@@ -360,20 +410,54 @@ public class PlayContext extends Context {
     		potUnlock.close();
     	}
         if(keycode == Input.Keys.M) {
-            contextManager.pushContext(new WorldMapContext());
+            contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
             soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
-        } else if(keycode == Input.Keys.EQUALS) {
-            Item item = new HealthPotion(100);
-            ItemEntity entity = new ItemEntity(20, 20, 0, item);
-			gameManager.getWorld().addEntity(entity);
-		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
+        } else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
+		} else if (keycode == Input.Keys.X) {
+            weaponRadialDisplay.show();
+        } else if (keycode == Input.Keys.Q && weaponRadialDisplay.getActive() == true) {
+            weaponRadialDisplay.hide();
+            seedRadialDisplay.show();
+        } else if (keycode == Input.Keys.E && weaponRadialDisplay.getActive() == true) {
+            weaponRadialDisplay.hide();
+            consumableRadialDisplay.show();
+        } else if (keycode == Input.Keys.Q && consumableRadialDisplay.getActive() == true) {
+        	consumableRadialDisplay.hide();
+            weaponRadialDisplay.show();
+        } else if (keycode == Input.Keys.Q && seedRadialDisplay.getActive() == true) {
+        	seedRadialDisplay.hide();
+            weaponRadialDisplay.show();
 		} else if (keycode == Input.Keys.T) {
-			chatStack.setVisible(!chatStack.isVisible());
-		}
+            chatStack.setVisible(!chatStack.isVisible());
+        } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
+            exit();
+        }
 	}
+
+	private void exit() {
+		if(gameManager.getCurrentNode().getNodeType() != 3) {
+            gameManager.getCurrentNode().changeNodeType(2);
+            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
+            contextManager.popContext();
+        } else {
+            gameManager.getCurrentNode().changeNodeType(2);
+            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
+            gameManager.getMapContext().addEndOfContext();
+            contextManager.popContext();
+        }
+        exitDisplayed = false;
+        // clear old observers (mushroom turret for example)
+        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager.deleteObservers();
+        
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();;
+
+        // stop the old weather effects
+        ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+    }
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
@@ -384,22 +468,7 @@ public class PlayContext extends Context {
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(gameManager.getCurrentNode().getNodeType() != 3) {
-                    gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
-                    contextManager.popContext();
-                } else {
-                    gameManager.getCurrentNode().changeNodeType(2);
-                    gameManager.getMapContext().updateMapDisplay();
-                    gameManager.getMapContext().addEndOfContext();
-                    contextManager.popContext();
-                }
-                // clear old observers (mushroom turret for example)
-                StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-                manager.deleteObservers();
-
-                // stop the old weather effects
-                ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
+                exit();
             }
         });
         exitWindow.add(yesButton);
@@ -412,13 +481,29 @@ public class PlayContext extends Context {
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
+            exitDisplayed = true;
             soundManager.pauseWeatherSounds();
         }
     }
 
     public void removeExitWindow() {
         exitWindow.remove();
+        exitDisplayed = false;
         soundManager.unpauseWeatherSounds();
+    }
+
+    public void removeConsumableRadialMenu() {
+        consumableRadialDisplay.remove();
+    }
+
+    public void removeWeaponRadialMenu() {
+    	//weaponRadialDisplay.setVisible(false);
+        weaponRadialDisplay.hide();
+    }
+
+    public void removeSeedRadialMenu() {
+    	//weaponRadialDisplay.setVisible(false);
+        seedRadialDisplay.hide();
     }
 
     public void addParticleEffect(ParticleEffectActor actor) {

@@ -57,8 +57,6 @@ public class MapGenerator {
 		Random seedGenerator = new Random();
 		seedValue = Math.abs(seedGenerator.nextInt(999));
 		mainGenerator = new Random(seedValue);
-		//used in case there is no safe level present (REMOVE ONCE SAFE LEVEL IS ADDED)
-		safeLevel = levelsMaster.get(0);
 	}
 	
 	/**
@@ -69,6 +67,15 @@ public class MapGenerator {
 	public void setGeneratorSeed(int seed) {
 		seedValue = seed;
 		mainGenerator = new Random(seedValue);
+	}
+	
+	/**
+	 * Gets the current MapGenerator seed.
+	 * @return
+	 *     Returns the current seed
+	 */
+	public int getSeedValue() {
+		return seedValue;
 	}
 	
 	/**
@@ -199,7 +206,7 @@ public class MapGenerator {
 					nodeType = 0; //node will be a safenode
 					safeNodeInColumn = true;
 					columnsSinceSafeNode = 0;
-					MapNode safeNode = new MapNode(i, nodeRow, nodeType, safeLevel,false);
+					MapNode safeNode = new MapNode(i, nodeRow, nodeType, safeLevel, false);
 					nodeList.add(safeNode);
 				} else {
 					nodeType = 1;  // in the future, will add different node types in here

@@ -18,7 +18,7 @@ public class StopwatchManagerTests {
 		
 		
 		//set the Stopwatch for one in game minute
-		for(int i=0; i<50; i++) {
+		for(int i=0; i<25; i++) {
 		stopwatch.onTick(i);
 		}
 		
@@ -61,7 +61,7 @@ public class StopwatchManagerTests {
 	public void stopwatchTimerTest(){
 		
 		//set the Stopwatch for one in game minute
-		for(int i=0; i<50; i++) {
+		for(int i=0; i<25; i++) {
 			stopwatch.onTick(i);
 			stopwatchClean.onTick(i);
 		}		
@@ -82,8 +82,8 @@ public class StopwatchManagerTests {
 				stopwatch.getStatus());
 		Assert.assertFalse("Timer should not be finished",
 				stopwatchClean.getStatus());
-		
-		for(int i=0; i<50; i++) {
+				
+		for(int i=0; i<100; i++) {
 			stopwatch.onTick(i);
 			stopwatchClean.onTick(i);
 		}		
@@ -103,7 +103,7 @@ public class StopwatchManagerTests {
 		stopwatchClean.startTimer(timelimit);
 		stopwatch.startTimer(timelimit);
 		
-		for(int i=0; i<50; i++) {
+		for(int i=0; i<25; i++) {
 			stopwatch.onTick(i);
 			stopwatchClean.onTick(i);
 		}		
@@ -114,6 +114,7 @@ public class StopwatchManagerTests {
 				stopwatch.getStatus());
 		
 		stopwatch.stopTimer();
+		stopwatch.resetStopwatch();
 		
 		for(int i=0; i<50; i++) {
 			stopwatch.onTick(i);

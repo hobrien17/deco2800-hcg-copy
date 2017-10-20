@@ -10,6 +10,8 @@ import com.deco2800.hcg.managers.TextureManager;
 import java.util.HashMap;
 
 public class Snail extends Enemy implements Tickable {
+
+    private int spriteCount;
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
      * position.
@@ -20,7 +22,8 @@ public class Snail extends Enemy implements Tickable {
      * @param id the ID of the Snail Enemy
      */
     public Snail(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id, EnemyType.SNAIL);
+        this.boss = false;
         this.setTexture("snail");
         this.level = 1;
         newPos.setX(posX);
@@ -57,27 +60,42 @@ public class Snail extends Enemy implements Tickable {
                 (TiledMapTileLayer) GameManager.get().getWorld().getMapLayerWithProperty("name", "newSludge"));
     }
 
+    public void updateSprite() {
+        if (spriteCount%4 == 0) {
+            switch (this.direction) {
+                case 1:
+                   this.setTexture("snailE");
+                    break;
+                case 2:
+                    this.setTexture("snailN");
+                    break;
+                case 3:
+                    this.setTexture("snailW");
+                    break;
+                case 4:
+                    this.setTexture("snailS");
+                    break;
+                default:
+                    break;
+            }
+        }
+        spriteCount++;
+    }
+
     /**
      * On Tick handler
      * @param gameTickCount Current game tick
      */
     @Override
     public void onTick(long gameTickCount) {
-    	if (this.getNumberPlayers() == 1) {
-			// status should always be 1
-	        this.setNewPos();//Put new position into Box3D.
-	        this.setPoisonTrail();//Set poison trail
-	        this.detectCollision();//Detect collision.
-	        this.moveAction();//Move enemy to the position in Box3D.
-	        // Apply any effects that exist on the entity
-	        myEffects.apply();	
-    	} else if (this.getNumberPlayers() > 1) { //multiplayer detection - Elvin T9
-    		this.detectPlayers();
-    		this.setNewPosMultiplayer();
-    		this.setPoisonTrail();
-    		this.detectCollision();
-    		this.moveAction();
-    		myEffects.apply();
-    	}
+        // status should always be 1
+        this.setNewPos();//Put new position into Box3D.
+        this.setPoisonTrail();//Set poison trail
+        this.setDirection();
+        this.detectCollision();//Detect collision.
+        this.updateSprite();
+        this.moveAction();//Move enemy to the position in Box3D.
+        // Apply any effects that exist on the entity
+        myEffects.apply();
     }
 }

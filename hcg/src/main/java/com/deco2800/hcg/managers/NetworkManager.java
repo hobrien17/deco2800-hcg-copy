@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -34,7 +36,6 @@ import com.deco2800.hcg.observers.ServerObserver;
 public final class NetworkManager extends Manager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NetworkManager.class);
 	private static final byte[] MESSAGE_HEADER = "H4RDC0R3".getBytes();
-	private static final int MAX_PLAYERS = 4; // maybe 5?
 	
 	private ArrayList<ServerObserver> serverListeners = new ArrayList<>();
 
@@ -43,15 +44,16 @@ public final class NetworkManager extends Manager {
 	//       shouldn't be a big issue for the moment
 	private HashMap<Integer, SocketAddress> sockets; // peers we are actually connected to
 	private HashMap<Integer, byte[]> sendQueue;
-	private long[] peerTickCounts;
-	private ArrayList<Integer> processedIds; // TODO: should be a ring buffer
+	private HashMap<Integer, Long> peerTickCounts;
+	private int acked;
+	private HashMap<Integer, Integer> peerSequenceNumbers;
 	private boolean host = false;
-	private boolean initialised = false;
 	private boolean multiplayerGame = false;
 	
 	private GameManager gameManager;
 	private ContextManager contextManager;
 	private PlayerManager playerManager;
+	private PlayerInputManager playerInputManager;
 	
 	private ByteBuffer messageBuffer;
 	private ByteBuffer sendBuffer;
@@ -68,12 +70,13 @@ public final class NetworkManager extends Manager {
 	public void init(boolean hostGame) {
 		sockets = new HashMap<>();
 		sendQueue = new HashMap<>();
-		peerTickCounts = new long[MAX_PLAYERS];
-		processedIds = new ArrayList<>();
+		peerTickCounts = new HashMap<>();
+		peerSequenceNumbers = new HashMap<>();
 		
 		gameManager = GameManager.get();
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+		playerInputManager = (PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
 		
 		// initialise channel
 		try {
@@ -98,7 +101,6 @@ public final class NetworkManager extends Manager {
 		receiveBuffer = ByteBuffer.allocateDirect(1400).order(ByteOrder.LITTLE_ENDIAN);
 
 		host = hostGame;
-		initialised = true;
 	}
 	
 	/**
@@ -156,7 +158,9 @@ public final class NetworkManager extends Manager {
 	 * @param tick Tick count
 	 */
 	public void updatePeerTickCount(int peer, long tick) {
-		// FIXME
+		if (peerTickCounts.get(peer) == null || tick > peerTickCounts.get(peer)) {
+			peerTickCounts.put(peer, tick);
+		}
 	}
 	
 	/**
@@ -315,38 +319,64 @@ public final class NetworkManager extends Manager {
 	 * Determines whether NetworkManager is properly in sync with other clients
 	 * @return <code>true</code> if it is not safe to proceed
 	 */
-	private boolean shouldBlock() {
-		// TODO
+	public boolean shouldBlock() {
+		if (!multiplayerGame || !(contextManager.currentContext() instanceof PlayContext)) {
+			return false;
+		}
+		
+		if (playerInputManager.getInputTick() > 0 && peerTickCounts.isEmpty()) {
+			return true;
+		}
+
+		for (long tick : peerTickCounts.values()) {
+			if (tick <= playerInputManager.getInputTick()) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
 	/**
-	 * Performs send and receive, blocking if necessary
+	 * Performs send and receive
 	 */
 	public void tick() {
-		if (initialised) {
-			do {
-				send(0);
-				receive();
-			} while (shouldBlock());
+		if (multiplayerGame) {
+			send(sendQueue.entrySet().iterator());
+			receive();
 		}
 	}
 
 	/**
 	 * Recurses over messages that are queued and sends them using the smallest number of packets
-	 * @param index Index to start at
+	 * @param messageIterator Message entry set iterator
 	 */
-	private void send(int index) {
+	private void send(Iterator<Entry<Integer, byte[]>> messageIterator) {
 		sendBuffer.clear();
-		// convert queue values to array
-		byte[][] toSend = sendQueue.values().toArray(new byte[0][0]);
-		// iterate through queued messages messages
-		for (; index < toSend.length; index++) {
-			// make sure we don't exceed 1400
-			if (toSend[index].length <= sendBuffer.remaining()) {
-				sendBuffer.put(toSend[index]);
-			}
+		
+		if (!messageIterator.hasNext()) {
+			return;
 		}
+		
+		// iterate through queued messages
+		do {
+			Entry<Integer, byte[]> next = messageIterator.next();
+			int id = next.getKey();
+			byte[] bytes = next.getValue();
+			
+			// remove message if it has been acked
+			if (id <= acked) {
+				messageIterator.remove();
+				continue;
+			}
+			
+			// make sure we don't exceed 1400 bytes
+			if (bytes.length <= sendBuffer.remaining()) {
+				sendBuffer.put(bytes);
+			} else {
+				break;
+			}
+		} while (messageIterator.hasNext());
 		
 		sendBuffer.flip();
 		// if not empty...
@@ -363,9 +393,7 @@ public final class NetworkManager extends Manager {
 		}
 		
 		// if we have more to send...
-		if (index != toSend.length) {
-			send(index - 1);
-		}
+		send(messageIterator);
 	}
 	
 	/**
@@ -417,10 +445,9 @@ public final class NetworkManager extends Manager {
 				MessageType messageType = Message.getType(receiveBuffer);
 				
 				if (messageType == MessageType.ACK) {
-					// remove message from queue
-					receiveBuffer.position(14);
-					int removeId = receiveBuffer.getInt();
-					sendQueue.remove(removeId);
+					if (messageId > acked) {
+						acked = messageId;
+					}
 					return;
 				}
 				
@@ -455,37 +482,31 @@ public final class NetworkManager extends Manager {
 				// unpack message
 				message.unpackData(receiveBuffer);
 
-				if (!processedIds.contains(messageId)) {
+				if (peerSequenceNumbers.get(0) == null
+						|| messageId > peerSequenceNumbers.get(0).intValue()) {
 					// process message
 					message.process(address);
 					// make sure we don't process this again
-					processedIds.add(messageId);
+					peerSequenceNumbers.put(0, messageId);
 					// log
 					LOGGER.debug("PROCESS: " + messageType.toString());
 				}
-				
-				if (message.shouldAck()) {
-					// acknowledge that we've received this
-					messageBuffer.clear();
-					// put header
-					messageBuffer.put(MESSAGE_HEADER);
-					// put id
-					messageBuffer.putInt(-1);
-					// put type
-					messageBuffer.put((byte) MessageType.ACK.ordinal());
-					// put number of fields
-					messageBuffer.put((byte) 0);
-					// put ACK id
-					messageBuffer.putInt(messageId);
-					// send ACK to peer
-					messageBuffer.flip();
-
-					try {
-						channel.send(messageBuffer, address);
-					} catch (IOException e) {
-						LOGGER.error("Failed to send ACK message", e);
-					}
-				}
+			}
+			
+			// acknowledge that we've successfully received this
+			messageBuffer.clear();
+			// put header
+			messageBuffer.put(MESSAGE_HEADER);
+			// put ACK id
+			messageBuffer.putInt(peerSequenceNumbers.get(0));
+			// put type
+			messageBuffer.put((byte) MessageType.ACK.ordinal());
+			// send ACK to peer
+			messageBuffer.flip();
+			try {
+				channel.send(messageBuffer, address);
+			} catch (IOException e) {
+				LOGGER.error("Failed to send ACK message", e);
 			}
 		} catch (BufferOverflowException | BufferUnderflowException
 				| MessageFormatException e) {
@@ -494,5 +515,8 @@ public final class NetworkManager extends Manager {
 			// TODO Implement a timeout so we can get away with this
 			LOGGER.error("Invalid datagram received", e);
 		}
+		
+		// receive the next message (if there is one)
+		receive();
 	}
 }

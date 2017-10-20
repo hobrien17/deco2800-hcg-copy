@@ -27,8 +27,7 @@ import com.deco2800.hcg.managers.SoundManager;
 
 public abstract class Weapon extends AbstractEntity implements Tickable {
 
-    protected float followX;
-    protected float followY;
+    protected Vector3 follow;
     protected Vector3 aim;
     protected double radius;
     protected boolean shoot;
@@ -59,8 +58,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
 
         this.shoot = false;
         this.counter = 0;
-        this.followX = 0;
-        this.followY = 0;
+        this.follow = new Vector3(0, 0, 0);
         this.aim = new Vector3(0, 0, 0);
         this.bulletType = BulletType.BASIC;
 
@@ -139,9 +137,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * @param worldY int y coordinate for weapon location
      */
     //TODO: Remove
-    public void updatePosition(float worldX, float worldY) {
-        this.followX = worldX;
-        this.followY = worldY;
+    public void updatePosition(Vector3 position) {
+        this.follow = position;
     }
 
 
@@ -158,40 +155,35 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected void shootBullet(float posX, float posY, float posZ,
                                float goalX, float goalY) {
         Bullet bullet;
-        if(this.weaponType == WeaponType.GRENADELAUNCHER) {
-            bullet = new Grenade(posX, posY, posZ, goalX, goalY,
-                    0, 0.6f, 0.6f, 1, this.user, -1);
-        } else {
-            switch (bulletType) {
-                case BASIC:
-                    bullet = new Bullet(posX, posY, posZ,
-                            goalX, goalY, this.user, 1);
-                    break;
-                case ICE:
-                    bullet = new IceBullet(posX, posY, posZ,
-                            goalX, goalY, this.user, 1);
-                    break;
-                case FIRE:
-                    bullet = new FireBullet(posX, posY, posZ,
-                            goalX, goalY, this.user, 1);
-                    break;
-                case EXPLOSION:
-                    bullet = new ExplosionBullet(posX, posY, posZ,
-                            goalX, goalY, this.user, 1);
-                    break;
-                case GRASS:
-                    bullet = new GrassBullet(posX, posY, posZ,
-                            goalX, goalY, this.user, 1);
-                    break;
-                case HOMING:
-                    bullet = new HomingBullet(posX, posY, posZ,
-                            goalX, goalY, this.user, 1);
-                    break;
-                default:
-                    bullet = new Bullet(posX, posY, posZ,
-                            goalX, goalY, this.user, 1);
-                    break;
-            }
+        switch (bulletType) {
+            case BASIC:
+                bullet = new Bullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            case ICE:
+                bullet = new IceBullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            case FIRE:
+                bullet = new FireBullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            case EXPLOSION:
+                bullet = new ExplosionBullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            case GRASS:
+                bullet = new GrassBullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            case HOMING:
+                bullet = new HomingBullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
+            default:
+                bullet = new Bullet(posX, posY, posZ,
+                        goalX, goalY, this.user, 1);
+                break;
         }
         GameManager.get().getWorld().addEntity(bullet);
     }
@@ -236,11 +228,15 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * Changes the position of the weapon in the gameworld
      * sets at certain distance from player character facing cursor
      */
-    //TODO: remove
     protected void setPosition() {
         // Calculate the angle between the cursor and player
-        float deltaX = this.user.getPosX() - this.followX;
-        float deltaY = this.user.getPosY() - this.followY;
+        float deltaX = this.user.getPosX() - this.follow.x;
+        float deltaY = this.user.getPosY() - this.follow.y;
+        if(deltaX < 0.01 && deltaX > -0.01 && deltaY < 0.01 && deltaY > -0.01) {
+            setPosX(this.user.getPosX());
+            setPosY(this.user.getPosY());
+            return;
+        }
         float angle = (float) (Math.atan2(deltaY, deltaX)) +
                 (float) (Math.PI);
         // Set weapon position along angle
@@ -257,7 +253,6 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      */
     @Override
     public void onTick(long gameTickCount) {
-        //TODO: remove
         setPosition();
 
         if(this.counter < this.cooldown) {
