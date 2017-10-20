@@ -30,7 +30,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.entities.bullets.BulletType;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-import com.deco2800.hcg.items.stackable.MagicMushroom;
 
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;

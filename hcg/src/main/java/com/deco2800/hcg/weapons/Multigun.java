@@ -1,7 +1,6 @@
 package com.deco2800.hcg.weapons;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
