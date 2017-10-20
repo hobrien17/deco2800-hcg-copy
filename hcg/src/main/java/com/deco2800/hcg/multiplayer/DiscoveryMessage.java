@@ -35,7 +35,7 @@ public class DiscoveryMessage extends Message {
 			try {
 				// send host message
 				networkManager.sendOnce(new HostMessage(networkManager.getLobbyName()), address);
-			} catch (IOException e) {LOGGER.info(e.toString());}
+			} catch (IOException e) {LOGGER.info(String.valueOf(e));}
 		}
 	}
 	
