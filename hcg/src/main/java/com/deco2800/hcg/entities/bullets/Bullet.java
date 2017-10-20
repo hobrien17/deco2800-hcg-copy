@@ -294,6 +294,6 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 
     @Override
     public float getLightPower() {
-        return 2;
+        return 3;
     }
 }

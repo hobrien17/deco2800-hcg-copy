@@ -101,9 +101,9 @@ public class Render3DLights implements Renderer {
             ShaderProgram shader = batch.getShader();
             Color preColour = batch.getColor();
             
-            if(entity instanceof LightEmitter) {
+            if(entity instanceof LightEmitter && ((LightEmitter)entity).getLightPower() > 0) {
                 shaders.bindLightShader(batch);
-                Color colour = ((LightEmitter)entity).getLightColour();
+                /*Color colour = ((LightEmitter)entity).getLightColour();
                 float intensity = ((LightEmitter)entity).getLightPower();
                 
                 batch.setColor(colour);
@@ -115,9 +115,10 @@ public class Render3DLights implements Renderer {
                 batch.draw(lightMap, 
                         isoX - (lightWidth / 2) + (width / 2), 
                         isoY - (lightHeight / 2),
-                        lightWidth, lightHeight);
+                        lightWidth, lightHeight);*/
             }
-            
+               
+            batch.setColor(Color.WHITE);
             if(entity instanceof CustomRenderable) {
                 ((CustomRenderable) entity).customDraw(batch, isoX, isoY, tileWidth, tileHeight, aspect, reg);
             } else {

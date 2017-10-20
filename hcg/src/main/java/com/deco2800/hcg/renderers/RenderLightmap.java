@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ShaderManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.shading.LightEmitter;
 
@@ -54,12 +56,17 @@ public class RenderLightmap implements Renderer {
                 lights.add((AbstractEntity) r);
             }
         }
-        
-        batch.begin();
 
         TextureManager reg = (TextureManager) GameManager.get()
                 .getManager(TextureManager.class);
         Texture lightMap = reg.getTexture("lightmap");
+        float lightAspect = (float) (lightMap.getWidth()) / (float) (tileWidth);
+        ShaderManager shaders = (ShaderManager) GameManager.get().getManager(ShaderManager.class);
+        batch.begin();
+        
+        ShaderProgram shader = batch.getShader();
+        Color preColour = batch.getColor();
+        shaders.bindLightShader(batch);
         
         for (int index = 0; index < lights.size(); index++) {
             Renderable entity = lights.get(index);
@@ -71,17 +78,24 @@ public class RenderLightmap implements Renderer {
             float isoY = baseY + ((cartX + cartY) / 2.0f) * tileHeight;
 
             // We want to keep the aspect ratio of the image so...
-            float aspect = (float) (lightMap.getWidth()) / (float) (tileWidth);
             
             Color colour = ((LightEmitter)entity).getLightColour();
             float intensity = ((LightEmitter)entity).getLightPower();
             
             batch.setColor(colour);
             
-            float width = intensity * tileWidth * entity.getXRenderLength();
-            float height = intensity * (lightMap.getHeight() / aspect) * entity.getYRenderLength();
-            batch.draw(lightMap, isoX - (width / 2), isoY - (height / 2), width, height);
+            float lightWidth = intensity * tileWidth * entity.getXRenderLength();
+            float lightHeight = intensity * (lightMap.getHeight() / lightAspect) * entity.getYRenderLength();
+            
+            float width = tileWidth * entity.getXRenderLength();
+            batch.draw(lightMap, 
+                    isoX - (lightWidth / 2) + (width / 2), 
+                    isoY - (lightHeight / 2),
+                    lightWidth, lightHeight);
         }
+        
+        batch.setColor(preColour);
+        batch.setShader(shader);
         
         batch.end();
 

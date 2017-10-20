@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
+import com.deco2800.hcg.renderers.RenderLightmap;
 import com.deco2800.hcg.renderers.Renderer;
 import com.deco2800.hcg.shading.ShaderState;
 
@@ -43,6 +44,8 @@ public class ShaderManager extends Manager implements Observer {
 
     private GameManager gameManager;
     private PlayerManager playerManager;
+    
+    private RenderLightmap lightRenderer;
 
     //Flag for custom overlay renders
     private ArrayList<customShader> customRenders;
@@ -108,7 +111,8 @@ public class ShaderManager extends Manager implements Observer {
 
         //Max of 5 custom renders
         customRenders = new ArrayList<>();
-
+        
+        this.lightRenderer = new RenderLightmap();
     }
     
     public boolean shadersCompiled() {
@@ -152,6 +156,7 @@ public class ShaderManager extends Manager implements Observer {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             
         this.tileRenderer.render();
+        lightRenderer.render(preBatch);
         renderer.render(preBatch);
             
         this.renderTarget.end();
