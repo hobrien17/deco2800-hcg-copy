@@ -16,7 +16,7 @@ public class GardenShop extends Shop{
     public GardenShop() {
 
         Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(player).setRadius(0.7).build();
-        Item starfallItem = new WeaponItem(starfall, "stardall", 0);
+        Item starfallItem = new WeaponItem(starfall, "starfall", 0);
         addStock(starfallItem);
 
         Item testSeedExplosive = new Seed(Seed.Type.EXPLOSIVE);
