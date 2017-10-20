@@ -7,6 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.deco2800.hcg.contexts.*;
+import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.enemyentities.Hedgehog;
+import com.deco2800.hcg.entities.npc_entities.NPC;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
+import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.items.stackable.Key;
+import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.Effects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +83,6 @@ public class Player extends Character implements Tickable {
 	private PlayerInputManager playerInputManager;
 	private PlayerManager playerManager;
 	private ConversationManager conversationManager;
-	private StopwatchManager stopwatchManager;
 
 	private boolean collided;
 	private boolean onExit = false;
@@ -82,6 +92,7 @@ public class Player extends Character implements Tickable {
 	private int xpThreshold = 200;
 	private float lastSpeedX;
 	private float lastSpeedY;
+	private long lastTick = 0;
 	private String displayImage;
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
@@ -130,8 +141,7 @@ public class Player extends Character implements Tickable {
 		this.contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
 		this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		this.conversationManager = new ConversationManager();
-		this.stopwatchManager = (StopwatchManager) gameManager.get().getManager(StopwatchManager.class);
-		this.stopwatchManager.resetStopwatch();
+
 
 		// Set up specialised skills map
 		this.specialisedSkills = new HashMap<String, Boolean>();
@@ -203,6 +213,8 @@ public class Player extends Character implements Tickable {
 
 		//Add some default items
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new Key());
+		inventory.addItem(new Key());
 		inventory.addItem(new SpeedPotion());
 	}
 
@@ -627,6 +639,27 @@ public class Player extends Character implements Tickable {
 			// update gun's firing position if we moved
 			handleTouchDragged(lastMouseX, lastMouseY, 0);
 		}
+		
+		//update walking animation
+		if(gameTickCount - lastTick >= 5) {
+			StringBuilder spriteName = new StringBuilder("player_");
+			spriteName.append(direction);
+			if (this.speedX == 0 && this.speedY == 0) {
+				// Player is not moving
+				spriteName.append("_stand");
+			} else {
+				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
+					spriteName.append("_stand");
+				} else if (this.spriteFrame == 1) {
+					spriteName.append("_move1");
+				} else if (this.spriteFrame == 3) {
+					spriteName.append("_move2");
+				}
+				this.spriteFrame = ++this.spriteFrame % 4;
+			}
+			this.setTexture(spriteName.toString());
+			lastTick = gameTickCount;
+		}
 
 		checkXp();
 		this.checkDeath();
@@ -707,7 +740,6 @@ public class Player extends Character implements Tickable {
 					exitMessageDisplayed = true;
 				}
 		default:
-			updateSprite(this.direction);
 			onExit = false;
 			break;
 		}
@@ -992,41 +1024,6 @@ public class Player extends Character implements Tickable {
 		}
 	}
 
-	/**
-	 * Updates the player's sprite based on its direction.
-	 * 
-	 * @param direction
-	 *            Direction the player is facing. Integer between 0 and 3.
-	 */
-	private void updateSprite(int direction) {
-		StringBuilder spriteName = new StringBuilder("player_");
-		spriteName.append(direction);
-		if (this.speedX == 0 && this.speedY == 0) {
-			// Player is not moving
-            this.stopwatchManager.resetStopwatch();
-			spriteName.append("_stand");
-			// To set timer finished status to true
-			this.stopwatchManager.startTimerFloat(0.001f);
-		} else {
-			// Player is moving
-			if (this.stopwatchManager.getStatus()) {
-				this.stopwatchManager.resetStopwatch();
-				this.stopwatchManager.startTimerFloat(0.04f / this.movementSpeed);
-
-				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
-					spriteName.append("_stand");
-				} else if (this.spriteFrame == 1) {
-					spriteName.append("_move1");
-				} else if (this.spriteFrame == 3) {
-					spriteName.append("_move2");
-				}
-				this.spriteFrame = ++this.spriteFrame % 4;
-			} else {
-				return;
-			}
-		}
-		this.setTexture(spriteName.toString());
-	}
 
 	/**
 	 * Sets the player's movement speed to zero and Set move to false if no keys
@@ -1141,6 +1138,10 @@ public class Player extends Character implements Tickable {
 	@Override
 	public Item getCurrentEquippedItem() {
 		return this.equippedItems.getCurrentEquippedItem();
+	}
+	
+	public void setEquipped(int index) {
+		this.equippedItems.setEquippedSlot(index);
 	}
 
 	/**

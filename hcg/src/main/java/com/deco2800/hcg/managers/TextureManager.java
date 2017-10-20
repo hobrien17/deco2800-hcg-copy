@@ -279,6 +279,11 @@ public class TextureManager extends Manager {
 			textureMap.put("consumables", new Texture("resources/ui/radial_menu/consumables.png"));
 			textureMap.put("weapsLeft", new Texture("resources/ui/radial_menu/weapons_left.png"));
 			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapons_right.png"));
+			textureMap.put("grenadeLauncher", new Texture("resources/ui/radial_menu/grenade_launcher.png"));
+			textureMap.put("machineGun", new Texture("resources/ui/radial_menu/machine_gun.png"));
+			textureMap.put("shotgun", new Texture("resources/ui/radial_menu/shotgun.png"));
+			textureMap.put("starfall", new Texture("resources/ui/radial_menu/starfall.png"));
+			textureMap.put("healthPotion", new Texture("resources/ui/radial_menu/health_potion.png"));
 
 			//Perks
 			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
@@ -335,6 +340,7 @@ public class TextureManager extends Manager {
 			textureMap.put("purple_potion", new Texture("resources/sprites/potions/potion_round_purple.png"));
 			textureMap.put("blue_potion", new Texture("resources/sprites/potions/potion_round_blue.png"));
 			textureMap.put("magic_mushroom", new Texture("resources/sprites/mushrooms/mushroom_fully_grown.png"));
+			textureMap.put("small_mushroom", new Texture("resources/sprites/mushrooms/mushroom_half_grown.png"));
 			textureMap.put("seed", new Texture("resources/placeholderassets/placeholderseed.png"));
 			textureMap.put("bunnings_snag", new Texture("resources/sprites/food/sausage.png"));
 			textureMap.put("bunnings_snag_and_bread", new Texture("resources/sprites/food/hotdog.png"));

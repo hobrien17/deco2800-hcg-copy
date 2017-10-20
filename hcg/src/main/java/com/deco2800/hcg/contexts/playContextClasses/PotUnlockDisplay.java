@@ -50,8 +50,8 @@ public class PotUnlockDisplay extends Window {
 	private Button conf;
 	private Button cancel;
 	
-	private final static float WIDTH = 300f;
-	private final static float HEIGHT = 200f;
+	private static final float WIDTH = 300f;
+	private static final float HEIGHT = 200f;
 	
 	public PotUnlockDisplay(Stage stage, Skin skin) {
 		super("Unlock Pot?", skin);

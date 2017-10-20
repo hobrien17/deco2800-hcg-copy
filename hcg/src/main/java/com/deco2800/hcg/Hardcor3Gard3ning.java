@@ -3,11 +3,30 @@ package com.deco2800.hcg;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.deco2800.hcg.contexts.MainMenuContext;
+import com.deco2800.hcg.entities.ItemEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.handlers.MouseHandler;
-import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.managers.CommandManager;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.ItemManager;
+import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
+import com.deco2800.hcg.managers.PlantManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.ShaderManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.managers.WeatherManager;
+import com.deco2800.hcg.managers.WorldManager;
 import com.deco2800.hcg.renderers.Renderable;
 
 /**
@@ -74,7 +93,7 @@ public class Hardcor3Gard3ning extends Game {
         
         /* Setup stopwatch manager */
         stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
-        stopwatchManager.startTimer(1);
+        stopwatchManager.startTimer(-1);
         
         /* Setup network manager */
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
@@ -124,10 +143,85 @@ public class Hardcor3Gard3ning extends Game {
                 return args[1];
             }
         });
+        
+        commandManager.registerCommand("give", new CommandManager.Command() {
+            @Override
+            public String run(String... args) {
+                if(!(args.length ==  2 || args.length == 3)) {
+                    return "Invalid number of arguments. \nCorrect Usage: /give item <amount>";
+                }
+                
+                Item item = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(args[1]);
+                
+                if(item != null) {
+                    int amount = 0;
+                    try {
+                        amount = Integer.parseInt(args[2]);
+                    } catch (Exception e) {
+                        if(e instanceof NumberFormatException) {
+                            return String.format("%s is not a valid number", args[2]);
+                        } else {
+                            amount = 1;
+                        }
+                    }
+                    item.setStackSize(amount);
+                    
+                    Player player = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer();
+                    
+                    if(player != null) {
+                        player.addItemToInventory(item);
+                    } else {
+                        return "Something went wrong!";
+                    }
+                } else {
+                    return "No such item";
+                }
+                
+                return "Success!";
+            }
+        });
 
+        commandManager.registerCommand("spawnItem", new CommandManager.Command() {
+            @Override
+            public String run(String... args) {
+                if(!(args.length ==  2 || args.length == 3)) {
+                    return "Invalid number of arguments. \nCorrect Usage: /spawnItem item <amount>";
+                }
+                
+                Item item = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(args[1]);
+                
+                if(item != null) {
+                    int amount = 0;
+                    try {
+                        amount = Integer.parseInt(args[2]);
+                    } catch (Exception e) {
+                        if(e instanceof NumberFormatException) {
+                            return String.format("%s is not a valid number", args[2]);
+                        } else {
+                            amount = 1;
+                        }
+                    }
+                    item.setStackSize(amount);
+                    
+                    Player player = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer();
+                    
+                    Vector2 position = new Vector2(0, 0);
+                    
+                    if(player != null) {
+                        position = new Vector2(player.getPosX(), player.getPosY());
+                        position.sub(1, 1);
+                    }
+                    
+                    GameManager.get().getWorld().addEntity(new ItemEntity(position.x, position.y, 0, item));
+                } else {
+                    return "No such item";
+                }
+                
+                return "Success!";
+            }
+        });
+        
         // Procedurally generate the world map and store it.
-
-
         worldManager.generateAndSetWorldStack();
 
         contextManager.pushContext(new MainMenuContext());

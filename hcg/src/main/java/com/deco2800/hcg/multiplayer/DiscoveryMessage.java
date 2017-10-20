@@ -18,8 +18,7 @@ import com.deco2800.hcg.managers.NetworkManager;
 public class DiscoveryMessage extends Message {
 	private final NetworkManager networkManager =
 			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(NetworkManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DiscoveryMessage.class);
 
 	public DiscoveryMessage() {
 		// Default constructor

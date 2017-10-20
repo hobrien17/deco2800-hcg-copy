@@ -3,7 +3,6 @@ package com.deco2800.hcg.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -52,7 +51,7 @@ public class RenderLightmap implements Renderer {
         List<AbstractEntity> lights = new ArrayList<>();
 
         for (Renderable r : renderables) {
-            if (r instanceof LightEmitter) {
+            if (r instanceof LightEmitter && ((LightEmitter)r).getLightPower() > 0) {
                 lights.add((AbstractEntity) r);
             }
         }
