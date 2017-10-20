@@ -147,37 +147,6 @@ public class PlayContext extends Context {
         stage.addActor(plantWindow);
         stage.addActor(plantButton);
 
-        window = new Window("Menu", skin);
-
-        /* Add a quit button to the menu */
-        Button button = new TextButton("Quit", skin);
-        Button die = new TextButton("Force quit", skin);
-
-        /* Add a programmatic listener to the quit button */
-        button.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                playerManager.despawnPlayers();
-                contextManager.popContext();
-            }
-        });
-        
-        die.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.exit(0);
-            }
-        });
-
-        /* Add all buttons to the menu */
-        window.add(button);
-        window.add(die);
-        window.pack();
-        window.setMovable(false); // So it doesn't fly around the screen
-
-        /* Add the window to the stage */
-        stage.addActor(window);
-
         /*
          * Setup an Input Multiplexer so that input can be handled by both the UI and
          * the game
@@ -294,7 +263,6 @@ public class PlayContext extends Context {
         GameManager.get().getCamera().update();
 
         stage.getViewport().update(width, height, true);
-        window.setPosition(0, stage.getHeight());
         playerStatus.setPosition(30f, stage.getHeight()-200f);
         clockDisplay.setPosition(stage.getWidth()-220f, 20f);
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
@@ -447,19 +415,44 @@ public class PlayContext extends Context {
     private void createPauseWindow() {
         pauseMenu = new Table();
         ImageButton quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
+        ImageButton instructions = new ImageButton(new Image(textureManager.getTexture("menu_instructions_button")).getDrawable());
+        ImageButton options = new ImageButton(new Image(textureManager.getTexture("menu_options_button")).getDrawable());
+        ImageButton back = new ImageButton(new Image(textureManager.getTexture("menu_back_button")).getDrawable());
+        ImageButton resume = new ImageButton(new Image(textureManager.getTexture("menu_resume_button")).getDrawable());
         quit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //pop ALL the contexts
-                contextManager.popContext();
-                contextManager.popContext();
-                contextManager.popContext();
-                contextManager.popContext();
+                System.exit(0);
+            }
+        });
+        instructions.addListener(new ChangeListener() {
+           @Override
+           public void changed(ChangeEvent event, Actor actor) {
+               contextManager.pushContext(new InstructionsMenuContext());
+           }
+        });
+        resume.addListener(new ChangeListener() {
+           @Override
+           public void changed(ChangeEvent event, Actor actor) {
+               removePauseWindow();
+           }
+        });
+        back.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
                 contextManager.popContext();
             }
         });
+        pauseMenu.add(resume);
+        pauseMenu.row();
+        pauseMenu.add(instructions);
+        pauseMenu.row();
+        pauseMenu.add(options);
+        pauseMenu.row();
+        pauseMenu.add(back);
+        pauseMenu.row();
         pauseMenu.add(quit);
-        pauseMenu.setWidth(150);
+        pauseMenu.setPosition(stage.getWidth()/2, stage.getHeight()/2);
         playerManager.getPlayer().setPauseDisplayed(false);
 
     }
@@ -467,7 +460,6 @@ public class PlayContext extends Context {
     public void addPauseWindow() {
         if (pauseMenu.getStage() == null){
 			/* Add the window to the stage */
-            PlayContext context = (PlayContext) contextManager.currentContext();
             stage.addActor(pauseMenu);
             playerManager.getPlayer().setPauseDisplayed(true);
             soundManager.pauseWeatherSounds();
