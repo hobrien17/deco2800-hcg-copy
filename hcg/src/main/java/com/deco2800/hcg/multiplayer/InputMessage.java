@@ -71,54 +71,27 @@ public class InputMessage extends Message {
 			switch (inputType) {
 			case KEY_DOWN:
 				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1]);
+						tick, 1, inputType.ordinal(), args[1]);
 				break;
 			case KEY_UP:
 				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1]);
+						tick, 1, inputType.ordinal(), args[1]);
 				break;
 			case MOUSE_MOVED:
 				playerInputManager.queueAction(
-						tick, 
-						1,
-						inputType.ordinal(),
-						args[1],
-						args[2]);
+						tick, 1, inputType.ordinal(), args[1], args[2]);
 				break;
 			case TOUCH_DOWN:
 				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1],
-						args[2],
-						args[3],
-						args[4]);
+						tick, 1, inputType.ordinal(), args[1], args[2], args[3], args[4]);
 				break;
 			case TOUCH_DRAGGED:
 				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1],
-						args[2],
-						args[3]);
+						tick, 1, inputType.ordinal(), args[1], args[2], args[3]);
 				break;
 			case TOUCH_UP:
 				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1],
-						args[2],
-						args[3],
-						args[4]);
+						tick, 1, inputType.ordinal(), args[1], args[2], args[3], args[4]);
 				break;
 			default:
 				break;
