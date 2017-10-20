@@ -1,5 +1,7 @@
 package com.deco2800.hcg.quests;
 
+import com.deco2800.hcg.entities.enemyentities.Enemy;
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.items.Item;
 import java.util.HashMap;
 
@@ -13,7 +15,7 @@ import java.util.HashMap;
 public class Quest {
 	private String title; //Name of the quest to be displayed
 	private HashMap<String,Integer> rewards; // items to amount for reward
-	private HashMap<Integer,HashMap<Integer, Integer>> killRequirement; //Kills for enemy ID required
+	private HashMap<Integer,HashMap<EnemyType, Integer>> killRequirement; //Kills for enemy ID required
 	private HashMap<String, Integer> itemRequirement; //Item required to complete quest
 	private String description;
 
@@ -25,13 +27,14 @@ public class Quest {
 	 * @param itemRequirement
 	 */
 	public Quest(String title, HashMap<String, Integer> rewards, HashMap<Integer,
-			HashMap<Integer, Integer>> killRequirement, HashMap<String, Integer> itemRequirement) {
+			HashMap<EnemyType, Integer>> killRequirement, HashMap<String, Integer> itemRequirement,
+		    String description) {
 
 		this.title = title;
 		this.rewards = rewards;
 		this.killRequirement = killRequirement;
 		this.itemRequirement = itemRequirement;
-		this.description = "";
+		this.description = description;
 	}
 
 	/**
@@ -47,7 +50,7 @@ public class Quest {
 		return rewards;
 	}
 
-	public HashMap<Integer, HashMap<Integer, Integer>> getKillRequirement() {
+	public HashMap<Integer, HashMap<EnemyType, Integer>> getKillRequirement() {
 		return killRequirement;
 	}
 
@@ -76,7 +79,7 @@ public class Quest {
 				//For each world
 				desc += "Goto world " + node.toString();
 				//Todo get a human friendly node name
-				for (Integer enemyID: killRequirement.get(node).keySet()) {
+				for (EnemyType enemyID: killRequirement.get(node).keySet()) {
 					//For each enemy ID get the amount of kills required
 					desc += " and kill " + killRequirement.get(node).get(enemyID).toString() + enemyID.toString() + ".";
 					//Todo get a human friendly enemy name

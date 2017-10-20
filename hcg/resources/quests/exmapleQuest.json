@@ -4,11 +4,11 @@
     "sunflower_seed": 1
   },
   "kReq": {  
-    "grass_normal_01.tmx": {
-      "1": 1
+    "1": {
+      "SNAIL": 1
     },  
-    "mushroom_normal_02.tmx": { 
-      "2": 1
+    "2": { 
+      "SQUIRREL": 1
     }
   },    
   "rewards": {

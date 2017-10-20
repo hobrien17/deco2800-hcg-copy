@@ -1,5 +1,7 @@
 package com.deco2800.hcg.quests;
 
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
+import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ResourceLoadException;
 import com.deco2800.hcg.managers.ItemManager;
@@ -67,9 +69,9 @@ public class QuestReader {
 
         //Containers for the information in the quest
         String title; //Name of the quest to be displayed
-        HashMap<String,Integer> rewards = new HashMap<>(); // items to amount for reward
-        HashMap<Integer,HashMap<Integer, Integer>> killRequirement = new HashMap<>(); //Kills for enemy ID required
-        HashMap<String, Integer> itemRequirement = new HashMap<>(); //Item required to complete quest
+        HashMap<String,Integer> rewards; // items to amount for reward
+        HashMap<Integer,HashMap<EnemyType, Integer>> killRequirement; //Kills for enemy ID required
+        HashMap<String, Integer> itemRequirement; //Item required to complete quest
         String description;
 
         //Get the inital json obj
@@ -95,11 +97,13 @@ public class QuestReader {
         JsonObject itemRewards = jQuest.getAsJsonObject("rewards");
         rewards = parseItemQuantityHashMap(title,itemRewards);
 
+        description = jQuest.get("optDesc").toString();
+
         //The kill requirements are a mapping between node{enemyID:killAmount}
         JsonObject killReqs = jQuest.getAsJsonObject("kReq");
         killRequirement = parseKillReqMap(title,killReqs);
 
-        return new Quest(title,rewards,killRequirement,itemRequirement);
+        return new Quest(title,rewards,killRequirement,itemRequirement,description);
     }
 
     private HashMap<String,Integer> parseItemQuantityHashMap(String title, JsonObject iqMap) throws ResourceLoadException {
@@ -161,11 +165,11 @@ public class QuestReader {
         return returnMap;
     }
 
-    private HashMap<Integer,HashMap<Integer, Integer>> parseKillReqMap(String title, JsonObject krmMap) {
+    private HashMap<Integer,HashMap<EnemyType, Integer>> parseKillReqMap(String title, JsonObject krmMap) {
         GameManager gameManager = GameManager.get();
 
-        HashMap<Integer,HashMap<Integer, Integer>> returnKRM = new HashMap<>();
-        HashMap<Integer, Integer> killCount;
+        HashMap<Integer,HashMap<EnemyType, Integer>> returnKRM = new HashMap<>();
+        HashMap<EnemyType, Integer> killCount;
 
         if (krmMap.entrySet().size() > 0) {
             for (Map.Entry node: krmMap.entrySet()) {
@@ -173,7 +177,19 @@ public class QuestReader {
                 if (gameManager.getWorldMap() == null) {
                     throw new ResourceLoadException("No world currently being created");
                 }
-                if (!gameManager.getWorldMap().getContainedNodes().contains(node)) {
+
+                //Confirm node index exists
+                //Todo make sure nodeID is numeric
+                int nodeID = Integer.parseInt(node.getKey().toString());
+                boolean foundNode = false;
+                for (MapNode mn: gameManager.getWorldMap().getContainedNodes()) {
+                    if (mn.getNodeID() == nodeID) {
+                        foundNode = true;
+                        break;
+                    }
+                }
+                if (!foundNode) {
+                    //Todo throw exceptoion for not finding node - be explicit about node id not valid
                     throw new ResourceLoadException("Can't add invalid worlds node.");
                 }
                 
@@ -217,20 +233,18 @@ public class QuestReader {
                                 title + ")");
                     }
 
-                    //Todo check to make sure it is a valid enemy ID - Note assumed numeric, change as needed
+                    //Todo ensure try catch gets non valid enemy type
+
+                    EnemyType et;
                     try {
-                        Integer.parseUnsignedInt(enemyCount.getKey().toString());
-                        int count = Integer.parseUnsignedInt(enemyCount.getValue().toString());
-                        if (count < 1) {
-                            throw new NumberFormatException();
-                        }
-                    } catch (NumberFormatException e) {
-                        throw new ResourceLoadException("Can't add a non positive integer item requirement amount for quest (" +
-                                title + ")");
+                        et = EnemyType.valueOf(enemyCount.getKey().toString());
+                    } catch (IllegalArgumentException e) {
+                        throw new ResourceLoadException("Invalid enemy type supplied (" +
+                                enemyCount.getKey().toString()+ ") for quest (" + title + ")");
                     }
 
                     //Todo make sure its not a duplicate enemy ID - make sure the below function handles it
-                    if (killCount.containsKey(enemyCount.getKey().toString())) {
+                    if (killCount.containsKey(et)) {
                         throw new ResourceLoadException("Can't add the same enemy key (" +
                                                         enemyCount.getKey().toString() +
                                                         ") in node (" +
@@ -238,13 +252,7 @@ public class QuestReader {
                                                         ") twice into the kill requirements node for quest (" +
                                                         title + ")");
                     }
-
-
-                    killCount.put(Integer.parseUnsignedInt(enemyCount.getKey().toString()),
-                                  Integer.parseUnsignedInt(enemyCount.getValue().toString()));
-
-
-
+                    killCount.put(et,Integer.parseUnsignedInt(enemyCount.getValue().toString()));
                 }
 
                 //Todo - confirm that the node int will always be uint

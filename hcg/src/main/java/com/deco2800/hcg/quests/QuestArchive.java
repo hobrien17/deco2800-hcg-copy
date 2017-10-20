@@ -2,6 +2,7 @@ package com.deco2800.hcg.quests;
 
 import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.entities.Player;
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class QuestArchive {
     private Quest quest;
-    private static HashMap<Integer,HashMap<Integer, Integer>> initalKillLog;
+    private static HashMap<Integer,HashMap<EnemyType, Integer>> initalKillLog;
     private NPC questGiver;
 
     private Boolean killReqCompleted = false;
@@ -32,9 +33,9 @@ public class QuestArchive {
         if (quest.getKillRequirement().size() != 0) {
             //Get the current kills for the different enemy IDs in nodes
             for (Integer node: quest.getKillRequirement().keySet()) {
-                HashMap<Integer,Integer> enemyIDKills = new HashMap<>();
-                for (Integer enemyID: quest.getKillRequirement().get(node).keySet()) {
-                    enemyIDKills.put(enemyID,playerManager.getPlayer().killLogGet(node,enemyID));
+                HashMap<EnemyType,Integer> enemyIDKills = new HashMap<>();
+                for (EnemyType enemyID: quest.getKillRequirement().get(node).keySet()) {
+                    enemyIDKills.put(enemyID,playerManager.getPlayer().killLogGet(enemyID,node));
                 }
                 this.initalKillLog.put(node,enemyIDKills);
             }
@@ -86,7 +87,7 @@ public class QuestArchive {
                 if (!playerManager.getPlayer().killLogContainsNode(node)) {
                     return false;
                 }
-                for (Integer enemyID: quest.getKillRequirement().get(node).keySet()) {
+                for (EnemyType enemyID: quest.getKillRequirement().get(node).keySet()) {
                     //Make sure the current kill log in the node contains the enemy ID
                     if (!playerManager.getPlayer().killLogContains(enemyID,node)) {
                         return false;
@@ -107,6 +108,13 @@ public class QuestArchive {
         //Check if the inventory currently has enough items
         Inventory inv = playerManager.getPlayer().getInventory();
 
+        //Todo get the names of required items
+
+        //Todo Check, if not true return false, else keep checking
+
+
+
+        inv.numberOf("");
         //Todo check if the inventory has the items
 
 

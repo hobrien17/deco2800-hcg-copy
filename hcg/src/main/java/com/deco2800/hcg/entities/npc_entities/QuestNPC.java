@@ -75,7 +75,6 @@ public class QuestNPC extends NPC {
 		this.speed = 0.02f;
 		this.conversation = conversation;
 		this.relationship = conversationManager.getDefaultRelationship(conversation);
-
 		this.texture = texture;
 
 		this.setGoal(posX, posY);
