@@ -38,6 +38,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected BulletType bulletType;
     protected int pellets;
     protected SoundManager soundManager;
+    protected String texture;
 
     /**
      * Constructor for Weapon objects.
@@ -65,8 +66,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.weaponType = weaponType;
         this.user = user;
         this.radius = radius;
-        // TODO: Get proper weapon textures
-        this.setTexture(texture);
+        this.setTexture("blank");
+        this.texture = texture;
         this.cooldown = cooldown;
         this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
     }
@@ -239,6 +240,28 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         }
         float angle = (float) (Math.atan2(deltaY, deltaX)) +
                 (float) (Math.PI);
+        
+        if(!texture.equals("blank")) {
+        //Update texture for angle
+            if(15 * Math.PI / 8 < angle || angle < Math.PI / 8) {
+                this.setTexture(texture + "_ne");
+            } else if(Math.PI / 8 <= angle && angle <= 3 * Math.PI / 8) {
+                this.setTexture(texture + "_e");
+            } else if(3 * Math.PI / 8 < angle && angle < 5 * Math.PI / 8) {
+                this.setTexture(texture + "_se");
+            } else if(5 * Math.PI / 8 <= angle && angle <= 7 * Math.PI / 8) {
+                this.setTexture(texture + "_s");
+            } else if(7 * Math.PI / 8 < angle && angle < 9 * Math.PI / 8) {
+                this.setTexture(texture + "_sw");
+            }  else if(9 * Math.PI / 8 <= angle && angle <= 11 * Math.PI / 8) {
+                this.setTexture(texture + "_w");
+            } else if(11 * Math.PI / 8 < angle && angle < 13 * Math.PI / 8) {
+                this.setTexture(texture + "_nw");
+            } else if(13 * Math.PI / 8 <= angle && angle <= 15 * Math.PI / 8) {
+                this.setTexture(texture + "_n");
+            }
+        }
+        
         // Set weapon position along angle
         setPosX(this.user.getPosX() +
                 (float) (this.radius * Math.cos(angle)));

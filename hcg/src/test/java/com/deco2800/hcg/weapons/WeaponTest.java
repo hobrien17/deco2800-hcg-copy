@@ -32,7 +32,7 @@ public class WeaponTest {
                 .setPosY(10)
                 .setPosZ(10)
                 .setRadius(2.5)
-                .setTexture("storm_bolter")
+                //.setTexture("storm_bolter")
                 .setXLength(20)
                 .setYLength(20)
                 .setZLength(20)
@@ -64,7 +64,7 @@ public class WeaponTest {
         assertTrue(weapon2.getPosY() == 10);
         assertTrue(weapon2.getPosZ() == 10);
         assertTrue(weapon2.radius == 2.5);
-        assertEquals(weapon2.getTexture(), "storm_bolter");
+        //assertEquals(weapon2.getTexture(), "storm_bolter");
         assertTrue(weapon2.getXLength() == 20);
         assertTrue(weapon2.getYLength() == 20);
         assertTrue(weapon2.getZLength() == 20);

@@ -164,6 +164,32 @@ public class TextureManager extends Manager {
 			textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass.png"));
 			textureMap.put("fire_corpse", new Texture("resources/sprites/dead_enemies/inferno.png"));
 			textureMap.put("explosion", new Texture("resources/sprites/bullets/explosion.png"));
+			
+			// Weapon textures
+			textureMap.put("multigun_n", new Texture("resources/sprites/weapons/multigun_n.png"));
+            textureMap.put("multigun_ne", new Texture("resources/sprites/weapons/multigun_ne.png"));
+            textureMap.put("multigun_e", new Texture("resources/sprites/weapons/multigun_e.png"));
+            textureMap.put("multigun_se", new Texture("resources/sprites/weapons/multigun_se.png"));
+            textureMap.put("multigun_s", new Texture("resources/sprites/weapons/multigun_s.png"));
+            textureMap.put("multigun_sw", new Texture("resources/sprites/weapons/multigun_sw.png"));
+            textureMap.put("multigun_w", new Texture("resources/sprites/weapons/multigun_w.png"));
+            textureMap.put("multigun_nw", new Texture("resources/sprites/weapons/multigun_nw.png"));
+            textureMap.put("shotgun_n", new Texture("resources/sprites/weapons/shotgun_n.png"));
+            textureMap.put("shotgun_ne", new Texture("resources/sprites/weapons/shotgun_ne.png"));
+            textureMap.put("shotgun_e", new Texture("resources/sprites/weapons/shotgun_e.png"));
+            textureMap.put("shotgun_se", new Texture("resources/sprites/weapons/shotgun_se.png"));
+            textureMap.put("shotgun_s", new Texture("resources/sprites/weapons/shotgun_s.png"));
+            textureMap.put("shotgun_sw", new Texture("resources/sprites/weapons/shotgun_sw.png"));
+            textureMap.put("shotgun_w", new Texture("resources/sprites/weapons/shotgun_w.png"));
+            textureMap.put("shotgun_nw", new Texture("resources/sprites/weapons/shotgun_nw.png"));
+            textureMap.put("machinegun_n", new Texture("resources/sprites/weapons/machinegun_n.png"));
+            textureMap.put("machinegun_ne", new Texture("resources/sprites/weapons/machinegun_ne.png"));
+            textureMap.put("machinegun_e", new Texture("resources/sprites/weapons/machinegun_e.png"));
+            textureMap.put("machinegun_se", new Texture("resources/sprites/weapons/machinegun_se.png"));
+            textureMap.put("machinegun_s", new Texture("resources/sprites/weapons/machinegun_s.png"));
+            textureMap.put("machinegun_sw", new Texture("resources/sprites/weapons/machinegun_sw.png"));
+            textureMap.put("machinegun_w", new Texture("resources/sprites/weapons/machinegun_w.png"));
+            textureMap.put("machinegun_nw", new Texture("resources/sprites/weapons/machinegun_nw.png"));
 
 			// Miscellaneous textures
 			textureMap.put("error", new Texture("resources/misc/error.png"));
