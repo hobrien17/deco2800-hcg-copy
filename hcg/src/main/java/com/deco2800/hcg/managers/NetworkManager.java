@@ -320,19 +320,29 @@ public final class NetworkManager extends Manager {
 	 * @return <code>true</code> if it is not safe to proceed
 	 */
 	public boolean shouldBlock() {
-		if (!multiplayerGame || !(contextManager.currentContext() instanceof PlayContext)) {
+		if (!(contextManager.currentContext() instanceof PlayContext)) {
 			return false;
 		}
 		
-		if (playerInputManager.getInputTick() > 0 && peerTickCounts.isEmpty()) {
-			return true;
-		}
-
-		for (long tick : peerTickCounts.values()) {
-			if (tick <= playerInputManager.getInputTick()) {
+		if (multiplayerGame) {
+			if (playerInputManager.getInputTick() > 0 && peerTickCounts.isEmpty()) {
 				return true;
 			}
+
+			for (long tick : peerTickCounts.values()) {
+				if (tick <= playerInputManager.getInputTick()) {
+					return true;
+				}
+			}
 		}
+		
+		// queue mouse input
+		playerInputManager.queueLocalInput(
+				InputType.MOUSE_MOVED,
+				null,
+				new float[] {playerInputManager.getLocalMouseX(), playerInputManager.getLocalMouseY()});
+		// increment input tick
+		playerInputManager.incrementInputTick();
 		
 		return false;
 	}
@@ -468,6 +478,15 @@ public final class NetworkManager extends Manager {
 						break;
 					case START:
 						message = new StartMessage();
+						break;
+					case WORLD_MAP:
+						message = new WorldMapMessage();
+						break;
+					case LEVEL_START:
+						message = new LevelStartMessage();
+						break;
+					case LEVEL_END:
+						message = new LevelEndMessage();
 						break;
 					case INPUT:
 						message = new InputMessage();

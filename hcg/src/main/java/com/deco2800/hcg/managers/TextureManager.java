@@ -279,6 +279,11 @@ public class TextureManager extends Manager {
 			textureMap.put("consumables", new Texture("resources/ui/radial_menu/consumables.png"));
 			textureMap.put("weapsLeft", new Texture("resources/ui/radial_menu/weapons_left.png"));
 			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapons_right.png"));
+			textureMap.put("grenadeLauncher", new Texture("resources/ui/radial_menu/grenade_launcher.png"));
+			textureMap.put("machineGun", new Texture("resources/ui/radial_menu/machine_gun.png"));
+			textureMap.put("shotgun", new Texture("resources/ui/radial_menu/shotgun.png"));
+			textureMap.put("starfall", new Texture("resources/ui/radial_menu/starfall.png"));
+			textureMap.put("healthPotion", new Texture("resources/ui/radial_menu/health_potion.png"));
 
 			//Perks
 			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
@@ -357,6 +362,17 @@ public class TextureManager extends Manager {
 			textureMap.put("server_refresh_button", new Texture("resources/ui/multiplayer_ui/menu_refresh_button.png"));
 			textureMap.put("multiplayer_title", new Texture("resources/ui/multiplayer_ui/multiplayer_title.png"));
 			textureMap.put("transparentUI", new Texture("resources/ui/multiplayer_ui/transparentUI.png"));
+			textureMap.put("MPcharacter_title", new Texture("resources/ui/multiplayer_ui/MPcharacter_title.png"));
+			textureMap.put("player1", new Texture("resources/ui/multiplayer_ui/player1.png"));
+			textureMap.put("player1head", new Texture("resources/ui/multiplayer_ui/player1head.png"));
+			textureMap.put("player2", new Texture("resources/ui/multiplayer_ui/player2.png"));
+			textureMap.put("player2head", new Texture("resources/ui/multiplayer_ui/player2head.png"));
+			textureMap.put("player3", new Texture("resources/ui/multiplayer_ui/player3.png"));
+			textureMap.put("player3head", new Texture("resources/ui/multiplayer_ui/player3head.png"));
+			textureMap.put("player4", new Texture("resources/ui/multiplayer_ui/player4.png"));
+			textureMap.put("player4head", new Texture("resources/ui/multiplayer_ui/player4head.png"));
+			textureMap.put("player5", new Texture("resources/ui/multiplayer_ui/player5.png"));
+			textureMap.put("player5head", new Texture("resources/ui/multiplayer_ui/player5head.png"));
 
 			//Conversation textures
 			textureMap.put("conversation_context", new Texture("resources/ui/conversations/conversation_context.png"));
