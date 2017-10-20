@@ -17,6 +17,7 @@ import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.multiplayer.LevelStartMessage;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class WorldMapContext extends UIContext {
 	private PlayerManager playerManager;
 	private ContextManager contextManager;
 	private WorldManager worldManager;
+	private NetworkManager networkManager;
 
 	private InputMultiplexer inputMultiplexer;
 
@@ -53,12 +55,14 @@ public class WorldMapContext extends UIContext {
 	// used for demo purposes
 	private boolean showAllNodes;
 	private PlayerMapEntity playerMapEntity;
+	
+	private WorldMap currentWorld;
 
 
 	/**
 	 * Constructor to create a new WorldMapContext
 	 */
-	public WorldMapContext() {
+	public WorldMapContext(WorldMap worldMap) {
 		gameManager = GameManager.get();
 		gameManager.setMapContext(this);
 		
@@ -70,7 +74,11 @@ public class WorldMapContext extends UIContext {
 				.getManager(ContextManager.class);
 		worldManager = (WorldManager) gameManager
 				.getManager(WorldManager.class);
+		networkManager = (NetworkManager) gameManager
+				.getManager(NetworkManager.class);
 		InputManager inputManager = new InputManager();
+		
+		currentWorld = worldMap;
 
 		showAllNodes = false;
 		
@@ -83,10 +91,12 @@ public class WorldMapContext extends UIContext {
 		Button quitButton = new TextButton("Quit", skin);
 		Button discoveredButton = new TextButton("Show all nodes", skin);
 		Button demoButton = new TextButton("Safehaven", skin);
+		Button testButton = new TextButton("UI Test", skin);
 
 		window.add(quitButton);
 		window.add(discoveredButton);
 		window.add(demoButton);
+		window.add(testButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight());
@@ -99,7 +109,7 @@ public class WorldMapContext extends UIContext {
 		hiddenNodes = new ArrayList<>();
 		
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
-			MapNodeEntity nodeEntry = new MapNodeEntity(node);
+			MapNodeEntity nodeEntry = new MapNodeEntity(node, worldMap);
 			if (!node.isDiscovered()) {
 				hiddenNodes.add(nodeEntry);
 				nodeEntry.setVisible(false);
@@ -109,7 +119,7 @@ public class WorldMapContext extends UIContext {
 
 		playerMapEntity = new PlayerMapEntity();
 		// set the playerMapEntity render position to be at the starting node;
-		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0));
+		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0), worldMap);
 		playerMapEntity.updatePosByNodeEntity(entryMapNode);
 
 		menuStage.addActor(window);
@@ -139,6 +149,19 @@ public class WorldMapContext extends UIContext {
 		demoButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				World world = World.SAFEZONE;
+				Level level = new Level(world, 0, 1, 1);
+				
+				gameManager.setWorld(world);
+
+				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
+				playerManager.spawnPlayers();
+				contextManager.pushContext(new PlayContext());
+			}
+		});
+
+		testButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				World world = new World("resources/maps/maps/grass_normal_01.tmx");
 				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
@@ -186,8 +209,13 @@ public class WorldMapContext extends UIContext {
 					&& !(nodeEntity.getNode().getNodeType() == 2)) {
                 // set the PlayerMapEntity position
 				playerMapEntity.updatePosByNodeEntity(nodeEntity);
+				// send to peers
+				if (networkManager.isMultiplayerGame()) {
+					networkManager.queueMessage(new LevelStartMessage(i));
+				}
 				// select the current node
 				worldManager.selectNode(i);
+				return;
 			}
 		}
 	}
@@ -195,13 +223,13 @@ public class WorldMapContext extends UIContext {
 	/**
 	 * Updates the display of the nodes on the world map. Handles making hidden nodes not visible to the user.
 	 */
-	void updateMapDisplay() {
+	public void updateMapDisplay(WorldMap currentWorld) {
 		updateNodesDisplayed();
 		stage.clear();
 		stage.addActor(new WorldMapEntity());
 		hiddenNodes.clear();
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
-			MapNodeEntity nodeEntry = new MapNodeEntity(node);
+			MapNodeEntity nodeEntry = new MapNodeEntity(node, currentWorld);
 			if (node.isDiscovered()) {
 				continue;
 			}
@@ -294,7 +322,7 @@ public class WorldMapContext extends UIContext {
 		potBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
 			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
-				nodeEntity.updateTexture();
+				nodeEntity.updateTexture(currentWorld);
 				drawPot(potBatch, nodeEntity);
 			}
 		}

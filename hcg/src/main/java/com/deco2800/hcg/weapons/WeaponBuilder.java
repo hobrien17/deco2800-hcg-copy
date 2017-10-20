@@ -184,6 +184,10 @@ public class WeaponBuilder {
                 cooldown = 10;
             }
             
+            if(radius == 0) {
+                radius = 0.1;
+            }
+            
             return new Machinegun(posX, posY, posZ, xLength, yLength, zLength,
                 weaponType, user, radius, texture, cooldown);
         } else if(weaponType == WeaponType.SHOTGUN) {
@@ -198,6 +202,10 @@ public class WeaponBuilder {
             
             if(pellets == -1) {
                 pellets = 6;
+            }
+            
+            if(radius == 0) {
+                radius = 0.1;
             }
             
             return new Shotgun(posX, posY, posZ, xLength, yLength, zLength,
@@ -216,6 +224,10 @@ public class WeaponBuilder {
                 pellets = 30;
             }
             
+            if(radius == 0) {
+                radius = 0.1;
+            }
+            
             return new Stargun(posX, posY, posZ, xLength, yLength, zLength,
                     weaponType, user, radius, texture, cooldown, pellets);
         } else if(weaponType == WeaponType.MULTIGUN) {
@@ -232,8 +244,12 @@ public class WeaponBuilder {
                 pellets = 3;
             }
             
-            if(arc == 0) {
+            if(arc <= 0.5 || arc >= 2 * Math.PI) {
                 arc = (float) (Math.PI / 4f);
+            }
+            
+            if(radius == 0) {
+                radius = 0.1;
             }
             
             return new Multigun(posX, posY, posZ, xLength, yLength, zLength,

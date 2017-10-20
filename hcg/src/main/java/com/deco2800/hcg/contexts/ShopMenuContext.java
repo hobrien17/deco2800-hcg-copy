@@ -47,7 +47,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private Player player;
     private ShopNPC shopKeeper;
 
-    private ShopMenuContext thisContext = this;
 
     /**
      * Constructor for the ShopMenuContext

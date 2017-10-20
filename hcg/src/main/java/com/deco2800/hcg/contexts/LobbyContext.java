@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 
 /**
@@ -32,7 +31,6 @@ public class LobbyContext extends UIContext{
     private Image playerPortrait2;
     private Image playerPortrait3;
     private Image playerPortrait4;
-    private Image transparentUI;
     private CheckBox readyCheckBox;
     private Stack player1;
     private Stack player2;
@@ -54,7 +52,6 @@ public class LobbyContext extends UIContext{
         GameManager gameManager = GameManager.get();
         ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
-        PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -74,7 +71,6 @@ public class LobbyContext extends UIContext{
         playerPortrait2 = new Image(textureManager.getTexture("lobby_image_frame"));
         playerPortrait3 = new Image(textureManager.getTexture("lobby_image_frame"));
         playerPortrait4 = new Image(textureManager.getTexture("lobby_image_frame"));
-        transparentUI = new Image(textureManager.getTexture("transparentUI"));
         //buttons set up
         back = new ImageButton(new Image(textureManager.getTexture("lobby_back_button")).getDrawable());
         start = new ImageButton(new Image(textureManager.getTexture("lobby_start_button")).getDrawable());

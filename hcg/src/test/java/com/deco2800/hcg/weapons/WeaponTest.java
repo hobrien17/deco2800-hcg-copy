@@ -45,12 +45,12 @@ public class WeaponTest {
         Shotgun weapon3 = (Shotgun) weapon2;
         Stargun weapon4 = (Stargun) star;
         assertEquals(weapon.cooldown, 5);
-        assertTrue(weapon.radius == 0);
+        assertTrue(weapon.radius == 0.1);
         assertEquals(weapon2.cooldown, 10);
         //assertEquals(weapon.aimX, 0);
         //assertEquals(weapon.aimY, 0);
         assertTrue(weapon.follow.x == weapon2.follow.x);
-        assertTrue(weapon.radius == 0);
+        assertTrue(weapon.radius == 0.1);
         assertEquals(weapon.shoot, false);
         assertEquals(weapon.user, player);
         assertEquals(weapon.user, weapon2.user);
