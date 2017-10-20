@@ -251,10 +251,11 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
 		playerInputManager.queueLocalInput(
 				InputType.TOUCH_DOWN,
-				new int[] {screenX, screenY, pointer, button},
-				null);
+				new int[] {pointer, button},
+				new float[] {position.x, position.y});
 	}
 
 	/**
@@ -268,7 +269,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
-	    playerInputManager.setLocalMousePosition(screenX, screenY);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.setLocalMousePosition(position.x, position.y);
 	}
 
 	/**
@@ -284,10 +286,11 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchUp(int screenX, int screenY, int pointer, int button) {
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
 		playerInputManager.queueLocalInput(
 				InputType.TOUCH_UP,
-				new int[] {screenX, screenY, pointer, button},
-				null);
+				new int[] {pointer, button},
+				new float[] {position.x, position.y});
 	}
 
 	/**
@@ -299,7 +302,8 @@ public class Player extends Character implements Tickable {
 	 *            the y position of mouse movement on the screen
 	 */
 	private void handleLocalMouseMoved(int screenX, int screenY) {
-		playerInputManager.setLocalMousePosition(screenX, screenY);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.setLocalMousePosition(position.x, position.y);
 	}
 
 	/**
