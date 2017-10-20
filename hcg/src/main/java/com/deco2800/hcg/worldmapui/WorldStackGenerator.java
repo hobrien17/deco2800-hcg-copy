@@ -11,7 +11,7 @@ import com.deco2800.hcg.entities.worldmap.WorldStack;
  * @author Ivo
  */
 public class WorldStackGenerator {
-	private final int NUMBER_OF_WORLDS = 3;
+	private static final int NUMBER_OF_WORLDS = 3;
 	
 	private MapGenerator mapGenerator;
 	
@@ -63,13 +63,31 @@ public class WorldStackGenerator {
 		WorldStack worldStack = new WorldStack();
 		for(Integer i = 0; i < NUMBER_OF_WORLDS; i++) {
 			if(rowNumber == 0 && columnNumber == 0) {
-				WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
-				worldMap.setPosition(i);
-				worldStack.addWorldToStack(worldMap);
+				if(i == 0) {
+					int seed = mapGenerator.getSeedValue();
+					mapGenerator.setGeneratorSeed(31);
+					WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
+					worldMap.setPosition(i);
+					worldStack.addWorldToStack(worldMap);
+					mapGenerator.setGeneratorSeed(seed);
+				} else {
+					WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
+					worldMap.setPosition(i);
+					worldStack.addWorldToStack(worldMap);
+				}
 			} else {
-				WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
-				worldMap.setPosition(i);
-				worldStack.addWorldToStack(worldMap);
+				if(i == 0) {
+					int seed = mapGenerator.getSeedValue();
+					mapGenerator.setGeneratorSeed(31);
+					WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
+					worldMap.setPosition(i);
+					worldStack.addWorldToStack(worldMap);
+					mapGenerator.setGeneratorSeed(seed);
+				} else {
+					WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
+					worldMap.setPosition(i);
+					worldStack.addWorldToStack(worldMap);
+				}
 			}
 			worldStack.incrementNumberOfWorlds();	
 		}

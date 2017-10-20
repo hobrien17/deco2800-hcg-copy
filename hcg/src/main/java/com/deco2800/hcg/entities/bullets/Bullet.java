@@ -2,10 +2,14 @@ package com.deco2800.hcg.entities.bullets;
 
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Tickable;
@@ -29,10 +33,14 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected float angle;
 	protected float changeX;
 	protected float changeY;
+	protected float deltaX;
+	protected float deltaY;
 
 	protected AbstractEntity user;
 	protected int hitCount;
 	protected BulletType bulletType;
+
+	protected int distanceTravelled;
 
 	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
@@ -158,16 +166,21 @@ public class Bullet extends AbstractEntity implements Tickable {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
+		distanceTravelled += 1;
+		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
+			specialAbility();
+		}
 		entityHit();
-
 		if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
 				- Math.abs(goalX)) < 0.5
 				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
 				- Math.abs(goalY)) < 0.5) {
-			GameManager.get().getWorld().removeEntity(this);
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
+		if (distanceTravelled >= 100) {
+			GameManager.get().getWorld().removeEntity(this);
+		}
 	}
 
 	/**
@@ -197,15 +210,12 @@ public class Bullet extends AbstractEntity implements Tickable {
 					// Temporary increase of xp for all enemies killed
 					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
-					if (user instanceof Player) {
-						Player playerUser = (Player) user;
-						playerUser.killLogAdd(target.getID());
-					}
 				} else {
 					// Temporary increase of xp for all enemies killed
 					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
 				}
+                spawnParticles(entity, "hitPuff.p");
 				hitCount--;
 			}
 
@@ -213,6 +223,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			if (entity instanceof DestructableTree && user instanceof Player
 					&& !(this instanceof GrassBullet)) {
 				DestructableTree tree = (DestructableTree) entity;
+				spawnParticles(entity, "hitPuff.p");
 				applyEffect(tree);
 				hitCount--;
 			}
@@ -221,6 +232,7 @@ public class Bullet extends AbstractEntity implements Tickable {
 			if (entity instanceof Player && user instanceof Enemy) {
 				// add code to apply effect to player here
 				Enemy enemyUser = (Enemy) user;
+				spawnParticles(entity, "hitPuff.p");
 				enemyUser.causeDamage((Player) entity);
 				hitCount--;
 			}
@@ -233,6 +245,25 @@ public class Bullet extends AbstractEntity implements Tickable {
 	}
 
 	/**
+	 * Method to overwrite in the grassBullet and trackingBullet class.
+	 * Called in the onTick method.
+	 */
+	protected void specialAbility() {
+		return;
+	}
+
+	/**
+	 * Updates the angle (direction) that the bullet travels too.
+	 *
+	 * @param changeAngle: The value to change the angle by
+	 */
+	public void updateAngle(int changeAngle) {
+		this.angle += changeAngle;
+		this.changeX = (float) (speed * Math.cos(angle));
+		this.changeY = (float) (speed * Math.sin(angle));
+	}
+
+	/**
 	 * Performs the action to be performed when an enemy is hit by a bullet
 	 *
 	 * @param target
@@ -241,13 +272,20 @@ public class Bullet extends AbstractEntity implements Tickable {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0));
+		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0, user));
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
-		if (bulletType instanceof Grenade) {
-			soundManager.stopSound("bullet-grenade-explode");
-			soundManager.playSound("bullet-grenade-explode");
-		}
+	    return;
+	}
+	
+	protected void spawnParticles(AbstractEntity entity, String particleFile) {
+	    ParticleEffect hitEffect = new ParticleEffect();
+        hitEffect.load(Gdx.files.internal("resources/particles/" + particleFile),
+        Gdx.files.internal("resources/particles/"));
+        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
+        hitEffect.setPosition(position.x, position.y);
+        hitEffect.start();
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, hitEffect);
 	}
 }

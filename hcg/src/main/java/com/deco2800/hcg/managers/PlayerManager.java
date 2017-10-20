@@ -40,6 +40,18 @@ public class PlayerManager extends Manager {
     			world.addEntity(player.getEquippedWeapon());
     		}
     }
+
+    /**
+     * Despawns players from the current world. Used for exiting levels.
+     */
+    public void despawnPlayers() {
+        World world = GameManager.get().getWorld();
+        for (Player player : players) {
+            player.ceaseMovement();
+            world.removeEntity(player);
+            world.removeEntity(player.getEquippedWeapon());
+        }
+    }
     
     /**
      * Gets all players.

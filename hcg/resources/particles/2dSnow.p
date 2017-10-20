@@ -131,7 +131,7 @@ active: true
 lowMin: 0.0
 lowMax: 0.0
 highMin: -5.0
-highMax: -12.0
+highMax: -24.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -178,13 +178,13 @@ active: false
 lowMin: 1000.0
 lowMax: 1000.0
 - Count - 
-min: 500
-max: 600
+min: 50
+max: 150
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 550.0
-highMax: 550.0
+highMin: 100.0
+highMax: 100.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -193,8 +193,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 1000.0
-highMax: 1000.0
+highMin: 3000.0
+highMax: 3000.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -292,7 +292,7 @@ timeline2: 0.8767123
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 10.0
+highMin: 2.0
 highMax: 5.0
 relative: false
 scalingCount: 1
@@ -303,8 +303,8 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: -12.0
-highMax: -12.0
+highMin: -17.0
+highMax: -17.0
 relative: false
 scalingCount: 1
 scaling0: 1.0

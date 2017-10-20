@@ -18,7 +18,6 @@ import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.TextureManager;
-import com.deco2800.hcg.worlds.World;
 
 /**
  * Holds the WorldStackContext information. Used to navigate and view the WorldStack when the player is in the game.
@@ -125,7 +124,7 @@ public class WorldStackContext extends UIContext {
 				 * to fix that problem.
 				 */
 				gameManager.setWorldMap(worldEntity.getWorldMap());
-				contextManager.pushContext(new WorldMapContext());
+				contextManager.pushContext(new WorldMapContext(worldEntity.getWorldMap()));
 			}
 		}
 	}
@@ -142,12 +141,15 @@ public class WorldStackContext extends UIContext {
 			if(worldEntry.getWorldMap().isUnlocked()) {
 				worldEntry.updateTexture();
 				if(worldEntry.getWorldMap().isCompleted()) {
-					if(worldEntry.getWorldMap().getWorldType() == 1) {
-						worldEntry.setWorldTexture(textureManager.getTexture("ws_urban_completed"));
-					} else if(worldEntry.getWorldMap().getWorldType() == 2) {
-						worldEntry.setWorldTexture(textureManager.getTexture("ws_forest_completed"));
+					if (worldEntry.getWorldMap().getWorldType() == 1) {
+						worldEntry.setWorldTexture(
+								textureManager.getTexture("ws_urban_completed"));
+					} else if (worldEntry.getWorldMap().getWorldType() == 2) {
+						worldEntry.setWorldTexture(
+								textureManager.getTexture("ws_forest_completed"));
 					} else {
-						worldEntry.setWorldTexture(textureManager.getTexture("ws_fungi_completed"));
+						worldEntry.setWorldTexture(
+								textureManager.getTexture("ws_fungi_completed"));
 					}
 				}
 			} else if (worldEntry.getWorldMap().getWorldType() == 2) {

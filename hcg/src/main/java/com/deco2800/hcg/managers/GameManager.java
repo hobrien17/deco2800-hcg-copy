@@ -21,8 +21,7 @@ import java.util.List;
  */
 public class GameManager implements TickableManager {
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(GameManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
     private static GameManager instance = null;
 
@@ -68,6 +67,14 @@ public class GameManager implements TickableManager {
         managers.add(manager);
     }
     
+    /**
+     * Returns a 3D vector mapping screen coordinates to game world coordinates
+     *
+     * @param screenX The x coordinate of the screen
+     * @param screenX The y coordinate of the screen
+     * @return A Vector3 of the game world coordinates 
+     * that map to the location on screen
+     */
     public Vector3 screenToWorld(int screenX, int screenY) {
         Vector3 worldCoords = GameManager.get().getCamera()
                 .unproject(new Vector3(screenX, screenY, 0));
@@ -80,6 +87,19 @@ public class GameManager implements TickableManager {
         projX -= projY - projX;
         
         return new Vector3(projX, projY, 0);
+    }
+    
+    public Vector3 worldToScreen(Vector3 worldCoords) {
+        int projX;
+        int projY;
+
+        projX = (int) (55f*(worldCoords.y + worldCoords.x)/2);
+        projY = (int) (-16f*(worldCoords.y - worldCoords.x) + 32f/2f);
+        
+        Vector3 screenCoords = GameManager.get().getCamera()
+                .project(new Vector3(projX, projY, 0));
+        
+        return screenCoords;
     }
 
     /**
@@ -102,7 +122,7 @@ public class GameManager implements TickableManager {
             this.addManager((Manager) ctor.newInstance());
         } catch (Exception e) {
             // Gotta catch 'em all
-            LOGGER.error(e.toString());
+            LOGGER.error(String.valueOf(e));
         }
 
 		/* And then return it */

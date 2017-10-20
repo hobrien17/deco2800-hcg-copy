@@ -1,8 +1,13 @@
 package com.deco2800.hcg.util;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Vector3;
+import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.entities.Character;
 
 import java.util.*;
@@ -16,6 +21,8 @@ import java.util.*;
  * @author Alex Subaric (deadmeu)
  */
 public class Effects {
+    
+    private int count;
 
     private Set<Effect> currentEffects; // a set of the current active effects
 
@@ -218,25 +225,54 @@ public class Effects {
                 effect.decrementUses();
             }
 
-            //Only activate while buff is active
-            if (!effect.onCooldown()) {
-                effect.startCooldownTimer();
-                // Handle damage
-                thisCharacter.takeDamage(effect.getDamage());
-                if(thisCharacter.getHealthCur() <= 0){
-                    Double prob = Math.random();
-                    if (prob > 0.3) {
-                        Corpse corpse = new BasicCorpse(owner.getPosX(), owner.getPosY(), 0);
-                        GameManager.get().getWorld().addEntity(corpse);
-                    }
-                    GameManager.get().getWorld().removeEntity(owner);
+			// Only activate while buff is active
+			if (effect.onCooldown()) {
+				return;
+			}
+			
+			if(effect.getUseCount() % 10 == 0) {
+                if(effect.getSpeedModifier() < 1) {
+                    spawnParticles(thisCharacter, "frozen.p");
                 }
-                // Handle slows
-                thisCharacter.changeSpeed(effect.getSpeedModifier());
+                
+                if(effect.getDamage() > 0 && effect.getDuration() > 1) {
+                    spawnParticles(thisCharacter, "fire.p");
+                }
+			}
+                
+			effect.startCooldownTimer();
+			// Handle damage
+			thisCharacter.takeDamage(effect.getDamage());
+			if (thisCharacter.getHealthCur() > 0) {
+				thisCharacter.changeSpeed(effect.getSpeedModifier());
+				return;
+			}
+			Double prob = Math.random();
+			if (prob > 0.3) {
+				Corpse corpse = new BasicCorpse(owner.getPosX(),
+						owner.getPosY(), 0);
+				GameManager.get().getWorld().addEntity(corpse);
+			}
+			GameManager.get().getWorld().removeEntity(owner);
+			AbstractEntity creator = effect.getCreator();
+			if (creator != null && creator instanceof Character) {
+				((Character) creator).killAlert(owner);
+			}
+			// Handle slows
+			thisCharacter.changeSpeed(effect.getSpeedModifier());
 
-                // Handle damage reduction, fire rate reduction, etc.
-            }
-        }
+			// Handle damage reduction, fire rate reduction, etc.
+		}
+	}
+    
+    protected void spawnParticles(AbstractEntity entity, String particleFile) {
+        ParticleEffect hitEffect = new ParticleEffect();
+        hitEffect.load(Gdx.files.internal("resources/particles/" + particleFile),
+        Gdx.files.internal("resources/particles/"));
+        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
+        hitEffect.setPosition(position.x, position.y);
+        hitEffect.start();
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, hitEffect);
     }
 
     @Override

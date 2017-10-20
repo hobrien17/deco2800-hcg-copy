@@ -9,14 +9,12 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
@@ -26,6 +24,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.WorldUtil;
 
 
@@ -33,6 +32,7 @@ public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
     private TextureManager textureManager;
     private GameManager gameManager;
+    private SoundManager soundManager;
     
     private List<ImageButton> buttons;
     private ImageButton closeButton;
@@ -48,11 +48,11 @@ public class GeneralRadialDisplay extends Group {
     private float xSize;
     private float ySize;
     
-    private final static float X_SIZE_MAX = 80f;
-    private final static float Y_SIZE_MAX = 80f;
-    private final static int MAX_BTNS = 11;
-    private final static float OUTLINE_SIZE = 350f;
-    private final static float DISTANCE = 165f;
+    private static final float X_SIZE_MAX = 80f;
+    private static final float Y_SIZE_MAX = 80f;
+    private static final int MAX_BTNS = 11;
+    private static final float OUTLINE_SIZE = 350f;
+    private static final float DISTANCE = 165f;
     
     private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 	
@@ -67,6 +67,7 @@ public class GeneralRadialDisplay extends Group {
 		gameManager = GameManager.get();
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
+        soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         this.stage = stage;
 		
         setupSprites();
@@ -124,6 +125,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("sunflower", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantSound();
             	plant(new Seed(Seed.Type.SUNFLOWER));
                 display.remove();
             }
@@ -132,6 +134,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("water", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantLilySound();
             	plant(new Seed(Seed.Type.WATER));
                 display.remove();
             }
@@ -140,6 +143,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("ice", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantSound();
             	plant(new Seed(Seed.Type.ICE));
                 display.remove();
             }
@@ -148,7 +152,8 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("fire", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	plant(new Seed(Seed.Type.FIRE));
+				playPlantSound();
+				plant(new Seed(Seed.Type.FIRE));
                 display.remove();
             }
         });
@@ -156,6 +161,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("explosive", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantSound();
             	plant(new Seed(Seed.Type.EXPLOSIVE));
                 display.remove();
             }
@@ -164,6 +170,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("grass", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+				playPlantSound();
             	plant(new Seed(Seed.Type.GRASS));
                 display.remove();
             }
@@ -286,4 +293,16 @@ public class GeneralRadialDisplay extends Group {
 		return (closestPot.isPresent() && !((Pot)closestPot.get()).isLocked()) || 
 				(closestCorpse.isPresent() && ((Corpse)closestCorpse.get()).isEmpty());
     }
+
+	protected void playPlantSound() {
+		String soundName = "plantingPot";
+		soundManager.stopSound(soundName);
+		soundManager.playSound(soundName);
+	}
+
+	protected void playPlantLilySound() {
+		String soundName = "plantingLily";
+		soundManager.stopSound(soundName);
+		soundManager.playSound(soundName);
+	}
 }

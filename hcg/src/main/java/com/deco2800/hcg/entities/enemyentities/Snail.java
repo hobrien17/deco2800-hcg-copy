@@ -1,6 +1,5 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.lootable.LootWrapper;
@@ -11,6 +10,8 @@ import com.deco2800.hcg.managers.TextureManager;
 import java.util.HashMap;
 
 public class Snail extends Enemy implements Tickable {
+
+    private int spriteCount;
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
      * position.
@@ -21,7 +22,8 @@ public class Snail extends Enemy implements Tickable {
      * @param id the ID of the Snail Enemy
      */
     public Snail(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id, EnemyType.SNAIL);
+        this.boss = false;
         this.setTexture("snail");
         this.level = 1;
         newPos.setX(posX);
@@ -33,15 +35,6 @@ public class Snail extends Enemy implements Tickable {
                 .setCooldown(50)
                 .setTexture("fire_seed")
                 .build();
-
-        // add new tile for poison trail
-        MapProperties mapProperties = new MapProperties();
-        mapProperties.put("name", "newSludge");
-        mapProperties.put("damagetype", "1");
-        mapProperties.put("damage", "1");
-        mapProperties.put("speed", "1.0");
-
-        GameManager.get().getWorld().addTiledMapTileLayer("newSludge", mapProperties);
 
     }
 
@@ -62,9 +55,31 @@ public class Snail extends Enemy implements Tickable {
         TextureManager textureManager = (TextureManager) GameManager.get().getManager(TextureManager.class);
 
         // add tile
-        GameManager.get().getWorld().newTileAtPos((int) prevPos.getX(), (int) prevPos.getY(),
+        GameManager.get().getWorld().newTileAtPos((int) this.getPosX(), (int) this.getPosY(),
                 textureManager.getTexture("poisontile"),
                 (TiledMapTileLayer) GameManager.get().getWorld().getMapLayerWithProperty("name", "newSludge"));
+    }
+
+    public void updateSprite() {
+        if (spriteCount%4 == 0) {
+            switch (this.direction) {
+                case 1:
+                   this.setTexture("snailE");
+                    break;
+                case 2:
+                    this.setTexture("snailN");
+                    break;
+                case 3:
+                    this.setTexture("snailW");
+                    break;
+                case 4:
+                    this.setTexture("snailS");
+                    break;
+                default:
+                    break;
+            }
+        }
+        spriteCount++;
     }
 
     /**
@@ -76,10 +91,11 @@ public class Snail extends Enemy implements Tickable {
         // status should always be 1
         this.setNewPos();//Put new position into Box3D.
         this.setPoisonTrail();//Set poison trail
+        this.setDirection();
         this.detectCollision();//Detect collision.
+        this.updateSprite();
         this.moveAction();//Move enemy to the position in Box3D.
         // Apply any effects that exist on the entity
         myEffects.apply();
-        
     }
 }

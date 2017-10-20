@@ -174,24 +174,26 @@ public class FixedSizeInventory implements Inventory {
 		if (item.isStackable()) {
 			for (int i = 0; i < this.getMaxSize(); i++) {
 				Item currentItem = this.items[i];
-				if (this.allowItemInSlot(currentItem, i)) {
-					if (currentItem == null) {
-						this.items[i] = item;
-						return true;
-					
-					} else if (item.sameItem(currentItem)
-							&& currentItem.addToStack(toAdd)) {
-						return true;
+				if (!this.allowItemInSlot(currentItem, i)) {
+					continue;
+				}
+				
+				if (currentItem == null) {
+					this.items[i] = item;
+					return true;
 
-					} else if (item.sameItem(currentItem)) {
-						toAdd -= currentItem.getMaxStackSize()
-								- currentItem.getStackSize();
-						currentItem.setStackSize(currentItem.getMaxStackSize());
-					}
+				} else if (item.sameItem(currentItem)
+						&& currentItem.addToStack(toAdd)) {
+					return true;
 
-					if (toAdd <= 0) {
-						return true;
-					}
+				} else if (item.sameItem(currentItem)) {
+					toAdd -= currentItem.getMaxStackSize()
+							- currentItem.getStackSize();
+					currentItem.setStackSize(currentItem.getMaxStackSize());
+				}
+
+				if (toAdd <= 0) {
+					return true;
 				}
 			}
 
@@ -247,5 +249,20 @@ public class FixedSizeInventory implements Inventory {
         }
         
         return builder.toString();
+    }
+
+    @Override
+    public int numberOf(String itemName) {
+        int total = 0;
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].getName() == itemName) {
+                if (items[i].isStackable()) {
+                    total += items[i].getStackSize();
+                } else {
+                    total++;
+                }
+            }
+        }
+        return total;
     }
 }

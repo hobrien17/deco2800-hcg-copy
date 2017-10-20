@@ -9,6 +9,11 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.observers.ServerObserver;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +38,7 @@ public class ServerBrowserContext extends UIContext {
     private Image separator2;
     private ScrollPane serverListPane;
     private List<String> serverList;
-    private String servers[];
-    private String refreshedServers[];
+    private Map<String, String> serverMap;
     private Dialog enterServer;
     private TextButton enterServerAdd;
     private TextButton enterServerExit;
@@ -68,14 +72,9 @@ public class ServerBrowserContext extends UIContext {
         addServer = new ImageButton(new Image(textureManager.getTexture("menu_add_button")).getDrawable());
         back = new ImageButton(new Image(textureManager.getTexture("lobby_back_button")).getDrawable());
         
-        
-        servers = new String[20];
-        for (int i = 0; i < 20; i++) {
-            servers[i] = "Server: " + i;
-        }
-        
+        serverMap = new HashMap<>();
         serverList = new List<String>(skin);
-        serverList.setItems(servers);
+		networkManager.refreshLocalServers();
         serverListPane = new ScrollPane(serverList);
         serverListPane.setSmoothScrolling(false);
         serverListPane.setDebug(false);
@@ -134,22 +133,24 @@ public class ServerBrowserContext extends UIContext {
         refresh.addListener(new ChangeListener() {
         	@Override
         	public void changed(ChangeEvent event, Actor actor) {
-        		//function that searches for games hosted on lan
-        		//get the number of servers hosted on lan
-        		//set the number of elements in refreshServers to the number of servers
-        		//check if the number of servers hosted is > 0, else exception/error?
-                refreshedServers = new String[0];
-
-        		for (int i = 0; i < refreshedServers.length; i++) {
-        			refreshedServers[i] = "Server: " + i;
-                    LOGGER.info(refreshedServers[i]);
-                }
-                serverList.setItems(refreshedServers);
-                serverListTable.clear();
-                serverListTable.add(serverListPane).expand().fill();
+        		serverMap.clear();
+        		networkManager.refreshLocalServers();
         	}
         });
         
+        join.addListener(new ChangeListener() {
+        		@Override
+        		public void changed(ChangeEvent event, Actor actor) {
+        			String lobbyName = serverList.getSelected();
+        			String hostName = serverMap.get(lobbyName);
+        			if (hostName == null) {
+        				return;
+        			}
+        			
+        			networkManager.join(hostName);
+        			networkManager.setLobbyName(lobbyName);
+        		}
+        });
 
         addServer.addListener(new ChangeListener() {
             @Override
@@ -182,6 +183,16 @@ public class ServerBrowserContext extends UIContext {
 				networkManager.init(false);
 				networkManager.join(serverIPTextfield.getText());
 			}
+        });
+        
+        networkManager.addServerListener(new ServerObserver() {
+        		@Override
+        		public void notifyServerFound(String lobbyName, String hostName) {
+        			serverMap.put(lobbyName, hostName);
+        	        serverList.setItems(serverMap.keySet().toArray(new String[0]));
+        	        serverListTable.clear();
+        	        serverListTable.add(serverListPane).expand().fill();
+        		}
         });
     }
 

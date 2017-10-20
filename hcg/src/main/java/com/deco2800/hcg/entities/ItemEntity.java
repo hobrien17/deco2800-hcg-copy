@@ -37,23 +37,25 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
 				        String.format("loot%d", MathUtils.random(1, 2)));
 			}
 		}
-		if(this.item.isStackable()) {
-			List<AbstractEntity> otherItems = WorldUtil.allEntitiesToPosition(this.getPosX(), this.getPosY(), 
-					1.5f, ItemEntity.class);
-			for(AbstractEntity other : otherItems) {
-				if (other != this) {
-					ItemEntity otherItem = (ItemEntity)other;
-				
-					if(!this.item.sameItem(otherItem.getItem())) {
-						continue;
-					}
-					
-					if (otherItem.getItem()
-							.addToStack(this.getItem().getStackSize())) {
-						GameManager.get().getWorld().removeEntity(this);
-						break;
-					}
-				}
+		if (!this.item.isStackable()) {
+			return;
+		}
+		List<AbstractEntity> otherItems = WorldUtil.allEntitiesToPosition(
+				this.getPosX(), this.getPosY(), 1.5f, ItemEntity.class);
+		for (AbstractEntity other : otherItems) {
+			if (other == this) {
+				continue;
+			}
+			
+			ItemEntity otherItem = (ItemEntity) other;
+
+			if (!this.item.sameItem(otherItem.getItem())) {
+				continue;
+			}
+
+			if (otherItem.getItem().addToStack(this.getItem().getStackSize())) {
+				GameManager.get().getWorld().removeEntity(this);
+				break;
 			}
 		}
 		

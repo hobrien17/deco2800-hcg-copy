@@ -8,7 +8,6 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Box3D;
 
-
 /**
  * The NPC class is to be implemented by Non-Player Characters (NPC) used in game
  *
@@ -49,6 +48,7 @@ public abstract class NPC extends Character implements Tickable {
         this.contextManager = (ContextManager)GameManager.get().getManager(ContextManager.class);
         this.INITIAL_POSITION = new Box3D(posX, posY, 0, 0, 0, 0);
         setTexture(texture);
+        this.growRender(-0.2f,-0.2f);
         this.conversation = conversation;
         this.faceImage = faceImage;
     }

@@ -2,13 +2,12 @@ package com.deco2800.hcg.entities;
 
 import java.util.*;
 
+import com.deco2800.hcg.entities.enemyentities.Enemy;
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
-import com.deco2800.hcg.entities.Harmable;
-import com.deco2800.hcg.entities.Tickable;
-
 
 /**
  * The Character abstract class is to be extended by all Characters, both
@@ -73,7 +72,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 
     //Kill Log with worlds
     //Main level is a mapping between the world ID to Enemies and their amount of kills
-    private HashMap<Integer,HashMap<Integer, Integer>> killLog;
+    private HashMap<Integer,HashMap<EnemyType, Integer>> killLog;
 
     /**
      * Creates a new Character at the given position.
@@ -198,7 +197,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * 
      * @param health The value to set maximum health to
      */
-    protected void setHealthMax(int health) {
+    public void setHealthMax(int health) {
         if (health < 0) {
             this.healthMax = 0;
         } else {
@@ -304,7 +303,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
     * 
     * @param stamina The value to set maximum stamina to
     */
-    protected void setStaminaMax(int stamina) {
+    public void setStaminaMax(int stamina) {
         if (stamina < 0) {
             this.staminaMax = 0;
         } else {
@@ -319,7 +318,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
     * 
     * @param stamina The value to set current stamina to
     */
-    protected void setStaminaCur(int stamina) {
+    public void setStaminaCur(int stamina) {
         if (stamina < 0) {
             this.staminaCur = 0;
         } else if (stamina > this.staminaMax) {
@@ -449,14 +448,14 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * Add a kill for the specified enemy ID. If it has not being killed before, add it to the kill log and
      * set its kill count to 1.
      *
-     * @param enemyID the unique identifier ID for the enemy.
+     * @param enemyType the type of enemy that was killed.
      */
-    public void killLogAdd(int enemyID) {
+    public void killLogAdd(EnemyType enemyType) {
         //Add the node ID if it has not already being added
         killLog.putIfAbsent(getCurrentNodeID(),new HashMap<>());
         //Add the enemy ID to that world if it has not already being added
-        killLog.get(getCurrentNodeID()).putIfAbsent(enemyID, 0);
-        killLog.get(getCurrentNodeID()).put(enemyID,1 + killLog.get(getCurrentNodeID()).get(enemyID));
+        killLog.get(getCurrentNodeID()).putIfAbsent(enemyType, 0);
+        killLog.get(getCurrentNodeID()).put(enemyType,1 + killLog.get(getCurrentNodeID()).get(enemyType));
         updateQuestLog();
     }
 
@@ -464,14 +463,14 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * Add a kill for the specified enemy ID. If it has not being killed before, add it to the kill log and
      * set its kill count to 1.
      *
-     * @param enemyID the unique identifier ID for the enemy.
+     * @param enemyType the type of enemy that was killed.
      */
-    public void killLogAdd(int enemyID, int nodeID) {
+    public void killLogAdd(EnemyType enemyType, int nodeID) {
         //Add the node ID if it has not already being added
         killLog.putIfAbsent(nodeID,new HashMap<>());
         //Add the enemy ID to that world if it has not already being added
-        killLog.get(nodeID).putIfAbsent(enemyID, 0);
-        killLog.get(nodeID).put(enemyID,1 + killLog.get(nodeID).get(enemyID));
+        killLog.get(nodeID).putIfAbsent(enemyType, 0);
+        killLog.get(nodeID).put(enemyType,1 + killLog.get(nodeID).get(enemyType));
         updateQuestLog();
     }
 
@@ -480,24 +479,24 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * Gets the amount of kills logged for the specified enemy ID in the current Node position
      * If it has not being killed before at the location it returns 0 kills for that enemy.
      *
-     * @param enemyID the unique identifier ID for the enemy.
+     * @param enemyType the type of enemy that was killed.
      * @return The amount of times the specified enemy has being killed in an area.
      */
-    public int killLogGet(int enemyID) {
-        return killLog.getOrDefault(getCurrentNodeID(),new HashMap<>()).getOrDefault(enemyID,0);
+    public int killLogGet(EnemyType enemyType) {
+        return killLog.getOrDefault(getCurrentNodeID(),new HashMap<>()).getOrDefault(enemyType,0);
     }
 
     /**
      * Gets the amount of kills logged for the specified enemy ID for all Node positions
      * If it has not being killed before at the location it returns 0 kills for that enemy.
      *
-     * @param enemyID the unique identifier ID for the enemy.
+     * @param enemyType the type of enemy that was killed.
      * @return The amount of times the specified enemy has being killed by the character.
      */
-    public int killLogGetTotal(int enemyID) {
+    public int killLogGetTotal(EnemyType enemyType) {
         int total = 0;
         for (int NodeID: killLog.keySet()) {
-            total += killLog.get(NodeID).getOrDefault(enemyID,0);
+            total += killLog.get(NodeID).getOrDefault(enemyType,0);
         }
         return total;
     }
@@ -506,13 +505,13 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * Gets the amount of kills logged for the specified enemy ID in the specified Node position
      * If it has not being killed before at the location it returns 0 kills for that enemy.
      *
-     * @param enemyID the unique identifier ID for the enemy.
+     * @param enemyType the type of enemy that was killed.
      * @param nodeID the specified node to get from
      * @return The amount of times the specified enemy has being killed in the kill log.
      */
-    public int killLogGet(int enemyID,int nodeID) {
+    public int killLogGet(EnemyType enemyType,int nodeID) {
         if (killLog.containsKey(nodeID)) {
-            return killLog.get(nodeID).getOrDefault(enemyID,0);
+            return killLog.get(nodeID).getOrDefault(enemyType,0);
         }
         return 0;
     }
@@ -521,12 +520,12 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * Used to determine if a particular enemy type has being killed in any of the nodes.
      * More useful for determining if bosses or the like have being killed.
      *
-     * @param enemyID the unique identifier ID for the enemy.
+     * @param enemyType the type of enemy that was killed.
      * @return if the specified enemy has being killed before.
      */
-    public boolean killLogContainsTotal(int enemyID) {
+    public boolean killLogContainsTotal(EnemyType enemyType) {
         for (Integer worldID: killLog.keySet()) {
-            if (killLog.get(worldID).containsKey(enemyID)) {
+            if (killLog.get(worldID).containsKey(enemyType)) {
                 return true;
             }
         }
@@ -537,22 +536,22 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * Used to determine if a particular enemy type has being killed at the current node.
      * More useful for determining if bosses or the like have being killed.
      *
-     * @param enemyID the unique identifier ID for the enemy.
+     * @param enemyType the type of enemy that was killed.
      * @return if the specified enemy has being killed before.
      */
-    public boolean killLogContains(int enemyID) {
-        return killLog.get(getCurrentNodeID()).containsKey(enemyID);
+    public boolean killLogContains(EnemyType enemyType) {
+        return killLog.get(getCurrentNodeID()).containsKey(enemyType);
     }
 
     /**
      * Used to determine if a particular enemy type has being killed at the specified node ID.
      * More useful for determining if bosses or the like have being killed.
      *
-     * @param enemyID the unique identifier ID for the enemy.
+     * @param enemyType the type of enemy that was killed.
      * @return if the specified enemy has being killed before.
      */
-    public boolean killLogContains(int enemyID, int nodeID) {
-        return killLog.get(nodeID).containsKey(enemyID);
+    public boolean killLogContains(EnemyType enemyType, int nodeID) {
+        return killLog.get(nodeID).containsKey(enemyType);
     }
 
     /**
@@ -568,6 +567,18 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      */
     private int getCurrentNodeID() {
         return GameManager.get().getCurrentNode().getNodeID();
+    }
+
+    /**
+     * Triggered when an AbstractEntity has died as the result of an effect caused by this character.
+     *
+     * @param victim the character that has died.
+     */
+    public void killAlert(AbstractEntity victim) {
+        if (victim instanceof Enemy) {
+            Enemy enemyVictim = (Enemy) victim;
+            this.killLogAdd(enemyVictim.getEnemyType());
+        }
     }
 
     @Override

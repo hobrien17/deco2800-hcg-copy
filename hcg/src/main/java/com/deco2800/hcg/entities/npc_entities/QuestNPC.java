@@ -1,8 +1,5 @@
 package com.deco2800.hcg.entities.npc_entities;
 
-import java.util.List;
-import java.util.Random;
-
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -12,6 +9,9 @@ import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Concrete class of a Quest NPC entity
@@ -28,17 +28,21 @@ public class QuestNPC extends NPC {
 	private float goalY;
 	private int moveDirection; // defaults to 0
 	private float speed; // defaults to 1
+	private String texture;
 
 	private PathfindingThread pathfinder;
 	private Thread thread;
 	private List<Point> path;
 	private Boolean astarDebug = true;
 
-	private ConversationManager conversationManager;
+	private ConversationManager conversationManager = (ConversationManager) GameManager.get()
+			.getManager(ConversationManager.class);
 	private TimeManager timemanager = (TimeManager) GameManager.get()
 			.getManager(TimeManager.class);
 	private PlayerManager playerManager = (PlayerManager) GameManager.get()
 			.getManager(PlayerManager.class);
+
+	private String relationship;
 
 	/**
 	 * Constructs a new Quest NPC
@@ -64,14 +68,31 @@ public class QuestNPC extends NPC {
 		this.boundaryY = 10;
 		this.moveDirection = 0;
 		this.speed = 0.02f;
-		this.conversationManager = new ConversationManager();
+		this.relationship = conversationManager.getDefaultRelationship(this.getConversation());
+		this.texture = texture;
 
 		this.setGoal(posX, posY);
 	}
 
 	public void interact() {
-		conversationManager.startConversation(this.getConversation(),
-				this.getFaceImage());
+		conversationManager.startConversation(this, this.getConversation());
+	}
+
+	/**
+	 * Get the NPC's current relationship state
+	 * Be aware this can change mid-conversation!
+	 * @return relationship state String
+	 */
+	public String getRelationship(){
+		return relationship;
+	}
+
+	/**
+	 * Set the NPC's relationship state
+	 * @param relationship new relationship state String
+	 */
+	public void setRelationship(String relationship){
+		this.relationship = relationship;
 	}
 
 	/**
@@ -219,6 +240,9 @@ public class QuestNPC extends NPC {
 
 			/* Apply these values to the entity */
 			if (!collided() && !detectPlayer()) {
+				//Set Appropriate texture relative to player movement direction
+				this.setCompassTexture(deltaX, deltaY);
+
 				this.setPosX(newX);
 				this.setPosY(newY);
 			}
@@ -245,6 +269,51 @@ public class QuestNPC extends NPC {
 
 		thread = new Thread(pathfinder);
 		thread.start();
+	}
+
+	/**
+	 * Set the appropriate compass direction texture with respect to movement.
+	 * @param deltaX x-Direction value
+	 * @param deltaY y-Direction value
+	 */
+	private void setCompassTexture(float deltaX, float deltaY) {
+		double angle = Math.atan2(deltaY, deltaX) * 180 / 3.14159f;
+
+		//0 is SouthWest
+
+		if (angle >= -67.5f && angle <= -22.5f) {
+			//South
+			this.setTexture(this.texture + "_South");
+
+		} else if (angle >= 22.5f && angle < 67.5) {
+			//West
+			this.setTexture(this.texture + "_West");
+
+		} else if (angle >= 112.5f && angle <= 157.5f) {
+			//North
+			this.setTexture(this.texture + "_North");
+
+		} else if (angle >= -157.5f && angle <= -112.5f) {
+			//East
+			this.setTexture(this.texture + "_East");
+
+		} else if (angle >= 67.5f && angle <= 112.5f) {
+			//North West
+			this.setTexture(this.texture + "_NorthWest");
+
+		} else if (angle >= -22.5f && angle < 22.5f) {
+			//South West
+			this.setTexture(this.texture + "_SouthWest");
+
+		} else if (angle >= -112.5f && angle <= -67.5f) {
+			//South East
+			this.setTexture(this.texture + "_SouthEast");
+
+		} else if (angle >= 157.5f || angle <= -157.5f) {
+			//North East
+			this.setTexture(this.texture + "_NorthEast");
+
+		}
 	}
 
 }

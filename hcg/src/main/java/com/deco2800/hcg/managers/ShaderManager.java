@@ -1,6 +1,5 @@
 package com.deco2800.hcg.managers;
 
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -204,7 +203,7 @@ public class ShaderManager extends Manager implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         int time = (int) (float) arg;
-        //((StopwatchManager) o).onTick(time);
+
     }
 
 }

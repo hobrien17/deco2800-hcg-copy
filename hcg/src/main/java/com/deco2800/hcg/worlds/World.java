@@ -50,6 +50,8 @@ public class World {
 
 	//Store Collisions
 	protected Array2D<List<AbstractEntity>> collisionMap;
+	
+	public static final World SAFEZONE = new World("resources/maps/maps/grass_safeZone_02.tmx");
 
 	/**
 	 * Empty abstract world, for testing
@@ -83,13 +85,13 @@ public class World {
 		// attempt to load the given file
 		try {
 			if ("test".equals(file)){ // for WorldTest
-				file = "resources/maps/maps/initial-map-test.tmx";
+				file = "resources/maps/maps/test.tmx";
 			}
 			this.map = new TmxMapLoader().load(file);
 			loadedFile = file;
 
 		} catch (Exception e) {
-			LOGGER.error(e.toString());
+			LOGGER.error(String.valueOf(e));
 			return;
 		}
 
@@ -188,8 +190,7 @@ public class World {
 
 					// otherwise, our entity is definately in our enum! so call
 					// in the spawn method
-					this.addEntity(WorldEntities.valueOf(layerName).spawn(x, y,
-							i + 1));
+					this.addEntity(WorldEntities.valueOf(layerName).spawn(x, y, i + 1));
 
 				}
 
@@ -203,6 +204,17 @@ public class World {
 			map.getLayers().remove(layer);
 
 		}
+
+        // add new tile for poison trail
+        MapProperties mapProperties = new MapProperties();
+        mapProperties.put("name", "newSludge");
+        mapProperties.put("damagetype", "1");
+        mapProperties.put("damage", "1");
+        mapProperties.put("speed", "1.0");
+
+        this.addTiledMapTileLayer("newSludge", mapProperties);
+
+        this.generatePuddles();
 
 	}
 
@@ -234,6 +246,7 @@ public class World {
 		try {
 			return this.collisionMap.get(x, y);
 		} catch (IndexOutOfBoundsException e) {
+			LOGGER.error("Invalid Tile Coordinate", e);
 			throw new IndexOutOfBoundsException("Invalid tile coordinate.");
 		}
 	}
@@ -563,8 +576,8 @@ public class World {
     TextureManager textureManager = (TextureManager) 
         GameManager.get().getManager(TextureManager.class);
     
-    String layerName = "";
-    String texture = "";
+    String layerName;
+    String texture;
     
     switch(this.weather) {
       case RAIN:
@@ -600,15 +613,15 @@ public class World {
     for (int i = 0; i < 200; i++) {
       
       // pick a random pair of numbers  
-      int X = 5 + rand.nextInt(this.getWidth() - 10);
-      int Y = 5 + rand.nextInt(this.getLength() - 10);
+      int posX = 5 + rand.nextInt(this.getWidth() - 10);
+      int posY = 5 + rand.nextInt(this.getLength() - 10);
 
       Boolean success = true;
       List<String> tilesSuccess = new ArrayList<String>(10 * 10);
       
       // check that we have chosen a valid tile (i.e. enough space around it
-      for (int x = X - 5; x < X + 5; x++) {
-        for (int y = Y - 5; y < Y + 5; y++) {
+      for (int x = posX - 5; x < posX + 5 && (success); x++) {
+        for (int y = posY - 5; y < posY + 5; y++) {
           if (this.getTiledMapTileLayerAtPos(y, x) == null) {
             success = false;
             break;
@@ -618,18 +631,15 @@ public class World {
             break;
             
           } else {
-            // make sure we aren't on an exit tile! this would be bad
-            if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("name") != null) {
-              if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("name").equals("exit")) {
-                success = false;
-                break;
-              }
-              // we don't want to be on deep water either
-              if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("name").equals("deep-water")) {
-                success = false;
-                break;
-              }
-
+            // make sure we aren't on an exit tile! this would be bad. same as water tiles
+            String name = (String) this.getTiledMapTileLayerAtPos(y, x).getProperties().get("name");
+            
+            if (name != null && ("exit".equals(name) || "water-deep".equals(name) || 
+                  "water-shallow".equals(name))) {
+              
+              success = false;
+              break;
+              
             }
             // make sure we aren't on an damage tile either
             if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("damage") != null) {
@@ -644,16 +654,13 @@ public class World {
 
             tilesSuccess.add(String.format("%d,%d", y, x));
           }
-          
-        }
-        if (!success) {
-          break;
+
         }
       }
       
       if (success) {
         // add tile
-        this.newTileAtPos((int) X, (int) Y, textureManager.getTexture(texture),
+        this.newTileAtPos((int) posX, (int) posY, textureManager.getTexture(texture),
            (TiledMapTileLayer) this.getMapLayerWithProperty("name", layerName));
         
         // add to successful blocks created. If we've made enough then break

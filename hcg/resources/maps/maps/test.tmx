@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="147">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="10" height="10" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="147">
  <properties>
   <property name="PlayerX" value="5"/>
   <property name="PlayerY" value="5"/>
  </properties>
- <tileset firstgid="1" source="../tiles/general-tiles.tsx"/>
- <tileset firstgid="11" source="../tiles/icesparkle.tsx"/>
- <tileset firstgid="18" source="../tiles/lava-animated.tsx"/>
+ <tileset firstgid="1" source="../tiles/deprecated/general-tiles.tsx"/>
+ <tileset firstgid="11" source="../tiles/deprecated/icesparkle.tsx"/>
+ <tileset firstgid="18" source="../tiles/volcanic_lava_animated.tsx"/>
  <tileset firstgid="26" source="../tiles/spikes-large.tsx"/>
  <tileset firstgid="27" source="../tiles/spikes.tsx"/>
- <tileset firstgid="28" source="../tiles/sludgebubbling.tsx"/>
- <tileset firstgid="36" source="../tiles/placeholder.tsx"/>
+ <tileset firstgid="28" source="../tiles/any_sludge_animated.tsx"/>
+ <tileset firstgid="36" source="../tiles/deprecated/placeholder.tsx"/>
  <layer name="tile" width="10" height="10">
   <properties>
    <property name="name" value="grass"/>

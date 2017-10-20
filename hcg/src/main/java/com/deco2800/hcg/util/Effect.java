@@ -1,5 +1,7 @@
 package com.deco2800.hcg.util;
 
+import com.deco2800.hcg.entities.AbstractEntity;
+
 /**
  * An effect class to store all the properties of an effect. Effects may be added to an Effects container which
  * each harmable entity has.
@@ -18,6 +20,7 @@ public class Effect {
     private int delay;          // delay until effect is ready for use (in ms)
     private long cooldownTimer; // timer used to keep track of whether effect is on ready to be used
     private float speedModifier;  // amount (in percentage) of slow to apply. 0 is none, 1 is 100% slow effect
+    private AbstractEntity creator; // the character that gave the effect to this owner.
 
     /**
      * Creates a new Effect with the given properties.
@@ -36,7 +39,7 @@ public class Effect {
      * @throws NullPointerException if name is null.
      * @throws IllegalArgumentException if an argument is not valid.
      */
-    public Effect(String name, int level, int damage, float speedModifier, int cooldown, int duration, int delay) {
+    public Effect(String name, int level, int damage, float speedModifier, int cooldown, int duration, int delay, AbstractEntity creator) {
         // Check for valid arguments
         if (name == null) {
             throw new NullPointerException("Effect name cannot be null.");
@@ -74,6 +77,7 @@ public class Effect {
 
         // Set the cooldown timer based on the supplied delay value
         this.cooldownTimer = System.currentTimeMillis() - (cooldown - delay);
+        this.creator = creator;
 
         resetUseCounter();
     }
@@ -178,6 +182,15 @@ public class Effect {
      */
     public float getSpeedModifier() {
         return speedModifier;
+    }
+
+    /**
+     * Returns the creator.
+     *
+     * @return Returns a Character denoting the effect creator.
+     */
+    public AbstractEntity getCreator() {
+        return creator;
     }
 
     /**

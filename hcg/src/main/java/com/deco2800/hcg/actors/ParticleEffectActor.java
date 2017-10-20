@@ -1,9 +1,13 @@
 package com.deco2800.hcg.actors;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.managers.GameManager;
 import com.badlogic.gdx.graphics.g2d.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +15,7 @@ import com.badlogic.gdx.Gdx;
 
 public class ParticleEffectActor extends Actor {
 	Map<ParticleEffect, Boolean> effects;
+	Map<AbstractEntity, ArrayList<ParticleEffect>> entityEffects;
 	SpriteBatch batch;
 
 	/**
@@ -19,6 +24,7 @@ public class ParticleEffectActor extends Actor {
 	public ParticleEffectActor() {
 		super();
 		effects = new HashMap<>();
+		entityEffects = new HashMap<>();
 	}
 	
 	/**
@@ -40,6 +46,11 @@ public class ParticleEffectActor extends Actor {
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.draw(batch);
 		}
+		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
+        	for(ParticleEffect effect : entry.getValue()) {
+        	    effect.draw(batch);
+            }
+		}
 	}
 
 	/**
@@ -52,6 +63,14 @@ public class ParticleEffectActor extends Actor {
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.update(delta);
 		}
+		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
+		    Vector3 position = GameManager.get().worldToScreen(
+                    new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
+		    for(ParticleEffect effect: entry.getValue())  {
+                effect.setPosition(position.x, position.y);
+                effect.update(delta);
+		    }
+		}
 	}
 
 	/**
@@ -62,7 +81,22 @@ public class ParticleEffectActor extends Actor {
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.allowCompletion();
 		}
+		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
+		    for(ParticleEffect effect : entry.getValue()) {
+		        effect.allowCompletion();
+		    }
+        }
 	}
+	
+	public void add(AbstractEntity entity, ParticleEffect effect) {
+	    if(entityEffects.containsKey(entity)) {
+	        entityEffects.get(entity).add(effect);
+	    } else {
+            ArrayList<ParticleEffect> effects = new ArrayList<>();
+            effects.add(effect);
+            entityEffects.put(entity, effects);
+	    }
+    }
 
 	/**
 	 * Renders all particle effects
@@ -82,6 +116,21 @@ public class ParticleEffectActor extends Actor {
 				entry.getKey().dispose();
 			}
 		}
+		
+		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
+            Vector3 position = GameManager.get().worldToScreen(
+                    new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
+            for(ParticleEffect effect : entry.getValue()) {
+                effect.setPosition(position.x, position.y);
+    		    effect.update(Gdx.graphics.getDeltaTime());
+                effect.draw(batch);
+    
+                if(effect.isComplete()) {
+                    effect.dispose();
+                    entry.getValue().remove(effect);
+                }
+            }
+        }
 		
 		batch.end();
 	}

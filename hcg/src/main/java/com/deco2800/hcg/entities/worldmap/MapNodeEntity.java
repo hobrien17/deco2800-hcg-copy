@@ -28,7 +28,7 @@ public class MapNodeEntity extends Actor {
 	 *
 	 * @param node the node to render
 	 */
-    public MapNodeEntity(MapNode node) {
+    public MapNodeEntity(MapNode node, WorldMap currentWorld) {
 
         this.node = node;
         GameManager gameManager = GameManager.get();
@@ -36,14 +36,14 @@ public class MapNodeEntity extends Actor {
 
         // Assigns the correct texture based on node type
 
-		updateTexture();
-
-		// pixels padding around each direction of the map
-		int mapPadding = 50;
+		updateTexture(currentWorld);
 
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
         int viewPortY = Gdx.graphics.getHeight();
+        
+        // pixels padding around each direction of the map
+        int mapPadding = (int) (0.05 * viewPortX);
 
         // Calculates the spacing between cells
         int renderableColWidth = (viewPortX - mapPadding) / gameManager.getWorldMap().getWorldColumns();
@@ -64,18 +64,46 @@ public class MapNodeEntity extends Actor {
 	/**
 	 * Checks the current nodeType in the parent node of this MapNodeEntity, and updates the stored texture to reflect.
 	 */
-	public void updateTexture(){
-		switch (node.getNodeType()) {
-			case 0: nodeTexture = textureManager.getTexture("safe_node");
-				break;
-			case 1: nodeTexture = textureManager.getTexture("discovered_node");
-				break;
-			case 2: nodeTexture = textureManager.getTexture("completed_node");
-				break;
-			case 3: nodeTexture = textureManager.getTexture("fungi_node");
-				break;
-			default: // This shouldn't happen, but catch all if it does.
-				nodeTexture = textureManager.getTexture("discovered_node");
+	public void updateTexture(WorldMap currentWorld){
+		if(currentWorld.getWorldType() == 1) {
+			switch (node.getNodeType()) {
+				case 0: nodeTexture = textureManager.getTexture("safe_node");
+					break;
+				case 1: nodeTexture = textureManager.getTexture("discovered_node");
+					break;
+				case 2: nodeTexture = textureManager.getTexture("completed_node");
+					break;
+				case 3: nodeTexture = textureManager.getTexture("fungi_node");
+					break;
+				default: // This shouldn't happen, but catch all if it does.
+					nodeTexture = textureManager.getTexture("discovered_node");
+			}
+		} else if(currentWorld.getWorldType() == 2) {
+			switch (node.getNodeType()) {
+				case 0: nodeTexture = textureManager.getTexture("forest_safe_node");
+					break;
+				case 1: nodeTexture = textureManager.getTexture("forest_discovered_node");
+					break;
+				case 2: nodeTexture = textureManager.getTexture("forest_completed_node");
+					break;
+				case 3: nodeTexture = textureManager.getTexture("forest_boss_node");
+					break;
+				default: // This shouldn't happen, but catch all if it does.
+					nodeTexture = textureManager.getTexture("discovered_node");
+			}
+		} else {
+			switch (node.getNodeType()) {
+				case 0: nodeTexture = textureManager.getTexture("waste_safe_node");
+					break;
+				case 1: nodeTexture = textureManager.getTexture("waste_discovered_node");
+					break;
+				case 2: nodeTexture = textureManager.getTexture("waste_completed_node");
+					break;
+				case 3: nodeTexture = textureManager.getTexture("waste_boss_node");
+					break;
+				default: // This shouldn't happen, but catch all if it does.
+					nodeTexture = textureManager.getTexture("discovered_node");
+			}
 		}
 	}
 	
