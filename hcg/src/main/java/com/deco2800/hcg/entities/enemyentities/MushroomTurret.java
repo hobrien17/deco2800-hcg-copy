@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.enemyentities;
 
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
@@ -28,9 +29,9 @@ public class MushroomTurret extends Enemy implements Observer {
      * @param ID the ID of the MushroomTurret Enemy
      */
     public MushroomTurret(float posX, float posY, float posZ, int ID) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID);
+        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, ID, EnemyType.MUSHROOMTURRET);
         this.boss = false;
-        this.setTexture("mushroom");
+        this.setTexture("mushroom0");
         this.level = 1;
         seconds = 0;
         range = 15 * this.level;
@@ -38,13 +39,9 @@ public class MushroomTurret extends Enemy implements Observer {
         manager.addObserver(this);
         healthMax = 20;
         healthCur = healthMax;
-        // weapon not working
-        this.enemyWeapon = new WeaponBuilder()
-                .setWeaponType(WeaponType.MACHINEGUN)
-                .setUser(this)
-                .setCooldown(50)
-                .setTexture("battle_seed")
-                .build();
+        this.enemyWeapon = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(this)
+                .setArc((float) Math.PI * 7 / 4).setPellets(8).setCooldown(30).setTexture("blank").build();
+        enemyWeapon.updatePosition(new Vector3(this.getPosX(), this.getPosY(), this.getPosZ()));
     }
 
     @Override
@@ -67,7 +64,10 @@ public class MushroomTurret extends Enemy implements Observer {
      * Creates 8 bullets and shoots them in different directions.
      */
     public void turretShoot() {
-        Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+        Vector3 position = new Vector3(this.getPosX() + 1, this.getPosY() + 1, 0);
+        enemyWeapon.updateAim(position);
+        enemyWeapon.openFire();
+        /*Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 this.getPosX() + range, this.getPosY(), this.getPosZ(), this, 1);
         GameManager.get().getWorld().addEntity(bullet1);
         Bullet bullet2 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
@@ -90,7 +90,11 @@ public class MushroomTurret extends Enemy implements Observer {
         GameManager.get().getWorld().addEntity(bullet7);
         Bullet bullet8 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet8);
+        GameManager.get().getWorld().addEntity(bullet8);*/
+    }
+    
+    protected void stopShooting() {
+        enemyWeapon.ceaseFire();
     }
 
     /**
@@ -103,20 +107,29 @@ public class MushroomTurret extends Enemy implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
+        if(!GameManager.get().getWorld().containsEntity(enemyWeapon)) {
+            GameManager.get().getWorld().addEntity(enemyWeapon);            
+        }
         switch (seconds%6){
             case 0: // set turret phase 1
-                this.setTexture("mushroom");
+                this.stopShooting();
+                this.setTexture("mushroom1");
                 break;
             case 1: // set turret phase 2
+                this.setTexture("mushroom2");
                 break;
             case 2: // set turret phase 3
+                this.setTexture("mushroom3");
                 break;
             case 3: // set turret phase 4
-                this.setTexture("tower");
+                this.setTexture("mushroom4");
                 break;
             case 4: // set turret phase 5
-                this.turretShoot();
+                this.setTexture("mushroom5");
                 break;
+            case 5:
+                this.setTexture("mushroom0");
+                this.turretShoot();
             default:
                 break;
 

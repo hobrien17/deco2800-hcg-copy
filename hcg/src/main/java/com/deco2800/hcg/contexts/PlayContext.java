@@ -1,14 +1,11 @@
 package com.deco2800.hcg.contexts;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.deco2800.hcg.managers.*;
-import com.deco2800.hcg.multiplayer.LevelEndMessage;
-import com.deco2800.hcg.multiplayer.LevelStartMessage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
@@ -32,7 +29,24 @@ import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-import com.deco2800.hcg.renderers.Render3D;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.MessageManager;
+import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
+import com.deco2800.hcg.managers.PlantManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.ShaderManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.managers.WeatherManager;
+import com.deco2800.hcg.managers.WorldManager;
+import com.deco2800.hcg.multiplayer.LevelEndMessage;
+import com.deco2800.hcg.renderers.Render3DLights;
 import com.deco2800.hcg.renderers.Renderer;
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -44,6 +58,7 @@ public class PlayContext extends Context {
     // Managers used by the game
     private GameManager gameManager;
     private WeatherManager weatherManager;
+    private ParticleEffectManager particleManager;
     private ContextManager contextManager;
     private MessageManager messageManager;
     private TextureManager textureManager;
@@ -69,7 +84,7 @@ public class PlayContext extends Context {
      * Check the documentation for each renderer to see how it handles WorldEntity
      * coordinates
      */
-    private Renderer renderer = new Render3D();
+    private Renderer renderer = new Render3DLights();
 
     // Stage and actors for game UI
     // TODO Game UI should probably be moved to a separate file
@@ -91,6 +106,7 @@ public class PlayContext extends Context {
     private ShaderProgram shader;
     private ShaderProgram postShader;
     private boolean useShaders = true;
+    private boolean exitDisplayed = false;
 
     private Window exitWindow;
 
@@ -106,6 +122,7 @@ public class PlayContext extends Context {
         // Set up managers for this game
         gameManager = GameManager.get();
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
+        particleManager = (ParticleEffectManager) gameManager.getManager(ParticleEffectManager.class);
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
@@ -146,6 +163,7 @@ public class PlayContext extends Context {
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
 
+        stage.addActor(particleManager.getActor());
         stage.addActor(chatStack);
         chatStack.setVisible(false);
         stage.addActor(clockDisplay);
@@ -368,7 +386,7 @@ public class PlayContext extends Context {
     		potUnlock.close();
     	}
         if(keycode == Input.Keys.M) {
-            contextManager.pushContext(new WorldMapContext());
+            contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
             soundManager.stopWeatherSounds();
         } else if(keycode == Input.Keys.N) {
             useShaders = !useShaders;
@@ -379,9 +397,19 @@ public class PlayContext extends Context {
 		} else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.T) {
-			chatStack.setVisible(!chatStack.isVisible());
-		}
+            chatStack.setVisible(!chatStack.isVisible());
+        } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
+            exit();
+        }
 	}
+
+	private void exit() {
+    	if (networkManager.isMultiplayerGame()) {
+		networkManager.queueMessage(new LevelEndMessage(0));
+    	}
+    	worldManager.completeLevel();
+    	exitDisplayed = false;
+    }
 
     private void createExitWindow() {
         exitWindow = new Window("Complete Level?", skin);
@@ -392,10 +420,7 @@ public class PlayContext extends Context {
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	if (networkManager.isMultiplayerGame()) {
-				networkManager.queueMessage(new LevelEndMessage(0));
-			}
-            	worldManager.completeLevel();
+            	exit();
             }
         });
         exitWindow.add(yesButton);
@@ -408,12 +433,14 @@ public class PlayContext extends Context {
         if(exitWindow.getStage() == null) {
             /* Add the window to the stage */
             stage.addActor(exitWindow);
+            exitDisplayed = true;
             soundManager.pauseWeatherSounds();
         }
     }
 
     public void removeExitWindow() {
         exitWindow.remove();
+        exitDisplayed = false;
         soundManager.unpauseWeatherSounds();
     }
 

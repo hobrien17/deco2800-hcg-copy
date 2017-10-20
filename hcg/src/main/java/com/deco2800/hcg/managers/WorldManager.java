@@ -89,13 +89,13 @@ public class WorldManager extends Manager {
         if(gameManager.getCurrentNode().getNodeType() != 3) {
             gameManager.getCurrentNode().changeNodeType(2);
             if (gameManager.getMapContext() != null) {
-                gameManager.getMapContext().updateMapDisplay();
+                gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
             }
             contextManager.popContext();
         } else {
             gameManager.getCurrentNode().changeNodeType(2);
             if (gameManager.getMapContext() != null) {
-                gameManager.getMapContext().updateMapDisplay();
+                gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
             }
             gameManager.getMapContext().addEndOfContext();
             contextManager.popContext();
@@ -103,6 +103,8 @@ public class WorldManager extends Manager {
         // clear old observers (mushroom turret for example)
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.deleteObservers();
+        
+        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();
 
         // stop the old weather effects
         ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();

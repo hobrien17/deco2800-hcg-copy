@@ -22,12 +22,14 @@ public class Hardcor3Gard3ning extends Game {
     private TextureManager textureManager;
     private TimeManager timeManager;
     private WeatherManager weatherManager;
+    private ParticleEffectManager particleManager;
 	private InputManager inputManager;
 	private PlantManager plantManager;
 	private ItemManager itemManager;
 	private StopwatchManager stopwatchManager;
 	private NetworkManager networkManager;
 	private CommandManager commandManager;
+	private ShaderManager shaderManager;
 	private WorldManager worldManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
@@ -58,6 +60,9 @@ public class Hardcor3Gard3ning extends Game {
         /* Create a weather manager. */
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
 
+        /* Create a particle effect manager. */
+        particleManager = (ParticleEffectManager) gameManager.getManager(ParticleEffectManager.class);
+        
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
         
@@ -77,10 +82,13 @@ public class Hardcor3Gard3ning extends Game {
         
         /* Create a command manager */
         commandManager = (CommandManager) gameManager.getManager(CommandManager.class);
-        
+
+
+        /* Create a command manager */
+        shaderManager = (ShaderManager) gameManager.getManager(ShaderManager.class);
+
         /* Create a world manager */
         worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
-        
         // add echo command
         // note args[0] is the command name, not the first argument
         commandManager.registerCommand("echo", new CommandManager.Command() {
@@ -99,9 +107,29 @@ public class Hardcor3Gard3ning extends Game {
 				return "weather stoped";
 			}
 		});
-        
+
+        commandManager.registerCommand("shader", new CommandManager.Command() {
+            @Override
+            public String run(String... args) {
+                if (args[1].equals("set")) {
+                    if (args[2].equals("contrast")) {
+                        shaderManager.setOvercast(Float.parseFloat(args[3]));
+                        return "Success!";
+                    }
+                } else if (args[1].equals("get")) {
+
+                } else {
+                    return "Invalid option";
+                }
+                return args[1];
+            }
+        });
+
+        // Procedurally generate the world map and store it.
+
+
         worldManager.generateAndSetWorldStack();
-        
+
         contextManager.pushContext(new MainMenuContext());
     }
 

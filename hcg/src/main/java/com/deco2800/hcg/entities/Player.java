@@ -1,10 +1,26 @@
 package com.deco2800.hcg.entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.buffs.Perk;
-import com.deco2800.hcg.contexts.*;
+import com.deco2800.hcg.contexts.CharacterStatsContext;
+import com.deco2800.hcg.contexts.DeathContext;
+import com.deco2800.hcg.contexts.LevelUpContext;
+import com.deco2800.hcg.contexts.PerksSelectionScreen;
+import com.deco2800.hcg.contexts.PlayContext;
+import com.deco2800.hcg.contexts.PlayerInventoryContext;
+import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
@@ -19,7 +35,16 @@ import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
-import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.items.stackable.SpeedPotion;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.ConversationManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
@@ -29,10 +54,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 /**
  * Entity for the playable character.
@@ -170,17 +191,19 @@ public class Player extends Character implements Tickable {
 
 		// Add weapons to inventory
 		Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN).setUser(this).setRadius(0.7).build();
-		Weapon starfall = new WeaponBuilder().setWeaponType(WeaponType.STARFALL).setUser(this).setRadius(0.7).build();
+		Weapon stargun = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(this).setRadius(0.7).build();
 		Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
 				.build();
-		Weapon grenadelauncher = new WeaponBuilder().setWeaponType(WeaponType.GRENADELAUNCHER).setUser(this)
-				.setRadius(0.7).build();
+		Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(this).setRadius(0.7)
+		        .setArc((float) Math.PI / 2f).setPellets(9).build();
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
-		equippedItems.addItem(new WeaponItem(grenadelauncher, "Grenade Launcher", 10));
-		equippedItems.addItem(new WeaponItem(starfall, "Starfall", 10));
+		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
+		equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
+		equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
 
-		//REMOVE THIS - JUST ADDED FOR TESTING
+		//Add some default items
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new SpeedPotion());
 	}
 
 	/**
@@ -353,8 +376,7 @@ public class Player extends Character implements Tickable {
     	    // for that because we don't need it.
 			Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
 			this.getEquippedWeapon().updateAim(position);
-			// TODO: remove
-			this.getEquippedWeapon().updatePosition(position.x, position.y);
+			this.getEquippedWeapon().updatePosition(position);
     	  } catch (Exception e) {LOGGER.error(String.valueOf(e));}
 		}
 		lastMouseX = screenX;
@@ -377,8 +399,6 @@ public class Player extends Character implements Tickable {
 		if (this.getEquippedWeapon() != null) {
 			this.getEquippedWeapon().ceaseFire();
 		}
-	    lastMouseX = screenX;
-	    lastMouseY = screenY;
 	}
 
 	/**
@@ -392,11 +412,10 @@ public class Player extends Character implements Tickable {
 	private void handleMouseMoved(int screenX, int screenY) {
 		if (this.getEquippedWeapon() != null) {
 			Vector3 position = GameManager.get().screenToWorld(screenX, screenY);
-			// TODO: remove
-			this.getEquippedWeapon().updatePosition(position.x, position.y);
+			this.getEquippedWeapon().updatePosition(position);
 		}
-	    lastMouseX = screenX;
-	    lastMouseY = screenY;
+        lastMouseX = screenX;
+        lastMouseY = screenY;
 	}
 
 	/**
@@ -514,8 +533,12 @@ public class Player extends Character implements Tickable {
 			// set the layer, and get the speed of the tile on the layer. Also
 			// name for logging.
 			layer = world.getTiledMapTileLayerAtPos((int) oldPosY, (int) oldPosX);
-			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
-
+			if (layer.getProperties().get("speed") != null) {
+			  speed = Float.parseFloat((String) layer.getProperties().get("speed"));
+			} else {
+			  speed = 1.0f;
+			}
+			
 			// see if current tile is a Gateway
 			if (layer.getProperties().get("PlayerX") != null && layer.getProperties().get("PlayerY") != null) {
 				oldPosX = Float.parseFloat((String) layer.getProperties().get("PlayerX"));
@@ -534,7 +557,6 @@ public class Player extends Character implements Tickable {
 			// if current tile is a gateway, load new map
 			if (layer.getProperties().get("newMap") != null) {
                 // create new world
-				System.out.print((String) layer.getProperties().get("newMap"));
 				World newWorld = new World("resources/maps/maps/" +(String) layer.getProperties().get("newMap"));
 				
 				// add the new weather effects
@@ -705,7 +727,11 @@ public class Player extends Character implements Tickable {
 			move = 0;
 			soundManager.stopAll();
 			this.contextManager.pushContext(new DeathContext());
-			healthCur = healthMax;
+			this.healthCur = healthMax;
+			this.movementDirection.put("up", false);
+			this.movementDirection.put("down", false);
+			this.movementDirection.put("left", false);
+			this.movementDirection.put("right", false);
 		}
 	}
 
@@ -830,6 +856,7 @@ public class Player extends Character implements Tickable {
 			break;
 		case Input.Keys.R:
 			if (this.getEquippedWeapon() != null) {
+			    this.getEquippedWeapon().ceaseFire();
 				GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
 			}
 			this.equippedItems.cycleEquippedSlot();
@@ -962,11 +989,13 @@ public class Player extends Character implements Tickable {
 			// Player is not moving
             this.stopwatchManager.resetStopwatch();
 			spriteName.append("_stand");
+			// To set timer finished status to true
+			this.stopwatchManager.startTimerFloat(0.001f);
 		} else {
 			// Player is moving
 			if (this.stopwatchManager.getStatus()) {
 				this.stopwatchManager.resetStopwatch();
-				this.stopwatchManager.startTimerFloat(0.02f / this.movementSpeed);
+				this.stopwatchManager.startTimerFloat(0.04f / this.movementSpeed);
 
 				if (this.spriteFrame == 0 || this.spriteFrame == 2) {
 					spriteName.append("_stand");
