@@ -115,4 +115,38 @@ public class EnemyTest {
         assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0.0f)));
         assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0.0f)));
     }
+    
+    @Test
+    public void testEqual() {
+        Squirrel anotherEnemy = new Squirrel(10.0f,10.0f,0.0f, 1);
+        assertFalse("Two different enemies are equal", enemy.equals(anotherEnemy));
+        Squirrel enemy2 = new Squirrel(5.0f,5.0f,0.0f, 0);
+        assertTrue("The same enemies are not equal", enemy.equals(enemy2));
+    }
+    
+    @Test
+    public void testBoss() {
+        assertFalse("this enemy is a boss", enemy.isBoss());
+    }
+    
+    @Test
+    public void testGetPlayerCollided() {
+        enemy.setCollidedPlayer(true);
+        assertThat("enemy is not collided with player", enemy.getPlayerCollided(), is(equalTo(true)));
+    }
+    
+    @Test
+    public void testTarget() {
+        Player player = new Player(10, 10, 10);
+        enemy.setTarget(player);
+        assertThat("Player is not the target", enemy.getTarget(), is(equalTo(player)));
+    }
+    
+    @Test
+    public void testCauseDamage() {
+        Player player = new Player(10, 10, 10);
+        int health = player.getHealthCur();
+        enemy.causeDamage(player);
+        assertThat("The health of player does not decrease by 10", player.getHealthCur(), is(equalTo(health - 10)));
+    }
 }

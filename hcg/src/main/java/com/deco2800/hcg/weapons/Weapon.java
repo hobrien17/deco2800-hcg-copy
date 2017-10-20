@@ -228,11 +228,15 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
      * Changes the position of the weapon in the gameworld
      * sets at certain distance from player character facing cursor
      */
-    //TODO: remove
     protected void setPosition() {
         // Calculate the angle between the cursor and player
         float deltaX = this.user.getPosX() - this.follow.x;
         float deltaY = this.user.getPosY() - this.follow.y;
+        if(deltaX < 0.01 && deltaX > -0.01 && deltaY < 0.01 && deltaY > -0.01) {
+            setPosX(this.user.getPosX());
+            setPosY(this.user.getPosY());
+            return;
+        }
         float angle = (float) (Math.atan2(deltaY, deltaX)) +
                 (float) (Math.PI);
         // Set weapon position along angle

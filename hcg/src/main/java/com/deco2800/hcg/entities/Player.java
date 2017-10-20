@@ -36,6 +36,7 @@ import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
+<<<<<<< HEAD
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -45,6 +46,9 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.WeatherManager;
+=======
+import com.deco2800.hcg.items.stackable.SpeedPotion;
+>>>>>>> 9dbd87da2fbf13d8e4b10e511e3816075eee23a2
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.Box3D;
@@ -202,8 +206,9 @@ public class Player extends Character implements Tickable {
 		equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
 		equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
 
-		//REMOVE THIS - JUST ADDED FOR TESTING
+		//Add some default items
 		inventory.addItem(new MagicMushroom());
+		inventory.addItem(new SpeedPotion());
 	}
 
 	/**
@@ -533,8 +538,12 @@ public class Player extends Character implements Tickable {
 			// set the layer, and get the speed of the tile on the layer. Also
 			// name for logging.
 			layer = world.getTiledMapTileLayerAtPos((int) oldPosY, (int) oldPosX);
-			speed = Float.parseFloat((String) layer.getProperties().get("speed"));
-
+			if (layer.getProperties().get("speed") != null) {
+			  speed = Float.parseFloat((String) layer.getProperties().get("speed"));
+			} else {
+			  speed = 1.0f;
+			}
+			
 			// see if current tile is a Gateway
 			if (layer.getProperties().get("PlayerX") != null && layer.getProperties().get("PlayerY") != null) {
 				oldPosX = Float.parseFloat((String) layer.getProperties().get("PlayerX"));
@@ -553,7 +562,6 @@ public class Player extends Character implements Tickable {
 			// if current tile is a gateway, load new map
 			if (layer.getProperties().get("newMap") != null) {
                 // create new world
-				System.out.print((String) layer.getProperties().get("newMap"));
 				World newWorld = new World("resources/maps/maps/" +(String) layer.getProperties().get("newMap"));
 				
 				// add the new weather effects

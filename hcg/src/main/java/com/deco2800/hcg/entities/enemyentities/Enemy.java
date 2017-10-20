@@ -40,13 +40,16 @@ public abstract class Enemy extends Character implements Lootable {
     protected float randomY;
     protected float lastPlayerX;
     protected float lastPlayerY;
+    protected float lostPlayerX;
+    protected float lostPlayerY;
     protected Random random;
     protected boolean collided;
     protected boolean collidedPlayer;
     protected Box3D newPos;
     protected int direction;
     protected boolean boss;
-
+    protected float defaultSpeed;
+    protected EnemyType enemyType;
     private Player target;
 
     //Multiple players
@@ -70,7 +73,7 @@ public abstract class Enemy extends Character implements Lootable {
      * @param id the enemy ID
      */
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
-                 int health, int strength, int id) {
+                 int health, int strength, int id, EnemyType enemyType) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         status = 1;
@@ -79,6 +82,7 @@ public abstract class Enemy extends Character implements Lootable {
         } else {
             throw new IllegalArgumentException();
         }
+        this.enemyType = enemyType;
         this.healthCur = health;
         this.attributes.put("strength", strength);
         this.attributes.put("vitality", 1);
@@ -117,6 +121,14 @@ public abstract class Enemy extends Character implements Lootable {
      * @return the integer ID of the enemy
      */
     public int getID() { return id; }
+
+    /**
+     * Gets the enemy type
+     *
+     * @return the integer ID of the enemy
+     */
+    public EnemyType getEnemyType() { return enemyType; }
+
 
     /**
      * Gets the last position X of player.
@@ -353,28 +365,39 @@ public abstract class Enemy extends Character implements Lootable {
                 this.lastPlayerX = closestPlayer.getPosX();
                 this.lastPlayerY = closestPlayer.getPosY();
             } else if (this.getStatus() == 2) {
-                this.setStatus(3);
-            } else {
-                this.setStatus(1);
-            }
-        } else {
-            float distance = this.distance(playerManager.getPlayer());
-            this.closestPlayer = playerManager.getPlayer();
-            if(distance <= 5 * this.level){
-                //Annoyed by player.
-                this.setStatus(2);
-                this.lastPlayerX = playerManager.getPlayer().getPosX();
-                this.lastPlayerY = playerManager.getPlayer().getPosY();
-            }else{
-                if (this.getStatus() == 2){
-                    //Lost player
-                    this.setStatus(3);
-                } else {
-                    this.setStatus(1);
-                }
-            }
-        }
-    }
+				this.setStatus(3);
+			} else {
+				this.setStatus(1);
+			}
+
+			return;
+		}
+        
+		float distance = this.distance(playerManager.getPlayer());
+		this.closestPlayer = playerManager.getPlayer();
+		if (distance <= 5 * this.level) {
+			// Annoyed by player.
+			this.setStatus(2);
+			this.lastPlayerX = playerManager.getPlayer().getPosX();
+			this.lastPlayerY = playerManager.getPlayer().getPosY();
+			return;
+		}
+		
+		if (this.getStatus() == 2) {
+			// Lost player
+			this.lostPlayerX = this.getLastPlayerX();
+			this.lostPlayerY = this.getLastPlayerY();
+			this.setStatus(3);
+		} else if (this.getStatus() == 3) {
+			if ((abs(this.lostPlayerX - this.getPosX()) < 1)
+					&& (abs(this.lostPlayerY - this.getPosY()) < 1)) {
+				this.setStatus(1);
+			}
+
+		} else {
+			this.setStatus(1);
+		}
+	}
         
 
     /**
@@ -526,7 +549,8 @@ public abstract class Enemy extends Character implements Lootable {
         }
         List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
         for (AbstractEntity entity : entities) {
-            if (!this.equals(entity) && newPos.overlaps(entity.getBox3D())) {
+            if (!this.equals(entity) && this.collidesWith(entity)) {
+                    //newPos.overlaps(entity.getBox3D())) {
                 if(entity instanceof Player) {
                     //this.causeDamage((Player)entity);
                     this.setTarget((Player)entity);
@@ -568,7 +592,8 @@ public abstract class Enemy extends Character implements Lootable {
                 this.shoot();
                 break;
             case 3://Status: Annoyed/Lost player
-                newPos = this.getMoveToPos(this.getLastPlayerX(), this.getLastPlayerY());
+
+                newPos = this.getMoveToPos(this.lostPlayerX, this.lostPlayerY);
                 break;
             default:
                 newPos = this.getRandomPos();
@@ -608,14 +633,9 @@ public abstract class Enemy extends Character implements Lootable {
         int playerCount = 0;
         float[] distances = new float[numPlayers];
         float closestDistance;
-        this.setStatus(2);
-        this.setMovementSpeed((float) (this.movementSpeed*0.1));
-        if (this.getHealthCur() <= this.getHealthMax()*0.5){
-            this.setMovementSpeed((this.movementSpeed*5));
-        }
-        players = playerManager.getPlayers();
         //Detect players
         if (this.getNumberPlayers() > 1) {
+            players = playerManager.getPlayers();
             //Iterates through all players and puts distance from enemy to each player into an array
             //Puts all players and their respective distances into a hash map
             for (Player player : players) {
@@ -638,12 +658,133 @@ public abstract class Enemy extends Character implements Lootable {
             this.lastPlayerY = closestPlayer.getPosY();
 
         } else {
-        this.lastPlayerX = playerManager.getPlayer().getPosX();
-        this.lastPlayerY = playerManager.getPlayer().getPosY();
+            this.lastPlayerX = playerManager.getPlayer().getPosX();
+            this.lastPlayerY = playerManager.getPlayer().getPosY();
         }
         //Set new position
         newPos = this.getToPlayerPos(closestPlayer);
         this.detectCollision();
         this.moveAction();
+    }
+
+    /**
+     *  Logic for Squirrel
+     *
+     */
+    void squirrel(){
+        this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.5));
+        this.defaultSpeed = this.getMovementSpeed();
+        List<Player> players;
+        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
+        int playerCount = 0;
+        float[] distances = new float[numPlayers];
+        float closestDistance;
+        //Detect players
+        if (this.getNumberPlayers() > 1) {
+            players = playerManager.getPlayers();
+            //Iterates through all players and puts distance from enemy to each player into an array
+            //Puts all players and their respective distances into a hash map
+            for (Player player : players) {
+                distances[playerCount] = this.distance(player);
+                playerHashMap.put(distances[playerCount], player);
+                playerCount++;
+            }
+
+            //Finds the smallest distance in the distance array
+            closestDistance = distances[0];
+            for (int j = 0; j < distances.length; j++) {
+                if (distances[j] < closestDistance) {
+                    closestDistance = distances[j];
+                }
+            }
+
+            //Gets the player with closest distance from the enemy and assigns to variable
+            this.closestPlayer = playerHashMap.get(closestDistance);
+            if (closestDistance <= 10 * this.level){
+                newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
+                newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
+                if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.85)){
+                    this.setMovementSpeed((float) (this.defaultSpeed * 1.2));
+                } else if ((this.getHealthCur() < this.getHealthMax()*0.85) && (this.getHealthCur() > this.getHealthMax()*0.5)){
+                    this.setMovementSpeed((float) (this.defaultSpeed * 1.4));
+                } else if ((this.getHealthCur() < this.getHealthMax()*0.5) && (this.getHealthCur() > this.getHealthMax()*0.25)){
+                    this.setMovementSpeed((float) (this.defaultSpeed * 1.6));
+                } else {
+                    this.setMovementSpeed((float) (this.defaultSpeed * 1.8));
+                }
+            } else {
+                newPos = this.getRandomPos();
+            }
+
+        } else {
+            this.closestPlayer = playerManager.getPlayer();
+            float distance = this.distance(playerManager.getPlayer());
+            if (distance <= 10 * this.level){
+                newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
+                newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
+            } else {
+                newPos = this.getRandomPos();
+            }
+        }
+        //Set new position
+        //newPos = this.getToPlayerPos(closestPlayer);
+        this.detectCollision();
+        this.moveAction();
+
+    }
+
+
+    /**
+     *  Logic for Tree
+     *
+     */
+    void tree(){
+        this.setMovementSpeed(0);
+        this.defaultSpeed = 0;
+
+        GameManager.get().getWorld().getWidth();
+        GameManager.get().getWorld().getLength();
+        if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.8)){
+            //bottom
+
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
+            this.setPosY(0);
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.8) && (this.getHealthCur() > this.getHealthMax()*0.6)){
+            //left
+            this.setPosX(0);
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.6) && (this.getHealthCur() > this.getHealthMax()*0.4)){
+            //right
+            this.setPosX(GameManager.get().getWorld().getWidth());
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
+        } else if ((this.getHealthCur() < this.getHealthMax()*0.4) && (this.getHealthCur() > this.getHealthMax()*0.2)){
+            //top
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
+            this.setPosY(GameManager.get().getWorld().getLength());
+        } else {
+            //middle
+            this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
+            this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
+        }
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Enemy)) {
+            return false;
+        }
+        Enemy anotherEnemy = (Enemy) object;
+        if (this.id == anotherEnemy.id) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31; // an odd base prime
+        int result = 1; // the hash code under construction
+        result = prime * result + this.id;
+        return result;
     }
 }
