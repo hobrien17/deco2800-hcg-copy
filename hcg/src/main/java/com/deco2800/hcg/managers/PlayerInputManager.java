@@ -300,10 +300,7 @@ public class PlayerInputManager extends Manager implements TickableManager {
 			return;
 		}
 		
-		// queue mouse input
-		queueLocalAction(InputType.MOUSE_MOVED.ordinal(), screenX, screenY);
-		
-		ArrayList<int[]> actions = actionQueue.get(++inputTickCount);
+		ArrayList<int[]> actions = actionQueue.get(inputTickCount);
 		if (actions == null) {
 			return;
 		}

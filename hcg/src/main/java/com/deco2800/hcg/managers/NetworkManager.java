@@ -320,19 +320,28 @@ public final class NetworkManager extends Manager {
 	 * @return <code>true</code> if it is not safe to proceed
 	 */
 	public boolean shouldBlock() {
-		if (!multiplayerGame || !(contextManager.currentContext() instanceof PlayContext)) {
+		if (!(contextManager.currentContext() instanceof PlayContext)) {
 			return false;
 		}
 		
-		if (playerInputManager.getInputTick() > 0 && peerTickCounts.isEmpty()) {
-			return true;
-		}
-
-		for (long tick : peerTickCounts.values()) {
-			if (tick <= playerInputManager.getInputTick()) {
+		if (multiplayerGame) {
+			if (playerInputManager.getInputTick() > 0 && peerTickCounts.isEmpty()) {
 				return true;
 			}
+
+			for (long tick : peerTickCounts.values()) {
+				if (tick <= playerInputManager.getInputTick()) {
+					return true;
+				}
+			}
 		}
+		
+		// queue mouse input
+		int x = playerInputManager.getLocalMouseX();
+		int y = playerInputManager.getLocalMouseY();
+		playerInputManager.queueLocalAction(InputType.MOUSE_MOVED.ordinal(), x, y);
+		// increment input tick
+		playerInputManager.incrementInputTick();
 		
 		return false;
 	}
