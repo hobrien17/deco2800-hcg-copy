@@ -3,6 +3,8 @@ package com.deco2800.hcg.entities;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -340,9 +342,9 @@ public class PlayerTest {
 	public void playerKillLogTests() {
 		Player player = new Player(0, 0, 0);
 
-		int exampleID1 = 0;
-		int exampleID2 = 1;
-		int exampleID3 = 2;
+		EnemyType exampleID1 = EnemyType.SQUIRREL;
+		EnemyType exampleID2 = EnemyType.HEDGEHOG;
+		EnemyType exampleID3 = EnemyType.SNAIL;
 
 		assertEquals(0,player.killLogGet(exampleID1));
 		player.killLogAdd(exampleID1);

@@ -38,7 +38,7 @@ public class PerksSelectionScreen extends UIContext{
             String textureName = perk.getName().replaceAll(" ", "_");
 
             this.perk = perk;
-            this.levelLabel = new Label(("" + perk.getCurrentLevel() + " / " + perk.getMaxLevel()), skin);
+            this.levelLabel = new Label("" + perk.getCurrentLevel() + " / " + perk.getMaxLevel(), skin);
             this.perkImage = new ImageButton(new Image(textureManager.getTexture(textureName)).getDrawable());
             this.border = new Image(textureManager.getTexture("perk_border_inactive"));
             this.perkDisplay = new Group();
@@ -87,8 +87,6 @@ public class PerksSelectionScreen extends UIContext{
 
         // Get necessary managers
         GameManager gameManager = GameManager.get();
-        ContextManager contextManager = (ContextManager)
-                gameManager.getManager(ContextManager.class);
         TextureManager textureManager = (TextureManager)
                 gameManager.getManager(TextureManager.class);
 

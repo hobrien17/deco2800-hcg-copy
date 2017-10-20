@@ -2,15 +2,12 @@ package com.deco2800.hcg.worldMap;
 
 
 import com.deco2800.hcg.worldmapui.LevelStore;
-import com.deco2800.hcg.worlds.World;
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.CORBA.WStringSeqHelper;
-
 import static org.junit.Assert.*;
 import com.deco2800.hcg.entities.worldmap.WorldStack;
 import com.deco2800.hcg.worldmapui.WorldStackGenerator;
-import java.util.*;
+
 public class WorldStackGeneratorTest {
 
     WorldStackGenerator wsg;
@@ -32,7 +29,8 @@ public class WorldStackGeneratorTest {
     public void testSeed() {
     	wsg.setGeneratorSeed(50);
         ws = wsg.generateWorldStack();
-        assertEquals(50, ws.getWorldStack().get(0).getWorldSeed());
+        //first world will always have a seed of 31!
+        assertEquals(50, ws.getWorldStack().get(1).getWorldSeed());
     }
     
     @Test

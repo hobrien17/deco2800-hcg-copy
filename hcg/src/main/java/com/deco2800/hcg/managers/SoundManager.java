@@ -108,6 +108,9 @@ public class SoundManager extends Manager {
 					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot2.wav")));
 
 
+			// Loot
+            soundMap.put("loot1", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot.wav")));
+            soundMap.put("loot2", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot2.wav")));
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}
@@ -217,7 +220,7 @@ public class SoundManager extends Manager {
 			try {
 				randomLoop.cancel(true);
 			} catch (NullPointerException e) {
-				LOGGER.info("No sting playing yet");
+				LOGGER.info("No sting playing yet",e);
 			}
 			randomLoop = executor.scheduleAtFixedRate(stingSound, 0, 4, TimeUnit.SECONDS);
 

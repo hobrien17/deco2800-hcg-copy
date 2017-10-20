@@ -174,10 +174,15 @@ public class WeaponBuilder {
     public Weapon build() {
         if(weaponType == null || user == null) {
             return null;
-        } else if(weaponType == WeaponType.MACHINEGUN) {
+        }
+        
+        if(radius == 0) {
+            radius = 0.1;
+        }
+        
+        if(weaponType == WeaponType.MACHINEGUN) {
             if(texture.equals("")) {
-                //TODO: Get proper texture
-                texture = "battle_seed";
+                texture = "machinegun";
             }
             
             if(cooldown == -1) {
@@ -188,8 +193,7 @@ public class WeaponBuilder {
                 weaponType, user, radius, texture, cooldown);
         } else if(weaponType == WeaponType.SHOTGUN) {
             if(texture.equals("")) {
-                //TODO: Get proper texture
-                texture = "battle_seed";
+                texture = "shotgun";
             }
             
             if(cooldown == -1) {
@@ -205,7 +209,7 @@ public class WeaponBuilder {
         } else if(weaponType == WeaponType.STARGUN) {
             if(texture.equals("")) {
                 //TODO: Get proper texture
-                texture = "battle_seed";
+                texture = "blank";
             }
             
             if(cooldown == -1) {
@@ -220,8 +224,7 @@ public class WeaponBuilder {
                     weaponType, user, radius, texture, cooldown, pellets);
         } else if(weaponType == WeaponType.MULTIGUN) {
             if(texture.equals("")) {
-                //TODO: Get proper texture
-                texture = "battle_seed";
+                texture = "multigun";
             }
             
             if(cooldown == -1) {
@@ -232,7 +235,7 @@ public class WeaponBuilder {
                 pellets = 3;
             }
             
-            if(arc == 0) {
+            if(arc <= 0.5 || arc >= 2 * Math.PI) {
                 arc = (float) (Math.PI / 4f);
             }
             

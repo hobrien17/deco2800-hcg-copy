@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.conversation.Conversation;
 import com.deco2800.hcg.conversation.ConversationNode;
 import com.deco2800.hcg.conversation.ConversationOption;
-import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 import org.slf4j.Logger;
@@ -37,8 +36,6 @@ public class ConversationContext extends UIContext {
 		super();
 
 		GameManager gameManager = GameManager.get();
-		ContextManager contextManager = (ContextManager)
-	            gameManager.getManager(ContextManager.class);
 		TextureManager textureManager = (TextureManager) 
 				gameManager.getManager(TextureManager.class);
 		
