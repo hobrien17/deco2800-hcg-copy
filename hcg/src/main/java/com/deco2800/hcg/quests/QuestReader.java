@@ -11,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,11 +23,15 @@ import java.util.Map;
  * @author Harry Guthrie
  */
 public class QuestReader {
+
+    static ArrayList<Integer> validEnemyID = new ArrayList<>(Arrays.asList(1,2,3,4));
+
     /**
      *  A function which loads all the quests into the quest manager, this utalizes the loadQuest function, and it then
      *  adds all the files in the folder to the hash map of quests titles to quests.
      */
     public HashMap<String,Quest> loadAllQuests() throws ResourceLoadException {
+
         HashMap<String,Quest> quests = new HashMap<>();
         String questsFolder = "resources/quests/";
         final File jQuestFile = new File(questsFolder);
@@ -164,6 +170,9 @@ public class QuestReader {
         if (krmMap.entrySet().size() > 0) {
             for (Map.Entry node: krmMap.entrySet()) {
                 //Check for valid world node
+                if (gameManager.getWorldMap() == null) {
+                    throw new ResourceLoadException("No world currently being created");
+                }
                 if (!gameManager.getWorldMap().getContainedNodes().contains(node)) {
                     throw new ResourceLoadException("Can't add invalid worlds node.");
                 }
