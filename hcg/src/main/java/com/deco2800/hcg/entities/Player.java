@@ -258,6 +258,9 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
+		if (pauseDisplayed) {
+			return;
+		}
 		Vector3 position = gameManager.screenToWorld(screenX, screenY);
 		playerInputManager.queueLocalInput(
 				InputType.TOUCH_DOWN,

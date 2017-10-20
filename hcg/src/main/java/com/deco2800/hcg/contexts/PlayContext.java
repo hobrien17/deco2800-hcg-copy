@@ -56,6 +56,7 @@ public class PlayContext extends Context {
 
     private Table pauseMenu;
 
+    private boolean pauseMenuDisplayed;
 
     // FIXME mouseHandler is never assigned
     private MouseHandler mouseHandler;
@@ -92,7 +93,6 @@ public class PlayContext extends Context {
     private String[] seedItems;
     private String[] consumableItems;
 
-    private Window window;
     private Window plantWindow;
     private boolean exitDisplayed = false;
 
@@ -234,6 +234,9 @@ public class PlayContext extends Context {
         
         /* reset input tick */
         playerInputManager.resetInputTick();
+
+        //playerManager.getPlayer().setPauseDisplayed(false);
+        pauseMenuDisplayed = false;
     }
 
     /**
@@ -355,7 +358,8 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
-        if (playerManager.getPlayer().getPauseDisplayed()) {
+        //System.out.println(pauseMenuDisplayed);
+        if (pauseMenuDisplayed) {
             if (keycode == Input.Keys.ESCAPE) {
                 removePauseWindow();
             }
@@ -392,6 +396,7 @@ public class PlayContext extends Context {
         } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
             exit();
         } else if(keycode == Input.Keys.ESCAPE) {
+            playerManager.getPlayer().setPauseDisplayed(true);
     	    addPauseWindow();
         }
 	}
@@ -483,6 +488,8 @@ public class PlayContext extends Context {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                removePauseWindow();
+                playerManager.despawnPlayers();
                 contextManager.popContext();
             }
         });
@@ -496,22 +503,22 @@ public class PlayContext extends Context {
         pauseMenu.row();
         pauseMenu.add(quit);
         pauseMenu.setPosition(stage.getWidth()/2, stage.getHeight()/2);
-        playerManager.getPlayer().setPauseDisplayed(false);
-
+        pauseMenuDisplayed = true;
     }
 
     public void addPauseWindow() {
         if (pauseMenu.getStage() == null){
 			/* Add the window to the stage */
             stage.addActor(pauseMenu);
-            playerManager.getPlayer().setPauseDisplayed(true);
+            pauseMenuDisplayed = true;
             soundManager.pauseWeatherSounds();
         }
     }
 
     public void removePauseWindow() {
-        pauseMenu.remove();
         playerManager.getPlayer().setPauseDisplayed(false);
+        pauseMenu.remove();
+        pauseMenuDisplayed = false;
         soundManager.unpauseWeatherSounds();
     }
 }
