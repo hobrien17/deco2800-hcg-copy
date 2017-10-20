@@ -279,11 +279,11 @@ public class TextureManager extends Manager {
 			textureMap.put("consumables", new Texture("resources/ui/radial_menu/consumables.png"));
 			textureMap.put("weapsLeft", new Texture("resources/ui/radial_menu/weapons_left.png"));
 			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapons_right.png"));
-			textureMap.put("grenadeLauncher", new Texture("resources/ui/radial_menu/grenade_launcher.png"));
 			textureMap.put("machineGun", new Texture("resources/ui/radial_menu/machine_gun.png"));
 			textureMap.put("shotgun", new Texture("resources/ui/radial_menu/shotgun.png"));
 			textureMap.put("starfall", new Texture("resources/ui/radial_menu/starfall.png"));
 			textureMap.put("healthPotion", new Texture("resources/ui/radial_menu/health_potion.png"));
+			textureMap.put("highlight", new Texture("resources/ui/radial_menu/highlight.png"));
 
 			//Perks
 			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));

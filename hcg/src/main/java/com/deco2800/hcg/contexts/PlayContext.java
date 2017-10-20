@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -103,6 +105,10 @@ public class PlayContext extends Context {
     private String[] weaponItems;
     private String[] seedItems;
     private String[] consumableItems;
+    private ImageButton seedMenu;
+    private ImageButton consumableMenu;
+    private ImageButton weaponLeft;
+    private ImageButton weaponRight;
 
     private Window window;
     private Window plantWindow;
@@ -156,7 +162,7 @@ public class PlayContext extends Context {
 
         seedItems = new String[]{"sunflowerC", "waterC", "iceC", "explosiveC","fireC","grassC"};
         List seedList = Arrays.asList(seedItems);
-        weaponItems = new String[]{"grenadeLauncher", "machineGun", "shotgun", "starfall"};
+        weaponItems = new String[]{"machineGun", "shotgun", "starfall"};
         List weapList = Arrays.asList(weaponItems);
         consumableItems = new String[]{"fertiliser", "bugSpray", "Health Potion"};
         List consumableList = Arrays.asList(consumableItems);
@@ -173,6 +179,21 @@ public class PlayContext extends Context {
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
+
+        ImageButton seedMenu = new ImageButton( new Image (textureManager.getTexture("seedSelect")).getDrawable());
+        ImageButton consumableMenu = new ImageButton( new Image (textureManager.getTexture("consumables")).getDrawable());
+        ImageButton weaponLeft = new ImageButton( new Image (textureManager.getTexture("weapsLeft")).getDrawable());
+        ImageButton weaponRight = new ImageButton( new Image (textureManager.getTexture("weapsRight")).getDrawable());
+
+        seedMenu.setSize(80, 100);
+        consumableMenu.setSize(80, 100);
+        weaponLeft.setSize(80, 100);
+        weaponRight.setSize(80, 100);
+
+        seedMenu.setPosition(0, stage.getHeight() / 2f - seedMenu.getHeight() / 2f);
+        consumableMenu.setPosition(stage.getWidth(), stage.getHeight() / 2f - consumableMenu.getHeight() / 2f);
+        weaponLeft.setPosition(0, stage.getHeight() / 2f - weaponLeft.getHeight() / 2f);
+        weaponRight.setPosition(stage.getWidth(), stage.getHeight() / 2f - weaponRight.getHeight() / 2f);
 
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
@@ -417,6 +438,9 @@ public class PlayContext extends Context {
         } else if (keycode == Input.Keys.B && RadialDisplay.plantableNearby()) {
 			radialDisplay.addRadialMenu(stage);
 		} else if (keycode == Input.Keys.X) {
+            weaponRadialDisplay.addRadialMenu(stage);
+            //weaponRadialDisplay.addActor(seedMenu);
+            //weaponRadialDisplay.addActor(consumableMenu);
             weaponRadialDisplay.show();
         } else if (keycode == Input.Keys.Q && weaponRadialDisplay.getActive() == true) {
             weaponRadialDisplay.hide();

@@ -1118,7 +1118,6 @@ public class Player extends Character implements Tickable {
 	public boolean addItemToInventory(Item item) {
 		return inventory.addItem(item);
 	}
-
 	@Override
 	public Item getCurrentEquippedItem() {
 		return this.equippedItems.getCurrentEquippedItem();

@@ -9,12 +9,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
@@ -28,9 +35,13 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponType;
-import com.deco2800.hcg.entities.bullets.BulletType;
+import com.deco2800.hcg.weapons.WeaponBuilder;
+import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.items.stackable.Key;
+import com.deco2800.hcg.inventory.PlayerEquipment;
+//import com.deco2800.hcg.shading.GrayScaleShader;
 
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
@@ -38,16 +49,15 @@ public class GeneralRadialDisplay extends Group {
     private GameManager gameManager;
     private SoundManager soundManager;
 
-    private Weapon weapon;
-    private WeaponType weaponType;
     private boolean active;
-    private Player player;
-    private BulletType bulletType;
-    private HealthPotion healthPotion;
+    private PlayerEquipment equippedItems;
+    private Inventory inventory;
+    private String seedHighlight;
     
     private List<ImageButton> buttons;
     private ImageButton closeButton;
     private Image outline;
+	private Label infoLbl;
     
     private Stage stage;
     private Group display;
@@ -79,17 +89,27 @@ public class GeneralRadialDisplay extends Group {
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
-        this.stage = stage;
 
+        this.stage = stage;
         this.active = false;
-		this.player = player;
-		this.weapon = weapon;
-		this.weaponType = weaponType;
-		this.bulletType = BulletType.BASIC;
-		this.healthPotion = healthPotion;
-		
+        this.seedHighlight = "sunflower";
+
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/plant_ui/basic_font.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		BitmapFont font = generator.generateFont(parameter);
+		LabelStyle normal = new LabelStyle(font, Color.valueOf("#004000"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/plant_ui/basic_bold.ttf"));
+		font = generator.generateFont(parameter);
+		LabelStyle bold = new LabelStyle(font, Color.valueOf("#004000"));
+		generator.dispose();
+		infoLbl = new Label("", bold);
+		infoLbl.setPosition(this.stage.getWidth() / 2, this.stage.getHeight() / 2);
+
+		equippedItems = PlayerEquipment.getPlayerEquipment();
+
         setupSprites();
         setupListeners();
+        //updateCount();
         
         display = new Group();
 
@@ -110,6 +130,7 @@ public class GeneralRadialDisplay extends Group {
 			button.setPosition(getButtonX(i), getButtonY(i));
 			button.addListener(listeners.get(item));
 			display.addActor(button);
+			display.addActor(infoLbl);
 		}
 		
 		closeButton = new ImageButton(getImage("close").getDrawable());
@@ -143,7 +164,6 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("grassC", "grass_btn");
 		sprites.put("outline", "radialOutline");
 		sprites.put("close", "menuClose");
-		sprites.put("grenadeLauncher", "grenadeLauncher");
 		sprites.put("machineGun", "machineGun");
 		sprites.put("shotgun", "shotgun");
 		sprites.put("starfall", "starfall");
@@ -212,9 +232,13 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("sunflowerC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.BASIC;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
+				equippedItems.setEquippedSlot(0);
+				if(getSeedHighlight() != "basic") {
+					Image highlight = new Image(textureManager.getTexture("highlight"));
+					highlight.setSize(X_SIZE_MAX,Y_SIZE_MAX);
+					highlight.setPosition(getButtonX(0), getButtonY(0));
+					setSeedHighlight("basic");
+				}
 				display.remove();
 			}
 		});
@@ -222,9 +246,11 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("waterC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.BASIC;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
+				equippedItems.setEquippedSlot(1);
+				if(getSeedHighlight() != "water") {
+
+					setSeedHighlight("water");
+				}
 				display.remove();
 			}
 		});
@@ -232,9 +258,10 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("iceC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.ICE;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
+				equippedItems.setEquippedSlot(2);
+				if(getSeedHighlight() != "ice") {
+					setSeedHighlight("ice");
+				}
 				display.remove();
 			}
 		});
@@ -242,9 +269,10 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("fireC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.FIRE;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
+				equippedItems.setEquippedSlot(3);
+				if(getSeedHighlight() != "fire") {
+					setSeedHighlight("fire");
+				}
 				display.remove();
 			}
 		});
@@ -252,9 +280,10 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("explosiveC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.EXPLOSION;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
+				equippedItems.setEquippedSlot(4);
+				if(getSeedHighlight() != "explosive") {
+					setSeedHighlight("explosive");
+				}
 				display.remove();
 			}
 		});
@@ -262,17 +291,10 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("grassC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.BASIC;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
-				display.remove();
-			}
-		});
-
-		listeners.put("grenadeLauncher", new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				//weaponType = weaponType.GRENADELAUNCHER;
+				equippedItems.setEquippedSlot(5);
+				if(getSeedHighlight() != "grass") {
+					setSeedHighlight("grass");
+				}
 				display.remove();
 			}
 		});
@@ -280,6 +302,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("machineGun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.MACHINEGUN;
 				display.remove();
 			}
@@ -288,6 +311,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("shotgun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.SHOTGUN;
 				display.remove();
 			}
@@ -296,7 +320,8 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("starfall", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				player.setEquipped(1);
+				//PlayerEquipment.cycleEquippedSlot();
+				//weaponType = weaponType.STARFALL;
 				display.remove();
 			}
 		});
@@ -320,7 +345,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("Health Potion", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//healthPotion.consume(player);
+				//HealthPotion.consume(Player);
 				display.remove();
 			}
 		});
@@ -474,23 +499,28 @@ public class GeneralRadialDisplay extends Group {
 		soundManager.playSound(soundName);
 	}
 
-	//public void updateCount(Item item) {
+	//protected void updateCount() {
 		//int itemCount = 0;
 		//for(int i = 0; i < inventory.getNumItems(); i++) {
-			//if(inventory.getItem(i) instanceof item) {
+			//if(inventory.getItem(i) instanceof HealthPotion) {
 				//itemCount += inventory.getItem(i).getStackSize();
 			//}
 		//}
 		//infoLbl.setText(String.format("%d", itemCount));
 
 		//if(keyCount > 0) {
-			//titleLbl.setText("Open pot by using key?");
-			//this.getTitleLabel().setText("Open pot?");
-			//conf.setVisible(true);
+			//Display amount
 		//} else {
-			//titleLbl.setText("No keys in inventory!");
-			//this.getTitleLabel().setText("No keys!");
-			//conf.setVisible(false);
+			//Display 0
+			//Use gray scale shader
 		//}
     //}
+
+    private void setSeedHighlight(String seed) {
+    	this.seedHighlight = seed;
+	}
+
+    private String getSeedHighlight() {
+    	return seedHighlight;
+	}
 }
