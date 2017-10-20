@@ -3,6 +3,7 @@ package com.deco2800.hcg.renderers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -77,8 +78,9 @@ public class RenderLightmap implements Renderer {
             
             batch.setColor(colour);
             
-            batch.draw(lightMap, isoX, isoY, intensity * tileWidth * entity.getXRenderLength(),
-                    intensity * (lightMap.getHeight() / aspect) * entity.getYRenderLength());
+            float width = intensity * tileWidth * entity.getXRenderLength();
+            float height = intensity * (lightMap.getHeight() / aspect) * entity.getYRenderLength();
+            batch.draw(lightMap, isoX - (width / 2), isoY - (height / 2), width, height);
         }
         
         batch.end();

@@ -26,9 +26,11 @@ public class ShaderManager extends Manager implements Observer {
     private FileHandle postVertexShader;
     private FileHandle preFragShader;
     private FileHandle postFragShader;
+    private FileHandle lightFragShader;
     
     private ShaderProgram preShader;
     private ShaderProgram postShader;
+    private ShaderProgram lightShader;
 
     private Logger LOGGER;
 
@@ -68,9 +70,12 @@ public class ShaderManager extends Manager implements Observer {
         
         this.preFragShader = Gdx.files.internal("resources/shaders/fragment_pre.glsl");
         this.postFragShader = Gdx.files.internal("resources/shaders/fragment_post.glsl");
+        
+        this.lightFragShader =  Gdx.files.internal("resources/shaders/lighting.glsl");
 
         this.preShader = new ShaderProgram(preVertexShader, preFragShader);
         this.postShader = new ShaderProgram(postVertexShader, postFragShader);
+        this.lightShader = new ShaderProgram(postVertexShader, lightFragShader);
 
         this.gameManager = GameManager.get();
         this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
@@ -84,12 +89,20 @@ public class ShaderManager extends Manager implements Observer {
             preShader = null;
         }
         
-        if(!this.postShader.isCompiled()) {
+        if(!postShader.isCompiled()) {
             LOGGER.error("Post shader failed to compile");
             System.out.println(postShader.getLog());
-            LOGGER.error(this.postShader.getLog());
+            LOGGER.error(postShader.getLog());
             
-            this.postShader = null;
+            postShader = null;
+        }
+        
+        if(!lightShader.isCompiled()) {
+            LOGGER.error("Light shader failed to compile");
+            System.out.println(lightShader.getLog());
+            LOGGER.error(lightShader.getLog());
+            
+            lightShader = null;
         }
         
         this.state = new ShaderState(new Color(1, 1, 1, 1), new Color(0.3F, 0.3F, 0.8F, 1));
@@ -107,7 +120,7 @@ public class ShaderManager extends Manager implements Observer {
     }
     
     public boolean shadersCompiled() {
-        return !(this.preShader == null || this.postShader == null);
+        return !(this.preShader == null || this.postShader == null || this.lightShader == null);
     }
 
     public void render(TimeManager timeManager, Renderer renderer) {
@@ -130,9 +143,10 @@ public class ShaderManager extends Manager implements Observer {
         this.lightBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
         
         this.lightTarget.begin();
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        this.lightBatch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_SRC_ALPHA);
+        //this.lightBatch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_SRC_ALPHA);
+        this.lightBatch.enableBlending();
         
         this.lightRenderer.render(this.lightBatch);
         
@@ -151,8 +165,10 @@ public class ShaderManager extends Manager implements Observer {
             }
             //this.preShader.setUniformf("u_globalColor", baseLight);
         }
+        this.preShader.setUniformf("u_globalLight", this.state.getGlobalLightColour());
         this.preBatch = new SpriteBatch(1001, preShader);
         this.preBatch.setProjectionMatrix(GameManager.get().getCamera().combined);
+        this.preBatch.enableBlending();
             
         this.tileRenderer = renderer.getTileRenderer(preBatch);
         this.tileRenderer.setView(GameManager.get().getCamera());
@@ -176,7 +192,6 @@ public class ShaderManager extends Manager implements Observer {
         
         int location = this.postShader.getUniformLocation("u_lightmap");
         this.postShader.setUniformi(location, 1);
-        this.postShader.setUniformf("u_globalLight", this.state.getGlobalLightColour());
         this.postShader.setUniformf("u_time", (float)(Math.PI * timeManager.getSeconds() / 60.0F));
         this.postShader.setUniformf("u_heat", state.getHeat());
         this.postShader.setUniformf("u_bloom", state.getBloom());
@@ -212,6 +227,9 @@ public class ShaderManager extends Manager implements Observer {
         Gdx.gl.glActiveTexture(1);
         this.lightMap.getTexture().bind();
         Gdx.gl.glActiveTexture(0);
+        
+        //postBatch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_SRC_ALPHA);
+        postBatch.enableBlending();
           
         postBatch.draw(scene, 0, 0, width, height);
             
@@ -257,5 +275,8 @@ public class ShaderManager extends Manager implements Observer {
         int time = (int) (float) arg;
         //((StopwatchManager) o).onTick(time);
     }
-
+    
+    public void bindLightShader(SpriteBatch batch) {
+        batch.setShader(this.lightShader);
+    }
 }
