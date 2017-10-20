@@ -108,6 +108,9 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
         Texture texture = textureManager.getTexture(this.getItem().getTexture());
         Texture beam = textureManager.getTexture("loot_beam");
         
+        float width = tileWidth * this.getXRenderLength();
+        float height = (texture.getHeight() / aspect) * this.getYRenderLength();
+        
         if(this.item.getRarity() != ItemRarity.COMMON) {
             Color precolour = batch.getColor();
             Color colour = this.getItem().getRarity().colour;
@@ -119,8 +122,7 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
             batch.setColor(precolour);
         }
         
-        batch.draw(texture, posX, posY, tileWidth * this.getXRenderLength(),
-                (texture.getHeight() / aspect) * this.getYRenderLength());
+        batch.draw(texture, posX, posY, width, height);
     }
 
     @Override

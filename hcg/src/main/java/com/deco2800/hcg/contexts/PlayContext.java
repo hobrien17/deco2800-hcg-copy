@@ -1,15 +1,17 @@
 package com.deco2800.hcg.contexts;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.deco2800.hcg.managers.*;
-
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -27,7 +29,22 @@ import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.HealthPotion;
-import com.deco2800.hcg.renderers.Render3D;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.MessageManager;
+import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
+import com.deco2800.hcg.managers.PlantManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.ShaderManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.managers.WeatherManager;
+import com.deco2800.hcg.renderers.Render3DLights;
 import com.deco2800.hcg.renderers.Renderer;
 /**
  * Context representing the playable game itself. Most of the code here was
@@ -64,7 +81,7 @@ public class PlayContext extends Context {
      * Check the documentation for each renderer to see how it handles WorldEntity
      * coordinates
      */
-    private Renderer renderer = new Render3D();
+    private Renderer renderer = new Render3DLights();
 
     // Stage and actors for game UI
     // TODO Game UI should probably be moved to a separate file

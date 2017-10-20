@@ -1,10 +1,26 @@
 package com.deco2800.hcg.entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.buffs.Perk;
-import com.deco2800.hcg.contexts.*;
+import com.deco2800.hcg.contexts.CharacterStatsContext;
+import com.deco2800.hcg.contexts.DeathContext;
+import com.deco2800.hcg.contexts.LevelUpContext;
+import com.deco2800.hcg.contexts.PerksSelectionScreen;
+import com.deco2800.hcg.contexts.PlayContext;
+import com.deco2800.hcg.contexts.PlayerInventoryContext;
+import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
@@ -20,7 +36,15 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.items.stackable.SpeedPotion;
-import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.managers.ContextManager;
+import com.deco2800.hcg.managers.ConversationManager;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.InputManager;
+import com.deco2800.hcg.managers.PlayerInputManager;
+import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.managers.StopwatchManager;
+import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
@@ -30,10 +54,6 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.worlds.World;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 /**
  * Entity for the playable character.
