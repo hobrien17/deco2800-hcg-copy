@@ -11,7 +11,6 @@ import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
-import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -22,15 +21,7 @@ import com.deco2800.hcg.util.Effect;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector3;
-import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Harmable;
-import com.deco2800.hcg.entities.Tickable;
-import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
-import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.enemyentities.Enemy;
-import com.deco2800.hcg.entities.Player;
 
-import java.util.List;
 
 /**
  * A generic player instance for the game
