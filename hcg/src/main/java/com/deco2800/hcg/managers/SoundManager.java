@@ -213,7 +213,7 @@ public class SoundManager extends Manager {
 			try {
 				randomLoop.cancel(true);
 			} catch (NullPointerException e) {
-				LOGGER.info("No sting playing yet");
+				LOGGER.info("No sting playing yet",e);
 			}
 			randomLoop = executor.scheduleAtFixedRate(stingSound, 0, 4, TimeUnit.SECONDS);
 
