@@ -157,7 +157,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 						.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
 					int number = 0;
 					try {
-					    Integer.parseInt(amount.getText().trim());
+					    number = Integer.parseInt(amount.getText().trim());
 					} catch(NumberFormatException e) {
 					    amount.setText("NaN");
 					}
@@ -177,7 +177,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 				errorImageVisible = false;
 				int number = 0;
                 try {
-                    Integer.parseInt(amount.getText().trim());
+                    number = Integer.parseInt(amount.getText().trim());
                 } catch(NumberFormatException e) {
                     amount.setText("NaN");
                 }
