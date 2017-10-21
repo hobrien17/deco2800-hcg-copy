@@ -866,20 +866,46 @@ public class Player extends Character implements Tickable {
 		if(pauseDisplayed){
 			return;
 		}
+		
+		// local inputs (i.e. context changes)
+		if (this == playerManager.getPlayer()) {
+			switch (keycode) {
+			case Input.Keys.P:
+				this.contextManager.pushContext(new PerksSelectionScreen());
+				break;
+			case Input.Keys.C:
+				if (levelUp) {
+					this.contextManager.pushContext(new LevelUpContext());
+				} else {
+					this.contextManager.pushContext(new CharacterStatsContext());
+				}
+				break;
+			case Input.Keys.E:
+				checkForInteraction();
+				break;
+			case Input.Keys.I:
+				// Display Inventory
+				LOGGER.info("Access player inventory");
+				contextManager.pushContext(new PlayerInventoryContext(this));
+				break;
+			case Input.Keys.TAB:
+				LOGGER.info("You press Tab!");
+				this.contextManager.pushContext(new ScoreBoardContext());
+				break;
+			default:
+				break;
+			}
+		}
+		
+		// replicated inputs
 		switch (keycode) {
 		case Input.Keys.X:
 			this.getEquippedWeapon().switchBullet();
-			break;
-		case Input.Keys.P:
-			this.contextManager.pushContext(new PerksSelectionScreen());
 			break;
 		case Input.Keys.C:
 			if (levelUp) {
 				levelUp = false;
 				levelUp();
-				this.contextManager.pushContext(new LevelUpContext());
-			} else {
-				this.contextManager.pushContext(new CharacterStatsContext());
 			}
 			break;
 		case Input.Keys.SHIFT_LEFT:
@@ -899,9 +925,6 @@ public class Player extends Character implements Tickable {
 		case Input.Keys.D:
 			movementDirection.put("right", true);
 			break;
-		case Input.Keys.E:
-			checkForInteraction();
-			break;
 		case Input.Keys.R:
 			if (this.getEquippedWeapon() != null) {
 			    this.getEquippedWeapon().ceaseFire();
@@ -912,11 +935,6 @@ public class Player extends Character implements Tickable {
 				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 			}
 			break;
-		case Input.Keys.I:
-			// Display Inventory
-			LOGGER.info("Access player inventory");
-			contextManager.pushContext(new PlayerInventoryContext(this));
-			break;
 		case Input.Keys.L:
 			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
 					Pot.class);
@@ -925,13 +943,10 @@ public class Player extends Character implements Tickable {
 				pot.getPlant().loot();
 			}
 			break;
-		case Input.Keys.TAB:
-			LOGGER.info("You press Tab!");
-			this.contextManager.pushContext(new ScoreBoardContext());
-			break;
 		default:
 			break;
 		}
+		
 		handleDirectionInput();
 		handleNoInput();
 	}
