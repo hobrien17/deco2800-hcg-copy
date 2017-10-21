@@ -37,11 +37,14 @@ import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.stackable.SmallMushroom;
 import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.items.tools.Fertiliser;
+import com.deco2800.hcg.items.tools.Tool;
 import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.inventory.PlayerEquipment;
@@ -60,9 +63,9 @@ public class GeneralRadialDisplay extends Group {
     private String seedHighlight;
     
     private List<ImageButton> buttons;
-    private ImageButton closeButton;
+    private List<Label> counts;
     private Image outline;
-	private Label infoLbl;
+    private LabelStyle style;
     
     private Stage stage;
     private Group display;
@@ -85,6 +88,7 @@ public class GeneralRadialDisplay extends Group {
 	public GeneralRadialDisplay(Stage stage, List<String> items) {
 		this.items = new ArrayList<>(items);
 		buttons = new ArrayList<>();
+		counts = new ArrayList<>();
 		
 		int scale = this.items.size()/MAX_BTNS + 1;
 		xSize = X_SIZE_MAX/(scale);
@@ -99,17 +103,15 @@ public class GeneralRadialDisplay extends Group {
         this.active = false;
         this.seedHighlight = "sunflower";
 
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/plant_ui/basic_font.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/radial_menu/advent_pro.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 40;
 		BitmapFont font = generator.generateFont(parameter);
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/plant_ui/basic_bold.ttf"));
-		font = generator.generateFont(parameter);
-		LabelStyle bold = new LabelStyle(font, Color.valueOf("#004000"));
+		style = new LabelStyle(font, Color.valueOf("#FFFFFF"));
 		generator.dispose();
-		infoLbl = new Label("", bold);
-		infoLbl.setPosition(this.stage.getWidth() / 2, this.stage.getHeight() / 2);
 
 		equippedItems = PlayerEquipment.getPlayerEquipment();
+		inventory = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer().getInventory();
 
         setupSprites();
         setupListeners();
@@ -133,10 +135,29 @@ public class GeneralRadialDisplay extends Group {
 			button.setPosition(getButtonX(i), getButtonY(i));
 			button.addListener(listeners.get(item));
 			display.addActor(button);
-			display.addActor(infoLbl);
 		}
 
 
+	}
+	
+	@Override
+	public float getWidth() {
+		return display.getWidth();
+	}
+	
+	@Override
+	public float getHeight() {
+		return display.getHeight();
+	}
+	
+	@Override
+	public float getX() {
+		return display.getX();
+	}
+	
+	@Override
+	public float getY() {
+		return display.getY();
 	}
 	
 	private void setupSprites() {
@@ -158,12 +179,13 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("shotgun", "shotgun");
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
-		sprites.put("bugSpray", "bugspray_btn");
-		sprites.put("healthPotion", "healthPotion");
-		sprites.put("speedPotion", "speedPotion");
-		sprites.put("magicMushroom", "magicMushroom");
-		sprites.put("smallMushroom", "smallMushroom");
-		sprites.put("key", "key");
+		sprites.put("bug_spray", "bugspray_btn");
+		sprites.put("health_potion", "healthPotion");
+		sprites.put("speed_potion", "speedPotion");
+		sprites.put("magic_mushroom", "magicMushroom");
+		sprites.put("small_mushroom", "smallMushroom");
+		sprites.put("bunnings_snag_and_bread", "snag_btn");
+		sprites.put("bunnings_snag", "sausage_btn");
 	}
 	
 	private void setupListeners() {
@@ -173,10 +195,6 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 				plant(new Seed(Seed.Type.SUNFLOWER));
-				if(plantableNearby()) {
-					playPlantSound();
-				}
-				display.remove();
             }
         });
 		
@@ -184,10 +202,6 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.WATER));
-				if(plantableNearby()) {
-					playPlantLilySound();
-				}
-                display.remove();
             }
         });
 		
@@ -195,10 +209,6 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.ICE));
-				if(plantableNearby()) {
-					playPlantSound();
-				}
-                display.remove();
             }
         });
 		
@@ -206,10 +216,6 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 				plant(new Seed(Seed.Type.FIRE));
-				if(plantableNearby()) {
-					playPlantSound();
-				}
-                display.remove();
             }
         });
 		
@@ -217,10 +223,6 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.EXPLOSIVE));
-				if(plantableNearby()) {
-					playPlantSound();
-				}
-                display.remove();
             }
         });
 		
@@ -228,10 +230,6 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.GRASS));
-				if(plantableNearby()) {
-					playPlantSound();
-				}
-                display.remove();
             }
         });
 
@@ -245,7 +243,6 @@ public class GeneralRadialDisplay extends Group {
 					highlight.setPosition(getButtonX(0), getButtonY(0));
 					setSeedHighlight("basic");
 				}
-				display.remove();
 			}
 		});
 
@@ -257,7 +254,6 @@ public class GeneralRadialDisplay extends Group {
 
 					setSeedHighlight("water");
 				}
-				display.remove();
 			}
 		});
 
@@ -268,7 +264,6 @@ public class GeneralRadialDisplay extends Group {
 				if(getSeedHighlight() != "ice") {
 					setSeedHighlight("ice");
 				}
-				display.remove();
 			}
 		});
 
@@ -279,7 +274,6 @@ public class GeneralRadialDisplay extends Group {
 				if(getSeedHighlight() != "fire") {
 					setSeedHighlight("fire");
 				}
-				display.remove();
 			}
 		});
 
@@ -290,7 +284,6 @@ public class GeneralRadialDisplay extends Group {
 				if(getSeedHighlight() != "explosive") {
 					setSeedHighlight("explosive");
 				}
-				display.remove();
 			}
 		});
 
@@ -301,7 +294,6 @@ public class GeneralRadialDisplay extends Group {
 				if(getSeedHighlight() != "grass") {
 					setSeedHighlight("grass");
 				}
-				display.remove();
 			}
 		});
 
@@ -310,7 +302,6 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.MACHINEGUN;
-				display.remove();
 			}
 		});
 
@@ -319,7 +310,6 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.SHOTGUN;
-				display.remove();
 			}
 		});
 
@@ -328,63 +318,48 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.STARFALL;
-				display.remove();
 			}
 		});
 
 		listeners.put("fertiliser", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				addFertiliser();
-				display.remove();
+				useItem(new Fertiliser());
 			}
 		});
 
-		listeners.put("bugSpray", new ChangeListener() {
+		listeners.put("bug_spray", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				addBugSpray();
-				display.remove();
+				useItem(new BugSpray());
 			}
 		});
 
-		listeners.put("healthPotion", new ChangeListener() {
+		listeners.put("health_potion", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
-				display.remove();
+				useItem(new HealthPotion(100));
 			}
 		});
 
-		listeners.put("speedPotion", new ChangeListener() {
+		listeners.put("speed_potion", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
-				display.remove();
+				useItem(new SpeedPotion());
 			}
 		});
 
-		listeners.put("magicMushroom", new ChangeListener() {
+		listeners.put("magic_mushroom", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
-				display.remove();
+				useItem(new MagicMushroom());
 			}
 		});
 
-		listeners.put("smallMushroom", new ChangeListener() {
+		listeners.put("small_mushroom", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-
-				display.remove();
-			}
-		});
-
-		listeners.put("key", new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				//PotUnlockDisplay.open();
-				display.remove();
+				useItem(new SmallMushroom());
 			}
 		});
 	}
@@ -427,6 +402,7 @@ public class GeneralRadialDisplay extends Group {
 	}
 	
 	public void show() {
+		update();
 		display.setVisible(true);
 		this.setActive(true);
 	}
@@ -450,7 +426,10 @@ public class GeneralRadialDisplay extends Group {
 			if(pot.plantInside(seed)) {
 				plantManager.addPlants(pot.getPlant());
 				plantManager.updateLabel();
+				playPlantSound();
+				inventory.removeItem(seed);
 			}
+			update();
 			return;
 		}
 		
@@ -458,28 +437,23 @@ public class GeneralRadialDisplay extends Group {
 		if(closestCorpse.isPresent()) {
 			Corpse corpse = (Corpse)closestCorpse.get();
 			corpse.plantInside(seed);
+			inventory.removeItem(seed);
+			update();
 			return;
 		}
     }
     
-    private void addBugSpray() {
-    	Optional<AbstractEntity> closest = getClosestPot();
-    	if(closest.isPresent()) {
-    		Pot pot = (Pot)closest.get();
-    		if(!pot.isEmpty()) {
-    			pot.getPlant().increaseRarity(0.1, 0.05);
+    private void useItem(Item item) {
+    	if(item instanceof Tool) {
+    		if(getClosestPot().isPresent() && !((Pot)getClosestPot().get()).isEmpty()) {
+    			((Tool)item).use();
     		}
+    	} else if(item instanceof ConsumableItem) {
+    		Player player = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer();
+    		((ConsumableItem)item).consume(player);
     	}
-    }
-    
-    private void addFertiliser() {
-    	Optional<AbstractEntity> closest = getClosestPot();
-    	if(closest.isPresent()) {
-    		Pot pot = (Pot)closest.get();
-    		if(!pot.isEmpty()) {
-    			pot.getPlant().changeDelay(0.8f);
-    		}
-    	}
+    	inventory.removeItem(item);
+    	update();
     }
     
     /**
@@ -487,7 +461,7 @@ public class GeneralRadialDisplay extends Group {
      * 
      * @return the closedst pot to the player
      */
-    private static Optional<AbstractEntity> getClosestPot() {
+    public static Optional<AbstractEntity> getClosestPot() {
     	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 		Player player = pm.getPlayer();
 		float px = player.getPosX();
@@ -501,7 +475,7 @@ public class GeneralRadialDisplay extends Group {
      * 
      * @return the closest corpse to the player
      */
-    private static Optional<AbstractEntity> getClosestCorpse() {
+    public static Optional<AbstractEntity> getClosestCorpse() {
     	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 		Player player = pm.getPlayer();
 		float px = player.getPosX();
@@ -535,6 +509,57 @@ public class GeneralRadialDisplay extends Group {
 		String soundName = "plantingLily";
 		soundManager.stopSound(soundName);
 		soundManager.playSound(soundName);
+	}
+	
+	private int getCount(String texture) {
+		int itemCount = 0;
+		for(int i = 0; i < inventory.getNumItems(); i++) {
+			if(inventory.getItem(i).getTexture().equals(texture)) {
+				itemCount += inventory.getItem(i).getStackSize();
+			}
+		}
+		return itemCount;
+	}
+	
+	private void update() {
+		for(Label lbl : counts) {
+			display.removeActor(lbl);
+		}
+		for(int i = 0; i < buttons.size(); i++) {
+			ImageButton button = buttons.get(i);
+			String type = items.get(i);
+			int count = -1;
+			if(type.equals("sunflower") || type.equals("water") || type.equals("cactus") || type.equals("ice") || 
+					type.equals("fire") || type.equals("explosive")) {
+				count = getCount(type + "_seed");
+			} else if(type.equals("sunflowerC") || type.equals("waterC") || type.equals("cactusC") || type.equals("iceC") || 
+					type.equals("fireC") || type.equals("explosiveC")) {
+				count = getCount(type.substring(0, type.length() - 1) + "_seed");
+			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("shotgun"));
+			else if(type.equals("health_potion")) {
+				count = getCount("red_potion");
+			} else if(type.equals("speed_potion")) {
+				count = getCount("purple_potion");
+			}
+			else{
+				count = getCount(type);
+			}
+			
+			if(count == 0) {
+				button.getImage().setColor(Color.valueOf("#505050"));
+				button.setDisabled(true);
+			} else {
+				if(count > 1) {
+					Label lbl = new Label(String.valueOf(count), style);
+					counts.add(lbl);
+					display.addActor(lbl);
+					lbl.setX(button.getX() + button.getWidth() - 20);
+					lbl.setY(button.getY() - 10);
+				}
+				button.getImage().setColor(Color.valueOf("#FFFFFF"));
+				button.setDisabled(false);
+			}
+		}
 	}
 
 	//protected void updateCount() {

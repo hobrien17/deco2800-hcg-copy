@@ -1,3 +1,5 @@
+package com.deco2800.hcg.shading;
+
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class GrayScaleShader {

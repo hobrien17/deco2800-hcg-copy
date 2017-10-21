@@ -71,7 +71,7 @@ public class TextureManager extends Manager {
 			textureMap.put("battle_seed_white", new Texture("resources/sprites/seeds/battle_seed_white.png"));
 			textureMap.put("explosive_seed", new Texture("resources/sprites/seeds/explosive_seed.png"));
 			textureMap.put("fire_seed", new Texture("resources/sprites/seeds/fire_seed.png"));
-			textureMap.put("gardening_seed", new Texture("resources/sprites/seeds/gardening_seed.png"));
+			textureMap.put("sunflower_seed", new Texture("resources/sprites/seeds/gardening_seed.png"));
 			textureMap.put("grass_seed", new Texture("resources/sprites/seeds/grass_seed.png"));
 			textureMap.put("ice_seed", new Texture("resources/sprites/seeds/ice_seed.png"));
 			textureMap.put("water_seed", new Texture("resources/sprites/seeds/water_seed.png"));
@@ -109,7 +109,8 @@ public class TextureManager extends Manager {
 			textureMap.put("trowel_mid", new Texture("resources/sprites/gardentools/trowel_dirty.png"));
 			textureMap.put("trowel_broken", new Texture("resources/sprites/gardentools/trowel_dirty_2.png"));
 			textureMap.put("shovel", new Texture("resources/sprites/gardentools/shovel.png"));
-			textureMap.put("key", new Texture("resources/sprites/plants/key.png"));
+			textureMap.put("hoe", new Texture("resources/sprites/gardentools/hoe.png"));
+			textureMap.put("key_icon", new Texture("resources/sprites/plants/key.png"));
 
 			// Enemy textures
 			textureMap.put("antE", new Texture("resources/sprites/enemies/ant_E_1.png"));

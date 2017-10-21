@@ -907,7 +907,7 @@ public class Player extends Character implements Tickable {
 		case Input.Keys.L:
 			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
 					Pot.class);
-			if (closest.isPresent()) {
+			if (closest.isPresent() && !((Pot)closest.get()).isEmpty()) {
 				Pot pot = (Pot) closest.get();
 				pot.getPlant().loot();
 			}
