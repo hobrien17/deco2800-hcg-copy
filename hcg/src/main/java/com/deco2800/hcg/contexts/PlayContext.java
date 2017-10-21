@@ -473,8 +473,8 @@ public class PlayContext extends Context {
         }
         exitDisplayed = false;
         // clear old observers (mushroom turret for example)
-        World world;
-        if((world = gameManager.getWorld()).equals(World.SAFEZONE)) {
+        World world = gameManager.getWorld();
+        if(world.equals(World.SAFEZONE)) {
         	world.saveStopwatch();
         } else {
         	StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
