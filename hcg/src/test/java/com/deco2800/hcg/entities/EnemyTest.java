@@ -162,4 +162,10 @@ public class EnemyTest {
     public void testGetEnemyType() {
         assertThat("Enemy type is incorrect", enemy.getEnemyType(), is(equalTo(EnemyType.SQUIRREL)));
     }
+    
+    @Test
+    public void testHashCode() {
+        assertThat("Hash code of this enemy is incorrect", enemy.hashCode(), is(equalTo(31)));
+    }
+    
 }

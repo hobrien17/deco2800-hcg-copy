@@ -1,11 +1,13 @@
 package com.deco2800.hcg.entities.enemyentities;
 
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Crab extends Enemy implements Tickable {
 
@@ -61,5 +63,25 @@ public class Crab extends Enemy implements Tickable {
             this.setMovementSpeed(this.defaultSpeed *3);
         }
         this.crab();
+    }
+    
+    /**
+     *  Logic for Crab
+     *
+     */
+    void crab(){
+        if (this.getNumberPlayers() > 1) {
+            findClosestPlayer();
+            this.lastPlayerX = closestPlayer.getPosX();
+            this.lastPlayerY = closestPlayer.getPosY();
+
+        } else {
+            this.lastPlayerX = playerManager.getPlayer().getPosX();
+            this.lastPlayerY = playerManager.getPlayer().getPosY();
+        }
+        //Set new position
+        newPos = this.getToPlayerPos(closestPlayer);
+        this.detectCollision();
+        this.moveAction();
     }
 }
