@@ -70,6 +70,11 @@ public class Multigun extends Weapon implements Tickable {
             angle = angle + shotAngle;
         }
         playFireSound();
+
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashSize = 4;
+        muzzleFlashStartTime = System.currentTimeMillis();
     }
     
 }
