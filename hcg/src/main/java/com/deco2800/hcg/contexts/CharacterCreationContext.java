@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
@@ -110,7 +111,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture[] charTextureArray;
     private int textureCount;
 
-    private TextArea selectedDescriptionText;
+//    private TextArea selectedDescriptionText;
 
     /**
      * Creates a new character creation screen
@@ -207,8 +208,8 @@ public class CharacterCreationContext extends CharacterContext{
                                 characterName.getText(), charTextureArray[textureCount].toString());
                     }
                 } else {
-                    selectedDescriptionText.setText("Please distribute all skill points and choose your specialised" +
-                            " skills");
+//                    selectedDescriptionText.setText("Please distribute all skill points and choose your specialised" +
+//                            " skills");
                 }
             }
         });
@@ -301,8 +302,8 @@ public class CharacterCreationContext extends CharacterContext{
                 strengthLabel.setText("Strength: " + strength);
                 attributePointsLabel.setText("Available Points: " + attributePoints);
                 carryWeightLabel.setText("Carry Weight: " + carryWeight);
-                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
-                        "deal with melee weapons, as well as how much you are able to carry");
+//                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
+//                        "deal with melee weapons, as well as how much you are able to carry");
             }
         });
 
@@ -320,8 +321,8 @@ public class CharacterCreationContext extends CharacterContext{
                 attributePointsLabel.setText("Available Points: " + attributePoints);
                 startingHealthLabel.setText("Starting Health: " + startingHealth);
                 healthGainLabel.setText("Health gained per level up: " + healthGain);
-                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-                        "as well as how much health you gain per level");
+//                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
+//                        "as well as how much health you gain per level");
             }
         });
 
@@ -339,8 +340,8 @@ public class CharacterCreationContext extends CharacterContext{
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
             	staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
-                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-                        "as well as how much stamina you gain per level");
+//                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
+//                        "as well as how much stamina you gain per level");
             }
         });
 
@@ -356,8 +357,8 @@ public class CharacterCreationContext extends CharacterContext{
             	intellectLabel.setText("Intellect: " + intellect);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
-                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-                        "to distribute to your skills each level");
+//                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
+//                        "to distribute to your skills each level");
             }
         });
 
@@ -371,9 +372,9 @@ public class CharacterCreationContext extends CharacterContext{
             	attributePoints++;
             	charismaLabel.setText("Charisma: " + charisma);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
-                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-                        "influence others to see your point of view, and perhaps even follow you");
+//                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
+//                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
+//                        "influence others to see your point of view, and perhaps even follow you");
             }
         });
 
@@ -387,8 +388,8 @@ public class CharacterCreationContext extends CharacterContext{
                     strengthLabel.setText("Strength: " + strength);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     carryWeightLabel.setText("Carry Weight: " + carryWeight);
-                    selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
-                            "deal with melee weapons, as well as how much you are able to carry");
+//                    selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
+//                            "deal with melee weapons, as well as how much you are able to carry");
                 }
             }
         });
@@ -405,8 +406,8 @@ public class CharacterCreationContext extends CharacterContext{
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingHealthLabel.setText("Starting Health: " + startingHealth);
                     healthGainLabel.setText("Health gained per level up: " + healthGain);
-                    selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-                            "as well as how much health you gain per level");
+//                    selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
+//                            "as well as how much health you gain per level");
                 }
             }
         });
@@ -423,8 +424,8 @@ public class CharacterCreationContext extends CharacterContext{
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
                     staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
-                    selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-                            "as well as how much stamina you gain per level");
+//                    selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
+//                            "as well as how much stamina you gain per level");
                 }
             }
         });
@@ -439,8 +440,8 @@ public class CharacterCreationContext extends CharacterContext{
                     intellectLabel.setText("Intellect: " + intellect);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
-                    selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-                            "to distribute to your skills each level");
+//                    selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
+//                            "to distribute to your skills each level");
                 }
             }
         });
@@ -453,9 +454,9 @@ public class CharacterCreationContext extends CharacterContext{
                     attributePoints--;
                     charismaLabel.setText("Charisma: " + charisma);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
-                    selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-                            "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-                            "influence others to see your point of view, and perhaps even follow you");
+//                    selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
+//                            "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
+//                            "influence others to see your point of view, and perhaps even follow you");
                 }
             }
         });
@@ -463,50 +464,53 @@ public class CharacterCreationContext extends CharacterContext{
         attributePointsLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("The number of points you have to distribute to your attributes.");
+//                selectedDescriptionText.setText("The number of points you have to distribute to your attributes.");
             }
         });
 
         strengthLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
-                        "deal with melee weapons, as well as how much you are able to carry");
+//                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
+//                        "deal with melee weapons, as well as how much you are able to carry");
             }
         });
 
         vitalityLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-                        "as well as how much health you gain per level");
+//                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
+//                        "as well as how much health you gain per level");
             }
         });
 
         agilityLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-                        "as well as how much stamina you gain per level");
+//                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
+//                        "as well as how much stamina you gain per level");
             }
         });
 
         intellectLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-                        "to distribute to your skills each level");
+//                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
+//                        "to distribute to your skills each level");
             }
         });
 
         charismaLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-                        "influence others to see your point of view, and perhaps even follow you");
+//                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
+//                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
+//                        "influence others to see your point of view, and perhaps even follow you");
             }
         });
+        
+        strengthLabel.addListener(new TextTooltip("Tooltip", skin));
+        strengthUp.addListener(new TextTooltip("Tooltip2", skin));
     }
 
     private void setupSkillsWindow() {
@@ -562,8 +566,8 @@ public class CharacterCreationContext extends CharacterContext{
                 }
                 meleeSkillLabel.setText("Melee Skill: " + meleeSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
-                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
-                        " Melee Weapons");
+//                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
+//                        " Melee Weapons");
             }
         });
 
@@ -588,8 +592,8 @@ public class CharacterCreationContext extends CharacterContext{
 				}
                 gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
-                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
-                        " Guns");
+//                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
+//                        " Guns");
             }
         });
 
@@ -614,32 +618,32 @@ public class CharacterCreationContext extends CharacterContext{
 				}
                 energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
-                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
-                        " Energy Weapons");
+//                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
+//                        " Energy Weapons");
             }
         });
 
         meleeSkillLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
-                        " Melee Weapons");
+//                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
+//                        " Melee Weapons");
             }
         });
 
         gunsSkillLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
-                        " Guns");
+//                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
+//                        " Guns");
             }
         });
 
         energyWeaponsSkillLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
-                        " Energy Weapons");
+//                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
+//                        " Energy Weapons");
             }
         });
     }
@@ -693,12 +697,12 @@ public class CharacterCreationContext extends CharacterContext{
         });
     }
 
-    private void setupSelectedDescriptionWindow() {
-        selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
-        selectedDescriptionText.setDisabled(true);
-        selectedDescriptionText.setColor(Color.WHITE);
-        //selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
-    }
+//    private void setupSelectedDescriptionWindow() {
+//        selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
+//        selectedDescriptionText.setDisabled(true);
+//        selectedDescriptionText.setColor(Color.WHITE);
+//        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
+//    }
 
     private void addSubtables() {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
