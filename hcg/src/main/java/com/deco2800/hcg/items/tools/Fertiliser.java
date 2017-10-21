@@ -15,6 +15,7 @@ public class Fertiliser extends Tool {
         this.texture = "fertiliser";
         this.maxStackSize = 10;
         this.currentStackSize = 1;
+        this.baseValue = 10;
 	}
 
 	@Override

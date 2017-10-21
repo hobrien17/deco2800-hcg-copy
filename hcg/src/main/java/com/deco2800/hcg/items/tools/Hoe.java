@@ -15,6 +15,7 @@ public class Hoe extends Tool {
         this.texture = nextTexture();
         this.maxStackSize = 1;
         this.currentStackSize = 1;
+        this.baseValue = 10;
 	}
 	
 	private String nextTexture() {
@@ -26,7 +27,6 @@ public class Hoe extends Tool {
 		case 1:
 			return "hoe_broken";
 		}
-		
 		return null;
 	}
 
