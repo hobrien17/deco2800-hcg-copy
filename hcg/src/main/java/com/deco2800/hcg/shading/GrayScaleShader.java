@@ -32,6 +32,6 @@ public class GrayScaleShader {
             "  gl_FragColor = vec4(grey, grey, grey, c.a);\n" +
             "}";
 
-    public static ShaderProgram grayScaleShader = new ShaderProgram(vertexShader,
+    public static final ShaderProgram grayScaleShader = new ShaderProgram(vertexShader,
             fragmentShader);
 }
