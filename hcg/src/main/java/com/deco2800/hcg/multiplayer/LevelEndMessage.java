@@ -14,16 +14,16 @@ public class LevelEndMessage extends Message {
 	private final WorldManager worldManager =
 			(WorldManager) GameManager.get().getManager(WorldManager.class);
 	
-	public LevelEndMessage() {
-		// Default constructor
-	}
-	
 	public LevelEndMessage(int seed) {
 		super(MessageType.LEVEL_END);
 	}
 	
+	public LevelEndMessage(SocketAddress address) {
+		super(address);
+	}
+	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		worldManager.completeLevel();
 	}
 }
