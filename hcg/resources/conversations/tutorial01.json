@@ -1,0 +1,63 @@
+{
+  "initialRelationship": "greetings",
+  "relationshipMap": {
+    "greetings": "hello",
+    "lost": "areYouLost"
+  },
+  "nodes": [
+    {
+      "id": "hello",
+      "nodeText": "Hello, weclome to Hardcore Gardening!",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Thank you!",
+          "actions": [],
+          "target": "goSeeSteve"
+        }
+      ]
+    },
+    {
+      "id": "goSeeSteve",
+      "nodeText": "In order to get started with the game, how about you go talk to Steve and he will talk to you about quests.",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Sounds great, thank you",
+          "actions": ["setRelationship|lost"],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "areYouLost",
+      "nodeText": "Hey are you lost? Can't find Steve?",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Yeah I can't seem to find him?",
+          "actions": [],
+          "target": "steveIsOverThere"
+        },
+        {
+          "conditions": [],
+          "optionText": "No, I'm not lost.",
+          "actions": ["setRelationship|greetings"],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "steveIsOverThere",
+      "nodeText": "Steve is just to the right, near the squirrels.",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Thanks for your help!",
+          "actions": [],
+          "target": null
+        }
+      ]
+    }
+  ]
+}
