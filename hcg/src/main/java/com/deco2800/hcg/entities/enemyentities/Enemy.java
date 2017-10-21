@@ -550,9 +550,8 @@ public abstract class Enemy extends Character implements Lootable {
         List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
         for (AbstractEntity entity : entities) {
             if (!this.equals(entity) && this.collidesWith(entity)) {
-                    //newPos.overlaps(entity.getBox3D())) {
+
                 if(entity instanceof Player) {
-                    //this.causeDamage((Player)entity);
                     this.setTarget((Player)entity);
                     this.setCollidedPlayer(true);
                 }
@@ -726,8 +725,6 @@ public abstract class Enemy extends Character implements Lootable {
                 newPos = this.getRandomPos();
             }
         }
-        //Set new position
-        //newPos = this.getToPlayerPos(closestPlayer);
         this.detectCollision();
         this.moveAction();
 
