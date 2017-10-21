@@ -17,13 +17,13 @@ public class ChatMessage extends Message {
 	
 	private String string;
 	
-	public ChatMessage() {
-		//deliberately empty
-	}
-	
 	public ChatMessage(String string) {
 		super(MessageType.CHAT);
 		this.string = string;
+	}
+	
+	public ChatMessage(SocketAddress address) {
+		super(address);
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class ChatMessage extends Message {
 	}
 	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		messageManager.chatMessageReceieved(string);
 	}
 }

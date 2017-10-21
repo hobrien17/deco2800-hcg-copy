@@ -150,8 +150,8 @@ public class WorldMapContext extends UIContext {
 			public void changed(ChangeEvent event, Actor actor) {
 				World world = World.SAFEZONE;
 				Level level = new Level(world, 0, 1, 1);
-				
 				gameManager.setWorld(world);
+				world.removeEntity(playerManager.getPlayer());
 
 				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
 				playerManager.spawnPlayers();

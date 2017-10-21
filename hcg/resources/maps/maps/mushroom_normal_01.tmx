@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1470">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1433">
+
  <properties>
   <property name="PlayerX" value="60"/>
   <property name="PlayerY" value="40"/>
@@ -9,6 +10,7 @@
  <tileset firstgid="7" source="../tiles/deprecated/general-tiles.tsx"/>
  <tileset firstgid="17" source="../tiles/any_water_animated.tsx"/>
  <tileset firstgid="21" source="../tiles/exit.tsx"/>
+ <tileset firstgid="22" source="../tiles/deprecated/placeholder.tsx"/>
  <layer name="grass" width="100" height="100">
   <properties>
    <property name="name" value="grass"/>
@@ -117,6 +119,21 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="NPC">
+  <properties>
+   <property name="name" value="NPC"/>
+  </properties>
+  <object id="1432" gid="22" x="1761.95" y="1482.55" width="55" height="32">
+   <properties>
+    <property name="Type" value="Quest"/>
+    <property name="conversation" value="james_test"/>
+    <property name="fName" value="James"/>
+    <property name="faceImage" value="npc_face"/>
+    <property name="sName" value="TestNPC"/>
+    <property name="texture" value="character_1"/>
+   </properties>
+  </object>
+ </objectgroup>
  <layer name="paths" width="100" height="100">
   <properties>
    <property name="name" value="sand"/>

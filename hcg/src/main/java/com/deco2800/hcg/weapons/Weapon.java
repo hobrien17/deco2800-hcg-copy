@@ -1,11 +1,13 @@
 package com.deco2800.hcg.weapons;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.*;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.shading.LightEmitter;
 
 /**
  * Weapon class containing all values and methods required for
@@ -25,8 +27,9 @@ import com.deco2800.hcg.managers.SoundManager;
  * @author Bodhi Howe - Sinquios
  */
 
-public abstract class Weapon extends AbstractEntity implements Tickable {
+public abstract class Weapon extends AbstractEntity implements Tickable, LightEmitter {
 
+    private final static int MUZZLE_FLASH_TIME = 50;
     protected Vector3 follow;
     protected Vector3 aim;
     protected double radius;
@@ -39,6 +42,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected int pellets;
     protected SoundManager soundManager;
     protected String texture;
+    protected int muzzleFlashEnabled;
+    protected float muzzleFlashSize;
+    protected long muzzleFlashStartTime;
 
     /**
      * Constructor for Weapon objects.
@@ -69,6 +75,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.setTexture("blank");
         this.texture = texture;
         this.cooldown = cooldown;
+        this.muzzleFlashEnabled = 0;
+        this.muzzleFlashSize = 3;
         this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
     }
 
@@ -223,6 +231,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 this.aim.x, this.aim.y);
         playFireSound();
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashStartTime = System.currentTimeMillis();
     }
 
     /**
@@ -270,6 +281,28 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     }
 
     /**
+     * Grab the current light colour of this entity.
+     *
+     * @return This entity's current light colour.
+     */
+    @Override
+    public Color getLightColour() {
+        return Color.YELLOW;
+    }
+
+    /**
+     * Grab the current light power of this entity. If it shouldn't emit light right
+     * now, return 0.
+     *
+     * @return This entity's current light power.
+     */
+    @Override
+    public float getLightPower() {
+//        return Float.MAX_VALUE * muzzleFlash;
+        return muzzleFlashSize * muzzleFlashEnabled;
+    }
+
+    /**
      * Updates position of the weapon in the game world and
      * shoots weapon if weapon cooldown is reached and
      * button is pressed
@@ -283,6 +316,13 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         } else if(shoot) {
             this.counter = 0;
             fireWeapon();
+        }
+
+        // Handle muzzle flash
+        if (muzzleFlashEnabled == 1) {
+            if (System.currentTimeMillis() - muzzleFlashStartTime >= MUZZLE_FLASH_TIME) {
+                muzzleFlashEnabled = 0;
+            }
         }
     }
 

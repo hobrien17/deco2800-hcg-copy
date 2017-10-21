@@ -25,10 +25,6 @@ public class StartMessage extends Message {
 	
 	private int seed;
 	
-	public StartMessage() {
-		//deliberately empty
-	}
-	
 	public StartMessage(int seed) {
 		super(MessageType.START);
 		this.seed = seed;
@@ -37,6 +33,10 @@ public class StartMessage extends Message {
 		
 		worldManager.setGeneratorSeed(networkManager.getNextRandomInt(Integer.MAX_VALUE));
 		worldManager.generateAndSetWorldStack();
+	}
+	
+	public StartMessage(SocketAddress address) {
+		super(address);
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class StartMessage extends Message {
 	}
 	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		networkManager.setSeed((long) seed);
 		
 		worldManager.setGeneratorSeed(networkManager.getNextRandomInt(Integer.MAX_VALUE));
