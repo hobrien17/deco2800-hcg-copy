@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.enemyentities;
 
 import com.badlogic.gdx.math.Vector3;
-import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
@@ -67,30 +66,6 @@ public class MushroomTurret extends Enemy implements Observer {
         Vector3 position = new Vector3(this.getPosX() + 1, this.getPosY() + 1, 0);
         enemyWeapon.updateAim(position);
         enemyWeapon.openFire();
-        /*Bullet bullet1 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                this.getPosX() + range, this.getPosY(), this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet1);
-        Bullet bullet2 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                Math.max(0,this.getPosX() - range), this.getPosY(), this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet2);
-        Bullet bullet3 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                this.getPosX(), this.getPosY() + range, this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet3);
-        Bullet bullet4 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                this.getPosX(), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet4);
-        Bullet bullet5 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                this.getPosX() + range, this.getPosY() + range, this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet5);
-        Bullet bullet6 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                Math.max(0,this.getPosX() - range), this.getPosY() + range , this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet6);
-        Bullet bullet7 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                this.getPosX() + range, Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet7);
-        Bullet bullet8 = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                Math.max(0,this.getPosX() - range), Math.max(0,this.getPosY() - range), this.getPosZ(), this, 1);
-        GameManager.get().getWorld().addEntity(bullet8);*/
     }
     
     protected void stopShooting() {

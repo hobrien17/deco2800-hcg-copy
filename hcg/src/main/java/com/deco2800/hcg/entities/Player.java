@@ -39,6 +39,7 @@ import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
+import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -84,6 +85,10 @@ public class Player extends Character implements Tickable {
 	private float lastSpeedY;
 	private long lastTick = 0;
 	private String displayImage;
+
+	private boolean pauseDisplayed;
+
+
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
 	
@@ -132,7 +137,6 @@ public class Player extends Character implements Tickable {
 		this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		this.conversationManager = new ConversationManager();
 
-
 		// Set up specialised skills map
 		this.specialisedSkills = new HashMap<String, Boolean>();
 		for (String attribute : SPECIALISED_SKILLS) {
@@ -143,6 +147,7 @@ public class Player extends Character implements Tickable {
 		for (Perk.perk enumPerk : Perk.perk.values()) {
 			perks.add(new Perk(enumPerk));
 		}
+
 
 		this.id = id;
 		if (id == 0) {
@@ -253,6 +258,9 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
+		if (pauseDisplayed) {
+			return;
+		}
 		Vector3 position = gameManager.screenToWorld(screenX, screenY);
 		playerInputManager.queueLocalInput(
 				InputType.TOUCH_DOWN,
@@ -447,7 +455,7 @@ public class Player extends Character implements Tickable {
 			// if player is moving
 			if (!terrain.equals(name)) {
 				// if player moved to a different tile
-				if (!name.equals("")) {
+				if (!"".equals(name)) {
 					// stop old sound effect if there were
 					soundStop(name);
 				}
@@ -855,7 +863,9 @@ public class Player extends Character implements Tickable {
 	 * possible actions on key press. Such as NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
-
+		if(pauseDisplayed){
+			return;
+		}
 		switch (keycode) {
 		case Input.Keys.X:
 			this.getEquippedWeapon().switchBullet();
@@ -901,9 +911,6 @@ public class Player extends Character implements Tickable {
 			if (this.getEquippedWeapon() != null) {
 				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 			}
-			break;
-		case Input.Keys.ESCAPE:
-			contextManager.popContext();
 			break;
 		case Input.Keys.I:
 			// Display Inventory
@@ -1158,4 +1165,13 @@ public class Player extends Character implements Tickable {
 	public List<String> getSpecialisedSkillsList() {
 		return SPECIALISED_SKILLS;
 	}
+
+	public void setPauseDisplayed(boolean value) {
+		pauseDisplayed = value;
+	}
+
+	public boolean getPauseDisplayed() {
+		return pauseDisplayed;
+	}
+
 }
