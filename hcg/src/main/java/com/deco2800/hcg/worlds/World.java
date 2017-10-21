@@ -605,32 +605,37 @@ public class World {
     TextureManager textureManager = (TextureManager) 
         GameManager.get().getManager(TextureManager.class);
     
-    int shitname = -1;
+    int numOfPuddleTypes = -1;
     
     String layerName;
     String texture;
-    String texture1 = null;
+    String texture2 = null;
+    String texture3 = null;
     
     switch(this.weather) {
       case RAIN:
         // lets make a rain puddle!
         layerName = "puddle";
         texture = "rainpuddle";
-        shitname = 1;
+        texture2= "rainpuddle2";
+        texture3 = "rainpuddle3";
+        numOfPuddleTypes = 3;
         break;
-        
       case SNOW:
         // lets make an ice puddle!
         layerName = "icepuddle";
         texture = "icepuddle";
-        shitname = 1;
+        texture2= "icepuddle2";
+        texture3 = "icepuddle3";
+        numOfPuddleTypes = 3;
         break;
       case SANDSTORM:
     	  // lets make a sandstorm puddle
     	  layerName = "sandstormpuddle";
           texture = "sandstormpuddle";
-          texture1 = "sandstormpuddle1";
-          shitname = 2;
+          texture2= "sandstormpuddle2";
+          texture3 = "sandstormpuddle3";
+          numOfPuddleTypes = 3;
           break;
       default:
         return;
@@ -701,19 +706,22 @@ public class World {
 				continue;
 			}
 
+			int randPuddleInt = randPuddleSelector.nextInt(numOfPuddleTypes)+1;
 			
-			// add tile
-			if (randPuddleSelector.nextInt(shitname+1)==2){
+			if (randPuddleInt == 2){
 				this.newTileAtPos((int) posX, (int) posY,
-						textureManager.getTexture(texture1), (TiledMapTileLayer) this
+						textureManager.getTexture(texture2), (TiledMapTileLayer) this
 								.getMapLayerWithProperty("name", layerName));
-			} else {
+			} else if (randPuddleInt == 3){
+				this.newTileAtPos((int) posX, (int) posY,
+						textureManager.getTexture(texture3), (TiledMapTileLayer) this
+								.getMapLayerWithProperty("name", layerName));
+			} else if (randPuddleInt == 1){
 				this.newTileAtPos((int) posX, (int) posY,
 						textureManager.getTexture(texture), (TiledMapTileLayer) this
 								.getMapLayerWithProperty("name", layerName));
 			}
 			
-
 			// add to successful blocks created. If we've made enough then break
 			successes++;
 			if (successes > 0) {
