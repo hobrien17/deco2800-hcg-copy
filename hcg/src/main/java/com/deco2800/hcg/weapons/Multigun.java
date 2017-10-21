@@ -54,7 +54,7 @@ public class Multigun extends Weapon implements Tickable {
     }
     
     @Override
-    protected void fireWeapon() {
+    protected void fire() {
         float deltaX = getPosX() - this.aim.x;
         float deltaY = getPosY() - this.aim.y;
         float angle = ((float) (Math.atan2(deltaY, deltaX)) + (float) (Math.PI)) - arc/2f;

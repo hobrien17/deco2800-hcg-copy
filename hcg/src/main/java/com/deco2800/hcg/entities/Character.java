@@ -2,10 +2,17 @@ package com.deco2800.hcg.entities;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 
@@ -599,5 +606,20 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
     @Override
     public void onTick(long gameTickCount) {
         myEffects.apply();
+    }
+    
+    protected void spawnParticles(AbstractEntity entity, String particleFile) {
+        try {
+            ParticleEffect effect = new ParticleEffect();
+            effect.load(Gdx.files.internal("resources/particles/" + particleFile),
+            Gdx.files.internal("resources/particles/"));
+            Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
+            effect.setPosition(position.x, position.y);
+            effect.start();
+            ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, effect);
+        } catch (Exception e) {
+            Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
+            LOGGER.error("Unable to load particle effects.");
+        }
     }
 }

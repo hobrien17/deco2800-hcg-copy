@@ -27,6 +27,7 @@ public class Machinegun extends Weapon implements Tickable {
             AbstractEntity user, double radius, String texture, int cooldown) {
         super(posX, posY, posZ, xLength, yLength, zLength, weaponType, user, radius,
                 texture, cooldown);
+        this.pellets = 1;
     }
     
     @Override
@@ -37,7 +38,7 @@ public class Machinegun extends Weapon implements Tickable {
     }
     
     @Override
-    protected void fireWeapon() {
+    protected void fire() {
         shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 this.aim.x, this.aim.y);
         playFireSound();

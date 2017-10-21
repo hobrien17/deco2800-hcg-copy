@@ -3,7 +3,11 @@ package com.deco2800.hcg.weapons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.bullets.*;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
@@ -222,18 +226,63 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
                 break;
         }
     }
+    
+    protected Seed bulletToSeed() {
+    	switch(bulletType) {
+    	case BASIC:
+            return new Seed(Seed.Type.SUNFLOWER);
+        case ICE:
+        	return new Seed(Seed.Type.ICE);
+        case FIRE:
+        	return new Seed(Seed.Type.FIRE);
+        case EXPLOSION:
+        	return new Seed(Seed.Type.EXPLOSIVE);
+        case GRASS:
+        	return new Seed(Seed.Type.GRASS);
+        case HOMING:
+        	return new Seed(Seed.Type.WATER);
+        default:
+            return null;
+    	}
+    }
+    
+    /**
+     * Caries out a fire sequence
+     */
+    protected void fire() {
+    	shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                this.aim.x, this.aim.y);
+        playFireSound();
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashStartTime = System.currentTimeMillis();
+    }
 
     /**
      * Fires weapon using different firing method based on weapon type
      * Takes local variables aimX and aimY as firing coordinates
      */
     protected void fireWeapon() {
-        shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                this.aim.x, this.aim.y);
-        playFireSound();
-        // Muzzle flash
-        muzzleFlashEnabled = 1;
-        muzzleFlashStartTime = System.currentTimeMillis();
+    	if(!(user instanceof Player)) {
+    		fire();
+    	} else {
+        	Inventory inventory = ((Player)user).getInventory();
+        	Seed seed = bulletToSeed();
+        	int count = 0;
+        	for(Item item : inventory) {
+        		if(item instanceof Seed && ((Seed) item).getType().equals(seed.getType())) {
+        			count += item.getStackSize();
+        		}
+        	}
+        	System.out.println(count);
+        	System.out.println(pellets);
+        	if(count >= this.pellets) {
+        		fire();
+        		for(int i = 0; i < this.pellets; i++) {
+        			inventory.removeItem(seed);
+        		}
+        	}
+    	}
     }
 
     /**

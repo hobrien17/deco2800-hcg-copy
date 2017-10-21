@@ -74,7 +74,6 @@ public class Perk {
     }
 
     public Perk(perk enumPerk) {
-
         GameManager gameManager = GameManager.get();
         PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         player = playerManager.getPlayer();
@@ -109,15 +108,14 @@ public class Perk {
     }
 
     public void setCurrentLevel( int currentLevel) {
-        if (currentLevel >= enumPerk.getMaxLevel() || currentLevel < 0) {
+        if (currentLevel > enumPerk.getMaxLevel() || currentLevel < 0) {
         }
         else {
             this.currentLevel = currentLevel;
         }
     }
-
-    public boolean isAvaliable() {
-        return player.getLevel() >= enumPerk.getLevelRequirement();
+    public boolean isAvaliable(Player player) {
+        return  player.getLevel() >= enumPerk.getLevelRequirement();
     }
 
     public boolean isMaxed() {

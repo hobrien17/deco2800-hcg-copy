@@ -213,20 +213,21 @@ public class Effects {
      * effect is restarted.
      */
     public void apply() {
+        List<Effect> forRemoval = new ArrayList<Effect>();
         for (Effect effect : currentEffects) {
             Character thisCharacter = owner;
 
             if (effect.getUseCount() == 0) {
                 if (!effect.onCooldown()) {
                     thisCharacter.resetSpeed();
-                    currentEffects.remove(effect);
+                    forRemoval.add(effect);
                     continue;
                 }
             } else {
                 effect.decrementUses();
             }
 
-			// Only activate while buff is active
+			// Only activate while effect is active
 			if (effect.onCooldown()) {
 				return;
 			}
@@ -270,6 +271,11 @@ public class Effects {
 
 			// Handle damage reduction, fire rate reduction, etc.
 		}
+
+		// Safely remove effects from the currentEffects collection
+		for (Effect effect : forRemoval) {
+            currentEffects.remove(effect);
+        }
 	}
     
     protected void spawnParticles(AbstractEntity entity, String particleFile) {

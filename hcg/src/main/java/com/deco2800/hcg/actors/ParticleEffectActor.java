@@ -118,18 +118,19 @@ public class ParticleEffectActor extends Actor {
 		}
 		
 		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
-            Vector3 position = GameManager.get().worldToScreen(
-                    new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
-            for(ParticleEffect effect : entry.getValue()) {
-                effect.setPosition(position.x, position.y);
-    		    effect.update(Gdx.graphics.getDeltaTime());
-                effect.draw(batch);
-    
-                if(effect.isComplete()) {
-                    effect.dispose();
-                    entry.getValue().remove(effect);
-                    if(entry.getValue().isEmpty()) {
-                        entityEffects.remove(entry.getKey());
+            if(entry.getValue().isEmpty()) {
+                entityEffects.remove(entry.getKey());
+            } else {
+                Vector3 position = GameManager.get().worldToScreen(
+                        new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
+                for(ParticleEffect effect : entry.getValue()) {
+                    effect.setPosition(position.x, position.y);
+        		    effect.update(Gdx.graphics.getDeltaTime());
+                    effect.draw(batch);
+        
+                    if(effect.isComplete()) {
+                        effect.dispose();
+                        entry.getValue().remove(effect);
                     }
                 }
             }

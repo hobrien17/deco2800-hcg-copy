@@ -27,6 +27,7 @@ import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.entities.bullets.BulletType;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -40,10 +41,13 @@ import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.stackable.SmallMushroom;
 import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.items.tools.Trowel;
+import com.deco2800.hcg.items.tools.Hoe;
 import com.deco2800.hcg.items.tools.Fertiliser;
 import com.deco2800.hcg.items.tools.Tool;
 import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.inventory.PlayerEquipment;
+import com.deco2800.hcg.weapons.Weapon;
 
 
 public class GeneralRadialDisplay extends Group {
@@ -51,11 +55,12 @@ public class GeneralRadialDisplay extends Group {
     private TextureManager textureManager;
     private GameManager gameManager;
     private SoundManager soundManager;
+    private PlayerManager playerManager;
 
     private boolean active;
     private PlayerEquipment equippedItems;
     private Inventory inventory;
-    private String seedHighlight;
+    private BulletType bulletType;
     
     private List<ImageButton> buttons;
     private List<Label> counts;
@@ -93,10 +98,10 @@ public class GeneralRadialDisplay extends Group {
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
+        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
         this.stage = stage;
         this.active = false;
-        this.seedHighlight = "sunflower";
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/radial_menu/advent_pro.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -105,12 +110,11 @@ public class GeneralRadialDisplay extends Group {
 		style = new LabelStyle(font, Color.valueOf("#FFFFFF"));
 		generator.dispose();
 
-		equippedItems = PlayerEquipment.getPlayerEquipment();
 		inventory = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer().getInventory();
+		playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.BASIC);
 		
         setupSprites();
         setupListeners();
-        //updateCount();
         
         display = new Group();
 
@@ -172,6 +176,7 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("outline", "radialOutline");
 		sprites.put("machineGun", "machineGun");
 		sprites.put("shotgun", "shotgun");
+		sprites.put("scatterGun", "scatterGun");
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
 		sprites.put("bug_spray", "bugspray_btn");
@@ -179,8 +184,10 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("speed_potion", "speedPotion");
 		sprites.put("magic_mushroom", "magicMushroom");
 		sprites.put("small_mushroom", "smallMushroom");
-		sprites.put("bunnings_snag_and_bread", "snag_btn");
-		sprites.put("bunnings_snag", "sausage_btn");
+		sprites.put("hoe", "hoe");
+		sprites.put("trowel", "trowel");
+		sprites.put("snag_btn", "snag_btn");
+		sprites.put("sausage_btn", "sausage_btn");
 	}
 	
 	private void setupListeners() {
@@ -231,91 +238,70 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("sunflowerC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				equippedItems.setEquippedSlot(0);
-				if(getSeedHighlight() != "basic") {
-					Image highlight = new Image(textureManager.getTexture("highlight"));
-					highlight.setSize(X_SIZE_MAX,Y_SIZE_MAX);
-					highlight.setPosition(getButtonX(0), getButtonY(0));
-					setSeedHighlight("basic");
-				}
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.BASIC);
 			}
 		});
 
 		listeners.put("waterC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				equippedItems.setEquippedSlot(1);
-				if(getSeedHighlight() != "water") {
-
-					setSeedHighlight("water");
-				}
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.HOMING);
 			}
 		});
 
 		listeners.put("iceC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				equippedItems.setEquippedSlot(2);
-				if(getSeedHighlight() != "ice") {
-					setSeedHighlight("ice");
-				}
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.ICE);
 			}
 		});
 
 		listeners.put("fireC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				equippedItems.setEquippedSlot(3);
-				if(getSeedHighlight() != "fire") {
-					setSeedHighlight("fire");
-				}
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.FIRE);
 			}
 		});
 
 		listeners.put("explosiveC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				equippedItems.setEquippedSlot(4);
-				if(getSeedHighlight() != "explosive") {
-					setSeedHighlight("explosive");
-				}
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.EXPLOSION);
 			}
 		});
 
 		listeners.put("grassC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				equippedItems.setEquippedSlot(5);
-				if(getSeedHighlight() != "grass") {
-					setSeedHighlight("grass");
-				}
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.GRASS);
 			}
 		});
 
 		listeners.put("machineGun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//PlayerEquipment.cycleEquippedSlot();
-				//weaponType = weaponType.MACHINEGUN;
-			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(0);
+				playerManager.getPlayer().setEquipped(0);
 			}
 		});
 
 		listeners.put("shotgun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//PlayerEquipment.cycleEquippedSlot();
-				//weaponType = weaponType.SHOTGUN;
-			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(1);
+				playerManager.getPlayer().setEquipped(1);
+			}
+		});
+
+		listeners.put("scatterGun", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				playerManager.getPlayer().setEquipped(2);
 			}
 		});
 
 		listeners.put("starfall", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//PlayerEquipment.cycleEquippedSlot();
-				//weaponType = weaponType.STARFALL;
-			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(3);
+			    playerManager.getPlayer().setEquipped(3);
 			}
 		});
 
@@ -355,6 +341,34 @@ public class GeneralRadialDisplay extends Group {
 		});
 
 		listeners.put("small_mushroom", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				useItem(new SmallMushroom());
+			}
+		});
+
+		listeners.put("hoe", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				//useItem(new Hoe());
+			}
+		});
+
+		listeners.put("trowel", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				//useItem(new Trowel());
+			}
+		});
+
+		listeners.put("sausage_btn", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				useItem(new SmallMushroom());
+			}
+		});
+
+		listeners.put("snag_btn", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new SmallMushroom());
@@ -533,7 +547,8 @@ public class GeneralRadialDisplay extends Group {
 			} else if(type.equals("sunflowerC") || type.equals("waterC") || type.equals("cactusC") || type.equals("iceC") || 
 					type.equals("fireC") || type.equals("explosiveC") || type.equals("grassC")) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
-			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("shotgun"));
+			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("scatterGun") || type.equals("shotgun") ||
+					type.equals("hoe") || type.equals("trowel"));
 			else if(type.equals("health_potion")) {
 				count = getCount("red_potion");
 			} else if(type.equals("speed_potion")) {
@@ -558,13 +573,5 @@ public class GeneralRadialDisplay extends Group {
 				button.setDisabled(false);
 			}
 		}
-	}
-
-    private void setSeedHighlight(String seed) {
-    	this.seedHighlight = seed;
-	}
-
-    private String getSeedHighlight() {
-    	return seedHighlight;
 	}
 }
