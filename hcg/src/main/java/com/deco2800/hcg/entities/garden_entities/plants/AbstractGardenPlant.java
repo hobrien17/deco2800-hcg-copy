@@ -216,7 +216,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 				Integer[] pair = new Integer[2];
 				pair[1] = (int) player.getPosX();
 				pair[2] = (int) player.getPosY();
- 				//int[] pair = { (int) player.getPosX(), (int) player.getPosY() };
 				positions.remove(pair);
 			}
 			if (positions.isEmpty()) {
