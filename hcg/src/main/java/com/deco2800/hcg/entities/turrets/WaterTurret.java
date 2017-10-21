@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.turrets;
 import java.util.List;
 import java.util.Observable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
@@ -78,6 +79,17 @@ public class WaterTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		return "water_corpse";
+	}
+
+	@Override
+	public int getGlowStrength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Color getGlowColor() {
+		return Color.GREEN;
 	}
 
 }

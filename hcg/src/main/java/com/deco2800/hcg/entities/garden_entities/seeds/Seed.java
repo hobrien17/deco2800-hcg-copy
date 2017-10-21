@@ -143,6 +143,19 @@ public class Seed extends StackableItem {
 	public String getName() {
 		return this.itemName;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof Seed) {
+			return ((Seed) other).getType().toString().equals(this.getType().toString());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.itemName.hashCode();
+	}
 
 
 }

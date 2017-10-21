@@ -7,6 +7,7 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
@@ -106,6 +107,16 @@ public class SunflowerTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		return "sunflower_corpse";
+	}
+
+	@Override
+	public int getGlowStrength() {
+		return 0;
+	}
+
+	@Override
+	public Color getGlowColor() {
+		return Color.GREEN;
 	}
 
 }

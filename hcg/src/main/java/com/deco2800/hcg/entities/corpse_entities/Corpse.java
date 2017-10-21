@@ -1,13 +1,15 @@
 package com.deco2800.hcg.entities.corpse_entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.bullets.FireBullet;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
+import com.deco2800.hcg.shading.LightEmitter;
 
-public abstract class Corpse extends AbstractEntity {
+public abstract class Corpse extends AbstractEntity implements LightEmitter {
 
     AbstractTurret turret;
 
@@ -69,5 +71,22 @@ public abstract class Corpse extends AbstractEntity {
      */
     public boolean isEmpty() {
     	return turret == null;
+    }
+    
+    @Override
+    public float getLightPower() {
+    	if(isEmpty()) {
+    		return 0;
+    	} else {
+    		return turret.getGlowStrength();
+    	}
+    }
+    
+    public Color getLightColour() {
+    	if(isEmpty()) {
+    		return Color.WHITE;
+    	} else {
+    		return turret.getGlowColor();
+    	}
     }
 }
