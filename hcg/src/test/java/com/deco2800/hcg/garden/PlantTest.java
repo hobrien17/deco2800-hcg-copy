@@ -12,7 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.deco2800.hcg.BaseTest;
-import com.deco2800.hcg.contexts.playcontextclasses.PlantWindow;
+import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.entities.garden_entities.plants.*;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.managers.GameManager;

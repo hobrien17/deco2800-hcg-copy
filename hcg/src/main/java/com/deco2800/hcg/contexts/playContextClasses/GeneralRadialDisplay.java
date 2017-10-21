@@ -1,4 +1,4 @@
-package com.deco2800.hcg.contexts.playcontextclasses;
+package com.deco2800.hcg.contexts.playContextClasses;
 
 import java.util.ArrayList;
 import java.util.HashMap;

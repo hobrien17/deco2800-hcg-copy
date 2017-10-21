@@ -242,7 +242,7 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 		// takeDamage method yet. We are advised that they will implement it
 		// soon
 		player.takeDamage(10);
-		
+
 		//Perk - BRAMBLE_AM
 
 	}
