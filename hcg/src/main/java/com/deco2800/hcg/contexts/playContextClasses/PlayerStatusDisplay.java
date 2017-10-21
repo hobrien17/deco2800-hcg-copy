@@ -19,6 +19,7 @@ public class PlayerStatusDisplay extends Group {
     private Image staminaBar;
     private Image playerBorder;
     private Image playerImage;
+    private Image levelBar;
     private Label playerHealth;
     private Label playerLevel;
     
@@ -44,8 +45,10 @@ public class PlayerStatusDisplay extends Group {
         healthBarShadow = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
         playerHealth = new Label(player.getHealthCur() + " / " + player.getHealthMax(), skin);
         playerLevel = new Label("Lv: " + player.getLevel(), skin);
+        levelBar = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
 
 		/* create player display GUI and add it to the stage */
+        this.addActor(levelBar);
         this.addActor(playerImage);
         this.addActor(playerBorder);
         this.addActor(playerLevel);
@@ -54,29 +57,34 @@ public class PlayerStatusDisplay extends Group {
         this.addActor(playerHealth);
         this.addActor(staminaBar);
 
+
         /*setting bar dimensions*/
-        float healthBarWidth = (float) player.getHealthCur() / player.getHealthMax() * 325;
+        float healthBarWidth = (float) player.getHealthCur() / player.getHealthMax() * 310;
         float healthBarHeight = 29;
         float staminaBarWidth = (float) player.getStaminaCur() / player.getStaminaMax() * 260;
-        float staminaBarHeight = 23;
+        float staminaBarHeight = 22;
         healthBar.setSize(healthBarWidth, healthBarHeight);
         healthBarShadow.setSize(healthBarWidth, healthBarHeight);
         staminaBar.setSize(staminaBarWidth, staminaBarHeight);
+        levelBar.setSize(player.getXp()/player.getXpThreshold() * 100,
+                115);
 
         /* Setting bar colours, health changes from green to red as health drops
          * 200/157 multiplier so function ranges from 0 to 255; the range of RGB colours.
          */
         setHealthBarColours();
         healthBarShadow.setColor(Color.BLACK);
-        staminaBar.setColor(Color.GOLD);
+        staminaBar.setColor(Color.ORANGE);
+        levelBar.setColor(Color.GOLD);
 
         /* positioning and scaling images bars and labels*/
-        healthBar.setPosition(125, 48);
-        healthBarShadow.setPosition(125, 48);
-        staminaBar.setPosition(120, 20);
+        healthBar.setPosition(130, 51);
+        healthBarShadow.setPosition(130, 50);
+        staminaBar.setPosition(130, 22);
         playerImage.setPosition(25, 8);
-        playerHealth.setPosition(125, 50);
-        playerLevel.setPosition(125, 85);
+        playerHealth.setPosition(135, 50);
+        playerLevel.setPosition(135, 90);
+        levelBar.setPosition(10, 5);
 
         playerLevel.setFontScale(1.5f);
         playerHealth.setFontScale(1.2f);
@@ -90,7 +98,7 @@ public class PlayerStatusDisplay extends Group {
     public void updatePlayerStatus() {
         /* Health bar */
         float healthBarWidth = (float) player.getHealthCur() /
-                player.getHealthMax() * 325;
+                player.getHealthMax() * 315;
 
         setHealthBarColours();
         healthBar.setWidth(healthBarWidth);
@@ -104,6 +112,8 @@ public class PlayerStatusDisplay extends Group {
         float staminaBarWidth = (float) player.getStaminaCur() /
                 player.getStaminaMax() * 260;
         staminaBar.setWidth(staminaBarWidth);
+        playerLevel.setText("Lv: " + player.getLevel());
+        levelBar.setWidth(((float) player.getXp()/(float)player.getXpThreshold()) * 110f);
     }
 
     /**
