@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="130" height="130" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="7781">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="130" height="130" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="7823">
  <properties>
   <property name="PlayerX" value="50"/>
   <property name="PlayerY" value="50"/>
@@ -153,6 +153,54 @@
 132,132,132,134,132,129,129,132,132,128,132,132,132,132,133,132,132,132,132,134,132,132,129,132,132,132,132,132,131,132,132,132,132,132,132,132,128,131,132,132,132,135,132,134,133,132,132,132,132,128,132,132,130,133,134,132,132,134,131,135,132,132,132,132,132,129,135,132,132,132,132,132,131,132,132,132,131,132,130,132,132,132,132,132,128,132,129,132,132,132,130,132,130,132,132,132,132,132,131,132,132,135,132,132,132,134,132,129,132,135,134,132,132,132,132,132,133,132,132,132,132,132,132,132,132,128,132,132,132,128
 </data>
  </layer>
+ <objectgroup name="mushroomturret">
+  <properties>
+   <property name="name" value="mushroomturret"/>
+  </properties>
+  <object id="7781" gid="4" x="1804.35" y="1941.65" width="55" height="32"/>
+  <object id="7785" gid="4" x="1154.95" y="2289.17" width="55" height="32"/>
+  <object id="7786" gid="4" x="1051.42" y="220.582" width="55" height="32"/>
+  <object id="7787" gid="4" x="1877.96" y="698.036" width="55" height="32"/>
+  <object id="7788" gid="4" x="2841.96" y="3454.04" width="55" height="32"/>
+  <object id="7789" gid="4" x="4077.09" y="1970.91" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="squirrel">
+  <properties>
+   <property name="name" value="squirrel"/>
+  </properties>
+  <object id="7790" gid="7" x="662.836" y="921.164" width="55" height="32"/>
+  <object id="7791" gid="7" x="621.891" y="1178.11" width="55" height="32"/>
+  <object id="7792" gid="7" x="640.073" y="1591.93" width="55" height="32"/>
+  <object id="7793" gid="7" x="2254.18" y="729.818" width="55" height="32"/>
+  <object id="7794" gid="7" x="1977.53" y="718.473" width="55" height="32"/>
+  <object id="7795" gid="7" x="2810.25" y="2109.75" width="55" height="32"/>
+  <object id="7796" gid="7" x="2770.84" y="2261.16" width="55" height="32"/>
+  <object id="7797" gid="7" x="2149.16" y="2914.84" width="55" height="32"/>
+  <object id="7798" gid="7" x="2228.87" y="4051.13" width="55" height="32"/>
+  <object id="7799" gid="7" x="662.327" y="2577.67" width="55" height="32"/>
+  <object id="7801" gid="7" x="653.091" y="850.909" width="55" height="32"/>
+  <object id="7802" gid="7" x="699.709" y="1116.29" width="55" height="32"/>
+  <object id="7803" gid="7" x="2265.38" y="2942.62" width="55" height="32"/>
+  <object id="7804" gid="7" x="2353.38" y="3030.62" width="55" height="32"/>
+  <object id="7805" gid="7" x="2057.02" y="3990.98" width="55" height="32"/>
+  <object id="7806" gid="7" x="2359.35" y="4032.65" width="55" height="32"/>
+  <object id="7807" gid="7" x="2303.93" y="1096.07" width="55" height="32"/>
+  <object id="7808" gid="7" x="2339.35" y="1196.65" width="55" height="32"/>
+  <object id="7809" gid="7" x="1890.04" y="253.964" width="55" height="32"/>
+  <object id="7810" gid="7" x="1954.04" y="317.964" width="55" height="32"/>
+  <object id="7811" gid="7" x="2813.96" y="98.0364" width="55" height="32"/>
+  <object id="7812" gid="7" x="2950.76" y="81.2364" width="55" height="32"/>
+  <object id="7813" gid="7" x="3937.16" y="862.836" width="55" height="32"/>
+  <object id="7814" gid="7" x="4023.64" y="1056.36" width="55" height="32"/>
+  <object id="7815" gid="7" x="4077.89" y="1306.11" width="55" height="32"/>
+  <object id="7816" gid="7" x="3969.38" y="1574.62" width="55" height="32"/>
+  <object id="7817" gid="7" x="65.3091" y="1454.69" width="55" height="32"/>
+  <object id="7818" gid="7" x="140" y="1548" width="55" height="32"/>
+  <object id="7819" gid="7" x="662.545" y="1977.45" width="55" height="32"/>
+  <object id="7820" gid="7" x="1048.29" y="2167.71" width="55" height="32"/>
+  <object id="7821" gid="7" x="1126.18" y="2161.82" width="55" height="32"/>
+  <object id="7822" gid="7" x="1122.25" y="1701.75" width="55" height="32"/>
+ </objectgroup>
  <objectgroup name="concretewall">
   <properties>
    <property name="name" value="concretewall"/>
