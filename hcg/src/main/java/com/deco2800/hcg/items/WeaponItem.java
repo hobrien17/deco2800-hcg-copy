@@ -1,7 +1,6 @@
 package com.deco2800.hcg.items;
 
 import com.deco2800.hcg.weapons.Weapon;
-import com.deco2800.hcg.weapons.WeaponType;
 
 /**
  * The WeaponItem class represents inventory items that have weapons
