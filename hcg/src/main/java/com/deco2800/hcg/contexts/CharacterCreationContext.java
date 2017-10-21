@@ -14,6 +14,9 @@ import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
+
 import java.util.*;
 import java.util.List;
 
@@ -29,6 +32,9 @@ public class CharacterCreationContext extends CharacterContext{
 
     private static final String FEMALE = "Female";
     private static final String MALE = "Male";
+    
+    private NetworkManager networkManager =
+    		(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 
     private Label strengthLabel;
     private Label vitalityLabel;
@@ -189,7 +195,11 @@ public class CharacterCreationContext extends CharacterContext{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (attributePoints == 0 && specializedSkillsPoints == 0) {
-                    contextManager.pushContext(new WorldStackContext());
+                		if (networkManager.isMultiplayerGame() && !networkManager.isHost()) {
+                			contextManager.pushContext(new WaitHostContext(0));
+                		} else {
+                			contextManager.pushContext(new WorldStackContext());
+                		}
                     /* Create new player */
                     /* Also check to see if player already exists */
                     if (playerManager.getPlayer() == null) {
@@ -207,7 +217,11 @@ public class CharacterCreationContext extends CharacterContext{
         skipButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                contextManager.pushContext(new WorldStackContext());
+            	if (networkManager.isMultiplayerGame() && !networkManager.isHost()) {
+            		contextManager.pushContext(new WaitHostContext(0));
+            	} else {
+            		contextManager.pushContext(new WorldStackContext());
+            	}
                 /* Create new player with default values. */
                 if (playerManager.getPlayer() == null) {
                     createPlayer(5, 5, 5, 5, 5, meleeSkill, gunsSkill, energyWeaponsSkill,

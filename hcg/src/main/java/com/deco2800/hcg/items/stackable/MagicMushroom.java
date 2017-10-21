@@ -1,5 +1,10 @@
 package com.deco2800.hcg.items.stackable;
 
+import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
@@ -7,10 +12,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ShaderManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 public class MagicMushroom extends ConsumableItem {
     //Super simple example class of a health potion
@@ -29,7 +30,7 @@ public class MagicMushroom extends ConsumableItem {
     public void consume(Character character) {
         // Update shader to run the magic mushroom shader for 4 in game hours. Also fully heals you
         ShaderManager shaders = (ShaderManager) GameManager.get().getManager(ShaderManager.class);
-        shaders.setCustom(0.3F, 0.3F, 0.4F, new Color(255, 153, 255, 50), 35);
+        shaders.setCustom(0.0F, 0.6F, 0.6F, new Color(150, 153, 120, 50), 35);
         ((Player)character).setHealthCur(character.getHealthMax());
     }
 

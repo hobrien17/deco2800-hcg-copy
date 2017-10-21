@@ -14,16 +14,16 @@ public class JoiningMessage extends Message {
 	private final NetworkManager networkManager =
 			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 	
-	public JoiningMessage() {
-		//deliberately empty
-	}
-	
 	public JoiningMessage(int id) {
 		super(MessageType.JOINING);
 	}
 	
+	public JoiningMessage(SocketAddress address) {
+		super(address);
+	}
+	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		// add peer to lobby
 		networkManager.addPeer(address);
 		// send joined message

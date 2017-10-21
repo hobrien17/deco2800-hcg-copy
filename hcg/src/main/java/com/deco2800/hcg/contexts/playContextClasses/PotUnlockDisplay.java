@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -20,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Align;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
@@ -53,8 +50,8 @@ public class PotUnlockDisplay extends Window {
 	private Button conf;
 	private Button cancel;
 	
-	private final static float WIDTH = 300f;
-	private final static float HEIGHT = 200f;
+	private static final float WIDTH = 300f;
+	private static final float HEIGHT = 200f;
 	
 	public PotUnlockDisplay(Stage stage, Skin skin) {
 		super("Unlock Pot?", skin);
@@ -81,7 +78,7 @@ public class PotUnlockDisplay extends Window {
 		generator.dispose();
 
 		TextureManager texManager = (TextureManager)gameManager.getManager(TextureManager.class);
-		Image keyImage = new Image(texManager.getTexture("key"));
+		Image keyImage = new Image(texManager.getTexture("key_icon"));
 		infoTbl = new Table();
 		infoLbl = new Label("", bold);
 		titleLbl = new Label("", normal);

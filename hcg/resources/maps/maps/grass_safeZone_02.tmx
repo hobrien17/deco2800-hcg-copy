@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="381">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="381">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
@@ -370,7 +370,7 @@
     <property name="Type" value="Shop"/>
     <property name="fName" value="Patrick"/>
     <property name="sName" value="Plants"/>
-    <property name="texture" value="character_shop"/>
+    <property name="texture" value="character_shop_2"/>
    </properties>
   </object>
   <object id="2" gid="57" x="272.038" y="390.367" width="55" height="32">

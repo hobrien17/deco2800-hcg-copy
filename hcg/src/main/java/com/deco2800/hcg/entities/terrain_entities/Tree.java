@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.Color;
+import com.deco2800.hcg.shading.LightEmitter;
+
 /**
  * @author Ken
  */
-public class Tree extends TerrainEntity {
+public class Tree extends TerrainEntity implements LightEmitter {
 
     private TreeType type;
     private Random random = new Random();
@@ -111,5 +114,25 @@ public class Tree extends TerrainEntity {
     public void setType(TreeType t) {
         this.type = t;
         setTexture();
+    }
+
+    @Override
+    public Color getLightColour() {
+        switch(this.type) {
+            case FLAMING:
+                return Color.ORANGE;
+            default:
+                return Color.WHITE;
+        }
+    }
+
+    @Override
+    public float getLightPower() {
+        switch(this.type) {
+            case FLAMING:
+                return 5;
+            default:
+                return 0;
+        }
     }
 }

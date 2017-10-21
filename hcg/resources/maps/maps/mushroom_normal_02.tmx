@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="300" height="300" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="7719">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="300" height="300" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="7736">
  <properties>
   <property name="PlayerX" value="10"/>
   <property name="PlayerY" value="118"/>
@@ -3385,6 +3385,33 @@
   <object id="7363" gid="3" x="1821.07" y="1265.16" width="75" height="96"/>
   <object id="7716" gid="3" x="3977.14" y="8901.46" width="75" height="96"/>
   <object id="7718" x="-4208.58" y="1872.58" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup name="snail">
+  <properties>
+   <property name="name" value="snail"/>
+  </properties>
+  <object id="7719" gid="3" x="1876.51" y="1947.49" width="55" height="32"/>
+  <object id="7720" gid="3" x="2092.51" y="2163.49" width="55" height="32"/>
+  <object id="7721" gid="3" x="5749.38" y="5466.62" width="55" height="32"/>
+  <object id="7722" gid="3" x="5843.49" y="5644.51" width="55" height="32"/>
+  <object id="7723" gid="3" x="6766.84" y="7089.16" width="55" height="32"/>
+  <object id="7724" gid="3" x="6933.53" y="7274.47" width="55" height="32"/>
+  <object id="7725" gid="3" x="4608.44" y="6671.56" width="55" height="32"/>
+  <object id="7726" gid="3" x="2063.13" y="5680.87" width="55" height="32"/>
+  <object id="7727" gid="3" x="3911.71" y="8488.29" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="hedgehog">
+  <properties>
+   <property name="name" value="hedgehog"/>
+  </properties>
+  <object id="7728" gid="2" x="1308.36" y="5363.64" width="55" height="32"/>
+  <object id="7729" gid="2" x="2717.09" y="5282.91" width="55" height="32"/>
+  <object id="7730" gid="2" x="3541.53" y="6442.47" width="55" height="32"/>
+  <object id="7731" gid="2" x="4530.04" y="5773.96" width="55" height="32"/>
+  <object id="7732" gid="2" x="6924.8" y="4659.2" width="55" height="32"/>
+  <object id="7733" gid="2" x="6485.53" y="6826.47" width="55" height="32"/>
+  <object id="7734" gid="2" x="7463.85" y="7544.15" width="55" height="32"/>
+  <object id="7735" gid="2" x="7740.95" y="7635.05" width="55" height="32"/>
  </objectgroup>
  <objectgroup name="squirrel">
   <properties>

@@ -17,6 +17,8 @@ import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.multiplayer.LevelStartMessage;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
 
@@ -37,6 +39,7 @@ public class WorldMapContext extends UIContext {
 	private PlayerManager playerManager;
 	private ContextManager contextManager;
 	private WorldManager worldManager;
+	private NetworkManager networkManager;
 
 	private InputMultiplexer inputMultiplexer;
 
@@ -72,6 +75,8 @@ public class WorldMapContext extends UIContext {
 				.getManager(ContextManager.class);
 		worldManager = (WorldManager) gameManager
 				.getManager(WorldManager.class);
+		networkManager = (NetworkManager) gameManager
+				.getManager(NetworkManager.class);
 		InputManager inputManager = new InputManager();
 		
 		currentWorld = worldMap;
@@ -87,15 +92,17 @@ public class WorldMapContext extends UIContext {
 		Button quitButton = new TextButton("Quit", skin);
 		Button discoveredButton = new TextButton("Show all nodes", skin);
 		Button demoButton = new TextButton("Safehaven", skin);
+		Button testButton = new TextButton("UI Test", skin);
 
 		window.add(quitButton);
 		window.add(discoveredButton);
 		window.add(demoButton);
+		window.add(testButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight());
 
-		stage.addActor(new WorldMapEntity());
+		stage.addActor(new WorldMapEntity(currentWorld.getWorldType()));
 		
 		createExitWindow();
 
@@ -112,7 +119,7 @@ public class WorldMapContext extends UIContext {
 		}
 
 		playerMapEntity = new PlayerMapEntity();
-		// set the playerMapEntity render position to be at the starting node;
+		// set the player Map Entity render position to be at the starting node;
 		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0), worldMap);
 		playerMapEntity.updatePosByNodeEntity(entryMapNode);
 
@@ -144,8 +151,22 @@ public class WorldMapContext extends UIContext {
 			public void changed(ChangeEvent event, Actor actor) {
 				World world = World.SAFEZONE;
 				Level level = new Level(world, 0, 1, 1);
+				gameManager.setWorld(world);
+				world.removeEntity(playerManager.getPlayer());
+
+				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
+				playerManager.spawnPlayers();
+				contextManager.pushContext(new PlayContext());
+			}
+		});
+
+		testButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				World world = new World("resources/maps/maps/grass_normal_01.tmx");
+				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
+				world.setWeather(Weathers.STORM);
 
 				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
 				playerManager.spawnPlayers();
@@ -190,8 +211,13 @@ public class WorldMapContext extends UIContext {
 					&& !(nodeEntity.getNode().getNodeType() == 2)) {
                 // set the PlayerMapEntity position
 				playerMapEntity.updatePosByNodeEntity(nodeEntity);
+				// send to peers
+				if (networkManager.isMultiplayerGame()) {
+					networkManager.queueMessage(new LevelStartMessage(i));
+				}
 				// select the current node
 				worldManager.selectNode(i);
+				return;
 			}
 		}
 	}
@@ -199,10 +225,10 @@ public class WorldMapContext extends UIContext {
 	/**
 	 * Updates the display of the nodes on the world map. Handles making hidden nodes not visible to the user.
 	 */
-	void updateMapDisplay(WorldMap currentWorld) {
+	public void updateMapDisplay(WorldMap currentWorld) {
 		updateNodesDisplayed();
 		stage.clear();
-		stage.addActor(new WorldMapEntity());
+		stage.addActor(new WorldMapEntity(currentWorld.getWorldType()));
 		hiddenNodes.clear();
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			MapNodeEntity nodeEntry = new MapNodeEntity(node, currentWorld);

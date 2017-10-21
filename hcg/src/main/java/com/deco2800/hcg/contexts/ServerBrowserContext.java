@@ -7,22 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.observers.ServerObserver;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * UI for server browser, used for joining a server.
  */
 public class ServerBrowserContext extends UIContext {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerBrowserContext.class);
 
     private ImageButton host;
     private ImageButton refresh;
@@ -50,7 +44,6 @@ public class ServerBrowserContext extends UIContext {
         GameManager gameManager = GameManager.get();
         ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
-        PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -135,6 +128,7 @@ public class ServerBrowserContext extends UIContext {
         	public void changed(ChangeEvent event, Actor actor) {
         		serverMap.clear();
         		networkManager.refreshLocalServers();
+        		contextManager.pushContext(new MultiplayerCharaterContext());
         	}
         });
         

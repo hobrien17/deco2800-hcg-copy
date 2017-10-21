@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.types.Weathers;
@@ -52,7 +53,8 @@ public class World {
 	protected Array2D<List<AbstractEntity>> collisionMap;
 	
 	public static final World SAFEZONE = new World("resources/maps/maps/grass_safeZone_02.tmx");
-
+	private StopwatchManager savedStopwatch; //used to save the stopwatch in the safezone
+	
 	/**
 	 * Empty abstract world, for testing
 	 */
@@ -447,11 +449,15 @@ public class World {
 
 		int xVal = collisionCoords[0];
 		int yVal = collisionCoords[2];
-
+		
 		if (xVal > 0 && xVal < this.getWidth() && yVal > 0 && yVal < this.getLength()) {
 			for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
 				for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
-					collisionMap.get(x, y).remove(entity);
+					try {
+						collisionMap.get(x, y).remove(entity);
+					} catch(IndexOutOfBoundsException ex) {
+						LOGGER.warn("Can't remove entity");
+					}
 				}
 			}
 		}
@@ -562,6 +568,33 @@ public class World {
 	 */
 	public float getStartingPlayerY() {
 		return startingPlayerY;
+	}
+	
+	/**
+	 * Saves a stopwatch to this world
+	 */
+	public void saveStopwatch() {
+		savedStopwatch = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);
+	}
+	
+	/**
+	 * Checks whether a stopwatch is saved
+	 * 
+	 * @return true if a stopwatch is saved, otherwise false
+	 */
+	public boolean stopwatchSaved() {
+		return savedStopwatch != null;
+	}
+	
+	/**
+	 * Loads the saved stopwatch into this world's stopwatch
+	 */
+	public void loadStopwatch() {
+		StopwatchManager stopwatch = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);
+		if(stopwatchSaved()) {
+			System.out.println("load");
+			stopwatch.copy(savedStopwatch);
+		}
 	}
 
 	/**

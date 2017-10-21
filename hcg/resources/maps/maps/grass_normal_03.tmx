@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="199" height="199" tilewidth="55" tileheight="32" nextobjectid="956">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="199" height="199" tilewidth="55" tileheight="32" nextobjectid="958">
  <properties>
   <property name="PlayerX" value="95"/>
   <property name="PlayerY" value="90"/>
@@ -223,6 +223,21 @@
 70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70
 </data>
  </layer>
+ <objectgroup name="NPC">
+  <properties>
+   <property name="name" value="NPC"/>
+  </properties>
+  <object id="957" gid="14" x="2404.55" y="3624.68" width="55" height="32">
+   <properties>
+    <property name="Type" value="Quest"/>
+    <property name="conversation" value="james_test"/>
+    <property name="fName" value="James"/>
+    <property name="faceImage" value="npc_face"/>
+    <property name="sName" value="TestNPC"/>
+    <property name="texture" value="character_1"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup name="snail">
   <properties>
    <property name="name" value="snail"/>

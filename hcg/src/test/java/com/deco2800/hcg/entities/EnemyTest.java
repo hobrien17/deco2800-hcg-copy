@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
@@ -63,7 +64,7 @@ public class EnemyTest {
         assertThat("Basic Enemy only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
         assertThat("Loot rarity should only have sunflower seed", enemy.getRarity().size(), is(equalTo(1)));
         //assertThat("Loot rarity should only have sunflower seed", enemy.getRarity(), is(equalTo(expectedRarity)));
-        assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo(new LootWrapper("sunflower_seed"))));
+        assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo(new LootWrapper("sunflower_seed", 1.0f))));
     }
     
 //    @Test (expected = IllegalArgumentException.class)
@@ -149,4 +150,22 @@ public class EnemyTest {
         enemy.causeDamage(player);
         assertThat("The health of player does not decrease by 10", player.getHealthCur(), is(equalTo(health - 10)));
     }
+    
+    @Test
+    public void testClosestPlayer() {
+        Player player = new Player(10, 10, 10);
+        enemy.setClosestPlayer(player);
+        assertThat("the player is not the closest", enemy.getClosestPlayer(), is(equalTo(player)));
+    }
+    
+    @Test
+    public void testGetEnemyType() {
+        assertThat("Enemy type is incorrect", enemy.getEnemyType(), is(equalTo(EnemyType.SQUIRREL)));
+    }
+    
+    @Test
+    public void testHashCode() {
+        assertThat("Hash code of this enemy is incorrect", enemy.hashCode(), is(equalTo(31)));
+    }
+    
 }

@@ -48,6 +48,9 @@ public class Stargun extends Weapon implements Tickable {
                     this.getPosZ(), this.aim.x, this.aim.y);
         }
         playFireSound();
+
+        // Muzzle flash
+        muzzleFlashEnabled = 0;
     }
     
 }

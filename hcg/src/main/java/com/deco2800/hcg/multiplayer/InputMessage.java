@@ -8,6 +8,8 @@ import java.nio.ByteBuffer;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
+import com.deco2800.hcg.managers.PlayerInputManager.Input;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,38 +27,50 @@ public class InputMessage extends Message {
 			(PlayerInputManager) GameManager.get().getManager(PlayerInputManager.class);
 	
 	private long tick;
-	private int[] args;
+	private InputType type;
+	private int[] ints;
+	private float[] floats;
 	
-	public InputMessage() {
-		//deliberately empty
-	}
-	
-	public InputMessage(long tick, int[] args) {
+	public InputMessage(long tick, Input input) {
 		super(MessageType.INPUT);
 		this.tick = tick;
-		this.args = args;
+		this.type = input.getType();
+		this.ints = input.getInts();
+		this.floats = input.getFloats();
+	}
+	
+	public InputMessage(SocketAddress address) {
+		super(address);
 	}
 	
 	@Override
 	public void packData(ByteBuffer buffer) {
 		super.packData(buffer);
 		buffer.putLong(tick);
-		buffer.put((byte) args.length);
-		for (int i = 0; i < args.length; i++) {
-			buffer.putShort((short) args[i]);
+		buffer.put((byte) type.ordinal());
+		buffer.put((byte) ints.length);
+		buffer.put((byte) floats.length);
+		for (int i = 0; i < ints.length; i++) {
+			buffer.putShort((short) ints[i]);
+		}
+		for (int i = 0; i < floats.length; i++) {
+			buffer.putFloat(floats[i]);
 		}
 	}
 	
 	@Override
 	public void unpackData(ByteBuffer buffer) throws MessageFormatException {
 		super.unpackData(buffer);
-		
 		try {
 			tick = buffer.getLong();
-			byte length = buffer.get();
-			args = new int[length];
-			for (int i = 0; i < length; i++) {
-				args[i] = (int) buffer.getShort();
+			type = InputType.values()[buffer.get()];
+			ints = new int[buffer.get()];
+			floats = new float[buffer.get()];
+			for (int i = 0; i < ints.length; i++) {
+				ints[i] = (int) buffer.getShort();
+			}
+			for (int i = 0; i < floats.length; i++) {
+				floats[i] = buffer.getFloat();
 			}
 		} catch (ArrayIndexOutOfBoundsException|BufferUnderflowException|BufferOverflowException e) {
 			throw new MessageFormatException(e);
@@ -64,68 +78,14 @@ public class InputMessage extends Message {
 	}
 	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		try {
-			InputType inputType = InputType.values()[args[0]];
 			// TODO: handle input for more than one player
-			switch (inputType) {
-			case KEY_DOWN:
-				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1]);
-				break;
-			case KEY_UP:
-				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1]);
-				break;
-			case MOUSE_MOVED:
-				playerInputManager.queueAction(
-						tick, 
-						1,
-						inputType.ordinal(),
-						args[1],
-						args[2]);
-				break;
-			case TOUCH_DOWN:
-				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1],
-						args[2],
-						args[3],
-						args[4]);
-				break;
-			case TOUCH_DRAGGED:
-				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1],
-						args[2],
-						args[3]);
-				break;
-			case TOUCH_UP:
-				playerInputManager.queueAction(
-						tick,
-						1,
-						inputType.ordinal(),
-						args[1],
-						args[2],
-						args[3],
-						args[4]);
-				break;
-			default:
-				break;
-			}
+			Input input = playerInputManager.new Input(type, 1, ints, floats);
+			playerInputManager.queueInput(tick, input);
 			
 			// MOUSE_MOVED messages will always be the last input sent for a given tick
-			if (inputType == InputType.MOUSE_MOVED) {
+			if (type == InputType.MOUSE_MOVED) {
 				networkManager.updatePeerTickCount(0, tick);
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
