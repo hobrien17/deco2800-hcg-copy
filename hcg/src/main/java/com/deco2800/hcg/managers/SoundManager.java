@@ -110,10 +110,10 @@ public class SoundManager extends Manager {
 			soundMap.put("freeze", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/freeze.wav")));
 			
 			// Shop sounds
-			soundMap.put("loot1", 
-					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot.wav")));
-			soundMap.put("loot2", 
-					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot2.wav")));
+			soundMap.put("buy", 
+					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/shop/buy.wav")));
+			soundMap.put("sell", 
+					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/shop/sell.wav")));
 
 
 			// Loot
