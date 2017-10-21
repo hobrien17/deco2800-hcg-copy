@@ -127,7 +127,7 @@ public abstract class Enemy extends Character implements Lootable {
     /**
      * Gets the enemy type
      *
-     * @return the integer ID of the enemy
+     * @return the type of the enemy
      */
     public EnemyType getEnemyType() { return enemyType; }
 

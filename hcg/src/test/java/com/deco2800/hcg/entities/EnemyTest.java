@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
@@ -155,5 +156,10 @@ public class EnemyTest {
         Player player = new Player(10, 10, 10);
         enemy.setClosestPlayer(player);
         assertThat("the player is not the closest", enemy.getClosestPlayer(), is(equalTo(player)));
+    }
+    
+    @Test
+    public void testGetEnemyType() {
+        assertThat("Enemy type is incorrect", enemy.getEnemyType(), is(equalTo(EnemyType.SQUIRREL)));
     }
 }
