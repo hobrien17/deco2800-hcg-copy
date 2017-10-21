@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import java.util.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.managers.GameManager;
@@ -66,50 +67,22 @@ public class WeatherManager extends Manager {
 	 */
 	public void resize() {
 		for (int emitter = 0; emitter < weather.getEmitters().size; emitter++) {
-			World world = GameManager.get().getWorld();
-
-			int width = 100; // default values in case world == null
-			int height = 100; // default values in case world == null
-
-			if (world == null) {
-				System.out.println("woops");
-			} else {
-				width = (world.getWidth());
-				height = (world.getLength());
-				System.out.println(width); // in case we're curious
-				System.out.println(height);
-			}
-
 			ParticleEmitter newEmitter = weather.getEmitters()
 					.get(emitter);
-			//newEmitter.setPosition(Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight() / 2);
-			newEmitter.setPosition(0,0); // I figure the world map probably gets put at 0,0 right?
+			newEmitter.setPosition(0, 0);
 
-			// idk what these do but MAGIC NUMBERS EVERYWHERE TAKE THAT JOEL FENWICK >:D
-			newEmitter.getSpawnHeight().setLowMax(3000);
-			newEmitter.getSpawnHeight().setLowMin(1000);
-			newEmitter.getSpawnWidth().setLowMax(2000);
-			newEmitter.getSpawnWidth().setLowMin(4000);
+			newEmitter.getSpawnHeight().setHighMax(2*Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setHighMin(2*Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setLowMax(-Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setLowMin(-Gdx.graphics.getHeight());
 
-			// how to set min/max particles: DO YOUR BEST
-			// max ~ 6000 is light, max ~ 12000 is heavy (this is right anymore idk??)
+			newEmitter.getSpawnWidth().setHighMax(2*Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setHighMin(2*Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setLowMax(-Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setLowMin(-Gdx.graphics.getWidth());
 
-			// these values are (really) arbitrary and need to be tweaked
-			newEmitter.setMaxParticleCount(height*400 + 10000);
-			newEmitter.setMinParticleCount(height*400/6 + 8000);
-
-			// just a thought what is the size of each tile?!?!?! because i feel like world.getWidth
-			// gives you the tile width? which would make all sporadic math redundant
-			// whats the difference between min and max
-			newEmitter.getSpawnWidth().setHighMax(width*400);
-			newEmitter.getSpawnWidth().setHighMin(width*400/6);
-
-			// whats the difference between min and max
-			newEmitter.getSpawnHeight().setHighMax(height*400);
-			newEmitter.getSpawnHeight().setHighMin(height*400/6);
-
-
-
+			newEmitter.setMaxParticleCount(2*newEmitter.getMaxParticleCount());
+			newEmitter.setMinParticleCount(2*newEmitter.getMinParticleCount());
 		}
 	}
 

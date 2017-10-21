@@ -1,5 +1,6 @@
 package com.deco2800.hcg.actors;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,6 +15,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 
 public class ParticleEffectActor extends Actor {
 	Map<ParticleEffect, Boolean> effects;
@@ -63,14 +65,16 @@ public class ParticleEffectActor extends Actor {
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		Vector3 cameraPosn = GameManager.get().getCamera().position;
 		for(ParticleEffect effect : effects.keySet()) {
+			effect.setPosition(cameraPosn.x, cameraPosn.y);
 			effect.update(delta);
 		}
 		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
 		    Vector3 position = GameManager.get().worldToScreen(
                     new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
 		    for(ParticleEffect effect: entry.getValue())  {
-                effect.setPosition(position.x, position.y);
+                effect.setPosition((position.x), (position.y));
                 effect.update(delta);
 		    }
 		}
@@ -112,6 +116,7 @@ public class ParticleEffectActor extends Actor {
 		for(Map.Entry<ParticleEffect, Boolean> entry : effects.entrySet()) {
 			entry.getKey().update(Gdx.graphics.getDeltaTime());
 			entry.getKey().draw(batch);
+
 
 			// reset animation if completed
 			if (entry.getKey().isComplete() && entry.getValue()) {
