@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.enemyentities;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
+import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.lootable.LootWrapper;
@@ -49,6 +50,7 @@ public abstract class Enemy extends Character implements Lootable {
     protected int direction;
     protected boolean boss;
     protected float defaultSpeed;
+    protected EnemyType enemyType;
     private Player target;
 
     //Multiple players
@@ -72,7 +74,7 @@ public abstract class Enemy extends Character implements Lootable {
      * @param id the enemy ID
      */
     public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
-                 int health, int strength, int id) {
+                 int health, int strength, int id, EnemyType enemyType) {
         super(posX, posY, posZ, xLength, yLength, zLength, centered);
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         status = 1;
@@ -81,6 +83,7 @@ public abstract class Enemy extends Character implements Lootable {
         } else {
             throw new IllegalArgumentException();
         }
+        this.enemyType = enemyType;
         this.healthCur = health;
         this.attributes.put("strength", strength);
         this.attributes.put("vitality", 1);
@@ -104,6 +107,7 @@ public abstract class Enemy extends Character implements Lootable {
 
         // Effects container
         myEffects = new Effects(this);
+        this.setupLoot();
     }
 
     /**
@@ -119,6 +123,14 @@ public abstract class Enemy extends Character implements Lootable {
      * @return the integer ID of the enemy
      */
     public int getID() { return id; }
+
+    /**
+     * Gets the enemy type
+     *
+     * @return the type of the enemy
+     */
+    public EnemyType getEnemyType() { return enemyType; }
+
 
     /**
      * Gets the last position X of player.
@@ -227,7 +239,9 @@ public abstract class Enemy extends Character implements Lootable {
 	}
     
     public void loot() {
-    	//TODO implement this
+    	Item drop = this.getLoot().get(0);
+        ItemEntity itemEntity = new ItemEntity(this.getPosX(), this.getPosY(), 0f, drop);
+        GameManager.get().getWorld().addEntity(itemEntity);
     }
 
     /**
@@ -355,35 +369,39 @@ public abstract class Enemy extends Character implements Lootable {
                 this.lastPlayerX = closestPlayer.getPosX();
                 this.lastPlayerY = closestPlayer.getPosY();
             } else if (this.getStatus() == 2) {
-                this.setStatus(3);
-            } else {
-                this.setStatus(1);
-            }
-        } else {
-            float distance = this.distance(playerManager.getPlayer());
-            this.closestPlayer = playerManager.getPlayer();
-            if(distance <= 5 * this.level){
-                //Annoyed by player.
-                this.setStatus(2);
-                this.lastPlayerX = playerManager.getPlayer().getPosX();
-                this.lastPlayerY = playerManager.getPlayer().getPosY();
-            }else{
-                if (this.getStatus() == 2){
-                    //Lost player
-                    this.lostPlayerX = this.getLastPlayerX();
-                    this.lostPlayerY = this.getLastPlayerY();
-                    this.setStatus(3);
-                } else if(this.getStatus() == 3){
-                    if ((abs(this.lostPlayerX - this.getPosX()) < 1) && (abs(this.lostPlayerY - this.getPosY()) < 1)){
-                        this.setStatus(1);
-                    }
+				this.setStatus(3);
+			} else {
+				this.setStatus(1);
+			}
 
-                } else {
-                    this.setStatus(1);
-                }
-            }
-        }
-    }
+			return;
+		}
+        
+		float distance = this.distance(playerManager.getPlayer());
+		this.closestPlayer = playerManager.getPlayer();
+		if (distance <= 5 * this.level) {
+			// Annoyed by player.
+			this.setStatus(2);
+			this.lastPlayerX = playerManager.getPlayer().getPosX();
+			this.lastPlayerY = playerManager.getPlayer().getPosY();
+			return;
+		}
+		
+		if (this.getStatus() == 2) {
+			// Lost player
+			this.lostPlayerX = this.getLastPlayerX();
+			this.lostPlayerY = this.getLastPlayerY();
+			this.setStatus(3);
+		} else if (this.getStatus() == 3) {
+			if ((abs(this.lostPlayerX - this.getPosX()) < 1)
+					&& (abs(this.lostPlayerY - this.getPosY()) < 1)) {
+				this.setStatus(1);
+			}
+
+		} else {
+			this.setStatus(1);
+		}
+	}
         
 
     /**
@@ -441,10 +459,10 @@ public abstract class Enemy extends Character implements Lootable {
         } else if (this.getPosY() > nextPosY) {
             currPosY -= movementSpeed * 0.25;
         }
-        Box3D newPos = getBox3D();
-        newPos.setX(currPosX);
-        newPos.setY(currPosY);
-        return newPos;
+        Box3D newPosition = getBox3D();
+        newPosition.setX(currPosX);
+        newPosition.setY(currPosY);
+        return newPosition;
     }
 
     /**
@@ -502,10 +520,10 @@ public abstract class Enemy extends Character implements Lootable {
                 (abs(posY - currPosY) < 1)){
             this.setStatus(1);
         }
-        Box3D newPos = getBox3D();
-        newPos.setX(currPosX);
-        newPos.setY(currPosY);
-        return newPos;
+        Box3D newPosition = getBox3D();
+        newPosition.setX(currPosX);
+        newPosition.setY(currPosY);
+        return newPosition;
     }
 
     /**
@@ -536,9 +554,8 @@ public abstract class Enemy extends Character implements Lootable {
         List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
         for (AbstractEntity entity : entities) {
             if (!this.equals(entity) && this.collidesWith(entity)) {
-                    //newPos.overlaps(entity.getBox3D())) {
+
                 if(entity instanceof Player) {
-                    //this.causeDamage((Player)entity);
                     this.setTarget((Player)entity);
                     this.setCollidedPlayer(true);
                 }
@@ -687,8 +704,8 @@ public abstract class Enemy extends Character implements Lootable {
             //Gets the player with closest distance from the enemy and assigns to variable
             this.closestPlayer = playerHashMap.get(closestDistance);
             if (closestDistance <= 10 * this.level){
-                newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
-                newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
+                newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
+                newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
                 if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.85)){
                     this.setMovementSpeed((float) (this.defaultSpeed * 1.2));
                 } else if ((this.getHealthCur() < this.getHealthMax()*0.85) && (this.getHealthCur() > this.getHealthMax()*0.5)){
@@ -706,14 +723,12 @@ public abstract class Enemy extends Character implements Lootable {
             this.closestPlayer = playerManager.getPlayer();
             float distance = this.distance(playerManager.getPlayer());
             if (distance <= 10 * this.level){
-                newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
-                newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
+                newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
+                newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
             } else {
                 newPos = this.getRandomPos();
             }
         }
-        //Set new position
-        //newPos = this.getToPlayerPos(closestPlayer);
         this.detectCollision();
         this.moveAction();
 
@@ -752,5 +767,25 @@ public abstract class Enemy extends Character implements Lootable {
             this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
             this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
         }
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Enemy)) {
+            return false;
+        }
+        Enemy anotherEnemy = (Enemy) object;
+        if (this.id == anotherEnemy.id) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31; // an odd base prime
+        int result = 1; // the hash code under construction
+        result = prime * result + this.id;
+        return result;
     }
 }

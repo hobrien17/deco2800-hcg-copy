@@ -27,7 +27,7 @@ public class Hedgehog extends Enemy implements Tickable {
      * @param id the ID of the Hedgehog Enemy
      */
     public Hedgehog(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id);
+        super(posX, posY, posZ, 1f, 1f, 1, false, 1000, 5, id, EnemyType.HEDGEHOG);
         this.boss = false;
         this.setTexture("hedgehogW1");
         this.level = 1;
@@ -188,6 +188,7 @@ public class Hedgehog extends Enemy implements Tickable {
                     } else {
                         this.setTexture("hedgehogE1");
                     }
+                    break;
                 case 2:
                     if (this.getTexture() == "hedgehogN1") {
                         this.setTexture("hedgehogN2");

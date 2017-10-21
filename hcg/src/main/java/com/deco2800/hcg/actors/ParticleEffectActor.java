@@ -7,6 +7,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
 import com.badlogic.gdx.graphics.g2d.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import com.badlogic.gdx.Gdx;
 
 public class ParticleEffectActor extends Actor {
 	Map<ParticleEffect, Boolean> effects;
-	Map<ParticleEffect, AbstractEntity> entityEffects;
+	Map<AbstractEntity, ArrayList<ParticleEffect>> entityEffects;
 	SpriteBatch batch;
 
 	/**
@@ -45,9 +46,11 @@ public class ParticleEffectActor extends Actor {
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.draw(batch);
 		}
-		for(ParticleEffect effect : entityEffects.keySet()) {
-		    effect.draw(batch);
-        }
+		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
+        	for(ParticleEffect effect : entry.getValue()) {
+        	    effect.draw(batch);
+            }
+		}
 	}
 
 	/**
@@ -60,12 +63,14 @@ public class ParticleEffectActor extends Actor {
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.update(delta);
 		}
-		for(ParticleEffect effect : entityEffects.keySet()) {
-            Vector3 position = GameManager.get().worldToScreen(
-                    new Vector3(entityEffects.get(effect).getPosX(), entityEffects.get(effect).getPosY(), 0));
-            effect.setPosition(position.x, position.y);
-            effect.update(delta);
-        }
+		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
+		    Vector3 position = GameManager.get().worldToScreen(
+                    new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
+		    for(ParticleEffect effect: entry.getValue())  {
+                effect.setPosition(position.x, position.y);
+                effect.update(delta);
+		    }
+		}
 	}
 
 	/**
@@ -76,13 +81,21 @@ public class ParticleEffectActor extends Actor {
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.allowCompletion();
 		}
-		for(ParticleEffect effect : entityEffects.keySet()) {
-            effect.allowCompletion();
+		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
+		    for(ParticleEffect effect : entry.getValue()) {
+		        effect.allowCompletion();
+		    }
         }
 	}
 	
-	public void add(ParticleEffect effect, AbstractEntity entity) {
-        entityEffects.put(effect, entity);
+	public void add(AbstractEntity entity, ParticleEffect effect) {
+	    if(entityEffects.containsKey(entity)) {
+	        entityEffects.get(entity).add(effect);
+	    } else {
+            ArrayList<ParticleEffect> effects = new ArrayList<>();
+            effects.add(effect);
+            entityEffects.put(entity, effects);
+	    }
     }
 
 	/**
@@ -104,15 +117,21 @@ public class ParticleEffectActor extends Actor {
 			}
 		}
 		
-		for(Map.Entry<ParticleEffect, AbstractEntity> entry : entityEffects.entrySet()) {
+		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
             Vector3 position = GameManager.get().worldToScreen(
-                    new Vector3(entry.getValue().getPosX(), entry.getValue().getPosY(), 0));
-            entry.getKey().setPosition(position.x, position.y);
-		    entry.getKey().update(Gdx.graphics.getDeltaTime());
-            entry.getKey().draw(batch);
-
-            if(entry.getKey().isComplete()) {
-                entry.getKey().dispose();
+                    new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
+            for(ParticleEffect effect : entry.getValue()) {
+                effect.setPosition(position.x, position.y);
+    		    effect.update(Gdx.graphics.getDeltaTime());
+                effect.draw(batch);
+    
+                if(effect.isComplete()) {
+                    effect.dispose();
+                    entry.getValue().remove(effect);
+                    if(entry.getValue().isEmpty()) {
+                        entityEffects.remove(entry.getKey());
+                    }
+                }
             }
         }
 		

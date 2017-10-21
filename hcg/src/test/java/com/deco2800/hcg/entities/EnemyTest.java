@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
@@ -115,6 +116,15 @@ public class EnemyTest {
         assertThat("Player PosX was incorrect", enemy.getLastPlayerX(), is(equalTo(0.0f)));
         assertThat("Player PosY was incorrect", enemy.getLastPlayerY(), is(equalTo(0.0f)));
     }
+    
+    @Test
+    public void testEqual() {
+        Squirrel anotherEnemy = new Squirrel(10.0f,10.0f,0.0f, 1);
+        assertFalse("Two different enemies are equal", enemy.equals(anotherEnemy));
+        Squirrel enemy2 = new Squirrel(5.0f,5.0f,0.0f, 0);
+        assertTrue("The same enemies are not equal", enemy.equals(enemy2));
+    }
+    
     @Test
     public void testBoss() {
         assertFalse("this enemy is a boss", enemy.isBoss());
@@ -139,5 +149,17 @@ public class EnemyTest {
         int health = player.getHealthCur();
         enemy.causeDamage(player);
         assertThat("The health of player does not decrease by 10", player.getHealthCur(), is(equalTo(health - 10)));
+    }
+    
+    @Test
+    public void testClosestPlayer() {
+        Player player = new Player(10, 10, 10);
+        enemy.setClosestPlayer(player);
+        assertThat("the player is not the closest", enemy.getClosestPlayer(), is(equalTo(player)));
+    }
+    
+    @Test
+    public void testGetEnemyType() {
+        assertThat("Enemy type is incorrect", enemy.getEnemyType(), is(equalTo(EnemyType.SQUIRREL)));
     }
 }

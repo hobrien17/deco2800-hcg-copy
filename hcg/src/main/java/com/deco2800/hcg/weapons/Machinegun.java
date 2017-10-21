@@ -41,6 +41,11 @@ public class Machinegun extends Weapon implements Tickable {
         shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 this.aim.x, this.aim.y);
         playFireSound();
+
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashSize = 3;
+        muzzleFlashStartTime = System.currentTimeMillis();
     }
     
 }

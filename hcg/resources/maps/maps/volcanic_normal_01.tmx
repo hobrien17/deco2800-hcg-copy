@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="40" height="40" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="83">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="40" height="40" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="102">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="15"/>
@@ -15,11 +15,6 @@
  <tileset firstgid="38" source="../tiles/deprecated/grass.tsx"/>
  <tileset firstgid="39" source="../tiles/spikes-large.tsx"/>
  <tileset firstgid="40" source="../tiles/health.tsx"/>
- <objectgroup name="ant">
-  <properties>
-   <property name="name" value="ant"/>
-  </properties>
- </objectgroup>
  <layer name="layer" width="40" height="40">
   <properties>
    <property name="name" value="grass"/>
@@ -236,5 +231,34 @@
   <object id="80" gid="3" x="1055.11" y="767.891" width="58" height="32"/>
   <object id="81" gid="3" x="1025.56" y="767.436" width="58" height="32"/>
   <object id="82" gid="3" x="995.855" y="769.145" width="58" height="32"/>
+ </objectgroup>
+ <objectgroup name="squirrel">
+  <properties>
+   <property name="name" value="squirrel"/>
+  </properties>
+  <object id="83" gid="4" x="88.6909" y="555.309" width="55" height="32"/>
+  <object id="84" gid="4" x="82.2545" y="853.745" width="55" height="32"/>
+  <object id="85" gid="4" x="84.2545" y="727.745" width="55" height="32"/>
+  <object id="86" gid="4" x="108" y="684" width="55" height="32"/>
+  <object id="87" gid="4" x="149.2" y="622.8" width="55" height="32"/>
+  <object id="88" gid="4" x="61.4182" y="446.582" width="55" height="32"/>
+  <object id="89" gid="4" x="161.382" y="902.618" width="55" height="32"/>
+  <object id="90" gid="4" x="230.036" y="833.964" width="55" height="32"/>
+  <object id="91" gid="4" x="718.727" y="1213.27" width="55" height="32"/>
+  <object id="92" gid="4" x="799.491" y="1240.51" width="55" height="32"/>
+  <object id="93" gid="4" x="825.6" y="1222.4" width="55" height="32"/>
+  <object id="94" gid="4" x="734" y="1182" width="55" height="32"/>
+  <object id="95" gid="4" x="954.291" y="1241.71" width="55" height="32"/>
+  <object id="96" gid="4" x="1044.33" y="1231.67" width="55" height="32"/>
+  <object id="97" gid="4" x="1043.27" y="1188.73" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="hedgehog">
+  <properties>
+   <property name="name" value="hedgehog"/>
+  </properties>
+  <object id="98" gid="9" x="116.727" y="99.2727" width="55" height="32"/>
+  <object id="99" gid="9" x="246.364" y="205.636" width="55" height="32"/>
+  <object id="100" gid="9" x="1219.96" y="1128.04" width="55" height="32"/>
+  <object id="101" gid="9" x="600.909" y="1235.09" width="55" height="32"/>
  </objectgroup>
 </map>

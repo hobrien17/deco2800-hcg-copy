@@ -16,7 +16,7 @@ public class Sunflower extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Sunflower(Pot master) {
-        super(master, "sunflower", 10);
+        super(master, "sunflower", 600); //~5 real-life minutes
     }
 
     @Override
@@ -28,19 +28,17 @@ public class Sunflower extends AbstractGardenPlant {
                 return "sunflower_02";
             case LARGE:
                 return "sunflower_03";
-            default:
-                return null;
         }
-
+        return null; //this should never occur
     }
 
     @Override
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("sunflower_seed", 5, 15), 0.7);
-        lootRarity.put(new LootWrapper("water_seed", 5, 10), 0.2);
-        lootRarity.put(new LootWrapper("ice_seed", 2, 5), 0.1);
+        lootRarity.put(new LootWrapper("sunflower_seed", 2, 4), 0.7);
+        lootRarity.put(new LootWrapper("water_seed", 2, 4), 0.2);
+        lootRarity.put(new LootWrapper("ice_seed", 2, 4), 0.1);
 
         checkLootRarity();
     }

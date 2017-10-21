@@ -16,7 +16,7 @@ public class DestructableTree extends AbstractEntity implements Harmable {
 
 	@Override
 	public void giveEffect(Effect effect) {
-		if(effect.getName().equals("Shot")) {
+		if("Shot".equals(effect.getName())) {
 			GameManager.get().getWorld().removeEntity(this);
 		}
 	}

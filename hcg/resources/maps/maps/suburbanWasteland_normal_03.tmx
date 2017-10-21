@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="1953">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="1985">
  <properties>
   <property name="PlayerX" value="50"/>
   <property name="PlayerY" value="50"/>
@@ -2611,6 +2611,44 @@
    </properties>
   </object>
   <object id="1855" gid="1" x="2654.4" y="2385.6" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="mushroomturret">
+  <properties>
+   <property name="name" value="mushroomturret"/>
+  </properties>
+  <object id="1953" gid="3" x="801.382" y="1286.62" width="55" height="32"/>
+  <object id="1956" gid="3" x="2096.36" y="2823.64" width="55" height="32"/>
+  <object id="1959" gid="3" x="673.018" y="110.982" width="55" height="32"/>
+  <object id="1960" gid="3" x="3120.29" y="719.709" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="squirrel">
+  <properties>
+   <property name="name" value="squirrel"/>
+  </properties>
+  <object id="1961" gid="3" x="1274.84" y="1085.16" width="55" height="32"/>
+  <object id="1962" gid="3" x="990.545" y="1089.45" width="55" height="32"/>
+  <object id="1963" gid="3" x="1220.58" y="2115.42" width="55" height="32"/>
+  <object id="1964" gid="3" x="1389.02" y="2106.98" width="55" height="32"/>
+  <object id="1965" gid="3" x="1993.38" y="1454.62" width="55" height="32"/>
+  <object id="1966" gid="3" x="1844.87" y="659.127" width="55" height="32"/>
+  <object id="1967" gid="3" x="1253.67" y="682.327" width="55" height="32"/>
+  <object id="1968" gid="3" x="623.927" y="1016.07" width="55" height="32"/>
+  <object id="1969" gid="3" x="622.618" y="1545.38" width="55" height="32"/>
+  <object id="1970" gid="3" x="1468.87" y="2587.13" width="55" height="32"/>
+  <object id="1971" gid="3" x="2407.35" y="1072.65" width="55" height="32"/>
+  <object id="1972" gid="3" x="2403.27" y="1524.73" width="55" height="32"/>
+  <object id="1973" gid="3" x="354.836" y="421.164" width="55" height="32"/>
+  <object id="1974" gid="3" x="257.091" y="518.909" width="55" height="32"/>
+  <object id="1975" gid="3" x="306.545" y="661.455" width="55" height="32"/>
+  <object id="1976" gid="3" x="280.436" y="807.564" width="55" height="32"/>
+  <object id="1977" gid="3" x="242.182" y="1853.82" width="55" height="32"/>
+  <object id="1978" gid="3" x="441.382" y="2974.62" width="55" height="32"/>
+  <object id="1979" gid="3" x="2854.69" y="2553.31" width="55" height="32"/>
+  <object id="1980" gid="3" x="2853.16" y="2402.84" width="55" height="32"/>
+  <object id="1981" gid="3" x="2849.24" y="1430.76" width="55" height="32"/>
+  <object id="1982" gid="3" x="2844.44" y="1323.56" width="55" height="32"/>
+  <object id="1983" gid="3" x="2821.38" y="1258.62" width="55" height="32"/>
+  <object id="1984" gid="3" x="2813.96" y="1186.04" width="55" height="32"/>
  </objectgroup>
  <objectgroup name="picketfence">
   <properties>

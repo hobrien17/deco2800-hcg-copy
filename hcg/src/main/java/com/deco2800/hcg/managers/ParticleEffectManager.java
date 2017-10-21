@@ -1,13 +1,10 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
-import com.badlogic.gdx.Gdx;
 import java.util.*;
 
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.types.Weathers;
 
 /**
  * A class to manage the game's particle effects.
@@ -47,7 +44,7 @@ public class ParticleEffectManager extends Manager {
         return particleEffectActor;
     }
     
-    public void addEffect(ParticleEffect effect, AbstractEntity entity) {
-        particleEffectActor.add(effect, entity);
+    public void addEffect(AbstractEntity entity, ParticleEffect effect) {
+        particleEffectActor.add(entity, effect);
     }
 }
