@@ -82,14 +82,14 @@ public class Hedgehog extends Enemy implements Tickable {
         if (chargedAtPlayer && distance > chargingRange){
             this.setChargeStatus(false);
         }
-        if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange) {
+        if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange && !collided) {
             // move slowly to player
             this.setSpeed(this.level * 0.01f);
             this.setStatus(2);
             this.updateStandingSprite();
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
-        } else if (!chargedAtPlayer && distance < chargingRange) {
+        } else if (!chargedAtPlayer && distance < chargingRange && !collided) {
             // charge at player
             this.setSpeed(this.level * 0.05f);
             this.setStatus(2);
@@ -118,14 +118,14 @@ public class Hedgehog extends Enemy implements Tickable {
     		this.setChargeStatus(false);    	
     	} 
     	
-    	if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange) {
+    	if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange && !collided) {
     		// move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
             this.updateStandingSprite();
             this.lastPlayerX = closestPlayer.getPosX();
             this.lastPlayerY = closestPlayer.getPosY();
-    	} else if (!chargedAtPlayer && distance < chargingRange) {
+    	} else if (!chargedAtPlayer && distance < chargingRange && !collided) {
             // charge at player
             setSpeed(this.level * 0.05f);
             this.setStatus(2);
