@@ -107,7 +107,7 @@ public class GeneralRadialDisplay extends Group {
 
 		equippedItems = PlayerEquipment.getPlayerEquipment();
 		inventory = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer().getInventory();
-
+		
         setupSprites();
         setupListeners();
         //updateCount();
@@ -297,6 +297,7 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.MACHINEGUN;
+			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(0);
 			}
 		});
 
@@ -305,6 +306,7 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.SHOTGUN;
+			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(1);
 			}
 		});
 
@@ -313,6 +315,7 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.STARFALL;
+			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(3);
 			}
 		});
 
