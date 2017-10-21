@@ -116,14 +116,4 @@ public class Crab extends Enemy implements Tickable {
         this.detectCollision();
         this.moveAction();
     }
-    
-    protected void spawnParticles(AbstractEntity entity, String particleFile) {
-        ParticleEffect effect = new ParticleEffect();
-        effect.load(Gdx.files.internal("resources/particles/" + particleFile),
-        Gdx.files.internal("resources/particles/"));
-        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
-        effect.setPosition(position.x, position.y);
-        effect.start();
-        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, effect);
-    }
 }
