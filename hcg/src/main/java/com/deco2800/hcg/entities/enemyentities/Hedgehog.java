@@ -145,32 +145,16 @@ public class Hedgehog extends Enemy implements Tickable {
         if (spriteCount%4 == 0) {
             switch (this.direction) {
                 case 1:
-                    if (this.getTexture() == "hedgeballWE1") {
-                        this.setTexture("hedgeballWE2");
-                    } else {
-                        this.setTexture("hedgeballWE1");
-                    }
+                    updateTexture("hedgeballWE");
                     break;
                 case 2:
-                    if (this.getTexture() == "hedgeballNS1") {
-                        this.setTexture("hedgeballNS2");
-                    } else {
-                        this.setTexture("hedgeballNS1");
-                    }
+                    updateTexture("hedgeballNS");
                     break;
                 case 3:
-                    if (this.getTexture() == "hedgeballWE1") {
-                        this.setTexture("hedgeballWE2");
-                    } else {
-                        this.setTexture("hedgeballWE1");
-                    }
+                    updateTexture("hedgeballWE");
                     break;
                 case 4:
-                    if (this.getTexture() == "hedgeballNS1") {
-                        this.setTexture("hedgeballNS2");
-                    } else {
-                        this.setTexture("hedgeballNS1");
-                    }
+                    updateTexture("hedgeballNS");
                     break;
                 default:
                     break;
@@ -183,32 +167,16 @@ public class Hedgehog extends Enemy implements Tickable {
         if (spriteCount%4 == 0) {
             switch (this.direction) {
                 case 1:
-                    if (this.getTexture() == "hedgehogE1") {
-                        this.setTexture("hedgehogE2");
-                    } else {
-                        this.setTexture("hedgehogE1");
-                    }
+                    updateTexture("hedgehogE");
                     break;
                 case 2:
-                    if (this.getTexture() == "hedgehogN1") {
-                        this.setTexture("hedgehogN2");
-                    } else {
-                        this.setTexture("hedgehogN1");
-                    }
+                    updateTexture("hedgehogN");
                     break;
                 case 3:
-                    if (this.getTexture() == "hedgehogW1") {
-                        this.setTexture("hedgehogW2");
-                    } else {
-                        this.setTexture("hedgehogW1");
-                    }
+                    updateTexture("hedgehogW");
                     break;
                 case 4:
-                    if (this.getTexture() == "hedgehogS1") {
-                        this.setTexture("hedgehogS2");
-                    } else {
-                        this.setTexture("hedgehogS1");
-                    }
+                    updateTexture("hedgehogS");
                     break;
                 default:
                     break;

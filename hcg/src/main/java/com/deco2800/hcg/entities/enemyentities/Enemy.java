@@ -626,7 +626,13 @@ public abstract class Enemy extends Character implements Lootable {
         enemyWeapon.openFire();
     }
 
-    
+    protected void updateTexture(String texture) {
+        if (this.getTexture() == texture) {
+            this.setTexture(texture + "2");
+        } else {
+            this.setTexture(texture);
+        }
+    }
 
     /**
      *  Logic for Squirrel

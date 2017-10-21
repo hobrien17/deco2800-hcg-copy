@@ -52,32 +52,16 @@ public class Squirrel extends Enemy implements Tickable {
 		if (spriteCount%4 == 0) {
 			switch (this.direction) {
 				case 1:
-					if (this.getTexture() == "antE") {
-						this.setTexture("antE2");
-					} else {
-						this.setTexture("antE");
-					}
+				    updateTexture("antE");
 					break;
 				case 2:
-					if (this.getTexture() == "antN") {
-						this.setTexture("antN2");
-					} else {
-						this.setTexture("antN");
-					}
+				    updateTexture("antN");
 					break;
 				case 3:
-					if (this.getTexture() == "antW") {
-						this.setTexture("antW2");
-					} else {
-						this.setTexture("antW");
-					}
+					updateTexture("antW");
 					break;
 				case 4:
-					if (this.getTexture() == "antS") {
-						this.setTexture("antS2");
-					} else {
-						this.setTexture("antS");
-					}
+					updateTexture("antS");
 					break;
 				default:
 					break;
@@ -85,6 +69,7 @@ public class Squirrel extends Enemy implements Tickable {
 		}
 		spriteCount++;
 	}
+	
 
 	/**
 	 * On Tick handler
