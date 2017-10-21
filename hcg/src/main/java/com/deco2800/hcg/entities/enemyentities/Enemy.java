@@ -459,10 +459,10 @@ public abstract class Enemy extends Character implements Lootable {
         } else if (this.getPosY() > nextPosY) {
             currPosY -= movementSpeed * 0.25;
         }
-        Box3D newPos = getBox3D();
-        newPos.setX(currPosX);
-        newPos.setY(currPosY);
-        return newPos;
+        Box3D newPosition = getBox3D();
+        newPosition.setX(currPosX);
+        newPosition.setY(currPosY);
+        return newPosition;
     }
 
     /**
@@ -520,10 +520,10 @@ public abstract class Enemy extends Character implements Lootable {
                 (abs(posY - currPosY) < 1)){
             this.setStatus(1);
         }
-        Box3D newPos = getBox3D();
-        newPos.setX(currPosX);
-        newPos.setY(currPosY);
-        return newPos;
+        Box3D newPosition = getBox3D();
+        newPosition.setX(currPosX);
+        newPosition.setY(currPosY);
+        return newPosition;
     }
 
     /**

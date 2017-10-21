@@ -188,6 +188,7 @@ public class Hedgehog extends Enemy implements Tickable {
                     } else {
                         this.setTexture("hedgehogE1");
                     }
+                    break;
                 case 2:
                     if (this.getTexture() == "hedgehogN1") {
                         this.setTexture("hedgehogN2");
