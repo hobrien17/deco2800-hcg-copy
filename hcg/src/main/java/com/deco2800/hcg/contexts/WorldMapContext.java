@@ -101,7 +101,7 @@ public class WorldMapContext extends UIContext {
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight());
 
-		stage.addActor(new WorldMapEntity());
+		stage.addActor(new WorldMapEntity(currentWorld.getWorldType()));
 		
 		createExitWindow();
 
@@ -226,7 +226,7 @@ public class WorldMapContext extends UIContext {
 	public void updateMapDisplay(WorldMap currentWorld) {
 		updateNodesDisplayed();
 		stage.clear();
-		stage.addActor(new WorldMapEntity());
+		stage.addActor(new WorldMapEntity(currentWorld.getWorldType()));
 		hiddenNodes.clear();
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			MapNodeEntity nodeEntry = new MapNodeEntity(node, currentWorld);

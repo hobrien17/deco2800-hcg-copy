@@ -1,8 +1,10 @@
 package com.deco2800.hcg.worldmapui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.deco2800.hcg.entities.worldmap.Level;
+import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldStack;
 
@@ -64,12 +66,10 @@ public class WorldStackGenerator {
 		for(Integer i = 0; i < NUMBER_OF_WORLDS; i++) {
 			if(rowNumber == 0 && columnNumber == 0) {
 				if(i == 0) {
-					int seed = mapGenerator.getSeedValue();
-					mapGenerator.setGeneratorSeed(31);
-					WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
-					worldMap.setPosition(i);
-					worldStack.addWorldToStack(worldMap);
-					mapGenerator.setGeneratorSeed(seed);
+					List<MapNode> placeholder = new ArrayList<MapNode>();
+					TutorialWorld tutorialWorld = new TutorialWorld(1, 10, 10, placeholder);
+					tutorialWorld.setPosition(i);
+					worldStack.addWorldToStack(tutorialWorld);
 				} else {
 					WorldMap worldMap = mapGenerator.generateWorldMap(i + 1);
 					worldMap.setPosition(i);
@@ -77,12 +77,10 @@ public class WorldStackGenerator {
 				}
 			} else {
 				if(i == 0) {
-					int seed = mapGenerator.getSeedValue();
-					mapGenerator.setGeneratorSeed(31);
-					WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
-					worldMap.setPosition(i);
-					worldStack.addWorldToStack(worldMap);
-					mapGenerator.setGeneratorSeed(seed);
+					List<MapNode> placeholder = new ArrayList<MapNode>();
+					TutorialWorld tutorialWorld = new TutorialWorld(1, rowNumber, columnNumber, placeholder);
+					tutorialWorld.setPosition(i);
+					worldStack.addWorldToStack(tutorialWorld);
 				} else {
 					WorldMap worldMap = mapGenerator.generateWorldMap(rowNumber, columnNumber, i + 1);
 					worldMap.setPosition(i);

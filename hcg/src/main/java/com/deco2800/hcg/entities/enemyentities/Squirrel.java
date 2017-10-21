@@ -10,9 +10,10 @@ import java.util.HashMap;
  */
 public class Squirrel extends Enemy implements Tickable {
 
-	private int spriteCount;
+	
 	private int counter;
 	private int delay;
+	private String[] sprites = {"antE", "antN", "antW", "antS"};
 
 	/**
 	 * Constructor for the Squirrel class. Creates a new squirrel at the given
@@ -28,7 +29,6 @@ public class Squirrel extends Enemy implements Tickable {
 		this.boss = false;
 		this.setTexture("antSW");
 		this.level = 1;
-		this.spriteCount = 0;
 		this.delay = 20;
 		this.counter = 20;
 		this.enemyWeapon = new WeaponBuilder()
@@ -46,28 +46,6 @@ public class Squirrel extends Enemy implements Tickable {
 		lootRarity.put(new LootWrapper("sunflower_seed", 1.0f), 1.0);
 
 		checkLootRarity();
-	}
-
-	public void updateSprite() {
-		if (spriteCount%4 == 0) {
-			switch (this.direction) {
-				case 1:
-				    updateTexture("antE");
-					break;
-				case 2:
-				    updateTexture("antN");
-					break;
-				case 3:
-					updateTexture("antW");
-					break;
-				case 4:
-					updateTexture("antS");
-					break;
-				default:
-					break;
-			}
-		}
-		spriteCount++;
 	}
 	
 
@@ -87,7 +65,7 @@ public class Squirrel extends Enemy implements Tickable {
 			this.causeDamage(this.getTarget());
 			this.counter = 0;
 		}
-		this.updateSprite();
+		this.updateSprite(sprites);
 		this.moveAction();//Move enemy to the position in Box3D.
 		// Apply any effects that exist on the entity
 		myEffects.apply();

@@ -1,13 +1,11 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Crab extends Enemy implements Tickable {
 
