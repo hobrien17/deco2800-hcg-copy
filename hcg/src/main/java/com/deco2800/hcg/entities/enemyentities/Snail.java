@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class Snail extends Enemy implements Tickable {
 
-    private int spriteCount;
+    private String[] sprites = {"snailE", "snailN", "snailW", "snailS"};
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
      * position.
@@ -60,27 +60,6 @@ public class Snail extends Enemy implements Tickable {
                 (TiledMapTileLayer) GameManager.get().getWorld().getMapLayerWithProperty("name", "newSludge"));
     }
 
-    public void updateSprite() {
-        if (spriteCount%4 == 0) {
-            switch (this.direction) {
-                case 1:
-                   this.setTexture("snailE");
-                    break;
-                case 2:
-                    this.setTexture("snailN");
-                    break;
-                case 3:
-                    this.setTexture("snailW");
-                    break;
-                case 4:
-                    this.setTexture("snailS");
-                    break;
-                default:
-                    break;
-            }
-        }
-        spriteCount++;
-    }
 
     /**
      * On Tick handler
@@ -93,7 +72,7 @@ public class Snail extends Enemy implements Tickable {
         this.setPoisonTrail();//Set poison trail
         this.setDirection();
         this.detectCollision();//Detect collision.
-        this.updateSprite();
+        this.updateSprite(sprites);
         this.moveAction();//Move enemy to the position in Box3D.
         // Apply any effects that exist on the entity
         myEffects.apply();
