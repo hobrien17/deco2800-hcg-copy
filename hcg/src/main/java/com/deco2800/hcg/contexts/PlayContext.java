@@ -3,7 +3,6 @@ package com.deco2800.hcg.contexts;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.Arrays;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,14 +23,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.actors.ParticleEffectActor;
-import com.deco2800.hcg.contexts.playContextClasses.ChatStack;
-import com.deco2800.hcg.contexts.playContextClasses.ClockDisplay;
-import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
-import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
-import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
-import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.garden_entities.plants.Pot;
-import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
+import com.deco2800.hcg.contexts.playcontextclasses.ChatStack;
+import com.deco2800.hcg.contexts.playcontextclasses.ClockDisplay;
+import com.deco2800.hcg.contexts.playcontextclasses.PlantWindow;
+import com.deco2800.hcg.contexts.playcontextclasses.PlayerStatusDisplay;
+import com.deco2800.hcg.contexts.playcontextclasses.PotUnlockDisplay;
+import com.deco2800.hcg.contexts.playcontextclasses.GeneralRadialDisplay;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.LevelEndMessage;
@@ -60,9 +57,6 @@ public class PlayContext extends Context {
     private TextureManager textureManager;
 
     private Table pauseMenu;
-
-    private static final float X_SIZE_MAX = 80f;
-    private static final float Y_SIZE_MAX = 80f;
 
     private boolean pauseMenuDisplayed;
 
@@ -393,23 +387,23 @@ public class PlayContext extends Context {
         if(keycode == Input.Keys.M) {
             contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
             soundManager.stopWeatherSounds();
-		} else if (keycode == Input.Keys.J && weaponRadialDisplay.getActive() == false) {
+		} else if (keycode == Input.Keys.J && !weaponRadialDisplay.getActive()) {
             seedRadialDisplay.hide();
             consumableRadialDisplay.hide();
             plantRadialDisplay.hide();
             weaponRadialDisplay.show();
-        } else if (keycode == Input.Keys.H && seedRadialDisplay.getActive() == false) {
+        } else if (keycode == Input.Keys.H && !seedRadialDisplay.getActive()) {
             weaponRadialDisplay.hide();
             consumableRadialDisplay.hide();
             plantRadialDisplay.hide();
             seedRadialDisplay.show();
-        } else if (keycode == Input.Keys.K && consumableRadialDisplay.getActive() == false) {
+        } else if (keycode == Input.Keys.K && !consumableRadialDisplay.getActive()) {
         	seedRadialDisplay.hide();
             consumableRadialDisplay.show();
             weaponRadialDisplay.hide();
             plantRadialDisplay.hide();
         } else if (keycode == Input.Keys.G && GeneralRadialDisplay.plantableNearby()
-                && plantRadialDisplay.getActive() == false) {
+                && !plantRadialDisplay.getActive()) {
             seedRadialDisplay.hide();
             consumableRadialDisplay.hide();
             weaponRadialDisplay.hide();

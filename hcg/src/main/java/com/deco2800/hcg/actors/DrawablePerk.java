@@ -41,7 +41,7 @@ public class DrawablePerk {
         String textureName = perk.getName().replaceAll(" ", "_");
         this.perkImage = new ImageButton(new Image(textureManager.getTexture(textureName)).getDrawable());
         this.border = new Image(textureManager.getTexture("perk_border_inactive"));
-        this.levelLabel = new Label(("" + perk.getCurrentLevel() + " / " + perk.getMaxLevel()), skin);
+        this.levelLabel = new Label("" + perk.getCurrentLevel() + " / " + perk.getMaxLevel(), skin);
 
         //other fields for handling when the perk is clicked
         this.stage = perksSelectionScreen.getStage();

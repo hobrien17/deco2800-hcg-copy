@@ -1,4 +1,4 @@
-package com.deco2800.hcg.contexts.playContextClasses;
+package com.deco2800.hcg.contexts.playcontextclasses;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,13 +41,10 @@ import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.stackable.SmallMushroom;
 import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
-import com.deco2800.hcg.items.tools.Trowel;
-import com.deco2800.hcg.items.tools.Hoe;
 import com.deco2800.hcg.items.tools.Fertiliser;
 import com.deco2800.hcg.items.tools.Tool;
 import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.inventory.PlayerEquipment;
-import com.deco2800.hcg.weapons.Weapon;
 
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
