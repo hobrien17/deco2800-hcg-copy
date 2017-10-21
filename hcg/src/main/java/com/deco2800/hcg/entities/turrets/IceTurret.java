@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.util.WorldUtil;
 
@@ -26,8 +27,8 @@ public class IceTurret extends AbstractTurret {
 	private List<AbstractEntity> far;
 	private int closeRange;
 	private int farRange;
-	private static final int BLOW = 5;
-	private static final int RESET = BLOW + 10;
+	private static final int BLOW = 10;
+	private static final int RESET = BLOW + 25;
 	private static final int NORMAL_CLOSE_RANGE = 10;
 	private static final int INCREASED_CLOSE_RANGE = 20;
 	private static final int REDUCED_CLOSE_RANGE = 0;
@@ -55,6 +56,7 @@ public class IceTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		if(++seconds == BLOW) {
+			((SoundManager)GameManager.get().getManager(SoundManager.class)).playSound("freeze");
 			near = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 					master.getPosY(), closeRange, Enemy.class);
 			far = WorldUtil.allEntitiesToPosition(master.getPosX(), 
@@ -63,12 +65,12 @@ public class IceTurret extends AbstractTurret {
 			for(AbstractEntity entity : near) {
 				Enemy enemy = (Enemy)entity;
 				enemy.setSpeed(0);
-				enemy.setTint(Color.ROYAL);
+				enemy.setTint(Color.valueOf("#B3FBFC"));
 			}
 			for(AbstractEntity entity : far) {
 				Enemy enemy = (Enemy)entity;
 				enemy.changeSpeed(0.5f);
-				enemy.setTint(Color.CYAN);
+				enemy.setTint(Color.valueOf("#B3FBFC"));
 			}
 		}
 		if(seconds == RESET) {
@@ -94,6 +96,16 @@ public class IceTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		return "ice_corpse_01";
+	}
+
+	@Override
+	public int getGlowStrength() {
+		return 2;
+	}
+
+	@Override
+	public Color getGlowColor() {
+		return Color.valueOf("#B3FBFC");
 	}
 
 }

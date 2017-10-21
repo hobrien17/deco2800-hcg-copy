@@ -92,8 +92,8 @@ public class FireBullet extends Bullet {
 	 *           the number of entities this object can hit before being destroyed
 	 */
 	public FireBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
-					  float yLength, float zLength, AbstractEntity user, int hitCount) {
-		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount);
+					  float yLength, float zLength, AbstractEntity user, int hitCount, float speed) {
+		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, speed);
 		this.setTexture("battle_seed_red");
 		this.bulletType = BulletType.FIRE;
 	}

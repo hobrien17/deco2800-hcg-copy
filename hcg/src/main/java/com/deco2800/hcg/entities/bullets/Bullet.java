@@ -30,7 +30,7 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 
-	protected float speed = 0.5f;
+	protected float speed;
 
 	protected float goalX;
 	protected float goalY;
@@ -98,7 +98,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
 				  float newZ, AbstractEntity user, int hitCount) {
-		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount);
+		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, 0.5f);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -131,8 +131,10 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
 				  float newZ, float xLength, float yLength, float zLength,
-				  AbstractEntity user, int hitCount) {
+				  AbstractEntity user, int hitCount, float speed) {
 		super(posX, posY, posZ, xLength, yLength, zLength);
+		
+		this.speed = speed;
 		this.setTexture("battle_seed");
 		this.bulletType = BulletType.BASIC;
 
@@ -171,12 +173,14 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		distanceTravelled += 1;
-		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
-			specialAbility();
-		}
-		entityHit();
-		if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
+	    if(user != null) {
+    		distanceTravelled += 1;
+    		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
+    			specialAbility();
+    		}
+    		entityHit();
+	    }
+    	if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
 				- Math.abs(goalX)) < 0.5
 				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
 				- Math.abs(goalY)) < 0.5) {

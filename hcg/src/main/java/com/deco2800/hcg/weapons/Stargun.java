@@ -40,7 +40,7 @@ public class Stargun extends Weapon implements Tickable {
     }
     
     @Override
-    protected void fireWeapon() {
+    protected void fire() {
         Random random = new Random();
         for(int i = 0; i < this.pellets; i++) {
             shootBullet(this.aim.x + 5 * (float) random.nextGaussian(),

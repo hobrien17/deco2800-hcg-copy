@@ -213,8 +213,8 @@ public class Player extends Character implements Tickable {
 		inventory.addItem(new Key());
 		inventory.addItem(new SpeedPotion());
 		inventory.addItem(new Seed(Seed.Type.FIRE));
-		inventory.addItem(new Seed(Seed.Type.GRASS));
-		inventory.addItem(new Seed(Seed.Type.EXPLOSIVE));
+		inventory.addItem(new Seed(Seed.Type.ICE));
+		inventory.addItem(new Seed(Seed.Type.ICE));
 	}
 
 	/**
