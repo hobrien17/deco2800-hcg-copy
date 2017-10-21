@@ -173,7 +173,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-	    if(user == null) {
+	    if(user != null) {
     		distanceTravelled += 1;
     		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
     			specialAbility();
