@@ -30,7 +30,7 @@ public class BugSpray extends Tool {
 
 	@Override
 	public Item copy() {
-		return new Fertiliser();
+		return new BugSpray();
 	}
 
 	@Override

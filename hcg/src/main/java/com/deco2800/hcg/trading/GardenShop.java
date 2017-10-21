@@ -20,16 +20,14 @@ public class GardenShop extends Shop{
     public GardenShop() {
 
         Item hoe = new Hoe();
-        hoe.setStackSize(10);
         addStock(hoe);
         Item fertiliser = new Fertiliser();
         fertiliser.setStackSize(10);
         addStock(fertiliser);
         Item bugSpray = new BugSpray();
-        bugSpray.setStackSize(10);
+        bugSpray.setStackSize(5);
         addStock(bugSpray);
         Item trowel = new Trowel();
-        trowel.setStackSize(10);
         addStock(trowel);
 
         Item seedExplosive = new Seed(Seed.Type.EXPLOSIVE);
