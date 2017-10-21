@@ -1,56 +1,47 @@
 package com.deco2800.hcg.contexts;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.quests.QuestArchive;
+import com.deco2800.hcg.quests.QuestManager;
 
 public class QuestMenuContext extends UIContext {
 
-	private Color tableColor;
 	private Table main;
 	private Window logWindow;
 	private Table readyTable;
 	private Table readyListTable;
 	private Table activeTable;
 	private Table activeListTable;
-	private Table inactiveTable;
-	private Table inactiveListTable;
 	private Table completedTable;
 	private Table completedListTable;
 	private Window secondaryWindow;
 	private Table nameTable;
-	private Table blurbTable;
-	private Table blurbTextTable;
 	private Table detailsTable;
 	private Table detailsTextTable;
 	private List<String> readyList;
 	private ScrollPane readyQuestsPane;
 	private List<String> activeList;
 	private ScrollPane activeQuestsPane;
-	private List<String> inactiveList;
-	private ScrollPane inactiveQuestsPane;
 	private List<String> completedList;
 	private ScrollPane completedQuestsPane;
-	private String questLogTitle;
 	private String readyTitle;
-	private String readyQuest;
 	private String activeTitle;
-	private String activeQuest;
-	private String inactiveTitle;
-	private String inactiveQuest;
 	private String completedTitle;
-	private String completedQuest;
 	private String nameTitle;
-	private String blurbTitle;
-	private String blurbText;
 	private String detailsTitle;
-	private String detailsText;
+	private TextArea detailsText;
 	private ImageButton questsBack;
 	
 	public QuestMenuContext() {
@@ -60,6 +51,8 @@ public class QuestMenuContext extends UIContext {
                 gameManager.getManager(ContextManager.class);
 		TextureManager textureManager = (TextureManager) 
 				gameManager.getManager(TextureManager.class);
+		QuestManager questManager = (QuestManager) 
+				gameManager.getManager(QuestManager.class);
 		
 		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		
@@ -78,10 +71,6 @@ public class QuestMenuContext extends UIContext {
         
         activeListTable = new Table(skin);
         
-        inactiveTable = new Table(skin);
-        
-        inactiveListTable = new Table(skin);
-        
         completedTable = new Table(skin);
         
         completedListTable = new Table(skin);
@@ -90,59 +79,71 @@ public class QuestMenuContext extends UIContext {
         
         nameTable = new Table(skin);
         
-        blurbTable = new Table(skin);
-        
-        blurbTextTable = new Table(skin);
-        
         detailsTable = new Table(skin);
         
-        detailsTextTable = new Table(skin);
-        
-        tableColor = new Color(Color.BROWN);
-        
-        //Create all Strings		
-		questLogTitle = new String("Quest Log");
-		readyTitle = new String("Ready to Complete:");
-		readyQuest = new String("Quest");
-		activeTitle = new String("Active:");
-		activeQuest = new String("Quest");
-		inactiveTitle = new String("Inactive:");
-		inactiveQuest = new String("Quest");
-		completedTitle = new String("Completed:");
-		completedQuest = new String("Quest");
-		nameTitle = new String("Quest Name");
-		blurbTitle = new String("Blurb:");
-		blurbText = new String("Blurb text goes in here");
-		detailsTitle = new String("Details:");
-		detailsText = new String("Details text goes in here");
+        detailsTextTable = new Table(skin);       
 		
 		//Create Image Button
 		questsBack = new ImageButton(new Image(textureManager.getTexture("instructions_back_button")).getDrawable());
 		
+		//Collect the data from the quest manager
+		ArrayList<QuestArchive> completedQuests = questManager.getCompletedQuests();
+		HashMap<QuestNPC,QuestArchive> completableQuests = questManager.getCompleteableQuests();
+		HashMap<QuestNPC,QuestArchive> unCompleteableQuests = questManager.getUnCompleteableQuests();
+		
 		//Create all Lists
 		readyList = new List<String>(skin);
-        readyList.setItems(readyQuest);
+        
+        //Turn the data into readable
+        int readyCounter = 0;
+        String[] readyStringList = new String[completableQuests.size()];
+        for (QuestArchive qa: completableQuests.values()) {
+        	readyStringList[readyCounter] = qa.getQuestTitle();
+        	readyCounter++;
+        }
+        readyList.setItems("Ready Test");
         readyQuestsPane = new ScrollPane(readyList);
         readyQuestsPane.setSmoothScrolling(false);
         readyQuestsPane.setDebug(false);
         
         activeList = new List<String>(skin);
-        activeList.setItems(activeQuest);
+        
+        int questCounter = 0;
+        String[] questStringList = new String[unCompleteableQuests.size()];
+        for (QuestArchive qa: unCompleteableQuests.values()) {
+        	questStringList[questCounter] = qa.getQuestTitle();
+        	questCounter++;
+        }
+        activeList.setItems("Active Test");
         activeQuestsPane = new ScrollPane(activeList);
         activeQuestsPane.setSmoothScrolling(false);
         activeQuestsPane.setDebug(false);
         
-        inactiveList = new List<String>(skin);
-        inactiveList.setItems(inactiveQuest);
-        inactiveQuestsPane = new ScrollPane(inactiveList);
-        inactiveQuestsPane.setSmoothScrolling(false);
-        inactiveQuestsPane.setDebug(false);
-        
         completedList = new List<String>(skin);
-        completedList.setItems(completedQuest);
+        String[] completedStringList = new String[completedQuests.size()];
+        int completedCounter = 0;
+        for (QuestArchive qa: completedQuests) {
+        	completedStringList[completedCounter] = qa.getQuestTitle();
+        	completedCounter++;
+        }
+        completedList.setItems("Completed Test");
         completedQuestsPane = new ScrollPane(completedList);
         completedQuestsPane.setSmoothScrolling(false);
         completedQuestsPane.setDebug(false);
+        
+        
+        //Create all Strings		
+		readyTitle = new String("Ready to Complete:");
+		activeTitle = new String("Quests:");
+		completedTitle = new String("Completed:");
+		nameTitle = new String("Quest Name: ");
+		detailsTitle = new String("Details:");
+		
+		detailsText = new TextArea("Click on a Quest to Display the Details", skin);
+		detailsText.setDisabled(true);
+		detailsText.setFillParent(true);
+		
+        //questManager.getQuest(readyList.getItems().first()).getTitle()
         
         logWindow.setTransform(true);
         
@@ -158,11 +159,6 @@ public class QuestMenuContext extends UIContext {
         activeListTable.add(activeQuestsPane).expand().fill();
         logWindow.add(activeListTable).expandX().fill();
         logWindow.row();
-        inactiveTable.add(inactiveTitle);
-        logWindow.add(inactiveTable).expandX().fill();
-        logWindow.row();
-        inactiveListTable.add(inactiveQuestsPane).expand().fill();
-        logWindow.add(inactiveListTable).expandX().fill();
         logWindow.row();
         completedTable.add(completedTitle);
         logWindow.add(completedTable).expandX().fill();
@@ -173,17 +169,11 @@ public class QuestMenuContext extends UIContext {
         nameTable.add(nameTitle);
         secondaryWindow.add(nameTable).expandX().fill();
         secondaryWindow.row();
-        blurbTable.add(blurbTitle);
-        secondaryWindow.add(blurbTable).expandX().fill();
-        secondaryWindow.row();
-        blurbTextTable.add(blurbText);
-        secondaryWindow.add(blurbTextTable).expandX().fill();
-        secondaryWindow.row();
         detailsTable.add(detailsTitle);
         secondaryWindow.add(detailsTable).expandX().fill();
         secondaryWindow.row();
-        detailsTextTable.add(detailsText);
-        secondaryWindow.add(detailsTextTable).expandX().fill();
+        detailsTextTable.add(detailsText).expand().fill();
+        secondaryWindow.add(detailsTextTable).expand().fill();
         secondaryWindow.row();
         
         main.add(logWindow).expand(1, 1).fill();
@@ -203,6 +193,31 @@ public class QuestMenuContext extends UIContext {
 			}
 		});
 		
+		readyList.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				nameTitle.concat("Ready Quest");
+				detailsText.setText("I am testing whether or not the text will run down or whether it will "
+						+ "stop at a certain point. Hello my name is Dylan, I hate Java with a burning passion.");
+			}
+		});
+		
+		activeList.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				nameTitle.concat("Active Quest");
+				detailsText.setText("Active Quest Details");
+			}
+		});
+		
+		completedList.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				nameTitle.concat("Completed Quest");
+				detailsText.setText("Completed Quest Details");
+			}
+		});
+			
 	}
-	
+		
 }
