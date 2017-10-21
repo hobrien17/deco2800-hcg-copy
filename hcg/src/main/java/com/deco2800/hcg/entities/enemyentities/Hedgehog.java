@@ -98,7 +98,11 @@ public class Hedgehog extends Enemy implements Tickable {
             this.updateSprite(ballSprites);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
-            spawnParticles(this, "rolyPoly.p");
+            
+            if(tickCount > 30) {
+                spawnParticles(this, "rolyPoly.p");
+                tickCount = 0;
+            }
         } else {
             // move randomly
             this.setSpeed(this.level * 0.03f);
@@ -163,6 +167,7 @@ public class Hedgehog extends Enemy implements Tickable {
         }
     	this.moveAction();//Move enemy to the position in Box3D.
     	myEffects.apply();
+    	checkParticles();
     }
 
 }
