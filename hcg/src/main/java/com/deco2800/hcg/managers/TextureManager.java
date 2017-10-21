@@ -313,6 +313,10 @@ public class TextureManager extends Manager {
 			textureMap.put("ws_urban_completed", new Texture("resources/worldmap/ws_urban_completed.png"));
 			textureMap.put("ws_purp_bg", new Texture("resources/worldmap/ws_purp_background.png"));
 			textureMap.put("player_map", new Texture("resources/worldmap/player_map.png"));
+			textureMap.put("ws_main_bg", new Texture("resources/worldmap/bg_world.png"));
+			textureMap.put("wm_urban_bg", new Texture("resources/worldmap/bg_urban.png"));
+			textureMap.put("wm_forest_bg", new Texture("resources/worldmap/bg_forest.png"));
+			textureMap.put("wm_waste_bg", new Texture("resources/worldmap/bg_waste.png"));
 
 			//Item textures
 			textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
