@@ -104,8 +104,13 @@ public class WorldManager extends Manager {
             contextManager.popContext();
         }
         // clear old observers (mushroom turret for example)
-        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-        manager.deleteObservers();
+        World world = gameManager.getWorld();
+        if(world.equals(World.SAFEZONE)) {
+        	world.saveStopwatch();
+        } else {
+        	StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        	manager.deleteObservers();
+        }
         
         ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();
 

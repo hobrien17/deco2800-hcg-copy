@@ -461,28 +461,6 @@ public class PlayContext extends Context {
     }
 
 	private void exit() {
-		if(gameManager.getCurrentNode().getNodeType() != 3) {
-            gameManager.getCurrentNode().changeNodeType(2);
-            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
-            contextManager.popContext();
-        } else {
-            gameManager.getCurrentNode().changeNodeType(2);
-            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
-            gameManager.getMapContext().addEndOfContext();
-            contextManager.popContext();
-        }
-        exitDisplayed = false;
-        // clear old observers (mushroom turret for example)
-        World world = gameManager.getWorld();
-        if(world.equals(World.SAFEZONE)) {
-        	world.saveStopwatch();
-        } else {
-        	StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-        	manager.deleteObservers();
-        }
-        
-        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();;
-
     	if (networkManager.isMultiplayerGame()) {
 		networkManager.queueMessage(new LevelEndMessage(0));
     	}
