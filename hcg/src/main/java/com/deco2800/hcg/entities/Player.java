@@ -1152,7 +1152,11 @@ public class Player extends Character implements Tickable {
 	}
 	
 	public void setEquipped(int index) {
-		this.equippedItems.setEquippedSlot(index);
+	    gameManager.getWorld().removeEntity(this.getEquippedWeapon());
+	    this.equippedItems.setEquippedSlot(index);
+	    if(this.getEquippedWeapon() != null) {
+	        gameManager.getWorld().addEntity(this.getEquippedWeapon());
+	    }
 	}
 
 	/**
