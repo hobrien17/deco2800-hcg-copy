@@ -1,5 +1,9 @@
 package com.deco2800.hcg.managers;
 
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.deco2800.hcg.util.MathHelper;
 
@@ -27,6 +31,8 @@ public class TimeManager extends Manager implements TickableManager {
 	private int[] dayCount = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	private boolean timePaused;
 	private boolean isNight;
+	
+	public final Map<String, LocalTime> timeNames;
 
 	/**
 	 * Constructor: Initializes day to 01/01/2047 and elapsed time to 0 on
@@ -43,6 +49,16 @@ public class TimeManager extends Manager implements TickableManager {
 		this.timeLabel = null;
 		this.dateLabel = null;
 		this.timePaused = false;
+		
+		this.timeNames = new HashMap<>();
+		this.timeNames.put("dawn", LocalTime.of(6, 0, 0));
+        this.timeNames.put("morning", LocalTime.of(9, 0, 0));
+        this.timeNames.put("midday", LocalTime.of(12, 0, 0));
+        this.timeNames.put("afternoon", LocalTime.of(14, 0, 0));
+        this.timeNames.put("evening", LocalTime.of(17, 0, 0));
+        this.timeNames.put("dusk", LocalTime.of(18, 0, 0));
+        this.timeNames.put("night", LocalTime.of(20, 0, 0));
+        this.timeNames.put("midnight", LocalTime.of(0, 0, 0));
 	}
 
 	/**

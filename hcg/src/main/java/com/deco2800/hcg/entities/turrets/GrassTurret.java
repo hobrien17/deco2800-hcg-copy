@@ -1,6 +1,8 @@
 package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observable;
+
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
 import com.deco2800.hcg.entities.bullets.GrassTurretBullet;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
@@ -70,6 +72,16 @@ public class GrassTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		return "grass_corpse";
+	}
+
+	@Override
+	public int getGlowStrength() {
+		return 0;
+	}
+
+	@Override
+	public Color getGlowColor() {
+		return Color.GREEN;
 	}
 
 }

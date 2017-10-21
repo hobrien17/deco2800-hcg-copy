@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.turrets;
 import java.util.List;
 import java.util.Observable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.bullets.Fireball;
@@ -86,6 +87,16 @@ public class FireTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		return "fire_corpse";
+	}
+
+	@Override
+	public int getGlowStrength() {
+		return 3;
+	}
+
+	@Override
+	public Color getGlowColor() {
+		return Color.RED;
 	}
 
 }
