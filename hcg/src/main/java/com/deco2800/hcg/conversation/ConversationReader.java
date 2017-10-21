@@ -135,12 +135,10 @@ public class ConversationReader {
 	// Parse a JSON condition into a Condition object
 	private static AbstractConversationCondition deserialiseOptionCondition(JsonElement jCondition) {
 
-		Scanner scanner = null;
-
+		// Collect options and arguments
+		String condition = jCondition.getAsString();
+		Scanner scanner = new Scanner(condition).useDelimiter("\\|");
 		try {
-			// Collect options and arguments
-			String condition = jCondition.getAsString();
-			scanner = new Scanner(condition).useDelimiter("\\|");
 			String command = scanner.next();
 			boolean negate = false;
 			if (command.charAt(0) == '!') {
@@ -183,12 +181,11 @@ public class ConversationReader {
 	// Parse a JSON action into a Action object
 	private static AbstractConversationAction deserialiseOptionAction(JsonElement jCondition) {
 
-		Scanner scanner = null;
+		// Collect options and arguments
+		String action = jCondition.getAsString();
+		Scanner scanner = new Scanner(action).useDelimiter("\\|");
 
 		try {
-			// Collect options and arguments
-			String action = jCondition.getAsString();
-			scanner = new Scanner(action).useDelimiter("\\|");
 			String command = scanner.next();
 			List<String> args = new ArrayList<>();
 			while (scanner.hasNext()) {
