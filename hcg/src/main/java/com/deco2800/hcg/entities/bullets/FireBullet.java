@@ -100,7 +100,7 @@ public class FireBullet extends Bullet {
 
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Ice", 1, 5, 1, 0, 200, 0, user));
+		target.giveEffect(new Effect("Fire", 1, 5, 1, 0, 200, 0, user));
 	}
 }
 

@@ -18,6 +18,7 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.worlds.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector3;
@@ -181,7 +182,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
-		if (distanceTravelled >= 100) {
+		if (distanceTravelled >= 100 || outOfBounds()) {
 			GameManager.get().getWorld().removeEntity(this);
 		}
 	}
@@ -290,6 +291,13 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
     @Override
     public float getLightPower() {
         return 3;
+    }
+    
+    protected boolean outOfBounds() {
+    	World world = GameManager.get().getWorld();
+    	return false;
+    	//return this.getPosX() <= changeX + 1 || this.getPosX() >= world.getWidth() - changeX - 1 || 
+    	//		this.getPosY() <= changeY + 1 || this.getPosY() >= world.getLength() - changeY - 1;
     }
 	
 	protected void spawnParticles(AbstractEntity entity, String particleFile) {

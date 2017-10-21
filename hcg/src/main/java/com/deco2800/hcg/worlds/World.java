@@ -453,7 +453,11 @@ public class World {
 		if (xVal > 0 && xVal < this.getWidth() && yVal > 0 && yVal < this.getLength()) {
 			for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
 				for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
-					collisionMap.get(x, y).remove(entity);
+					try {
+						collisionMap.get(x, y).remove(entity);
+					} catch(IndexOutOfBoundsException ex) {
+						LOGGER.warn("Can't remove entity");
+					}
 				}
 			}
 		}
