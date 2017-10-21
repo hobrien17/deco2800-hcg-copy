@@ -101,7 +101,6 @@ public class PlayContext extends Context {
     private String[] seedItems;
     private String[] consumableItems;
     private String[] plantItems;
-    private ImageButton shovelButton;
 
     private Window plantWindow;
     private boolean exitDisplayed = false;
@@ -152,10 +151,10 @@ public class PlayContext extends Context {
         List<String> plantList = Arrays.asList(plantItems);
         seedItems = new String[]{"sunflowerC", "waterC", "iceC", "explosiveC","fireC","grassC"};
         List<String> seedList = Arrays.asList(seedItems);
-        weaponItems = new String[]{"machineGun", "shotgun", "starfall"};
+        weaponItems = new String[]{"machineGun", "shotgun", "scatterGun", "starfall"};
         List<String> weapList = Arrays.asList(weaponItems);
-        consumableItems = new String[]{"fertiliser", "bug_spray", "health_potion", "speed_potion",
-                "magic_mushroom", "small_mushroom"};
+        consumableItems = new String[]{"fertiliser", "bug_spray", "snag", "sausage",
+                "magic_mushroom", "small_mushroom", "hoe", "trowel", "shovel"};
         List<String> consumableList = Arrays.asList(consumableItems);
 
         weaponRadialDisplay = new GeneralRadialDisplay(stage, weapList);
@@ -195,23 +194,6 @@ public class PlayContext extends Context {
         seedRadialDisplay.hide();
         consumableRadialDisplay.hide();
         plantRadialDisplay.hide();
-        
-        shovelButton = new ImageButton( new Image (textureManager.getTexture("shovel")).getDrawable());
-        shovelButton.setSize(X_SIZE_MAX, Y_SIZE_MAX);
-        stage.addActor(shovelButton);
-        shovelButton.setPosition(plantRadialDisplay.getX() + plantRadialDisplay.getWidth()/2f - X_SIZE_MAX/2f,
-    			plantRadialDisplay.getY() - plantRadialDisplay.getHeight()/2f - Y_SIZE_MAX/2f);
-        shovelButton.setVisible(false);
-
-        shovelButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-            	Optional<AbstractEntity> closest = GeneralRadialDisplay.getClosestPot();
-            	if(closest.isPresent() && !((Pot)closest.get()).isEmpty()) {
-            		((Pot)closest.get()).removePlant();
-            	}
-            }
-        });
 
         /*
          * Setup an Input Multiplexer so that input can be handled by both the UI and
@@ -416,26 +398,22 @@ public class PlayContext extends Context {
             consumableRadialDisplay.hide();
             plantRadialDisplay.hide();
             weaponRadialDisplay.show();
-            shovelButton.setVisible(false);
         } else if (keycode == Input.Keys.H && seedRadialDisplay.getActive() == false) {
             weaponRadialDisplay.hide();
             consumableRadialDisplay.hide();
             plantRadialDisplay.hide();
             seedRadialDisplay.show();
-            shovelButton.setVisible(false);
         } else if (keycode == Input.Keys.K && consumableRadialDisplay.getActive() == false) {
         	seedRadialDisplay.hide();
             consumableRadialDisplay.show();
             weaponRadialDisplay.hide();
             plantRadialDisplay.hide();
-            shovelButton.setVisible(false);
         } else if (keycode == Input.Keys.G && GeneralRadialDisplay.plantableNearby()
                 && plantRadialDisplay.getActive() == false) {
             seedRadialDisplay.hide();
             consumableRadialDisplay.hide();
             weaponRadialDisplay.hide();
             plantRadialDisplay.show();
-            shovelButton.setVisible(true);
 		} else if (keycode == Input.Keys.T) {
             chatStack.setVisible(!chatStack.isVisible());
         } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
@@ -455,7 +433,6 @@ public class PlayContext extends Context {
             consumableRadialDisplay.hide();
         } else if(keycode == Input.Keys.G) {
             plantRadialDisplay.hide();
-            shovelButton.setVisible(false);
         }
     }
 
@@ -498,18 +475,6 @@ public class PlayContext extends Context {
         exitWindow.remove();
         exitDisplayed = false;
         soundManager.unpauseWeatherSounds();
-    }
-
-    public void removeConsumableRadialMenu() {
-        consumableRadialDisplay.remove();
-    }
-
-    public void removeWeaponRadialMenu() {
-        weaponRadialDisplay.hide();
-    }
-
-    public void removeSeedRadialMenu() {
-        seedRadialDisplay.hide();
     }
 
     public void addParticleEffect(ParticleEffectActor actor) {
