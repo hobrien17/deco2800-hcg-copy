@@ -11,6 +11,7 @@ import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
+import com.deco2800.hcg.entities.terrain_entities.TerrainEntity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -208,6 +209,10 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				if (target instanceof MushroomTurret) {
 					MushroomTurret turret = (MushroomTurret) target;
 					turret.removeObserver();
+					turret.removeWeapon();
+					if (user instanceof Player) {
+						((Player) user).killLogAdd(target.getEnemyType());
+					}
 					GameManager.get().getWorld().removeEntity(turret);
 
 				} else if (target.getHealthCur() <= 0) {
@@ -231,6 +236,13 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				applyEffect(tree);
 				hitCount--;
 			}
+			
+            // Collision with terrain entity
+            if (entity instanceof TerrainEntity && user instanceof Player
+                    && !(this instanceof GrassBullet)) {
+                spawnParticles(entity, "hitPuff.p");
+                hitCount--;
+            }
 
 			// Collision with player
 			if (entity instanceof Player && user instanceof Enemy) {

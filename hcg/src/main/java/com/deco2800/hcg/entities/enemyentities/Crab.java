@@ -44,7 +44,7 @@ public class Crab extends Enemy implements Tickable {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("water_seed"), 1.0);
+        lootRarity.put(new LootWrapper("water_seed", 1.0f), 1.0);
 
         checkLootRarity();
     }
@@ -61,5 +61,25 @@ public class Crab extends Enemy implements Tickable {
             this.setMovementSpeed(this.defaultSpeed *3);
         }
         this.crab();
+    }
+    
+    /**
+     *  Logic for Crab
+     *
+     */
+    void crab(){
+        if (this.getNumberPlayers() > 1) {
+            findClosestPlayer();
+            this.lastPlayerX = closestPlayer.getPosX();
+            this.lastPlayerY = closestPlayer.getPosY();
+
+        } else {
+            this.lastPlayerX = playerManager.getPlayer().getPosX();
+            this.lastPlayerY = playerManager.getPlayer().getPosY();
+        }
+        //Set new position
+        newPos = this.getToPlayerPos(closestPlayer);
+        this.detectCollision();
+        this.moveAction();
     }
 }

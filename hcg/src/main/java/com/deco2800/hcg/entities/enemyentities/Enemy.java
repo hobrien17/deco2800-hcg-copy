@@ -54,11 +54,13 @@ public abstract class Enemy extends Character implements Lootable {
     private Player target;
 
     //Multiple players
-    private int numPlayers;
-    private Player closestPlayer;
+    protected int numPlayers;
+    protected Player closestPlayer;
 
     protected Box3D prevPos;
     protected Weapon enemyWeapon;
+    
+    protected int spriteCount;
 
     /**
      * Creates a new enemy at the given position
@@ -104,6 +106,7 @@ public abstract class Enemy extends Character implements Lootable {
         this.newPos = getBox3D();
         this.prevPos = getBox3D();
         this.target = null;
+        this.spriteCount = 0;
 
         // Effects container
         myEffects = new Effects(this);
@@ -338,30 +341,7 @@ public abstract class Enemy extends Character implements Lootable {
      */
     public void detectPlayers() {
         if (this.getNumberPlayers() > 1) {
-            List<Player> players;
-            HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
-            int playerCount = 0;
-            float[] distances = new float[numPlayers];
-            float closestDistance;
-            players = playerManager.getPlayers();
-            //Iterates through all players and puts distance from enemy to each player into an array
-            //Puts all players and their respective distances into a hash map
-            for (Player player : players) {
-                distances[playerCount] = this.distance(player);
-                playerHashMap.put(distances[playerCount], player);
-                playerCount++;
-            }
-
-            //Finds the smallest distance in the distance array
-            closestDistance = distances[0];
-            for (int j = 0; j < distances.length; j++) {
-                if (distances[j] < closestDistance) {
-                    closestDistance = distances[j];
-                }
-            }
-
-            //Gets the player with closest distance from the enemy and assigns to variable
-            this.closestPlayer = playerHashMap.get(closestDistance);
+            float closestDistance = findClosestPlayer();
 
             //Following is a modification of detectPlayer
             if (closestDistance <= 5 * this.level) {
@@ -627,47 +607,41 @@ public abstract class Enemy extends Character implements Lootable {
     }
 
     /**
-     *  Logic for Crab
-     *
+     * Update the texture based on the current texture of the sprite
+     * @param texture: the base texture
      */
-    void crab(){
-        List<Player> players;
-        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
-        int playerCount = 0;
-        float[] distances = new float[numPlayers];
-        float closestDistance;
-        //Detect players
-        if (this.getNumberPlayers() > 1) {
-            players = playerManager.getPlayers();
-            //Iterates through all players and puts distance from enemy to each player into an array
-            //Puts all players and their respective distances into a hash map
-            for (Player player : players) {
-                distances[playerCount] = this.distance(player);
-                playerHashMap.put(distances[playerCount], player);
-                playerCount++;
-            }
-
-            //Finds the smallest distance in the distance array
-            closestDistance = distances[0];
-            for (int j = 0; j < distances.length; j++) {
-                if (distances[j] < closestDistance) {
-                    closestDistance = distances[j];
-                }
-            }
-
-            //Gets the player with closest distance from the enemy and assigns to variable
-            this.closestPlayer = playerHashMap.get(closestDistance);
-            this.lastPlayerX = closestPlayer.getPosX();
-            this.lastPlayerY = closestPlayer.getPosY();
-
+    private void updateTexture(String texture) {
+        if (this.getTexture() == texture) {
+            this.setTexture(texture + "2");
         } else {
-            this.lastPlayerX = playerManager.getPlayer().getPosX();
-            this.lastPlayerY = playerManager.getPlayer().getPosY();
+            this.setTexture(texture);
         }
-        //Set new position
-        newPos = this.getToPlayerPos(closestPlayer);
-        this.detectCollision();
-        this.moveAction();
+    }
+    
+    /**
+     * Update the sprites based on the direction
+     * @param directionTextures: the list of the sprite textures
+     */
+    protected void updateSprite(String[] directionTextures) {
+        if (spriteCount % 4 == 0) {
+            switch (this.direction) {
+                case 1:
+                    updateTexture(directionTextures[0]);
+                    break;
+                case 2:
+                    updateTexture(directionTextures[1]);
+                    break;
+                case 3:
+                    updateTexture(directionTextures[2]);
+                    break;
+                case 4:
+                    updateTexture(directionTextures[3]);
+                    break;
+                default:
+                    break;
+            }
+        }
+        spriteCount++;
     }
 
     /**
@@ -677,32 +651,8 @@ public abstract class Enemy extends Character implements Lootable {
     void squirrel(){
         this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.5));
         this.defaultSpeed = this.getMovementSpeed();
-        List<Player> players;
-        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
-        int playerCount = 0;
-        float[] distances = new float[numPlayers];
-        float closestDistance;
-        //Detect players
         if (this.getNumberPlayers() > 1) {
-            players = playerManager.getPlayers();
-            //Iterates through all players and puts distance from enemy to each player into an array
-            //Puts all players and their respective distances into a hash map
-            for (Player player : players) {
-                distances[playerCount] = this.distance(player);
-                playerHashMap.put(distances[playerCount], player);
-                playerCount++;
-            }
-
-            //Finds the smallest distance in the distance array
-            closestDistance = distances[0];
-            for (int j = 0; j < distances.length; j++) {
-                if (distances[j] < closestDistance) {
-                    closestDistance = distances[j];
-                }
-            }
-
-            //Gets the player with closest distance from the enemy and assigns to variable
-            this.closestPlayer = playerHashMap.get(closestDistance);
+            float closestDistance = findClosestPlayer();
             if (closestDistance <= 10 * this.level){
                 newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
                 newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
@@ -734,6 +684,38 @@ public abstract class Enemy extends Character implements Lootable {
 
     }
 
+    /**
+     * Find the closest player and the distance between the closest player and this enemy in multiplayer mode
+     * @return the distance between the closest player and this enemy
+     */
+    protected float findClosestPlayer() {
+        List<Player> players;
+        HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
+        int playerCount = 0;
+        float[] distances = new float[numPlayers];
+        float closestDistance;
+        //Detect players
+        players = playerManager.getPlayers();
+        //Iterates through all players and puts distance from enemy to each player into an array
+        //Puts all players and their respective distances into a hash map
+        for (Player player : players) {
+            distances[playerCount] = this.distance(player);
+            playerHashMap.put(distances[playerCount], player);
+            playerCount++;
+        }
+
+        //Finds the smallest distance in the distance array
+        closestDistance = distances[0];
+        for (int j = 0; j < distances.length; j++) {
+            if (distances[j] < closestDistance) {
+                closestDistance = distances[j];
+            }
+        }
+
+        //Gets the player with closest distance from the enemy and assigns to variable
+        this.closestPlayer = playerHashMap.get(closestDistance);
+        return closestDistance;
+    }
 
     /**
      *  Logic for Tree

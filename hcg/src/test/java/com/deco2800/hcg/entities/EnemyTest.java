@@ -64,7 +64,7 @@ public class EnemyTest {
         assertThat("Basic Enemy only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
         assertThat("Loot rarity should only have sunflower seed", enemy.getRarity().size(), is(equalTo(1)));
         //assertThat("Loot rarity should only have sunflower seed", enemy.getRarity(), is(equalTo(expectedRarity)));
-        assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo(new LootWrapper("sunflower_seed"))));
+        assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo(new LootWrapper("sunflower_seed", 1.0f))));
     }
     
 //    @Test (expected = IllegalArgumentException.class)
@@ -162,4 +162,10 @@ public class EnemyTest {
     public void testGetEnemyType() {
         assertThat("Enemy type is incorrect", enemy.getEnemyType(), is(equalTo(EnemyType.SQUIRREL)));
     }
+    
+    @Test
+    public void testHashCode() {
+        assertThat("Hash code of this enemy is incorrect", enemy.hashCode(), is(equalTo(31)));
+    }
+    
 }
