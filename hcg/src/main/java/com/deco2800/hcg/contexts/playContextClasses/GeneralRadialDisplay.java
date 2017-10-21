@@ -179,14 +179,13 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
 		sprites.put("bug_spray", "bugspray_btn");
-		sprites.put("health_potion", "healthPotion");
-		sprites.put("speed_potion", "speedPotion");
+		sprites.put("snag", "snag_btn");
+		sprites.put("sausage", "sausage_btn");
 		sprites.put("magic_mushroom", "magicMushroom");
 		sprites.put("small_mushroom", "smallMushroom");
 		sprites.put("hoe", "hoe");
 		sprites.put("trowel", "trowel");
-		sprites.put("snag_btn", "snag_btn");
-		sprites.put("sausage_btn", "sausage_btn");
+		sprites.put("shovel", "shovel");
 	}
 	
 	private void setupListeners() {
@@ -336,7 +335,7 @@ public class GeneralRadialDisplay extends Group {
 			}
 		});
 
-		listeners.put("health_potion", new ChangeListener() {
+		listeners.put("snag", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new HealthPotion(100));
@@ -344,7 +343,7 @@ public class GeneralRadialDisplay extends Group {
 			}
 		});
 
-		listeners.put("speed_potion", new ChangeListener() {
+		listeners.put("sausage", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new SpeedPotion());
@@ -384,18 +383,13 @@ public class GeneralRadialDisplay extends Group {
 			}
 		});
 
-		listeners.put("sausage_btn", new ChangeListener() {
+		listeners.put("shovel", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				useItem(new SmallMushroom());
-				hide();
-			}
-		});
-
-		listeners.put("snag_btn", new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				useItem(new SmallMushroom());
+				Optional<AbstractEntity> closest = GeneralRadialDisplay.getClosestPot();
+				if(closest.isPresent() && !((Pot)closest.get()).isEmpty()) {
+					((Pot)closest.get()).removePlant();
+				}
 				hide();
 			}
 		});
@@ -573,7 +567,7 @@ public class GeneralRadialDisplay extends Group {
 					type.equals("fireC") || type.equals("explosiveC") || type.equals("grassC")) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
 			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("scatterGun") || type.equals("shotgun") ||
-					type.equals("hoe") || type.equals("trowel"));
+					type.equals("hoe") || type.equals("trowel") || type.equals("shovel"));
 			else if(type.equals("health_potion")) {
 				count = getCount("red_potion");
 			} else if(type.equals("speed_potion")) {
