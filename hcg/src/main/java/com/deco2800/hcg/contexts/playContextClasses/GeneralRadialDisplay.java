@@ -33,9 +33,6 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.WorldUtil;
-import com.deco2800.hcg.weapons.Weapon;
-import com.deco2800.hcg.weapons.WeaponType;
-import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
@@ -46,9 +43,7 @@ import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.items.tools.Fertiliser;
 import com.deco2800.hcg.items.tools.Tool;
 import com.deco2800.hcg.items.tools.BugSpray;
-import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.inventory.PlayerEquipment;
-import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 
 
 public class GeneralRadialDisplay extends Group {
