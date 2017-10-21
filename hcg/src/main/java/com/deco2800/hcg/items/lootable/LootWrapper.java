@@ -29,7 +29,7 @@ public class LootWrapper {
 	 * @param name
 	 * 			the name of the loot
 	 * @param rarity
-	 * 			the rarity of the loot
+	 * 			the rarity of the loot contents
 	 */
 	public LootWrapper(String name, float rarity) {
 		if (name == null) {
@@ -76,6 +76,9 @@ public class LootWrapper {
 		int newCooldown;
 		int newPellets;
 		float newArc;
+		String prefix;
+
+		// Adjust the weapon stats
 		switch(((WeaponItem) item).getWeapon().getWeaponType()) {
 			case MACHINEGUN:
 				if (rarity <= 0.1f) {
@@ -128,10 +131,21 @@ public class LootWrapper {
 						.setPellets(newPellets).build();
 				break;
 		}
-
 		if (newWeapon != null) {
 			((WeaponItem) item).setWeapon(newWeapon);
 		}
+
+		// Adjust the WeaponItem prefix
+		if (rarity <= 0.1f) {
+			prefix = "Godly";
+		} else if (rarity <= 0.5f) {
+			prefix = "Good";
+		} else {
+			prefix = "Bad";
+		}
+
+		String name = String.format("%s %s", prefix, ((WeaponItem) item).getItemName());
+		((WeaponItem) item).setItemName(name);
 	}
 	
 	/**

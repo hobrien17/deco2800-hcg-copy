@@ -191,6 +191,14 @@ public class TextureManager extends Manager {
             textureMap.put("machinegun_sw", new Texture("resources/sprites/weapons/machinegun_sw.png"));
             textureMap.put("machinegun_w", new Texture("resources/sprites/weapons/machinegun_w.png"));
             textureMap.put("machinegun_nw", new Texture("resources/sprites/weapons/machinegun_nw.png"));
+            textureMap.put("stargun_n", new Texture("resources/sprites/weapons/stargun_n.png"));
+            textureMap.put("stargun_ne", new Texture("resources/sprites/weapons/stargun_ne.png"));
+            textureMap.put("stargun_e", new Texture("resources/sprites/weapons/stargun_e.png"));
+            textureMap.put("stargun_se", new Texture("resources/sprites/weapons/stargun_se.png"));
+            textureMap.put("stargun_s", new Texture("resources/sprites/weapons/stargun_s.png"));
+            textureMap.put("stargun_sw", new Texture("resources/sprites/weapons/stargun_sw.png"));
+            textureMap.put("stargun_w", new Texture("resources/sprites/weapons/stargun_w.png"));
+            textureMap.put("stargun_nw", new Texture("resources/sprites/weapons/stargun_nw.png"));
 
 			// Miscellaneous textures
 			textureMap.put("error", new Texture("resources/misc/error.png"));

@@ -52,6 +52,25 @@ public class WeaponItem extends SingleItem {
     }
 
     /**
+     * Returns the name of the weapon item.
+     * @return A string denoting the weapon name.
+     */
+    public String getItemName() {
+        return itemName;
+    }
+
+    /**
+     * Sets a new name for the item.
+     * @param newName the new name for the item.
+     */
+    public void setItemName(String newName) {
+        if (newName == null) {
+            throw new IllegalArgumentException("New item name cannot be null.");
+        }
+        itemName = newName;
+    }
+
+    /**
      * Sets a the WeaponItem's weapon reference to some new weapon.
      * @param newWeapon the new weapon to be set to the WeaponItem.
      */

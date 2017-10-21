@@ -102,7 +102,7 @@ public class ExplosionBullet extends Bullet {
 	 */
 	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
 			float yLength, float zLength, AbstractEntity user, int hitCount) {
-		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount);
+		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, 0.5f);
 		this.setTexture("battle_seed_grey");
 		this.bulletType = BulletType.EXPLOSION;
 	}
@@ -116,7 +116,9 @@ public class ExplosionBullet extends Bullet {
 		target.giveEffect(new Effect("Explosion", 1, 1000, 1, 0, 1, 0, user));
 		ArrayList<Player> players = ((PlayerManager) (GameManager.get().getManager(PlayerManager.class))).getPlayers();
 		for(AbstractEntity close : closest) {
-		    if(close instanceof Player && players.contains(close)) {
+		    if(user instanceof Player && close instanceof Player && players.contains(close)) {
+		    } else if(user instanceof Enemy && close instanceof Player) {
+		        ((Player)close).giveEffect(new Effect("Explosion", 1, 1000, 1, 0, 1, 0, user));
 		    } else {
 		        ((Enemy)close).giveEffect(new Effect("Explosion", 1, 1000, 1, 0, 1, 0, user));
 		    }
