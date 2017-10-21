@@ -170,13 +170,13 @@ public class Hardcor3Gard3ning extends Game {
                     int amount = 0;
                     try {
                         amount = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        return String
+                                .format("%s is not a valid number", args[2]);
                     } catch (Exception e) {
-                        if(e instanceof NumberFormatException) {
-                            return String.format("%s is not a valid number", args[2]);
-                        } else {
-                            amount = 1;
-                        }
+                        amount = 1;
                     }
+
                     item.setStackSize(amount);
                     
                     Player player = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer();
@@ -207,12 +207,10 @@ public class Hardcor3Gard3ning extends Game {
                     int amount = 0;
                     try {
                         amount = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        return String.format("%s is not a valid number", args[2]);
                     } catch (Exception e) {
-                        if(e instanceof NumberFormatException) {
-                            return String.format("%s is not a valid number", args[2]);
-                        } else {
-                            amount = 1;
-                        }
+                        amount = 1;
                     }
                     item.setStackSize(amount);
                     
@@ -242,7 +240,7 @@ public class Hardcor3Gard3ning extends Game {
                 }
                 
                 TimeManager manager = (TimeManager)GameManager.get().getManager(TimeManager.class);
-                LocalTime time = null;
+                LocalTime time;
                 if(manager.timeNames.containsKey(args[1])) {
                     time = manager.timeNames.get(args[1]);
                 } else {

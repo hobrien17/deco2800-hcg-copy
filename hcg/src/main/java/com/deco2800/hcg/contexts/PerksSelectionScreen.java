@@ -162,7 +162,7 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                     (branch1.getHeight()*(float)(3-i)/4f - drawablePerk.getPerkDisplay().getHeight() + 25));
+                     branch1.getHeight()*(float)(3-i)/4f - drawablePerk.getPerkDisplay().getHeight() + 25);
             //adding perk to display
             branch1.addActor(drawablePerk.getPerkDisplay());
         }
@@ -177,7 +177,7 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                    (branch1.getHeight()*(float)(3-0.75*i)/4f- drawablePerk.getPerkDisplay().getHeight() + 25));
+                    branch1.getHeight()*(float)(3-0.75*i)/4f- drawablePerk.getPerkDisplay().getHeight() + 25);
             //adding perk to display
             branch2.addActor(drawablePerk.getPerkDisplay());
         }
@@ -192,7 +192,7 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                    (branch1.getHeight()*(float)(3-i)/4f- drawablePerk.getPerkDisplay().getHeight() + 25));
+                    branch1.getHeight()*(float)(3-i)/4f- drawablePerk.getPerkDisplay().getHeight() + 25);
             //adding perk to display
             branch3.addActor(drawablePerk.getPerkDisplay());
         }

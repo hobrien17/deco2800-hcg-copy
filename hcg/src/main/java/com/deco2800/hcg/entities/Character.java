@@ -72,6 +72,8 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 
     // Effects container
     protected Effects myEffects;
+    
+    protected int tickCount = 0;
 
     // Skills
     // TODO: Message weapons team to find out what categories of weapons they will implement
@@ -605,7 +607,24 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      */
     @Override
     public void onTick(long gameTickCount) {
+        checkParticles();
         myEffects.apply();
+    }
+    
+    protected void checkParticles() {
+        if(tickCount < 30) {
+            tickCount++;
+        } else {
+            for(Effect effect : myEffects.getEffects()) {
+                if("Fire".equals(effect.getName())) {
+                    spawnParticles(this, "fire.p");
+                }
+                if("Ice".equals(effect.getName())) {
+                    spawnParticles(this, "frozen.p");
+                }
+            }
+            tickCount = 0;
+        }
     }
     
     protected void spawnParticles(AbstractEntity entity, String particleFile) {
@@ -613,7 +632,8 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
             ParticleEffect effect = new ParticleEffect();
             effect.load(Gdx.files.internal("resources/particles/" + particleFile),
             Gdx.files.internal("resources/particles/"));
-            Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
+            Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX() + entity.getXLength()/2,
+                    entity.getPosY() + entity.getYLength()/2, 0));
             effect.setPosition(position.x, position.y);
             effect.start();
             ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, effect);

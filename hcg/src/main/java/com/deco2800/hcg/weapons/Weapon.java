@@ -151,7 +151,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
      */
     //TODO: Remove
     public void updatePosition(Vector3 position) {
-        this.follow = position;
+        this.follow = new Vector3(position);
     }
 
 

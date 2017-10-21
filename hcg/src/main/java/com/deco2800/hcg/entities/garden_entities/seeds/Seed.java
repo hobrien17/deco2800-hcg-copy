@@ -157,5 +157,4 @@ public class Seed extends StackableItem {
 		return this.itemName.hashCode();
 	}
 
-
 }

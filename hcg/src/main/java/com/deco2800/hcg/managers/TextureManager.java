@@ -314,11 +314,9 @@ public class TextureManager extends Manager {
 			textureMap.put("shotgun", new Texture("resources/ui/radial_menu/shotgun.png"));
 			textureMap.put("scatterGun", new Texture("resources/ui/radial_menu/scatter_gun.png"));
 			textureMap.put("starfall", new Texture("resources/ui/radial_menu/starfall.png"));
-			textureMap.put("healthPotion", new Texture("resources/ui/radial_menu/health_potion.png"));
 			textureMap.put("key", new Texture("resources/ui/radial_menu/key_button.png"));
 			textureMap.put("magicMushroom", new Texture("resources/ui/radial_menu/magicmushroom_button.png"));
 			textureMap.put("smallMushroom", new Texture("resources/ui/radial_menu/smallmushroom_button.png"));
-			textureMap.put("speedPotion", new Texture("resources/ui/radial_menu/speed_potion.png"));
 			textureMap.put("shovel", new Texture("resources/ui/radial_menu/shovel_button.png"));
 			textureMap.put("hoe", new Texture("resources/ui/radial_menu/hoe_button.png"));
 			textureMap.put("trowel", new Texture("resources/ui/radial_menu/trowel_button.png"));
