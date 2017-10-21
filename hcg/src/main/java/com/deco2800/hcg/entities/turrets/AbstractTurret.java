@@ -2,6 +2,7 @@ package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observer;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.StopwatchManager;
@@ -47,5 +48,19 @@ public abstract class AbstractTurret implements Observer {
 	 * @return the texture name of this object
 	 */
 	public abstract String getThisTexture();
+	
+	/**
+	 * Gets the glow strength of this turret
+	 * 
+	 * @return the turret's glow
+	 */
+	public abstract int getGlowStrength();
+	
+	/**
+	 * Gets the glow colour of this turret
+	 * 
+	 * @return the turret's colour
+	 */
+	public abstract Color getGlowColor();
 	
 }
