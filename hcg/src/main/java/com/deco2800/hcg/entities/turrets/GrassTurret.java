@@ -3,7 +3,6 @@ package com.deco2800.hcg.entities.turrets;
 import java.util.Observable;
 
 import com.badlogic.gdx.graphics.Color;
-import com.deco2800.hcg.entities.bullets.GrassBullet;
 import com.deco2800.hcg.entities.bullets.GrassTurretBullet;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
