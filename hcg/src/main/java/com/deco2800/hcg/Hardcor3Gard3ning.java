@@ -27,6 +27,7 @@ import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.managers.WorldManager;
+import com.deco2800.hcg.quests.QuestManager;
 import com.deco2800.hcg.renderers.Renderable;
 
 /**
@@ -50,6 +51,7 @@ public class Hardcor3Gard3ning extends Game {
 	private CommandManager commandManager;
 	private ShaderManager shaderManager;
 	private WorldManager worldManager;
+	private QuestManager questManager;
     private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
@@ -108,6 +110,10 @@ public class Hardcor3Gard3ning extends Game {
 
         /* Create a world manager */
         worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
+
+        /* Create a Quest Mnager */
+        questManager = (QuestManager) gameManager.getManager((QuestManager.class));
+
         // add echo command
         // note args[0] is the command name, not the first argument
         commandManager.registerCommand("echo", new CommandManager.Command() {

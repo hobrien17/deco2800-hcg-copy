@@ -4,7 +4,7 @@ import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 
 public class StartQuestAction extends AbstractConversationAction {
 
-    String questName;
+    private String questName;
 
     public StartQuestAction(String questName) {
         this.questName = questName;
