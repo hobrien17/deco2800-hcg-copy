@@ -14,8 +14,6 @@ import com.deco2800.hcg.managers.PlayerManager;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class EnemyTest {
     Squirrel enemy;
@@ -63,7 +61,6 @@ public class EnemyTest {
                 is(equalTo(1)));
         assertThat("Basic Enemy only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
         assertThat("Loot rarity should only have sunflower seed", enemy.getRarity().size(), is(equalTo(1)));
-        //assertThat("Loot rarity should only have sunflower seed", enemy.getRarity(), is(equalTo(expectedRarity)));
         assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo(new LootWrapper("sunflower_seed"))));
     }
     

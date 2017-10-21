@@ -450,7 +450,7 @@ public abstract class Enemy extends Character implements Lootable {
      * Modified for multiplayer by Elvin - Team 9
      * @return Box3D
      */
-    private Box3D getToPlayerPos(Player player){
+    protected Box3D getToPlayerPos(Player player){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
         if((abs(this.getPosX() - player.getPosX()) > 1)||
@@ -479,7 +479,7 @@ public abstract class Enemy extends Character implements Lootable {
      * Move enemy to pointed position. Use for going to the player's last position.
      *
      */
-    private Box3D getMoveToPos(float posX, float posY){
+    protected Box3D getMoveToPos(float posX, float posY){
         float currPosX = this.getPosX();
         float currPosY = this.getPosY();
         prevPos.setX(currPosX);
