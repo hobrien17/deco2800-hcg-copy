@@ -12,7 +12,7 @@
         {
           "conditions": [],
           "optionText": "Thank you!",
-          "actions": [],
+          "actions": ["startQuest|exmapleQuest.json"],
           "target": "goSeeSteve"
         }
       ]
