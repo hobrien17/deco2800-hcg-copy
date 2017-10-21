@@ -23,12 +23,7 @@ public class WeaponItem extends SingleItem {
         this.itemName = name;
         this.itemWeight = weight;
         this.baseValue = 10;
-       // WeaponType type = weapon.getWeaponType();
         this.texture = "red_potion";
-        //switch (type) {
-        //    case SHOTGUN:
-        //        this.texture = "red_potion";
-        //}
     }
     
     @Override

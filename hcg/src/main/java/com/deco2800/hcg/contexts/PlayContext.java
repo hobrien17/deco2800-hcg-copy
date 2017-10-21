@@ -235,7 +235,6 @@ public class PlayContext extends Context {
         /* reset input tick */
         playerInputManager.resetInputTick();
 
-        //playerManager.getPlayer().setPauseDisplayed(false);
         pauseMenuDisplayed = false;
     }
 
@@ -358,7 +357,7 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
-        //System.out.println(pauseMenuDisplayed);
+
         if (pauseMenuDisplayed) {
             if (keycode == Input.Keys.ESCAPE) {
                 removePauseWindow();
@@ -447,12 +446,10 @@ public class PlayContext extends Context {
     }
 
     public void removeWeaponRadialMenu() {
-    	//weaponRadialDisplay.setVisible(false);
         weaponRadialDisplay.hide();
     }
 
     public void removeSeedRadialMenu() {
-    	//weaponRadialDisplay.setVisible(false);
         seedRadialDisplay.hide();
     }
 

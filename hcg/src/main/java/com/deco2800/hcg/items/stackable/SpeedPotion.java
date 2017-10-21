@@ -33,7 +33,6 @@ public class SpeedPotion extends ConsumableItem implements Observer {
     }
     @Override
     public void consume(Character character) {
-        //((Player)character).setSpeed(0.6f);
         usingCharacter = character;
         ((Player)character).setStaminaCur(character.getStaminaMax());
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
