@@ -2,6 +2,7 @@ package com.deco2800.hcg.items.stackable;
 
 import java.util.ArrayList;
 
+import com.deco2800.hcg.buffs.Perk;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
@@ -27,7 +28,24 @@ public class HealthPotion extends ConsumableItem {
     @Override
     public void consume(Character character) {
         //TODO: Update character health
-        ((Player)character).setHealthCur(character.getHealthCur() + 100);
+
+        //Perk - FULL_PETAL_ALCHEMIST
+        Perk fullPetal = ((Player) character).getPerk(Perk.perk.FULL_PETAL_ALCHEMIST);
+        if (fullPetal.isActive()) {
+            int extraHealing = 0;
+            switch(fullPetal.getCurrentLevel()) {
+                case 0:
+                    break;
+                case 1:
+                    extraHealing = 15 + 5*character.getLevel();
+                    break;
+                case 2:
+                    extraHealing = 30 + 10*character.getLevel();
+                    break;
+
+            }
+            ((Player)character).setHealthCur(character.getHealthCur() + 100 + extraHealing);
+        }
         LOGGER.info("Health Updated!");
     }
 

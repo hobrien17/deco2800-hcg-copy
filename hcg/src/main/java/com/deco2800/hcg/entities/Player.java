@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -678,6 +679,24 @@ public class Player extends Character implements Tickable {
 			}
 			this.setTexture(spriteName.toString());
 			lastTick = gameTickCount;
+		}
+
+		//Perk - I_AM_GROOT
+		Perk IamGroot = this.getPerk(Perk.perk.I_AM_GROOT);
+		if (IamGroot.isActive()) {
+			if (gameTickCount % 100 == 0) {
+				switch (IamGroot.getCurrentLevel()) {
+					case 0:
+						break;
+					case 1:
+						this.takeDamage(-(1 + (int)(0.2 * this.getLevel())));
+						break;
+					case 2:
+						this.takeDamage(-(2 + (int)(0.3 * this.getLevel())));
+						break;
+				}
+			}
+
 		}
 
 		checkXp();
