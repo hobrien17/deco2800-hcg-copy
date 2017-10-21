@@ -87,8 +87,6 @@ public class PerksSelectionScreen extends UIContext{
 
         // Get necessary managers
         GameManager gameManager = GameManager.get();
-        ContextManager contextManager = (ContextManager)
-                gameManager.getManager(ContextManager.class);
         TextureManager textureManager = (TextureManager)
                 gameManager.getManager(TextureManager.class);
 

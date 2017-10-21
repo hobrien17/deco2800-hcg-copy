@@ -263,10 +263,7 @@ public class TimeManager extends Manager implements TickableManager {
 		if (timePaused) {
 			return;
 		}
-		
-		//for(int i = 0; i < 30; i++) {
-		    this.nextSecond();
-		//}
+		this.nextSecond();
 		if (this.timeLabel != null) {
 			this.timeLabel.setText(this.getTime());
 		}

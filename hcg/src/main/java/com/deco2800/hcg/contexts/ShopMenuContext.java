@@ -9,6 +9,7 @@ import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.TimeManager;
 
@@ -25,6 +26,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private ContextManager contextManager;
     private TextureManager textureManager;
     private TimeManager timeManager;
+    private SoundManager soundManager;
 
     private Skin skin;
     private Image shopTitle;
@@ -47,7 +49,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
     private Player player;
     private ShopNPC shopKeeper;
 
-    private ShopMenuContext thisContext = this;
 
     /**
      * Constructor for the ShopMenuContext
@@ -64,6 +65,8 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 gameManager.getManager(TextureManager.class);
         timeManager = (TimeManager)
                 gameManager.getManager(TimeManager.class);
+        soundManager = (SoundManager)
+        		gameManager.getManager(SoundManager.class);
         amountString = "1";
         amount = new TextField(amountString,
                 new Skin(Gdx.files.internal("resources/ui/uiskin.json")));
@@ -156,12 +159,18 @@ public class ShopMenuContext extends InventoryDisplayContext {
 				errorImageVisible = false;
 				if ((selectedItem != null) && !selectedItem
 						.sameItem(new Seed(Seed.Type.SUNFLOWER))) {
-					int number = Integer.parseInt(amount.getText().trim());
+					int number = 0;
+					try {
+					    number = Integer.parseInt(amount.getText().trim());
+					} catch(NumberFormatException e) {
+					    amount.setText("NaN");
+					}
 					for (int i = 0; i < number; i++) {
 						if (shopKeeper.getShop().buyStock(selectedItem) != 0) {
 							errorImageVisible = true;
 						}
 					}
+					soundManager.playSound("loot");
 				}
 				draw();
 			}
@@ -171,7 +180,13 @@ public class ShopMenuContext extends InventoryDisplayContext {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				errorImageVisible = false;
-				int number = Integer.parseInt(amount.getText().trim());
+				int number = 0;
+                try {
+                    number = Integer.parseInt(amount.getText().trim());
+                } catch(NumberFormatException e) {
+                    amount.setText("NaN");
+                }
+                
 				if ((selectedItem != null)
 						&& !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))
 						&& !(shopKeeper.getShop().getStock()
@@ -181,6 +196,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 							errorImageVisible = true;
 						}
 					}
+					soundManager.playSound("loot2");
 				}
 				draw();
 			}

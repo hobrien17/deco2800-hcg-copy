@@ -15,8 +15,6 @@ public class LevelStore {
 		levelList = new ArrayList<>();
 
 		// Safe Zone levels
-		//levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_01.tmx"), 0, 1, 0));
-		// map above needs to be redone! Does not have an exit tile!
 		levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_02.tmx"), 0, 1, 0));
 
 		
@@ -33,7 +31,6 @@ public class LevelStore {
 	    levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_01.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_02.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_01.tmx"), 3, 8, 1));
-		//levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_02.tmx"), 2, 5, 1));		
 		
 		// Boss levels (there should only be three! (one for each main biome))
 		// Ensure they are in ascending biome order

@@ -407,8 +407,11 @@ public abstract class InventoryDisplayContext extends UIContext {
         while ((items != null) && items.hasNext()) {
             //Setup variables for this iteration
             Item currentItem = (Item) items.next();
-            ImageButton button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture()))
-                    .getDrawable());
+            Texture itemTexture = textureManager.getTexture(currentItem.getTexture());
+            if(itemTexture == null) {
+                itemTexture = textureManager.getTexture("error");
+            }
+            ImageButton button = new ImageButton(new Image(itemTexture).getDrawable());
             Stack stack = new Stack();
             Image clickedImage = new Image(textureManager.getTexture(SELECTED));
             commonSetup(currentItem, button, stack, clickedImage);

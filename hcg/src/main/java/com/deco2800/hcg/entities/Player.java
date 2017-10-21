@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
@@ -33,19 +32,14 @@ import com.deco2800.hcg.contexts.PlayContext;
 import com.deco2800.hcg.contexts.PlayerInventoryContext;
 import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
-import com.deco2800.hcg.entities.corpse_entities.Corpse;
-import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
-import com.deco2800.hcg.entities.npc_entities.NPC;
-import com.deco2800.hcg.entities.npc_entities.QuestNPC;
-import com.deco2800.hcg.entities.npc_entities.ShopNPC;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
-import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -54,12 +48,9 @@ import com.deco2800.hcg.managers.InputManager;
 import com.deco2800.hcg.managers.PlayerInputManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
-import com.deco2800.hcg.managers.StopwatchManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.util.Effect;
-import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
@@ -94,6 +85,10 @@ public class Player extends Character implements Tickable {
 	private float lastSpeedY;
 	private long lastTick = 0;
 	private String displayImage;
+
+	private boolean pauseDisplayed;
+
+
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
 	
@@ -142,7 +137,6 @@ public class Player extends Character implements Tickable {
 		this.playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		this.conversationManager = new ConversationManager();
 
-
 		// Set up specialised skills map
 		this.specialisedSkills = new HashMap<String, Boolean>();
 		for (String attribute : SPECIALISED_SKILLS) {
@@ -153,6 +147,7 @@ public class Player extends Character implements Tickable {
 		for (Perk.perk enumPerk : Perk.perk.values()) {
 			perks.add(new Perk(enumPerk));
 		}
+
 
 		this.id = id;
 		if (id == 0) {
@@ -263,7 +258,14 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDown(int screenX, int screenY, int pointer, int button) {
-		playerInputManager.queueLocalAction(InputType.TOUCH_DOWN.ordinal(), screenX, screenY, pointer, button);
+		if (pauseDisplayed) {
+			return;
+		}
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.queueLocalInput(
+				InputType.TOUCH_DOWN,
+				new int[] {pointer, button},
+				new float[] {position.x, position.y});
 	}
 
 	/**
@@ -277,7 +279,8 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchDragged(int screenX, int screenY, int pointer) {
-	    playerInputManager.setLocalMousePosition(screenX, screenY);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.setLocalMousePosition(position.x, position.y);
 	}
 
 	/**
@@ -293,7 +296,11 @@ public class Player extends Character implements Tickable {
 	 *            <unknown>
 	 */
 	private void handleLocalTouchUp(int screenX, int screenY, int pointer, int button) {
-		playerInputManager.queueLocalAction(InputType.TOUCH_UP.ordinal(), screenX, screenY, pointer, button);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.queueLocalInput(
+				InputType.TOUCH_UP,
+				new int[] {pointer, button},
+				new float[] {position.x, position.y});
 	}
 
 	/**
@@ -305,7 +312,8 @@ public class Player extends Character implements Tickable {
 	 *            the y position of mouse movement on the screen
 	 */
 	private void handleLocalMouseMoved(int screenX, int screenY) {
-		playerInputManager.setLocalMousePosition(screenX, screenY);
+		Vector3 position = gameManager.screenToWorld(screenX, screenY);
+		playerInputManager.setLocalMousePosition(position.x, position.y);
 	}
 
 	/**
@@ -315,7 +323,10 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key pressed
 	 */
 	private void handleLocalKeyDown(int keycode) {
-		playerInputManager.queueLocalAction(InputType.KEY_DOWN.ordinal(), keycode);
+		playerInputManager.queueLocalInput(
+				InputType.KEY_DOWN,
+				new int[] {keycode},
+				null);
 	}
 
 	/**
@@ -325,7 +336,10 @@ public class Player extends Character implements Tickable {
 	 *            the keycode of the key released
 	 */
 	private void handleLocalKeyUp(int keycode) {
-		playerInputManager.queueLocalAction(InputType.KEY_UP.ordinal(), keycode);
+		playerInputManager.queueLocalInput(
+				InputType.KEY_UP,
+				new int[] {keycode},
+				null);
 	}
 
 	/**
@@ -441,7 +455,7 @@ public class Player extends Character implements Tickable {
 			// if player is moving
 			if (!terrain.equals(name)) {
 				// if player moved to a different tile
-				if (!name.equals("")) {
+				if (!"".equals(name)) {
 					// stop old sound effect if there were
 					soundStop(name);
 				}
@@ -717,7 +731,7 @@ public class Player extends Character implements Tickable {
 			this.setTexture("hcg_character_sink");
 			break;
 		case "exit":
-			if (!onExit) {
+			if (this == playerManager.getPlayer() && !onExit) {
 					PlayContext play = (PlayContext) contextManager.currentContext();
 					play.addExitWindow();
 					onExit = true;
@@ -849,7 +863,9 @@ public class Player extends Character implements Tickable {
 	 * possible actions on key press. Such as NPC interaction.
 	 */
 	private void handleKeyDown(int keycode) {
-
+		if(pauseDisplayed){
+			return;
+		}
 		switch (keycode) {
 		case Input.Keys.X:
 			this.getEquippedWeapon().switchBullet();
@@ -895,9 +911,6 @@ public class Player extends Character implements Tickable {
 			if (this.getEquippedWeapon() != null) {
 				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
 			}
-			break;
-		case Input.Keys.ESCAPE:
-			contextManager.popContext();
 			break;
 		case Input.Keys.I:
 			// Display Inventory
@@ -1151,4 +1164,13 @@ public class Player extends Character implements Tickable {
 	public List<String> getSpecialisedSkillsList() {
 		return SPECIALISED_SKILLS;
 	}
+
+	public void setPauseDisplayed(boolean value) {
+		pauseDisplayed = value;
+	}
+
+	public boolean getPauseDisplayed() {
+		return pauseDisplayed;
+	}
+
 }

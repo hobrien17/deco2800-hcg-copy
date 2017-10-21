@@ -49,7 +49,7 @@ import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
-//import com.deco2800.hcg.shading.GrayScaleShader;
+
 
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
@@ -561,23 +561,6 @@ public class GeneralRadialDisplay extends Group {
 			}
 		}
 	}
-
-	//protected void updateCount() {
-		//int itemCount = 0;
-		//for(int i = 0; i < inventory.getNumItems(); i++) {
-			//if(inventory.getItem(i) instanceof HealthPotion) {
-				//itemCount += inventory.getItem(i).getStackSize();
-			//}
-		//}
-		//infoLbl.setText(String.format("%d", itemCount));
-
-		//if(keyCount > 0) {
-			//Display amount
-		//} else {
-			//Display 0
-			//Use gray scale shader
-		//}
-    //}
 
     private void setSeedHighlight(String seed) {
     	this.seedHighlight = seed;
