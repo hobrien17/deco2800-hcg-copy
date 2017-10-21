@@ -591,7 +591,11 @@ public class World {
         layerName = "icepuddle";
         texture = "icepuddle";
         break;
-        
+      case SANDSTORM:
+    	  // lets make a sandstorm puddle
+    	  layerName = "sandstormpuddle";
+          texture = "sandstormpuddle";
+          break;
       default:
         return;
     }
@@ -602,81 +606,80 @@ public class World {
     this.addTiledMapTileLayer(layerName, mapProperties);
     
     Random rand = new Random();
-    
     int successes = -3 - rand.nextInt(2);
-    
+
     // checked tiles list. there will only be at most our number of tiles created * 10^2 of these
     List<String> tilesTaken = new ArrayList<String>((0 - successes) * 10 * 10);
-    
-    // pick a random square on the map, check its surroundings are not null
-    // we will time out after 200 attempts
-    for (int i = 0; i < 200; i++) {
-      
-      // pick a random pair of numbers  
-      int posX = 5 + rand.nextInt(this.getWidth() - 10);
-      int posY = 5 + rand.nextInt(this.getLength() - 10);
 
-      Boolean success = true;
-      List<String> tilesSuccess = new ArrayList<String>(10 * 10);
-      
-      // check that we have chosen a valid tile (i.e. enough space around it
-      for (int x = posX - 5; x < posX + 5 && (success); x++) {
-        for (int y = posY - 5; y < posY + 5; y++) {
-          if (this.getTiledMapTileLayerAtPos(y, x) == null) {
-            success = false;
-            break;
-            
-          } else if (tilesTaken.contains(String.format("%d,%d", y, x))){
-            success = false;
-            break;
-            
-          } else {
-            // make sure we aren't on an exit tile! this would be bad. same as water tiles
-            String name = (String) this.getTiledMapTileLayerAtPos(y, x).getProperties().get("name");
-            
-            if (name != null && ("exit".equals(name) || "water-deep".equals(name) || 
-                  "water-shallow".equals(name))) {
-              
-              success = false;
-              break;
-              
-            }
-            // make sure we aren't on an damage tile either
-            if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("damage") != null) {
-              success = false;
-              break;
-            }
-            // make sure we aren't on top of a slippery tile too
-            if (this.getTiledMapTileLayerAtPos(y, x).getProperties().get("slippery") != null) {
-              success = false;
-              break;
-            }
+		// pick a random square on the map, check its surroundings are not null
+		// we will time out after 200 attempts
+		for (int i = 0; i < 200; i++) {
 
-            tilesSuccess.add(String.format("%d,%d", y, x));
-          }
+			// pick a random pair of numbers
+			int posX = 5 + rand.nextInt(this.getWidth() - 10);
+			int posY = 5 + rand.nextInt(this.getLength() - 10);
 
-        }
-      }
-      
-      if (success) {
-        // add tile
-        this.newTileAtPos((int) posX, (int) posY, textureManager.getTexture(texture),
-           (TiledMapTileLayer) this.getMapLayerWithProperty("name", layerName));
-        
-        // add to successful blocks created. If we've made enough then break
-        successes++;
-        if (successes > 0) {
-          break;
-        }
+			Boolean success = true;
+			List<String> tilesSuccess = new ArrayList<String>(10 * 10);
 
-        // add all the tiles used in this puddle creation to the tilesTaken list
-        for (String str : tilesSuccess) {
-          tilesTaken.add(str);
-        }
-        
-      }
-      
-    }    
+			// check if the chosen tile is valid i.e. enough space around it
+			for (int x = posX - 5; x < posX + 5 && (success); x++) {
+				for (int y = posY - 5; y < posY + 5; y++) {
+					if (this.getTiledMapTileLayerAtPos(y, x) == null
+							|| tilesTaken
+									.contains(String.format("%d,%d", y, x))) {
+						success = false;
+						break;
+					}
+					
+					// make sure we aren't on an exit tile! this would be
+					// bad. same as water tiles
+					String name = (String) this.getTiledMapTileLayerAtPos(y, x)
+							.getProperties().get("name");
 
+					if (name != null
+							&& ("exit".equals(name) || "water-deep".equals(name)
+									|| "water-shallow".equals(name))) {
+
+						success = false;
+						break;
+					}
+
+					// make sure we aren't on an damage tile or slippery
+					// tille either
+					if (this.getTiledMapTileLayerAtPos(y, x).getProperties()
+							.get("damage") != null
+							|| this.getTiledMapTileLayerAtPos(y, x)
+									.getProperties().get("slippery") != null) {
+						success = false;
+						break;
+					}
+
+					tilesSuccess.add(String.format("%d,%d", y, x));
+				}
+			}
+
+			if (!success) {
+				continue;
+			}
+
+			
+			// add tile
+			this.newTileAtPos((int) posX, (int) posY,
+					textureManager.getTexture(texture), (TiledMapTileLayer) this
+							.getMapLayerWithProperty("name", layerName));
+
+			// add to successful blocks created. If we've made enough then break
+			successes++;
+			if (successes > 0) {
+				break;
+			}
+
+			// add all the tiles used in this puddle creation to the tilesTaken
+			// list
+			for (String str : tilesSuccess) {
+				tilesTaken.add(str);
+			}
+		}
   }
 }
