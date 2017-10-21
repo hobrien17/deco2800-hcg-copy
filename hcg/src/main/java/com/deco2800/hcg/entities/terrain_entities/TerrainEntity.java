@@ -5,7 +5,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 /**
  * @author Ken
  */
-class TerrainEntity extends AbstractEntity {
+public class TerrainEntity extends AbstractEntity {
 
     /**
      * Creates a new TerrainEntity at the given position with the given size

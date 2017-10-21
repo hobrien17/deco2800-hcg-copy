@@ -209,8 +209,7 @@ public class WeaponBuilder {
                     weaponType, user, radius, texture, cooldown, pellets);
         } else if(weaponType == WeaponType.STARGUN) {
             if("".equals(texture)) {
-                //TODO: Get proper texture
-                texture = "blank";
+                texture = "stargun";
             }
             
             if(cooldown == -1) {

@@ -6,6 +6,7 @@ import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Hedgehog extends Enemy implements Tickable {
@@ -15,7 +16,8 @@ public class Hedgehog extends Enemy implements Tickable {
     boolean chargedAtPlayer;
     private int counter;
     private int delay;
-    private int spriteCount;
+    private String[] ballSprites = {"hedgeballWE", "hedgeballNS", "hedgeballWE", "hedgeballNS"};
+    private String[] standingSprites = {"hedgehogE", "hedgehogN", "hedgehogW", "hedgehogS"};
 
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
@@ -52,7 +54,7 @@ public class Hedgehog extends Enemy implements Tickable {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("explosive_seed"), 1.0);
+        lootRarity.put(new LootWrapper("explosive_seed", 1.0f), 1.0);
 
         checkLootRarity();
     }
@@ -82,25 +84,25 @@ public class Hedgehog extends Enemy implements Tickable {
         if (chargedAtPlayer && distance > chargingRange){
             this.setChargeStatus(false);
         }
-        if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange) {
+        if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange && !collided) {
             // move slowly to player
             this.setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.updateStandingSprite();
+            this.updateSprite(standingSprites);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
-        } else if (!chargedAtPlayer && distance < chargingRange) {
+        } else if (!chargedAtPlayer && distance < chargingRange && !collided) {
             // charge at player
             this.setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.updateBallSprite();
+            this.updateSprite(ballSprites);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else {
             // move randomly
             this.setSpeed(this.level * 0.03f);
             this.setStatus(3);
-            this.updateStandingSprite();
+            this.updateSprite(standingSprites);
         }
     }
     
@@ -118,104 +120,29 @@ public class Hedgehog extends Enemy implements Tickable {
     		this.setChargeStatus(false);    	
     	} 
     	
-    	if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange) {
+    	if (!chargedAtPlayer && distance < walkingRange && distance > chargingRange && !collided) {
     		// move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.updateStandingSprite();
+            this.updateSprite(standingSprites);
             this.lastPlayerX = closestPlayer.getPosX();
             this.lastPlayerY = closestPlayer.getPosY();
-    	} else if (!chargedAtPlayer && distance < chargingRange) {
+    	} else if (!chargedAtPlayer && distance < chargingRange && !collided) {
             // charge at player
             setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.updateBallSprite();
+            this.updateSprite(ballSprites);
             this.lastPlayerX = closestPlayer.getPosX();
             this.lastPlayerY = closestPlayer.getPosY();
         } else {
             // move randomly
             setSpeed(this.level * 0.03f);
             this.setStatus(3);
-            this.updateStandingSprite();
+            this.updateSprite(standingSprites);
         }
     	
     }
 
-    public void updateBallSprite() {
-        if (spriteCount%4 == 0) {
-            switch (this.direction) {
-                case 1:
-                    if (this.getTexture() == "hedgeballWE1") {
-                        this.setTexture("hedgeballWE2");
-                    } else {
-                        this.setTexture("hedgeballWE1");
-                    }
-                    break;
-                case 2:
-                    if (this.getTexture() == "hedgeballNS1") {
-                        this.setTexture("hedgeballNS2");
-                    } else {
-                        this.setTexture("hedgeballNS1");
-                    }
-                    break;
-                case 3:
-                    if (this.getTexture() == "hedgeballWE1") {
-                        this.setTexture("hedgeballWE2");
-                    } else {
-                        this.setTexture("hedgeballWE1");
-                    }
-                    break;
-                case 4:
-                    if (this.getTexture() == "hedgeballNS1") {
-                        this.setTexture("hedgeballNS2");
-                    } else {
-                        this.setTexture("hedgeballNS1");
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-        spriteCount++;
-    }
-
-    public void updateStandingSprite() {
-        if (spriteCount%4 == 0) {
-            switch (this.direction) {
-                case 1:
-                    if (this.getTexture() == "hedgehogE1") {
-                        this.setTexture("hedgehogE2");
-                    } else {
-                        this.setTexture("hedgehogE1");
-                    }
-                case 2:
-                    if (this.getTexture() == "hedgehogN1") {
-                        this.setTexture("hedgehogN2");
-                    } else {
-                        this.setTexture("hedgehogN1");
-                    }
-                    break;
-                case 3:
-                    if (this.getTexture() == "hedgehogW1") {
-                        this.setTexture("hedgehogW2");
-                    } else {
-                        this.setTexture("hedgehogW1");
-                    }
-                    break;
-                case 4:
-                    if (this.getTexture() == "hedgehogS1") {
-                        this.setTexture("hedgehogS2");
-                    } else {
-                        this.setTexture("hedgehogS1");
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-        spriteCount++;
-    }
-    
     /**
      * On Tick handler
      * @param gameTickCount Current game tick

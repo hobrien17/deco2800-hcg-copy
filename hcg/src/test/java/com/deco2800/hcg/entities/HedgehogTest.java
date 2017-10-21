@@ -57,7 +57,7 @@ public class HedgehogTest {
     public void testLoot() {
         enemy.setupLoot();
         assertThat("Hedgehog only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
-        assertThat("Item should be explosive seed", enemy.randItem(), is(equalTo(new LootWrapper("explosive_seed"))));
+        assertThat("Item should be explosive seed", enemy.randItem(), is(equalTo(new LootWrapper("explosive_seed", 1.0f))));
     }
 
     @Test

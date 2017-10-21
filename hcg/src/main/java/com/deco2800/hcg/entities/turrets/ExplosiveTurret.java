@@ -3,7 +3,9 @@ package com.deco2800.hcg.entities.turrets;
 import java.util.List;
 import java.util.Observable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.managers.GameManager;
@@ -23,8 +25,8 @@ public class ExplosiveTurret extends AbstractTurret {
 	private int range;
 	private int blow;
 	private float expSize;
-	private static final int NORMAL_BLOW = 5;
-	private static final int INCREASED_BLOW = 10;
+	private static final int NORMAL_BLOW = 10;
+	private static final int INCREASED_BLOW = 20;
 	private static final int NORMAL_RANGE = 5;
 	private static final int INCREASED_RANGE = 10;
 	private static final float NORMAL_SIZE = 0.4f;
@@ -70,7 +72,12 @@ public class ExplosiveTurret extends AbstractTurret {
 			GameManager.get().getWorld().addEntity(exp);
 			List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 					master.getPosY(), range, Enemy.class);
+			entities.addAll(WorldUtil.allEntitiesToPosition(master.getPosX(), master.getPosY(), range, Player.class));
 			for(AbstractEntity entity : entities) {
+				if(entity instanceof Player) {
+					((Player) entity).takeDamage(10);
+					continue;
+				}
 				GameManager.get().getWorld().removeEntity(entity);
 			}
 			GameManager.get().getWorld().removeEntity(master);
@@ -84,6 +91,16 @@ public class ExplosiveTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		return "cactus_corpse_01";
+	}
+
+	@Override
+	public int getGlowStrength() {
+		return 0;
+	}
+
+	@Override
+	public Color getGlowColor() {
+		return Color.GREEN;
 	}
 
 }

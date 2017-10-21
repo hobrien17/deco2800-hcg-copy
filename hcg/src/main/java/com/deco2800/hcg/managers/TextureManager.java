@@ -135,17 +135,17 @@ public class TextureManager extends Manager {
 			textureMap.put("mushroom3", new Texture("resources/sprites/enemies/Mushroom_3.png"));
 			textureMap.put("mushroom4", new Texture("resources/sprites/enemies/Mushroom_4.png"));
 			textureMap.put("mushroom5", new Texture("resources/sprites/enemies/Mushroom_5.png"));
-			textureMap.put("hedgehogS1", new Texture("resources/sprites/enemies/armadillo_S_1.png"));
+			textureMap.put("hedgehogS", new Texture("resources/sprites/enemies/armadillo_S_1.png"));
 			textureMap.put("hedgehogS2", new Texture("resources/sprites/enemies/armadillo_S_2.png"));
-			textureMap.put("hedgehogE1", new Texture("resources/sprites/enemies/armadillo_E_1.png"));
+			textureMap.put("hedgehogE", new Texture("resources/sprites/enemies/armadillo_E_1.png"));
 			textureMap.put("hedgehogE2", new Texture("resources/sprites/enemies/armadillo_E_2.png"));
-			textureMap.put("hedgehogW1", new Texture("resources/sprites/enemies/armadillo_W_1.png"));
+			textureMap.put("hedgehogW", new Texture("resources/sprites/enemies/armadillo_W_1.png"));
 			textureMap.put("hedgehogW2", new Texture("resources/sprites/enemies/armadillo_W_2.png"));
-			textureMap.put("hedgehogN1", new Texture("resources/sprites/enemies/armadillo_N_1.png"));
+			textureMap.put("hedgehogN", new Texture("resources/sprites/enemies/armadillo_N_1.png"));
 			textureMap.put("hedgehogN2", new Texture("resources/sprites/enemies/armadillo_N_2.png"));
-			textureMap.put("hedgeballNS1", new Texture("resources/sprites/enemies/armaball_NS_1.png"));
+			textureMap.put("hedgeballNS", new Texture("resources/sprites/enemies/armaball_NS_1.png"));
 			textureMap.put("hedgeballNS2", new Texture("resources/sprites/enemies/armaball_NS_2.png"));
-			textureMap.put("hedgeballWE1", new Texture("resources/sprites/enemies/armaball_WE_1.png"));
+			textureMap.put("hedgeballWE", new Texture("resources/sprites/enemies/armaball_WE_1.png"));
 			textureMap.put("hedgeballWE2", new Texture("resources/sprites/enemies/armaball_WE_2.png"));
 			textureMap.put("snailE", new Texture("resources/sprites/enemies/snail_E.png"));
 			textureMap.put("snailN", new Texture("resources/sprites/enemies/snail_N.png"));
@@ -191,6 +191,14 @@ public class TextureManager extends Manager {
             textureMap.put("machinegun_sw", new Texture("resources/sprites/weapons/machinegun_sw.png"));
             textureMap.put("machinegun_w", new Texture("resources/sprites/weapons/machinegun_w.png"));
             textureMap.put("machinegun_nw", new Texture("resources/sprites/weapons/machinegun_nw.png"));
+            textureMap.put("stargun_n", new Texture("resources/sprites/weapons/stargun_n.png"));
+            textureMap.put("stargun_ne", new Texture("resources/sprites/weapons/stargun_ne.png"));
+            textureMap.put("stargun_e", new Texture("resources/sprites/weapons/stargun_e.png"));
+            textureMap.put("stargun_se", new Texture("resources/sprites/weapons/stargun_se.png"));
+            textureMap.put("stargun_s", new Texture("resources/sprites/weapons/stargun_s.png"));
+            textureMap.put("stargun_sw", new Texture("resources/sprites/weapons/stargun_sw.png"));
+            textureMap.put("stargun_w", new Texture("resources/sprites/weapons/stargun_w.png"));
+            textureMap.put("stargun_nw", new Texture("resources/sprites/weapons/stargun_nw.png"));
 
 			// Miscellaneous textures
 			textureMap.put("error", new Texture("resources/misc/error.png"));
@@ -365,6 +373,10 @@ public class TextureManager extends Manager {
 			textureMap.put("ws_urban_completed", new Texture("resources/worldmap/ws_urban_completed.png"));
 			textureMap.put("ws_purp_bg", new Texture("resources/worldmap/ws_purp_background.png"));
 			textureMap.put("player_map", new Texture("resources/worldmap/player_map.png"));
+			textureMap.put("ws_main_bg", new Texture("resources/worldmap/bg_world.png"));
+			textureMap.put("wm_urban_bg", new Texture("resources/worldmap/bg_urban.png"));
+			textureMap.put("wm_forest_bg", new Texture("resources/worldmap/bg_forest.png"));
+			textureMap.put("wm_waste_bg", new Texture("resources/worldmap/bg_waste.png"));
 
 			//Item textures
 			textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));

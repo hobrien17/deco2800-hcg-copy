@@ -128,6 +128,9 @@ public class ParticleEffectActor extends Actor {
                 if(effect.isComplete()) {
                     effect.dispose();
                     entry.getValue().remove(effect);
+                    if(entry.getValue().isEmpty()) {
+                        entityEffects.remove(entry.getKey());
+                    }
                 }
             }
         }

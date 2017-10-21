@@ -256,7 +256,9 @@ public class Effects {
                     GameManager.get().getWorld().addEntity(corpse);
                 }
 			} else {
-                ((Enemy) owner).loot();
+			    if (owner instanceof Enemy) {
+                    ((Enemy) owner).loot();
+                }
             }
 			GameManager.get().getWorld().removeEntity(owner);
 			AbstractEntity creator = effect.getCreator();

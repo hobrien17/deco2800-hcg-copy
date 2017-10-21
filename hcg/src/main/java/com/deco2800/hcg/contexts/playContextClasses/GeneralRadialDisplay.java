@@ -107,7 +107,7 @@ public class GeneralRadialDisplay extends Group {
 
 		equippedItems = PlayerEquipment.getPlayerEquipment();
 		inventory = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer().getInventory();
-
+		
         setupSprites();
         setupListeners();
         //updateCount();
@@ -297,6 +297,7 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.MACHINEGUN;
+			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(0);
 			}
 		});
 
@@ -305,6 +306,7 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.SHOTGUN;
+			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(1);
 			}
 		});
 
@@ -313,6 +315,7 @@ public class GeneralRadialDisplay extends Group {
 			public void changed(ChangeEvent event, Actor actor) {
 				//PlayerEquipment.cycleEquippedSlot();
 				//weaponType = weaponType.STARFALL;
+			    ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer().setEquipped(3);
 			}
 		});
 
@@ -525,10 +528,10 @@ public class GeneralRadialDisplay extends Group {
 			String type = items.get(i);
 			int count = -1;
 			if(type.equals("sunflower") || type.equals("water") || type.equals("cactus") || type.equals("ice") || 
-					type.equals("fire") || type.equals("explosive")) {
+					type.equals("fire") || type.equals("explosive") || type.equals("grass")) {
 				count = getCount(type + "_seed");
 			} else if(type.equals("sunflowerC") || type.equals("waterC") || type.equals("cactusC") || type.equals("iceC") || 
-					type.equals("fireC") || type.equals("explosiveC")) {
+					type.equals("fireC") || type.equals("explosiveC") || type.equals("grassC")) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
 			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("shotgun"));
 			else if(type.equals("health_potion")) {

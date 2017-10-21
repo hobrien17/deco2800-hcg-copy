@@ -36,21 +36,6 @@ public class SunflowerTurretTest extends TurretBaseTest {
 	}
 	
 	/*
-	 * Tests that the turret does not shoot when no enemies are in range
-	 */
-	@Test
-	public void testNoShoot() {
-		setupNoWeather();
-		world.removeEntity(enemy);
-		turret.update(sw, 0);
-		for(AbstractEntity entity : world.getEntities()) {
-			if(entity instanceof Bullet) {
-				fail("No bullets should have been spawned");
-			}
-		}
-	}
-	
-	/*
 	 * Tests the turret's limited ammo
 	 */
 	@Test
@@ -82,24 +67,13 @@ public class SunflowerTurretTest extends TurretBaseTest {
 	@Test
 	public void testStormyWeather() {
 		setupWeather(Weathers.STORM);
-		for (int i = 0; i <= 60; i++) {
-			assertTrue("The world should still contain the corpse", world.containsEntity(corpse));
-			turret.update(sw, 0);
+		turret.update(sw, 0);
+		int counter = 0;
+		for(AbstractEntity entity : world.getEntities()) {
+			if (entity instanceof Bullet) {
+				counter++;
+			}
 		}
-		assertFalse("The turret should have been destroyed", world.containsEntity(corpse));
-	}
-	
-	/*
-	 * Test that the turret will randomly shoot in a storm
-	 */
-	@Test
-	public void testStormyWeather2() {
-		setupWeather(Weathers.STORM);
-		world.removeEntity(enemy);
-		for (int i = 0; i <= 60; i++) {
-			assertTrue("The world should still contain the corpse", world.containsEntity(corpse));
-			turret.update(sw, 0);
-		}
-		assertFalse("The turret should have been destroyed", world.containsEntity(corpse));
+		assertEquals("There should be 36 bullets in the world", 36, counter);
 	}
 }

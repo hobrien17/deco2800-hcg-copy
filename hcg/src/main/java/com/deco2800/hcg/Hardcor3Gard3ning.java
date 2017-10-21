@@ -1,5 +1,9 @@
 package com.deco2800.hcg;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -227,6 +231,36 @@ public class Hardcor3Gard3ning extends Game {
                 }
                 
                 return "Success!";
+            }
+        });
+        
+        commandManager.registerCommand("setTime", new CommandManager.Command() {
+            @Override
+            public String run(String... args) {
+                if(args.length != 2) {
+                    return "Invalid number of arguments. \nCorrect Usage: /setTime time";
+                }
+                
+                TimeManager manager = (TimeManager)GameManager.get().getManager(TimeManager.class);
+                LocalTime time = null;
+                if(manager.timeNames.containsKey(args[1])) {
+                    time = manager.timeNames.get(args[1]);
+                } else {
+                    try {
+                        time = LocalTime.parse(args[1], DateTimeFormatter.ISO_LOCAL_TIME);
+                    } catch(DateTimeParseException e) {
+                        time = null;
+                    }
+                }
+                
+                if(time != null) {
+                    manager.setDateTime(time.getSecond(), time.getMinute(), time.getHour(), 
+                            manager.getDay(), manager.getMonth(), manager.getYear());
+                } else {
+                    return "Invalid time.";
+                }
+                
+                return String.format("Time set to %s.", time);
             }
         });
         
