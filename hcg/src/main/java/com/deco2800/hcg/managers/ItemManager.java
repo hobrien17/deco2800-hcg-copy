@@ -3,6 +3,8 @@ package com.deco2800.hcg.managers;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.items.stackable.MagicMushroom;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +38,9 @@ public class ItemManager extends Manager {
             case "water_seed":
                 return new Seed(Seed.Type.WATER);
             case "health_potion":
-                return new HealthPotion(10);
+                return new HealthPotion(100);
+            case "magic_mushroom":
+                return new MagicMushroom();
             default:
                 LOGGER.warn("Unable to find given class, returning null");
                 return null;

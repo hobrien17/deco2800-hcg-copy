@@ -24,8 +24,8 @@ public class SpeedPotion extends ConsumableItem implements Observer {
     public SpeedPotion() {
         this.baseValue = 15;
         this.itemWeight = 3;
-        this.itemName = "Speed Potion";
-        this.texture = "purple_potion";
+        this.itemName = "Bunnings Snag";
+        this.texture = "bunnings_snag_and_bread";
         this.currentStackSize = 1;
         this.maxStackSize = 5;
         startTime = 0;
@@ -33,7 +33,6 @@ public class SpeedPotion extends ConsumableItem implements Observer {
     }
     @Override
     public void consume(Character character) {
-        //((Player)character).setSpeed(0.6f);
         usingCharacter = character;
         ((Player)character).setStaminaCur(character.getStaminaMax());
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
@@ -79,7 +78,7 @@ public class SpeedPotion extends ConsumableItem implements Observer {
 
     @Override
     public ItemRarity getRarity() {
-        return ItemRarity.UNCOMMON;
+        return ItemRarity.RARE;
     }
 
     @Override

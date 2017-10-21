@@ -30,7 +30,7 @@ public abstract class GenericItem implements Item {
     public int getBaseValue() {
         return this.baseValue;
     }
-    
+
     @Override
     public String getTexture() {
         return this.texture;

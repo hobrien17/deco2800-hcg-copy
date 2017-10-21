@@ -18,11 +18,11 @@ public class PlayerManager extends Manager {
     
     /**
      * Adds a player to the game.
-     * @param player The player to add
+     * @param tempPlayer The player to add
      * @return <code>true</code> if player has not been previously added
      */
-    public boolean addPlayer(Player player) {
-    		return players.add(player);
+    public boolean addPlayer(Player tempPlayer) {
+    		return players.add(tempPlayer);
     }
     
     /**
@@ -30,14 +30,14 @@ public class PlayerManager extends Manager {
      */
     public void spawnPlayers() {
     		World world = GameManager.get().getWorld();
-    		for (Player player : players) {
+    		for (Player tempPlayer : players) {
     			// FIXME Players shouldn't spawn in the same place
-    		    player.setPosX(world.getStartingPlayerX());
-    		    player.setPosY(world.getStartingPlayerY());
+                tempPlayer.setPosX(world.getStartingPlayerX());
+                tempPlayer.setPosY(world.getStartingPlayerY());
 
     			    			
-    			world.addEntity(player);
-    			world.addEntity(player.getEquippedWeapon());
+    			world.addEntity(tempPlayer);
+    			world.addEntity(tempPlayer.getEquippedWeapon());
     		}
     }
 
@@ -46,10 +46,10 @@ public class PlayerManager extends Manager {
      */
     public void despawnPlayers() {
         World world = GameManager.get().getWorld();
-        for (Player player : players) {
-            player.ceaseMovement();
-            world.removeEntity(player);
-            world.removeEntity(player.getEquippedWeapon());
+        for (Player tempPlayer : players) {
+            tempPlayer.ceaseMovement();
+            world.removeEntity(tempPlayer);
+            world.removeEntity(tempPlayer.getEquippedWeapon());
         }
     }
     
@@ -64,9 +64,9 @@ public class PlayerManager extends Manager {
     /**
      * Sets the player.
      */
-    public void setPlayer(Player player) {
-        this.player = player;
-        addPlayer(player);
+    public void setPlayer(Player tempPlayer) {
+        this.player = tempPlayer;
+        addPlayer(tempPlayer);
     }
 
     /**

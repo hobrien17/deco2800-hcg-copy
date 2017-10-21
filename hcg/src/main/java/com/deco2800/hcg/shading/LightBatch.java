@@ -403,7 +403,8 @@ public class LightBatch implements Batch {
         }
         int count = spritesInBatch * 6;
         
-        this.lastTexture.bind();
+        Gdx.gl.glActiveTexture(0);
+        this.lastTexture.bind(0);
         Mesh mesh = this.mesh;
         mesh.setVertices(this.vertices, 0, this.idx);
         mesh.getIndicesBuffer().position(0);
