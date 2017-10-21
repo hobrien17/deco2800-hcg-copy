@@ -149,4 +149,11 @@ public class EnemyTest {
         enemy.causeDamage(player);
         assertThat("The health of player does not decrease by 10", player.getHealthCur(), is(equalTo(health - 10)));
     }
+    
+    @Test
+    public void testClosestPlayer() {
+        Player player = new Player(10, 10, 10);
+        enemy.setClosestPlayer(player);
+        assertThat("the player is not the closest", enemy.getClosestPlayer(), is(equalTo(player)));
+    }
 }

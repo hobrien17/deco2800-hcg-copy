@@ -138,38 +138,42 @@ public class ConversationReader {
 		// Collect options and arguments
 		String condition = jCondition.getAsString();
 		Scanner scanner = new Scanner(condition).useDelimiter("\\|");
-		String command = scanner.next();
-		boolean negate = false;
-		if (command.charAt(0) == '!') {
-			command = command.substring(1);
-			negate = true;
-		}
-		List<String> args = new ArrayList<>();
-		while (scanner.hasNext()) {
-			args.add(scanner.next());
-		}
+		try {
+			String command = scanner.next();
+			boolean negate = false;
+			if (command.charAt(0) == '!') {
+				command = command.substring(1);
+				negate = true;
+			}
+			List<String> args = new ArrayList<>();
+			while (scanner.hasNext()) {
+				args.add(scanner.next());
+			}
 
-		// Generate the appropriate condition object
-		switch (command) {
+			// Generate the appropriate condition object
+			switch (command) {
 
-			case "checkRelationship":
-				if (args.size() != 1) {
-					throw new ResourceLoadException("Wrong number of args in condition: " + condition);
-				}
-				return new CheckRelationshipCondition(negate, args.get(0));
+				case "checkRelationship":
+					if (args.size() != 1) {
+						throw new ResourceLoadException("Wrong number of args in condition: " + condition);
+					}
+					return new CheckRelationshipCondition(negate, args.get(0));
 
-			case "healthPercentBelow":
-				if (args.size() != 1) {
-					throw new ResourceLoadException("Wrong number of args in condition: " + condition);
-				}
-				try {
-					return new HealthPercentBelowCondition(negate, Integer.parseInt(args.get(0)));
-				} catch (NumberFormatException e) {
-					throw new ResourceLoadException("Unparsable int in condition: " + condition, e);
-				}
+				case "healthPercentBelow":
+					if (args.size() != 1) {
+						throw new ResourceLoadException("Wrong number of args in condition: " + condition);
+					}
+					try {
+						return new HealthPercentBelowCondition(negate, Integer.parseInt(args.get(0)));
+					} catch (NumberFormatException e) {
+						throw new ResourceLoadException("Unparsable int in condition: " + condition, e);
+					}
 
-			default:
-				throw new ResourceLoadException("No such condition: " + condition);
+				default:
+					throw new ResourceLoadException("No such condition: " + condition);
+			}
+		} finally {
+			scanner.close();
 		}
 
 	}
@@ -180,33 +184,38 @@ public class ConversationReader {
 		// Collect options and arguments
 		String action = jCondition.getAsString();
 		Scanner scanner = new Scanner(action).useDelimiter("\\|");
-		String command = scanner.next();
-		List<String> args = new ArrayList<>();
-		while (scanner.hasNext()) {
-			args.add(scanner.next());
-		}
 
-		// Generate the appropriate action object
-		switch (command) {
+		try {
+			String command = scanner.next();
+			List<String> args = new ArrayList<>();
+			while (scanner.hasNext()) {
+				args.add(scanner.next());
+			}
 
-			case "setRelationship":
-				if (args.size() != 1) {
-					throw new ResourceLoadException("Wrong number of args in action: " + action);
-				}
-				return new SetRelationshipAction(args.get(0));
+			// Generate the appropriate action object
+			switch (command) {
 
-			case "giveItems":
-				if (args.size() != 2) {
-					throw new ResourceLoadException("Wrong number of args in action: " + action);
-				}
-				try {
-					return new GiveItemsAction(args.get(0), Integer.parseInt(args.get(1)));
-				} catch (NumberFormatException e) {
-					throw new ResourceLoadException("Unparsable int in action: " + action, e);
-				}
+				case "setRelationship":
+					if (args.size() != 1) {
+						throw new ResourceLoadException("Wrong number of args in action: " + action);
+					}
+					return new SetRelationshipAction(args.get(0));
 
-			default:
-				throw new ResourceLoadException("No such action: " + action);
+				case "giveItems":
+					if (args.size() != 2) {
+						throw new ResourceLoadException("Wrong number of args in action: " + action);
+					}
+					try {
+						return new GiveItemsAction(args.get(0), Integer.parseInt(args.get(1)));
+					} catch (NumberFormatException e) {
+						throw new ResourceLoadException("Unparsable int in action: " + action, e);
+					}
+
+				default:
+					throw new ResourceLoadException("No such action: " + action);
+			}
+		} finally {
+			scanner.close();
 		}
 
 	}

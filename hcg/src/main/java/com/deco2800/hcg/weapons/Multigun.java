@@ -1,7 +1,6 @@
 package com.deco2800.hcg.weapons;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
@@ -71,6 +70,11 @@ public class Multigun extends Weapon implements Tickable {
             angle = angle + shotAngle;
         }
         playFireSound();
+
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashSize = 4;
+        muzzleFlashStartTime = System.currentTimeMillis();
     }
     
 }

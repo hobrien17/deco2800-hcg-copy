@@ -16,7 +16,7 @@ public class Cactus extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Cactus(Pot master) {
-        super(master, "cactus", 20);
+        super(master, "cactus", 2100); //~20 real-life minutes
     }
     
     @Override
@@ -36,9 +36,9 @@ public class Cactus extends AbstractGardenPlant {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("explosive_seed", 2, 5), 0.7);
-        lootRarity.put(new LootWrapper("fire_seed", 5, 10), 0.2);
-        lootRarity.put(new LootWrapper("grass_seed", 5, 10), 0.1);
+        lootRarity.put(new LootWrapper("explosive_seed", 15, 20), 0.7);
+        lootRarity.put(new LootWrapper("fire_seed", 15, 20), 0.2);
+        lootRarity.put(new LootWrapper("grass_seed", 15, 20), 0.1);
         
         checkLootRarity();
     }

@@ -36,7 +36,7 @@ public class GardenTest {
 		sprites.put(Grass.class, "grass");
 		sprites.put(Water.class, "lily");
 		sprites.put(Inferno.class, "inferno");
-		sprites.put(Ice.class, "ice"); //need to change
+		sprites.put(Ice.class, "ice");
 		
 		names.put(Sunflower.class, "sunflower");
 		names.put(Cactus.class, "cactus");
@@ -99,7 +99,7 @@ public class GardenTest {
 		AbstractGardenPlant plant = new Sunflower(p);
 		assertTrue(p.addPlant(plant));
 		assertEquals(p.getPlant(), plant);
-		assertEquals(plant.getGrowDelay(), 10);
+		assertEquals(plant.getGrowDelay(), 600);
 	}
 	
 	/*

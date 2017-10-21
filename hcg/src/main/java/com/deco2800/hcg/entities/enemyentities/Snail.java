@@ -22,7 +22,7 @@ public class Snail extends Enemy implements Tickable {
      * @param id the ID of the Snail Enemy
      */
     public Snail(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 0.3f, 0.3f, 1, false, 1000, 5, id, EnemyType.SNAIL);
+        super(posX, posY, posZ, 1f, 1f, 1, false, 1000, 5, id, EnemyType.SNAIL);
         this.boss = false;
         this.setTexture("snail");
         this.level = 1;

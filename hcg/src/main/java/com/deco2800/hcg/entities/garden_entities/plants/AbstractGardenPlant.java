@@ -105,16 +105,6 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	}
 
 	/**
-	 * Sets the current plant's name
-	 *
-	 * @param name
-	 *            plant's name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
 	 * Gets the plant's name
 	 *
 	 * @return The name for this plant
@@ -198,12 +188,12 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 		return null;
 	}
 
-	private List<int[]> getPositions() {
-		List<int[]> positions = new ArrayList<>();
+	private List<Integer[]> getPositions() {
+		List<Integer[]> positions = new ArrayList<>();
 		for (int x = -1; x <= 1; x++) {
 			for (int y = -1; y <= 1; y++) {
 				if (x != 0 || y != 0) {
-					int[] pair = { (int)master.getPosX() + x, (int)master.getPosY() + y };
+					Integer[] pair = { (int)master.getPosX() + x, (int)master.getPosY() + y };
 					positions.add(pair);
 				}
 			}
@@ -218,19 +208,21 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 		}
 		List<Item> items = getLoot();
 		for (Item item : items) {
-			List<int[]> positions = getPositions();
+			List<Integer[]> positions = getPositions();
 			List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(master.getPosX(), master.getPosY(), 2f,
 					Player.class);
 			for (AbstractEntity entity : entities) {
 				Player player = (Player) entity;
-				int[] pair = { (int) player.getPosX(), (int) player.getPosY() };
+				Integer[] pair = new Integer[2];
+				pair[1] = (int) player.getPosX();
+				pair[2] = (int) player.getPosY();
 				positions.remove(pair);
 			}
 			if (positions.isEmpty()) {
 				positions = getPositions();
 			}
 			int randomInt = (int) (Math.random() * positions.size());
-			int[] randomPos = positions.get(randomInt);
+			Integer[] randomPos = positions.get(randomInt);
 			ItemEntity itemEntity = new ItemEntity(randomPos[0], randomPos[1], 0f, item);
 			GameManager.get().getWorld().addEntity(itemEntity);
 		}

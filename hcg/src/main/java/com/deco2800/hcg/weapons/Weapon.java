@@ -1,11 +1,13 @@
 package com.deco2800.hcg.weapons;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.*;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.shading.LightEmitter;
 
 /**
  * Weapon class containing all values and methods required for
@@ -25,8 +27,9 @@ import com.deco2800.hcg.managers.SoundManager;
  * @author Bodhi Howe - Sinquios
  */
 
-public abstract class Weapon extends AbstractEntity implements Tickable {
+public abstract class Weapon extends AbstractEntity implements Tickable, LightEmitter {
 
+    private final static int MUZZLE_FLASH_TIME = 50;
     protected Vector3 follow;
     protected Vector3 aim;
     protected double radius;
@@ -38,6 +41,10 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
     protected BulletType bulletType;
     protected int pellets;
     protected SoundManager soundManager;
+    protected String texture;
+    protected int muzzleFlashEnabled;
+    protected float muzzleFlashSize;
+    protected long muzzleFlashStartTime;
 
     /**
      * Constructor for Weapon objects.
@@ -65,9 +72,11 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         this.weaponType = weaponType;
         this.user = user;
         this.radius = radius;
-        // TODO: Get proper weapon textures
-        this.setTexture(texture);
+        this.setTexture("blank");
+        this.texture = texture;
         this.cooldown = cooldown;
+        this.muzzleFlashEnabled = 0;
+        this.muzzleFlashSize = 3;
         this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
     }
 
@@ -222,6 +231,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 this.aim.x, this.aim.y);
         playFireSound();
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashStartTime = System.currentTimeMillis();
     }
 
     /**
@@ -239,11 +251,55 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         }
         float angle = (float) (Math.atan2(deltaY, deltaX)) +
                 (float) (Math.PI);
+        
+        if(!"blank".equals(texture)) {
+        //Update texture for angle
+            if(15 * Math.PI / 8 < angle || angle < Math.PI / 8) {
+                this.setTexture(texture + "_ne");
+            } else if(Math.PI / 8 <= angle && angle <= 3 * Math.PI / 8) {
+                this.setTexture(texture + "_e");
+            } else if(3 * Math.PI / 8 < angle && angle < 5 * Math.PI / 8) {
+                this.setTexture(texture + "_se");
+            } else if(5 * Math.PI / 8 <= angle && angle <= 7 * Math.PI / 8) {
+                this.setTexture(texture + "_s");
+            } else if(7 * Math.PI / 8 < angle && angle < 9 * Math.PI / 8) {
+                this.setTexture(texture + "_sw");
+            }  else if(9 * Math.PI / 8 <= angle && angle <= 11 * Math.PI / 8) {
+                this.setTexture(texture + "_w");
+            } else if(11 * Math.PI / 8 < angle && angle < 13 * Math.PI / 8) {
+                this.setTexture(texture + "_nw");
+            } else if(13 * Math.PI / 8 <= angle && angle <= 15 * Math.PI / 8) {
+                this.setTexture(texture + "_n");
+            }
+        }
+        
         // Set weapon position along angle
         setPosX(this.user.getPosX() +
                 (float) (this.radius * Math.cos(angle)));
         setPosY(this.user.getPosY() +
                 (float) (this.radius * Math.sin(angle)));
+    }
+
+    /**
+     * Grab the current light colour of this entity.
+     *
+     * @return This entity's current light colour.
+     */
+    @Override
+    public Color getLightColour() {
+        return Color.YELLOW;
+    }
+
+    /**
+     * Grab the current light power of this entity. If it shouldn't emit light right
+     * now, return 0.
+     *
+     * @return This entity's current light power.
+     */
+    @Override
+    public float getLightPower() {
+//        return Float.MAX_VALUE * muzzleFlash;
+        return muzzleFlashSize * muzzleFlashEnabled;
     }
 
     /**
@@ -260,6 +316,13 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         } else if(shoot) {
             this.counter = 0;
             fireWeapon();
+        }
+
+        // Handle muzzle flash
+        if (muzzleFlashEnabled == 1) {
+            if (System.currentTimeMillis() - muzzleFlashStartTime >= MUZZLE_FLASH_TIME) {
+                muzzleFlashEnabled = 0;
+            }
         }
     }
 
