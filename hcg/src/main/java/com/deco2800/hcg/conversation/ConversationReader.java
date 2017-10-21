@@ -149,6 +149,8 @@ public class ConversationReader {
 			args.add(scanner.next());
 		}
 
+		scanner.close();
+
 		// Generate the appropriate condition object
 		switch (command) {
 
@@ -185,6 +187,8 @@ public class ConversationReader {
 		while (scanner.hasNext()) {
 			args.add(scanner.next());
 		}
+
+		scanner.close();
 
 		// Generate the appropriate action object
 		switch (command) {

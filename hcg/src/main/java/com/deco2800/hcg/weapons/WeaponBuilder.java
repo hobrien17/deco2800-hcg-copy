@@ -14,17 +14,17 @@ import com.deco2800.hcg.entities.AbstractEntity;
 public class WeaponBuilder {
     private WeaponType weaponType = null;
     private AbstractEntity user = null;
-    private float posX = 0;
-    private float posY = 0;
-    private float posZ = 0;
-    private float xLength = 1;
-    private float yLength = 1;
-    private float zLength = 1;
-    private double radius = 0;
+    private float posX = 0.0f;
+    private float posY = 0.0f;
+    private float posZ = 0.0f;
+    private float xLength = 1.0f;
+    private float yLength = 1.0f;
+    private float zLength = 1.0f;
+    private double radius = 0.0f;
     private String texture = "";
     private int cooldown = -1;
     private int pellets = -1;
-    private float arc = 0;
+    private float arc = 0.0f;
 
     /**
      * Initialises a new WeaponBuilder
@@ -176,8 +176,8 @@ public class WeaponBuilder {
             return null;
         }
         
-        if(radius == 0) {
-            radius = 0.1;
+        if(radius == 0.0f) {
+            radius = 0.1f;
         }
         
         if(weaponType == WeaponType.MACHINEGUN) {
@@ -235,8 +235,8 @@ public class WeaponBuilder {
                 pellets = 3;
             }
             
-            if(arc <= 0.5 || arc >= 2 * Math.PI) {
-                arc = (float) (Math.PI / 4f);
+            if(arc <= 0.5f || arc >= 2.0f * Math.PI) {
+                arc = (float) (Math.PI / 4.0f);
             }
             
             return new Multigun(posX, posY, posZ, xLength, yLength, zLength,
