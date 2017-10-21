@@ -231,16 +231,6 @@ public class Effects {
 			if (effect.onCooldown()) {
 				return;
 			}
-			
-			if(effect.getUseCount() % 10 == 0) {
-                if(effect.getSpeedModifier() < 1) {
-                    spawnParticles(thisCharacter, "frozen.p");
-                }
-                
-                if(effect.getDamage() > 0 && effect.getDuration() > 1) {
-                    spawnParticles(thisCharacter, "fire.p");
-                }
-			}
                 
 			effect.startCooldownTimer();
 			// Handle damage
@@ -277,16 +267,6 @@ public class Effects {
             currentEffects.remove(effect);
         }
 	}
-    
-    protected void spawnParticles(AbstractEntity entity, String particleFile) {
-        ParticleEffect hitEffect = new ParticleEffect();
-        hitEffect.load(Gdx.files.internal("resources/particles/" + particleFile),
-        Gdx.files.internal("resources/particles/"));
-        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
-        hitEffect.setPosition(position.x, position.y);
-        hitEffect.start();
-        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, hitEffect);
-    }
 
     @Override
     public boolean equals(Object o) {
