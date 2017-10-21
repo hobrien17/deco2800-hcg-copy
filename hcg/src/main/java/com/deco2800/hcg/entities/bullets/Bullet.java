@@ -207,6 +207,10 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				if (target instanceof MushroomTurret) {
 					MushroomTurret turret = (MushroomTurret) target;
 					turret.removeObserver();
+					turret.removeWeapon();
+					if (user instanceof Player) {
+						((Player) user).killLogAdd(target.getEnemyType());
+					}
 					GameManager.get().getWorld().removeEntity(turret);
 
 				} else if (target.getHealthCur() <= 0) {
