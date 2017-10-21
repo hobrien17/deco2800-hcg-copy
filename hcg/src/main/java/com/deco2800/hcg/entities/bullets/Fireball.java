@@ -34,7 +34,7 @@ public class Fireball extends FireBullet {
 	 */
 	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
 		super(getPosChange(posX, posY, newX, newY)[0], getPosChange(posX, posY, newX, newY)[1], posZ, newX, newY, newZ, 
-				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, -1);
+				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, -1, 0.5f);
 		if(newX > posX && newY > posY) {
 			this.setTexture("fireball_right");
 		} else if(newX > posX && newY < posY) {
