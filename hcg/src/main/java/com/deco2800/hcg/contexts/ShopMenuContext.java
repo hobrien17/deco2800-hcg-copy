@@ -170,7 +170,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 							errorImageVisible = true;
 						}
 					}
-					soundManager.playSound("loot");
+					soundManager.playSound("buy");
 				}
 				draw();
 			}
@@ -196,7 +196,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 							errorImageVisible = true;
 						}
 					}
-					soundManager.playSound("loot2");
+					soundManager.playSound("sell");
 				}
 				draw();
 			}

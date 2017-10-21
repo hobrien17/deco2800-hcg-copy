@@ -152,10 +152,10 @@ public class PlayContext extends Context {
         List<String> plantList = Arrays.asList(plantItems);
         seedItems = new String[]{"sunflowerC", "waterC", "iceC", "explosiveC","fireC","grassC"};
         List<String> seedList = Arrays.asList(seedItems);
-        weaponItems = new String[]{"machineGun", "shotgun", "starfall"};
+        weaponItems = new String[]{"machineGun", "shotgun", "scatterGun", "starfall"};
         List<String> weapList = Arrays.asList(weaponItems);
         consumableItems = new String[]{"fertiliser", "bug_spray", "health_potion", "speed_potion",
-                "magic_mushroom", "small_mushroom"};
+                "magic_mushroom", "small_mushroom", "snag_btn", "sausage_btn", "hoe", "trowel"};
         List<String> consumableList = Arrays.asList(consumableItems);
 
         weaponRadialDisplay = new GeneralRadialDisplay(stage, weapList);
