@@ -325,12 +325,19 @@ public class TextureManager extends Manager {
 			textureMap.put("shovel", new Texture("resources/ui/radial_menu/shovel_button.png"));
 			textureMap.put("highlight", new Texture("resources/ui/radial_menu/highlight.png"));
 
-			//Perks
-			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
+			//PlayerStatusHud
+			textureMap.put("player_normal_border", new Texture("resources/ui/player_status_hud/" +
+					"player_normal_border.png"));
+			textureMap.put("health_bar_pixel", new Texture("resources/ui/player_status_hud/health_bar_pixel.png"));
+
+			//Perks General
 			textureMap.put("perk_border_inactive", new Texture("resources/ui/perks/perk_border_inactive.png"));
+			textureMap.put("perk_border_maxed", new Texture("resources/ui/perks/perk_border_maxed.png"));
+			textureMap.put("path_separator", new Texture("resources/ui/perks/path_separator.png"));
 
-
+			//Perk Images
+			textureMap.put("Holly_Moley", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
 
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));

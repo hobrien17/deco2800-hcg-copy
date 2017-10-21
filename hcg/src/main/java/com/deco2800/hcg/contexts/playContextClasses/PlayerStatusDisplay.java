@@ -22,30 +22,30 @@ public class PlayerStatusDisplay extends Group {
     private Image levelBar;
     private Label playerHealth;
     private Label playerLevel;
-    
     private String staminaBarLoction;
+    private TextureManager textureManager;
     
     public PlayerStatusDisplay() {
         super();
-        staminaBarLoction = "resources/ui/player_status_hud/health_bar_pixel.png";
         
         /*adding GameManager and obtaining player class*/
         gameManager = GameManager.get();
         PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
         player = playerManager.getPlayer();
+        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
         /*position of Status Display*/
 
         /* Add the player's health and stamina display*/
         playerImage = new Image(new Texture(player.getDisplayImage()));
-        playerBorder = new Image(new Texture(Gdx.files.internal("resources/ui/player_status_hud/player_normal_border.png")));
-        staminaBar = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
-        healthBar = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
-        healthBarShadow = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
+        playerBorder = new Image(textureManager.getTexture("player_normal_border"));
+        staminaBar = new Image(textureManager.getTexture("health_bar_pixel"));
+        healthBar = new Image(textureManager.getTexture("health_bar_pixel"));
+        healthBarShadow = new Image(textureManager.getTexture("health_bar_pixel"));
         playerHealth = new Label(player.getHealthCur() + " / " + player.getHealthMax(), skin);
         playerLevel = new Label("Lv: " + player.getLevel(), skin);
-        levelBar = new Image(new Texture(Gdx.files.internal(staminaBarLoction)));
+        levelBar = new Image(textureManager.getTexture("health_bar_pixel"));
 
 		/* create player display GUI and add it to the stage */
         this.addActor(levelBar);
@@ -114,6 +114,7 @@ public class PlayerStatusDisplay extends Group {
         staminaBar.setWidth(staminaBarWidth);
         playerLevel.setText("Lv: " + player.getLevel());
         levelBar.setWidth(((float) player.getXp()/(float)player.getXpThreshold()) * 110f);
+
     }
 
     /**
