@@ -30,7 +30,6 @@ import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
 import com.deco2800.hcg.handlers.MouseHandler;
