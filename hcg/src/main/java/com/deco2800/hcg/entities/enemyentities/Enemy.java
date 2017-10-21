@@ -554,9 +554,8 @@ public abstract class Enemy extends Character implements Lootable {
         List<AbstractEntity> entities = GameManager.get().getWorld().getEntities();
         for (AbstractEntity entity : entities) {
             if (!this.equals(entity) && this.collidesWith(entity)) {
-                    //newPos.overlaps(entity.getBox3D())) {
+
                 if(entity instanceof Player) {
-                    //this.causeDamage((Player)entity);
                     this.setTarget((Player)entity);
                     this.setCollidedPlayer(true);
                 }
@@ -705,8 +704,8 @@ public abstract class Enemy extends Character implements Lootable {
             //Gets the player with closest distance from the enemy and assigns to variable
             this.closestPlayer = playerHashMap.get(closestDistance);
             if (closestDistance <= 10 * this.level){
-                newPos.setX((2 * this.getPosX() - this.closestPlayer.getPosX()));
-                newPos.setY((2 * this.getPosY() - this.closestPlayer.getPosY()));
+                newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
+                newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
                 if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.85)){
                     this.setMovementSpeed((float) (this.defaultSpeed * 1.2));
                 } else if ((this.getHealthCur() < this.getHealthMax()*0.85) && (this.getHealthCur() > this.getHealthMax()*0.5)){
@@ -730,8 +729,6 @@ public abstract class Enemy extends Character implements Lootable {
                 newPos = this.getRandomPos();
             }
         }
-        //Set new position
-        //newPos = this.getToPlayerPos(closestPlayer);
         this.detectCollision();
         this.moveAction();
 

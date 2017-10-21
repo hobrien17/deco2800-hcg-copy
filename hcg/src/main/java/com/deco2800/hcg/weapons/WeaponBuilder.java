@@ -14,17 +14,17 @@ import com.deco2800.hcg.entities.AbstractEntity;
 public class WeaponBuilder {
     private WeaponType weaponType = null;
     private AbstractEntity user = null;
-    private float posX = 0;
-    private float posY = 0;
-    private float posZ = 0;
-    private float xLength = 1;
-    private float yLength = 1;
-    private float zLength = 1;
-    private double radius = 0;
+    private float posX = 0.0f;
+    private float posY = 0.0f;
+    private float posZ = 0.0f;
+    private float xLength = 1.0f;
+    private float yLength = 1.0f;
+    private float zLength = 1.0f;
+    private double radius = 0.0f;
     private String texture = "";
     private int cooldown = -1;
     private int pellets = -1;
-    private float arc = 0;
+    private float arc = 0.0f;
 
     /**
      * Initialises a new WeaponBuilder
@@ -154,8 +154,8 @@ public class WeaponBuilder {
     }
     
     /**
-     * Sets the pellets of the weapon builder
-     * @param pellets the pellet type to set it to
+     * Sets the arc of the weapon builder
+     * @param arc the arc to set it to
      * @return the weapon builder
      */
     public WeaponBuilder setArc(float arc) {
@@ -175,13 +175,14 @@ public class WeaponBuilder {
         if(weaponType == null || user == null) {
             return null;
         }
-        
-        if(radius == 0) {
-            radius = 0.1;
+
+        //Should not use equality on floating point numbers
+        if((int) (radius * 100) == 0) {
+            radius = 0.1f;
         }
         
         if(weaponType == WeaponType.MACHINEGUN) {
-            if(texture.equals("")) {
+            if("".equals(texture)) {
                 texture = "machinegun";
             }
             
@@ -192,7 +193,7 @@ public class WeaponBuilder {
             return new Machinegun(posX, posY, posZ, xLength, yLength, zLength,
                 weaponType, user, radius, texture, cooldown);
         } else if(weaponType == WeaponType.SHOTGUN) {
-            if(texture.equals("")) {
+            if("".equals(texture)) {
                 texture = "shotgun";
             }
             
@@ -207,7 +208,7 @@ public class WeaponBuilder {
             return new Shotgun(posX, posY, posZ, xLength, yLength, zLength,
                     weaponType, user, radius, texture, cooldown, pellets);
         } else if(weaponType == WeaponType.STARGUN) {
-            if(texture.equals("")) {
+            if("".equals(texture)) {
                 //TODO: Get proper texture
                 texture = "blank";
             }
@@ -223,7 +224,7 @@ public class WeaponBuilder {
             return new Stargun(posX, posY, posZ, xLength, yLength, zLength,
                     weaponType, user, radius, texture, cooldown, pellets);
         } else if(weaponType == WeaponType.MULTIGUN) {
-            if(texture.equals("")) {
+            if("".equals(texture)) {
                 texture = "multigun";
             }
             
@@ -235,8 +236,8 @@ public class WeaponBuilder {
                 pellets = 3;
             }
             
-            if(arc <= 0.5 || arc >= 2 * Math.PI) {
-                arc = (float) (Math.PI / 4f);
+            if(arc <= 0.5f || arc >= 2.0f * Math.PI) {
+                arc = (float) (Math.PI / 4.0f);
             }
             
             return new Multigun(posX, posY, posZ, xLength, yLength, zLength,

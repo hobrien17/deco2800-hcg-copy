@@ -241,7 +241,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable {
         float angle = (float) (Math.atan2(deltaY, deltaX)) +
                 (float) (Math.PI);
         
-        if(!texture.equals("blank")) {
+        if(!"blank".equals(texture)) {
         //Update texture for angle
             if(15 * Math.PI / 8 < angle || angle < Math.PI / 8) {
                 this.setTexture(texture + "_ne");

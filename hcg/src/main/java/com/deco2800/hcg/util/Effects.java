@@ -34,7 +34,6 @@ public class Effects {
     // TODO Store a copy of the original attributes of the owner (allows for temporary effects to take place)
     // Maybe initialise this to -1 or something? That way if there is more than one effect that modifies the
     // attribute, it won't overwrite the value.
-//    a private int originalSlow;
 
     /**
      * Creates a new Effects container to store a set of active effects.
@@ -257,7 +256,9 @@ public class Effects {
                     GameManager.get().getWorld().addEntity(corpse);
                 }
 			} else {
-                ((Enemy) owner).loot();
+			    if (owner instanceof Enemy) {
+                    ((Enemy) owner).loot();
+                }
             }
 			GameManager.get().getWorld().removeEntity(owner);
 			AbstractEntity creator = effect.getCreator();

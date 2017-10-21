@@ -18,7 +18,7 @@ public class Seed extends StackableItem {
 	 * Stores the many different types of seeds in the game *
 	 */
 	public enum Type {
-		SUNFLOWER("sunflower_seed", Sunflower.class, SunflowerTurret.class), 
+		SUNFLOWER("sunflower_seed", Sunflower.class, SunflowerTurret.class),
 		EXPLOSIVE("explosive_seed", Cactus.class, ExplosiveTurret.class), 
 		FIRE("fire_seed", Inferno.class, FireTurret.class), 
 		GRASS("grass_seed",	Grass.class, GrassTurret.class), 

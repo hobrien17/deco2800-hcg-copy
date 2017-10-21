@@ -1,7 +1,6 @@
 package com.deco2800.hcg.items;
 
 import com.deco2800.hcg.weapons.Weapon;
-import com.deco2800.hcg.weapons.WeaponType;
 
 /**
  * The WeaponItem class represents inventory items that have weapons
@@ -23,12 +22,7 @@ public class WeaponItem extends SingleItem {
         this.itemName = name;
         this.itemWeight = weight;
         this.baseValue = 10;
-       // WeaponType type = weapon.getWeaponType();
         this.texture = "red_potion";
-        //switch (type) {
-        //    case SHOTGUN:
-        //        this.texture = "red_potion";
-        //}
     }
     
     @Override

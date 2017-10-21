@@ -1,9 +1,9 @@
 package com.deco2800.hcg.contexts;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import java.util.List;
 import java.util.Arrays;
-
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -29,19 +29,7 @@ import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.RadialDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
 import com.deco2800.hcg.handlers.MouseHandler;
-import com.deco2800.hcg.managers.ContextManager;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.InputManager;
-import com.deco2800.hcg.managers.NetworkManager;
-import com.deco2800.hcg.managers.ParticleEffectManager;
-import com.deco2800.hcg.managers.PlantManager;
-import com.deco2800.hcg.managers.PlayerInputManager;
-import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.ShaderManager;
-import com.deco2800.hcg.managers.SoundManager;
-import com.deco2800.hcg.managers.TimeManager;
-import com.deco2800.hcg.managers.WeatherManager;
-import com.deco2800.hcg.managers.WorldManager;
+import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.LevelEndMessage;
 import com.deco2800.hcg.renderers.Render3DLights;
 import com.deco2800.hcg.renderers.Renderer;
@@ -64,7 +52,11 @@ public class PlayContext extends Context {
     private ShaderManager shaderManager;
     private PlantManager plantManager;
     private WorldManager worldManager;
+    private TextureManager textureManager;
 
+    private Table pauseMenu;
+
+    private boolean pauseMenuDisplayed;
 
     // FIXME mouseHandler is never assigned
     private MouseHandler mouseHandler;
@@ -101,7 +93,6 @@ public class PlayContext extends Context {
     private String[] seedItems;
     private String[] consumableItems;
 
-    private Window window;
     private Window plantWindow;
     private boolean exitDisplayed = false;
 
@@ -129,6 +120,7 @@ public class PlayContext extends Context {
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
+        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
         /* Setup the camera and move it to the center of the world */
         GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
@@ -158,6 +150,7 @@ public class PlayContext extends Context {
         seedRadialDisplay = new GeneralRadialDisplay(stage, seedList);
         consumableRadialDisplay = new GeneralRadialDisplay(stage, consumableList);
         createExitWindow();
+        createPauseWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
         plantWindow = new PlantWindow(plantSkin);
@@ -183,37 +176,6 @@ public class PlayContext extends Context {
         weaponRadialDisplay.hide();
         seedRadialDisplay.hide();
         consumableRadialDisplay.hide();
-
-        window = new Window("Menu", skin);
-
-        /* Add a quit button to the menu */
-        Button button = new TextButton("Quit", skin);
-        Button die = new TextButton("Force quit", skin);
-
-        /* Add a programmatic listener to the quit button */
-        button.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                playerManager.despawnPlayers();
-                contextManager.popContext();
-            }
-        });
-        
-        die.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.exit(0);
-            }
-        });
-
-        /* Add all buttons to the menu */
-        window.add(button);
-        window.add(die);
-        window.pack();
-        window.setMovable(false); // So it doesn't fly around the screen
-
-        /* Add the window to the stage */
-        stage.addActor(window);
 
         /*
          * Setup an Input Multiplexer so that input can be handled by both the UI and
@@ -272,6 +234,8 @@ public class PlayContext extends Context {
         
         /* reset input tick */
         playerInputManager.resetInputTick();
+
+        pauseMenuDisplayed = false;
     }
 
     /**
@@ -331,7 +295,6 @@ public class PlayContext extends Context {
         GameManager.get().getCamera().update();
 
         stage.getViewport().update(width, height, true);
-        window.setPosition(0, stage.getHeight());
         playerStatus.setPosition(30f, stage.getHeight()-200f);
         clockDisplay.setPosition(stage.getWidth()-220f, 20f);
         plantWindow.setPosition(stage.getWidth(), stage.getHeight());
@@ -394,6 +357,13 @@ public class PlayContext extends Context {
 
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
+
+        if (pauseMenuDisplayed) {
+            if (keycode == Input.Keys.ESCAPE) {
+                removePauseWindow();
+            }
+            return;
+        }
     	if(keycode == Input.Keys.U && potUnlock.isOpen()) {
     		potUnlock.close();
     	} else if(keycode == Input.Keys.U) {
@@ -424,6 +394,9 @@ public class PlayContext extends Context {
             chatStack.setVisible(!chatStack.isVisible());
         } else if ((keycode == Input.Keys.SPACE) && exitDisplayed) {
             exit();
+        } else if(keycode == Input.Keys.ESCAPE) {
+            playerManager.getPlayer().setPauseDisplayed(true);
+    	    addPauseWindow();
         }
 	}
 
@@ -473,16 +446,76 @@ public class PlayContext extends Context {
     }
 
     public void removeWeaponRadialMenu() {
-    	//weaponRadialDisplay.setVisible(false);
         weaponRadialDisplay.hide();
     }
 
     public void removeSeedRadialMenu() {
-    	//weaponRadialDisplay.setVisible(false);
         seedRadialDisplay.hide();
     }
 
     public void addParticleEffect(ParticleEffectActor actor) {
         stage.addActor(actor);
+    }
+
+    private void createPauseWindow() {
+        pauseMenu = new Table();
+        ImageButton quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
+        ImageButton instructions = new ImageButton(new Image(textureManager.getTexture("menu_instructions_button")).getDrawable());
+        ImageButton options = new ImageButton(new Image(textureManager.getTexture("menu_options_button")).getDrawable());
+        ImageButton back = new ImageButton(new Image(textureManager.getTexture("menu_back_button")).getDrawable());
+        ImageButton resume = new ImageButton(new Image(textureManager.getTexture("menu_resume_button")).getDrawable());
+        quit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.exit(0);
+            }
+        });
+        instructions.addListener(new ChangeListener() {
+           @Override
+           public void changed(ChangeEvent event, Actor actor) {
+               contextManager.pushContext(new InstructionsMenuContext());
+           }
+        });
+        resume.addListener(new ChangeListener() {
+           @Override
+           public void changed(ChangeEvent event, Actor actor) {
+               removePauseWindow();
+           }
+        });
+        back.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                removePauseWindow();
+                playerManager.despawnPlayers();
+                contextManager.popContext();
+            }
+        });
+        pauseMenu.add(resume);
+        pauseMenu.row();
+        pauseMenu.add(instructions);
+        pauseMenu.row();
+        pauseMenu.add(options);
+        pauseMenu.row();
+        pauseMenu.add(back);
+        pauseMenu.row();
+        pauseMenu.add(quit);
+        pauseMenu.setPosition(stage.getWidth()/2, stage.getHeight()/2);
+        pauseMenuDisplayed = true;
+    }
+
+    public void addPauseWindow() {
+        if (pauseMenu.getStage() == null){
+			/* Add the window to the stage */
+            stage.addActor(pauseMenu);
+            pauseMenuDisplayed = true;
+            soundManager.pauseWeatherSounds();
+        }
+    }
+
+    public void removePauseWindow() {
+        playerManager.getPlayer().setPauseDisplayed(false);
+        pauseMenu.remove();
+        pauseMenuDisplayed = false;
+        soundManager.unpauseWeatherSounds();
     }
 }

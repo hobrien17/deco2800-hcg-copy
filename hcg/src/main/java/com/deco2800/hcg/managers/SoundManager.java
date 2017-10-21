@@ -100,6 +100,13 @@ public class SoundManager extends Manager {
 			soundMap.put("shovelTrowel",
 					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/shovel_or_trowel.wav")));
 			soundMap.put("key", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/key.wav")));
+			
+			// Shop sounds
+			soundMap.put("loot1", 
+					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot.wav")));
+			soundMap.put("loot2", 
+					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot2.wav")));
+
 
 			// Loot
             soundMap.put("loot1", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot.wav")));
