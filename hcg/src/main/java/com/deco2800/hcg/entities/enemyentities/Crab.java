@@ -44,7 +44,7 @@ public class Crab extends Enemy implements Tickable {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("water_seed"), 1.0);
+        lootRarity.put(new LootWrapper("water_seed", 1.0f), 1.0);
 
         checkLootRarity();
     }

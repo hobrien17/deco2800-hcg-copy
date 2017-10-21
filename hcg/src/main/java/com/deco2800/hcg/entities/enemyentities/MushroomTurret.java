@@ -48,7 +48,7 @@ public class MushroomTurret extends Enemy implements Observer {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("fire_seed"), 1.0);
+        lootRarity.put(new LootWrapper("fire_seed", 1.0f), 1.0);
 
         checkLootRarity();
     }
