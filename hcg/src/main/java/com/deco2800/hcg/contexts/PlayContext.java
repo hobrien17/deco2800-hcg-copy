@@ -500,18 +500,6 @@ public class PlayContext extends Context {
         soundManager.unpauseWeatherSounds();
     }
 
-    public void removeConsumableRadialMenu() {
-        consumableRadialDisplay.remove();
-    }
-
-    public void removeWeaponRadialMenu() {
-        weaponRadialDisplay.hide();
-    }
-
-    public void removeSeedRadialMenu() {
-        seedRadialDisplay.hide();
-    }
-
     public void addParticleEffect(ParticleEffectActor actor) {
         stage.addActor(actor);
     }

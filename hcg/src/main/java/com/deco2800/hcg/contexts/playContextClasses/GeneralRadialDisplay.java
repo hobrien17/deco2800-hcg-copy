@@ -49,7 +49,6 @@ import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.weapons.Weapon;
 
-
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
     private TextureManager textureManager;
@@ -197,6 +196,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 				plant(new Seed(Seed.Type.SUNFLOWER));
+				hide();
             }
         });
 		
@@ -204,6 +204,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.WATER));
+				hide();
             }
         });
 		
@@ -211,6 +212,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.ICE));
+				hide();
             }
         });
 		
@@ -218,6 +220,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 				plant(new Seed(Seed.Type.FIRE));
+				hide();
             }
         });
 		
@@ -225,6 +228,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.EXPLOSIVE));
+				hide();
             }
         });
 		
@@ -232,6 +236,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.GRASS));
+				hide();
             }
         });
 
@@ -239,6 +244,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.BASIC);
+				hide();
 			}
 		});
 
@@ -246,6 +252,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.HOMING);
+				hide();
 			}
 		});
 
@@ -253,6 +260,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.ICE);
+				hide();
 			}
 		});
 
@@ -260,6 +268,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.FIRE);
+				hide();
 			}
 		});
 
@@ -267,6 +276,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.EXPLOSION);
+				hide();
 			}
 		});
 
@@ -274,6 +284,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.GRASS);
+				hide();
 			}
 		});
 
@@ -281,6 +292,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().setEquipped(0);
+				hide();
 			}
 		});
 
@@ -288,6 +300,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().setEquipped(1);
+				hide();
 			}
 		});
 
@@ -295,6 +308,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().setEquipped(2);
+				hide();
 			}
 		});
 
@@ -302,6 +316,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 			    playerManager.getPlayer().setEquipped(3);
+				hide();
 			}
 		});
 
@@ -309,6 +324,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new Fertiliser());
+				hide();
 			}
 		});
 
@@ -316,6 +332,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new BugSpray());
+				hide();
 			}
 		});
 
@@ -323,6 +340,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new HealthPotion(100));
+				hide();
 			}
 		});
 
@@ -330,6 +348,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new SpeedPotion());
+				hide();
 			}
 		});
 
@@ -337,6 +356,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new MagicMushroom());
+				hide();
 			}
 		});
 
@@ -344,6 +364,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new SmallMushroom());
+				hide();
 			}
 		});
 
@@ -351,13 +372,15 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				//useItem(new Hoe());
+				hide();
 			}
 		});
 
 		listeners.put("trowel", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//useItem(new Trowel());
+				//useItem(new Trowel ());
+				hide();
 			}
 		});
 
@@ -365,6 +388,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new SmallMushroom());
+				hide();
 			}
 		});
 
@@ -372,6 +396,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new SmallMushroom());
+				hide();
 			}
 		});
 	}
