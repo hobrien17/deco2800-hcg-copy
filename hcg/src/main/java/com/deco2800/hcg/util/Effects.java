@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
+import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.entities.Character;
@@ -247,11 +249,15 @@ public class Effects {
 				return;
 			}
 			Double prob = Math.random();
-			if (prob > 0.3) {
-				Corpse corpse = new BasicCorpse(owner.getPosX(),
-						owner.getPosY(), 0);
-				GameManager.get().getWorld().addEntity(corpse);
-			}
+			if (prob > 0.5) {
+			    if (owner instanceof Squirrel) {
+                    Corpse corpse = new BasicCorpse(owner.getPosX(),
+                            owner.getPosY(), 0);
+                    GameManager.get().getWorld().addEntity(corpse);
+                }
+			} else {
+                ((Enemy) owner).loot();
+            }
 			GameManager.get().getWorld().removeEntity(owner);
 			AbstractEntity creator = effect.getCreator();
 			if (creator != null && creator instanceof Character) {

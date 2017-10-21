@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.enemyentities;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
+import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.lootable.LootWrapper;
@@ -106,6 +107,7 @@ public abstract class Enemy extends Character implements Lootable {
 
         // Effects container
         myEffects = new Effects(this);
+        this.setupLoot();
     }
 
     /**
@@ -237,7 +239,9 @@ public abstract class Enemy extends Character implements Lootable {
 	}
     
     public void loot() {
-    	//TODO implement this
+    	Item drop = this.getLoot().get(0);
+        ItemEntity itemEntity = new ItemEntity(this.getPosX(), this.getPosY(), 0f, drop);
+        GameManager.get().getWorld().addEntity(itemEntity);
     }
 
     /**
