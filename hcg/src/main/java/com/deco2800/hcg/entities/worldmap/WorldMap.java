@@ -126,6 +126,15 @@ public class WorldMap {
 	}
 	
 	/**
+	 * Swaps out the nodes in this WorldMap to the ones specified in the parameter.
+	 * @param nodeList
+	 * 		The nodes to change to
+	 */
+	public void changeContainedNodes(List<MapNode> nodeList) {
+		containedNodes = nodeList;
+	}
+	
+	/**
 	 * Adds a new seed to the world or changes the current one.
 	 * @param seed
 	 *     The seed to change to
