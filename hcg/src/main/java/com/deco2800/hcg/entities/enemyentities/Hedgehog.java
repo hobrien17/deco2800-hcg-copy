@@ -6,7 +6,6 @@ import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Hedgehog extends Enemy implements Tickable {

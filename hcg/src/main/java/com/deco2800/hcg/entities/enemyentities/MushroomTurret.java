@@ -1,6 +1,6 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.badlogic.gdx.Game;
+
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
