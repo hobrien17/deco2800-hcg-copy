@@ -689,11 +689,11 @@ public class CharacterCreationContext extends CharacterContext{
     private void addSubtables() {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesWindow).top().left().expandX().fillX().padBottom(15);
-        masterTable.add(skillsWindow).top().right().expandX().fillX().padBottom(15);
+        masterTable.add(attributesWindow).top().left().expandX().fillX().expandY().fillY().pad(30);
+        masterTable.add(skillsWindow).top().right().expandX().fillX().expandY().fillY().pad(30);
         masterTable.row();
-        masterTable.add(statsWindow).top().left().expandX().fillX().fillY().padBottom(15);
-        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().padBottom(15);
+        masterTable.add(statsWindow).top().left().expandX().fillX().expandY().fillY().pad(30);
+        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().expandY().fillY().pad(30);
         masterTable.row();
         //masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
