@@ -105,20 +105,16 @@ public class QuestArchive {
     }
 
     private Boolean getItemReqCompleted() {
-        //Check if the inventory currently has enough items
+    	//TODO test this method
         Inventory inv = playerManager.getPlayer().getInventory();
-
-        //Todo get the names of required items
-
-        //Todo Check, if not true return false, else keep checking
-
-
-
-        inv.numberOf("");
-        //Todo check if the inventory has the items
-
-
+        
+        for(String item: quest.getItemRequirement().keySet()){
+        	if(!(inv.numberOf(item)>=quest.getItemRequirement().get(item))){
+        		return false;
+        	}
+        }
         return true;
+
     }
 
     public String getQuestTitle() {
