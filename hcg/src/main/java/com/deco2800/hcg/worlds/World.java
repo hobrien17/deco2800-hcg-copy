@@ -576,25 +576,32 @@ public class World {
     TextureManager textureManager = (TextureManager) 
         GameManager.get().getManager(TextureManager.class);
     
+    int shitname = -1;
+    
     String layerName;
     String texture;
+    String texture1 = null;
     
     switch(this.weather) {
       case RAIN:
         // lets make a rain puddle!
         layerName = "puddle";
         texture = "rainpuddle";
+        shitname = 1;
         break;
         
       case SNOW:
         // lets make an ice puddle!
         layerName = "icepuddle";
         texture = "icepuddle";
+        shitname = 1;
         break;
       case SANDSTORM:
     	  // lets make a sandstorm puddle
     	  layerName = "sandstormpuddle";
           texture = "sandstormpuddle";
+          texture1 = "sandstormpuddle1";
+          shitname = 2;
           break;
       default:
         return;
@@ -607,6 +614,8 @@ public class World {
     
     Random rand = new Random();
     int successes = -3 - rand.nextInt(2);
+    
+    Random randPuddleSelector = new Random();
 
     // checked tiles list. there will only be at most our number of tiles created * 10^2 of these
     List<String> tilesTaken = new ArrayList<String>((0 - successes) * 10 * 10);
@@ -665,9 +674,16 @@ public class World {
 
 			
 			// add tile
-			this.newTileAtPos((int) posX, (int) posY,
-					textureManager.getTexture(texture), (TiledMapTileLayer) this
-							.getMapLayerWithProperty("name", layerName));
+			if (randPuddleSelector.nextInt(shitname+1)==2){
+				this.newTileAtPos((int) posX, (int) posY,
+						textureManager.getTexture(texture1), (TiledMapTileLayer) this
+								.getMapLayerWithProperty("name", layerName));
+			} else {
+				this.newTileAtPos((int) posX, (int) posY,
+						textureManager.getTexture(texture), (TiledMapTileLayer) this
+								.getMapLayerWithProperty("name", layerName));
+			}
+			
 
 			// add to successful blocks created. If we've made enough then break
 			successes++;
