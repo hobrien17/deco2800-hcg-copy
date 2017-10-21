@@ -64,7 +64,7 @@ public class EnemyTest {
         assertThat("Basic Enemy only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
         assertThat("Loot rarity should only have sunflower seed", enemy.getRarity().size(), is(equalTo(1)));
         //assertThat("Loot rarity should only have sunflower seed", enemy.getRarity(), is(equalTo(expectedRarity)));
-        assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo(new LootWrapper("sunflower_seed"))));
+        assertThat("Item should be sunflower seed", enemy.randItem(), is(equalTo(new LootWrapper("sunflower_seed", 1.0f))));
     }
     
 //    @Test (expected = IllegalArgumentException.class)
