@@ -55,6 +55,11 @@ public class Shotgun extends Weapon implements Tickable {
                     (float) random.nextGaussian()); 
         }
         playFireSound();
+
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashSize = 4;
+        muzzleFlashStartTime = System.currentTimeMillis();
     }
     
 }

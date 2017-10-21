@@ -54,31 +54,33 @@ public class PlantManager extends Manager {
 	public void removePlants(AbstractGardenPlant plant) {
 		if (plantList.contains(plant)) {
 			plantList.remove(plant);
+			updateLabel();
 		}
+
 	}
 
-    /**
-     * Removes all plants in the plant manager
-     */
+	/**
+	 * Removes all plants in the plant manager
+	 */
 	public void removeAll() {
-	    plantList.clear();
-	    updateLabel();
-    }
+		plantList.clear();
+		updateLabel();
+	}
 
-    /**
-     * Returns all plants in the plant manager
-     * 
-     * @return a list of all plants
-     */
+	/**
+	 * Returns all plants in the plant manager
+	 * 
+	 * @return a list of all plants
+	 */
 	public ArrayList<AbstractGardenPlant> getPlants() {
-	    return plantList;
-    }
+		return plantList;
+	}
 
 	/**
 	 * Sets the window for the manager
-     *
-	 * @param plantWindow 
-	 * 			the window to set it to
+	 *
+	 * @param plantWindow
+	 *            the window to set it to
 	 */
 	public void setPlantWindow(Window plantWindow, Skin skin) {
 		this.plantWindow = plantWindow;
@@ -89,57 +91,52 @@ public class PlantManager extends Manager {
 	}
 
 	/**
-	 * Updates the labels in the plant manager UI 
+	 * Updates the labels in the plant manager UI
 	 */
 	public void updateLabel() {
-	    windowTable.clear();
-	    contents();
-		plantWindow.pack();
-		plantWindow.setPosition(6000,6000);
+		if (windowTable != null) {
+			windowTable.clear();
+			contents();
+			plantWindow.pack();
+			plantWindow.setPosition(6000, 6000);
+		}
 	}
 
-    /**
-     * Sets the visibility of the plantWindow
-     * 
-     * @param visible if window is set to visible
-     */
-	public void setWindowVisible(boolean visible){
-	    this.plantWindow.setVisible(visible);
-	    plantButton.setVisible(!visible);
-    }
+	/**
+	 * Sets the visibility of the plantWindow
+	 * 
+	 * @param visible
+	 *            if window is set to visible
+	 */
+	public void setWindowVisible(boolean visible) {
+		this.plantWindow.setVisible(visible);
+		plantButton.setVisible(!visible);
+	}
 
-    /**
-     * Sets plantButton
-     *
-     * @param button the plant window switch
-     */
-    public void setPlantButton(Button button) {
-	    plantButton = button;
-        plantButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                setWindowVisible(true);
-            }
-        });
-	    plantButton.setVisible(false);
-    }
-
-    /**
-     * Highlights the plant
-     *
-     * @param plant the plant to be highlighted
-     */
-    private void highLight(AbstractGardenPlant plant) {
-    	//TODO implement this
-    }
+	/**
+	 * Sets plantButton
+	 *
+	 * @param button
+	 *            the plant window switch
+	 */
+	public void setPlantButton(Button button) {
+		plantButton = button;
+		plantButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				setWindowVisible(true);
+			}
+		});
+		plantButton.setVisible(false);
+	}
 
 	/**
 	 * Retrieves plants from plantList
 	 */
 	private void contents() {
 		if (plantList.size() == 0) {
-		    Label nonPlant = new Label("No plants planted", skin);
-		    nonPlant.setColor(Color.GRAY);
+			Label nonPlant = new Label("No plants planted", skin);
+			nonPlant.setColor(Color.GRAY);
 			windowTable.add(nonPlant);
 		} else {
 			for (AbstractGardenPlant plant : plantList) {
@@ -153,29 +150,30 @@ public class PlantManager extends Manager {
 				}
 				UIupdate(plant, stage);
 			}
-        }
+		}
 	}
 
-    /**
-     * Update the UI
-     *
-     * @param plant The plant is going to be displayed
-     * @param stage The stage of this plant
-     */
-	private void UIupdate(AbstractGardenPlant plant, String stage){
-        StringBuilder currentRow = new StringBuilder();
-        Button button = new ImageButton(skin.getDrawable(plant.getName()));
-        Label plantName = new Label(plant.getName().toUpperCase(),skin);
-        windowTable.add();
-        windowTable.add(plantName);
-        windowTable.row();
-        windowTable.add(button);
-        currentRow.append("      Stage: ").append(stage).append("  \n")
-                .append("      X:").append((int) plant.getPot().getPosX()).append("   Y:")
-                .append((int) plant.getPot().getPosY());
-        Label info = new Label(currentRow, skin);
-        info.setColor(Color.BLUE);
-        windowTable.add(info);
-        windowTable.row();
-    }
+	/**
+	 * Update the UI
+	 *
+	 * @param plant
+	 *            The plant is going to be displayed
+	 * @param stage
+	 *            The stage of this plant
+	 */
+	private void UIupdate(AbstractGardenPlant plant, String stage) {
+		StringBuilder currentRow = new StringBuilder();
+		Button button = new ImageButton(skin.getDrawable(plant.getName()));
+		Label plantName = new Label(plant.getName().toUpperCase(), skin);
+		windowTable.add();
+		windowTable.add(plantName);
+		windowTable.row();
+		windowTable.add(button);
+		currentRow.append("      Stage: ").append(stage).append("  \n").append("      X:")
+				.append((int) plant.getPot().getPosX()).append("   Y:").append((int) plant.getPot().getPosY());
+		Label info = new Label(currentRow, skin);
+		info.setColor(Color.BLUE);
+		windowTable.add(info);
+		windowTable.row();
+	}
 }

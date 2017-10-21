@@ -109,7 +109,8 @@ public class TextureManager extends Manager {
 			textureMap.put("trowel_mid", new Texture("resources/sprites/gardentools/trowel_dirty.png"));
 			textureMap.put("trowel_broken", new Texture("resources/sprites/gardentools/trowel_dirty_2.png"));
 			textureMap.put("shovel", new Texture("resources/sprites/gardentools/shovel.png"));
-			textureMap.put("key", new Texture("resources/sprites/plants/key.png"));
+			textureMap.put("hoe", new Texture("resources/sprites/gardentools/hoe.png"));
+			textureMap.put("key_icon", new Texture("resources/sprites/plants/key.png"));
 
 			// Enemy textures
 			textureMap.put("antE", new Texture("resources/sprites/enemies/ant_E_1.png"));
@@ -305,11 +306,16 @@ public class TextureManager extends Manager {
 			textureMap.put("consumables", new Texture("resources/ui/radial_menu/consumables.png"));
 			textureMap.put("weapsLeft", new Texture("resources/ui/radial_menu/weapons_left.png"));
 			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapons_right.png"));
-			textureMap.put("grenadeLauncher", new Texture("resources/ui/radial_menu/grenade_launcher.png"));
 			textureMap.put("machineGun", new Texture("resources/ui/radial_menu/machine_gun.png"));
 			textureMap.put("shotgun", new Texture("resources/ui/radial_menu/shotgun.png"));
 			textureMap.put("starfall", new Texture("resources/ui/radial_menu/starfall.png"));
 			textureMap.put("healthPotion", new Texture("resources/ui/radial_menu/health_potion.png"));
+			textureMap.put("key", new Texture("resources/ui/radial_menu/key_button.png"));
+			textureMap.put("magicMushroom", new Texture("resources/ui/radial_menu/magicmushroom_button.png"));
+			textureMap.put("smallMushroom", new Texture("resources/ui/radial_menu/smallmushroom_button.png"));
+			textureMap.put("speedPotion", new Texture("resources/ui/radial_menu/speed_potion.png"));
+			textureMap.put("shovel", new Texture("resources/ui/radial_menu/shovel_button.png"));
+			textureMap.put("highlight", new Texture("resources/ui/radial_menu/highlight.png"));
 
 			//Perks
 			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));

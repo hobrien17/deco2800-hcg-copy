@@ -920,7 +920,7 @@ public class Player extends Character implements Tickable {
 		case Input.Keys.L:
 			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
 					Pot.class);
-			if (closest.isPresent()) {
+			if (closest.isPresent() && !((Pot)closest.get()).isEmpty()) {
 				Pot pot = (Pot) closest.get();
 				pot.getPlant().loot();
 			}
@@ -1131,7 +1131,6 @@ public class Player extends Character implements Tickable {
 	public boolean addItemToInventory(Item item) {
 		return inventory.addItem(item);
 	}
-
 	@Override
 	public Item getCurrentEquippedItem() {
 		return this.equippedItems.getCurrentEquippedItem();

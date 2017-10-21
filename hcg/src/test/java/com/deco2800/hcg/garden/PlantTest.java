@@ -40,8 +40,8 @@ public class PlantTest extends BaseTest {
     	manager.setPlantWindow(new PlantWindow(skin), skin);
     	manager.setPlantButton(new Button());
     			
-		Details[] arr = {new Details(Seed.Type.SUNFLOWER, Sunflower.class, "sunflower", 10),
-				new Details(Seed.Type.GRASS, Grass.class, "grass", 15)};
+		Details[] arr = {new Details(Seed.Type.SUNFLOWER, Sunflower.class, "sunflower", 600),
+				new Details(Seed.Type.GRASS, Grass.class, "grass", 900)};
 		details = Arrays.asList(arr);
 		
 		pot = new Pot(5, 5, 0);
