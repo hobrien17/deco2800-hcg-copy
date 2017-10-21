@@ -2,14 +2,10 @@ package com.deco2800.hcg.turrets;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.Bullet;
-import com.deco2800.hcg.entities.enemyentities.Enemy;
-import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 import com.deco2800.hcg.types.Weathers;
 

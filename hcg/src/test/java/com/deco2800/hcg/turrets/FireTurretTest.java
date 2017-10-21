@@ -2,18 +2,14 @@ package com.deco2800.hcg.turrets;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.bullets.Fireball;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.turrets.Explosion;
 import com.deco2800.hcg.entities.turrets.FireTurret;
-import com.deco2800.hcg.entities.turrets.SunflowerTurret;
 import com.deco2800.hcg.types.Weathers;
 
 public class FireTurretTest extends TurretBaseTest {
@@ -116,5 +112,18 @@ public class FireTurretTest extends TurretBaseTest {
 			}
 		}
 		fail("There should be an explosion during a sandstorm");
+	}
+	
+	@Test
+	public void testSandstormExplosion() {
+		setupWeather(Weathers.SANDSTORM);
+		Enemy closeEnemy = new Squirrel(6, 5, 0, 1);
+		world.addEntity(closeEnemy);
+		
+		for (int i = 1; i <= 6; i++) {
+			assertTrue("Close enemy should still be in world", world.containsEntity(closeEnemy));
+			turret.update(sw, i);
+		}
+		assertFalse("Close enemy should be destroyed", world.containsEntity(closeEnemy));
 	}
 }

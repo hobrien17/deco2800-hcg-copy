@@ -81,6 +81,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 		assertEquals("The explosion should be at the correct y position", 5, exp.getPosY(), 0);
 		assertEquals("The explosion should have the correct x-length", 0.01f, exp.getXRenderLength(), 0);
 		assertEquals("The explosion should have the correct y-length", 0.01f, exp.getYRenderLength(), 0);
+		assertEquals("The explosion should have rate of change of 0.4", 0.4f, exp.getRateOfChange(), 0);
 		exp.onTick(0);
 		assertEquals("The explosion should be at the correct x position", 6 - 0.4f, exp.getPosX(), 0);
 		assertEquals("The explosion should be at the correct y position", 5, exp.getPosY(), 0);
@@ -182,6 +183,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 			fail("There should be an explosion in the world");
 			return;
 		}
+		assertEquals("The explosion should have rate of change of 0.5", 0.5f, exp.getRateOfChange(), 0);
 		exp.onTick(0);
 		assertEquals("The explosion should be at the correct x position", 6 - 0.5f, exp.getPosX(), 0);
 		assertEquals("The explosion should be at the correct y position", 5, exp.getPosY(), 0);

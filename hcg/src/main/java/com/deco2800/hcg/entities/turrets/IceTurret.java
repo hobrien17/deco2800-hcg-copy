@@ -67,7 +67,6 @@ public class IceTurret extends AbstractTurret {
 			}
 			for(AbstractEntity entity : far) {
 				Enemy enemy = (Enemy)entity;
-				System.out.println(enemy.getMovementSpeed());
 				enemy.changeSpeed(0.5f);
 				enemy.setTint(Color.CYAN);
 			}

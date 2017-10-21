@@ -22,6 +22,7 @@ public class Hardcor3Gard3ning extends Game {
     private TextureManager textureManager;
     private TimeManager timeManager;
     private WeatherManager weatherManager;
+    private ParticleEffectManager particleManager;
 	private InputManager inputManager;
 	private PlantManager plantManager;
 	private ItemManager itemManager;
@@ -58,6 +59,9 @@ public class Hardcor3Gard3ning extends Game {
         /* Create a weather manager. */
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
 
+        /* Create a particle effect manager. */
+        particleManager = (ParticleEffectManager) gameManager.getManager(ParticleEffectManager.class);
+        
         /* Create an input manager. */
         inputManager = (InputManager) gameManager.getManager(InputManager.class);
         
@@ -110,7 +114,7 @@ public class Hardcor3Gard3ning extends Game {
      */
     @Override
     public void render() {
-        networkManager.tick(); // It's important that this is called before fireTicks()
+        networkManager.tick();
         fireTicks();
         clearScreen();
         super.render(); // Will render current context
@@ -139,7 +143,9 @@ public class Hardcor3Gard3ning extends Game {
      */
     private void fireTicks() {
         while (TimeUtils.millis() >= nextGameTick) {
-        	if (! contextManager.ticksRunning()) {
+        	if (networkManager.shouldBlock()) {
+        		return;
+        	} else if (!contextManager.ticksRunning()) {
         		// Schedule next tick
         		nextGameTick += gameTickPeriod;
         		return;

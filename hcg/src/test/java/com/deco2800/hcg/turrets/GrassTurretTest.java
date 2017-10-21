@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
-import com.deco2800.hcg.entities.turrets.FireTurret;
 import com.deco2800.hcg.entities.turrets.GrassTurret;
 import com.deco2800.hcg.types.Weathers;
 

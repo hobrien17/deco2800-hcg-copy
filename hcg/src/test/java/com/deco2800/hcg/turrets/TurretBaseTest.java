@@ -28,7 +28,7 @@ public class TurretBaseTest extends BaseTest {
 	AbstractTurret turret;
 	Corpse corpse;
 	Enemy enemy;
-	
+		
 	@BeforeClass
 	public static void setupWorld() {
 		gm = GameManager.get();
@@ -68,4 +68,6 @@ public class TurretBaseTest extends BaseTest {
 		}
 		world.setWeather(Weathers.NONE);
 	}
+		
+	
 }
