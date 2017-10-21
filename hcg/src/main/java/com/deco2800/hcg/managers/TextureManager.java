@@ -329,14 +329,27 @@ public class TextureManager extends Manager {
 			textureMap.put("player_normal_border", new Texture("resources/ui/player_status_hud/" +
 					"player_normal_border.png"));
 			textureMap.put("health_bar_pixel", new Texture("resources/ui/player_status_hud/health_bar_pixel.png"));
+
 			//Perks General
 			textureMap.put("perk_border_inactive", new Texture("resources/ui/perks/perk_border_inactive.png"));
 			textureMap.put("perk_border_maxed", new Texture("resources/ui/perks/perk_border_maxed.png"));
 			textureMap.put("path_separator", new Texture("resources/ui/perks/path_separator.png"));
 
 			//Perk Images
+			textureMap.put("I_am_groot", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Splinter_is_coming", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Full-Petal_Alchemist", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Guns_and_Roses", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Run_Fungus,_Run!", new Texture("resources/ui/perks/perk_place_holder.png"));
 			textureMap.put("Holly_Moley", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Kale-ra-te", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Thor-n", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("The_Fungal_Countdown", new Texture("resources/ui/perks/perk_place_holder.png"));
 			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Last_But_Not_Yeast", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Saving_Graves", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Fungicidal_Maniac", new Texture("resources/ui/perks/perk_place_holder.png"));
+
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
 			textureMap.put("buy_bag", new Texture("resources/ui/shop_ui/buy_bag.png"));
