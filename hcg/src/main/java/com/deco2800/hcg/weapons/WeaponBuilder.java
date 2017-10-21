@@ -175,8 +175,9 @@ public class WeaponBuilder {
         if(weaponType == null || user == null) {
             return null;
         }
-        
-        if(radius == 0.0f) {
+
+        //Should not use equality on floating point numbers
+        if((int) (radius * 100) == 0) {
             radius = 0.1f;
         }
         
