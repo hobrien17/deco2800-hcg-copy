@@ -1,7 +1,6 @@
 package com.deco2800.hcg.entities.garden_entities.plants;
 
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Plant;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;

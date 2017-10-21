@@ -14,8 +14,10 @@ import com.deco2800.hcg.worlds.World;
 public class WorldManager extends Manager {
 	
 	GameManager gameManager = GameManager.get();
-	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 	private ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
+	private PlayerInputManager playerInputManager =
+			(PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
 	
 	/**
 	 * The WorldStackGenerator instance.
@@ -79,6 +81,7 @@ public class WorldManager extends Manager {
         newWorld.generatePuddles();
 		gameManager.setWorld(newWorld);
 		playerManager.spawnPlayers();
+		playerInputManager.resetInputTick();
 		contextManager.pushContext(new PlayContext());
 	}
 	
@@ -101,8 +104,13 @@ public class WorldManager extends Manager {
             contextManager.popContext();
         }
         // clear old observers (mushroom turret for example)
-        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-        manager.deleteObservers();
+        World world = gameManager.getWorld();
+        if(world.equals(World.SAFEZONE)) {
+        	world.saveStopwatch();
+        } else {
+        	StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        	manager.deleteObservers();
+        }
         
         ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();
 

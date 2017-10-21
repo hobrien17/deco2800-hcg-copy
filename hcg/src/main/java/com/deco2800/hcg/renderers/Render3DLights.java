@@ -88,6 +88,9 @@ public class Render3DLights implements Renderer {
 
             String textureString = entity.getTexture();
             Texture tex = reg.getTexture(textureString);
+            if (tex == null) {
+            	continue;
+            }
 
             float cartX = entity.getPosX();
             float cartY = (worldWidth - 1) - entity.getPosY();

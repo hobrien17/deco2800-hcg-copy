@@ -30,7 +30,6 @@ import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
 import com.deco2800.hcg.contexts.playContextClasses.PlayerStatusDisplay;
 import com.deco2800.hcg.contexts.playContextClasses.PotUnlockDisplay;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.contexts.playContextClasses.GeneralRadialDisplay;
 import com.deco2800.hcg.handlers.MouseHandler;
@@ -461,28 +460,6 @@ public class PlayContext extends Context {
     }
 
 	private void exit() {
-		if(gameManager.getCurrentNode().getNodeType() != 3) {
-            gameManager.getCurrentNode().changeNodeType(2);
-            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
-            contextManager.popContext();
-        } else {
-            gameManager.getCurrentNode().changeNodeType(2);
-            gameManager.getMapContext().updateMapDisplay(gameManager.getWorldMap());
-            gameManager.getMapContext().addEndOfContext();
-            contextManager.popContext();
-        }
-        exitDisplayed = false;
-        // clear old observers (mushroom turret for example)
-        World world = gameManager.getWorld();
-        if(world.equals(World.SAFEZONE)) {
-        	world.saveStopwatch();
-        } else {
-        	StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-        	manager.deleteObservers();
-        }
-        
-        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();;
-
     	if (networkManager.isMultiplayerGame()) {
 		networkManager.queueMessage(new LevelEndMessage(0));
     	}

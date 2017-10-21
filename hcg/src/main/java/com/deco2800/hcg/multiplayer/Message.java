@@ -16,15 +16,9 @@ public class Message {
 	
 	private static int sequenceNumber = 0;
 	
+	protected SocketAddress address;
 	private int id;
 	private MessageType type;
-	
-	/**
-	 * Constructs an empty message
-	 */
-	public Message() {
-		//deliberately empty
-	}
 	
 	/**
 	 * Constructs a new message with the specified type
@@ -33,6 +27,14 @@ public class Message {
 	Message(MessageType type) {
 		this.id = sequenceNumber++;
 		this.type = type;
+	}
+	
+	/**
+	 * Constructs a message
+	 * @param address The address from which the message was received
+	 */
+	Message(SocketAddress address) {
+		this.address = address;
 	}
 	
 	/**
@@ -72,10 +74,9 @@ public class Message {
 	
 	/**
 	 * Processes the received information
-	 * @param address The address from which the message was received
 	 * @require <code>unpackData</code> must have been called first
 	 */
-	public void process(SocketAddress address) {
+	public void process() {
 		// Do nothing
 	}
 	

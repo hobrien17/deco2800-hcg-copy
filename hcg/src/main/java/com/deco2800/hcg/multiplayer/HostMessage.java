@@ -18,13 +18,13 @@ public class HostMessage extends Message {
 	
 	private String lobbyName;
 	
-	public HostMessage() {
-		// Default constructor
-	}
-	
 	public HostMessage(String lobbyName) {
 		super(MessageType.HOST);
 		this.lobbyName = lobbyName;
+	}
+	
+	public HostMessage(SocketAddress address) {
+		super(address);
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class HostMessage extends Message {
 	}
 	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		// add server to list
 		networkManager.serverFound(lobbyName, ((InetSocketAddress) address).getHostString());
 	}
