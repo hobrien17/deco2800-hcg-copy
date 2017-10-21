@@ -24,6 +24,7 @@ public class HealthPotion extends ConsumableItem {
         this.currentStackSize = 1;
         this.maxStackSize = 10;
     }
+
     @Override
     public void consume(Character character) {
         //TODO: Update character health

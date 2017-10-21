@@ -39,20 +39,20 @@ public class TutorialWorld extends WorldMap {
 		nodeList = createMappings(tutorialLevels);
 		changeContainedNodes(nodeList);
 	}
-	
+
 	private List<MapNode> createMappings(ArrayList<Level> list) {
 		ArrayList<MapNode> nodeList = new ArrayList<MapNode>();
-		MapNode initialNode = new MapNode(0, 5, 1, list.get(0), true);
+		MapNode initialNode = new MapNode(0, 1, 1, list.get(0), true);
 		nodeList.add(initialNode);
 		for(int i = 1; i < 10; i++) {
 			if(i == 3 || i == 8) {
-				MapNode nodeToAdd = new MapNode(i, 5, 0, list.get(i), false);
+				MapNode nodeToAdd = new MapNode(i, 1, 0, list.get(i), false);
 				nodeList.add(nodeToAdd);
 			} else if(i == 9) {
-				MapNode nodeToAdd = new MapNode(i, 5, 3, list.get(i), false);
+				MapNode nodeToAdd = new MapNode(i, 1, 3, list.get(i), false);
 				nodeList.add(nodeToAdd);
 			} else {
-				MapNode nodeToAdd = new MapNode(i, 5, 1, list.get(i), false);
+				MapNode nodeToAdd = new MapNode(i, 1, 1, list.get(i), false);
 				nodeList.add(nodeToAdd);
 			}
 		}
