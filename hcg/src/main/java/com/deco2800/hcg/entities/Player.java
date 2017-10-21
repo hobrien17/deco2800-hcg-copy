@@ -34,6 +34,7 @@ import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
@@ -87,7 +88,7 @@ public class Player extends Character implements Tickable {
 	private String displayImage;
 
 	private boolean pauseDisplayed;
-
+	private int perkPoints;
 
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
@@ -144,6 +145,7 @@ public class Player extends Character implements Tickable {
 		}
 		//Set up perks
 		perks = new ArrayList<>();
+		this.perkPoints = 0;
 		for (Perk.perk enumPerk : Perk.perk.values()) {
 			perks.add(new Perk(enumPerk));
 		}
@@ -211,6 +213,9 @@ public class Player extends Character implements Tickable {
 		inventory.addItem(new Key());
 		inventory.addItem(new Key());
 		inventory.addItem(new SpeedPotion());
+		inventory.addItem(new Seed(Seed.Type.FIRE));
+		inventory.addItem(new Seed(Seed.Type.ICE));
+		inventory.addItem(new Seed(Seed.Type.ICE));
 	}
 
 	/**
@@ -243,6 +248,22 @@ public class Player extends Character implements Tickable {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 *
+	 * @return the number of points avaliable for spending in perks
+	 */
+	public int getPerkPoints() {
+		return perkPoints;
+	}
+
+	/**
+	 *
+	 * @param value is the number of points avaliable for perks
+	 */
+	public void setPerkPoints(int value) {
+		this.perkPoints = value;
 	}
 
 	/**
@@ -789,6 +810,7 @@ public class Player extends Character implements Tickable {
 		if (xp >= xpThreshold) {
 			// TODO: You have levelled up pop up
 			levelUp = true;
+			levelUp();
 		}
 	}
 
@@ -797,8 +819,10 @@ public class Player extends Character implements Tickable {
 	 * health and stamina based on player agility and vitality
 	 */
 	private void levelUp() {
+		xp -= xpThreshold;
 		xpThreshold *= 1.5;
-		level++;
+		this.level = level +1;
+		this.perkPoints = perkPoints +1;
 
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");

@@ -43,7 +43,7 @@ public class TurretBaseTest extends BaseTest {
 		corpse = new BasicCorpse(5, 5, 0);
 		world.addEntity(corpse);
 		
-		enemy = new Squirrel(7, 5, 0, 0);
+		enemy = new Squirrel(3, 5, 0, 0);
 		world.addEntity(enemy);
 	}
 	

@@ -94,7 +94,7 @@ public class IceBullet extends Bullet {
 	 */
 	public IceBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
 			float yLength, float zLength, AbstractEntity user, int hitCount) {
-		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount);
+		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, 0.5f);
 		this.setTexture("battle_seed_blue");
 		this.bulletType = BulletType.ICE;
 	}
