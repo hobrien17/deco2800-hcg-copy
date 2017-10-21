@@ -34,6 +34,7 @@ import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
@@ -211,6 +212,9 @@ public class Player extends Character implements Tickable {
 		inventory.addItem(new Key());
 		inventory.addItem(new Key());
 		inventory.addItem(new SpeedPotion());
+		inventory.addItem(new Seed(Seed.Type.FIRE));
+		inventory.addItem(new Seed(Seed.Type.GRASS));
+		inventory.addItem(new Seed(Seed.Type.EXPLOSIVE));
 	}
 
 	/**

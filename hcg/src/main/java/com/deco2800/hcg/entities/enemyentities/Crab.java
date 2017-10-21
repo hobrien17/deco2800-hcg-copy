@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.bullets.ExplosionBullet;
@@ -15,7 +14,6 @@ import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Crab extends Enemy implements Tickable {
 
@@ -58,7 +56,7 @@ public class Crab extends Enemy implements Tickable {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("water_seed"), 1.0);
+        lootRarity.put(new LootWrapper("water_seed", 1.0f), 1.0);
 
         checkLootRarity();
     }

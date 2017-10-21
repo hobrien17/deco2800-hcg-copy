@@ -42,7 +42,7 @@ public class Snail extends Enemy implements Tickable {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("grass_seed"), 1.0);
+        lootRarity.put(new LootWrapper("grass_seed", 1.0f), 1.0);
 
         checkLootRarity();
     }

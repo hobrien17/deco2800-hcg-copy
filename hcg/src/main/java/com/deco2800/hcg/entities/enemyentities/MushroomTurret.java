@@ -1,5 +1,6 @@
 package com.deco2800.hcg.entities.enemyentities;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
@@ -47,7 +48,7 @@ public class MushroomTurret extends Enemy implements Observer {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("fire_seed"), 1.0);
+        lootRarity.put(new LootWrapper("fire_seed", 1.0f), 1.0);
 
         checkLootRarity();
     }
@@ -57,6 +58,13 @@ public class MushroomTurret extends Enemy implements Observer {
      */
     public void removeObserver() {
         manager.deleteObserver(this);
+    }
+
+    /**
+     * Removes the enemy Weapon.
+     */
+    public void removeWeapon() {
+        GameManager.get().getWorld().removeEntity(this.enemyWeapon);
     }
 
     /**

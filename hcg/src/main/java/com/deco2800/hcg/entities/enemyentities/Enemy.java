@@ -59,6 +59,8 @@ public abstract class Enemy extends Character implements Lootable {
 
     protected Box3D prevPos;
     protected Weapon enemyWeapon;
+    
+    protected int spriteCount;
 
     /**
      * Creates a new enemy at the given position
@@ -104,6 +106,7 @@ public abstract class Enemy extends Character implements Lootable {
         this.newPos = getBox3D();
         this.prevPos = getBox3D();
         this.target = null;
+        this.spriteCount = 0;
 
         // Effects container
         myEffects = new Effects(this);
@@ -338,30 +341,7 @@ public abstract class Enemy extends Character implements Lootable {
      */
     public void detectPlayers() {
         if (this.getNumberPlayers() > 1) {
-            List<Player> players;
-            HashMap<Float, Player> playerHashMap = new HashMap<Float, Player>();
-            int playerCount = 0;
-            float[] distances = new float[numPlayers];
-            float closestDistance;
-            players = playerManager.getPlayers();
-            //Iterates through all players and puts distance from enemy to each player into an array
-            //Puts all players and their respective distances into a hash map
-            for (Player player : players) {
-                distances[playerCount] = this.distance(player);
-                playerHashMap.put(distances[playerCount], player);
-                playerCount++;
-            }
-
-            //Finds the smallest distance in the distance array
-            closestDistance = distances[0];
-            for (int j = 0; j < distances.length; j++) {
-                if (distances[j] < closestDistance) {
-                    closestDistance = distances[j];
-                }
-            }
-
-            //Gets the player with closest distance from the enemy and assigns to variable
-            this.closestPlayer = playerHashMap.get(closestDistance);
+            float closestDistance = findClosestPlayer();
 
             //Following is a modification of detectPlayer
             if (closestDistance <= 5 * this.level) {
@@ -626,12 +606,42 @@ public abstract class Enemy extends Character implements Lootable {
         enemyWeapon.openFire();
     }
 
-    protected void updateTexture(String texture) {
+    /**
+     * Update the texture based on the current texture of the sprite
+     * @param texture: the base texture
+     */
+    private void updateTexture(String texture) {
         if (this.getTexture() == texture) {
             this.setTexture(texture + "2");
         } else {
             this.setTexture(texture);
         }
+    }
+    
+    /**
+     * Update the sprites based on the direction
+     * @param directionTextures: the list of the sprite textures
+     */
+    protected void updateSprite(String[] directionTextures) {
+        if (spriteCount % 4 == 0) {
+            switch (this.direction) {
+                case 1:
+                    updateTexture(directionTextures[0]);
+                    break;
+                case 2:
+                    updateTexture(directionTextures[1]);
+                    break;
+                case 3:
+                    updateTexture(directionTextures[2]);
+                    break;
+                case 4:
+                    updateTexture(directionTextures[3]);
+                    break;
+                default:
+                    break;
+            }
+        }
+        spriteCount++;
     }
 
     /**

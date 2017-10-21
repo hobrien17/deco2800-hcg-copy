@@ -11,6 +11,7 @@ import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
+import com.deco2800.hcg.entities.terrain_entities.TerrainEntity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -18,6 +19,7 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.worlds.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector3;
@@ -185,7 +187,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
-		if (distanceTravelled >= 100) {
+		if (distanceTravelled >= 100 || outOfBounds()) {
 			GameManager.get().getWorld().removeEntity(this);
 		}
 	}
@@ -211,6 +213,10 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				if (target instanceof MushroomTurret) {
 					MushroomTurret turret = (MushroomTurret) target;
 					turret.removeObserver();
+					turret.removeWeapon();
+					if (user instanceof Player) {
+						((Player) user).killLogAdd(target.getEnemyType());
+					}
 					GameManager.get().getWorld().removeEntity(turret);
 
 				} else if (target.getHealthCur() <= 0) {
@@ -234,6 +240,13 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				applyEffect(tree);
 				hitCount--;
 			}
+			
+            // Collision with terrain entity
+            if (entity instanceof TerrainEntity && user instanceof Player
+                    && !(this instanceof GrassBullet)) {
+                spawnParticles(entity, "hitPuff.p");
+                hitCount--;
+            }
 
 			// Collision with player
 			if (entity instanceof Player && user instanceof Enemy) {
@@ -294,6 +307,13 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
     @Override
     public float getLightPower() {
         return 3;
+    }
+    
+    protected boolean outOfBounds() {
+    	World world = GameManager.get().getWorld();
+    	return false;
+    	//return this.getPosX() <= changeX + 1 || this.getPosX() >= world.getWidth() - changeX - 1 || 
+    	//		this.getPosY() <= changeY + 1 || this.getPosY() >= world.getLength() - changeY - 1;
     }
 	
 	protected void spawnParticles(AbstractEntity entity, String particleFile) {

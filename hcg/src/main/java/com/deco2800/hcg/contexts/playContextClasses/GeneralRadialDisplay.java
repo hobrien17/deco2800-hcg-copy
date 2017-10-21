@@ -528,10 +528,10 @@ public class GeneralRadialDisplay extends Group {
 			String type = items.get(i);
 			int count = -1;
 			if(type.equals("sunflower") || type.equals("water") || type.equals("cactus") || type.equals("ice") || 
-					type.equals("fire") || type.equals("explosive")) {
+					type.equals("fire") || type.equals("explosive") || type.equals("grass")) {
 				count = getCount(type + "_seed");
 			} else if(type.equals("sunflowerC") || type.equals("waterC") || type.equals("cactusC") || type.equals("iceC") || 
-					type.equals("fireC") || type.equals("explosiveC")) {
+					type.equals("fireC") || type.equals("explosiveC") || type.equals("grassC")) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
 			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("shotgun"));
 			else if(type.equals("health_potion")) {
