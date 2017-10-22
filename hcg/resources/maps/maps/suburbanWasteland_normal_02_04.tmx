@@ -200,6 +200,7 @@
     <property name="fName" value="Steve"/>
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="Woolworth"/>
+    <property name="texture" value="character_1"/>
    </properties>
   </object>
  </objectgroup>
