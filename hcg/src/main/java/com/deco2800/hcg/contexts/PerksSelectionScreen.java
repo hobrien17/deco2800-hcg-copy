@@ -148,7 +148,7 @@ public class PerksSelectionScreen extends UIContext {
 
         //Druid
         ArrayList<Enum> druidPerks =  new ArrayList<>(Arrays.asList(Perk.perk.I_AM_GROOT, Perk.perk.SPLINTER_IS_COMING,
-                Perk.perk.FULL_PETAL_ALCHEMIST, Perk.perk.GUNS_AND_ROSES));
+                Perk.perk.FULL_PETAL_ALCHEMIST));
 
         for (int i = 0; i < druidPerks.size(); i++) {
             //creating perk
@@ -156,14 +156,14 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                     branch1.getHeight()*(float)(3-i)/4f - drawablePerk.getPerkDisplay().getHeight());
+                     branch1.getHeight()*(float)(2.5 - i)/4f - drawablePerk.getPerkDisplay().getHeight());
             //adding perk to display
             branch1.addActor(drawablePerk.getPerkDisplay());
         }
 
         //Survivalist
         ArrayList<Enum> survivalPerks =  new ArrayList<>(Arrays.asList(Perk.perk.RUN_FUNGUS_RUN, Perk.perk.HOLLY_MOLEY,
-                Perk.perk.KALERATE, Perk.perk.THORN, Perk.perk.THE_FUNGAL_COUNTDOWN));
+                Perk.perk.KALERATE, Perk.perk.THORN));
 
         for (int i = 0; i < survivalPerks.size(); i++) {
             //creating perk
@@ -171,14 +171,14 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                    branch1.getHeight()*(float)(3-0.75*i)/4f- drawablePerk.getPerkDisplay().getHeight());
+                    branch1.getHeight()*(float)(2.5 - 0.655 * (float)i)/4f - drawablePerk.getPerkDisplay().getHeight());
             //adding perk to display
             branch2.addActor(drawablePerk.getPerkDisplay());
         }
 
         //Fungal Fanatic
         ArrayList<Enum> fungalPerks =  new ArrayList<>(Arrays.asList(Perk.perk.BRAMBLE_AM, Perk.perk.BUT_NOT_YEAST,
-                Perk.perk.SAVING_GRAVES, Perk.perk.FUNGICIDAL_MANIAC));
+                Perk.perk.SAVING_GRAVES));
 
         for (int i = 0; i < fungalPerks.size(); i++) {
             //creating perk
@@ -186,7 +186,7 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                    branch1.getHeight()*(float)(3-i)/4f- drawablePerk.getPerkDisplay().getHeight());
+                    branch1.getHeight()*(float)(2.5-i)/4f - drawablePerk.getPerkDisplay().getHeight());
             //adding perk to display
             branch3.addActor(drawablePerk.getPerkDisplay());
         }

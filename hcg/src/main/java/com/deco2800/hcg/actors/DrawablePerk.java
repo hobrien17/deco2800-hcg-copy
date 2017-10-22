@@ -89,8 +89,8 @@ public class DrawablePerk {
                 if (perk.isAvaliable(player)) {
                     if(perk.getCurrentLevel() > 0) {
                         player.setPerkPoints(player.getPerkPoints() + 1);
+                        perk.setCurrentLevel(perk.getCurrentLevel() - 1);
                     }
-                    perk.setCurrentLevel(perk.getCurrentLevel() - 1);
                     perksSelectionScreen.update();
                 }
             }
