@@ -80,7 +80,6 @@ public class FixedSizeInventory implements Inventory {
 		}
 		return true;
 	}
-    
 
     @Override
     public boolean removeItem(Item item, int number) {
@@ -107,6 +106,29 @@ public class FixedSizeInventory implements Inventory {
 			}
 		}
 		return true;
+    }
+
+    @Override
+    public boolean removeItem(String item, int number) {
+        int toRemove = number;
+        for (int i = 0; i < this.getMaxSize(); i++) {
+            Item currentItem = this.items[i];
+            if (currentItem != null && currentItem.getName().toLowerCase().equals(item.toLowerCase())) {
+                if (toRemove >= currentItem.getStackSize()) {
+                    toRemove -= currentItem.getStackSize();
+                    this.removeItem(i);
+                } else {
+                    currentItem.setStackSize(
+                            currentItem.getStackSize() - toRemove);
+                    toRemove = 0;
+                }
+            }
+
+            if (toRemove <= 0) {
+                break;
+            }
+        }
+        return (toRemove <= 0);
     }
     
     @Override

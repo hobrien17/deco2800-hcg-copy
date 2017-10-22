@@ -69,6 +69,13 @@ public class QuestArchive {
                 }
             }
         }
+
+        //Remove required items if needed
+        if (quest.getItemRequirement().size() > 0) {
+            for (Map.Entry<String,Integer> itemReq: quest.getItemRequirement().entrySet()) {
+                playerInventory.removeItem(itemReq.getKey().replace("_", " "),itemReq.getValue());
+            }
+        }
     }
 
     public NPC getQuestGiver() {
