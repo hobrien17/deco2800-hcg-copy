@@ -114,13 +114,8 @@ public class QuestArchive {
         return quest.getTitle();
     }
 
-    public void update() {
 
+    public HashMap<EnemyType, Integer> getInitalKillLog() {
+        return initalKillLog;
     }
-
-
-
-
-
-
 }
