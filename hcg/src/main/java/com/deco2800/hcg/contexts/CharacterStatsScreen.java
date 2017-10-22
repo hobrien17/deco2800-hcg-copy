@@ -15,6 +15,7 @@ abstract class CharacterStatsScreen extends CharacterContext {
     Window skillsWindow;
     private Window statsWindow;
     private Window perksWindow;
+    private Window memeWindow;
 
     int machineGunSkill;
     int shotGunSkill;
@@ -26,8 +27,7 @@ abstract class CharacterStatsScreen extends CharacterContext {
     Label starGunSkillLabel;
     Label multiGunSkillLabel;
 
-
-    TextButton backButton;
+    ImageButton close;
 
     CharacterStatsScreen() {
         getManagers();
@@ -37,6 +37,7 @@ abstract class CharacterStatsScreen extends CharacterContext {
         setupAttributesWindow();
         setupSkillsWindow();
         setupStatsWindow();
+        setupMemeWindow();
         addSubtables();
     }
 
@@ -46,12 +47,14 @@ abstract class CharacterStatsScreen extends CharacterContext {
         skillsWindow = new Window("Skills", skin);
         statsWindow = new Window("Stats", skin);
         perksWindow = new Window("Perks", skin);
+        memeWindow = new Window("To-do list", skin);
 
         Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
         attributesWindow.setBackground(new Image(backgroundTexture).getDrawable());
         skillsWindow.setBackground(new Image(backgroundTexture).getDrawable());
         statsWindow.setBackground(new Image(backgroundTexture).getDrawable());
         perksWindow.setBackground(new Image(backgroundTexture).getDrawable());
+        memeWindow.setBackground(new Image(backgroundTexture).getDrawable());
     }
 
     private void setupTopRowInfo() {
@@ -59,15 +62,16 @@ abstract class CharacterStatsScreen extends CharacterContext {
         int currentXp = playerManager.getPlayer().getXp();
         int xpThreshold = playerManager.getPlayer().getXpThreshold();
 
-        backButton = new TextButton("Back", skin);
+        close = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
+
         Label levelLabel = new Label("Level: " + level, skin);
         Label xpLabel = new Label("Xp: " + currentXp + "/" + xpThreshold, skin);
 
-        topRowInfoTable.add(backButton).left().expandX();
+        topRowInfoTable.add(close).left().expandX();
         topRowInfoTable.add(levelLabel).right().padRight(10);
         topRowInfoTable.add(xpLabel).right();
 
-        backButton.addListener(new ChangeListener() {
+        close.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 contextManager.popContext();
@@ -135,6 +139,15 @@ abstract class CharacterStatsScreen extends CharacterContext {
         statsWindow.row();
     }
 
+    private void setupMemeWindow() {
+        CheckBox getSnags = new CheckBox("Grab some snags", skin);
+        CheckBox saveTheWorld = new CheckBox("Save the world", skin);
+
+        memeWindow.add(getSnags);
+        memeWindow.row();
+        memeWindow.add(saveTheWorld);
+    }
+
     private  void addSubtables() {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
@@ -142,6 +155,7 @@ abstract class CharacterStatsScreen extends CharacterContext {
         masterTable.add(skillsWindow).top().right().expandX().expandY().fillX().fillY().padBottom(15);
         masterTable.row();
         masterTable.add(statsWindow).top().left().expandX().expandY().fillX().fillY();
+        masterTable.add(memeWindow).top().right().expandX().expandY().fillX().fillY();
     }
 
 }
