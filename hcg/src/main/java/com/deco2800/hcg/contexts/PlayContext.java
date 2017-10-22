@@ -3,7 +3,11 @@ package com.deco2800.hcg.contexts;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -14,16 +18,12 @@ import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.contexts.playContextClasses.*;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.handlers.MouseHandler;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.LevelEndMessage;
@@ -52,9 +52,18 @@ public class PlayContext extends Context {
     private TextureManager textureManager;
 
     private Table pauseMenu;
-
+    
+    private Table scoreBoard;
+    private List<Window> playerWindows;
+    private List<Window> rankWindows;
+    private Window playersWindow;
+    protected Table topRowInfoTable;
+    protected Skin skinBoard = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+    protected Window rankBoard;
+    private Window ranksWindow;
+    
     private boolean pauseMenuDisplayed;
-
+    private boolean scoreBoardDisplay;
     // FIXME mouseHandler is never assigned
     private MouseHandler mouseHandler;
 
@@ -63,7 +72,8 @@ public class PlayContext extends Context {
 
     // Is the game paused?
     private boolean unpaused = true;
-
+    
+ 
     /**
      * Set the renderer. 3D is for Isometric worlds 2D is for Side Scrolling worlds
      * Check the documentation for each renderer to see how it handles WorldEntity
@@ -99,6 +109,8 @@ public class PlayContext extends Context {
     private Stage stage;
     private Skin skin;
     private Skin plantSkin;
+    
+    
 
     /**
      * Create the PlayContext
@@ -151,6 +163,7 @@ public class PlayContext extends Context {
         consumableRadialDisplay = new GeneralRadialDisplay(stage, consumableList);
         plantRadialDisplay = new GeneralRadialDisplay(stage, plantList);
         createExitWindow();
+        createScoreBoard();
         createPauseWindow();
         clockDisplay = new ClockDisplay();
         playerStatus = new PlayerStatusDisplay();
@@ -315,7 +328,11 @@ public class PlayContext extends Context {
         consumableRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         plantRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
     }
-
+    
+    
+    
+    
+    
     /**
      * Disposes of assets etc when the rendering system is stopped.
      */
@@ -362,7 +379,8 @@ public class PlayContext extends Context {
     public boolean ticksRunning() {
         return unpaused;
     }
-
+    
+    
     // Handle switching to World Map by pressing "m" or opening the radial display
     private void handleKeyDown(int keycode) {
 
@@ -372,6 +390,13 @@ public class PlayContext extends Context {
             }
             return;
         }
+//        if (scoreBoardDisplay) {
+//            if (keycode == Input.Keys.TAB) {
+//                removeScoreBoard();
+//            }
+//            return;
+//        }
+        
     	if(keycode == Input.Keys.U && potUnlock.isOpen()) {
     		potUnlock.close();
     	} else if(keycode == Input.Keys.U) {
@@ -407,6 +432,8 @@ public class PlayContext extends Context {
         } else if(keycode == Input.Keys.ESCAPE) {
             playerManager.getPlayer().setPauseDisplayed(true);
     	    addPauseWindow();
+        } else if (keycode == Input.Keys.TAB) {
+        	addScoreBoard();
         }
 	}
 
@@ -419,6 +446,8 @@ public class PlayContext extends Context {
             consumableRadialDisplay.hide();
         } else if(keycode == Input.Keys.G) {
             plantRadialDisplay.hide();
+        } else if (keycode == Input.Keys.TAB) {
+        	removeScoreBoard();
         }
     }
 
@@ -466,7 +495,9 @@ public class PlayContext extends Context {
     public void addParticleEffect(ParticleEffectActor actor) {
         stage.addActor(actor);
     }
-
+    
+    
+    
     private void createPauseWindow() {
         pauseMenu = new Table();
         ImageButton quit = new ImageButton(new Image(textureManager.getTexture("menu_quit_button")).getDrawable());
@@ -512,7 +543,7 @@ public class PlayContext extends Context {
         pauseMenu.setPosition(stage.getWidth()/2, stage.getHeight()/2);
         pauseMenuDisplayed = true;
     }
-
+    
     public void addPauseWindow() {
         if (pauseMenu.getStage() == null){
 			/* Add the window to the stage */
@@ -527,5 +558,119 @@ public class PlayContext extends Context {
         pauseMenu.remove();
         pauseMenuDisplayed = false;
         soundManager.unpauseWeatherSounds();
+    }
+    
+    private void createScoreBoard() {
+    	scoreBoard = new Table();
+    	playerWindows = new ArrayList<Window>();
+    	rankWindows = new ArrayList<Window>();
+        setPlayersWindow();
+        setRankWindow();
+        display_top_row_info();
+        display_player_windows();
+        display_rank_window();
+        scoreBoardDisplay = false;
+        scoreBoard.setPosition(stage.getWidth()/2, stage.getHeight());
+    }
+    
+    private void setRankWindow() {
+    	ranksWindow = new Window(" " , skinBoard); 
+        Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
+        ranksWindow.setBackground(new Image(backgroundTexture).getDrawable());
+        Label title = new Label("TEAM RANKING", skinBoard);
+        ranksWindow.add(title).top().center();
+        ranksWindow.row();
+    }
+    
+    private void display_rank_window() {
+    	int numPlayers = playerManager.getPlayers().size();
+    	ArrayList<Player> playerList = new ArrayList<Player>();
+    	for (int i = 0; i < numPlayers; i++) {
+    		Player player = playerManager.getPlayers().get(i);
+    		playerList.add(player);
+    	}
+    	Collections.sort(playerList, new PlayerRankingComparator());;
+    	for (int i = 0; i < numPlayers; i++) {
+    		rankWindows.add(new Window(" ",skinBoard));
+    		Player p = playerList.get(i);
+    		Label playerLabel = new Label("Rank " + (i + 1) + " - Player " + p.getId(), skinBoard);
+    		Window window =  rankWindows.get(i);
+    		window.add(playerLabel);
+    		Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
+            window.setBackground(new Image(backgroundTexture).getDrawable());
+            ranksWindow.add(window);
+    	}
+    	scoreBoard.add(ranksWindow).height(stage.getHeight()/5);
+    	scoreBoard.row();
+    }
+    
+    private class PlayerRankingComparator implements Comparator<Player> {
+    	public int compare(Player p1, Player p2) {
+        	int levelP1 = p1.getLevel();
+        	int levelP2 = p2.getLevel();
+        	if (levelP1 != levelP2)
+        		return levelP1 - levelP2; 
+        	else 
+        		return p1.getXp() - p2.getXp();
+        }
+    }
+    
+    public void display_player_windows() {
+        int numPlayers = playerManager.getPlayers().size();
+        for (int i = 0; i < numPlayers; i++) {
+        		int level = playerManager.getPlayer().getLevel();
+        		playerWindows.add(new Window(" ",skinBoard));
+        		int curHealth = playerManager.getPlayers().get(i).getHealthCur();
+        		int maxHealth  = playerManager.getPlayers().get(i).getHealthMax();
+        		int currentStamina = playerManager.getPlayer().getStaminaCur();
+        		int maxStamina = playerManager.getPlayer().getStaminaMax();
+	        	Label healthLabel = new Label("Health: " + curHealth + "/" + maxHealth, skinBoard);
+	            Label staminaLabel = new Label("Stamina: " + currentStamina + "/" + maxStamina, skinBoard);
+	            
+	        	Label playerLabel = new Label("Player" + (i + 1) + "- Level " + level, skinBoard);
+	            Window window = playerWindows.get(i);
+	            window.add(playerLabel).top();
+	            window.row();
+	            window.add(healthLabel);
+	            window.row();
+	            window.add(staminaLabel);
+	            Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
+	            window.setBackground(new Image(backgroundTexture).getDrawable());
+	            playersWindow.add(window);
+        }
+        scoreBoard.add(playersWindow).width(stage.getWidth()/2).height(stage.getHeight()/3).top().expandY().fillY().padBottom(15);
+        scoreBoard.row();
+    }
+    
+    /**
+     *  The outermost window that contains the player windows
+     */
+    private void setPlayersWindow() {
+        playersWindow = new Window("Player List" , skinBoard); 
+        Texture backgroundTexture = textureManager.getTexture("ccWindow_Border_White");
+        playersWindow.setBackground(new Image(backgroundTexture).getDrawable());
+        Label title = new Label("YOUR TEAM", skinBoard);
+        playersWindow.add(title).top().center();
+        playersWindow.row();
+    } 
+    
+    /**
+     * Top buttons to go back to the game
+     */
+    public void display_top_row_info() {
+        topRowInfoTable = new Table(skinBoard);
+        scoreBoard.add(topRowInfoTable).width(stage.getWidth()/2).height(stage.getHeight()/6).top().left().expandX().fillX().colspan(2).padBottom(15);
+        scoreBoard.row();
+    }
+    public void removeScoreBoard() {
+        scoreBoard.remove();
+        scoreBoardDisplay = false;
+    }
+    public void addScoreBoard() {
+    	if (scoreBoard.getStage() == null){
+			/* Add the window to the stage */
+            stage.addActor(scoreBoard);
+            scoreBoardDisplay = true;
+        }
     }
 }

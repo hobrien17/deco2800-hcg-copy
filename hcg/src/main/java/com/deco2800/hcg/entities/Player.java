@@ -1001,10 +1001,10 @@ public class Player extends Character implements Tickable {
 				LOGGER.info("Access player inventory");
 				contextManager.pushContext(new PlayerInventoryContext(this));
 				break;
-			case Input.Keys.TAB:
-				LOGGER.info("You press Tab!");
-				this.contextManager.pushContext(new ScoreBoardContext());
-				break;
+//			case Input.Keys.TAB:
+//				LOGGER.info("You press Tab!");
+//				this.contextManager.pushContext(new ScoreBoardContext());
+//				break;
 			default:
 				break;
 			}
@@ -1287,5 +1287,7 @@ public class Player extends Character implements Tickable {
 	public int getSkillPoints() {
 		return skillPoints;
 	}
-
+	public int getId() {
+		return id;
+	}
 }
