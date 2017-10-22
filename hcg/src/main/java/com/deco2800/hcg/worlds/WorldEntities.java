@@ -25,6 +25,7 @@ import com.deco2800.hcg.entities.terrain_entities.SludgeBarrel;
 import com.deco2800.hcg.entities.terrain_entities.Swing;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
+import com.deco2800.hcg.entities.terrain_entities.Volcano;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
 import com.deco2800.hcg.entities.terrain_entities.WarningSign;
 import com.deco2800.hcg.items.stackable.HealthPotion;
@@ -33,7 +34,7 @@ public enum WorldEntities {
 
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, UPOT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
     GREENTREE, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM, SNAIL, LEAFLESSTREE, INVISIBLE, BARBEQUE,
-    WARNINGSIGN;
+    WARNINGSIGN, VOLCANO;
 
     /**
      * Return an instance of the entity at the given position and the selected
@@ -106,6 +107,8 @@ public enum WorldEntities {
                 return new Barbeque(x, y, 0f);
             case WARNINGSIGN:
                 return new WarningSign(x, y, 0f);
+            case VOLCANO:
+                return new Volcano(x, y, 0f);
             default:
                 return null;
         }

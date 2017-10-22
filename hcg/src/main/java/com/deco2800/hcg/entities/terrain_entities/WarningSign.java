@@ -3,7 +3,7 @@ package com.deco2800.hcg.entities.terrain_entities;
 public class WarningSign extends TerrainEntity {
 
     /**
-     * Creates a new Swing at the given position with the given size
+     * Creates a new Warning Sign at the given position with the given size
      * parameters.
      *
      * @param posX    the x position
