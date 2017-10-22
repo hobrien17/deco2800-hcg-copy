@@ -11,7 +11,6 @@ import com.deco2800.hcg.quests.QuestManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
-
 import java.util.List;
 
 /**
