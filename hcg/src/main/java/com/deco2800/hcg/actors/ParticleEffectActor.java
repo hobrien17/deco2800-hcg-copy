@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Matrix4;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class ParticleEffectActor extends Actor {
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		Matrix4 before = batch.getProjectionMatrix();
 		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.draw(batch);
@@ -52,6 +54,7 @@ public class ParticleEffectActor extends Actor {
         	    effect.draw(batch);
             }
 		}
+		batch.setProjectionMatrix(before);
 	}
 
 	/**
