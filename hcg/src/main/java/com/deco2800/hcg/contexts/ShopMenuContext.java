@@ -95,9 +95,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
         playerInventory = new Table();
         playerInventory.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
 
-        moneyCounter = new Table();
-        moneyCounter.setBackground(new Image(textureManager.getTexture("shop_inventory")).getDrawable());
-
         //adding the textfield
         amountString = amount.getText();
         amount = new TextField(amountString, skin);
@@ -111,8 +108,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
         shopSell = new ImageButton(new Image(textureManager.getTexture("shop_sell_button")).getDrawable());
         shopExit = new ImageButton(new Image(textureManager.getTexture("shop_exit")).getDrawable());
 
-        buySell.add(moneyCounter).height(60).width(80).pad(40);
-        buySell.row();
         buySell.add(sellBag).height(80).width(80);
         buySell.row();
         buySell.add(shopBuy).height(80).width(160);
