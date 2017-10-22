@@ -40,7 +40,6 @@ public class Tree extends Enemy implements Tickable {
                 .setCooldown(50)
                 .setTexture("battle_seed")
                 .build();
-        this.setStatus(2);
         this.setMovementSpeed((float) (this.movementSpeed*0.1));
         this.defaultSpeed = this.getMovementSpeed();
 

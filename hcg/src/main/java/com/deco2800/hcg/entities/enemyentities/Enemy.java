@@ -391,7 +391,7 @@ public abstract class Enemy extends Character implements Lootable {
      * Go to the player's position if detected player during moving.
      *
      */
-    private Box3D getRandomPos() {
+    Box3D getRandomPos() {
         float radius;
         float distance;
         float currPosX = this.getPosX();
@@ -644,45 +644,7 @@ public abstract class Enemy extends Character implements Lootable {
         spriteCount++;
     }
 
-    /**
-     *  Logic for Squirrel
-     *
-     */
-    void squirrel(){
-        this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.5));
-        this.defaultSpeed = this.getMovementSpeed();
-        if (this.getNumberPlayers() > 1) {
-            float closestDistance = findClosestPlayer();
-            if (closestDistance <= 10 * this.level){
-                newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
-                newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
-                if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.85)){
-                    this.setMovementSpeed((float) (this.defaultSpeed * 1.2));
-                } else if ((this.getHealthCur() < this.getHealthMax()*0.85) && (this.getHealthCur() > this.getHealthMax()*0.5)){
-                    this.setMovementSpeed((float) (this.defaultSpeed * 1.4));
-                } else if ((this.getHealthCur() < this.getHealthMax()*0.5) && (this.getHealthCur() > this.getHealthMax()*0.25)){
-                    this.setMovementSpeed((float) (this.defaultSpeed * 1.6));
-                } else {
-                    this.setMovementSpeed((float) (this.defaultSpeed * 1.8));
-                }
-            } else {
-                newPos = this.getRandomPos();
-            }
 
-        } else {
-            this.closestPlayer = playerManager.getPlayer();
-            float distance = this.distance(playerManager.getPlayer());
-            if (distance <= 10 * this.level){
-                newPos.setX(2 * this.getPosX() - this.closestPlayer.getPosX());
-                newPos.setY(2 * this.getPosY() - this.closestPlayer.getPosY());
-            } else {
-                newPos = this.getRandomPos();
-            }
-        }
-        this.detectCollision();
-        this.moveAction();
-
-    }
 
     /**
      * Find the closest player and the distance between the closest player and this enemy in multiplayer mode
