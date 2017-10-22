@@ -34,8 +34,10 @@ import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.WorldUtil;
+import com.deco2800.hcg.weapons.WeaponType;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.stackable.SmallMushroom;
@@ -290,7 +292,14 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("machinegun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				playerManager.getPlayer().setEquipped(0);
+				PlayerEquipment equip = playerManager.getPlayer().getEquippedItems();
+				for(int i = 0; i < equip.getMaxSize(); i++) {
+					if(equip.getItem(i) != null && equip.getItem(i) instanceof WeaponItem &&
+							((WeaponItem)equip.getItem(i)).getWeapon().getWeaponType().equals(WeaponType.MACHINEGUN)) {
+						playerManager.getPlayer().setEquipped(i);
+						break;
+					}
+				}
 				hide();
 			}
 		});
@@ -298,15 +307,28 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("shotgun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				playerManager.getPlayer().setEquipped(1);
-				hide();
+				PlayerEquipment equip = playerManager.getPlayer().getEquippedItems();
+				for(int i = 0; i < equip.getMaxSize(); i++) {
+					if(equip.getItem(i) != null && equip.getItem(i) instanceof WeaponItem &&
+							((WeaponItem)equip.getItem(i)).getWeapon().getWeaponType().equals(WeaponType.SHOTGUN)) {
+						playerManager.getPlayer().setEquipped(i);
+						break;
+					}
+				}
 			}
 		});
 
 		listeners.put("multigun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				playerManager.getPlayer().setEquipped(2);
+				PlayerEquipment equip = playerManager.getPlayer().getEquippedItems();
+				for(int i = 0; i < equip.getMaxSize(); i++) {
+					if(equip.getItem(i) != null && equip.getItem(i) instanceof WeaponItem &&
+							((WeaponItem)equip.getItem(i)).getWeapon().getWeaponType().equals(WeaponType.MULTIGUN)) {
+						playerManager.getPlayer().setEquipped(i);
+						break;
+					}
+				}
 				hide();
 			}
 		});
@@ -314,7 +336,14 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("starfall", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-			    playerManager.getPlayer().setEquipped(3);
+				PlayerEquipment equip = playerManager.getPlayer().getEquippedItems();
+				for(int i = 0; i < equip.getMaxSize(); i++) {
+					if(equip.getItem(i) != null && equip.getItem(i) instanceof WeaponItem &&
+							((WeaponItem)equip.getItem(i)).getWeapon().getWeaponType().equals(WeaponType.STARGUN)) {
+						playerManager.getPlayer().setEquipped(i);
+						break;
+					}
+				}
 				hide();
 			}
 		});
@@ -549,6 +578,20 @@ public class GeneralRadialDisplay extends Group {
 		return itemCount;
 	}
 	
+	private int getEquipmentCount(String texture) {
+		int itemCount = 0;
+		PlayerEquipment equipped = playerManager.getPlayer().getEquippedItems();
+		if(equipped.getMaxSize() == 0) {
+			return 0;
+		}
+		for(int i = 0; i < equipped.getMaxSize(); i++) {
+			if(equipped.getItem(i) != null && equipped.getItem(i).getTexture().equals(texture)) {
+				itemCount++;
+			}
+		}
+		return itemCount;
+	}
+	
 	private void update() {
 		for(Label lbl : counts) {
 			display.removeActor(lbl);
@@ -564,7 +607,7 @@ public class GeneralRadialDisplay extends Group {
 					"fireC".equals(type) || "explosiveC".equals(type) || "grassC".equals(type)) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
 			} else if(type.equals("machinegun") || type.equals("starfall") || type.equals("multigun") || type.equals("shotgun")) {
-				count = getCount(type + "_ne");
+				count = getEquipmentCount(type + "_ne");
 			} else if(type.equals("snag")) {
 				count = getCount("bunnings_snag_and_bread");
 			} else if(type.equals("sausage")) {

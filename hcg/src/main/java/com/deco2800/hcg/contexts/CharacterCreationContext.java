@@ -733,9 +733,6 @@ public class CharacterCreationContext extends CharacterContext{
         Item testPotion = new HealthPotion(100);
         Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
         Item shovel = new Shovel();
-        Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(player)
-    			.setRadius(0.7).build();
-        Item gun = new WeaponItem(machinegun, "Machine Gun", 10);
         startingSeeds.setStackSize(200);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
@@ -745,6 +742,5 @@ public class CharacterCreationContext extends CharacterContext{
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
         player.addItemToInventory(shovel);
-        player.addItemToInventory(gun);
     }
 }

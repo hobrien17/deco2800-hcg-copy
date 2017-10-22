@@ -76,8 +76,8 @@ public class ItemManager extends Manager {
             case "key":
                 return new Key();
             case "multigun":
-            	Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(player)
-            			.setRadius(0.7).build();
+            	Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(player).setRadius(0.7)
+		        	.setArc((float) Math.PI / 2f).setPellets(9).build();
             	return new WeaponItem(multigun, "Multi-gun", 10);
             case "stargun":
             	Weapon stargun = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(player)
