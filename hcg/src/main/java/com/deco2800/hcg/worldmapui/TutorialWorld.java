@@ -27,8 +27,8 @@ public class TutorialWorld extends WorldMap {
 		// tutorial world.
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
 		tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 1, 1));
-		tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 1, 1));
 		tutorialLevels.add(new Level(new World("resources/maps/maps/grass_safeZone_02_tutorial.tmx"), 0, 1, 1));
+		tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 1, 1));
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
@@ -39,10 +39,10 @@ public class TutorialWorld extends WorldMap {
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
 		nodeList = createMappings(tutorialLevels);
 		changeContainedNodes(nodeList);
-		
-		
+
+
 		/*
-		 *        
+		 *
 		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_01.tmx"), 1, 1, 1));
         levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02.tmx"), 1, 2, 1));
         levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 3, 1));

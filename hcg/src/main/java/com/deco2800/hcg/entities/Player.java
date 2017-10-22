@@ -114,6 +114,9 @@ public class Player extends Character implements Tickable {
 
 	private int id;
 
+	private int actualLevel;
+
+
 	/**
 	 * Creates a new player at specified position.
 	 *
@@ -208,6 +211,9 @@ public class Player extends Character implements Tickable {
 		//Add some default items
 		inventory.addItem(new MagicMushroom());
 		inventory.addItem(new SpeedPotion());
+
+		actualLevel = 1;
+		skillPoints = 0;
 	}
 
 	/**
@@ -270,6 +276,8 @@ public class Player extends Character implements Tickable {
 		} else {
 			//Perk - THOR-N
 			Perk thorn = this.getPerk(Perk.perk.THORN);
+			//Perks cannot be active if the player is level 1
+			// and thus cant be active for testing.
 			if (thorn.isActive()) {
 				switch (thorn.getCurrentLevel()) {
 					case 0:
@@ -290,6 +298,7 @@ public class Player extends Character implements Tickable {
 					damage = 0;
 				}
 			}
+
 			if (damage > healthCur) {
 				healthCur = 0;
 			} else {
@@ -824,10 +833,10 @@ public class Player extends Character implements Tickable {
 	private void handleTerrain(String terrain) {
 		switch (terrain) {
 		case "water-deep":
-			this.setTexture("hcg_character_swim");
+			//this.setTexture("hcg_character_swim");
 			break;
 		case "water-shallow":
-			this.setTexture("hcg_character_sink");
+			//this.setTexture("hcg_character_sink");
 			break;
 		case "exit":
 			if (this == playerManager.getPlayer() && !onExit) {
@@ -847,15 +856,15 @@ public class Player extends Character implements Tickable {
 	 * character in the character creation screen
 	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
-			int meleeSkill, int gunsSkill, int energyWeaponsSkill, String name) {
+			int machineGunSkill, int shotGunSkill, int starGunSkill, String name) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
-		setSkills(meleeSkill, gunsSkill, energyWeaponsSkill);
+		setSkills(machineGunSkill, shotGunSkill, starGunSkill);
 		setName(name);
 		healthMax = 50 * vitality;
 		healthCur = healthMax;
 		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
-		skillPoints = 4 + 2 * intellect;
+		//skillPoints = skillPoints + (4 + 2 * intellect);
 	}
 
 	public void setSpecialisedSkills(Map specialisedSkills) {
@@ -888,7 +897,9 @@ public class Player extends Character implements Tickable {
 		if (xp >= xpThreshold) {
 			// TODO: You have levelled up pop up
 			levelUp = true;
-			levelUp();
+			for (int i = 0; i < xp/xpThreshold; i++) {
+				levelUp();
+			}
 		}
 	}
 
@@ -899,20 +910,20 @@ public class Player extends Character implements Tickable {
 	private void levelUp() {
 		xp -= xpThreshold;
 		xpThreshold *= 1.5;
-		this.level = level +1;
-		this.perkPoints = perkPoints +1;
+		this.level = level + 1;
+		this.perkPoints = perkPoints + 1;
 
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");
-		healthMax += vitality * 40;
-		healthCur += vitality * 40;
+		healthMax += vitality * 20;
+		healthCur += vitality * 20;
 
 		// Increase stamina by agility points
 		int agility = attributes.get("agility");
-		staminaMax += agility * 40;
-		staminaCur += agility * 40;
+		staminaMax += agility * 10;
+		staminaCur += agility * 10;
 
-		skillPoints = 4 + attributes.get("intellect") * 2;
+		skillPoints = skillPoints + (4 + attributes.get("intellect") * 2);
 		// TODO: enter level up screen
 	}
 
@@ -1007,7 +1018,7 @@ public class Player extends Character implements Tickable {
 		case Input.Keys.C:
 			if (levelUp) {
 				levelUp = false;
-				levelUp();
+				skillPoints = 0;
 			}
 			break;
 		case Input.Keys.SHIFT_LEFT:
@@ -1284,6 +1295,10 @@ public class Player extends Character implements Tickable {
 
 	public boolean getPauseDisplayed() {
 		return pauseDisplayed;
+	}
+
+	public int getSkillPoints() {
+		return skillPoints;
 	}
 
 }
