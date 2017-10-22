@@ -151,14 +151,12 @@ public class QuestMenuContext extends UIContext {
 		completedTitle = new String("Finished Quests:");
 		nameTitle = new String("Quest Name: ");
 		detailsTitle = new String("Details:");
-		
-		//TODO Added the new Strings here
+
 		enemyType = new String("Enemy Type: ");
 		enemyAmountText = new String("Kill Amount Required: ");
 		itemType = new String("Item Type: ");
 		itemAmountText = new String("Item Amount Required: ");
-		
-		//TODO Added the new Integers here
+
 		enemyAmount = new Integer(0);
 		itemAmount = new Integer(0);
 		
@@ -233,9 +231,10 @@ public class QuestMenuContext extends UIContext {
 				if(questManager.getQuest(readyList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(readyList.getSelected()).getDescription());
 				}
+
 				//TODO Change the concats to whatever you want them to be
 				enemyType.concat("Enemy");
-				enemyAmountText.concat(enemyAmount.toString());
+				enemyAmountText.concat(questManager.getQuest(readyList.getSelected()).);
 				itemType.concat("Item");
 				itemAmountText.concat(itemAmount.toString());
 			}
