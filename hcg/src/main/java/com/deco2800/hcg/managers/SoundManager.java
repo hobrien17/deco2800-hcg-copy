@@ -32,6 +32,9 @@ public class SoundManager extends Manager {
 	ScheduledFuture<?> randomLoop;
 
 	ArrayList<Sound> weatherSounds = new ArrayList<Sound>();
+	
+	//a boolean to test if mute is on
+	private boolean isMute;
 
 	// String Constants
 	private static final String NO_REF = "No reference to sound effect: ";
@@ -40,7 +43,8 @@ public class SoundManager extends Manager {
 	 * Constructor Loads all audio files to memory on startup.
 	 */
 	public SoundManager() {
-
+		
+		isMute = false;
 		try {
 			soundMap.put("ree", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree1.wav")));
 			soundMap.put("quack", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/quack.wav")));
@@ -130,6 +134,9 @@ public class SoundManager extends Manager {
 	 * Play the sound mapped to a given string
 	 */
 	public void playSound(String soundString) {
+		if(isMute){
+			return;
+		}
 		Sound sound = soundMap.get(soundString);
 		if (sound != null) {
 			LOGGER.info("Playing sound effect: " + soundString);
@@ -176,7 +183,9 @@ public class SoundManager extends Manager {
 	 * continue playing sound is a loop
 	 */
 	public void loopSound(String soundString) {
-
+		if(isMute){
+			return;
+		}
 		Sound sound = soundMap.get(soundString);
 
 		if (sound != null) {
@@ -203,7 +212,9 @@ public class SoundManager extends Manager {
 	 * special loop sound player for weather effects
 	 */
 	public void ambientLoopSound(String soundString) {
-
+		if(isMute){
+			return;
+		}
 		for (Sound playing : weatherSounds) {
 			playing.stop();
 		}
@@ -243,6 +254,9 @@ public class SoundManager extends Manager {
 	 * 
 	 */
 	private void randomPlaySound(Sound sound) {
+		if(isMute){
+			return;
+		}
 		double random = Math.random();
 		if (random > 0.65) {
 			sound.play((float) random); // varies intensity
@@ -264,6 +278,17 @@ public class SoundManager extends Manager {
 	public void unpauseWeatherSounds(){
 		for (String weatherSound : onWeatherSounds) {
 			playSound(weatherSound);
+		}
+	}
+	
+	public void toggleMute(){
+		if(isMute){
+			unpauseWeatherSounds();
+			isMute = false;
+		} else {
+			stopAll();
+			pauseWeatherSounds();
+			isMute = true;
 		}
 	}
 }
