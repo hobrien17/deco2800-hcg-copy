@@ -297,7 +297,7 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 		//Perk - Run,Fungus,Run!
 		Perk runFungus = player.getPerk(Perk.perk.RUN_FUNGUS_RUN);
 		if (runFungus.isActive()) {
-			int speedTime = (runFungus.getCurrentLevel());
+			int speedTime = runFungus.getCurrentLevel();
 			target.giveEffect(new Effect("Shot", 1, 0, 1.2f,
 					1000, speedTime, 0, this));
 		}

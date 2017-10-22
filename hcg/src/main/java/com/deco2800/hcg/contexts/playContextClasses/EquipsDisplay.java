@@ -2,7 +2,6 @@ package com.deco2800.hcg.contexts.playContextClasses;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -13,13 +12,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.deco2800.hcg.inventory.Inventory;
-import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.entities.bullets.BulletType;
 import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Set;
 
 public class EquipsDisplay extends Group {
 
@@ -28,13 +25,7 @@ public class EquipsDisplay extends Group {
 	private Map<String, Image> sprites;
 	private Label currentBulletCount;
 	private TextureManager textureManager;
-	private PlayerEquipment equippedItems;
 	private Inventory inventory;
-	private BulletType bulletType;
-	private WeaponType weaponType;
-
-	private Stage stage;
-	private Group display;
 	private LabelStyle style;
 
 	public EquipsDisplay() {

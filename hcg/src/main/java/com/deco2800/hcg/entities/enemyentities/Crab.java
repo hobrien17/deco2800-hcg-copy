@@ -4,17 +4,14 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.bullets.Bullet;
-import com.deco2800.hcg.entities.bullets.ExplosionBullet;
 import com.deco2800.hcg.entities.turrets.Explosion;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

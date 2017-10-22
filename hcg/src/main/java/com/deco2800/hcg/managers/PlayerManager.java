@@ -3,7 +3,6 @@ package com.deco2800.hcg.managers;
 import java.util.ArrayList;
 
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.multiplayer.CharacterMessage;
 import com.deco2800.hcg.worlds.World;
 
 /**

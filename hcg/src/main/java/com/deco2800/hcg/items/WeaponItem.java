@@ -1,8 +1,5 @@
 package com.deco2800.hcg.items;
 
-import com.deco2800.hcg.weapons.Multigun;
-import com.deco2800.hcg.weapons.Shotgun;
-import com.deco2800.hcg.weapons.Stargun;
 import com.deco2800.hcg.weapons.Weapon;
 
 /**

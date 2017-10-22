@@ -82,7 +82,6 @@ public class ShaderManager extends Manager implements Observer {
         LOGGER = LoggerFactory.getLogger(ShaderManager.class);
         if(!preShader.isCompiled()) {
             LOGGER.error("Shader failed to compile.");
-            System.out.println(preShader.getLog());
             LOGGER.error(preShader.getLog());
             
             preShader = null;
@@ -90,7 +89,6 @@ public class ShaderManager extends Manager implements Observer {
         
         if(!postShader.isCompiled()) {
             LOGGER.error("Post shader failed to compile");
-            System.out.println(postShader.getLog());
             LOGGER.error(postShader.getLog());
             
             postShader = null;
@@ -98,7 +96,6 @@ public class ShaderManager extends Manager implements Observer {
         
         if(!lightShader.isCompiled()) {
             LOGGER.error("Light shader failed to compile");
-            System.out.println(lightShader.getLog());
             LOGGER.error(lightShader.getLog());
             
             lightShader = null;
@@ -249,7 +246,6 @@ public class ShaderManager extends Manager implements Observer {
     /** Needed for stopwatch manager */
     @Override
     public void update(Observable o, Object arg) {
-        int time = (int) (float) arg;
         for (int i = 0; i < customRenders.size(); i++) {
             customRenders.get(i).durationTime--;
         }

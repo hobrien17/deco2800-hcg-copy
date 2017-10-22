@@ -70,7 +70,6 @@ public class Player extends Character implements Tickable {
 	private boolean sprinting;
 	private int staggerDamage;
 	private boolean staggeringDamage = false;
-	private long staggerTickCount;
 	private boolean levelUp = false;
 	private int xpThreshold = 200;
 	private float lastSpeedX;
@@ -108,8 +107,6 @@ public class Player extends Character implements Tickable {
 
 	private int id;
 	private String spritePrefix = "player_";
-
-	private int actualLevel;
 
 
 	/**
@@ -192,22 +189,13 @@ public class Player extends Character implements Tickable {
 		equippedItems = PlayerEquipment.getPlayerEquipment();
 
 		// Add weapons to inventory
-		Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN).setUser(this).setRadius(0.7).build();
-		Weapon stargun = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(this).setRadius(0.7).build();
 		Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(this).setRadius(0.7)
 				.build();
-		Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(this).setRadius(0.7)
-		        .setArc((float) Math.PI / 2f).setPellets(9).build();
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
-		//equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
-		//equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
-		//equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
 
 		//Add some default items
 		inventory.addItem(new MagicMushroom());
 		inventory.addItem(new SpeedPotion());
-
-		actualLevel = 1;
 		skillPoints = 0;
 	}
 
@@ -857,7 +845,6 @@ public class Player extends Character implements Tickable {
 		healthCur = healthMax;
 		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
-		//skillPoints = skillPoints + (4 + 2 * intellect);
 	}
 	
 	/**

@@ -49,7 +49,6 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 
 	protected int distanceTravelled;
 
-	private SoundManager soundManager;
 	private GameManager gameManager = GameManager.get();
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
@@ -75,7 +74,6 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				  AbstractEntity user, int hitCount, float speed, int damage) {
 		this(posX, posY, posZ, xd, yd, posZ,
 				user, hitCount, speed, damage);
-		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
 	/**
@@ -101,7 +99,6 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
 				  float newZ, AbstractEntity user, int hitCount, float speed, int damage) {
 		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, speed, damage);
-		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
 	/**
@@ -154,8 +151,6 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 
 		this.user = user;
 		this.hitCount = hitCount;
-
-		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
 	/**

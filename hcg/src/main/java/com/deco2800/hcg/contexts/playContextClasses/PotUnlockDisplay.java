@@ -37,7 +37,6 @@ public class PotUnlockDisplay extends Window {
 	private Inventory inventory;
 	
 	private Stage stage;
-	private Skin skin;
 	private boolean open;
 	
 	private Table infoTbl;
@@ -56,7 +55,6 @@ public class PotUnlockDisplay extends Window {
 	public PotUnlockDisplay(Stage stage, Skin skin) {
 		super("Unlock Pot?", skin);
 		this.stage = stage;
-		this.skin = skin;
 		gameManager = GameManager.get();
 		playerManager = (PlayerManager)gameManager.getManager(PlayerManager.class);
 		soundManager = (SoundManager)gameManager.getManager(SoundManager.class);

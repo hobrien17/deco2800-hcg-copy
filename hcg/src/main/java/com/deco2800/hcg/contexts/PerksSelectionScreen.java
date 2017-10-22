@@ -40,7 +40,6 @@ public class PerksSelectionScreen extends UIContext {
     private Image branch1Label;
     private Image branch2Label;
     private Image branch3Label;
-    private HashMap<Enum,DrawablePerk> drawablePerks;
 
     /**
      * Creates a new PerksSelectionScreen
@@ -143,8 +142,6 @@ public class PerksSelectionScreen extends UIContext {
      * Creates the perks and displays them in their respective branch groups
      */
     void createPerks() {
-        //creating drawable perks
-        drawablePerks = new HashMap<>();
 
         //Druid
         ArrayList<Enum> druidPerks =  new ArrayList<>(Arrays.asList(Perk.perk.I_AM_GROOT, Perk.perk.SPLINTER_IS_COMING,

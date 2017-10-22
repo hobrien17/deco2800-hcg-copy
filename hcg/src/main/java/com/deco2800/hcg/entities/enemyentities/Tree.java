@@ -3,7 +3,6 @@ package com.deco2800.hcg.entities.enemyentities;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
