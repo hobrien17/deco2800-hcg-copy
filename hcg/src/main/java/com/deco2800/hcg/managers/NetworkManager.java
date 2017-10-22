@@ -152,6 +152,13 @@ public final class NetworkManager extends Manager {
 		return random.nextFloat();
 	}
 	
+	/**
+	 * Returns a random, normally distributed double
+	 * @return Gaussian double
+	 */
+	public double getNextGaussian() {
+		return random.nextGaussian();
+	}
 	
 	/**
 	 * Sets the networked random generator's seed

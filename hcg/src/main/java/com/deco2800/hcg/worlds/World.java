@@ -14,6 +14,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Selectable;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.renderers.Renderable;
 import com.deco2800.hcg.types.Weathers;
@@ -21,7 +22,6 @@ import com.deco2800.hcg.types.Weathers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import com.deco2800.hcg.util.Array2D;
 import org.slf4j.Logger;
@@ -35,6 +35,9 @@ import org.slf4j.LoggerFactory;
  */
 public class World {
 	static final Logger LOGGER = LoggerFactory.getLogger(World.class);
+	
+	private NetworkManager networkManager = (NetworkManager) GameManager.get()
+			.getManager(NetworkManager.class);
 
 	private String loadedFile;
 	private Weathers weather;
@@ -620,9 +623,7 @@ public class World {
     
     this.addTiledMapTileLayer(layerName, mapProperties);
     
-    Random rand = new Random();
-    
-    int successes = -3 - rand.nextInt(2);
+    int successes = -3 - networkManager.getNextRandomInt(2);
     
     // checked tiles list. there will only be at most our number of tiles created * 10^2 of these
     List<String> tilesTaken = new ArrayList<String>((0 - successes) * 10 * 10);
@@ -632,8 +633,8 @@ public class World {
     for (int i = 0; i < 200; i++) {
       
       // pick a random pair of numbers  
-      int posX = 5 + rand.nextInt(this.getWidth() - 10);
-      int posY = 5 + rand.nextInt(this.getLength() - 10);
+      int posX = 5 + networkManager.getNextRandomInt(this.getWidth() - 10);
+      int posY = 5 + networkManager.getNextRandomInt(this.getLength() - 10);
 
       Boolean success = true;
       List<String> tilesSuccess = new ArrayList<String>(10 * 10);
