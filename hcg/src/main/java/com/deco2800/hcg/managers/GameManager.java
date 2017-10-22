@@ -42,6 +42,8 @@ public class GameManager implements TickableManager {
     private WorldStackContext stackContext;
     
     private boolean tutorialMessageDisplayed;
+    
+    private boolean tutorialWorldMessageDisplayed;
 
     /**
      * Returns an instance of the GM
@@ -233,5 +235,13 @@ public class GameManager implements TickableManager {
     
     public boolean getTutorialMessageDisplayed() {
     	return tutorialMessageDisplayed;
+    }
+    
+    public void setTutorialWorldMessageDisplayed() {
+    	tutorialWorldMessageDisplayed = true;
+    }
+    
+    public boolean getTutorialWorldMessageDisplayed() {
+    	return tutorialWorldMessageDisplayed;
     }
 }

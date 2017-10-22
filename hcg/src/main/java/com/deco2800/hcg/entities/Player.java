@@ -276,6 +276,8 @@ public class Player extends Character implements Tickable {
 		} else {
 			//Perk - THOR-N
 			Perk thorn = this.getPerk(Perk.perk.THORN);
+			//Perks cannot be active if the player is level 1
+			// and thus cant be active for testing.
 			if (thorn.isActive()) {
 				switch (thorn.getCurrentLevel()) {
 					case 0:
@@ -296,6 +298,7 @@ public class Player extends Character implements Tickable {
 					damage = 0;
 				}
 			}
+
 			if (damage > healthCur) {
 				healthCur = 0;
 			} else {
@@ -830,10 +833,10 @@ public class Player extends Character implements Tickable {
 	private void handleTerrain(String terrain) {
 		switch (terrain) {
 		case "water-deep":
-			this.setTexture("hcg_character_swim");
+			//this.setTexture("hcg_character_swim");
 			break;
 		case "water-shallow":
-			this.setTexture("hcg_character_sink");
+			//this.setTexture("hcg_character_sink");
 			break;
 		case "exit":
 			if (this == playerManager.getPlayer() && !onExit) {
@@ -853,9 +856,9 @@ public class Player extends Character implements Tickable {
 	 * character in the character creation screen
 	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
-			int meleeSkill, int gunsSkill, int energyWeaponsSkill, String name) {
+			int machineGunSkill, int shotGunSkill, int starGunSkill, String name) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
-		setSkills(meleeSkill, gunsSkill, energyWeaponsSkill);
+		setSkills(machineGunSkill, shotGunSkill, starGunSkill);
 		setName(name);
 		healthMax = 50 * vitality;
 		healthCur = healthMax;
@@ -894,7 +897,9 @@ public class Player extends Character implements Tickable {
 		if (xp >= xpThreshold) {
 			// TODO: You have levelled up pop up
 			levelUp = true;
-			levelUp();
+			for (int i = 0; i < xp/xpThreshold; i++) {
+				levelUp();
+			}
 		}
 	}
 
