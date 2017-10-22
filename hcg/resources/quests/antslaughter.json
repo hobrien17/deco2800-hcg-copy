@@ -1,0 +1,12 @@
+{
+  "title":"Ant_Quest",
+  "iReq": {
+  },
+  "kReq": {
+    "SQUIRREL": 10
+  },
+  "rewards": {
+    "explosive_seed": 1
+  },
+  "optDesc":""
+}
