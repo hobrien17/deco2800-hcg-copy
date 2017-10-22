@@ -114,6 +114,9 @@ public class Player extends Character implements Tickable {
 
 	private int id;
 
+	private int actualLevel;
+
+
 	/**
 	 * Creates a new player at specified position.
 	 *
@@ -208,6 +211,9 @@ public class Player extends Character implements Tickable {
 		//Add some default items
 		inventory.addItem(new MagicMushroom());
 		inventory.addItem(new SpeedPotion());
+
+		actualLevel = 1;
+		skillPoints = 0;
 	}
 
 	/**
@@ -855,7 +861,7 @@ public class Player extends Character implements Tickable {
 		healthCur = healthMax;
 		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
-		skillPoints = 4 + 2 * intellect;
+		//skillPoints = skillPoints + (4 + 2 * intellect);
 	}
 
 	public void setSpecialisedSkills(Map specialisedSkills) {
@@ -899,20 +905,20 @@ public class Player extends Character implements Tickable {
 	private void levelUp() {
 		xp -= xpThreshold;
 		xpThreshold *= 1.5;
-		this.level = level +1;
-		this.perkPoints = perkPoints +1;
+		this.level = level + 1;
+		this.perkPoints = perkPoints + 1;
 
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");
-		healthMax += vitality * 40;
-		healthCur += vitality * 40;
+		healthMax += vitality * 20;
+		healthCur += vitality * 20;
 
 		// Increase stamina by agility points
 		int agility = attributes.get("agility");
-		staminaMax += agility * 40;
-		staminaCur += agility * 40;
+		staminaMax += agility * 10;
+		staminaCur += agility * 10;
 
-		skillPoints = 4 + attributes.get("intellect") * 2;
+		skillPoints = skillPoints + (4 + attributes.get("intellect") * 2);
 		// TODO: enter level up screen
 	}
 
@@ -1004,7 +1010,7 @@ public class Player extends Character implements Tickable {
 		case Input.Keys.C:
 			if (levelUp) {
 				levelUp = false;
-				levelUp();
+				skillPoints = 0;
 			}
 			break;
 		case Input.Keys.SHIFT_LEFT:
@@ -1271,6 +1277,10 @@ public class Player extends Character implements Tickable {
 
 	public boolean getPauseDisplayed() {
 		return pauseDisplayed;
+	}
+
+	public int getSkillPoints() {
+		return skillPoints;
 	}
 
 }
