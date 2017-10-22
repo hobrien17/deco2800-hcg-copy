@@ -160,7 +160,7 @@ public class QuestReader {
                                                     ") is not a valid item in quest (" +
                                                     title + ")");
                 }
-
+                //Item names use the _ when creating, but " " when checking
                 returnMap.put(i.getKey().toString(),Integer.parseUnsignedInt(i.getValue().toString()));
             }
         }

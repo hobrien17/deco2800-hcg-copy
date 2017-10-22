@@ -295,7 +295,7 @@ public class QuestMenuContext extends UIContext {
 		for (Map.Entry<String,Integer> killMap: killList.entrySet()) {
 			killRequire.row();
 			EnemyType et = EnemyType.valueOf(killMap.getKey());
-			if (player.killLogGet(et) >
+			if (player.killLogGet(et) >=
 					qa.getInitalKillLog().get(et) + qa.getQuest().getKillRequirement().get(et)) {
 				killRequire.add(killMap.getKey() + " = REQUISITE MET");
 			} else {
@@ -312,7 +312,7 @@ public class QuestMenuContext extends UIContext {
 		Player player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
 		for (Map.Entry<String,Integer> itemMap: itemList.entrySet()) {
 			itemRequire.row();
-			if (player.getInventory().numberOf(itemMap.getKey()) > itemMap.getValue()) {
+			if (player.getInventory().numberOf(itemMap.getKey()) >= itemMap.getValue()) {
 				itemRequire.add(itemMap.getKey() + " = REQUISITE MET");
 			} else {
 				itemRequire.add(itemMap.getKey() + " = " + player.getInventory().numberOf(itemMap.getKey()) +

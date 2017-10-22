@@ -10,6 +10,8 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
+import org.lwjgl.Sys;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,9 +88,8 @@ public class QuestArchive {
                 if (!playerManager.getPlayer().killLogContains(enemyID)) {
                     return false;
                 }
-                // Make sure the person has got the current difference in kills
-                if ((playerManager.getPlayer().killLogGet(enemyID) - initalKillLog.get(enemyID))
-                        < quest.getKillRequirement().get(enemyID)) {
+                if (!(playerManager.getPlayer().killLogGet(enemyID) >=
+                        initalKillLog.get(enemyID) + quest.getKillRequirement().get(enemyID))) {
                     return false;
                 }
             }
@@ -98,16 +99,13 @@ public class QuestArchive {
     }
 
     private Boolean getItemReqCompleted() {
-        Inventory inv = playerManager.getPlayer().getInventory();
-        
+        Player player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
         for(String item: quest.getItemRequirement().keySet()){
-        	if(!(inv.numberOf(item)>=quest.getItemRequirement().get(item))){
-        		return false;
-        	}
+            if (!(player.getInventory().numberOf(item.replace("_"," ")) >= quest.getItemRequirement().get(item))) {
+                return false;
+            }
         }
         return true;
-        
-
     }
 
     public String getQuestTitle() {
