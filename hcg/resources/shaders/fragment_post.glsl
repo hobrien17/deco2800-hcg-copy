@@ -100,7 +100,7 @@ vec4 getVignette(vec2 tc) {
 	//use smoothstep to create a smooth vignette
 	float vignette = smoothstep(RADIUS, RADIUS-SOFTNESS, len);
     float centre = 1.0 - vignette;
-    float damage = 0.3 + 0.7*(1.0-u_health);
+    float damage = (1.0 - u_health)*(1.0-u_health);
 
 	//apply the vignette with 50% opacity
 
