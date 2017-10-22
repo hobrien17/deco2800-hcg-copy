@@ -41,7 +41,7 @@ public class MapNodeEntity extends Actor {
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
         int viewPortY = Gdx.graphics.getHeight();
-        
+
         // pixels padding around each direction of the map
         int mapPadding = (int) (0.05 * viewPortX);
 

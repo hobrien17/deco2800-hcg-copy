@@ -5,6 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 
+/**
+ * PlayerMapEntity creates the player sprite as a renderable actor to see the current position of the player in the WorldMap.
+ *
+ * @author chuducty, based on jakedunn code
+ */
 public class PlayerMapEntity extends Actor {
     GameManager gameManager;
     private Texture playerTexture;
@@ -17,7 +22,8 @@ public class PlayerMapEntity extends Actor {
         gameManager = GameManager.get();
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         playerTexture = textureManager.getTexture("player_map");
-
+        // Calculate the scaling required on the sprite height.
+        spriteHeight = playerTexture.getHeight() / (playerTexture.getWidth() / spriteWidth);
     }
 
     /**
@@ -30,8 +36,6 @@ public class PlayerMapEntity extends Actor {
         xPos =  Math.round(mapNodeEntity.getXPos() + mapNodeEntity.getWidth() / 2 - spriteWidth / 2);
         // move it up horizontally by the node entity sprite height
         yPos = Math.round(mapNodeEntity.getYPos() + mapNodeEntity.getHeight() / 2);
-        // Calculate the scaling required on the sprite height.
-        spriteHeight = playerTexture.getHeight() / (playerTexture.getWidth() / spriteWidth);
     }
 
     /**
