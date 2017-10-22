@@ -175,6 +175,7 @@ public class MultiplayerCharacterContext extends UIContext{
                         "small loan of a million dollars. \nStrength: 5\nVitality: 5\nAgility: 6\n Intellect:" +
                         " 12\nCharisma: 8\nMelee Skill: 10\nGun Skill: 10\nEnergy Weapon Skill: 15");
                 selectedCharacter = 4;
+                break;
             default:
                 break;
         }

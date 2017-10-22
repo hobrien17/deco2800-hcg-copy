@@ -15,6 +15,7 @@ import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.weapons.*;
 import com.deco2800.hcg.worlds.World;
@@ -278,18 +279,29 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 				case 0:
 					break;
 				case 1:
-					this.takeDamage((int)(3 + 0.5 * player.getLevel()));
+					this.takeDamage((int) (3 + 0.5 * player.getLevel()));
 					break;
 				case 2:
-					this.takeDamage((int)(5 + 0.7 * player.getLevel()));
+					this.takeDamage((int) (5 + 0.7 * player.getLevel()));
 					break;
 				case 3:
 					this.takeDamage(7 + player.getLevel());
 					break;
 				case 4:
 					this.takeDamage((int) (10 + 1.2 * player.getLevel()));
+					break;
+				default:
+					break;
 			}
 		}
+		//Perk - Run,Fungus,Run!
+		Perk runFungus = player.getPerk(Perk.perk.RUN_FUNGUS_RUN);
+		if (runFungus.isActive()) {
+			int speedTime = (runFungus.getCurrentLevel());
+			target.giveEffect(new Effect("Shot", 1, 0, 1.2f,
+					1000, speedTime, 0, this));
+		}
+
 
 	}
 
@@ -697,15 +709,31 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 		if (spriteCount % 4 == 0) {
 			switch (this.direction) {
 			case 1:
+				if (enemyType == enemyType.SNAIL) {
+					setTexture(directionTextures[0]);
+					break;
+				}
 				updateTexture(directionTextures[0]);
 				break;
 			case 2:
+				if (enemyType == enemyType.SNAIL) {
+					setTexture(directionTextures[1]);
+					break;
+				}
 				updateTexture(directionTextures[1]);
 				break;
 			case 3:
+				if (enemyType == enemyType.SNAIL) {
+					setTexture(directionTextures[2]);
+					break;
+				}
 				updateTexture(directionTextures[2]);
 				break;
 			case 4:
+				if (enemyType == enemyType.SNAIL) {
+					setTexture(directionTextures[3]);
+					break;
+				}
 				updateTexture(directionTextures[3]);
 				break;
 			default:
@@ -794,42 +822,6 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 		return closestDistance;
 	}
 
-	/**
-	 * Logic for Tree
-	 *
-	 */
-	void tree() {
-		this.setMovementSpeed(0);
-		this.defaultSpeed = 0;
-
-		GameManager.get().getWorld().getWidth();
-		GameManager.get().getWorld().getLength();
-		if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax() * 0.8)) {
-			// bottom
-
-			this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
-			this.setPosY(0);
-		} else if ((this.getHealthCur() < this.getHealthMax() * 0.8)
-				&& (this.getHealthCur() > this.getHealthMax() * 0.6)) {
-			// left
-			this.setPosX(0);
-			this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
-		} else if ((this.getHealthCur() < this.getHealthMax() * 0.6)
-				&& (this.getHealthCur() > this.getHealthMax() * 0.4)) {
-			// right
-			this.setPosX(GameManager.get().getWorld().getWidth());
-			this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
-		} else if ((this.getHealthCur() < this.getHealthMax() * 0.4)
-				&& (this.getHealthCur() > this.getHealthMax() * 0.2)) {
-			// top
-			this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
-			this.setPosY(GameManager.get().getWorld().getLength());
-		} else {
-			// middle
-			this.setPosX((float) (GameManager.get().getWorld().getWidth() * 0.5));
-			this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
-		}
-	}
 
 	public Color getLightColour() {
 		if (this.getTint() == null) {

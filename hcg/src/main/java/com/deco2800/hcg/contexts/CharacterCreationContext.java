@@ -9,18 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.tools.Shovel;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
-import com.deco2800.hcg.weapons.Weapon;
-import com.deco2800.hcg.weapons.WeaponBuilder;
-import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.*;
 import java.util.List;
@@ -63,20 +60,20 @@ public class CharacterCreationContext extends CharacterContext{
     private CheckBox shotGunSpecialise;
     private CheckBox starGunSpecialise;
     private CheckBox multiGunSpecialise;
-
-    private SelectBox<String> characterSex;
+    
+    private TextField characterName;
 
     // For some reason the checkBox isChecked method isn't working properly so this is a temporary fix
     private Boolean machineGunSkillSpecialiseChecked = false;
     private Boolean shotGunSkillSpecialiseChecked = false;
     private Boolean starGunSkillSpecialiseChecked = false;
     private Boolean multiGunSkillSpecialiseChecked = false;
-
-    private Window attributesWindow;
-    private Window skillsWindow;
-    private Window statsWindow;
-    private Window characterPreviewWindow;
-    private Window selectedDescriptionWindow;
+    
+    // Sub tables
+    private Table attributesTable;
+    private Table skillsTable;
+    private Table statsTable;
+    private Table characterPreviewTable;
 
     private String[] sexes = new String[]{MALE, FEMALE};
 
@@ -84,7 +81,7 @@ public class CharacterCreationContext extends CharacterContext{
     private List<String> SPECIALISED_SKILLS = Arrays.asList( "machineGunSkill", "shotGunSkill", "starGunSkill", "multiGunSkill");
     private Map<String, Boolean> specialisedSkills;
 
-
+    // Attribute and skill points
     private int strength = 5; 
     private int vitality = 5;
     private int agility = 5;
@@ -96,12 +93,12 @@ public class CharacterCreationContext extends CharacterContext{
     private int multiGunSkill = 10;
     private int attributePoints = 5;
     private int specializedSkillsPoints = 2;
-    private int skillPointsGain = 14;
+    private int skillPointsGain = 7;
     private int carryWeight = 180;
-    private int startingHealth = 1800;
-    private int startingStamina = 1800;
-    private int healthGain = 200;
-    private int staminaGain = 200;
+    private int startingHealth = 250;
+    private int startingStamina = 250;
+    private int healthGain = 80;
+    private int staminaGain = 40;
 
     private Image characterPreviewImage;
 
@@ -112,12 +109,14 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture female2;
     private Texture female3;
     private Texture blankWindowBackground;
+    private Texture titleAttributes;
+    private Texture titleSkills;
+    private Texture titleStats;
+    private Texture titleCharacter;
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray;
     private int textureCount;
-
-    private TextArea selectedDescriptionText;
 
     /**
      * Creates a new character creation screen
@@ -136,7 +135,6 @@ public class CharacterCreationContext extends CharacterContext{
         setupSkillsWindow();
         setupStatsWindow();
         setupCharacterPreviewWindow();
-        setupSelectedDescriptionWindow();
         addSubtables();
     }
 
@@ -147,6 +145,10 @@ public class CharacterCreationContext extends CharacterContext{
         female1 = textureManager.getTexture("ccFemale1");
         female2 = textureManager.getTexture("ccFemale2");
         female3 = textureManager.getTexture("ccFemale3");
+        titleAttributes = textureManager.getTexture("ccAttributes");
+        titleSkills = textureManager.getTexture("ccSkills");
+        titleStats = textureManager.getTexture("ccStats");
+        titleCharacter = textureManager.getTexture("ccCharacter");
         blankWindowBackground = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
@@ -154,39 +156,24 @@ public class CharacterCreationContext extends CharacterContext{
     // Declaring sub-tables/sub-windows
     private void initSubTables() {
         topRowInfoTable = new Table(skin);
-        attributesWindow = new Window("Attributes", skin);
-        skillsWindow = new Window("Skills", skin);
-        statsWindow = new Window("Stats", skin);
-        characterPreviewWindow = new Window("Character Preview", skin);
-        selectedDescriptionWindow = new Window("Click on an attribute or skill to find out what it does!", skin);
-
-        // Set windows as non-movable
-        attributesWindow.setMovable(false);
-        skillsWindow.setMovable(false);
-        statsWindow.setMovable(false);
-        characterPreviewWindow.setMovable(false);
-        selectedDescriptionWindow.setMovable(false);
-
-        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
-        skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
-        statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
-        characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        attributesTable = new Table(skin);
+        skillsTable = new Table(skin);
+        statsTable = new Table(skin);
+        characterPreviewTable = new Table(skin);
+        
+        attributesTable.setBackground(new Image(blankWindowBackground).getDrawable());
+        skillsTable.setBackground(new Image(blankWindowBackground).getDrawable());
+        statsTable.setBackground(new Image(blankWindowBackground).getDrawable());
+        characterPreviewTable.setBackground(new Image(blankWindowBackground).getDrawable());
     }
 
     //Setting up top row info
     private void setupTopRowInfo() {
         TextButton quitButton = new TextButton("Back", skin);
-        TextButton skipButton = new TextButton("CLICK HERE TO SKIP CHARACTER CREATION", skin);
-        TextButton doneButton = new TextButton("Finished", skin);
-        TextField characterName = new TextField("Enter Name", skin);
-
-        characterSex = new SelectBox<>(skin);
-        characterSex.setItems(sexes);
-
-        topRowInfoTable.add(characterName);
-        topRowInfoTable.add(characterSex).left().expandX();
-        topRowInfoTable.add(quitButton).center();
-        topRowInfoTable.add(skipButton);
+        TextButton skipButton = new TextButton("Skip", skin);
+        TextButton doneButton = new TextButton("Done", skin);
+        topRowInfoTable.add(quitButton).left().expandX();
+        topRowInfoTable.add(skipButton).right();
         topRowInfoTable.add(doneButton).right();
 
         quitButton.addListener(new ChangeListener() {
@@ -214,8 +201,7 @@ public class CharacterCreationContext extends CharacterContext{
                                 multiGunSkill, characterName.getText(), charTextureArray[textureCount].toString());
                     }
                 } else {
-                    selectedDescriptionText.setText("Please distribute all skill points and choose your specialised" +
-                            " skills");
+                    //TODO: Show tooltip explaining why you can't advance
                 }
             }
         });
@@ -236,23 +222,10 @@ public class CharacterCreationContext extends CharacterContext{
                 }
             }
         });
-
-
-        characterSex.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-				if (characterSex.getSelected() == MALE) {
-					textureCount = 0;
-				} else {
-					textureCount = 3;
-				}
-				characterPreviewImage.setDrawable(new SpriteDrawable(
-						new Sprite(charTextureArray[textureCount])));
-			}
-        });
     }
 
     private void setupAttributesWindow() {
+        // Attribute labels
         attributePointsLabel = new Label("Available Points: " + attributePoints, skin);
         strengthLabel = new Label("Strength: " + strength, skin);
         vitalityLabel = new Label("Vitality: " + vitality, skin);
@@ -260,6 +233,7 @@ public class CharacterCreationContext extends CharacterContext{
         intellectLabel = new Label("Intellect: " + intellect, skin);
         charismaLabel = new Label("Charisma: " + charisma, skin);
 
+        // Buttons to increase and decrease attribute points
         TextButton strengthDown = new TextButton("Down", skin);
         TextButton vitalityDown = new TextButton("Down", skin);
         TextButton agilityDown = new TextButton("Down", skin);
@@ -270,30 +244,46 @@ public class CharacterCreationContext extends CharacterContext{
         TextButton agilityUp = new TextButton("Up", skin);
         TextButton intellectUp = new TextButton("Up", skin);
         TextButton charismaUp = new TextButton("Up", skin);
-
-        // Add attribute labels and button to the window
-        attributesWindow.add(attributePointsLabel);
-        attributesWindow.row();
-        attributesWindow.add(strengthDown);
-        attributesWindow.add(strengthLabel);
-        attributesWindow.add(strengthUp);
-        attributesWindow.row();
-        attributesWindow.add(vitalityDown);
-        attributesWindow.add(vitalityLabel);
-        attributesWindow.add(vitalityUp);
-        attributesWindow.row();
-        attributesWindow.add(agilityDown);
-        attributesWindow.add(agilityLabel);
-        attributesWindow.add(agilityUp);
-        attributesWindow.row();
-        attributesWindow.add(intellectDown);
-        attributesWindow.add(intellectLabel);
-        attributesWindow.add(intellectUp);
-        attributesWindow.row();
-        attributesWindow.add(charismaDown);
-        attributesWindow.add(charismaLabel);
-        attributesWindow.add(charismaUp);
-        attributesWindow.pack();
+        
+        // Tooltips for displaying information on attributes
+        TextTooltip strengthInfo = new TextTooltip("Strength determines how much damage you " +
+                "deal with melee weapons, as well as how much you are able to carry.", skin);
+        TextTooltip vitalityInfo = new TextTooltip("Vitality determines your starting health " +
+                "as well as how much health you gain per level.", skin);
+        TextTooltip agilityInfo = new TextTooltip("Agility determines your starting stamina " +
+                "as well as how much stamina you gain per level.", skin);
+        TextTooltip intellectInfo = new TextTooltip("Intellect determines how many skill " +
+                "points you have to distribute to your skills each level.", skin);
+        TextTooltip charismaInfo = new TextTooltip("Charisma determines how well your " +
+                "interactions with friendly NPCs go.", skin);
+        
+        // Add everything to the subtable
+        attributesTable.add(new Image(titleAttributes)).colspan(3).padTop(50).padBottom(30);
+        attributesTable.row();
+        attributesTable.add(attributePointsLabel).colspan(3).padBottom(10);
+        attributesTable.row();
+        attributesTable.add(strengthDown);
+        attributesTable.add(strengthLabel);
+        attributesTable.add(strengthUp);
+        attributesTable.row();
+        attributesTable.add(vitalityDown);
+        attributesTable.add(vitalityLabel);
+        attributesTable.add(vitalityUp);
+        attributesTable.row();
+        attributesTable.add(agilityDown);
+        attributesTable.add(agilityLabel);
+        attributesTable.add(agilityUp);
+        attributesTable.row();
+        attributesTable.add(intellectDown);
+        attributesTable.add(intellectLabel);
+        attributesTable.add(intellectUp);
+        attributesTable.row();
+        attributesTable.add(charismaDown);
+        attributesTable.add(charismaLabel);
+        attributesTable.add(charismaUp);
+        attributesTable.row();
+        attributesTable.add().expandY();
+        attributesTable.pack();
 
         // Add listeners for buttons
         strengthDown.addListener(new ClickListener() {
@@ -308,8 +298,6 @@ public class CharacterCreationContext extends CharacterContext{
                 strengthLabel.setText("Strength: " + strength);
                 attributePointsLabel.setText("Available Points: " + attributePoints);
                 carryWeightLabel.setText("Carry Weight: " + carryWeight);
-                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
-                        "deal with melee weapons, as well as how much you are able to carry");
             }
         });
 
@@ -321,14 +309,12 @@ public class CharacterCreationContext extends CharacterContext{
                 }
             	vitality--;
                 attributePoints++;
-                startingHealth -= 200;
-                healthGain -= 40;
+                startingHealth -= 50;
+                healthGain -= 20;
                 vitalityLabel.setText("Vitality: " + vitality);
                 attributePointsLabel.setText("Available Points: " + attributePoints);
                 startingHealthLabel.setText("Starting Health: " + startingHealth);
                 healthGainLabel.setText("Health gained per level up: " + healthGain);
-                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-                        "as well as how much health you gain per level");
             }
         });
 
@@ -340,14 +326,12 @@ public class CharacterCreationContext extends CharacterContext{
                 }
             	agility--;
             	attributePoints++;
-            	startingStamina -= 200;
-            	staminaGain -= 40;
+            	startingStamina -= 50;
+            	staminaGain -= 10;
             	agilityLabel.setText("Agility: " + agility);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
             	staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
-                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-                        "as well as how much stamina you gain per level");
             }
         });
 
@@ -359,12 +343,10 @@ public class CharacterCreationContext extends CharacterContext{
                 }
             	intellect--;
             	attributePoints++;
-            	skillPointsGain -= 2;
+            	skillPointsGain -= 1;
             	intellectLabel.setText("Intellect: " + intellect);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
-                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-                        "to distribute to your skills each level");
             }
         });
 
@@ -378,9 +360,6 @@ public class CharacterCreationContext extends CharacterContext{
             	attributePoints++;
             	charismaLabel.setText("Charisma: " + charisma);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
-                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-                        "influence others to see your point of view, and perhaps even follow you");
             }
         });
 
@@ -394,8 +373,6 @@ public class CharacterCreationContext extends CharacterContext{
                     strengthLabel.setText("Strength: " + strength);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     carryWeightLabel.setText("Carry Weight: " + carryWeight);
-                    selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
-                            "deal with melee weapons, as well as how much you are able to carry");
                 }
             }
         });
@@ -406,14 +383,12 @@ public class CharacterCreationContext extends CharacterContext{
                 if (vitality < 10 && attributePoints > 0) {
                     vitality++;
                     attributePoints--;
-                    startingHealth += 200;
-                    healthGain += 40;
+                    startingHealth += 50;
+                    healthGain += 20;
                     vitalityLabel.setText("Vitality: " + vitality);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingHealthLabel.setText("Starting Health: " + startingHealth);
                     healthGainLabel.setText("Health gained per level up: " + healthGain);
-                    selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-                            "as well as how much health you gain per level");
                 }
             }
         });
@@ -424,14 +399,12 @@ public class CharacterCreationContext extends CharacterContext{
                 if (agility < 10 && attributePoints > 0) {
                     agility++;
                     attributePoints--;
-                    startingStamina += 200;
-                    staminaGain += 40;
+                    startingStamina += 50;
+                    staminaGain += 10;
                     agilityLabel.setText("Agility: " + agility);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
                     staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
-                    selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-                            "as well as how much stamina you gain per level");
                 }
             }
         });
@@ -442,12 +415,10 @@ public class CharacterCreationContext extends CharacterContext{
                 if (intellect < 10 && attributePoints > 0) {
                     intellect++;
                     attributePoints--;
-                    skillPointsGain += 2;
+                    skillPointsGain += 1;
                     intellectLabel.setText("Intellect: " + intellect);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
-                    selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-                            "to distribute to your skills each level");
                 }
             }
         });
@@ -460,94 +431,67 @@ public class CharacterCreationContext extends CharacterContext{
                     attributePoints--;
                     charismaLabel.setText("Charisma: " + charisma);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
-                    selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-                            "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-                            "influence others to see your point of view, and perhaps even follow you");
                 }
             }
         });
 
-        attributePointsLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("The number of points you have to distribute to your attributes.");
-            }
-        });
-
-        strengthLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
-                        "deal with melee weapons, as well as how much you are able to carry");
-            }
-        });
-
-        vitalityLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-                        "as well as how much health you gain per level");
-            }
-        });
-
-        agilityLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-                        "as well as how much stamina you gain per level");
-            }
-        });
-
-        intellectLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-                        "to distribute to your skills each level");
-            }
-        });
-
-        charismaLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-                        "influence others to see your point of view, and perhaps even follow you");
-            }
-        });
+        // Add tooltips to labels
+        attributePointsLabel.addListener(new TextTooltip("The number of points you have to " +
+                "distribute to your attributes.", skin));
+        strengthLabel.addListener(strengthInfo);
+        vitalityLabel.addListener(vitalityInfo);
+        agilityLabel.addListener(agilityInfo);
+        intellectLabel.addListener(intellectInfo);
+        charismaLabel.addListener(charismaInfo);
     }
 
     private void setupSkillsWindow() {
+        // Skill labels
         specializedSkillsPointsLabel = new Label("Available Specialities: " + specializedSkillsPoints, skin);
         machineGunSkillLabel = new Label("Machine Gun Skill: " + machineGunSkill, skin);
         shotGunSkillLabel = new Label("Shotgun Skill: " + shotGunSkill, skin);
         starGunSkillLabel = new Label("Star Gun Skill: " + starGunSkill, skin);
         multiGunSkillLabel = new Label("Multi Gun Skill: " + multiGunSkill, skin);
 
-
-        machineGunSpecialise = new CheckBox("Specialise", skin);
+        // Checkboxes to choose specialties
+        machineGunSpecialise = new CheckBox("", skin);
         machineGunSpecialise.setChecked(false);
-        shotGunSpecialise = new CheckBox("Specialise", skin);
+        shotGunSpecialise = new CheckBox("", skin);
         shotGunSpecialise.setChecked(false);
-        starGunSpecialise = new CheckBox("Specialise", skin);
+        starGunSpecialise = new CheckBox("", skin);
         starGunSpecialise.setChecked(false);
-        multiGunSpecialise = new CheckBox("Specialise", skin);
+        multiGunSpecialise = new CheckBox("", skin);
         multiGunSpecialise.setChecked(false);
-
-        // Add attribute labels and button to the window
-        skillsWindow.add(specializedSkillsPointsLabel);
-        skillsWindow.row();
-        skillsWindow.add(machineGunSpecialise);
-        skillsWindow.add(machineGunSkillLabel);
-        skillsWindow.row();
-        skillsWindow.add(shotGunSpecialise);
-        skillsWindow.add(shotGunSkillLabel);
-        skillsWindow.row();
-        skillsWindow.add(starGunSpecialise);
-        skillsWindow.add(starGunSkillLabel);
-        skillsWindow.row();
-        skillsWindow.add(multiGunSpecialise);
-        skillsWindow.add(multiGunSkillLabel);
-        skillsWindow.pack();
+        
+        // Tooltips for displaying information on skills
+        TextTooltip machineGunInfo = new TextTooltip("Determines how much damage you do with " +
+                "the Machine Gun. Weapon damage will be multiplied by a factor of SkillPoints/20", skin);
+        TextTooltip shotGunInfo = new TextTooltip("Determines how much damage you do with the " +
+                "Shotgun. Weapon damage will be multiplied by a factor of SkillPoints/20", skin);
+        TextTooltip starGunInfo = new TextTooltip("Determines how much damage you do with the " +
+                "Star Gun. Weapon damage will be multiplied by a factor of SkillPoints/20", skin);
+        TextTooltip multiGunInfo = new TextTooltip("Determines how much damage you do with the " +
+                "Multi Gun. Weapon damage will be multiplied by a factor of SkillPoints/20", skin);
+        
+        // Add everything to subtable
+        skillsTable.add(new Image(titleSkills)).colspan(2).padTop(50).padBottom(30);
+        skillsTable.row();
+        skillsTable.add(specializedSkillsPointsLabel).colspan(2).padBottom(10);
+        skillsTable.row();
+        skillsTable.add(machineGunSpecialise).left().padRight(10);
+        skillsTable.add(machineGunSkillLabel);
+        skillsTable.row();
+        skillsTable.add(shotGunSpecialise).left().padRight(10);
+        skillsTable.add(shotGunSkillLabel);
+        skillsTable.row();
+        skillsTable.add(starGunSpecialise).left().padRight(10);
+        skillsTable.add(starGunSkillLabel);
+        skillsTable.row();
+        skillsTable.add(multiGunSpecialise).left().padRight(10);
+        skillsTable.add(multiGunSkillLabel);
+        skillsTable.row();
+        skillsTable.add().expandY();
+        skillsTable.pack();
 
         /*  Add listeners to the check-boxes have had to do some VERY odd work arounds to get these checkboxes working
             The checkbox.isChecked() methods don't seem to be working properly with the clickListener
@@ -576,8 +520,6 @@ public class CharacterCreationContext extends CharacterContext{
                 }
                 machineGunSkillLabel.setText("Machine Gun Skill: " + machineGunSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
-                selectedDescriptionText.setText("Your Machine Gun skill.\n Determines how much damage you do with" +
-                        " the Machine Gun");
             }
         });
 
@@ -602,8 +544,6 @@ public class CharacterCreationContext extends CharacterContext{
 				}
                 shotGunSkillLabel.setText("Shotgun Skill: " + shotGunSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
-                selectedDescriptionText.setText("Your Shot Gun skill.\n Determines how much damage you do with" +
-                        " the Shotgun");
             }
         });
 
@@ -628,8 +568,6 @@ public class CharacterCreationContext extends CharacterContext{
 				}
                 starGunSkillLabel.setText("Star Gun Skill: " + starGunSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
-                selectedDescriptionText.setText("Your Star Gun skill.\n Determines how much damage you do with" +
-                        " the Star Gun");
             }
         });
 
@@ -654,73 +592,79 @@ public class CharacterCreationContext extends CharacterContext{
                 }
                 multiGunSkillLabel.setText("Multi Gun Skill: " + multiGunSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
-                selectedDescriptionText.setText("Your Multi Gun skill.\n Determines how much damage you do with" +
-                        " the Multi Gun");
             }
         });
 
-        machineGunSkillLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Machine Gun skill.\n Determines how much damage you do with" +
-                        " the Machine Gun");
-            }
-        });
-
-        shotGunSkillLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Shotgun skill.\n Determines how much damage you do with" +
-                        " the Shotgun");
-            }
-        });
-
-        starGunSkillLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Star Gun skill.\n Determines how much damage you do with" +
-                        " the Star Gun");
-            }
-        });
-
-        multiGunSkillLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                selectedDescriptionText.setText("Your Multi Gun skill.\n Determines how much damage you do with" +
-                        " the Multi Gun");
-            }
-        });
-
+        //Add tooltips to labels
+        specializedSkillsPointsLabel.addListener(new TextTooltip("The number of points you have to" + 
+                "distribute to your attributes.", skin));
+        machineGunSkillLabel.addListener(machineGunInfo);
+        shotGunSkillLabel.addListener(shotGunInfo);
+        starGunSkillLabel.addListener(starGunInfo);
+        multiGunSkillLabel.addListener(multiGunInfo);
     }
 
     private void setupStatsWindow() {
+        // Stat labels
         startingHealthLabel = new Label("Starting Health: " + startingHealth, skin);
         startingStaminaLabel = new Label("Starting stamina: " + startingStamina, skin);
         healthGainLabel = new Label("Health gained per level up: " + healthGain, skin);
         staminaGainLabel = new Label("Stamina gained per level up: " + staminaGain, skin);
         skillPointsGainLabel = new Label("Skill points to spend per level up: " + skillPointsGain, skin);
         carryWeightLabel = new Label("Carry Weight: " + carryWeight, skin);
-
-        statsWindow.add(startingHealthLabel);
-        statsWindow.row();
-        statsWindow.add(startingStaminaLabel);
-        statsWindow.row();
-        statsWindow.add(healthGainLabel);
-        statsWindow.row();
-        statsWindow.add(staminaGainLabel);
-        statsWindow.row();
-        statsWindow.add(skillPointsGainLabel);
-        statsWindow.row();
-        statsWindow.add(carryWeightLabel);
+        
+        // Add everything to subtable
+        statsTable.add(new Image(titleStats)).padTop(50).padBottom(30);
+        statsTable.row();
+        statsTable.add(startingHealthLabel);
+        statsTable.row();
+        statsTable.add(startingStaminaLabel);
+        statsTable.row();
+        statsTable.add(healthGainLabel);
+        statsTable.row();
+        statsTable.add(staminaGainLabel);
+        statsTable.row();
+        statsTable.add(skillPointsGainLabel);
+        statsTable.row();
+        statsTable.add(carryWeightLabel);
+        statsTable.row();
+        statsTable.add().expandY();
+        statsTable.pack();
     }
 
     private void setupCharacterPreviewWindow() {
         characterPreviewImage = new Image(male1);
 
-        TextButton next = new TextButton("Next", skin);
+        TextButton next = new TextButton("Change colour", skin);
+        
+        this.characterName = new TextField("Enter Name", skin);
+        SelectBox<String> characterSex = new SelectBox<String>(skin);
+        characterSex.setItems(sexes);
 
-        characterPreviewWindow.add(next);
-        characterPreviewWindow.add(characterPreviewImage);
+        // Add everything to subtable
+        characterPreviewTable.add(new Image(titleCharacter)).colspan(2).padBottom(30);
+        characterPreviewTable.row();
+        characterPreviewTable.add(this.characterName).right();
+        characterPreviewTable.add(characterSex).left();
+        characterPreviewTable.row();
+        characterPreviewTable.add(characterPreviewImage).colspan(2);
+        characterPreviewTable.row();
+        characterPreviewTable.add(next).colspan(2);
+        characterPreviewTable.pack();
+        
+        // Listeners for buttons
+        characterSex.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (characterSex.getSelected() == MALE) {
+                    textureCount = 0;
+                } else {
+                    textureCount = 3;
+                }
+                characterPreviewImage.setDrawable(new SpriteDrawable(
+                        new Sprite(charTextureArray[textureCount])));
+            }
+        });
 
         next.addListener(new ClickListener() {
             @Override
@@ -742,23 +686,15 @@ public class CharacterCreationContext extends CharacterContext{
         });
     }
 
-    private void setupSelectedDescriptionWindow() {
-        selectedDescriptionText = new TextArea("JUST CLICK ON SOMETHING ALREADY", skin);
-        selectedDescriptionText.setDisabled(true);
-        selectedDescriptionText.setColor(Color.WHITE);
-        selectedDescriptionWindow.add(selectedDescriptionText).bottom().left().expandY().expandX().fillX().fillY();
-    }
-
     private void addSubtables() {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesWindow).top().left().expandX().fillX().padBottom(15);
-        masterTable.add(skillsWindow).top().right().expandX().fillX().padBottom(15);
+        masterTable.add(characterPreviewTable).grow().pad(30);
+        masterTable.add(attributesTable).grow().pad(30);
         masterTable.row();
-        masterTable.add(statsWindow).top().left().expandX().fillX().fillY().padBottom(15);
-        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().padBottom(15);
+        masterTable.add(statsTable).grow().pad(30);
+        masterTable.add(skillsTable).grow().pad(30);
         masterTable.row();
-        masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
 
 

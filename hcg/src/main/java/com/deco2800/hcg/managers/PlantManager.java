@@ -134,7 +134,7 @@ public class PlantManager extends Manager {
 	 * Retrieves plants from plantList
 	 */
 	private void contents() {
-		if (plantList.size() == 0) {
+		if (plantList.isEmpty()) {
 			Label nonPlant = new Label("No plants planted", skin);
 			nonPlant.setColor(Color.GRAY);
 			windowTable.add(nonPlant);

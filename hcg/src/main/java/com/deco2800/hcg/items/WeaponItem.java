@@ -1,6 +1,5 @@
 package com.deco2800.hcg.items;
 
-import com.deco2800.hcg.weapons.Machinegun;
 import com.deco2800.hcg.weapons.Multigun;
 import com.deco2800.hcg.weapons.Shotgun;
 import com.deco2800.hcg.weapons.Stargun;
@@ -38,12 +37,16 @@ public class WeaponItem extends SingleItem {
      * @return the value in seeds
      */
     private int getValue() {
-    	if(weapon instanceof Multigun || weapon instanceof Shotgun) {
-    		return 20;
-    	} else if(weapon instanceof Stargun) {
-    		return 30;
-    	}
-    	return 0;
+        if (getRarity() == ItemRarity.COMMON) {
+            return 20;
+        } else if (getRarity() == ItemRarity.UNCOMMON) {
+            return 30;
+        } else if (getRarity() == ItemRarity.RARE) {
+            return 50;
+        } else if (getRarity() == ItemRarity.LEGENDARY) {
+            return 100;
+        }
+        return 0;
     }
     
     @Override
@@ -109,7 +112,7 @@ public class WeaponItem extends SingleItem {
     }
     
     @Override
-    public boolean sameItem(Item item) throws IllegalArgumentException {
+    public boolean sameItem(Item item) {
         return item instanceof WeaponItem && 
                item.getName().equals(this.itemName) &&
                this.weapon.equals(((WeaponItem)item).getWeapon());

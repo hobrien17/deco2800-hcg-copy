@@ -34,7 +34,7 @@ public interface Inventory extends Iterable<Item> {
      * @throws IndexOutOfBoundsException
      *            if the provided index is not a valid position in the inventory.
      */
-    Item getItem(int index) throws IndexOutOfBoundsException;
+    Item getItem(int index);
     
     /**
      * Remove the item stored at position <code>index</code> inside this inventory.
@@ -45,7 +45,7 @@ public interface Inventory extends Iterable<Item> {
      * @throws IndexOutOfBoundsException
      *            if the provided index is not a valid position in the inventory.
      */
-    Item removeItem(int index) throws IndexOutOfBoundsException;
+    Item removeItem(int index);
     
     /**
      * Remove the given item from the inventory, if it exists.
@@ -66,6 +66,17 @@ public interface Inventory extends Iterable<Item> {
      * @return
      */
     boolean removeItem(Item item, int number);
+
+    /**
+     * Remove a given number of the given item
+     *
+     * @param item
+     *          The item to remove
+     * @param number
+     *          The number to remove
+     * @return
+     */
+    boolean removeItem(String item, int number);
     
     /**
      * Tests whether or not this inventory can currently accept <code>item</code>.
@@ -92,7 +103,7 @@ public interface Inventory extends Iterable<Item> {
      * @return Whether or not the item is able to be inserted into the slot.
 
      */
-    boolean canFitItemInSlot(Item item, int index) throws IndexOutOfBoundsException;
+    boolean canFitItemInSlot(Item item, int index);
     
     /**
      * Tests whether or not the slot at position <code>index</code> can contain
@@ -111,7 +122,7 @@ public interface Inventory extends Iterable<Item> {
      * @throws IndexOutOfBoundsException
      * 
      */
-    boolean allowItemInSlot(Item item, int index) throws IndexOutOfBoundsException;
+    boolean allowItemInSlot(Item item, int index);
     
     /**
      * Inserts <code>item</code> into position <code>index</code> in the inventory
@@ -123,7 +134,7 @@ public interface Inventory extends Iterable<Item> {
      *            The position to insert the item into.
      * @return Whether or not the item was able to be inserted into the inventory.
      */
-    boolean insertItem(Item item, int index) throws IndexOutOfBoundsException;
+    boolean insertItem(Item item, int index);
     
     /**
      * Inserts <code>item</code> into the inventory into the first free spaces that
