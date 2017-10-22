@@ -294,7 +294,7 @@ public final class NetworkManager extends Manager {
 					try {
 						// send discovery message
 						SocketAddress socketAddress = new InetSocketAddress(broadcastAddress, 1337);
-						sendOnce(new DiscoveryMessage(getNextRandomInt()), socketAddress);
+						sendOnce(new DiscoveryMessage(), socketAddress);
 					} catch (IOException e) {
 						LOGGER.error("Failed to send discovery message", e);
 					}
@@ -321,7 +321,7 @@ public final class NetworkManager extends Manager {
 		// add host to peers
 		sockets.put(0, socketAddress);
 		// try to connect
-		queueMessage(new JoiningMessage(getNextRandomInt()));
+		queueMessage(new JoiningMessage());
 	}
 
 	/**

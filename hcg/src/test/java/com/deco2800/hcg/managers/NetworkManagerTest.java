@@ -56,9 +56,9 @@ public class NetworkManagerTest  {
 		hostNetworkManager.init(true);
 		int size = hostNetworkManager.getSendQueueSize();
 		assertThat("The message queue contains messages", size, is(equalTo(0)));
-		hostNetworkManager.queueMessage(new JoiningMessage(0));
+		hostNetworkManager.queueMessage(new JoiningMessage());
 		assertThat("The queue should only have 1 message only", hostNetworkManager.getSendQueueSize(), is(equalTo(1)));
-		hostNetworkManager.queueMessage(new JoiningMessage(0));
+		hostNetworkManager.queueMessage(new JoiningMessage());
 		assertThat("Queue should have 2 messages", hostNetworkManager.getSendQueueSize(), is(equalTo(2)));
 	}
 }

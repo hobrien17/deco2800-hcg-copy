@@ -20,7 +20,7 @@ public class DiscoveryMessage extends Message {
 			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 	private static final Logger LOGGER = LoggerFactory.getLogger(DiscoveryMessage.class);
 	
-	public DiscoveryMessage(int id) {
+	public DiscoveryMessage() {
 		super(MessageType.DISCOVERY);
 	}
 	
