@@ -173,9 +173,9 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("fireC", "fire_btn");
 		sprites.put("grassC", "grass_btn");
 		sprites.put("outline", "radialOutline");
-		sprites.put("machineGun", "machineGun");
+		sprites.put("machinegun", "machineGun");
 		sprites.put("shotgun", "shotgun");
-		sprites.put("scatterGun", "scatterGun");
+		sprites.put("multigun", "scatterGun");
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
 		sprites.put("bug_spray", "bugspray_btn");
@@ -287,7 +287,7 @@ public class GeneralRadialDisplay extends Group {
 			}
 		});
 
-		listeners.put("machineGun", new ChangeListener() {
+		listeners.put("machinegun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().setEquipped(0);
@@ -303,7 +303,7 @@ public class GeneralRadialDisplay extends Group {
 			}
 		});
 
-		listeners.put("scatterGun", new ChangeListener() {
+		listeners.put("multigun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().setEquipped(2);
@@ -386,7 +386,6 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("shovel", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				Optional<AbstractEntity> closest = GeneralRadialDisplay.getClosestPot();
 				useItem(new Shovel());
 				hide();
 			}
@@ -564,8 +563,9 @@ public class GeneralRadialDisplay extends Group {
 			} else if("sunflowerC".equals(type) || "waterC".equals(type) || "cactusC".equals(type) || "iceC".equals(type) ||
 					"fireC".equals(type) || "explosiveC".equals(type) || "grassC".equals(type)) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
-			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("scatterGun") || type.equals("shotgun"));
-			else if(type.equals("snag")) {
+			} else if(type.equals("machinegun") || type.equals("starfall") || type.equals("multigun") || type.equals("shotgun")) {
+				count = getCount(type + "_ne");
+			} else if(type.equals("snag")) {
 				count = getCount("bunnings_snag_and_bread");
 			} else if(type.equals("sausage")) {
 				count = getCount("bunnings_snag");

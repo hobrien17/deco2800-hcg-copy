@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 
 public class Trowel extends Tool {
 
@@ -33,6 +34,11 @@ public class Trowel extends Tool {
 	public void effect(Pot pot) {
 		pot.getPlant().harvest();
 		player.getInventory().removeItem(this);
+	}
+	
+	@Override
+	public ItemRarity getRarity() {
+		return ItemRarity.RARE;
 	}
 
 }

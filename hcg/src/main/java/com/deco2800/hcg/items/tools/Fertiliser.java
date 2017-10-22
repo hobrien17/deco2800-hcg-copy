@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 
 public class Fertiliser extends Tool {
 
@@ -42,6 +43,11 @@ public class Fertiliser extends Tool {
 	public void effect(Pot pot) {
 		pot.getPlant().changeDelay(0.75f);
 		player.getInventory().removeItem(this);
+	}
+	
+	@Override
+	public ItemRarity getRarity() {
+		return ItemRarity.UNCOMMON;
 	}
 
 }

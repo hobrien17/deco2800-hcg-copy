@@ -83,7 +83,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         this.weaponType = weaponType;
         this.user = user;
         this.radius = radius;
-        this.setTexture("blank");
+        this.setTexture(texture);
         this.texture = texture;
         this.cooldown = cooldown;
         this.muzzleFlashEnabled = 0;
@@ -418,6 +418,11 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
     }
     
     public ItemRarity getRarity() {
+        if(this instanceof Multigun || this instanceof Machinegun) {
+        	return ItemRarity.RARE;
+        } else if(this instanceof Stargun) {
+        	return ItemRarity.LEGENDARY;
+        }
         return ItemRarity.COMMON;
     }
 }
