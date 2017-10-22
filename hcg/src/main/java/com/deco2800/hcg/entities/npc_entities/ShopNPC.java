@@ -4,6 +4,7 @@ import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.GardenShop;
 import com.deco2800.hcg.trading.Shop;
+import com.deco2800.hcg.trading.WeaponShop;
 
 /**
  * Concrete implementation of a Shop NPC entity.
@@ -32,8 +33,9 @@ public class ShopNPC extends NPC {
 			case "Plants":
 				shop = new GardenShop();
 				break;
-			default:
-				shop = new GeneralShop();
+			case "Weapons":
+				shop = new WeaponShop();
+				break;
 		}
 	}
 

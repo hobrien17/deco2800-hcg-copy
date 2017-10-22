@@ -36,7 +36,7 @@ public class ConversationManager extends Manager {
             loadConversation("tutorialfirst", "resources/conversations/tutorialfirst.json");
             loadConversation("tutorialmaze", "resources/conversations/tutorialmaze.json");
             loadConversation("tutorialmultilevel", "resources/conversations/tutorialmultilevel.json");
-            loadConversation("shoptutorial", "resources/conversations/tutorialfirst.json");
+            loadConversation("shoptutorial", "resources/conversations/plantingSeedTutorial.json");
             loadConversation("tutoriallevelling", "resources/conversations/tutoriallevelling.json");
             loadConversation("tutorialoverrun", "resources/conversations/tutorialoverrun.json");
 
