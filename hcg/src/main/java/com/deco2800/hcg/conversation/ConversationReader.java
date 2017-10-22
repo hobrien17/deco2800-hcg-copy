@@ -24,6 +24,7 @@ public class ConversationReader {
 
 	// Read a Conversation from a file
 	public static Conversation readConversation(String filename) {
+
 		try {
 			JsonParser parser = new JsonParser();
 			BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -135,10 +136,14 @@ public class ConversationReader {
 	// Parse a JSON condition into a Condition object
 	private static AbstractConversationCondition deserialiseOptionCondition(JsonElement jCondition) {
 
-		// Collect options and arguments
-		String condition = jCondition.getAsString();
-		Scanner scanner = new Scanner(condition).useDelimiter("\\|");
+		Scanner scanner = null;
+
 		try {
+			// Collect options and arguments
+			String condition = jCondition.getAsString();
+			scanner = new Scanner(condition);
+			scanner.useDelimiter("\\|");
+
 			String command = scanner.next();
 			boolean negate = false;
 			if (command.charAt(0) == '!') {
@@ -173,7 +178,9 @@ public class ConversationReader {
 					throw new ResourceLoadException("No such condition: " + condition);
 			}
 		} finally {
-			scanner.close();
+			if (scanner != null) {
+				scanner.close();
+			}
 		}
 
 	}
@@ -181,11 +188,14 @@ public class ConversationReader {
 	// Parse a JSON action into a Action object
 	private static AbstractConversationAction deserialiseOptionAction(JsonElement jCondition) {
 
-		// Collect options and arguments
-		String action = jCondition.getAsString();
-		Scanner scanner = new Scanner(action).useDelimiter("\\|");
+		Scanner scanner = null;
 
 		try {
+			// Collect options and arguments
+			String action = jCondition.getAsString();
+			scanner = new Scanner(action);
+			scanner.useDelimiter("\\|");
+
 			String command = scanner.next();
 			List<String> args = new ArrayList<>();
 			while (scanner.hasNext()) {
@@ -215,7 +225,9 @@ public class ConversationReader {
 					throw new ResourceLoadException("No such action: " + action);
 			}
 		} finally {
-			scanner.close();
+			if (scanner != null) {
+				scanner.close();
+			}
 		}
 
 	}

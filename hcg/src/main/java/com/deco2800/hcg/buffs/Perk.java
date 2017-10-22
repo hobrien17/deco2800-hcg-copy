@@ -17,15 +17,15 @@ public class Perk {
 
     public enum perk {
         //Druid
-        I_AM_GROOT("I am groot", 1, 2, "I am groot - Slowly regain (1/2 + 0.2/0.3 per level) health per second"),
+       /*Done*/ I_AM_GROOT("I am groot", 1, 2, "I am groot - Slowly regain (1/2 + 0.2/0.3 per level) health per second"),
         SPLINTER_IS_COMING("Splinter is coming", 2, 3, "Splinter is coming - Enemies hit by you have a 15% chance of being " +
-                "splintered, damaging them for (5/10/15 + 2/3/5 per level) per second for 3 seconds"),
-        FULL_PETAL_ALCHEMIST("Full-Petal Alchemist", 5, 2, "Full-Petal Alchemist - By turning the food into potions, you gain (15/30 + " +
+                "splintered, damaging them for (5/10/15 + 1/2/3 per level) per second for 3 seconds"),
+        /*Done*/ FULL_PETAL_ALCHEMIST("Full-Petal Alchemist", 5, 2, "Full-Petal Alchemist - By turning the food into potions, you gain (15/30 + " +
                 "5/10 per level) Increased healing from food seeds"),
         GUNS_AND_ROSES("Guns and Roses", 10, 1, "Guns and Roses - turrets you plant in corpses have a 15% attack speed increase."),
 
         //Survivalist
-        RUN_FUNGUS_RUN("Run Fungus, Run!", 1, 3, "Run Fungus, Run! - If you are hit, they receive a (1/2/4) second 20% speed" +
+        RUN_FUNGUS_RUN("Run Fungus, Run!", 1, 3, "Run Fungus, Run! - If you are hit, you receive a (1/2/4) second 20% speed" +
                 " boost"),
         HOLLY_MOLEY("Holly Moley", 2, 2, "Holly Moley - Increases the explosion radius of your explosive seed by (10%/20%)"),
         KALERATE("Kale-ra-te", 5, 2, "Kale-ra-te - Your advanced fighting training has given you a (5%/10%) chance to dodge " +
