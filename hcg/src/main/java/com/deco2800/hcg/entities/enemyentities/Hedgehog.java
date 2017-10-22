@@ -15,7 +15,8 @@ public class Hedgehog extends Enemy implements Tickable {
     boolean chargedAtPlayer;
     private int counter;
     private int delay;
-    private int spriteCount;
+    private String[] ballSprites = {"hedgeballWE", "hedgeballNS", "hedgeballWE", "hedgeballNS"};
+    private String[] standingSprites = {"hedgehogE", "hedgehogN", "hedgehogW", "hedgehogS"};
 
     /**
      * Constructor for the Hedgehog class. Creates a new hedgehog at the given
@@ -27,7 +28,7 @@ public class Hedgehog extends Enemy implements Tickable {
      * @param id the ID of the Hedgehog Enemy
      */
     public Hedgehog(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 1f, 1f, 1, false, 1000, 5, id, EnemyType.HEDGEHOG);
+        super(posX, posY, posZ, 1f, 1f, 1, false, 1750, 5, id, EnemyType.HEDGEHOG);
         this.boss = false;
         this.setTexture("hedgehogW1");
         this.level = 1;
@@ -52,7 +53,7 @@ public class Hedgehog extends Enemy implements Tickable {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("explosive_seed"), 1.0);
+        lootRarity.put(new LootWrapper("explosive_seed", 1.0f), 1.0);
 
         checkLootRarity();
     }
@@ -86,21 +87,26 @@ public class Hedgehog extends Enemy implements Tickable {
             // move slowly to player
             this.setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.updateStandingSprite();
+            this.updateSprite(standingSprites);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
         } else if (!chargedAtPlayer && distance < chargingRange && !collided) {
             // charge at player
             this.setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.updateBallSprite();
+            this.updateSprite(ballSprites);
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
+            
+            if(tickCount > 30) {
+                spawnParticles(this, "rolyPoly.p");
+                tickCount = 0;
+            }
         } else {
             // move randomly
             this.setSpeed(this.level * 0.03f);
             this.setStatus(3);
-            this.updateStandingSprite();
+            this.updateSprite(standingSprites);
         }
     }
     
@@ -122,69 +128,25 @@ public class Hedgehog extends Enemy implements Tickable {
     		// move slowly to player
             setSpeed(this.level * 0.01f);
             this.setStatus(2);
-            this.updateStandingSprite();
+            this.updateSprite(standingSprites);
             this.lastPlayerX = closestPlayer.getPosX();
             this.lastPlayerY = closestPlayer.getPosY();
     	} else if (!chargedAtPlayer && distance < chargingRange && !collided) {
             // charge at player
             setSpeed(this.level * 0.05f);
             this.setStatus(2);
-            this.updateBallSprite();
+            this.updateSprite(ballSprites);
             this.lastPlayerX = closestPlayer.getPosX();
             this.lastPlayerY = closestPlayer.getPosY();
         } else {
             // move randomly
             setSpeed(this.level * 0.03f);
             this.setStatus(3);
-            this.updateStandingSprite();
+            this.updateSprite(standingSprites);
         }
     	
     }
 
-    public void updateBallSprite() {
-        if (spriteCount%4 == 0) {
-            switch (this.direction) {
-                case 1:
-                    updateTexture("hedgeballWE");
-                    break;
-                case 2:
-                    updateTexture("hedgeballNS");
-                    break;
-                case 3:
-                    updateTexture("hedgeballWE");
-                    break;
-                case 4:
-                    updateTexture("hedgeballNS");
-                    break;
-                default:
-                    break;
-            }
-        }
-        spriteCount++;
-    }
-
-    public void updateStandingSprite() {
-        if (spriteCount%4 == 0) {
-            switch (this.direction) {
-                case 1:
-                    updateTexture("hedgehogE");
-                    break;
-                case 2:
-                    updateTexture("hedgehogN");
-                    break;
-                case 3:
-                    updateTexture("hedgehogW");
-                    break;
-                case 4:
-                    updateTexture("hedgehogS");
-                    break;
-                default:
-                    break;
-            }
-        }
-        spriteCount++;
-    }
-    
     /**
      * On Tick handler
      * @param gameTickCount Current game tick
@@ -204,6 +166,7 @@ public class Hedgehog extends Enemy implements Tickable {
         }
     	this.moveAction();//Move enemy to the position in Box3D.
     	myEffects.apply();
+    	checkParticles();
     }
 
 }

@@ -82,16 +82,15 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
         
         float width = tileWidth * this.getXRenderLength();
         float height = (texture.getHeight() / aspect) * this.getYRenderLength();
+        float size = this.getItem().getRarity().beamSize;
+        Color precolour = batch.getColor();
+        Color colour = this.getItem().getRarity().colour;
         
-        if(this.item.getRarity() != ItemRarity.COMMON) {
-            Color precolour = batch.getColor();
-            Color colour = this.getItem().getRarity().colour;
-            batch.setColor(colour);
-    
-            batch.draw(beam, posX, posY, tileWidth / 2, beam.getHeight() / 3);
-            
-            batch.setColor(precolour);
-        }
+        batch.setColor(colour);
+
+        batch.draw(beam, posX, posY, tileWidth / 2, size * beam.getHeight() / 3);
+        
+        batch.setColor(precolour);
         
         batch.draw(texture, posX, posY, width, height);
     }
@@ -103,6 +102,6 @@ public class ItemEntity extends AbstractEntity implements Tickable, CustomRender
 
     @Override
     public float getLightPower() {
-        return this.getItem().getRarity() == ItemRarity.COMMON ? 0 : 5;
+        return this.getItem().getRarity().beamSize * 5;
     }
 }

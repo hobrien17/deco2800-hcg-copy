@@ -34,6 +34,7 @@ import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
@@ -87,7 +88,7 @@ public class Player extends Character implements Tickable {
 	private String displayImage;
 
 	private boolean pauseDisplayed;
-
+	private int perkPoints;
 
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
@@ -144,6 +145,7 @@ public class Player extends Character implements Tickable {
 		}
 		//Set up perks
 		perks = new ArrayList<>();
+		this.perkPoints = 0;
 		for (Perk.perk enumPerk : Perk.perk.values()) {
 			perks.add(new Perk(enumPerk));
 		}
@@ -211,6 +213,9 @@ public class Player extends Character implements Tickable {
 		inventory.addItem(new Key());
 		inventory.addItem(new Key());
 		inventory.addItem(new SpeedPotion());
+		inventory.addItem(new Seed(Seed.Type.FIRE));
+		inventory.addItem(new Seed(Seed.Type.ICE));
+		inventory.addItem(new Seed(Seed.Type.ICE));
 	}
 
 	/**
@@ -243,6 +248,50 @@ public class Player extends Character implements Tickable {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 *
+	 * @return the number of points avaliable for spending in perks
+	 */
+	public int getPerkPoints() {
+		return perkPoints;
+	}
+
+	/**
+	 *
+	 * @param value is the number of points avaliable for perks
+	 */
+	public void setPerkPoints(int value) {
+		this.perkPoints = value;
+	}
+
+	/**
+	 * Take the damage inflicted by the other entities
+	 *
+	 * @param damage: the amount of the damage
+	 */
+	@Override
+	public void takeDamage(int damage) {
+		if (damage < 0) {
+			heal(Math.abs(damage));
+		} else {
+			Perk thorn = this.getPerk(Perk.perk.THORN);
+			if (thorn.isActive()) {
+				switch (thorn.getCurrentLevel()) {
+					case 0:
+						break;
+					case 1:
+						damage = (int) ((9f / 10f) * (float) damage);
+						break;
+				}
+			}
+			if (damage > healthCur) {
+				healthCur = 0;
+			} else {
+				healthCur -= damage;
+			}
+		}
 	}
 
 	/**
@@ -659,6 +708,24 @@ public class Player extends Character implements Tickable {
 			lastTick = gameTickCount;
 		}
 
+		//Perk - I_AM_GROOT
+		Perk IamGroot = this.getPerk(Perk.perk.I_AM_GROOT);
+		if (IamGroot.isActive()) {
+			if (gameTickCount % 50 == 0) {
+				switch (IamGroot.getCurrentLevel()) {
+					case 0:
+						break;
+					case 1:
+						this.takeDamage(-(1 + (int)(0.2 * this.getLevel())));
+						break;
+					case 2:
+						this.takeDamage(-(2 + (int)(0.25 * this.getLevel())));
+						break;
+				}
+			}
+
+		}
+
 		checkXp();
 		this.checkDeath();
 	}
@@ -789,6 +856,7 @@ public class Player extends Character implements Tickable {
 		if (xp >= xpThreshold) {
 			// TODO: You have levelled up pop up
 			levelUp = true;
+			levelUp();
 		}
 	}
 
@@ -797,8 +865,10 @@ public class Player extends Character implements Tickable {
 	 * health and stamina based on player agility and vitality
 	 */
 	private void levelUp() {
+		xp -= xpThreshold;
 		xpThreshold *= 1.5;
-		level++;
+		this.level = level +1;
+		this.perkPoints = perkPoints +1;
 
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");

@@ -191,6 +191,14 @@ public class TextureManager extends Manager {
             textureMap.put("machinegun_sw", new Texture("resources/sprites/weapons/machinegun_sw.png"));
             textureMap.put("machinegun_w", new Texture("resources/sprites/weapons/machinegun_w.png"));
             textureMap.put("machinegun_nw", new Texture("resources/sprites/weapons/machinegun_nw.png"));
+            textureMap.put("stargun_n", new Texture("resources/sprites/weapons/stargun_n.png"));
+            textureMap.put("stargun_ne", new Texture("resources/sprites/weapons/stargun_ne.png"));
+            textureMap.put("stargun_e", new Texture("resources/sprites/weapons/stargun_e.png"));
+            textureMap.put("stargun_se", new Texture("resources/sprites/weapons/stargun_se.png"));
+            textureMap.put("stargun_s", new Texture("resources/sprites/weapons/stargun_s.png"));
+            textureMap.put("stargun_sw", new Texture("resources/sprites/weapons/stargun_sw.png"));
+            textureMap.put("stargun_w", new Texture("resources/sprites/weapons/stargun_w.png"));
+            textureMap.put("stargun_nw", new Texture("resources/sprites/weapons/stargun_nw.png"));
 
 			// Miscellaneous textures
 			textureMap.put("error", new Texture("resources/misc/error.png"));
@@ -302,27 +310,43 @@ public class TextureManager extends Manager {
 			textureMap.put("fertiliser_btn", new Texture("resources/ui/radial_menu/fertiliser.png"));
 			textureMap.put("menuClose", new Texture("resources/ui/radial_menu/menu_close.png"));
 			textureMap.put("radialOutline", new Texture("resources/ui/radial_menu/radialOutline.png"));
-			textureMap.put("seedSelect", new Texture("resources/ui/radial_menu/seed_select.png"));
-			textureMap.put("consumables", new Texture("resources/ui/radial_menu/consumables.png"));
-			textureMap.put("weapsLeft", new Texture("resources/ui/radial_menu/weapons_left.png"));
-			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapons_right.png"));
 			textureMap.put("machineGun", new Texture("resources/ui/radial_menu/machine_gun.png"));
 			textureMap.put("shotgun", new Texture("resources/ui/radial_menu/shotgun.png"));
+			textureMap.put("scatterGun", new Texture("resources/ui/radial_menu/scatter_gun.png"));
 			textureMap.put("starfall", new Texture("resources/ui/radial_menu/starfall.png"));
-			textureMap.put("healthPotion", new Texture("resources/ui/radial_menu/health_potion.png"));
 			textureMap.put("key", new Texture("resources/ui/radial_menu/key_button.png"));
 			textureMap.put("magicMushroom", new Texture("resources/ui/radial_menu/magicmushroom_button.png"));
 			textureMap.put("smallMushroom", new Texture("resources/ui/radial_menu/smallmushroom_button.png"));
-			textureMap.put("speedPotion", new Texture("resources/ui/radial_menu/speed_potion.png"));
 			textureMap.put("shovel", new Texture("resources/ui/radial_menu/shovel_button.png"));
-			textureMap.put("highlight", new Texture("resources/ui/radial_menu/highlight.png"));
+			textureMap.put("hoe", new Texture("resources/ui/radial_menu/hoe_button.png"));
+			textureMap.put("trowel", new Texture("resources/ui/radial_menu/trowel_button.png"));
+			textureMap.put("snag_btn", new Texture("resources/ui/radial_menu/sausage_button.png"));
+			textureMap.put("sausage_btn", new Texture("resources/ui/radial_menu/hotdog_button.png"));
 
-			//Perks
-			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
+			//PlayerStatusHud
+			textureMap.put("player_normal_border", new Texture("resources/ui/player_status_hud/" +
+					"player_normal_border.png"));
+			textureMap.put("health_bar_pixel", new Texture("resources/ui/player_status_hud/health_bar_pixel.png"));
+
+			//Perks General
 			textureMap.put("perk_border_inactive", new Texture("resources/ui/perks/perk_border_inactive.png"));
+			textureMap.put("perk_border_maxed", new Texture("resources/ui/perks/perk_border_maxed.png"));
+			textureMap.put("path_separator", new Texture("resources/ui/perks/path_separator.png"));
 
-
+			//Perk Images
+			textureMap.put("I_am_groot", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Splinter_is_coming", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Full-Petal_Alchemist", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Guns_and_Roses", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Run_Fungus,_Run!", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Holly_Moley", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Kale-ra-te", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Thor-n", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("The_Fungal_Countdown", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Last_But_Not_Yeast", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Saving_Graves", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("Fungicidal_Maniac", new Texture("resources/ui/perks/perk_place_holder.png"));
 
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));

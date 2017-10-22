@@ -18,6 +18,9 @@ public class WeaponItem extends SingleItem {
      * @param weight the weight of the item
      */
     public WeaponItem(Weapon weapon, String name, int weight) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null.");
+        }
         this.weapon = weapon;
         this.itemName = name;
         this.itemWeight = weight;
@@ -47,16 +50,51 @@ public class WeaponItem extends SingleItem {
     public Weapon getWeapon() {
         return this.weapon;
     }
+
+    /**
+     * Returns the name of the weapon item.
+     * @return A string denoting the weapon name.
+     */
+    public String getItemName() {
+        return itemName;
+    }
+
+    /**
+     * Sets a new name for the item.
+     * @param newName the new name for the item.
+     */
+    public void setItemName(String newName) {
+        if (newName == null) {
+            throw new IllegalArgumentException("New item name cannot be null.");
+        }
+        itemName = newName;
+    }
+
+    /**
+     * Sets a the WeaponItem's weapon reference to some new weapon.
+     * @param newWeapon the new weapon to be set to the WeaponItem.
+     */
+    public void setWeapon(Weapon newWeapon) {
+        if (newWeapon == null) {
+            throw new IllegalArgumentException("New weapon cannot be null.");
+        }
+        weapon = newWeapon;
+    }
     
     @Override
     public boolean sameItem(Item item) throws IllegalArgumentException {
         return item instanceof WeaponItem && 
-               item.getName() == this.itemName && 
+               item.getName().equals(this.itemName) &&
                this.weapon.equals(((WeaponItem)item).getWeapon());
     }
 
     @Override
     public Item copy() {
         return new WeaponItem(weapon, itemName, itemWeight);
+    }
+
+    @Override
+    public ItemRarity getRarity() {
+        return this.weapon == null ? ItemRarity.COMMON : this.weapon.getRarity();
     }
 }

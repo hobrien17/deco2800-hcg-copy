@@ -36,6 +36,6 @@ public class CrabTest {
     public void testLoot() {
         enemy.setupLoot();
         assertThat("Crab only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
-        assertThat("Item should be water seed", enemy.randItem(), is(equalTo(new LootWrapper("water_seed"))));
+        assertThat("Item should be water seed", enemy.randItem(), is(equalTo(new LootWrapper("water_seed", 1.0f))));
     }
 }

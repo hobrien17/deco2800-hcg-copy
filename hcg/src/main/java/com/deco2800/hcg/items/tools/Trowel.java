@@ -16,6 +16,7 @@ public class Trowel extends Tool {
         this.texture = nextTexture();
         this.maxStackSize = 1;
         this.currentStackSize = 1;
+        this.baseValue = 10;
 	}
 	
 	private String nextTexture() {

@@ -15,6 +15,7 @@ public class BugSpray extends Tool {
         this.texture = "bug_spray";
         this.maxStackSize = 5;
         this.currentStackSize = 1;
+        this.baseValue = 10;
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class BugSpray extends Tool {
 
 	@Override
 	public Item copy() {
-		return new Fertiliser();
+		return new BugSpray();
 	}
 
 	@Override

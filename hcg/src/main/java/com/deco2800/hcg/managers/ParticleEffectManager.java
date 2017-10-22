@@ -16,28 +16,11 @@ public class ParticleEffectManager extends Manager {
 
     ParticleEffectActor particleEffectActor;
 
-    ArrayList<ParticleEffect> currentEffects;
-
     /**
      * Constructor for Particle Effect Manager
      */
     public ParticleEffectManager() {
-        currentEffects = new ArrayList<ParticleEffect>();
         particleEffectActor = new ParticleEffectActor();
-    }
-
-    public void stopAllEffects() {
-        currentEffects.clear();
-    }
-
-    public void stopEffect(ParticleEffect effect) {
-        if (currentEffects.contains(effect)) {
-            currentEffects.remove(effect);
-        }
-    }
-
-    public ArrayList<ParticleEffect> getCurrentEffects() {
-        return currentEffects;
     }
 
     public ParticleEffectActor getActor() {

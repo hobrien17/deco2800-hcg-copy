@@ -18,6 +18,7 @@ import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.LevelStartMessage;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
 
@@ -118,7 +119,7 @@ public class WorldMapContext extends UIContext {
 		}
 
 		playerMapEntity = new PlayerMapEntity();
-		// set the player Map Entity render position to be at the starting node;
+		// set the player Map Entity render position to be at the starting node
 		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0), worldMap);
 		playerMapEntity.updatePosByNodeEntity(entryMapNode);
 
@@ -165,6 +166,7 @@ public class WorldMapContext extends UIContext {
 				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
+				world.setWeather(Weathers.STORM);
 
 				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
 				playerManager.spawnPlayers();

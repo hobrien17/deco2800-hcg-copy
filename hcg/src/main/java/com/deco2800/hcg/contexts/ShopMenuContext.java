@@ -170,7 +170,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 							errorImageVisible = true;
 						}
 					}
-					soundManager.playSound("loot");
+					soundManager.playSound("buy");
 				}
 				draw();
 			}
@@ -186,7 +186,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 } catch(NumberFormatException e) {
                     amount.setText("NaN");
                 }
-                
 				if ((selectedItem != null)
 						&& !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))
 						&& !(shopKeeper.getShop().getStock()
@@ -196,7 +195,7 @@ public class ShopMenuContext extends InventoryDisplayContext {
 							errorImageVisible = true;
 						}
 					}
-					soundManager.playSound("loot2");
+					soundManager.playSound("sell");
 				}
 				draw();
 			}

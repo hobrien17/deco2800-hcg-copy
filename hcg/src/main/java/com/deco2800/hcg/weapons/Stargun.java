@@ -3,6 +3,7 @@ package com.deco2800.hcg.weapons;
 import java.util.Random;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.ItemRarity;
 
 /**
  * Stargun represents the a weapon that shoots stars as bullets
@@ -40,7 +41,7 @@ public class Stargun extends Weapon implements Tickable {
     }
     
     @Override
-    protected void fireWeapon() {
+    protected void fire() {
         Random random = new Random();
         for(int i = 0; i < this.pellets; i++) {
             shootBullet(this.aim.x + 5 * (float) random.nextGaussian(),
@@ -52,5 +53,8 @@ public class Stargun extends Weapon implements Tickable {
         // Muzzle flash
         muzzleFlashEnabled = 0;
     }
-    
+
+    public ItemRarity getRarity() {
+        return ItemRarity.LEGENDARY;
+    }
 }

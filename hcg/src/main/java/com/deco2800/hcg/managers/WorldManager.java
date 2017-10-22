@@ -115,8 +115,6 @@ public class WorldManager extends Manager {
         	StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         	manager.deleteObservers();
         }
-        
-        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();
 
         // stop the old weather effects
         ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();
