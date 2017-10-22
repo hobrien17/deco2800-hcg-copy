@@ -90,6 +90,7 @@ public class PlayContext extends Context {
     private String[] seedItems;
     private String[] consumableItems;
     private String[] plantItems;
+    private EquipsDisplay equipsDisplay;
 
     private Window plantWindow;
     private boolean exitDisplayed = false;
@@ -159,6 +160,7 @@ public class PlayContext extends Context {
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
+        equipsDisplay = new EquipsDisplay();
         
 
         /* Add ParticleEffectActor that controls weather. */
@@ -169,6 +171,7 @@ public class PlayContext extends Context {
         chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
+        stage.addActor(equipsDisplay);
         
         if(gameManager.getWorld().equals(World.SAFEZONE)) {
         	stage.addActor(plantWindow);
@@ -314,6 +317,7 @@ public class PlayContext extends Context {
         weaponRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         consumableRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         plantRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        equipsDisplay.setPosition(10f, stage.getHeight() - 400f);
     }
 
     /**
@@ -355,6 +359,7 @@ public class PlayContext extends Context {
     @Override
     public void onTick(long gameTickCount) {
         playerStatus.updatePlayerStatus();
+        equipsDisplay.update();
 
     }
 

@@ -109,6 +109,14 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
     }
 
     /**
+     * Returns the type of the bullet equipped
+     * @return the type of the bullet equipped
+     */
+    public BulletType getBulletType() {
+        return bulletType;
+    }
+
+    /**
      * Returns the weapon's user
      * @return the user of the weapon
      */
