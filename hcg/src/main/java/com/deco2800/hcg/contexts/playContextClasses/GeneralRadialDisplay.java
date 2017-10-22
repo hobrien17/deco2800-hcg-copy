@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,7 @@ import com.deco2800.hcg.items.tools.Tool;
 import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 
+
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
     private TextureManager textureManager;
@@ -65,7 +67,7 @@ public class GeneralRadialDisplay extends Group {
     private List<Label> counts;
     private Image outline;
     private LabelStyle style;
-    
+
     private Stage stage;
     private Group display;
     
@@ -179,8 +181,8 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
 		sprites.put("bug_spray", "bugspray_btn");
-		sprites.put("snag", "snag_btn");
-		sprites.put("sausage", "sausage_btn");
+		sprites.put("snag", "sausage_btn");
+		sprites.put("sausage", "snag_btn");
 		sprites.put("magic_mushroom", "magicMushroom");
 		sprites.put("small_mushroom", "smallMushroom");
 		sprites.put("hoe", "hoe_btn");
@@ -365,7 +367,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("snag", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				useItem(new HealthPotion(100));
+				useItem(new SpeedPotion());
 				hide();
 			}
 		});
@@ -373,7 +375,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("sausage", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				useItem(new SpeedPotion());
+				useItem(new HealthPotion(100));
 				hide();
 			}
 		});
