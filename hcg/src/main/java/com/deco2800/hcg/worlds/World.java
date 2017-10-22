@@ -627,6 +627,14 @@ public class World {
           texture3 = "sandstormpuddle3";
           numOfPuddleTypes = 3;
           break;
+      case DROUGHT:
+    	  // lets make a sandstorm puddle
+    	  layerName = "crackspuddle";
+          texture = "crackspuddle";
+          texture2= "crackspuddle2";
+          texture3 = "crackspuddle3";
+          numOfPuddleTypes = 3;
+          break;
       default:
         return;
     }
