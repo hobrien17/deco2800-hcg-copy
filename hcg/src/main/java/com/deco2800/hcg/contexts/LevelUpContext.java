@@ -15,17 +15,17 @@ public class LevelUpContext extends CharacterStatsScreen {
 
     private int skillPoints;
 
-    private int oldMeleeSkill;
-    private int oldGunsSkill;
-    private int oldEnergyWeaponsSkill;
+    private int oldMachineGunSkill;
+    private int oldShotGunSkill;
+    private int oldStarGunSkill;
 
     public LevelUpContext() {
         super();
         topRowInfoTable.removeActor(backButton);
         skillPoints = playerManager.getPlayer().getSkillPoints();
-        oldMeleeSkill = playerManager.getPlayer().getAttribute("meleeSkill");
-        oldGunsSkill = playerManager.getPlayer().getAttribute("gunsSkill");
-        oldEnergyWeaponsSkill = playerManager.getPlayer().getAttribute("energyWeaponsSkill");
+        oldMachineGunSkill = playerManager.getPlayer().getAttribute("machineGunSkill");
+        oldShotGunSkill = playerManager.getPlayer().getAttribute("shotGunSkill");
+        oldStarGunSkill = playerManager.getPlayer().getAttribute("starGunSkill");
         skillsButtons();
         finishButton();
     }
@@ -39,11 +39,11 @@ public class LevelUpContext extends CharacterStatsScreen {
 				if (skillPoints != 0) {
 					return;
 				}
-				playerManager.getPlayer().setAttribute("meleeSkill",
-						meleeSkill);
-				playerManager.getPlayer().setAttribute("gunsSkill", gunsSkill);
-				playerManager.getPlayer().setAttribute("energyWeaponsSkill",
-						energyWeaponsSkill);
+				playerManager.getPlayer().setAttribute("machineGunSkill",
+                        machineGunSkill);
+				playerManager.getPlayer().setAttribute("shotGunSkill", shotGunSkill);
+				playerManager.getPlayer().setAttribute("starGunSkill",
+                        starGunSkill);
 				contextManager.popContext();
 			}
         });
@@ -56,9 +56,9 @@ public class LevelUpContext extends CharacterStatsScreen {
 
         Label skillPointsLabel;
         skillPointsLabel = new Label("Available Specialities: " + skillPoints, skin);
-        meleeSkillLabel = new Label("Melee Skill: " + meleeSkill, skin);
-        gunsSkillLabel = new Label("Guns Skill: " + gunsSkill, skin);
-        energyWeaponsSkillLabel = new Label("Energy Weapons: " + energyWeaponsSkill, skin);
+        machineGunSkillLabel = new Label("Melee Skill: " + machineGunSkill, skin);
+        shotGunSkillLabel = new Label("Guns Skill: " + shotGunSkill, skin);
+        starGunSkillLabel = new Label("Energy Weapons: " + starGunSkill, skin);
 
         TextButton meleeSkillDown = new TextButton("Down", skin);
         TextButton gunsSkillDown = new TextButton("Down", skin);
@@ -71,30 +71,30 @@ public class LevelUpContext extends CharacterStatsScreen {
         skillsWindow.add(skillPointsLabel);
         skillsWindow.row();
         skillsWindow.add(meleeSkillDown);
-        skillsWindow.add(meleeSkillLabel);
+        skillsWindow.add(machineGunSkillLabel);
         skillsWindow.add(meleeSkillUp);
         skillsWindow.row();
         skillsWindow.add(gunsSkillDown);
-        skillsWindow.add(gunsSkillLabel);
+        skillsWindow.add(shotGunSkillLabel);
         skillsWindow.add(gunsSkillUp);
         skillsWindow.row();
         skillsWindow.add(energyWeaponsSkillDown);
-        skillsWindow.add(energyWeaponsSkillLabel);
+        skillsWindow.add(starGunSkillLabel);
         skillsWindow.add(energyWeaponsSkillUp);
 
         meleeSkillDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (playerManager.getPlayer().getSpecialisedSkills().get("meleeSkill")) {
-                    if ((meleeSkill - 2) >= oldMeleeSkill) {
-                        meleeSkill -= 2;
+                if (playerManager.getPlayer().getSpecialisedSkills().get("machineGunSkill")) {
+                    if ((machineGunSkill - 2) >= oldMachineGunSkill) {
+                        machineGunSkill -= 2;
                         skillPoints++;
 					}
-				} else if ((meleeSkill - 1) >= oldMeleeSkill) {
-					meleeSkill--;
+				} else if ((machineGunSkill - 1) >= oldMachineGunSkill) {
+					machineGunSkill--;
 					skillPoints++;
 				}
-				meleeSkillLabel.setText("Melee Skill: " + meleeSkill);
+				machineGunSkillLabel.setText("Melee Skill: " + machineGunSkill);
                 skillPointsLabel.setText("Available Points: " + skillPoints);
             }
         });
@@ -102,16 +102,16 @@ public class LevelUpContext extends CharacterStatsScreen {
         gunsSkillDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (playerManager.getPlayer().getSpecialisedSkills().get("gunsSkill")) {
-                    if ((gunsSkill - 2) >= oldGunsSkill) {
-                        gunsSkill -= 2;
+                if (playerManager.getPlayer().getSpecialisedSkills().get("shotGunSkill")) {
+                    if ((shotGunSkill - 2) >= oldShotGunSkill) {
+                        shotGunSkill -= 2;
                         skillPoints++;
 					}
-				} else if ((gunsSkill - 1) >= oldGunsSkill) {
-					gunsSkill--;
+				} else if ((shotGunSkill - 1) >= oldShotGunSkill) {
+					shotGunSkill--;
 					skillPoints++;
 				}
-                gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
+                shotGunSkillLabel.setText("Guns Skill: " + shotGunSkill);
                 skillPointsLabel.setText("Available Points: " + skillPoints);
 
             }
@@ -120,16 +120,16 @@ public class LevelUpContext extends CharacterStatsScreen {
         energyWeaponsSkillDown.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (playerManager.getPlayer().getSpecialisedSkills().get("energyWeaponsSkill")) {
-                    if ((energyWeaponsSkill - 2) >= oldEnergyWeaponsSkill) {
-                        energyWeaponsSkill -= 2;
+                if (playerManager.getPlayer().getSpecialisedSkills().get("starGunSkill")) {
+                    if ((starGunSkill - 2) >= oldStarGunSkill) {
+                        starGunSkill -= 2;
                         skillPoints++;
                     }
-				} else if ((energyWeaponsSkill - 1) >= oldEnergyWeaponsSkill) {
-					energyWeaponsSkill--;
+				} else if ((starGunSkill - 1) >= oldStarGunSkill) {
+					starGunSkill--;
 					skillPoints++;
 				}
-				energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
+				starGunSkillLabel.setText("Energy Weapons Skill: " + starGunSkill);
                 skillPointsLabel.setText("Available Points: " + skillPoints);
             }
         });
@@ -137,14 +137,14 @@ public class LevelUpContext extends CharacterStatsScreen {
         meleeSkillUp.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (meleeSkill < 100 && skillPoints > 0) {
-                    if (playerManager.getPlayer().getSpecialisedSkills().get("meleeSkill")) {
-                        meleeSkill += 2;
+                if (machineGunSkill < 100 && skillPoints > 0) {
+                    if (playerManager.getPlayer().getSpecialisedSkills().get("machineGunSkill")) {
+                        machineGunSkill += 2;
                     } else {
-                        meleeSkill++;
+                        machineGunSkill++;
                     }
                     skillPoints--;
-                    meleeSkillLabel.setText("Melee Skill: " + meleeSkill);
+                    machineGunSkillLabel.setText("Melee Skill: " + machineGunSkill);
                     skillPointsLabel.setText("Available Points: " + skillPoints);
                 }
             }
@@ -153,14 +153,14 @@ public class LevelUpContext extends CharacterStatsScreen {
         gunsSkillUp.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (gunsSkill < 100 && skillPoints > 0) {
-                    if (playerManager.getPlayer().getSpecialisedSkills().get("gunsSkill")) {
-                        gunsSkill += 2;
+                if (shotGunSkill < 100 && skillPoints > 0) {
+                    if (playerManager.getPlayer().getSpecialisedSkills().get("shotGunSkill")) {
+                        shotGunSkill += 2;
                     } else {
-                        gunsSkill++;
+                        shotGunSkill++;
                     }
                     skillPoints--;
-                    gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
+                    shotGunSkillLabel.setText("Guns Skill: " + shotGunSkill);
                     skillPointsLabel.setText("Available Points: " + skillPoints);
                 }
             }
@@ -169,14 +169,14 @@ public class LevelUpContext extends CharacterStatsScreen {
         energyWeaponsSkillUp.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (energyWeaponsSkill < 100 && skillPoints > 0) {
-                    if (playerManager.getPlayer().getSpecialisedSkills().get("energyWeaponsSkill")) {
-                        energyWeaponsSkill += 2;
+                if (starGunSkill < 100 && skillPoints > 0) {
+                    if (playerManager.getPlayer().getSpecialisedSkills().get("starGunSkill")) {
+                        starGunSkill += 2;
                     } else {
-                        energyWeaponsSkill++;
+                        starGunSkill++;
                     }
                     skillPoints--;
-                    energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
+                    starGunSkillLabel.setText("Energy Weapons Skill: " + starGunSkill);
                     skillPointsLabel.setText("Available Points: " + skillPoints);
                 }
             }
