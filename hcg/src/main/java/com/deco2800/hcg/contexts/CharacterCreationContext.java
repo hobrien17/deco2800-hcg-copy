@@ -271,6 +271,18 @@ public class CharacterCreationContext extends CharacterContext{
         TextButton agilityUp = new TextButton("Up", skin);
         TextButton intellectUp = new TextButton("Up", skin);
         TextButton charismaUp = new TextButton("Up", skin);
+        
+        TextTooltip strengthInfo = new TextTooltip("Strength determines how much damage you " +
+                "deal with melee weapons, as well as how much you are able to carry.", skin);
+        TextTooltip vitalityInfo = new TextTooltip("Vitality determines your starting health " +
+                "as well as how much health you gain per level.", skin);
+        TextTooltip agilityInfo = new TextTooltip("Agility determines your starting stamina " +
+                "as well as how much stamina you gain per level.", skin);
+        TextTooltip intellectInfo = new TextTooltip("Intellect determines how many skill " +
+                "points you have to distribute to your skills each level.", skin);
+        TextTooltip charismaInfo = new TextTooltip("Charisma determines how well your " +
+                "interactions with friendly NPCs go.", skin);
+        
 
         // Add attribute labels and button to the window
 //        attributesWindow.add(attributePointsLabel);
@@ -355,8 +367,6 @@ public class CharacterCreationContext extends CharacterContext{
                 attributePointsLabel.setText("Available Points: " + attributePoints);
                 startingHealthLabel.setText("Starting Health: " + startingHealth);
                 healthGainLabel.setText("Health gained per level up: " + healthGain);
-//                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-//                        "as well as how much health you gain per level");
             }
         });
 
@@ -374,8 +384,6 @@ public class CharacterCreationContext extends CharacterContext{
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
             	staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
-//                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-//                        "as well as how much stamina you gain per level");
             }
         });
 
@@ -391,8 +399,6 @@ public class CharacterCreationContext extends CharacterContext{
             	intellectLabel.setText("Intellect: " + intellect);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
-//                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-//                        "to distribute to your skills each level");
             }
         });
 
@@ -406,9 +412,6 @@ public class CharacterCreationContext extends CharacterContext{
             	attributePoints++;
             	charismaLabel.setText("Charisma: " + charisma);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
-//                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-//                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-//                        "influence others to see your point of view, and perhaps even follow you");
             }
         });
 
@@ -422,8 +425,6 @@ public class CharacterCreationContext extends CharacterContext{
                     strengthLabel.setText("Strength: " + strength);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     carryWeightLabel.setText("Carry Weight: " + carryWeight);
-//                    selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
-//                            "deal with melee weapons, as well as how much you are able to carry");
                 }
             }
         });
@@ -440,8 +441,6 @@ public class CharacterCreationContext extends CharacterContext{
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingHealthLabel.setText("Starting Health: " + startingHealth);
                     healthGainLabel.setText("Health gained per level up: " + healthGain);
-//                    selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-//                            "as well as how much health you gain per level");
                 }
             }
         });
@@ -458,8 +457,6 @@ public class CharacterCreationContext extends CharacterContext{
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
                     staminaGainLabel.setText("Stamina Gained per Level: " + staminaGain);
-//                    selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-//                            "as well as how much stamina you gain per level");
                 }
             }
         });
@@ -474,8 +471,6 @@ public class CharacterCreationContext extends CharacterContext{
                     intellectLabel.setText("Intellect: " + intellect);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
-//                    selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-//                            "to distribute to your skills each level");
                 }
             }
         });
@@ -488,63 +483,17 @@ public class CharacterCreationContext extends CharacterContext{
                     attributePoints--;
                     charismaLabel.setText("Charisma: " + charisma);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
-//                    selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-//                            "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-//                            "influence others to see your point of view, and perhaps even follow you");
                 }
             }
         });
 
-        attributePointsLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("The number of points you have to distribute to your attributes.");
-            }
-        });
-
-//        strengthLabel.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
-//                        "deal with melee weapons, as well as how much you are able to carry");
-//            }
-//        });
-
-        vitalityLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("Your Vitality.\n Vitality determines your starting health," +
-//                        "as well as how much health you gain per level");
-            }
-        });
-
-        agilityLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("Your Agility.\n Agility determines your starting stamina," +
-//                        "as well as how much stamina you gain per level");
-            }
-        });
-
-        intellectLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("Your Intellect.\n Intellect determines how many skill points you have" +
-//                        "to distribute to your skills each level");
-            }
-        });
-
-        charismaLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("Your Charisma.\n Charisma determines how well your interactions with" +
-//                        "friendly NPCs go. A high Charisma will allow you to barter for better prices at shops and" +
-//                        "influence others to see your point of view, and perhaps even follow you");
-            }
-        });
-        
-        strengthLabel.addListener(new TextTooltip("Tooltip", skin));
-        strengthUp.addListener(new TextTooltip("Tooltip2", skin));
+        attributePointsLabel.addListener(new TextTooltip("The number of points you have to " +
+                "distribute to your attributes.", skin));
+        strengthLabel.addListener(strengthInfo);
+        vitalityLabel.addListener(vitalityInfo);
+        agilityLabel.addListener(agilityInfo);
+        intellectLabel.addListener(intellectInfo);
+        charismaLabel.addListener(charismaInfo);
     }
 
     private void setupSkillsWindow() {
@@ -559,6 +508,7 @@ public class CharacterCreationContext extends CharacterContext{
         gunsSkillSpecialise.setChecked(false);
         energyWeaponsSkillSpecialise = new CheckBox("Specialise", skin);
         energyWeaponsSkillSpecialise.setChecked(false);
+        
 
         // Add attribute labels and button to the window
         skillsWindow.add(specializedSkillsPointsLabel);
