@@ -43,7 +43,9 @@ public class ConversationContext extends UIContext {
 		
 		npcImage = new Image(textureManager.getTexture(npcFace));
 		nodeText = new Label("", skin);
+		nodeText.setFontScale(3);
 		npcName = new Label(npcFName, skin);
+		npcName.setFontScale(3);
 
 		buttons = new HorizontalGroup();
 		buttons.space(30f);
@@ -81,6 +83,7 @@ public class ConversationContext extends UIContext {
 			LOGGER.error(this + " * " + option.getOptionText()); //DEBUG
 			TextButton button = new TextButton(option.getOptionText(), skin);
 			button.pad(20);
+			button.getLabel().setFontScale(3);
 			button.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {

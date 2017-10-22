@@ -438,8 +438,8 @@ public class TextureManager extends Manager {
 			textureMap.put("player5head", new Texture("resources/ui/multiplayer_ui/player5head.png"));
 
 			//Conversation textures
-			textureMap.put("conversation_context", new Texture("resources/ui/conversations/conversation_context.png"));
-			textureMap.put("npc_face", new Texture("resources/sprites/npc/npc_face.png"));
+			textureMap.put("conversation_context", new Texture("resources/ui/conversations/raw_background.png"));
+			textureMap.put("npc_face", new Texture("resources/sprites/npc/Quest_1_SouthEast.png"));
 
 			//Character creation textures
 			textureMap.put("ccMale1", new Texture("resources/sprites/player/character_creation/male1.png"));
