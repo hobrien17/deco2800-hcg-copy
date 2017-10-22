@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.enemyentities;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
@@ -89,6 +90,8 @@ public class Tree extends Enemy implements Tickable {
             this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
             if (!firstSpawn){
                 //New enemies spawn
+                Snail snail1 = new Snail(this.prevPos.getX(), this.prevPos.getY(),0f, id*9999991);
+                GameManager.get().getWorld().addEntity(snail1);
                 firstSpawn = true;
             }
         } else if ((this.getHealthCur() < this.getHealthMax()*0.6) && (this.getHealthCur() > this.getHealthMax()*0.4)){
@@ -97,6 +100,8 @@ public class Tree extends Enemy implements Tickable {
             this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
             if (!secondSpawn){
                 //New enemies spawn
+                Snail snail2 = new Snail(this.prevPos.getX(), this.prevPos.getY(),0f, id*9999992);
+                GameManager.get().getWorld().addEntity(snail2);
                 secondSpawn = true;
             }
         } else if ((this.getHealthCur() < this.getHealthMax()*0.4) && (this.getHealthCur() > this.getHealthMax()*0.2)){
@@ -105,6 +110,8 @@ public class Tree extends Enemy implements Tickable {
             this.setPosY(GameManager.get().getWorld().getLength());
             if (!thirdSpawn){
                 //New enemies spawn
+                Snail snail3 = new Snail(this.prevPos.getX(), this.prevPos.getY(),0f, id*9999993);
+                GameManager.get().getWorld().addEntity(snail3);
                 thirdSpawn = true;
             }
         } else {
@@ -113,6 +120,8 @@ public class Tree extends Enemy implements Tickable {
             this.setPosY((float) (GameManager.get().getWorld().getLength() * 0.5));
             if (!forthSpawn){
                 //New enemies spawn
+                Snail snail4 = new Snail(this.prevPos.getX(), this.prevPos.getY(),0f, id*9999994);
+                GameManager.get().getWorld().addEntity(snail4);
                 forthSpawn = true;
             }
         }
