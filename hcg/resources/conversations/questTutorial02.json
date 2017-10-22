@@ -1,0 +1,87 @@
+{
+  "initialRelationship": "greetings",
+  "relationshipMap": {
+    "greetings": "hello",
+    "youSure":  "areYouSure",
+    "haveYouCompletedTheQuest": "didYouCompleteTheQuest",
+    "completed":"completedNode"
+  },
+
+  "nodes": [
+    {
+      "id": "hello",
+      "nodeText": "Hello traveller, my name is Steve. Would you like to learn about Quests?",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Yes I'd love to",
+          "actions": [],
+          "target": "learnQuests"
+        },
+        {
+          "conditions": [],
+          "optionText": "No I'd rather not sorry, bye.",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+
+    {
+      "id": "learnQuests",
+      "nodeText": "I have just granted you a quest, if you press the 'Q' key it will open up your Quests dialog. Come straight back to me once you have completed the Quest as you won't be able to get your reward if you change levels.",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Okay, see you soon",
+          "actions": ["setRelationship|haveYouCompletedTheQuest", "startQuest|Test_Quest_1"],
+          "target": null
+        }
+      ]
+    },
+
+    {
+      "id": "didYouCompleteTheQuest",
+      "nodeText": "Hi did you finish the quest I gave you?",
+      "options": [
+        {
+          "conditions": ["questCompleted|Test_Quest_1"],
+          "optionText": "Yeah I did!",
+          "actions": ["finishCurrentQuest"],
+          "target": "Thanks"
+        },
+        {
+          "conditions": ["!questCompleted|Test_Quest_1"],
+          "optionText": "No I haven't yet, i'll come back when I have",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+
+    {
+      "id": "Thanks",
+      "nodeText": "Awesome, that's great. I have given you an item for completing my quest. Go over to the Shop attendent and you can access the shop and trade.",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Okay, I will do that thanks!",
+          "actions": ["setRelationship|completed","giveItems|ice_seed|1"],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "completedNode",
+      "nodeText": "I hope you have a great time playing this game",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Thank you I think I will!",
+          "actions": [],
+          "target": null
+        }
+      ]
+    }
+  ]
+}

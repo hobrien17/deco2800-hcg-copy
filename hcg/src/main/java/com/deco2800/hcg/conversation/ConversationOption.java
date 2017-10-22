@@ -70,7 +70,6 @@ public class ConversationOption {
      * @return whether this node should be visible
      */
     public boolean testConditions() {
-        boolean result = true;
         for (AbstractConversationCondition condition : conditions) {
             if (!condition.testCondition(grandparent.getTalkingTo())) {
                 return false;

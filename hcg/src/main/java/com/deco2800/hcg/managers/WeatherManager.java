@@ -2,7 +2,6 @@ package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Gdx;
 import java.util.*;
 

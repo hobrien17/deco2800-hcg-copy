@@ -349,42 +349,17 @@ public class PlayerTest {
 		assertEquals(0,player.killLogGet(exampleID1));
 		player.killLogAdd(exampleID1);
 		assertEquals(1,player.killLogGet(exampleID1));
-		assertEquals(1,player.killLogGetTotal(exampleID1));
+		assertEquals(1,player.killLogGet(exampleID1));
 		assertEquals(true,player.killLogContains(exampleID1));
 		for (int i=0; i<10; i++) {
 			player.killLogAdd(exampleID2);
 		}
 		assertEquals(10,player.killLogGet(exampleID2));
 		assertEquals(1,player.killLogGet(exampleID1));
-		assertEquals(10,player.killLogGetTotal(exampleID2));
-		assertEquals(1,player.killLogGetTotal(exampleID1));
+		assertEquals(10,player.killLogGet(exampleID2));
+		assertEquals(1,player.killLogGet(exampleID1));
 		assertEquals(false,player.killLogContains(exampleID3));
 		assertEquals(0,player.killLogGet(exampleID3));
-		assertEquals(0,player.killLogGetTotal(exampleID3));
-
-		//The above all assumes only one world, extra world tests below
-		int exampleNode1 = 0;
-		int exampleNode2 = 1;
-		int exampleNode3 = 2;
-
-		assertEquals(0,player.killLogGet(exampleID1,exampleNode1));
-		player.killLogAdd(exampleID1,exampleNode1);
-		assertEquals(1,player.killLogGet(exampleID1,exampleNode1));
-		assertEquals(2,player.killLogGetTotal(exampleID1));
-		assertEquals(true,player.killLogContains(exampleID1,exampleNode1));
-		for (int i=0; i<10; i++) {
-			player.killLogAdd(exampleID2,exampleNode2);
-		}
-		assertEquals(10,player.killLogGet(exampleID2,exampleNode2));
-		assertEquals(1,player.killLogGet(exampleID1,exampleNode1));
-		assertEquals(20,player.killLogGetTotal(exampleID2));
-		assertEquals(2,player.killLogGetTotal(exampleID1));
-		assertEquals(false,player.killLogContains(exampleID3,exampleNode1));
-		player.killLogAdd(exampleID3,exampleNode3);
-		assertEquals(false,player.killLogContains(exampleID3,exampleNode1));
-		assertEquals(true,player.killLogContains(exampleID3,exampleNode3));
-		assertEquals(0,player.killLogGet(exampleID3,exampleNode1));
-		assertEquals(1,player.killLogGet(exampleID3,exampleNode3));
-		assertEquals(1,player.killLogGetTotal(exampleID3));
+		assertEquals(0,player.killLogGet(exampleID3));
 	}
 }
