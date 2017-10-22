@@ -15,7 +15,7 @@
         {
           "conditions": [],
           "optionText": "Yes I'd love to",
-          "actions": ["startQuest|test"],
+          "actions": ["startQuest|Test_Quest_1"],
           "target": "learnQuests"
         },
         {

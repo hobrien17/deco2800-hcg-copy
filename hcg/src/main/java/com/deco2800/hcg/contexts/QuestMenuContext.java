@@ -1,6 +1,7 @@
 package com.deco2800.hcg.contexts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -114,7 +115,10 @@ public class QuestMenuContext extends UIContext {
         	questStringList[questCounter] = qa.getQuestTitle();
         	questCounter++;
         }
-        activeList.setItems("Active Test");
+
+        activeList.setItems(questStringList);
+
+
         activeQuestsPane = new ScrollPane(activeList);
         activeQuestsPane.setSmoothScrolling(false);
         activeQuestsPane.setDebug(false);
