@@ -66,12 +66,13 @@ public class CharacterCreationContext extends CharacterContext{
     private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
 //    private Window attributesWindow;
-    private Window skillsWindow;
+//    private Window skillsWindow;
     private Window statsWindow;
     private Window characterPreviewWindow;
     //private Window selectedDescriptionWindow;
     
     private Table attributesTable;
+    private Table skillsTable;
 
     private String[] sexes = new String[]{MALE, FEMALE};
 
@@ -109,6 +110,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture female3;
     private Texture blankWindowBackground;
     private Texture titleAttributes;
+    private Texture titleStats;
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray;
@@ -145,6 +147,7 @@ public class CharacterCreationContext extends CharacterContext{
         female2 = textureManager.getTexture("ccFemale2");
         female3 = textureManager.getTexture("ccFemale3");
         titleAttributes = textureManager.getTexture("ccAttributes");
+        titleStats = textureManager.getTexture("ccStats");
         blankWindowBackground = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
@@ -154,24 +157,26 @@ public class CharacterCreationContext extends CharacterContext{
         topRowInfoTable = new Table(skin);
 //        attributesWindow = new Window("Attributes", skin);
         attributesTable = new Table(skin);
-        skillsWindow = new Window("Skills", skin);
+//        skillsWindow = new Window("Skills", skin);
+        skillsTable = new Table(skin);
         statsWindow = new Window("Stats", skin);
         characterPreviewWindow = new Window("Character Preview", skin);
         //selectedDescriptionWindow = new Window("Click on an attribute or skill to find out what it does!", skin);
 
         // Set windows as non-movable
 //        attributesWindow.setMovable(false);
-        skillsWindow.setMovable(false);
+//        skillsWindow.setMovable(false);
         statsWindow.setMovable(false);
         characterPreviewWindow.setMovable(false);
         //selectedDescriptionWindow.setMovable(false);
 
 //        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
-        skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+//        skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         
         attributesTable.setBackground(new Image(blankWindowBackground).getDrawable());
+        skillsTable.setBackground(new Image(blankWindowBackground).getDrawable());
     }
 
     //Setting up top row info
@@ -502,26 +507,48 @@ public class CharacterCreationContext extends CharacterContext{
         gunsSkillLabel = new Label("Guns Skill: " + gunsSkill, skin);
         energyWeaponsSkillLabel = new Label("Energy Weapons Skill: " + energyWeaponsSkill, skin);
 
-        meleeSkillSpecialise = new CheckBox("Specialise", skin);
+        meleeSkillSpecialise = new CheckBox("", skin);
         meleeSkillSpecialise.setChecked(false);
-        gunsSkillSpecialise = new CheckBox("Specialise", skin);
+        gunsSkillSpecialise = new CheckBox("", skin);
         gunsSkillSpecialise.setChecked(false);
-        energyWeaponsSkillSpecialise = new CheckBox("Specialise", skin);
+        energyWeaponsSkillSpecialise = new CheckBox("", skin);
         energyWeaponsSkillSpecialise.setChecked(false);
+        
+        TextTooltip meleeInfo = new TextTooltip("Determines how much damage you do with Melee Weapons.",
+                skin);
+        TextTooltip gunInfo = new TextTooltip("Determines how much damage you do with Guns.", skin);
+        TextTooltip energyInfo = new TextTooltip("Determines how much damage you do with Energy Weapons.",
+                skin);
         
 
         // Add attribute labels and button to the window
-        skillsWindow.add(specializedSkillsPointsLabel);
-        skillsWindow.row();
-        skillsWindow.add(meleeSkillSpecialise);
-        skillsWindow.add(meleeSkillLabel);
-        skillsWindow.row();
-        skillsWindow.add(gunsSkillSpecialise);
-        skillsWindow.add(gunsSkillLabel);
-        skillsWindow.row();
-        skillsWindow.add(energyWeaponsSkillSpecialise);
-        skillsWindow.add(energyWeaponsSkillLabel);
-        skillsWindow.pack();
+//        skillsWindow.add(specializedSkillsPointsLabel);
+//        skillsWindow.row();
+//        skillsWindow.add(meleeSkillSpecialise);
+//        skillsWindow.add(meleeSkillLabel);
+//        skillsWindow.row();
+//        skillsWindow.add(gunsSkillSpecialise);
+//        skillsWindow.add(gunsSkillLabel);
+//        skillsWindow.row();
+//        skillsWindow.add(energyWeaponsSkillSpecialise);
+//        skillsWindow.add(energyWeaponsSkillLabel);
+//        skillsWindow.pack();
+        
+        skillsTable.add(new Image(titleStats)).colspan(2).padTop(50).padBottom(30);
+        skillsTable.row();
+        skillsTable.add(specializedSkillsPointsLabel).colspan(2).padBottom(10);
+        skillsTable.row();
+        skillsTable.add(meleeSkillSpecialise).padRight(10);
+        skillsTable.add(meleeSkillLabel);
+        skillsTable.row();
+        skillsTable.add(gunsSkillSpecialise).padRight(10);
+        skillsTable.add(gunsSkillLabel);
+        skillsTable.row();
+        skillsTable.add(energyWeaponsSkillSpecialise).padRight(10);
+        skillsTable.add(energyWeaponsSkillLabel);
+        skillsTable.row();
+        skillsTable.add().expandY();
+        skillsTable.pack();
 
         /*  Add listeners to the check-boxes have had to do some VERY odd work arounds to get these checkboxes working
             The checkbox.isChecked() methods don't seem to be working properly with the clickListener
@@ -607,29 +634,11 @@ public class CharacterCreationContext extends CharacterContext{
             }
         });
 
-        meleeSkillLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
-//                        " Melee Weapons");
-            }
-        });
-
-        gunsSkillLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
-//                        " Guns");
-            }
-        });
-
-        energyWeaponsSkillLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-//                selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
-//                        " Energy Weapons");
-            }
-        });
+        specializedSkillsPointsLabel.addListener(new TextTooltip("The number of points you have to" + 
+                "distribute to your attributes.", skin));
+        meleeSkillLabel.addListener(meleeInfo);
+        gunsSkillLabel.addListener(gunInfo);
+        energyWeaponsSkillLabel.addListener(energyInfo);
     }
 
     private void setupStatsWindow() {
@@ -692,7 +701,7 @@ public class CharacterCreationContext extends CharacterContext{
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
         masterTable.add(attributesTable).top().grow().pad(30);
-        masterTable.add(skillsWindow).top().right().grow().pad(30);
+        masterTable.add(skillsTable).top().right().grow().pad(30);
         masterTable.row();
         masterTable.add(statsWindow).top().left().grow().pad(30);
         masterTable.add(characterPreviewWindow).top().right().grow().pad(30);
