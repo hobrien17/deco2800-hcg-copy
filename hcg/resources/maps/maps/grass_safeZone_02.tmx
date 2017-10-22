@@ -381,7 +381,6 @@
     <property name="texture" value="character_shop"/>
    </properties>
   </object>
-<<<<<<< HEAD
   <object id="380" gid="57" x="255.791" y="170.709" width="55" height="32">
    <properties>
     <property name="Type" value="Quest"/>
@@ -400,8 +399,6 @@
     <property name="texture" value="character_shop_3"/>
    </properties>
   </object>
-=======
->>>>>>> cf7d3da54f4262c33c653bfdd42bbf9c53eda28b
  </objectgroup>
  <objectgroup name="Pot">
   <properties>

@@ -14,7 +14,7 @@ public class JoiningMessage extends Message {
 	private final NetworkManager networkManager =
 			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 	
-	public JoiningMessage(int id) {
+	public JoiningMessage() {
 		super(MessageType.JOINING);
 	}
 	
@@ -27,6 +27,6 @@ public class JoiningMessage extends Message {
 		// add peer to lobby
 		networkManager.addPeer(address);
 		// send joined message
-		networkManager.queueMessage(new JoinedMessage(networkManager.getNextRandomInt()));
+		networkManager.queueMessage(new JoinedMessage());
 	}
 }

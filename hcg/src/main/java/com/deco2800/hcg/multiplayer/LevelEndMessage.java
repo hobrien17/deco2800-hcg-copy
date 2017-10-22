@@ -14,7 +14,7 @@ public class LevelEndMessage extends Message {
 	private final WorldManager worldManager =
 			(WorldManager) GameManager.get().getManager(WorldManager.class);
 	
-	public LevelEndMessage(int seed) {
+	public LevelEndMessage() {
 		super(MessageType.LEVEL_END);
 	}
 	

@@ -11,6 +11,7 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.items.lootable.Lootable;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.Box3D;
@@ -33,6 +34,7 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 
 	// logger for this class
 	private static final Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
+	protected NetworkManager networkManager;
 	protected PlayerManager playerManager;
 	protected int level;
 	// Current status of enemy. 1 : New Born, 2 : Chasing 3 : Annoyed
@@ -47,7 +49,6 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 	protected float lastPlayerY;
 	protected float lostPlayerX;
 	protected float lostPlayerY;
-	protected Random random;
 	protected boolean collided;
 	protected boolean collidedPlayer;
 	protected Box3D newPos;
@@ -93,6 +94,7 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 	public Enemy(float posX, float posY, float posZ, float xLength, float yLength, float zLength, boolean centered,
 			int health, int strength, int id, EnemyType enemyType) {
 		super(posX, posY, posZ, xLength, yLength, zLength, centered);
+		this.networkManager = (NetworkManager) GameManager.get().getManager(NetworkManager.class);
 		this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 		status = 1;
 		if (id >= 0) {
@@ -114,8 +116,6 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 		this.speedY = 0;
 		this.level = 1;
 		this.movementSpeedNorm = this.movementSpeed = (float) (this.level * 0.03);
-		this.random = new Random();
-		this.random.setSeed(this.getID());
 		this.setCollided(false);
 		this.setCollidedPlayer(false);
 		this.newPos = getBox3D();
@@ -489,9 +489,9 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 		prevPos.setX(currPosX);
 		prevPos.setY(currPosY);
 		// Get direction of next position. Randomly be chosen between 0 and 360.
-		radius = Math.abs(random.nextFloat()) * 400 % 360;
+		radius = Math.abs(networkManager.getNextRandomFloat()) * 400 % 360;
 		// Get distance to next position which is no more than maximum.
-		distance = Math.abs(random.nextFloat()) * this.level * 5;
+		distance = Math.abs(networkManager.getNextRandomFloat()) * this.level * 5;
 		if (distance < 3) {
 			distance += 3;
 		}

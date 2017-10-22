@@ -433,7 +433,7 @@ public class PlayContext extends Context {
 
 	private void exit() {
     	if (networkManager.isMultiplayerGame()) {
-		networkManager.queueMessage(new LevelEndMessage(0));
+		networkManager.queueMessage(new LevelEndMessage());
     	}
     	worldManager.completeLevel();
     	exitDisplayed = false;
