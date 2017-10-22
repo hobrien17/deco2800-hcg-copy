@@ -63,7 +63,6 @@ public class ConversationContext extends UIContext {
 		table.add(buttons).padBottom(100);
 		stage.addActor(table);
 		
-		table.debug();
 	}
 
     /**
