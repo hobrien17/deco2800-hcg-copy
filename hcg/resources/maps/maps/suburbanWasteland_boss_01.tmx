@@ -97,21 +97,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="NPC">
-  <properties>
-   <property name="name" value="NPC"/>
-  </properties>
-  <object id="1003" gid="58" x="1100.33" y="1024.17" width="55" height="32">
-   <properties>
-    <property name="Type" value="Quest"/>
-    <property name="conversation" value="tutorialmultilevel"/>
-    <property name="fName" value="Jim"/>
-    <property name="faceImage" value="npc_face"/>
-    <property name="sName" value="Bunning"/>
-    <property name="texture" value="character_1"/>
-   </properties>
-  </object>
- </objectgroup>
  <objectgroup name="hedgehog">
   <properties>
    <property name="name" value="hedgehog"/>
