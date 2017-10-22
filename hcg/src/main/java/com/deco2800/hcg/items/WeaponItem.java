@@ -22,8 +22,8 @@ public class WeaponItem extends SingleItem {
      * @param weight the weight of the item
      */
     public WeaponItem(Weapon weapon, String name, int weight) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name cannot be null.");
+        if (name == null || weapon == null) {
+            throw new IllegalArgumentException("Name or weapon cannot be null.");
         }
         this.weapon = weapon;
         this.itemName = name;
