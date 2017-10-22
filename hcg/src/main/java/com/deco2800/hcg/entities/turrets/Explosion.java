@@ -61,13 +61,11 @@ public class Explosion extends AbstractEntity implements Tickable, LightEmitter 
 
 	@Override
 	public Color getLightColour() {
-		// TODO Auto-generated method stub
 		return Color.ORANGE;
 	}
 
 	@Override
 	public float getLightPower() {
-		// TODO Auto-generated method stub
 		return change * 20;
 	}
 }

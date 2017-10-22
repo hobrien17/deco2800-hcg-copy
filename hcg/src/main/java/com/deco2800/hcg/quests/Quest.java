@@ -21,7 +21,7 @@ public class Quest {
 	 * @param itemToReward the item being rewarded by the quest
 	 * @throws IllegalArgumentException
 	 */
-	public Quest(String instruction, Item itemRequested, Item itemToReward) throws IllegalArgumentException {
+	public Quest(String instruction, Item itemRequested, Item itemToReward) {
 		if("".equals(instruction) || itemRequested == null || itemToReward == null){
 			throw new IllegalArgumentException(); 
 		}

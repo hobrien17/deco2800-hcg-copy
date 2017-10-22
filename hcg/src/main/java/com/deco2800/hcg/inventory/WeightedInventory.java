@@ -35,12 +35,12 @@ public class WeightedInventory implements Inventory {
 	}
 
 	@Override
-	public Item getItem(int index) throws IndexOutOfBoundsException {
+	public Item getItem(int index) {
 		return this.items.get(index);
 	}
 
 	@Override
-	public Item removeItem(int index) throws IndexOutOfBoundsException {
+	public Item removeItem(int index) {
 		return this.items.remove(index);
 	}
 
@@ -51,8 +51,7 @@ public class WeightedInventory implements Inventory {
 	}
 
 	@Override
-	public boolean insertItem(Item item, int index)
-			throws IndexOutOfBoundsException {
+	public boolean insertItem(Item item, int index) {
 		if (this.canInsert(item)) {
 			this.items.add(index, item);
 			return true;
@@ -62,15 +61,13 @@ public class WeightedInventory implements Inventory {
 	}
 
 	@Override
-	public boolean canFitItemInSlot(Item item, int index)
-			throws IndexOutOfBoundsException {
+	public boolean canFitItemInSlot(Item item, int index) {
 		// TODO
 		return true;
 	}
 
 	@Override
-	public boolean allowItemInSlot(Item item, int index)
-			throws IndexOutOfBoundsException {
+	public boolean allowItemInSlot(Item item, int index) {
 		if (index < 0 || index >= this.getMaxSize()) {
 			// Even for an implementation without restrictions
 			// we don't want people calling this with silly indices

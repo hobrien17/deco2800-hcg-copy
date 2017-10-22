@@ -29,8 +29,9 @@ public class Water extends AbstractGardenPlant {
 			return "lily_02";
 		case LARGE:
 			return "lily_03";
+		default:
+			return null;
 		}
-		return null;
 	}
 
 	@Override
