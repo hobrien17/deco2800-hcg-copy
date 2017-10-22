@@ -25,6 +25,7 @@ public class LevelStore {
 	    levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_01.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_02.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_01.tmx"), 3, 8, 1));
+		levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_03.tmx"), 3, 8, 1));
 		
 		// Boss levels (there should only be three! (one for each main biome))
 		// Ensure they are in ascending biome order
