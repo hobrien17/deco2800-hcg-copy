@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class Quest {
 	private String title; //Name of the quest to be displayed
 	private HashMap<String,Integer> rewards; // items to amount for reward
-	private HashMap<Integer,HashMap<EnemyType, Integer>> killRequirement; //Kills for enemy ID required
+	private HashMap<EnemyType, Integer> killRequirement; //Kills for enemy ID required
 	private HashMap<String, Integer> itemRequirement; //Item required to complete quest
 	private String description;
 
@@ -26,8 +26,8 @@ public class Quest {
 	 * @param killRequirement
 	 * @param itemRequirement
 	 */
-	public Quest(String title, HashMap<String, Integer> rewards, HashMap<Integer,
-			HashMap<EnemyType, Integer>> killRequirement, HashMap<String, Integer> itemRequirement,
+	public Quest(String title, HashMap<String, Integer> rewards, HashMap<EnemyType,
+			Integer> killRequirement, HashMap<String, Integer> itemRequirement,
 		    String description) {
 
 		this.title = title;
@@ -50,7 +50,7 @@ public class Quest {
 		return rewards;
 	}
 
-	public HashMap<Integer, HashMap<EnemyType, Integer>> getKillRequirement() {
+	public HashMap<EnemyType, Integer> getKillRequirement() {
 		return killRequirement;
 	}
 
@@ -75,16 +75,15 @@ public class Quest {
 		if (killRequirement.size() > 0) {
 			bothReq = true;
 
-			for (Integer node: killRequirement.keySet()) {
-				//For each world
-				desc += "Goto world " + node.toString();
-				//Todo get a human friendly node name
-				for (EnemyType enemyID: killRequirement.get(node).keySet()) {
-					//For each enemy ID get the amount of kills required
-					desc += " and kill " + killRequirement.get(node).get(enemyID).toString() + enemyID.toString() + ".";
-					//Todo get a human friendly enemy name
-				}
+			desc += "Kill ";
+
+			for (EnemyType enemyID: killRequirement.keySet()) {
+				//For each enemy ID get the amount of kills required
+				desc += killRequirement.get(enemyID).toString() + " " + enemyID.toString() + " and ";
 			}
+			//Remove trailing and
+			desc = desc.substring(0,desc.length() - "and ".length()); //Remove the trailing ','
+			desc += ".";
 		}
 
 		if (itemRequirement.size() > 0) {
