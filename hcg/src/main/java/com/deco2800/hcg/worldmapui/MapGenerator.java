@@ -310,9 +310,9 @@ public class MapGenerator {
 	 *     Returns a random boss level from the levelsBoss list
 	 */
 	private Level getBossLevel(int worldType) {
-		if(!(levelsBoss.isEmpty())) {
+		if(levelsBoss.size() != 2) {
 			// boss levels should be in ascending biome order!
-			return levelsBoss.get(worldType);
+			return levelsBoss.get(worldType - 1);
 		} else {
 			return getLevel(0, 0); //return a random level
 		}
