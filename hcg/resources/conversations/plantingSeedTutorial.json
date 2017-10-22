@@ -7,7 +7,7 @@
   "nodes": [
     {
       "id": "hello",
-      "nodeText": "Hi there! Welcome to the safe zone, you can get to the safe zone by clicking the safehaven at the top left of screen. Would you like to learn about more things you can do in the safe haven?",
+      "nodeText": "Hi there! Welcome to the safe zone, you can get to the safe zone by clicking ont of the safezone level nodes on the world map. Would you like to learn about more things you can do in the safe haven?",
       "options": [
         {
           "conditions": [],

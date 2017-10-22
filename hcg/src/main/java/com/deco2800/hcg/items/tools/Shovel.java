@@ -13,7 +13,7 @@ public class Shovel extends Tool {
 		this.texture = "shovel";
 		this.maxStackSize = 1;
 		this.currentStackSize = 1;
-		this.baseValue = 0;
+		this.baseValue = 1;
 	}
 
 	@Override
