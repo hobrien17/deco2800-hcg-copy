@@ -149,6 +149,27 @@ public class TextureManager extends Manager {
 			textureMap.put("snailN", new Texture("resources/sprites/enemies/snail_N.png"));
 			textureMap.put("snailS", new Texture("resources/sprites/enemies/snail_S.png"));
 			textureMap.put("snailW", new Texture("resources/sprites/enemies/snail_W.png"));
+			textureMap.put("squirrelS", new Texture("resources/sprites/enemies/Squirrel_S_1.png"));
+			textureMap.put("squirrelS2", new Texture("resources/sprites/enemies/Squirrel_S_2.png"));
+			textureMap.put("squirrelE", new Texture("resources/sprites/enemies/Squirrel_E_1.png"));
+			textureMap.put("squirrelE2", new Texture("resources/sprites/enemies/Squirrel_E_2.png"));
+			textureMap.put("squirrelW", new Texture("resources/sprites/enemies/Squirrel_W_1.png"));
+			textureMap.put("squirrelW2", new Texture("resources/sprites/enemies/Squirrel_W_2.png"));
+			textureMap.put("squirrelN", new Texture("resources/sprites/enemies/Squirrel_N_1.png"));
+			textureMap.put("squirrelN2", new Texture("resources/sprites/enemies/Squirrel_N_2.png"));
+			textureMap.put("crabS", new Texture("resources/sprites/enemies/Crab_S_1.png"));
+			textureMap.put("crabS2", new Texture("resources/sprites/enemies/Crab_S_2.png"));
+			textureMap.put("crabE", new Texture("resources/sprites/enemies/Crab_E_1.png"));
+			textureMap.put("crabE2", new Texture("resources/sprites/enemies/Crab_E_2.png"));
+			textureMap.put("crabW", new Texture("resources/sprites/enemies/Crab_W_1.png"));
+			textureMap.put("crabW2", new Texture("resources/sprites/enemies/Crab_W_2.png"));
+			textureMap.put("crabN", new Texture("resources/sprites/enemies/Crab_N_1.png"));
+			textureMap.put("crabN2", new Texture("resources/sprites/enemies/Crab_N_2.png"));
+			textureMap.put("Tree25", new Texture("resources/sprites/enemies/Tree_25.png"));
+			textureMap.put("Tree50", new Texture("resources/sprites/enemies/Tree_50.png"));
+			textureMap.put("Tree75", new Texture("resources/sprites/enemies/Tree_75.png"));
+			textureMap.put("Tree100", new Texture("resources/sprites/enemies/Tree_100.png"));
+
 
 			// Corpse textures
 			textureMap.put("corpse", new Texture("resources/sprites/dead_enemies/deadant.png"));

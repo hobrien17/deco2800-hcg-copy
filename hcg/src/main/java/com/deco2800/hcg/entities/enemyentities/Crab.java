@@ -15,6 +15,8 @@ public class Crab extends Enemy implements Tickable {
     private int explosionCounter;
     private boolean explosionSet;
     private Bullet explosionLocation;
+
+    private String[] sprites = {"crabE", "crabN", "crabW", "crabS"};
     
     /**
      * Constructor for the Crab class. Creates a new crab boss at the given
@@ -113,6 +115,7 @@ public class Crab extends Enemy implements Tickable {
         
         //Set new position
         newPos = this.getToPlayerPos(closestPlayer);
+        this.updateSprite(sprites);
         this.detectCollision();
         this.moveAction();
 

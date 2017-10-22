@@ -29,7 +29,7 @@ public class Tree extends Enemy implements Tickable {
         super(posX, posY, posZ, 1f, 1f, 1, false, 10000, 10, id, EnemyType.CRAB);
 
         this.boss = true;
-        // set texture
+        this.setTexture("Tree100");
         this.level = 1;
         newPos.setX(posX);
         newPos.setY(posY);
