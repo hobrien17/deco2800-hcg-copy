@@ -14,6 +14,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.Box3D;
+import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 import com.deco2800.hcg.weapons.*;
 import com.deco2800.hcg.worlds.World;
@@ -278,10 +279,10 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 				case 0:
 					break;
 				case 1:
-					this.takeDamage((int)(3 + 0.5 * player.getLevel()));
+					this.takeDamage((int) (3 + 0.5 * player.getLevel()));
 					break;
 				case 2:
-					this.takeDamage((int)(5 + 0.7 * player.getLevel()));
+					this.takeDamage((int) (5 + 0.7 * player.getLevel()));
 					break;
 				case 3:
 					this.takeDamage(7 + player.getLevel());
@@ -290,6 +291,14 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 					this.takeDamage((int) (10 + 1.2 * player.getLevel()));
 			}
 		}
+		//Perk - Run,Fungus,Run!
+		Perk runFungus = player.getPerk(Perk.perk.RUN_FUNGUS_RUN);
+		if (runFungus.isActive()) {
+			int speedTime = (runFungus.getCurrentLevel());
+			target.giveEffect(new Effect("Shot", 1, 0, 1.2f,
+					1000, speedTime, 0, this));
+		}
+
 
 	}
 
