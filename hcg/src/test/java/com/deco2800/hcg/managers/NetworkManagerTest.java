@@ -13,44 +13,52 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.deco2800.hcg.contexts.LobbyContext;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.multiplayer.JoiningMessage;
 
 public class NetworkManagerTest  {
 	private GameManager gameManager;
-	private NetworkManager networkManager;
-	private NetworkManager networkManager2;
+	private NetworkManager hostNetworkManager;
+	private NetworkManager clientNetworkManager;
 	
 	@Before
-	public void setupNetworkManager() {
+	public void setupNetworkManagers() {
 		gameManager = GameManager.get();
-		networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
-		networkManager2 = (NetworkManager) gameManager.getManager(NetworkManager.class);
+		hostNetworkManager = new NetworkManager();
+		clientNetworkManager = new NetworkManager();
 	}
 	
 	@Test
-	public void initializeTest() {
-		networkManager.init(true);
-		networkManager2.init(false);
+	public void isMultiplayerGameTest() {
+		clientNetworkManager.init(false);
+		clientNetworkManager.setMultiplayerGame(true);
+		assertTrue(clientNetworkManager.isMultiplayerGame());
 	}
 	
 	@Test
-	public void initHostTest() {
-		networkManager.init(true);
-		assertThat("Player is not hosting", networkManager.isHost(), is(equalTo(true)));
-		networkManager.init(false);
-		assertThat("Player is hosting", networkManager.isHost(), is(equalTo(false)));
+	public void isHostTest() {
+		hostNetworkManager.init(true);
+		assertThat("Player is not hosting", hostNetworkManager.isHost(), is(equalTo(true)));
+		clientNetworkManager.init(false);
+		assertThat("Player is hosting", clientNetworkManager.isHost(), is(equalTo(false)));
+	}
+	
+	@Test
+	public void isDiscoverableTest() {
+		hostNetworkManager.init(true);
+		assertFalse(hostNetworkManager.isDiscoverable());
 	}
 	
 	@Test
 	public void queueMessageTest() {
-		networkManager.init(true);
-		int size = networkManager.getSendQueueSize();
+		hostNetworkManager.init(true);
+		int size = hostNetworkManager.getSendQueueSize();
 		assertThat("The message queue contains messages", size, is(equalTo(0)));
-		networkManager.queueMessage(new JoiningMessage(0));
-		assertThat("The queue should only have 1 message only", networkManager.getSendQueueSize(), is(equalTo(1)));
-		networkManager.queueMessage(new JoiningMessage(0));
-		assertThat("Queue should have 2 messages", networkManager.getSendQueueSize(), is(equalTo(2)));
+		hostNetworkManager.queueMessage(new JoiningMessage(0));
+		assertThat("The queue should only have 1 message only", hostNetworkManager.getSendQueueSize(), is(equalTo(1)));
+		hostNetworkManager.queueMessage(new JoiningMessage(0));
+		assertThat("Queue should have 2 messages", hostNetworkManager.getSendQueueSize(), is(equalTo(2)));
 	}
 }
