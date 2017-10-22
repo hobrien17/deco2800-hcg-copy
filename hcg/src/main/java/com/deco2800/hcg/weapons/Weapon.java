@@ -178,31 +178,31 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         switch (bulletType) {
             case BASIC:
                 bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 1000);
                 break;
             case ICE:
                 bullet = new IceBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 0);
                 break;
             case FIRE:
                 bullet = new FireBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 5);
                 break;
             case EXPLOSION:
                 bullet = new ExplosionBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 1000);
                 break;
             case GRASS:
                 bullet = new GrassBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 1000);
                 break;
             case HOMING:
                 bullet = new HomingBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 1000);
                 break;
             default:
                 bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 1000);
                 break;
         }
         GameManager.get().getWorld().addEntity(bullet);

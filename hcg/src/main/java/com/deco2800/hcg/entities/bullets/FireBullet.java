@@ -15,6 +15,8 @@ import com.deco2800.hcg.util.Effect;
  */
 public class FireBullet extends Bullet {
 
+	private int damage;
+
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
 	 *
@@ -34,9 +36,10 @@ public class FireBullet extends Bullet {
 	 *            the total number of enemies that can be hit
 	 */
 	public FireBullet(float posX, float posY, float posZ, float xd, float yd,
-					  AbstractEntity user, int hitCount) {
+					  AbstractEntity user, int hitCount, float speed, int damage) {
 		super(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount);
+				user, hitCount, speed, damage);
+		this.damage = damage;
 		this.setTexture("battle_seed_red");
 		this.bulletType = BulletType.FIRE;
 	}
@@ -59,8 +62,10 @@ public class FireBullet extends Bullet {
 	 * @param user
 	 *           the entity who shot this bullet
 	 */
-	public FireBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
-		super(posX, posY, posZ, newX, newY, newZ, user, 1);
+	public FireBullet(float posX, float posY, float posZ, float newX, float newY, float newZ,
+					  AbstractEntity user, float speed, int damage) {
+		super(posX, posY, posZ, newX, newY, newZ, user, 1, speed, damage);
+		this.damage = damage;
 		this.setTexture("battle_seed_red");
 		this.bulletType = BulletType.FIRE;
 	}
@@ -92,15 +97,16 @@ public class FireBullet extends Bullet {
 	 *           the number of entities this object can hit before being destroyed
 	 */
 	public FireBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
-					  float yLength, float zLength, AbstractEntity user, int hitCount, float speed) {
-		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, speed);
+					  float yLength, float zLength, AbstractEntity user, int hitCount, float speed, int damage) {
+		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, speed, damage);
+		this.damage = damage;
 		this.setTexture("battle_seed_red");
 		this.bulletType = BulletType.FIRE;
 	}
 
 	@Override
 	protected void applyEffect(Harmable target) {
-		target.giveEffect(new Effect("Fire", 1, 5, 1, 0, 200, 0, user));
+		target.giveEffect(new Effect("Fire", 1, damage, 1, 0, 200, 0, user));
 	}
 }
 
