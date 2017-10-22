@@ -1,0 +1,87 @@
+{
+  "initialRelationship": "greetings",
+  "relationshipMap": {
+    "greetings": "hello",
+    "youSure":  "areYouSure",
+    "haveYouCompletedTheQuest": "didYouCompleteTheQuest",
+    "completed":"completedNode"
+  },
+
+  "nodes": [
+    {
+      "id": "hello",
+      "nodeText": "Hello traveller. Are you ready to go on your next Adventure?",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Yes I'd love to",
+          "actions": [],
+          "target": "adventure"
+        },
+        {
+          "conditions": [],
+          "optionText": "No I'd rather not sorry, bye.",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+
+    {
+      "id": "adventure",
+      "nodeText": "I have just granted you a noble quest, be careful on your journey. Return to me once you've completed your adventure.",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Okay, see you soon",
+          "actions": ["setRelationship|haveYouCompletedTheQuest", "startQuest|Ant_Quest"],
+          "target": null
+        }
+      ]
+    },
+
+    {
+      "id": "didYouCompleteTheQuest",
+      "nodeText": "Hi did you ravage the ant population?",
+      "options": [
+        {
+          "conditions": ["questCompleted|Ant_Quest"],
+          "optionText": "Yeah I did!",
+          "actions": ["finishCurrentQuest"],
+          "target": "Thanks"
+        },
+        {
+          "conditions": ["!questCompleted|Ant_Quest"],
+          "optionText": "No I haven't yet, i'll come back when I have",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+
+    {
+      "id": "Thanks",
+      "nodeText": "Awesome, that's great. I have given you an item for completing my quest. Go over to the Shop attendent and you can access the shop and trade.",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Okay, I will do that thanks!",
+          "actions": ["setRelationship|completed","giveItems|ice_seed|1"],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "completedNode",
+      "nodeText": "I hope you have a great time playing this game",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Thank you I think I will!",
+          "actions": [],
+          "target": null
+        }
+      ]
+    }
+  ]
+}

@@ -66,6 +66,17 @@ public interface Inventory extends Iterable<Item> {
      * @return
      */
     boolean removeItem(Item item, int number);
+
+    /**
+     * Remove a given number of the given item
+     *
+     * @param item
+     *          The item to remove
+     * @param number
+     *          The number to remove
+     * @return
+     */
+    boolean removeItem(String item, int number);
     
     /**
      * Tests whether or not this inventory can currently accept <code>item</code>.

@@ -40,7 +40,7 @@
     },
 	{
       "id": "3",
-      "nodeText": "Try left clicking to shoot at them with your gun. If you put enough bullets into them they should die. Make sure to look out for any loot they drop! And you don't have unlimited ammo!",
+      "nodeText": "Try left clicking to shoot at them with your gun. If you put enough bullets into them they \n should die. Make sure to look out for any loot they drop! And you don't have unlimited ammo!",
       "options": [
         {
           "optionText": "Ok, I'll try. Got any other hints?",
