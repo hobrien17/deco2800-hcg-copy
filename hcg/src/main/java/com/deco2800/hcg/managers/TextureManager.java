@@ -436,6 +436,7 @@ public class TextureManager extends Manager {
             textureMap.put("ccAttributes", new Texture("resources/ui/character_creation/heading_attributes.png"));
             textureMap.put("ccSkills", new Texture("resources/ui/character_creation/heading_skills.png"));
             textureMap.put("ccStats", new Texture("resources/ui/character_creation/heading_stats.png"));
+            textureMap.put("ccCharacter", new Texture("resources/ui/character_creation/heading_character.png"));
             textureMap.put("ccPreview", new Texture("resources/ui/character_creation/heading_preview.png"));
             textureMap.put("ccDone", new Texture("resources/ui/character_creation/heading_done.png"));
 
