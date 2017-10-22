@@ -92,8 +92,7 @@ public class QuestMenuContext extends UIContext {
 		HashMap<QuestNPC,QuestArchive> unCompleteableQuests = questManager.getUnCompleteableQuests();
 		
 		//Create all Lists
-		readyList = new List<String>(skin);
-        
+		readyList = new List<>(skin);
         //Turn the data into readable
         int readyCounter = 0;
         String[] readyStringList = new String[completableQuests.size()];
@@ -101,32 +100,31 @@ public class QuestMenuContext extends UIContext {
         	readyStringList[readyCounter] = qa.getQuestTitle();
         	readyCounter++;
         }
-        readyList.setItems("Ready Test");
+        readyList.setItems(readyStringList);
         readyQuestsPane = new ScrollPane(readyList);
         readyQuestsPane.setSmoothScrolling(false);
         readyQuestsPane.setDebug(false);
         
-        activeList = new List<String>(skin);
-        
+        activeList = new List<>(skin);
         int questCounter = 0;
         String[] questStringList = new String[unCompleteableQuests.size()];
         for (QuestArchive qa: unCompleteableQuests.values()) {
         	questStringList[questCounter] = qa.getQuestTitle();
         	questCounter++;
         }
-        activeList.setItems("Active Test");
+        activeList.setItems(questStringList);
         activeQuestsPane = new ScrollPane(activeList);
         activeQuestsPane.setSmoothScrolling(false);
         activeQuestsPane.setDebug(false);
         
-        completedList = new List<String>(skin);
+        completedList = new List<>(skin);
         String[] completedStringList = new String[completedQuests.size()];
         int completedCounter = 0;
         for (QuestArchive qa: completedQuests) {
         	completedStringList[completedCounter] = qa.getQuestTitle();
         	completedCounter++;
         }
-        completedList.setItems("Completed Test");
+        completedList.setItems(completedStringList);
         completedQuestsPane = new ScrollPane(completedList);
         completedQuestsPane.setSmoothScrolling(false);
         completedQuestsPane.setDebug(false);
