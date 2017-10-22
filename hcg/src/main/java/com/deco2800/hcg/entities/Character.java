@@ -66,10 +66,6 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
     // Effects container
     protected Effects myEffects;
 
-    // Skills
-    // TODO: Message weapons team to find out what categories of weapons they will implement
-
-
     //Kill Log with worlds
     //Main level is a mapping between the world ID to Enemies and their amount of kills
     private HashMap<Integer,HashMap<EnemyType, Integer>> killLog;
@@ -456,7 +452,6 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
         //Add the enemy ID to that world if it has not already being added
         killLog.get(getCurrentNodeID()).putIfAbsent(enemyType, 0);
         killLog.get(getCurrentNodeID()).put(enemyType,1 + killLog.get(getCurrentNodeID()).get(enemyType));
-        updateQuestLog();
     }
 
     /**
@@ -471,7 +466,6 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
         //Add the enemy ID to that world if it has not already being added
         killLog.get(nodeID).putIfAbsent(enemyType, 0);
         killLog.get(nodeID).put(enemyType,1 + killLog.get(nodeID).get(enemyType));
-        updateQuestLog();
     }
 
 
@@ -556,14 +550,6 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 
     public boolean killLogContainsNode(int nodeID) {
         return killLog.containsKey(nodeID);
-    }
-
-    /**
-     * Used to tell the quest log that things have changed. Which will be useful if 'notifications'
-     * are enabled to tell the player that they have competed a quest.
-     */
-    public void updateQuestLog() {
-        //Todo: Add the quest log function for updating.
     }
 
     /**
