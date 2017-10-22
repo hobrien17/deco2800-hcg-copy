@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -53,6 +54,8 @@ public class QuestMenuContext extends UIContext {
 	private Table itemRequire;
 	private String itemTitle;
 	private HashMap<String, Integer> itemList;
+	private Table itemReward;
+	private String rewardedItem;
 	
 	public QuestMenuContext() {
 		
@@ -96,6 +99,8 @@ public class QuestMenuContext extends UIContext {
         killRequire = new Table(skin);
         
         itemRequire = new Table(skin);
+        
+        itemReward = new Table(skin);
 		
 		//Create Image Button
 		questsBack = new ImageButton(new Image(textureManager.getTexture("instructions_back_button")).getDrawable());
@@ -153,11 +158,14 @@ public class QuestMenuContext extends UIContext {
 		nameTitle = new String("Quest Name: ");
 		detailsTitle = new String("Details:");
 		
-		//TODO new Strings (Titles to separate the parts)
+		//New Strings (Titles to separate the parts)
 		killTitle = new String("Kill Requirements");
 		itemTitle = new String("Item Requirements");
 		
-		//TODO new HashMaps which take a String for the enemy/item and a Integer for the amount
+		//TODO new String that is conacated with the Item to be rewarded
+		rewardedItem = new String("Item to be Rewarded: ");
+		
+		//New HashMaps which take a String for the enemy/item and a Integer for the amount
 		killList = new HashMap<>();
 		itemList = new HashMap<>();
 		
@@ -169,29 +177,29 @@ public class QuestMenuContext extends UIContext {
         
         logWindow.setTransform(true);
         
-        readyTable.add(readyTitle);
+        readyTable.add(readyTitle).align(0);
         logWindow.add(readyTable).expandX().fill();
         logWindow.row();
         readyListTable.add(readyQuestsPane).expand().fill();
         logWindow.add(readyListTable).expandX().fill();
         logWindow.row();
-        activeTable.add(activeTitle);
+        activeTable.add(activeTitle).align(0);
         logWindow.add(activeTable).expandX().fill();
         logWindow.row();
         activeListTable.add(activeQuestsPane).expand().fill();
         logWindow.add(activeListTable).expandX().fill();
         logWindow.row();
         logWindow.row();
-        completedTable.add(completedTitle);
+        completedTable.add(completedTitle).align(0);
         logWindow.add(completedTable).expandX().fill();
         logWindow.row();
         completedListTable.add(completedQuestsPane).expand().fill();
         logWindow.add(completedListTable).expandX().fill();
         
-        nameTable.add(nameTitle);
+        nameTable.add(nameTitle).align(0);
         secondaryWindow.add(nameTable).expandX().fill();
         secondaryWindow.row();
-        detailsTable.add(detailsTitle);
+        detailsTable.add(detailsTitle).align(0);
         secondaryWindow.add(detailsTable).expandX().fill();
         secondaryWindow.row();
         detailsTextTable.add(detailsText).expand().fill();
@@ -200,6 +208,9 @@ public class QuestMenuContext extends UIContext {
         secondaryWindow.add(killRequire).expandX().fillX().left();
         secondaryWindow.row().padTop(10);
         secondaryWindow.add(itemRequire).expandX().fillX().left();
+        secondaryWindow.row();
+        itemReward.add(rewardedItem);
+        secondaryWindow.add(itemReward).expandX().fillX();
         main.add(logWindow).expand(1, 1).fill();
         main.add(secondaryWindow).expand(4, 1).fill();
         main.row();
@@ -217,6 +228,7 @@ public class QuestMenuContext extends UIContext {
 			}
 		});
 		
+		//TODO need to add a Concat for 'rewardedItem' which adds the item to be added
 		readyList.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
