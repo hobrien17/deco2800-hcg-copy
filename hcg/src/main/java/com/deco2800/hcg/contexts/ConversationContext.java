@@ -54,13 +54,16 @@ public class ConversationContext extends UIContext {
 		
 		table.row().spaceBottom(40);
 		table.add(npcImage);
-		table.row().padBottom(80);
+		table.row().padBottom(90);
 		table.add(npcName);
-		table.row().spaceTop(180);
-		table.add(nodeText).padBottom(50);
+		table.row().spaceTop(220);
+		table.add(nodeText).padBottom(130);
+		table.row().spaceBottom(20);
 		table.row().space(50, 0, 50, 0);
-		table.add(buttons).padBottom(160);
+		table.add(buttons).padBottom(100);
 		stage.addActor(table);
+		
+		table.debug();
 	}
 
     /**
