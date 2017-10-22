@@ -169,10 +169,8 @@ public class CharacterCreationContext extends CharacterContext{
     //Setting up top row info
     private void setupTopRowInfo() {
         TextButton quitButton = new TextButton("Back", skin);
-        TextButton skipButton = new TextButton("Skip", skin);
         TextButton doneButton = new TextButton("Done", skin);
         topRowInfoTable.add(quitButton).left().expandX();
-        topRowInfoTable.add(skipButton).right();
         topRowInfoTable.add(doneButton).right();
 
         quitButton.addListener(new ChangeListener() {
@@ -201,23 +199,6 @@ public class CharacterCreationContext extends CharacterContext{
                     }
                 } else {
                     //TODO: Show tooltip explaining why you can't advance
-                }
-            }
-        });
-
-        // Temporary button to create character with default values
-        skipButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-            	if (networkManager.isMultiplayerGame() && !networkManager.isHost()) {
-            		contextManager.pushContext(new WaitHostContext(0));
-            	} else {
-            		contextManager.pushContext(new WorldStackContext());
-            	}
-                /* Create new player with default values. */
-                if (playerManager.getPlayer() == null) {
-                    createPlayer(5, 5, 5, 5, 5, machineGunSkill, shotGunSkill, starGunSkill,
-                           multiGunSkill, characterName.getText(), charTextureArray[textureCount].toString());
                 }
             }
         });

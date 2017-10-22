@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="20" height="20" tilewidth="55" tileheight="32" nextobjectid="1">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="20" height="20" tilewidth="55" tileheight="32" nextobjectid="5">
  <properties>
   <property name="PlayerX" value="10"/>
   <property name="PlayerY" value="10"/>
@@ -8,6 +8,7 @@
  <tileset firstgid="29" source="../tiles/invisible-tile.tsx"/>
  <tileset firstgid="30" source="../tiles/new-sludge.tsx"/>
  <tileset firstgid="58" source="../tiles/exit.tsx"/>
+ <tileset firstgid="59" source="../tiles/deprecated/grass.tsx"/>
  <layer name="grass" width="20" height="20">
   <properties>
    <property name="name" value="grass"/>
@@ -30,8 +31,8 @@
 0,54,54,54,54,54,54,54,54,54,54,54,54,44,30,30,30,30,30,30,
 0,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
 0,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
-0,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,0,0,30,30,
-0,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,0,0,30,30,
+0,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,1,1,30,30,
+0,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,1,1,30,30,
 0,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,
 0,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30
 </data>
@@ -95,34 +96,15 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="exit" width="20" height="20">
+ <objectgroup name="tree">
   <properties>
-   <property name="name" value="exit"/>
-   <property name="speed" value="1"/>
+   <property name="name" value="tree"/>
   </properties>
-  <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,58,58,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,58,58,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-</data>
- </layer>
+  <object id="1" gid="59" x="171.964" y="528.036" width="55" height="32"/>
+  <object id="2" gid="59" x="343.036" y="562.964" width="55" height="32"/>
+  <object id="3" gid="59" x="545.418" y="418.582" width="55" height="32"/>
+  <object id="4" gid="59" x="541.6" y="234.4" width="55" height="32"/>
+ </objectgroup>
  <layer name="gateway3" width="20" height="20">
   <properties>
    <property name="PlayerX" value="1"/>
