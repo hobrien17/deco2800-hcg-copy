@@ -2,10 +2,17 @@ package com.deco2800.hcg.entities;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 
@@ -65,6 +72,10 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 
     // Effects container
     protected Effects myEffects;
+    
+    protected int tickCount = 0;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Character.class);
 
     // Skills
     // TODO: Message weapons team to find out what categories of weapons they will implement
@@ -598,6 +609,38 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      */
     @Override
     public void onTick(long gameTickCount) {
+        checkParticles();
         myEffects.apply();
+    }
+    
+    protected void checkParticles() {
+        if(tickCount < 30) {
+            tickCount++;
+        } else {
+            for(Effect effect : myEffects.getEffects()) {
+                if("Fire".equals(effect.getName())) {
+                    spawnParticles(this, "fire.p");
+                }
+                if("Ice".equals(effect.getName())) {
+                    spawnParticles(this, "frozen.p");
+                }
+            }
+            tickCount = 0;
+        }
+    }
+    
+    protected void spawnParticles(AbstractEntity entity, String particleFile) {
+        try {
+            ParticleEffect effect = new ParticleEffect();
+            effect.load(Gdx.files.internal("resources/particles/" + particleFile),
+            Gdx.files.internal("resources/particles/"));
+            Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX() + entity.getXLength()/2,
+                    entity.getPosY() + entity.getYLength()/2, 0));
+            effect.setPosition(position.x, position.y);
+            effect.start();
+            ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, effect);
+        } catch (Exception e) {
+            LOGGER.error("Unable to load particle effects.",e);
+        }
     }
 }

@@ -37,9 +37,11 @@ public class Inferno extends AbstractGardenPlant {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("fire_seed", 5, 20), 0.7);
-        lootRarity.put(new LootWrapper("explosive_seed", 5, 20), 0.2);
-        lootRarity.put(new LootWrapper("water_seed", 5, 20), 0.1);
+        lootRarity.put(new LootWrapper("fire_seed", 7, 9), 0.5);
+        lootRarity.put(new LootWrapper("grass_seed", 6, 9), 0.2);
+        lootRarity.put(new LootWrapper("shotgun", 1, 1), 0.1);
+        lootRarity.put(new LootWrapper("multigun", 1, 1), 0.1);
+        lootRarity.put(new LootWrapper("trowel", 1, 1), 0.1);
 
         checkLootRarity();
     }

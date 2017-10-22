@@ -1,8 +1,11 @@
 package com.deco2800.hcg.entities.turrets;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.shading.LightEmitter;
 
 /**
  * Explosion class
@@ -11,7 +14,7 @@ import com.deco2800.hcg.managers.GameManager;
  * @author Henry O'Brien
  *
  */
-public class Explosion extends AbstractEntity implements Tickable {
+public class Explosion extends AbstractEntity implements Tickable, LightEmitter {
 	
 	private float change;
 	private static final float MOD = 0.015f;
@@ -32,6 +35,8 @@ public class Explosion extends AbstractEntity implements Tickable {
 		super(posX, posY, posZ, 0, 0, 0, 0.01f, 0.01f, true);
 		this.setTexture("explosion");
 		this.change = change;
+		((SoundManager)GameManager.get().getManager(SoundManager.class)).playSound("explosion");
+
 	}
 	
 	/**
@@ -52,5 +57,17 @@ public class Explosion extends AbstractEntity implements Tickable {
 			this.setPosX(this.getPosX()-change);
 			change -= MOD;
 		}
+	}
+
+	@Override
+	public Color getLightColour() {
+		// TODO Auto-generated method stub
+		return Color.ORANGE;
+	}
+
+	@Override
+	public float getLightPower() {
+		// TODO Auto-generated method stub
+		return change * 20;
 	}
 }

@@ -39,7 +39,7 @@ public class SpeedPotion extends ConsumableItem implements Observer {
         manager.addObserver(this);
         LOGGER.info("Stamina Updated!");
         startTime = (int)manager.getStopwatchTime();
-        endTime = startTime + 100;
+        endTime = startTime + 20;
     }
 
     @Override

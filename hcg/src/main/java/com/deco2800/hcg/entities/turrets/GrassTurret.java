@@ -1,7 +1,9 @@
 package com.deco2800.hcg.entities.turrets;
 
 import java.util.Observable;
-import com.deco2800.hcg.entities.bullets.GrassBullet;
+
+import com.badlogic.gdx.graphics.Color;
+import com.deco2800.hcg.entities.bullets.GrassTurretBullet;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.types.Weathers;
@@ -58,8 +60,8 @@ public class GrassTurret extends AbstractTurret {
 				double radAngle = angle*Math.PI/180;
 				double newX = master.getPosX() + DISTANCE*Math.cos(radAngle);
 				double newY = master.getPosY() + DISTANCE*Math.sin(radAngle);
-				GrassBullet bullet = new GrassBullet(master.getPosX(), master.getPosY(), master.getPosZ(), 
-						(float)newX, (float)newY, 0, master);
+				GrassTurretBullet bullet = new GrassTurretBullet(master.getPosX(), master.getPosY(), master.getPosZ(), 
+						(float)newX, (float)newY, 0, master, 0.5f, 1000);
 				GameManager.get().getWorld().addEntity(bullet);
 			}
 			GameManager.get().getWorld().removeEntity(master);
@@ -69,6 +71,16 @@ public class GrassTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		return "grass_corpse";
+	}
+
+	@Override
+	public int getGlowStrength() {
+		return 0;
+	}
+
+	@Override
+	public Color getGlowColor() {
+		return Color.GREEN;
 	}
 
 }

@@ -1,0 +1,62 @@
+{
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "0"
+  },
+  "nodes": [
+    {
+      "id": "0",
+      "nodeText": "Welcome to the wasteland!",
+      "options": [
+        {
+          "optionText": "Thanks, I guess",
+          "target": "1"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "nodeText": "No problem! It's really not that bad, once you know how to kill the enemies.",
+      "options": [
+        {
+          "optionText": "Enemies?",
+          "target": "2"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "nodeText": "Yeah, enemies! They're pretty hard to miss! We have a pretty serious ant problem here, go see if you can get rid of them for me.",
+      "options": [
+		{
+		  "optionText": "How do I do that?",
+          "target": "3"
+		},
+		{
+		  "optionText": "Will do, Got any other hints?",
+          "target": "4"
+		}
+      ]
+    },
+	{
+      "id": "3",
+      "nodeText": "Try left clicking to shoot at them with your gun. If you put enough bullets into them they should die. Make sure to look out for any loot they drop! And you don't have unlimited ammo!",
+      "options": [
+        {
+          "optionText": "Ok, I'll try. Got any other hints?",
+          "target": "4"
+        }
+      ]
+    },
+	{
+      "id": "4",
+      "nodeText": "Yeah! some of my friends live by here, try talking to them to see what they have to say! It could save your life! The exits at the other side of here, good luck!",
+      "options": [
+        {
+          "optionText": "Thanks very much!",
+          "target": "null"
+        }
+      ]
+    }
+  ]
+}
