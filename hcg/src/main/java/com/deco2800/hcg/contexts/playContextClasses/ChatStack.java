@@ -91,7 +91,7 @@ public class ChatStack extends Stack {
             @Override
             public void keyTyped(TextField textField, char c) {
                 if (c != '\b') {
-                    chatString += c;
+                    chatString += Character.toString(c);
 				} else if (chatString.length() > 0) {
 					chatString = chatString.substring(0,
 							chatString.length() - 1);

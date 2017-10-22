@@ -6,7 +6,6 @@ import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Hedgehog extends Enemy implements Tickable {
@@ -29,7 +28,7 @@ public class Hedgehog extends Enemy implements Tickable {
      * @param id the ID of the Hedgehog Enemy
      */
     public Hedgehog(float posX, float posY, float posZ, int id) {
-        super(posX, posY, posZ, 1f, 1f, 1, false, 1000, 5, id, EnemyType.HEDGEHOG);
+        super(posX, posY, posZ, 1f, 1f, 1, false, 1750, 5, id, EnemyType.HEDGEHOG);
         this.boss = false;
         this.setTexture("hedgehogW1");
         this.level = 1;

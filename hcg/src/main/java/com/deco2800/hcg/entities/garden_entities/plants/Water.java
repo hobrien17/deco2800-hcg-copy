@@ -37,9 +37,11 @@ public class Water extends AbstractGardenPlant {
 	void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put(new LootWrapper("water_seed", 5, 10), 0.7);
-        lootRarity.put(new LootWrapper("ice_seed", 5, 10), 0.2);
-        lootRarity.put(new LootWrapper("explosive_seed", 5, 10), 0.1);
+		lootRarity.put(new LootWrapper("water_seed", 5, 7), 0.4);
+        lootRarity.put(new LootWrapper("ice_seed", 4, 7), 0.2);
+        lootRarity.put(new LootWrapper("snag", 1, 2), 0.2);
+        lootRarity.put(new LootWrapper("sausage", 1, 2), 0.1);
+        lootRarity.put(new LootWrapper("bug_spray", 1, 1), 0.1);
 
         checkLootRarity();
 	}

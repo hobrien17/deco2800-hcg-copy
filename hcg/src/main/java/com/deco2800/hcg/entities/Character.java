@@ -75,6 +75,8 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
     
     protected int tickCount = 0;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Character.class);
+
     // Skills
     // TODO: Message weapons team to find out what categories of weapons they will implement
 
@@ -638,8 +640,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
             effect.start();
             ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, effect);
         } catch (Exception e) {
-            Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
-            LOGGER.error("Unable to load particle effects.");
+            LOGGER.error("Unable to load particle effects.",e);
         }
     }
 }

@@ -2,11 +2,9 @@ package com.deco2800.hcg.garden;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.deco2800.hcg.BaseTest;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
-import com.deco2800.hcg.entities.Plant;
 import com.deco2800.hcg.entities.garden_entities.plants.*;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.managers.GameManager;

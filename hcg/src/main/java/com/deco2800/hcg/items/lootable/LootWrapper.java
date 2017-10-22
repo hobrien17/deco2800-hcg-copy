@@ -176,14 +176,19 @@ public class LootWrapper {
 	
 	public void modAmount(float mod) {
 		amount *= mod;
+		if(amount <= 0) {
+			amount = 1;
+		}
+		item.setStackSize(amount);
 	}
 	
 	@Override
 	public boolean equals(Object o) {
-		System.out.println("eq");
+		float epsilon = 0.00001f;
 		if(o instanceof LootWrapper) {
 			LootWrapper wrapper = (LootWrapper)o;
-			return wrapper.getName().equals(this.getName()) && wrapper.getRarity() == this.getRarity();
+			return wrapper.getName().equals(this.getName()) &&
+					Math.abs(wrapper.getRarity() - this.getRarity()) <= epsilon;
 		}
 		return false;
 	}

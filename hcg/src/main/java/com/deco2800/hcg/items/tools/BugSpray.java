@@ -1,21 +1,18 @@
 package com.deco2800.hcg.items.tools;
 
-import java.util.Optional;
+import java.util.ArrayList;
 
-import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.util.WorldUtil;
 
 public class BugSpray extends Tool {
 
 	public BugSpray() {
-		super(1);
 		this.itemName = "Bug Spray";
-        this.texture = "bug_spray";
-        this.maxStackSize = 5;
-        this.currentStackSize = 1;
-        this.baseValue = 10;
+		this.texture = "bug_spray";
+		this.maxStackSize = 10;
+		this.currentStackSize = 1;
+		this.baseValue = 5;
 	}
 
 	@Override
@@ -34,15 +31,17 @@ public class BugSpray extends Tool {
 	}
 
 	@Override
-	public void use() {
-		Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(player.getPosX(), player.getPosY(), 
-				1.5f, Pot.class);
-		if(closest.isPresent()) {
-			Pot pot = (Pot)closest.get();
-			if(!pot.isEmpty()) {
-				pot.getPlant().increaseRarity(0.1, 0.05);
-			}
-		}
+	public ArrayList<String> getInformation() {
+		ArrayList<String> list = new ArrayList<>();
+		list.add("Kills those pesky bugs that are destroying your loot");
+		list.add("Increases the chance that a plant drops rare loot");
+		return list;
 	}
-	
+
+	@Override
+	public void effect(Pot pot) {
+		pot.getPlant().increaseRarity(0.1, 0.05);
+		player.getInventory().removeItem(this);
+	}
+
 }

@@ -186,7 +186,6 @@ public class ShopMenuContext extends InventoryDisplayContext {
                 } catch(NumberFormatException e) {
                     amount.setText("NaN");
                 }
-                
 				if ((selectedItem != null)
 						&& !selectedItem.sameItem(new Seed(Seed.Type.SUNFLOWER))
 						&& !(shopKeeper.getShop().getStock()

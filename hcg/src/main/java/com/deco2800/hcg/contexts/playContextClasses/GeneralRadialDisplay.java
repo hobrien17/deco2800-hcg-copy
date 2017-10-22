@@ -43,11 +43,11 @@ import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.items.tools.Trowel;
 import com.deco2800.hcg.items.tools.Hoe;
+import com.deco2800.hcg.items.tools.Shovel;
 import com.deco2800.hcg.items.tools.Fertiliser;
 import com.deco2800.hcg.items.tools.Tool;
 import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.inventory.PlayerEquipment;
-import com.deco2800.hcg.weapons.Weapon;
 
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
@@ -183,9 +183,9 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("sausage", "sausage_btn");
 		sprites.put("magic_mushroom", "magicMushroom");
 		sprites.put("small_mushroom", "smallMushroom");
-		sprites.put("hoe", "hoe");
-		sprites.put("trowel", "trowel");
-		sprites.put("shovel", "shovel");
+		sprites.put("hoe", "hoe_btn");
+		sprites.put("trowel", "trowel_btn");
+		sprites.put("shovel", "shovel_btn");
 	}
 	
 	private void setupListeners() {
@@ -370,7 +370,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("hoe", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//useItem(new Hoe());
+				useItem(new Hoe());
 				hide();
 			}
 		});
@@ -378,7 +378,7 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("trowel", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//useItem(new Trowel ());
+				useItem(new Trowel());
 				hide();
 			}
 		});
@@ -387,9 +387,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Optional<AbstractEntity> closest = GeneralRadialDisplay.getClosestPot();
-				if(closest.isPresent() && !((Pot)closest.get()).isEmpty()) {
-					((Pot)closest.get()).removePlant();
-				}
+				useItem(new Shovel());
 				hide();
 			}
 		});
@@ -482,8 +480,8 @@ public class GeneralRadialDisplay extends Group {
     	} else if(item instanceof ConsumableItem) {
     		Player player = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer();
     		((ConsumableItem)item).consume(player);
+        	inventory.removeItem(item);
     	}
-    	inventory.removeItem(item);
     	update();
     }
     
@@ -560,20 +558,18 @@ public class GeneralRadialDisplay extends Group {
 			ImageButton button = buttons.get(i);
 			String type = items.get(i);
 			int count = -1;
-			if(type.equals("sunflower") || type.equals("water") || type.equals("cactus") || type.equals("ice") || 
-					type.equals("fire") || type.equals("explosive") || type.equals("grass")) {
+			if("sunflower".equals(type) || "water".equals(type) || "cactus".equals(type) || "ice".equals(type) ||
+					"fire".equals(type) || "explosive".equals(type) || "grass".equals(type)) {
 				count = getCount(type + "_seed");
-			} else if(type.equals("sunflowerC") || type.equals("waterC") || type.equals("cactusC") || type.equals("iceC") || 
-					type.equals("fireC") || type.equals("explosiveC") || type.equals("grassC")) {
+			} else if("sunflowerC".equals(type) || "waterC".equals(type) || "cactusC".equals(type) || "iceC".equals(type) ||
+					"fireC".equals(type) || "explosiveC".equals(type) || "grassC".equals(type)) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
-			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("scatterGun") || type.equals("shotgun") ||
-					type.equals("hoe") || type.equals("trowel") || type.equals("shovel"));
-			else if(type.equals("health_potion")) {
-				count = getCount("red_potion");
-			} else if(type.equals("speed_potion")) {
-				count = getCount("purple_potion");
-			}
-			else{
+			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("scatterGun") || type.equals("shotgun"));
+			else if(type.equals("snag")) {
+				count = getCount("bunnings_snag_and_bread");
+			} else if(type.equals("sausage")) {
+				count = getCount("bunnings_snag");
+			} else{
 				count = getCount(type);
 			}
 			
