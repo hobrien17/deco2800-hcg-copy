@@ -159,11 +159,9 @@ public class PlayContext extends Context {
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
-        
 
         /* Add ParticleEffectActor that controls weather. */
         stage.addActor(weatherManager.getActor());
-
         stage.addActor(particleManager.getActor());
         stage.addActor(chatStack);
         chatStack.setVisible(false);
