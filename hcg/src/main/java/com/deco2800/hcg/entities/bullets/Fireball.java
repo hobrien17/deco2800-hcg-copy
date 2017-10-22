@@ -1,10 +1,14 @@
 package com.deco2800.hcg.entities.bullets;
 
+import java.util.List;
+
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.WorldUtil;
 
 /**
  * Fireball class
@@ -137,8 +141,12 @@ public class Fireball extends FireBullet {
 	
 	@Override
 	protected void applyEffect(Harmable target) {
-		//((SoundManager)GameManager.get().getManager(SoundManager.class)).playSound("fireball_hit");
-		target.giveEffect(new Effect("Shot", 1, damage, 1, 0, 1, 0, user));
+		AbstractEntity entity = (AbstractEntity)target;
+		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 3, Enemy.class);
+		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0, user));
+		for(AbstractEntity other : closest) {
+			((Enemy)other).giveEffect(new Effect("Fire", 1, 5, 1, 0, 200, 0, user));
+		}
 	}
 
 }

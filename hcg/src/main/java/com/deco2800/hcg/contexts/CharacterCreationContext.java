@@ -12,10 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.items.tools.Shovel;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.weapons.Weapon;
+import com.deco2800.hcg.weapons.WeaponBuilder;
+import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.*;
 import java.util.List;
@@ -727,6 +733,10 @@ public class CharacterCreationContext extends CharacterContext{
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
         Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
+        Item shovel = new Shovel();
+        Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(player)
+    			.setRadius(0.7).build();
+        Item gun = new WeaponItem(machinegun, "Machine Gun", 10);
         startingSeeds.setStackSize(50);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
@@ -735,5 +745,7 @@ public class CharacterCreationContext extends CharacterContext{
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
+        player.addItemToInventory(shovel);
+        player.addItemToInventory(gun);
     }
 }

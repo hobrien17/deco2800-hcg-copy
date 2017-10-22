@@ -140,7 +140,7 @@ public class PlayContext extends Context {
         List<String> plantList = Arrays.asList(plantItems);
         seedItems = new String[]{"sunflowerC", "waterC", "iceC", "explosiveC","fireC","grassC"};
         List<String> seedList = Arrays.asList(seedItems);
-        weaponItems = new String[]{"machineGun", "shotgun", "scatterGun", "starfall"};
+        weaponItems = new String[]{"machinegun", "shotgun", "multigun", "starfall"};
         List<String> weapList = Arrays.asList(weaponItems);
         consumableItems = new String[]{"fertiliser", "bug_spray", "snag", "sausage",
                 "magic_mushroom", "small_mushroom", "hoe", "trowel", "shovel"};
@@ -379,10 +379,7 @@ public class PlayContext extends Context {
     	} else {
     		potUnlock.close();
     	}
-        if(keycode == Input.Keys.M) {
-            contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
-            soundManager.stopWeatherSounds();
-		} else if (keycode == Input.Keys.J && !weaponRadialDisplay.getActive()) {
+        if (keycode == Input.Keys.J && !weaponRadialDisplay.getActive()) {
             seedRadialDisplay.hide();
             consumableRadialDisplay.hide();
             plantRadialDisplay.hide();

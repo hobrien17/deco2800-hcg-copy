@@ -36,9 +36,13 @@ public class Cactus extends AbstractGardenPlant {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("explosive_seed", 15, 20), 0.7);
-        lootRarity.put(new LootWrapper("fire_seed", 15, 20), 0.2);
-        lootRarity.put(new LootWrapper("grass_seed", 15, 20), 0.1);
+        lootRarity.put(new LootWrapper("explosive_seed", 8, 10), 0.45);
+        lootRarity.put(new LootWrapper("sunflower_seed", 10, 10), 0.1);
+        lootRarity.put(new LootWrapper("grass_seed", 9, 10), 0.1);
+        lootRarity.put(new LootWrapper("fire_seed", 8, 10), 0.1);
+        lootRarity.put(new LootWrapper("water_seed", 7, 10), 0.1);
+        lootRarity.put(new LootWrapper("ice_seed", 7, 10), 0.1);
+        lootRarity.put(new LootWrapper("starfall", 1, 1), 0.05);
         
         checkLootRarity();
     }

@@ -28,7 +28,7 @@ public class ExplosiveTurret extends AbstractTurret {
 	private static final int NORMAL_BLOW = 10;
 	private static final int INCREASED_BLOW = 20;
 	private static final int NORMAL_RANGE = 5;
-	private static final int INCREASED_RANGE = 10;
+	private static final int INCREASED_RANGE = 8;
 	private static final float NORMAL_SIZE = 0.4f;
 	private static final float INCREASED_SIZE = 0.5f;
 		

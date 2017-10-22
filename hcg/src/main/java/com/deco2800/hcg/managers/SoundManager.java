@@ -108,6 +108,7 @@ public class SoundManager extends Manager {
 			soundMap.put("fireball", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fireball.wav")));
 			soundMap.put("fireball_hit", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fireball_hit.wav")));
 			soundMap.put("freeze", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/freeze.wav")));
+			soundMap.put("grow", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/grow.wav")));
 			
 			// Shop sounds
 			soundMap.put("buy", 
