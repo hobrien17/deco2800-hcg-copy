@@ -249,7 +249,7 @@ public class Effects {
 				return;
 			}
 			Double prob = Math.random();
-			if (prob > 0.5) {
+			if (prob > 0.7) {
 			    if (owner instanceof Squirrel) {
                     Corpse corpse = new BasicCorpse(owner.getPosX(),
                             owner.getPosY(), 0);
