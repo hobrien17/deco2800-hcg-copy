@@ -22,7 +22,6 @@ public abstract class NPC extends Character implements Tickable {
     private final Box3D INITIAL_POSITION;
     protected PlayerManager playerManager;
     protected ContextManager contextManager;
-    private String conversation;
     private String faceImage;
     
 
@@ -36,7 +35,7 @@ public abstract class NPC extends Character implements Tickable {
      * @param sName NPC's surname
      * @param texture NPC's texture
      */
-    public NPC(float posX, float posY,String fName,String sName, String texture, String conversation, String faceImage) {
+    public NPC(float posX, float posY,String fName,String sName, String texture, String faceImage) {
 
         //Set up the parent constructor
         super(posX,posY,0,0.5f,0.5f,1.0f,false);
@@ -49,17 +48,11 @@ public abstract class NPC extends Character implements Tickable {
         this.INITIAL_POSITION = new Box3D(posX, posY, 0, 0, 0, 0);
         setTexture(texture);
         this.growRender(-0.2f,-0.2f);
-        this.conversation = conversation;
+
         this.faceImage = faceImage;
     }
     
-	public String getConversation(){
-		return conversation;
-	}
-	
-	public void setConversation(String convo){
-		this.conversation = convo;
-	}
+
     
     /**
      * Returns the NPC's first name

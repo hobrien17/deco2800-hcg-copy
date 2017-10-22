@@ -2,12 +2,9 @@ package com.deco2800.hcg.weapons;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.managers.GameManager;
 
 public class WeaponTest {
     

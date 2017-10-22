@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
@@ -22,13 +23,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.buffs.Perk;
-import com.deco2800.hcg.contexts.CharacterStatsContext;
-import com.deco2800.hcg.contexts.DeathContext;
-import com.deco2800.hcg.contexts.LevelUpContext;
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
-import com.deco2800.hcg.contexts.PlayContext;
-import com.deco2800.hcg.contexts.PlayerInventoryContext;
-import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.inventory.Inventory;
@@ -975,70 +969,77 @@ public class Player extends Character implements Tickable {
 	 * Handle movement when wasd keys are pressed down. As well as other
 	 * possible actions on key press. Such as NPC interaction.
 	 */
+	/**
+	 * Handle movement when wasd keys are pressed down. As well as other
+	 * possible actions on key press. Such as NPC interaction.
+	 */
 	private void handleKeyDown(int keycode) {
 		if(pauseDisplayed){
 			return;
 		}
-		
+
 		// local inputs (i.e. context changes)
 		if (this == playerManager.getPlayer()) {
 			switch (keycode) {
-			case Input.Keys.P:
-				this.contextManager.pushContext(new PerksSelectionScreen());
-				break;
+				case Input.Keys.P:
+					this.contextManager.pushContext(new PerksSelectionScreen());
+					break;
+				case Input.Keys.C:
+					if (levelUp) {
+						this.contextManager.pushContext(new LevelUpContext());
+					} else {
+						this.contextManager.pushContext(new CharacterStatsContext());
+					}
+					break;
+				case Input.Keys.E:
+					checkForInteraction();
+					break;
+				case Input.Keys.Q:
+					this.contextManager.pushContext(new QuestMenuContext());
+					break;
+				case Input.Keys.I:
+					// Display Inventory
+					LOGGER.info("Access player inventory");
+					contextManager.pushContext(new PlayerInventoryContext(this));
+					break;
+				case Input.Keys.TAB:
+					LOGGER.info("You press Tab!");
+					this.contextManager.pushContext(new ScoreBoardContext());
+					break;
+				default:
+					break;
+			}
+		}
+
+		// replicated inputs
+		switch (keycode) {
 			case Input.Keys.C:
 				if (levelUp) {
-					this.contextManager.pushContext(new LevelUpContext());
-				} else {
-					this.contextManager.pushContext(new CharacterStatsContext());
+					levelUp = false;
+					skillPoints = 0;
 				}
 				break;
-			case Input.Keys.E:
-				checkForInteraction();
+			case Input.Keys.SHIFT_LEFT:
+				if (staminaCur > 0) {
+					sprinting = true;
+				}
 				break;
-			case Input.Keys.I:
-				// Display Inventory
-				LOGGER.info("Access player inventory");
-				contextManager.pushContext(new PlayerInventoryContext(this));
+			case Input.Keys.W:
+				movementDirection.put("up", true);
 				break;
-			case Input.Keys.TAB:
-				LOGGER.info("You press Tab!");
-				this.contextManager.pushContext(new ScoreBoardContext());
+			case Input.Keys.S:
+				movementDirection.put("down", true);
+				break;
+			case Input.Keys.A:
+				movementDirection.put("left", true);
+				break;
+			case Input.Keys.D:
+				movementDirection.put("right", true);
 				break;
 			default:
 				break;
-			}
 		}
-		
-		// replicated inputs
-		switch (keycode) {
-		case Input.Keys.C:
-			if (levelUp) {
-				levelUp = false;
-				skillPoints = 0;
-			}
-			break;
-		case Input.Keys.SHIFT_LEFT:
-			if (staminaCur > 0) {
-				sprinting = true;
-			}
-			break;
-		case Input.Keys.W:
-			movementDirection.put("up", true);
-			break;
-		case Input.Keys.S:
-			movementDirection.put("down", true);
-			break;
-		case Input.Keys.A:
-			movementDirection.put("left", true);
-			break;
-		case Input.Keys.D:
-			movementDirection.put("right", true);
-			break;
-		default:
-			break;
-		}
-		
+
 		handleDirectionInput();
 		handleNoInput();
 	}

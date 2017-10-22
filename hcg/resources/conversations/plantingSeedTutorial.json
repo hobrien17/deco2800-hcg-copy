@@ -1,0 +1,99 @@
+{
+  "initialRelationship": "safezone",
+  "relationshipMap": {
+    "safezone": "hello"
+  },
+
+  "nodes": [
+    {
+      "id": "hello",
+      "nodeText": "Hi there! Welcome to the safe zone, you can get to the safe zone by clicking the safehaven at the top left of screen. Would you like to learn about more things you can do in the safe haven?",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Yes, please.",
+          "actions": [],
+          "target": "learnSafeHaven"
+        },
+        {
+          "conditions": [],
+          "optionText": "No I think I can manage it",
+          "actions": [],
+          "target": "bye"
+        }
+      ]
+    },
+    {
+      "id": "learnSafeHaven",
+      "nodeText": "You can buy and sell with shop keepers using the basic form of seed as currency. Simply go up to a shop keeper and press the 'E' key",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Can you tell me more about the safe zone please.",
+          "actions": [],
+          "target": "tellMeMore"
+        },
+        {
+          "conditions": [],
+          "optionText": "Okay, I have to go now.",
+          "actions": [],
+          "target": "bye"
+        }
+      ]
+    },
+    {
+      "id": "tellMeMore",
+      "nodeText": "Gardening is a big part of the game, you can plant seeds by holding the 'G' key next to pots. Planting seeds will give you back even more seeds after they have grown. Don't forget to plant as you may run out of ammo!",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Tell me more about planting seeds please.",
+          "actions": [],
+          "target": "usingKeys"
+        },
+        {
+          "conditions": [],
+          "optionText": "Okay, I have to go now.",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "bye",
+      "nodeText": "Okay, come back if you still need help",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Yep I will thank you",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "usingKeys",
+      "nodeText": "In order to plant a seed you must have a key, these can be bought from the shop or can be obtained by completing quests. When you have a key, go up to a pot and press the 'U' key and you can start planting",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Thanks for all your help!",
+          "actions": [],
+          "target": "happyBye"
+        }
+      ]
+    },
+    {
+      "id": "happyBye",
+      "nodeText": "Thats okay, come back any time if you need help!",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "I definitely will, thank you",
+          "actions": [],
+          "target": null
+        }
+      ]
+    }
+  ]
+}
