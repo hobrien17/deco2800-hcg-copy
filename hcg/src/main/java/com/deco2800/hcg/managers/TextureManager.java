@@ -473,6 +473,9 @@ public class TextureManager extends Manager {
             textureMap.put("ccCharacter", new Texture("resources/ui/character_creation/heading_character.png"));
             textureMap.put("ccPreview", new Texture("resources/ui/character_creation/heading_preview.png"));
             textureMap.put("ccDone", new Texture("resources/ui/character_creation/heading_done.png"));
+            
+            // Death context textures
+            textureMap.put("dead", new Texture("resources/ui/death/dead.png"));
 
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);

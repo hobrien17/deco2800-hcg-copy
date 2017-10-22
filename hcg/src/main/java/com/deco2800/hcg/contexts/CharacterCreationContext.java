@@ -176,8 +176,8 @@ public class CharacterCreationContext extends CharacterContext{
         TextButton quitButton = new TextButton("Back", skin);
         TextButton skipButton = new TextButton("Skip", skin);
         TextButton doneButton = new TextButton("Done", skin);
-        topRowInfoTable.add(quitButton).center();
-        topRowInfoTable.add(skipButton);
+        topRowInfoTable.add(quitButton).left().expandX();
+        topRowInfoTable.add(skipButton).right();
         topRowInfoTable.add(doneButton).right();
 
         quitButton.addListener(new ChangeListener() {
