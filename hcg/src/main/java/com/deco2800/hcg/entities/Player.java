@@ -81,6 +81,9 @@ public class Player extends Character implements Tickable {
 	private boolean onExit = false;
 	private boolean exitMessageDisplayed = false;
 	private boolean sprinting;
+	private int staggerDamage;
+	private boolean staggeringDamage = false;
+	private long staggerTickCount;
 	private boolean levelUp = false;
 	private int xpThreshold = 200;
 	private float lastSpeedX;
@@ -272,6 +275,7 @@ public class Player extends Character implements Tickable {
 		if (damage < 0) {
 			heal(Math.abs(damage));
 		} else {
+			//Perk - THOR-N
 			Perk thorn = this.getPerk(Perk.perk.THORN);
 			if (thorn.isActive()) {
 				switch (thorn.getCurrentLevel()) {
@@ -282,11 +286,44 @@ public class Player extends Character implements Tickable {
 						break;
 				}
 			}
+			//Perk - SAVING_GRAVES
+			Perk savingGraves = this.getPerk(Perk.perk.SAVING_GRAVES);
+			if (savingGraves.isActive()) {
+				//damage is more than 10%
+				if (damage >= this.getHealthMax()/10) {
+					//add damage to be staggered on next tick
+					staggerDamage += damage;
+					staggeringDamage = true;
+					damage = 0;
+				}
+			}
 			if (damage > healthCur) {
 				healthCur = 0;
 			} else {
 				healthCur -= damage;
 			}
+		}
+	}
+
+	/**
+	 * method to implement Saving Graves perk,
+	 * damage that does more than 10% of the players health in one hit is added to a stagger
+	 * and  1/3 of the stagger amount is done to the player every second until there is nothing left to stagger
+	 */
+	public void staggerDamage() {
+		//getting damage
+		int damage = staggerDamage/3;
+		staggerDamage -= damage;
+
+		//nothing left, no longer staggering damage
+		if (staggerDamage ==0) {
+			staggeringDamage = false;
+		}
+		//if damage kills player, set health to 0
+		if (damage > healthCur) {
+			healthCur = 0;
+		} else {
+			healthCur -= damage;
 		}
 	}
 
@@ -568,6 +605,12 @@ public class Player extends Character implements Tickable {
 	public void onTick(long gameTickCount) {
 		float oldPosX = this.getPosX();
 		float oldPosY = this.getPosY();
+
+		if (gameTickCount % 50 ==0) {
+			if (staggeringDamage) {
+				staggerDamage();
+			}
+		}
 
 		// Apply any active effects
 		myEffects.apply();
