@@ -88,7 +88,7 @@ public class QuestNPC extends NPC {
 	}
 
 	public Boolean isQuestActive(String questName) {
-		return questManager.isQuestActive(this);
+		return questManager.isQuestActive(this, questName);
 	}
 
 	public Boolean isQuestCompleted(String questName) {

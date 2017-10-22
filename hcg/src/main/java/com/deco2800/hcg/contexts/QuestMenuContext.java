@@ -108,9 +108,9 @@ public class QuestMenuContext extends UIContext {
 		questsBack = new ImageButton(new Image(textureManager.getTexture("instructions_back_button")).getDrawable());
 		
 		//Collect the data from the quest manager
-		java.util.List<QuestArchive> completedQuests = questManager.getCompletedQuests();
-		Map<QuestNPC,QuestArchive> completableQuests = questManager.getCompleteableQuests();
-		Map<QuestNPC,QuestArchive> unCompleteableQuests = questManager.getUnCompleteableQuests();
+		ArrayList<QuestArchive> completedQuests = questManager.getCompletedQuests();
+		HashMap<QuestNPC,QuestArchive> completableQuests = questManager.getCompleteableQuests();
+		HashMap<QuestNPC,QuestArchive> unCompleteableQuests = questManager.getUnCompleteableQuests();
 		
 		//Create all Lists
 		readyList = new List<>(skin);

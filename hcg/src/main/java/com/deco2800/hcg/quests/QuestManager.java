@@ -6,7 +6,6 @@ import com.deco2800.hcg.managers.ResourceLoadException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,10 +14,10 @@ import java.util.Map;
  * @author Harry Guthrie
  */
 public class QuestManager extends Manager {
-    Map<String,Quest> quests;
+    HashMap<String,Quest> quests;
 
-    Map<QuestNPC,QuestArchive> questLog;
-    List<QuestArchive> completedLog;
+    HashMap<QuestNPC,QuestArchive> questLog;
+    ArrayList<QuestArchive> completedLog;
 
     /**
      *  Creates a new quest manager
@@ -48,7 +47,7 @@ public class QuestManager extends Manager {
 
     public void addQuest(QuestNPC npc, String questName) throws ResourceLoadException {
         if (!quests.containsKey(questName)) {
-            throw new ResourceLoadException("quests doesn't contain the key " + questName + " quest hash map only contains values:"+ " "+ quests.keySet());
+            throw new ResourceLoadException("quests doesn't contain the key " + questName.toString() + " quest hash map only contains values:"+ " "+ quests.keySet()); //todo write a proper exception
         }
         QuestArchive qa = new QuestArchive(quests.get(questName),npc);
         questLog.put(npc,qa);
@@ -56,8 +55,7 @@ public class QuestManager extends Manager {
 
     public void completeQuest(QuestNPC npc) {
         if (!questLog.containsKey(npc)) {
-            throw new ResourceLoadException("The Quest log does not contain a quest for the npc (" +
-                    npc.getFirstName() + " " + npc.getSurname() + ")"); //todo write a proper exception
+            throw new ResourceLoadException(""); //todo write a proper exception
         }
         //Complete the quest - note does not check if completable
         questLog.get(npc).completeQuest();
@@ -79,7 +77,7 @@ public class QuestManager extends Manager {
         }
     }
 
-    public Boolean isQuestActive (QuestNPC npc) {
+    public Boolean isQuestActive (QuestNPC npc, String questName) {
         return (questLog.containsKey(npc));
     }
     public Boolean isQuestCompleted (QuestNPC npc, String questName)  {
@@ -95,11 +93,11 @@ public class QuestManager extends Manager {
     /**
      * ------------------------------------- Functions for the quest UI -------------------------------------
      */
-    public List<QuestArchive> getCompletedQuests() {
+    public ArrayList<QuestArchive> getCompletedQuests() {
         return completedLog;
     }
 
-    public Map<QuestNPC,QuestArchive> getCompleteableQuests() {
+    public HashMap<QuestNPC,QuestArchive> getCompleteableQuests() {
         HashMap<QuestNPC,QuestArchive> completeableLog = new HashMap<>();
         for (Map.Entry<QuestNPC,QuestArchive> entry: questLog.entrySet()) {
             if (canQuestBeCompleted(entry.getKey())) {
@@ -109,7 +107,7 @@ public class QuestManager extends Manager {
         return completeableLog;
     }
 
-    public Map<QuestNPC,QuestArchive> getUnCompleteableQuests() {
+    public HashMap<QuestNPC,QuestArchive> getUnCompleteableQuests() {
         HashMap<QuestNPC,QuestArchive> unCompleteableLog = new HashMap<>();
         for (Map.Entry<QuestNPC,QuestArchive> entry: questLog.entrySet()) {
             if (!canQuestBeCompleted(entry.getKey())) {
@@ -131,6 +129,7 @@ public class QuestManager extends Manager {
      * Replaces currently loaded quests (if they exist) and replaces them with a new set of quests
      */
     public void loadAllQuests() {
+        HashMap<String,Quest> tmpQ = new HashMap<>();
         QuestReader qr = new QuestReader();
         quests = qr.loadAllQuests();
     }
