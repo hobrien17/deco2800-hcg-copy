@@ -764,7 +764,7 @@
     <property name="fName" value="Steve"/>
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="Rob"/>
-    <property name="texture" value="character_1"/>
+    <property name="texture" value="character_2"/>
    </properties>
   </object>
   <object id="1654" gid="141" x="874.779" y="822.224" width="55" height="32">
