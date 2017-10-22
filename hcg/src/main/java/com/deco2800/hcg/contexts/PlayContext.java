@@ -379,10 +379,7 @@ public class PlayContext extends Context {
     	} else {
     		potUnlock.close();
     	}
-        if(keycode == Input.Keys.M) {
-            contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
-            soundManager.stopWeatherSounds();
-		} else if (keycode == Input.Keys.J && !weaponRadialDisplay.getActive()) {
+        if (keycode == Input.Keys.J && !weaponRadialDisplay.getActive()) {
             seedRadialDisplay.hide();
             consumableRadialDisplay.hide();
             plantRadialDisplay.hide();
