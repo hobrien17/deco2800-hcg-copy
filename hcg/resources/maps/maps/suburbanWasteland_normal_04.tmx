@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="2315">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="2318">
  <properties>
   <property name="PlayerX" value="20"/>
   <property name="PlayerY" value="70"/>
@@ -693,22 +693,13 @@
   <properties>
    <property name="name" value="hedgehog"/>
   </properties>
-  <object id="2291" gid="1" x="2443.93" y="532.073" width="55" height="32"/>
-  <object id="2292" gid="1" x="2256.65" y="391.345" width="55" height="32"/>
   <object id="2293" gid="1" x="1872.29" y="239.709" width="55" height="32"/>
   <object id="2294" gid="1" x="2721.16" y="222.836" width="55" height="32"/>
   <object id="2295" gid="1" x="2857.16" y="358.836" width="55" height="32"/>
-  <object id="2296" gid="1" x="1466.76" y="2501.24" width="55" height="32"/>
   <object id="2297" gid="1" x="2230.69" y="2953.31" width="55" height="32"/>
-  <object id="2298" gid="1" x="2683.27" y="2572.73" width="55" height="32"/>
   <object id="2299" gid="1" x="2883.05" y="2348.95" width="55" height="32"/>
-  <object id="2300" gid="1" x="1258.47" y="2069.53" width="55" height="32"/>
-  <object id="2301" gid="1" x="911.2" y="1512.8" width="55" height="32"/>
   <object id="2302" gid="1" x="131.927" y="1548.07" width="55" height="32"/>
   <object id="2303" gid="1" x="165.382" y="1930.62" width="55" height="32"/>
-  <object id="2304" gid="1" x="1559.71" y="2040.29" width="55" height="32"/>
-  <object id="2305" gid="1" x="1254.55" y="1353.45" width="55" height="32"/>
-  <object id="2306" gid="1" x="2413.6" y="1018.4" width="55" height="32"/>
   <object id="2307" gid="1" x="2942.47" y="1961.53" width="55" height="32"/>
   <object id="2308" gid="1" x="3010.33" y="2173.67" width="55" height="32"/>
  </objectgroup>
@@ -782,6 +773,16 @@
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="George"/>
     <property name="texture" value="character_shop"/>
+   </properties>
+  </object>
+  <object id="2317" gid="3" x="2325.86" y="2500.08" width="55" height="32">
+   <properties>
+    <property name="Type" value="Quest"/>
+    <property name="conversation" value="tutorialwasteland"/>
+    <property name="fName" value="Jim"/>
+    <property name="faceImage" value="npc_face"/>
+    <property name="sName" value="Bunning"/>
+    <property name="texture" value="character_1"/>
    </properties>
   </object>
  </objectgroup>
