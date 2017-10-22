@@ -97,7 +97,6 @@ public class PlayContext extends Context {
     private Window exitWindow;
 
     private Stage stage;
-    private Stage weatherStage;
     private Skin skin;
     private Skin plantSkin;
 
@@ -124,10 +123,6 @@ public class PlayContext extends Context {
         /* Setup the camera and move it to the center of the world */
         GameManager.get().setCamera(new OrthographicCamera(1920, 1080));
         GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
-
-        /* Add ParticleEffectActor that controls weather. */
-        weatherStage = new Stage(new ScreenViewport());
-        weatherStage.addActor(weatherManager.getActor());
 
         // Setup GUI
         stage = new Stage(new ScreenViewport());
@@ -166,33 +161,15 @@ public class PlayContext extends Context {
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
         
 
+        /* Add ParticleEffectActor that controls weather. */
+        stage.addActor(weatherManager.getActor());
 
+        stage.addActor(particleManager.getActor());
         stage.addActor(chatStack);
         chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
-        stage.addActor(plantWindow);
-        stage.addActor(plantButton);
         
-        /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
-        stage.addActor(particleManager.getActor());
-        
-        Window window = new Window("Menu", skin);
-
-        /* Add a quit button to the menu */
-        Button button = new TextButton("Quit", skin);
-        Button die = new TextButton("Force quit", skin);
-
-        /* Add a programmatic listener to the quit button */
-        button.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                playerManager.despawnPlayers();
-                contextManager.popContext();
-            }
-        });
-
         if(gameManager.getWorld().equals(World.SAFEZONE)) {
         	stage.addActor(plantWindow);
         	stage.addActor(plantButton);
@@ -261,7 +238,7 @@ public class PlayContext extends Context {
         });
 
         /* set initial time */
-        timeManager.setDateTime(0, 3, 14, 3, 6, 2047);
+        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
         
         /* reset input tick */
         playerInputManager.resetInputTick();
@@ -307,8 +284,6 @@ public class PlayContext extends Context {
         }
 
         // Update and draw the stage
-        weatherStage.act();
-        weatherStage.draw();
         stage.act();
         stage.draw();
     }
@@ -404,15 +379,7 @@ public class PlayContext extends Context {
     	} else {
     		potUnlock.close();
     	}
-
-        if(keycode == Input.Keys.M || keycode == Input.Keys.ESCAPE) {
-        	contextManager.pushContext(new WorldMapContext(gameManager.getWorldMap()));
-            soundManager.stopSound("ambientMusic");
-            soundManager.stopWeatherSounds();
-		}
-
         if (keycode == Input.Keys.J && !weaponRadialDisplay.getActive()) {
-
             seedRadialDisplay.hide();
             consumableRadialDisplay.hide();
             plantRadialDisplay.hide();

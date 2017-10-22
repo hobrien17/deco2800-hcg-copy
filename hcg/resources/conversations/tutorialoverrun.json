@@ -1,0 +1,42 @@
+{
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "0"
+  },
+  "nodes": [
+    {
+      "id": "0",
+      "nodeText": "It seems like you're getting the hang of things.",
+      "options": [
+        {
+          "optionText": "Thanks",
+          "target": "1"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "nodeText": "We've got big problem up ahead. Since everyone moved out, the town's been overrun by ants and hedgehogs. Could you go ahead and get rid of them?",
+      "options": [
+        {
+          "optionText": "I'll see what I can do!",
+          "target": null
+        },
+		{
+          "optionText": "I'm not ready for that yet.",
+          "target": 2
+        }
+      ]
+    },
+	{
+      "id": "2",
+      "nodeText": "Aw, well that's a shame.",
+      "options": [
+        {
+          "optionText": "Alright",
+          "target": null
+        }
+      ]
+    }
+  ]
+}

@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.bullets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.deco2800.hcg.buffs.Perk;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;
@@ -24,7 +25,8 @@ public class ExplosionBullet extends Bullet {
 
     private Explosion explosion;
     private int damage;
-    
+    PlayerManager playerManager;
+
 	/**
 	 * Creates a new Bullet at the given position with the given direction.
 	 *
@@ -50,6 +52,7 @@ public class ExplosionBullet extends Bullet {
 		this.damage = damage;
 		this.setTexture("battle_seed_grey");
 		this.bulletType = BulletType.EXPLOSION;
+		playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 	}
 	
 	/**
@@ -117,7 +120,14 @@ public class ExplosionBullet extends Bullet {
         explosion = new Explosion(this.getPosX(), this.getPosY(), this.getPosZ(), 0.3f);
         GameManager.get().getWorld().addEntity(explosion);
 		AbstractEntity entity = (AbstractEntity)target;
-		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 2.5f, Enemy.class);
+
+		float explosionRadius = 2.5f;
+		//Perk - HOLLY_MOLEY
+		Perk hollyMoley = playerManager.getPlayer().getPerk(Perk.perk.HOLLY_MOLEY);
+		if (hollyMoley.isActive()) {
+			explosionRadius *= (1 + 0.1 * hollyMoley.getCurrentLevel());
+		}
+		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), explosionRadius, Enemy.class);
 		target.giveEffect(new Effect("Explosion", 1, damage, 1, 0, 1, 0, user));
 		ArrayList<Player> players = ((PlayerManager) (GameManager.get().getManager(PlayerManager.class))).getPlayers();
 		for(AbstractEntity close : closest) {
