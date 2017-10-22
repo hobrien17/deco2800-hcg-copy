@@ -232,8 +232,10 @@ public class TextureManager extends Manager {
             textureMap.put("sandstormpuddle", new Texture("resources/puddles/sandstorm_puddle.png"));
             textureMap.put("sandstormpuddle2", new Texture("resources/puddles/sandstorm_puddle_v2.png"));
             textureMap.put("sandstormpuddle3", new Texture("resources/puddles/sandstorm_puddle_v3.png"));
-            
-            
+            textureMap.put("crackspuddle", new Texture("resources/puddles/cracks.png"));
+            textureMap.put("crackspuddle2", new Texture("resources/puddles/cracks_v2.png"));
+            textureMap.put("crackspuddle3", new Texture("resources/puddles/cracks_v3.png"));
+                        
             
 			//trees
 			textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
