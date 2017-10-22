@@ -291,4 +291,12 @@ public class SoundManager extends Manager {
 			isMute = true;
 		}
 	}
+
+	public boolean getMuteStatus() {
+		if(isMute){
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

@@ -298,6 +298,9 @@ public class TextureManager extends Manager {
 			textureMap.put("instructions_title", new Texture("resources/ui/main_menu/instructions_title.png"));
 			textureMap.put("toggle_mute_button", new Texture("resources/ui/main_menu/mute_button.png"));
 			textureMap.put("toggle_shaders_button", new Texture("resources/ui/main_menu/shaders_button.png"));
+			textureMap.put("toggle_mute_button_greyscale", new Texture("resources/ui/main_menu/mute_button_greyscale.png"));
+			textureMap.put("toggle_shaders_button_greyscale", new Texture("resources/ui/main_menu/shaders_button_greyscale.png"));
+
 
 			// Texture for the Radial Menu
 			textureMap.put("sunflower_btn", new Texture("resources/ui/radial_menu/sunflower.png"));

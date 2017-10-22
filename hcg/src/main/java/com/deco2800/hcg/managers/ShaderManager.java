@@ -267,4 +267,12 @@ public class ShaderManager extends Manager implements Observer {
     public void toggleShaders() {
         this.enabled = !this.enabled;
     }
+
+    public boolean getShaderStatus() {
+        if (this.enabled) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
