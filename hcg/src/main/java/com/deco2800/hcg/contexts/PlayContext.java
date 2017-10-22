@@ -98,6 +98,7 @@ public class PlayContext extends Context {
     private Window exitWindow;
 
     private Stage stage;
+    private Stage weatherStage;
     private Skin skin;
     private Skin plantSkin;
 
@@ -126,6 +127,7 @@ public class PlayContext extends Context {
         GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
 
         // Setup GUI
+        weatherStage = new Stage(new ScreenViewport());
         stage = new Stage(new ScreenViewport());
         stage.getBatch().enableBlending();
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -164,9 +166,8 @@ public class PlayContext extends Context {
         
 
         /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
-
-        stage.addActor(particleManager.getActor());
+        weatherStage.addActor(weatherManager.getActor());
+        weatherStage.addActor(particleManager.getActor());
         stage.addActor(chatStack);
         chatStack.setVisible(false);
         stage.addActor(clockDisplay);
@@ -241,7 +242,7 @@ public class PlayContext extends Context {
         });
 
         /* set initial time */
-        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
+        timeManager.setDateTime(0, 16, 14, 3, 6, 2047);
         
         /* reset input tick */
         playerInputManager.resetInputTick();
@@ -287,8 +288,11 @@ public class PlayContext extends Context {
         }
 
         // Update and draw the stage
+        weatherStage.act();
+        weatherStage.draw();
         stage.act();
         stage.draw();
+
     }
 
     /**
