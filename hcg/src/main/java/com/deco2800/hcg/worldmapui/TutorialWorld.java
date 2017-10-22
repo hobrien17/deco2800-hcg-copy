@@ -33,7 +33,7 @@ public class TutorialWorld extends WorldMap {
         tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_05.tmx"), 1, 1, 1));
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
-		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
+		tutorialLevels.add(new Level(new World("resources/maps/maps/grass_safeZone_02_tutorial.tmx"), 0, 1, 1));
 		// Boss level!
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
 		nodeList = createMappings(tutorialLevels);
@@ -43,14 +43,17 @@ public class TutorialWorld extends WorldMap {
 
 	private List<MapNode> createMappings(ArrayList<Level> list) {
 		ArrayList<MapNode> nodeList = new ArrayList<MapNode>();
-		MapNode initialNode = new MapNode(0, 1, 1, list.get(0), true);
+		MapNode initialNode = new MapNode(0, 2, 1, list.get(0), true);
 		nodeList.add(initialNode);
 		for(int i = 1; i < 10; i++) {
-			if(i == 9) {
-				MapNode nodeToAdd = new MapNode(i, 1, 3, list.get(i), false);
+			if(i == 2 || i == 8) {
+				MapNode nodeToAdd = new MapNode(i, 2, 0, list.get(i), false);
+				nodeList.add(nodeToAdd);
+			} else if(i == 9) {
+				MapNode nodeToAdd = new MapNode(i, 2, 3, list.get(i), false);
 				nodeList.add(nodeToAdd);
 			} else {
-				MapNode nodeToAdd = new MapNode(i, 1, 1, list.get(i), false);
+				MapNode nodeToAdd = new MapNode(i, 2, 1, list.get(i), false);
 				nodeList.add(nodeToAdd);
 			}
 		}
