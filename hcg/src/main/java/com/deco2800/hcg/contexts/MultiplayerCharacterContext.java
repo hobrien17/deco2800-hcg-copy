@@ -13,7 +13,7 @@ import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.multiplayer.CharacterMessage;
 
 
-public class MultiplayerCharaterContext extends UIContext{
+public class MultiplayerCharacterContext extends UIContext{
     private Table main;
     private Table titleTable;
     private Table loreTable;
@@ -46,7 +46,7 @@ public class MultiplayerCharaterContext extends UIContext{
 
 
 
-    public MultiplayerCharaterContext() {
+    public MultiplayerCharacterContext() {
         gameManager = GameManager.get();
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);

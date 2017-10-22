@@ -3,7 +3,7 @@ package com.deco2800.hcg.multiplayer;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 
-import com.deco2800.hcg.contexts.MultiplayerCharaterContext;
+import com.deco2800.hcg.contexts.MultiplayerCharacterContext;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
@@ -53,6 +53,6 @@ public class StartMessage extends Message {
 		networkManager.setSeed((long) seed);
 		worldManager.setGeneratorSeed(networkManager.getNextRandomInt(Integer.MAX_VALUE));
 		worldManager.generateAndSetWorldStack();
-		contextManager.pushContext(new MultiplayerCharaterContext());
+		contextManager.pushContext(new MultiplayerCharacterContext());
 	}
 }

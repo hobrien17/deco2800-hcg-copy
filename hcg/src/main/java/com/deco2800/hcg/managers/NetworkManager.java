@@ -307,7 +307,7 @@ public final class NetworkManager extends Manager {
 		int seed = getNextRandomInt();
 		queueMessage(new StartMessage(seed));
 		random.setSeed((long) seed);
-		contextManager.pushContext(new MultiplayerCharaterContext());
+		contextManager.pushContext(new MultiplayerCharacterContext());
 	}
 	
 	/**
