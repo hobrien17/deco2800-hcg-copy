@@ -1,5 +1,7 @@
 package com.deco2800.hcg.util;
 
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
@@ -9,6 +11,7 @@ import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.managers.PlayerManager;
+import com.deco2800.hcg.managers.TextureManager;
 
 import java.util.*;
 
@@ -248,8 +251,28 @@ public class Effects {
                 } else {
                     if (owner instanceof Enemy) {
                         ((Enemy) owner).loot();
+                        
+                        if (((Enemy) owner).isBoss()) {
+                          
+                          // add new tile for exit
+                          MapProperties mapProperties = new MapProperties();
+                          mapProperties.put("name", "exit");
+                          mapProperties.put("speed", "1.0");
+
+                          GameManager.get().getWorld().addTiledMapTileLayer("exit", mapProperties);
+                          
+                          TextureManager textureManager = (TextureManager) GameManager.get().getManager(TextureManager.class);
+
+                          GameManager.get().getWorld().newTileAtPos((int) owner.getPosX(), (int) owner.getPosY(),
+                              textureManager.getTexture("exit"),
+                              (TiledMapTileLayer) GameManager.get().getWorld().getMapLayerWithProperty("name", "exit"));
+
+
+                        }
+                        
                     }
                 }
+                
 
                 GameManager.get().getWorld().removeEntity(owner);
                 PlayerManager playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);

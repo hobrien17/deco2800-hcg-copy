@@ -244,6 +244,7 @@ public class TextureManager extends Manager {
 			textureMap.put("poisontile", new Texture("resources/maps/textures/deprecated/sludgebubbling1.png"));
             textureMap.put("rainpuddle", new Texture("resources/maps/textures/rain-puddle.png"));
             textureMap.put("icepuddle", new Texture("resources/maps/textures/ice-puddle.png"));
+            textureMap.put("exit", new Texture("resources/maps/textures/exit.png"));
 
 			//trees
 			textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
