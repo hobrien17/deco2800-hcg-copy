@@ -1,11 +1,8 @@
 package com.deco2800.hcg.quests;
 
-import com.deco2800.hcg.entities.enemyentities.Enemy;
-import com.deco2800.hcg.entities.enemyentities.EnemyType;
-import com.deco2800.hcg.items.Item;
-import org.lwjgl.Sys;
 
-import java.util.HashMap;
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
+import java.util.Map;
 
 /**
  * A base class for Quests that will be used by players/NPCs
@@ -16,9 +13,9 @@ import java.util.HashMap;
 
 public class Quest {
 	private String title; //Name of the quest to be displayed
-	private HashMap<String,Integer> rewards; // items to amount for reward
-	private HashMap<EnemyType, Integer> killRequirement; //Kills for enemy ID required
-	private HashMap<String, Integer> itemRequirement; //Item required to complete quest
+	private Map<String,Integer> rewards; // items to amount for reward
+	private Map<EnemyType, Integer> killRequirement; //Kills for enemy ID required
+	private Map<String, Integer> itemRequirement; //Item required to complete quest
 	private String description;
 
 	/**
@@ -28,9 +25,9 @@ public class Quest {
 	 * @param killRequirement
 	 * @param itemRequirement
 	 */
-	public Quest(String title, HashMap<String, Integer> rewards, HashMap<EnemyType,
-			Integer> killRequirement, HashMap<String, Integer> itemRequirement,
-		    String description) {
+	public Quest(String title, Map<String, Integer> rewards, Map<EnemyType,
+                Integer> killRequirement, Map<String, Integer> itemRequirement,
+				 String description) {
 
 		this.title = title;
 		this.rewards = rewards;
@@ -48,15 +45,15 @@ public class Quest {
 		return title;
 	}
 
-	public HashMap<String, Integer> getRewards() {
+	public Map<String, Integer> getRewards() {
 		return rewards;
 	}
 
-	public HashMap<EnemyType, Integer> getKillRequirement() {
+	public Map<EnemyType, Integer> getKillRequirement() {
 		return killRequirement;
 	}
 
-	public HashMap<String, Integer> getItemRequirement() {
+	public Map<String, Integer> getItemRequirement() {
 		return itemRequirement;
 	}
 
@@ -77,9 +74,9 @@ public class Quest {
 			bothReq = true;
 			desc += "Kill ";
 
-			for (EnemyType enemyID: killRequirement.keySet()) {
+			for (Map.Entry<EnemyType,Integer> entry: killRequirement.entrySet()) {
 				//For each enemy ID get the amount of kills required
-				desc += killRequirement.get(enemyID).toString() + " " + enemyID.toString().toLowerCase() + " and ";
+				desc += entry.getValue().toString() + " " + entry.getKey().toString().toLowerCase() + " and ";
 			}
 			//Remove trailing and
 			desc = desc.substring(0,desc.length() - "and ".length()); //Remove the trailing ','
@@ -92,8 +89,8 @@ public class Quest {
 			} else {
 				desc = "Collect";
 			}
-			for (String i: itemRequirement.keySet()) {
-				desc += " " + itemRequirement.get(i).toString().toLowerCase() + " " + i + ",";
+			for (Map.Entry<String,Integer> i: itemRequirement.entrySet()) {
+				desc += " " + i.getValue().toString().toLowerCase() + " " + i.getKey() + ",";
 			}
 			desc = desc.substring(0,desc.length() - 1); //Remove the trailing ','
 			desc += ".";

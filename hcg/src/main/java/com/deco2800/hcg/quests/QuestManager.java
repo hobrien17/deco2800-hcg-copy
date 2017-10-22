@@ -46,7 +46,7 @@ public class QuestManager extends Manager {
         return null;
     }
 
-    public void addQuest(QuestNPC npc, String questName) throws ResourceLoadException {
+    public void addQuest(QuestNPC npc, String questName) {
         if (!quests.containsKey(questName)) {
             throw new ResourceLoadException("quests doesn't contain the key " + questName + " quest hash map only contains values:"+ " "+ quests.keySet());
         }
@@ -57,7 +57,7 @@ public class QuestManager extends Manager {
     public void completeQuest(QuestNPC npc) {
         if (!questLog.containsKey(npc)) {
             throw new ResourceLoadException("The Quest log does not contain a quest for the npc (" +
-                    npc.getFirstName() + " " + npc.getSurname() + ")"); //todo write a proper exception
+                    npc.getFirstName() + " " + npc.getSurname() + ")");
         }
         //Complete the quest - note does not check if completable
         questLog.get(npc).completeQuest();

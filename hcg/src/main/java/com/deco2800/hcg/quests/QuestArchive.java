@@ -11,12 +11,12 @@ import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class QuestArchive {
     private Quest quest;
-    private HashMap<EnemyType, Integer> initalKillLog;
+    private EnumMap<EnemyType, Integer> initalKillLog;
     private NPC questGiver;
 
     private Boolean killReqCompleted = false;
@@ -31,7 +31,7 @@ public class QuestArchive {
 
         Player player = ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer();
 
-        this.initalKillLog = new HashMap<>();
+        this.initalKillLog = new EnumMap<>(EnemyType.class);
         //Store the initial kill log plus the current amount of kills
         if (quest.getKillRequirement().size() != 0) {
             //Get the current kills for the different enemy IDs in nodes

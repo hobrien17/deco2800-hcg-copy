@@ -13,10 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -32,7 +29,7 @@ public class QuestReader {
      *  A function which loads all the quests into the quest manager, this utalizes the loadQuest function, and it then
      *  adds all the files in the folder to the hash map of quests titles to quests.
      */
-    public HashMap<String,Quest> loadAllQuests() throws ResourceLoadException {
+    public Map<String,Quest> loadAllQuests() {
 
         HashMap<String,Quest> quests = new HashMap<>();
         String questsFolder = "resources/quests/";
@@ -61,7 +58,7 @@ public class QuestReader {
      * @return
      * @throws IOException
      */
-    public Quest loadQuest(String fp) throws ResourceLoadException {
+    public Quest loadQuest(String fp) {
         //Make sure the file is a json file
         if (!fp.substring(fp.length() - ".json".length(),fp.length()).equals(".json")) {
             throw new ResourceLoadException("All files in the quest resources files must be .json files");
@@ -70,7 +67,7 @@ public class QuestReader {
         //Containers for the information in the quest
         String title; //Name of the quest to be displayed
         HashMap<String,Integer> rewards; // items to amount for reward
-        HashMap<EnemyType, Integer> killRequirement; //Kills for enemy ID required
+        EnumMap<EnemyType, Integer> killRequirement; //Kills for enemy ID required
         HashMap<String, Integer> itemRequirement; //Item required to complete quest
         String description;
 
@@ -95,9 +92,7 @@ public class QuestReader {
 
         //The item requirements and rewards are stored as a mapping between item ID and count
         JsonObject itemReqs = jQuest.getAsJsonObject("iReq");
-        System.out.println("Parseing Item Requirements");
         itemRequirement = parseItemQuantityHashMap(title,itemReqs);
-        System.out.println("Parseing Item Rewards");
         JsonObject itemRewards = jQuest.getAsJsonObject("rewards");
         rewards = parseItemQuantityHashMap(title,itemRewards);
 
@@ -105,13 +100,12 @@ public class QuestReader {
         description = description.replaceAll("^\"|\"$", "");
 
         JsonObject killReqs = jQuest.getAsJsonObject("kReq");
-        System.out.println("Parseing Kill Requirements");
         killRequirement = parseKillReqMap(title,killReqs);
 
         return new Quest(title,rewards,killRequirement,itemRequirement,description);
     }
 
-    private HashMap<String,Integer> parseItemQuantityHashMap(String title, JsonObject iqMap) throws ResourceLoadException {
+    private HashMap<String,Integer> parseItemQuantityHashMap(String title, JsonObject iqMap) {
         //Create Instance of the Item Manager class for checking valid items
         ItemManager itemManager = (ItemManager) GameManager.get().getManager(ItemManager.class);
 
@@ -164,15 +158,14 @@ public class QuestReader {
                                                     title + ")");
                 }
                 //Item names use the _ when creating, but " " when checking
-                System.out.println("Added an item to map");
                 returnMap.put(i.getKey().toString(),Integer.parseUnsignedInt(i.getValue().toString()));
             }
         }
         return returnMap;
     }
 
-    private HashMap<EnemyType, Integer> parseKillReqMap(String title, JsonObject krmMap) {
-        HashMap <EnemyType, Integer> returnKRM = new HashMap<>();
+    private EnumMap<EnemyType, Integer> parseKillReqMap(String title, JsonObject krmMap) {
+        EnumMap<EnemyType, Integer> returnKRM = new EnumMap<>(EnemyType.class);
 
         if (!krmMap.entrySet().isEmpty()) {
 
@@ -215,7 +208,6 @@ public class QuestReader {
                                                     enemyMap.getKey() + ")");
 
                 }
-                System.out.println("Added an item to map");
                 returnKRM.put(et,killCount);
             }
 
