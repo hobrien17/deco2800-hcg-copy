@@ -67,8 +67,8 @@ public class Tree extends Enemy implements Tickable {
         }
         this.tree();
         // Pos for ramdom ground weapon
-        float ramdomX = Math.abs(random.nextFloat()) * GameManager.get().getWorld().getWidth();
-        float ramdomY = Math.abs(random.nextFloat()) * GameManager.get().getWorld().getWidth();
+        float ramdomX = Math.abs(networkManager.getNextRandomFloat()) * GameManager.get().getWorld().getWidth();
+        float ramdomY = Math.abs(networkManager.getNextRandomFloat()) * GameManager.get().getWorld().getWidth();
         //need to set time counter
     }
 
