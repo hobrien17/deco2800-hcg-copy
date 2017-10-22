@@ -310,28 +310,20 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         //Update texture for angle
             if(15 * Math.PI / 8 < angle || angle < Math.PI / 8) {
                 this.setTexture(texture + "_ne");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(Math.PI / 8 <= angle && angle <= 3 * Math.PI / 8) {
                 this.setTexture(texture + "_e");
-                this.growRender(-(this.getXRenderLength() - 0.7f), -(this.getYRenderLength() - 0.7f));
             } else if(3 * Math.PI / 8 < angle && angle < 5 * Math.PI / 8) {
                 this.setTexture(texture + "_se");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(5 * Math.PI / 8 <= angle && angle <= 7 * Math.PI / 8) {
                 this.setTexture(texture + "_s");
-                this.growRender(-(this.getXRenderLength() - 0.15f), -(this.getYRenderLength() - 0.07f));
             } else if(7 * Math.PI / 8 < angle && angle < 9 * Math.PI / 8) {
                 this.setTexture(texture + "_sw");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             }  else if(9 * Math.PI / 8 <= angle && angle <= 11 * Math.PI / 8) {
                 this.setTexture(texture + "_w");
-                this.growRender(-(this.getXRenderLength() - 0.7f), -(this.getYRenderLength() - 0.7f));
             } else if(11 * Math.PI / 8 < angle && angle < 13 * Math.PI / 8) {
                 this.setTexture(texture + "_nw");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(13 * Math.PI / 8 <= angle && angle <= 15 * Math.PI / 8) {
                 this.setTexture(texture + "_n");
-                this.growRender(-(this.getXRenderLength() - 0.15f), -(this.getYRenderLength() - 0.07f));
             }
         }
         

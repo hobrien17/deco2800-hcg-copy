@@ -4,10 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.MessageManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.multiplayer.ChatMessage;
 
 /**
  * UI for Multiplayer Lobby. Made by Leon Zheng from Team 9
@@ -36,13 +39,14 @@ public class LobbyContext extends UIContext{
     private Stack player2;
     private Stack player3;
     private Stack player4;
-    private TextField chatTextfield;
+    private TextField chatTextField;
     private TextField lobbyNameTextfield;
     private TextArea chatTextArea;
     private Dialog hostName;
     private TextButton changeLobbyName;
     private TextButton hostNameAdd;
     private TextButton hostNameExit;
+    private String chatString = "";
 
     /**
      * Lobby UI constructor, initializes the entire UI
@@ -51,6 +55,7 @@ public class LobbyContext extends UIContext{
 
         GameManager gameManager = GameManager.get();
         ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+        MessageManager messageManager = (MessageManager) gameManager.getManager(MessageManager.class);
         NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
@@ -85,7 +90,7 @@ public class LobbyContext extends UIContext{
         player3 = new Stack(playerPortrait3);
         player4 = new Stack(playerPortrait4);
         //chat UI setup
-        chatTextfield = new TextField("", skin);
+        chatTextField = new TextField("", skin);
         chatTextArea = new TextArea("", skin);
         chatTextArea.setDisabled(true);
         //LobbyName Change
@@ -131,7 +136,7 @@ public class LobbyContext extends UIContext{
         main.row().expand();
         main.add(chatTextArea).fill();
         main.row();
-        chatTable.add(chatTextfield).fill().expandX().left();
+        chatTable.add(chatTextField).fill().expandX().left();
         chatTable.add(send).right();
         main.add(chatTable).fill();
 
@@ -176,7 +181,66 @@ public class LobbyContext extends UIContext{
             }
         });
 
+		/*
+		 * Setup inputs for the buttons and the game itself
+		 */
+        send.addListener(new ChangeListener() {
+            @Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (!networkManager.isMultiplayerGame()) {
+					return;
+				}
+				
+				if (chatString.trim().length() > 0) {
+					networkManager.queueMessage(
+							new ChatMessage(chatTextField.getText()));
+					chatTextArea.appendText(chatTextField.getText() + "\n");
+					chatTextField.setText("");
+					stage.setKeyboardFocus(null);
+					chatString = "";
+					return;
+				}
+				chatTextField.setText("");
+				chatTextField.setCursorPosition(0);
+				chatString = "";
+			}
+        });
 
+        /*
+        	Input Listener for Textfield
+         */
+        chatTextField.setTextFieldListener(new TextField.TextFieldListener() { //textfield Listener
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                if (c != '\b') {
+                    chatString += Character.toString(c);
+				} else if (chatString.length() > 0) {
+					chatString = chatString.substring(0,
+							chatString.length() - 1);
+				}
+
+				if (c != '\r') {
+					return;
+				}
+
+				if (chatString.trim().length() > 0) {
+					networkManager.queueMessage(
+							new ChatMessage(chatTextField.getText()));
+					chatTextArea.appendText(chatTextField.getText() + "\n");
+				} else {
+					chatTextField.setCursorPosition(0);
+				}
+				chatTextField.setText("");
+				chatString = "";
+				stage.setKeyboardFocus(null);
+			}
+		});
+
+        messageManager.addChatMessageListener(this::handleChatMessage);
+    }
+    
+    private void handleChatMessage(String message) {
+        chatTextArea.appendText(message + "\n");
     }
 
     /**

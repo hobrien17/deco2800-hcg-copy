@@ -40,9 +40,9 @@ public class ClockDisplay extends Group {
 
         /* Create clock GUI and add it to the stage */
         this.addActor(clockImage);
-        clockLabel.setPosition(85, 90);
+        clockLabel.setPosition(90, 90);
         clockLabel.setFontScale((float)1);
-        dateLabel.setPosition(85, 60);
+        dateLabel.setPosition(90, 60);
         dateLabel.setFontScale((float)0.55);
         this.addActor(clockLabel);
         this.addActor(dateLabel);
