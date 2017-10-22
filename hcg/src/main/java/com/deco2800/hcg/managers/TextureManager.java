@@ -239,6 +239,7 @@ public class TextureManager extends Manager {
 			//NPCs
 			textureMap.put("character_1", new Texture("resources/sprites/npc/Quest_1_SouthEast.png"));
 
+			//White Shirt NPC
 			textureMap.put("character_1_SouthEast", new Texture("resources/sprites/npc/Quest_1_SouthEast.png"));
 			textureMap.put("character_1_South", new Texture("resources/sprites/npc/Quest_1_South.png"));
 			textureMap.put("character_1_SouthWest", new Texture("resources/sprites/npc/Quest_1_SouthWest.png"));
@@ -247,6 +248,17 @@ public class TextureManager extends Manager {
 			textureMap.put("character_1_North", new Texture("resources/sprites/npc/Quest_1_North.png"));
 			textureMap.put("character_1_NorthEast", new Texture("resources/sprites/npc/Quest_1_NorthEast.png"));
 			textureMap.put("character_1_East", new Texture("resources/sprites/npc/Quest_1_East.png"));
+
+			//Purple Shirt NPC
+			textureMap.put("character_2", new Texture("resources/sprites/npc/Quest_2_SouthEast.png"));
+			textureMap.put("character_2_SouthEast", new Texture("resources/sprites/npc/Quest_2_SouthEast.png"));
+			textureMap.put("character_2_South", new Texture("resources/sprites/npc/Quest_2_South.png"));
+			textureMap.put("character_2_SouthWest", new Texture("resources/sprites/npc/Quest_2_SouthWest.png"));
+			textureMap.put("character_2_West", new Texture("resources/sprites/npc/Quest_2_West.png"));
+			textureMap.put("character_2_NorthWest", new Texture("resources/sprites/npc/Quest_2_NorthWest.png"));
+			textureMap.put("character_2_North", new Texture("resources/sprites/npc/Quest_2_North.png"));
+			textureMap.put("character_2_NorthEast", new Texture("resources/sprites/npc/Quest_2_NorthEast.png"));
+			textureMap.put("character_2_East", new Texture("resources/sprites/npc/Quest_2_East.png"));
 
 			textureMap.put("character_shop", new Texture("resources/sprites/npc/Shopkeeper_1.png"));
 			textureMap.put("character_shop_2", new Texture("resources/sprites/npc/Shopkeeper_2.png"));
@@ -438,8 +450,8 @@ public class TextureManager extends Manager {
 			textureMap.put("player5head", new Texture("resources/ui/multiplayer_ui/player5head.png"));
 
 			//Conversation textures
-			textureMap.put("conversation_context", new Texture("resources/ui/conversations/conversation_context.png"));
-			textureMap.put("npc_face", new Texture("resources/sprites/npc/npc_face.png"));
+			textureMap.put("conversation_context", new Texture("resources/ui/conversations/raw_background.png"));
+			textureMap.put("npc_face", new Texture("resources/sprites/npc/Quest_1_SouthEast.png"));
 
 			//Character creation textures
 			textureMap.put("ccMale1", new Texture("resources/sprites/player/character_creation/male1.png"));
