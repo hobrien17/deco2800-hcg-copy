@@ -19,12 +19,12 @@ public class Seed extends StackableItem {
 	 * Stores the many different types of seeds in the game *
 	 */
 	public enum Type {
-		SUNFLOWER("sunflower_seed", 1, ItemRarity.COMMON, Sunflower.class, SunflowerTurret.class), EXPLOSIVE(
-				"explosive_seed", 3, ItemRarity.UNCOMMON, Cactus.class, ExplosiveTurret.class), FIRE("fire_seed", 3,
-						ItemRarity.UNCOMMON, Inferno.class, FireTurret.class), GRASS("grass_seed", 2, ItemRarity.COMMON,
-								Grass.class, GrassTurret.class), ICE("ice_seed", 2, ItemRarity.COMMON, Ice.class,
-										IceTurret.class), WATER("water_seed", 2, ItemRarity.COMMON, Water.class,
-												WaterTurret.class);
+		SUNFLOWER("sunflower_seed", 1, ItemRarity.COMMON, Sunflower.class, SunflowerTurret.class), 
+		EXPLOSIVE("explosive_seed", 3, ItemRarity.UNCOMMON, Cactus.class, ExplosiveTurret.class), 
+		FIRE("fire_seed", 3, ItemRarity.UNCOMMON, Inferno.class, FireTurret.class), 
+		GRASS("grass_seed", 2, ItemRarity.COMMON, Grass.class, GrassTurret.class), 
+		ICE("ice_seed", 2, ItemRarity.COMMON, Ice.class, IceTurret.class), 
+		WATER("water_seed", 2, ItemRarity.COMMON, Water.class, WaterTurret.class);
 
 		private String texture;
 		private int value;
@@ -179,15 +179,12 @@ public class Seed extends StackableItem {
 
 	@Override
 	public boolean equals(Object other) {
-		if (other instanceof Seed) {
-			return ((Seed) other).getType().toString().equals(this.getType().toString());
-		}
-		return false;
+		return other instanceof Seed && ((Seed)other).getType().equals(this.getType());
 	}
 
 	@Override
 	public int hashCode() {
-		return this.itemName.hashCode();
+		return this.getType().hashCode();
 	}
 
 }

@@ -16,7 +16,7 @@ public class Inferno extends AbstractGardenPlant {
      * @param master the pot to associate the plant with
      */
     public Inferno(Pot master) {
-        super(master, "inferno", 1800); //~15 real-life minutes
+        super(master, "inferno", 1080); //~9 real-life minutes
     }
 
     @Override
@@ -37,8 +37,8 @@ public class Inferno extends AbstractGardenPlant {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("fire_seed", 7, 9), 0.5);
-        lootRarity.put(new LootWrapper("grass_seed", 6, 9), 0.2);
+        lootRarity.put(new LootWrapper("fire_seed", 15, 20), 0.5);
+        lootRarity.put(new LootWrapper("grass_seed", 5, 15), 0.2);
         lootRarity.put(new LootWrapper("shotgun", 1, 1), 0.1);
         lootRarity.put(new LootWrapper("multigun", 1, 1), 0.1);
         lootRarity.put(new LootWrapper("trowel", 1, 1), 0.1);

@@ -13,10 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.deco2800.hcg.BaseTest;
 import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.*;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.StopwatchManager;
 
 /**
@@ -32,13 +35,18 @@ public class PlantTest extends BaseTest {
 	
 	@BeforeClass
 	public static void setup() {
+		((PlayerManager)GameManager.get().getManager(PlayerManager.class)).setPlayer(new Player(1, 1, 0));
 		PlantManager manager = (PlantManager) GameManager.get().getManager(PlantManager.class);
     	Skin skin = new Skin(Gdx.files.internal("resources/ui/plant_ui/flat-earth-ui.json"));
     	manager.setPlantWindow(new PlantWindow(skin), skin);
     	manager.setPlantButton(new Button());
     			
-		Details[] arr = {new Details(Seed.Type.SUNFLOWER, Sunflower.class, "sunflower", 600),
-				new Details(Seed.Type.GRASS, Grass.class, "grass", 900)};
+		Details[] arr = {new Details(Seed.Type.SUNFLOWER, Sunflower.class, "sunflower", "sunflower", 600, ItemRarity.COMMON),
+				new Details(Seed.Type.GRASS, Grass.class, "grass", "grass", 900, ItemRarity.COMMON),
+				new Details(Seed.Type.WATER, Water.class, "water", "lily", 1200, ItemRarity.COMMON),
+				new Details(Seed.Type.ICE, Ice.class, "ice", "ice", 1500, ItemRarity.COMMON),
+				new Details(Seed.Type.FIRE, Inferno.class, "fire", "inferno", 1800, ItemRarity.UNCOMMON),
+				new Details(Seed.Type.EXPLOSIVE, Cactus.class, "explosive", "cactus", 2100, ItemRarity.UNCOMMON)};
 		details = Arrays.asList(arr);
 		
 		pot = new Pot(5, 5, 0);
@@ -50,6 +58,7 @@ public class PlantTest extends BaseTest {
 		for(Details detail : details) {
 			Seed seed = new Seed(detail.seed);
 			assertEquals("Seed has wrong name", detail.seedName(), seed.getName().toUpperCase());
+			assertEquals("Seed has wrong rarity", detail.rarity, seed.getRarity());
 			assertEquals("Seed has wrong texture", detail.seedTex(), seed.getTexture());
 			pot.plantInside(seed);
 			AbstractGardenPlant plant = pot.getPlant();
@@ -103,17 +112,22 @@ public class PlantTest extends BaseTest {
 		private Seed.Type seed;
 		private Class<? extends AbstractGardenPlant> plant;
 		private String name;
+		private String seedName;
 		private int growDelay;
+		private ItemRarity rarity;
 		
-		private Details(Seed.Type seed,	Class<? extends AbstractGardenPlant> plant, String name, int growDelay) {
+		private Details(Seed.Type seed,	Class<? extends AbstractGardenPlant> plant, String seedName, String name, int growDelay, 
+				ItemRarity rarity) {
 			this.seed = seed;
 			this.plant = plant;
+			this.seedName = seedName;
 			this.name = name;
 			this.growDelay = growDelay;
+			this.rarity = rarity;
 		}
 		
 		private String seedName() {
-			return (name + " Seed").toUpperCase();
+			return (seedName + " Seed").toUpperCase();
 		}
 		
 		private String plantName() {
@@ -121,7 +135,7 @@ public class PlantTest extends BaseTest {
 		}
 		
 		private String seedTex() {
-			return name + "_seed";
+			return seedName + "_seed";
 		}
 		
 		private String sproutTex() {

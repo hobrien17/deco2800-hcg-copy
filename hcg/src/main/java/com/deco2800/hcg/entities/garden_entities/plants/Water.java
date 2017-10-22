@@ -17,7 +17,7 @@ public class Water extends AbstractGardenPlant {
 	 */
 	public Water(Pot master) {
 
-		super(master, "lily", 1200); //~10 real-life minutes
+		super(master, "lily", 840); //~7 real-life minutes
 	}
 
 	@Override
@@ -34,11 +34,11 @@ public class Water extends AbstractGardenPlant {
 	}
 
 	@Override
-	void setupLoot() {
+	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put(new LootWrapper("water_seed", 5, 7), 0.4);
-        lootRarity.put(new LootWrapper("ice_seed", 4, 7), 0.2);
+		lootRarity.put(new LootWrapper("water_seed", 10, 15), 0.4);
+        lootRarity.put(new LootWrapper("ice_seed", 5, 10), 0.2);
         lootRarity.put(new LootWrapper("snag", 1, 2), 0.2);
         lootRarity.put(new LootWrapper("sausage", 1, 2), 0.1);
         lootRarity.put(new LootWrapper("bug_spray", 1, 1), 0.1);

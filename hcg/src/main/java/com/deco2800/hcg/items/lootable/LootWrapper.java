@@ -63,7 +63,7 @@ public class LootWrapper {
 		amount = (int)(Math.random() * ((maxAmount - minAmount) + 1)) + minAmount;
 		item = ((ItemManager)GameManager.get().getManager(ItemManager.class)).getNew(name);
 		if (amount > 1) {
-			item.addToStack(amount);
+			item.setStackSize(amount);
 		}
 	}
 
