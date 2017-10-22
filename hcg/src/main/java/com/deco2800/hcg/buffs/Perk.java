@@ -108,9 +108,7 @@ public class Perk {
     }
 
     public void setCurrentLevel( int currentLevel) {
-        if (currentLevel > enumPerk.getMaxLevel() || currentLevel < 0) {
-        }
-        else {
+        if (currentLevel <= enumPerk.getMaxLevel() && currentLevel >= 0) {
             this.currentLevel = currentLevel;
         }
     }

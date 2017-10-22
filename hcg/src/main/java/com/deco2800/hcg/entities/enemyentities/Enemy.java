@@ -289,6 +289,8 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 					break;
 				case 4:
 					this.takeDamage((int) (10 + 1.2 * player.getLevel()));
+				default:
+					break;
 			}
 		}
 		//Perk - Run,Fungus,Run!

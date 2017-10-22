@@ -32,6 +32,8 @@ public class ShopNPC extends NPC {
 			case "Plants":
 				shop = new GardenShop();
 				break;
+			default:
+				shop = new GeneralShop();
 		}
 	}
 

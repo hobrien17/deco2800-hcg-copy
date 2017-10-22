@@ -19,7 +19,7 @@ public abstract class NPC extends Character implements Tickable {
 
     private String fName;
     private String sName;
-    private final Box3D INITIAL_POSITION;
+    private final Box3D initialPosition;
     protected PlayerManager playerManager;
     protected ContextManager contextManager;
     private String conversation;
@@ -46,7 +46,7 @@ public abstract class NPC extends Character implements Tickable {
         this.sName = sName;
         this.playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
         this.contextManager = (ContextManager)GameManager.get().getManager(ContextManager.class);
-        this.INITIAL_POSITION = new Box3D(posX, posY, 0, 0, 0, 0);
+        this.initialPosition = new Box3D(posX, posY, 0, 0, 0, 0);
         setTexture(texture);
         this.growRender(-0.2f,-0.2f);
         this.conversation = conversation;
@@ -94,7 +94,7 @@ public abstract class NPC extends Character implements Tickable {
      * @return Box3D representation of first spawn location
      */
     public Box3D getInitialPosition(){
-    	return this.INITIAL_POSITION;
+    	return this.initialPosition;
     }
     
     public abstract void interact();
