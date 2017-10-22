@@ -393,6 +393,7 @@ public class TextureManager extends Manager {
 			textureMap.put("wm_urban_bg", new Texture("resources/worldmap/bg_urban.png"));
 			textureMap.put("wm_forest_bg", new Texture("resources/worldmap/bg_forest.png"));
 			textureMap.put("wm_waste_bg", new Texture("resources/worldmap/bg_waste.png"));
+			textureMap.put("ws_blackout_bg", new Texture("resources/worldmap/bg_blackout.png"));
 
 			//Item textures
 			textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));

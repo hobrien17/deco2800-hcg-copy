@@ -31,6 +31,7 @@ import com.badlogic.gdx.math.Vector3;
 public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 
 	protected float speed;
+	protected int damage;
 
 	protected float goalX;
 	protected float goalY;
@@ -70,9 +71,9 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float xd, float yd,
-				  AbstractEntity user, int hitCount) {
+				  AbstractEntity user, int hitCount, float speed, int damage) {
 		this(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount);
+				user, hitCount, speed, damage);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -97,8 +98,8 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
-				  float newZ, AbstractEntity user, int hitCount) {
-		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, 0.5f);
+				  float newZ, AbstractEntity user, int hitCount, float speed, int damage) {
+		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, speed, damage);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -131,10 +132,11 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
 				  float newZ, float xLength, float yLength, float zLength,
-				  AbstractEntity user, int hitCount, float speed) {
+				  AbstractEntity user, int hitCount, float speed, int damage) {
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		
 		this.speed = speed;
+		this.damage = damage;
 		this.setTexture("battle_seed");
 		this.bulletType = BulletType.BASIC;
 
@@ -292,7 +294,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 250, 1, 0, 1, 0, user));
+		target.giveEffect(new Effect("Shot", 1, damage, 1, 0, 1, 0, user));
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
