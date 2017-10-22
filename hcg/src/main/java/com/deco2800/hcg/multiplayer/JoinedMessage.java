@@ -15,16 +15,16 @@ public class JoinedMessage extends Message {
 	private final ContextManager contextManager =
 			(ContextManager) GameManager.get().getManager(ContextManager.class);
 	
-	public JoinedMessage() {
-		//deliberately empty
-	}
-	
 	public JoinedMessage(int id) {
 		super(MessageType.JOINED);
 	}
 	
+	public JoinedMessage(SocketAddress address) {
+		super(address);
+	}
+	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		// TODO we need to communicate how many other players are already in the
 		//      game as well as their state
 		contextManager.pushContext(new LobbyContext());

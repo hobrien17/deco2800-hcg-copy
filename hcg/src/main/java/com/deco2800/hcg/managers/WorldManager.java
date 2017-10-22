@@ -14,10 +14,13 @@ import com.deco2800.hcg.worlds.World;
 public class WorldManager extends Manager {
 	
 	GameManager gameManager = GameManager.get();
+
 	SoundManager soundManager = (SoundManager) GameManager.get()
 	.getManager(SoundManager.class);
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 	private ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+	private PlayerInputManager playerInputManager =
+			(PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
 	
 	/**
 	 * The WorldStackGenerator instance.
@@ -71,6 +74,7 @@ public class WorldManager extends Manager {
 		// delete stopwatches
         ((StopwatchManager) gameManager.getManager(StopwatchManager.class)).deleteObservers();
         
+
         // create new world
 		World newWorld = new World(node.getNodeLinkedLevel().getWorld().getLoadedFile());
 		
@@ -82,9 +86,22 @@ public class WorldManager extends Manager {
         soundManager.stopSound("ambientMusic");
         soundManager.loopSound("ambientMusic");
 
-        newWorld.generatePuddles();
-		gameManager.setWorld(newWorld);
+        if(node.getNodeType() == 0) {
+        	gameManager.setWorld(World.SAFEZONE);
+        } else {
+        	// create new world
+    		newWorld = new World(node.getNodeLinkedLevel().getWorld().getLoadedFile());
+    		
+            // add the new weather effects
+            ((WeatherManager) gameManager.getManager(WeatherManager.class)).
+              setWeather(newWorld.getWeatherType());
+
+
+            newWorld.generatePuddles();
+    		gameManager.setWorld(newWorld);
+        }
 		playerManager.spawnPlayers();
+		playerInputManager.resetInputTick();
 		contextManager.pushContext(new PlayContext());
 	}
 	
@@ -107,10 +124,9 @@ public class WorldManager extends Manager {
             contextManager.popContext();
         }
         // clear old observers (mushroom turret for example)
+        World world = gameManager.getWorld();
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.deleteObservers();
-        
-        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();
 
         // stop the old weather effects
         ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();

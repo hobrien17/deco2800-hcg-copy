@@ -10,6 +10,8 @@ import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.turrets.IceTurret;
 import com.deco2800.hcg.types.Weathers;
 
+import junit.framework.Assert;
+
 public class IceTurretTest extends TurretBaseTest {
 	private Enemy farEnemy;
 	
@@ -34,7 +36,7 @@ public class IceTurretTest extends TurretBaseTest {
 	public void testFreeze() {
 		setupNoWeather();
 		
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			turret.update(sw, i); // update until the turret detonates
 		}
 		assertEquals("The enemy should be frozen", 0f, enemy.getMovementSpeed(), 0);
@@ -45,7 +47,7 @@ public class IceTurretTest extends TurretBaseTest {
 	public void testFreezeReset() {
 		setupNoWeather();
 		
-		for (int i = 1; i <= 15; i++) {
+		for (int i = 1; i <= 35; i++) {
 			turret.update(sw, i); // update until the turret is destroyed
 		}
 		assertFalse("The enemy should not be frozen", 0f == enemy.getMovementSpeed());
@@ -55,7 +57,7 @@ public class IceTurretTest extends TurretBaseTest {
 	public void testDestroy() {
 		setupNoWeather();
 		
-		for (int i = 1; i <= 15; i++) {
+		for (int i = 1; i <= 35; i++) {
 			assertTrue("The world should contain the corpse", world.containsEntity(corpse));
 			turret.update(sw, i); // update until the turret is destroyed
 		}
@@ -66,13 +68,17 @@ public class IceTurretTest extends TurretBaseTest {
 	public void testColour() {
 		setupNoWeather();
 		
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			turret.update(sw, i); // update until the turret detonates
 		}
-		assertEquals("The enemies should be blue", Color.ROYAL, enemy.getTint());
-		assertEquals("The far away enemies should be cyan", Color.CYAN, farEnemy.getTint());
+		assertEquals("The enemies should be #B3FBFC", Color.valueOf("#B3FBFC"), enemy.getTint());
+		assertEquals("The enemies should be #B3FBFC", Color.valueOf("#B3FBFC"), farEnemy.getTint());
+		assertEquals("The enemies should have glow #B3FBFC", Color.valueOf("#B3FBFC"), enemy.getLightColour());
+		assertEquals("The enemies should have glow #B3FBFC", Color.valueOf("#B3FBFC"), farEnemy.getLightColour());
+		assertEquals("The close enemies should have glow strength 3", 3, enemy.getLightPower(), 0);
+		assertEquals("The far away enemies should have glow strength 1", 1, farEnemy.getLightPower(), 0);
 		
-		for(int i = 1; i <= 10; i++) {
+		for(int i = 1; i <= 25; i++) {
 			turret.update(sw, i); //update until the turret is destroyed
 		}
 		assertEquals("The enemies should be normal coloured when un-frozen", null, enemy.getTint());
@@ -83,7 +89,7 @@ public class IceTurretTest extends TurretBaseTest {
 	public void testSnowyWeather() {
 		setupWeather(Weathers.SNOW);
 		
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			turret.update(sw, i); // update until the turret detonates
 		}
 		assertEquals("The enemy should be frozen", 0f, enemy.getMovementSpeed(), 0);
@@ -94,7 +100,7 @@ public class IceTurretTest extends TurretBaseTest {
 	public void testSandstorm() {
 		setupWeather(Weathers.SANDSTORM);
 		
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			turret.update(sw, i); // update until the turret detonates
 		}
 		assertEquals("The enemy should be slower than normal", 0.5f, enemy.getMovementSpeed(), 0);

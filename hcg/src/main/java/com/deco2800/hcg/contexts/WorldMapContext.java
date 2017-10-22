@@ -18,6 +18,7 @@ import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
 import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.LevelStartMessage;
+import com.deco2800.hcg.types.Weathers;
 import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
 
@@ -101,7 +102,7 @@ public class WorldMapContext extends UIContext {
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight());
 
-		stage.addActor(new WorldMapEntity());
+		stage.addActor(new WorldMapEntity(currentWorld.getWorldType()));
 		
 		createExitWindow();
 
@@ -118,7 +119,7 @@ public class WorldMapContext extends UIContext {
 		}
 
 		playerMapEntity = new PlayerMapEntity();
-		// set the player Map Entity render position to be at the starting node;
+		// set the player Map Entity render position to be at the starting node
 		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0), worldMap);
 		playerMapEntity.updatePosByNodeEntity(entryMapNode);
 
@@ -165,6 +166,7 @@ public class WorldMapContext extends UIContext {
 				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
+				world.setWeather(Weathers.DROUGHT);
 
 				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
 				playerManager.spawnPlayers();
@@ -226,7 +228,7 @@ public class WorldMapContext extends UIContext {
 	public void updateMapDisplay(WorldMap currentWorld) {
 		updateNodesDisplayed();
 		stage.clear();
-		stage.addActor(new WorldMapEntity());
+		stage.addActor(new WorldMapEntity(currentWorld.getWorldType()));
 		hiddenNodes.clear();
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {
 			MapNodeEntity nodeEntry = new MapNodeEntity(node, currentWorld);

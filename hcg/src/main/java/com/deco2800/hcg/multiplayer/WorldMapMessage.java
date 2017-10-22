@@ -17,13 +17,13 @@ public class WorldMapMessage extends Message {
 	
 	private int worldMapIndex;
 	
-	public WorldMapMessage() {
-		// Default constructor
-	}
-	
 	public WorldMapMessage(int worldMapIndex) {
 		super(MessageType.WORLD_MAP);
 		this.worldMapIndex = worldMapIndex;
+	}
+	
+	public WorldMapMessage(SocketAddress address) {
+		super(address);
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class WorldMapMessage extends Message {
 	}
 	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		worldManager.setWorldMap(worldMapIndex);
 	}
 }
