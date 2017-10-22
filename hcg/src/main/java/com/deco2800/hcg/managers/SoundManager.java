@@ -105,12 +105,16 @@ public class SoundManager extends Manager {
 			soundMap.put("shovelTrowel",
 					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/shovel_or_trowel.wav")));
 			soundMap.put("key", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/key.wav")));
+			soundMap.put("fireball", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fireball.wav")));
+			soundMap.put("fireball_hit", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fireball_hit.wav")));
+			soundMap.put("freeze", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/freeze.wav")));
+			soundMap.put("grow", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/grow.wav")));
 			
 			// Shop sounds
-			soundMap.put("loot1", 
-					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot.wav")));
-			soundMap.put("loot2", 
-					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot2.wav")));
+			soundMap.put("buy", 
+					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/shop/buy.wav")));
+			soundMap.put("sell", 
+					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/shop/sell.wav")));
 
 
 			// Loot

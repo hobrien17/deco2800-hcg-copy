@@ -16,13 +16,13 @@ abstract class CharacterStatsScreen extends CharacterContext {
     private Window statsWindow;
     private Window perksWindow;
 
-    int meleeSkill;
-    int gunsSkill;
-    int energyWeaponsSkill;
+    int machineGunSkill;
+    int shotGunSkill;
+    int starGunSkill;
 
-    Label meleeSkillLabel;
-    Label gunsSkillLabel;
-    Label energyWeaponsSkillLabel;
+    Label machineGunSkillLabel;
+    Label shotGunSkillLabel;
+    Label starGunSkillLabel;
 
     TextButton backButton;
 
@@ -98,19 +98,19 @@ abstract class CharacterStatsScreen extends CharacterContext {
     }
 
     private  void setupSkillsWindow() {
-        meleeSkill = playerManager.getPlayer().getAttribute("meleeSkill");
-        gunsSkill = playerManager.getPlayer().getAttribute("gunsSkill");
-        energyWeaponsSkill = playerManager.getPlayer().getAttribute("energyWeaponsSkill");
+        machineGunSkill = playerManager.getPlayer().getAttribute("machineGunSkill");
+        shotGunSkill = playerManager.getPlayer().getAttribute("shotGunSkill");
+        starGunSkill = playerManager.getPlayer().getAttribute("starGunSkill");
 
-        meleeSkillLabel = new Label("Melee Skill: " + meleeSkill, skin);
-        gunsSkillLabel = new Label("Guns Skill: " + gunsSkill, skin);
-        energyWeaponsSkillLabel = new Label("Energy Weapons Skill: " + energyWeaponsSkill, skin);
+        machineGunSkillLabel = new Label("Melee Skill: " + machineGunSkill, skin);
+        shotGunSkillLabel = new Label("Guns Skill: " + shotGunSkill, skin);
+        starGunSkillLabel = new Label("Energy Weapons Skill: " + starGunSkill, skin);
 
-        skillsWindow.add(meleeSkillLabel);
+        skillsWindow.add(machineGunSkillLabel);
         skillsWindow.row();
-        skillsWindow.add(gunsSkillLabel);
+        skillsWindow.add(shotGunSkillLabel);
         skillsWindow.row();
-        skillsWindow.add(energyWeaponsSkillLabel);
+        skillsWindow.add(starGunSkillLabel);
     }
 
     private  void setupStatsWindow() {

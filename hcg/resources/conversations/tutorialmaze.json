@@ -1,0 +1,42 @@
+{
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "0"
+  },
+  "nodes": [
+    {
+      "id": "0",
+      "nodeText": "Well done on making it this far.",
+      "options": [
+        {
+          "optionText": "Thanks",
+          "target": "1"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "nodeText": "Somehow we've found ourselves in the middle of a big maze. There's gotta be an exit around here somewhere...",
+      "options": [
+        {
+          "optionText": "I'll take a look around!",
+          "target": null
+        },
+		{
+          "optionText": "Are you not gonna help find it?",
+          "target": 2
+        }
+      ]
+    },
+	{
+      "id": "2",
+      "nodeText": "I'll find my own way out later.",
+      "options": [
+        {
+          "optionText": "Thanks alot.",
+          "target": null
+        }
+      ]
+    }
+  ]
+}

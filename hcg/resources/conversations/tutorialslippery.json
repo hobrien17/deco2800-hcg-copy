@@ -1,0 +1,42 @@
+{
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "0"
+  },
+  "nodes": [
+    {
+      "id": "0",
+      "nodeText": "Hello again! How'd you find the last level?",
+      "options": [
+        {
+          "optionText": "Too easy!",
+          "target": "1"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "nodeText": "That's great! Good luck with this one, this is hard!",
+      "options": [
+        {
+          "optionText": "Why is it hard?",
+          "target": "2"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "nodeText": "Someone spilled a bunch of oil over here, and its super slippery! And watch out for a little suprise at the end. Watch out for the bullets from the turrets too. Good Luck!",
+      "options": [
+        {
+          "optionText": "Cheers",
+          "target": null
+        },
+		{
+		  "optionText": "Can you run that by me again?",
+          "target": "1"
+		}
+      ]
+    }
+  ]
+}

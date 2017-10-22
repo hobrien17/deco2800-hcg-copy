@@ -11,6 +11,7 @@ import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.entities.terrain_entities.DestructableTree;
+import com.deco2800.hcg.entities.terrain_entities.TerrainEntity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.managers.PlayerManager;
@@ -18,6 +19,7 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.shading.LightEmitter;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.worlds.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector3;
@@ -28,7 +30,8 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 
-	protected float speed = 0.5f;
+	protected float speed;
+	protected int damage;
 
 	protected float goalX;
 	protected float goalY;
@@ -68,9 +71,9 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float xd, float yd,
-				  AbstractEntity user, int hitCount) {
+				  AbstractEntity user, int hitCount, float speed, int damage) {
 		this(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount);
+				user, hitCount, speed, damage);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -95,8 +98,8 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
-				  float newZ, AbstractEntity user, int hitCount) {
-		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount);
+				  float newZ, AbstractEntity user, int hitCount, float speed, int damage) {
+		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, speed, damage);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -129,8 +132,11 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
 				  float newZ, float xLength, float yLength, float zLength,
-				  AbstractEntity user, int hitCount) {
+				  AbstractEntity user, int hitCount, float speed, int damage) {
 		super(posX, posY, posZ, xLength, yLength, zLength);
+		
+		this.speed = speed;
+		this.damage = damage;
 		this.setTexture("battle_seed");
 		this.bulletType = BulletType.BASIC;
 
@@ -169,19 +175,21 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 */
 	@Override
 	public void onTick(long gameTickCount) {
-		distanceTravelled += 1;
-		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
-			specialAbility();
-		}
-		entityHit();
-		if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
+	    if(user != null) {
+    		distanceTravelled += 1;
+    		if (distanceTravelled >= 20 && distanceTravelled % 20 == 0) {
+    			specialAbility();
+    		}
+    		entityHit();
+	    }
+    	if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
 				- Math.abs(goalX)) < 0.5
 				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
 				- Math.abs(goalY)) < 0.5) {
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
-		if (distanceTravelled >= 100) {
+		if (distanceTravelled >= 100 || outOfBounds()) {
 			GameManager.get().getWorld().removeEntity(this);
 		}
 	}
@@ -214,12 +222,9 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 					GameManager.get().getWorld().removeEntity(turret);
 
 				} else if (target.getHealthCur() <= 0) {
-					// Temporary increase of xp for all enemies killed
-					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
 				} else {
 					// Temporary increase of xp for all enemies killed
-					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
 				}
                 spawnParticles(entity, "hitPuff.p");
@@ -234,6 +239,13 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				applyEffect(tree);
 				hitCount--;
 			}
+			
+            // Collision with terrain entity
+            if (entity instanceof TerrainEntity && user instanceof Player
+                    && !(this instanceof GrassBullet)) {
+                spawnParticles(entity, "hitPuff.p");
+                hitCount--;
+            }
 
 			// Collision with player
 			if (entity instanceof Player && user instanceof Enemy) {
@@ -279,7 +291,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0, user));
+		target.giveEffect(new Effect("Shot", 1, damage, 1, 0, 1, 0, user));
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
@@ -295,12 +307,20 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
     public float getLightPower() {
         return 3;
     }
+    
+    protected boolean outOfBounds() {
+    	World world = GameManager.get().getWorld();
+    	return false;
+    	//return this.getPosX() <= changeX + 1 || this.getPosX() >= world.getWidth() - changeX - 1 || 
+    	//		this.getPosY() <= changeY + 1 || this.getPosY() >= world.getLength() - changeY - 1;
+    }
 	
 	protected void spawnParticles(AbstractEntity entity, String particleFile) {
 	    ParticleEffect hitEffect = new ParticleEffect();
         hitEffect.load(Gdx.files.internal("resources/particles/" + particleFile),
         Gdx.files.internal("resources/particles/"));
-        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
+        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX() + entity.getXLength()/2,
+                entity.getPosY() + entity.getYLength()/2, 0));
         hitEffect.setPosition(position.x, position.y);
         hitEffect.start();
         ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, hitEffect);

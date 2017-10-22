@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.entities.turrets.AbstractTurret;
@@ -36,42 +37,54 @@ public class TextureTest extends TurretBaseTest {
 		corpse.plantInside(new Seed(Seed.Type.SUNFLOWER));
 		assertEquals("The corpse should have the sunflower sprite", "sunflower_corpse", corpse.getTexture());
 		assertEquals("SUNFLOWER", corpse.getTurret().getName().toUpperCase());
+		assertEquals(Color.GREEN, corpse.getTurret().getGlowColor());
+		assertEquals(0, corpse.getTurret().getGlowStrength());
 
 		corpse = new BasicCorpse(5, 5, 0);
 		corpse.plantInside(new Seed(Seed.Type.WATER));
 		assertEquals("The corpse should have the water sprite", "water_corpse", corpse.getTexture());
 		assertEquals("LILY", corpse.getTurret().getName().toUpperCase());
+		assertEquals(Color.GREEN, corpse.getTurret().getGlowColor());
+		assertEquals(0, corpse.getTurret().getGlowStrength());
 
 		corpse = new BasicCorpse(5, 5, 0);
 		corpse.plantInside(new Seed(Seed.Type.GRASS));
 		assertEquals("The corpse should have the grass sprite", "grass_corpse", corpse.getTexture());
 		assertEquals("GRASS", corpse.getTurret().getName().toUpperCase());
+		assertEquals(Color.GREEN, corpse.getTurret().getGlowColor());
+		assertEquals(0, corpse.getTurret().getGlowStrength());
 
 		corpse = new BasicCorpse(5, 5, 0);
 		corpse.plantInside(new Seed(Seed.Type.FIRE));
 		assertEquals("The corpse should have the fire sprite", "fire_corpse", corpse.getTexture());
 		assertEquals("INFERNO", corpse.getTurret().getName().toUpperCase());
+		assertEquals(Color.RED, corpse.getTurret().getGlowColor());
+		assertEquals(3, corpse.getTurret().getGlowStrength());
 
 		corpse = new BasicCorpse(5, 5, 0);
 		corpse.plantInside(new Seed(Seed.Type.EXPLOSIVE));
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 8; i++) {
 			assertEquals("The corpse should have the first cactus sprite", "cactus_corpse_01", corpse.getTexture());
 			corpse.getTurret().update(sw, i);
 		}
 		assertEquals("The corpse should have the second cactus sprite", "cactus_corpse_02", corpse.getTexture());
-		corpse.getTurret().update(sw, 3);
+		corpse.getTurret().update(sw, 9);
 		assertEquals("The corpse should have the third cactus sprite", "cactus_corpse_03", corpse.getTexture());
 		assertEquals("CACTUS", corpse.getTurret().getName().toUpperCase());
+		assertEquals(Color.GREEN, corpse.getTurret().getGlowColor());
+		assertEquals(0, corpse.getTurret().getGlowStrength());
 
 		corpse = new BasicCorpse(5, 5, 0);
 		corpse.plantInside(new Seed(Seed.Type.ICE));
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 8; i++) {
 			assertEquals("The corpse should have the first ice sprite", "ice_corpse_01", corpse.getTexture());
 			corpse.getTurret().update(sw, i);
 		}
 		assertEquals("The corpse should have the second ice sprite", "ice_corpse_02", corpse.getTexture());
-		corpse.getTurret().update(sw, 3);
+		corpse.getTurret().update(sw, 9);
 		assertEquals("The corpse should have the third ice sprite", "ice_corpse_03", corpse.getTexture());
 		assertEquals("ICE", corpse.getTurret().getName().toUpperCase());
+		assertEquals(Color.valueOf("#B3FBFC"), corpse.getTurret().getGlowColor());
+		assertEquals(2, corpse.getTurret().getGlowStrength());
 	}
 }

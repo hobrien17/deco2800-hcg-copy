@@ -65,7 +65,8 @@ public class ParticleEffectActor extends Actor {
 		}
 		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
 		    Vector3 position = GameManager.get().worldToScreen(
-                    new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
+                    new Vector3(entry.getKey().getPosX() + entry.getKey().getXLength()/2,
+                            entry.getKey().getPosY() + entry.getKey().getYLength()/2, 0));
 		    for(ParticleEffect effect: entry.getValue())  {
                 effect.setPosition(position.x, position.y);
                 effect.update(delta);
@@ -92,9 +93,9 @@ public class ParticleEffectActor extends Actor {
 	    if(entityEffects.containsKey(entity)) {
 	        entityEffects.get(entity).add(effect);
 	    } else {
-            ArrayList<ParticleEffect> effects = new ArrayList<>();
-            effects.add(effect);
-            entityEffects.put(entity, effects);
+            ArrayList<ParticleEffect> temp = new ArrayList<>();
+            temp.add(effect);
+            entityEffects.put(entity, temp);
 	    }
     }
 
@@ -118,18 +119,20 @@ public class ParticleEffectActor extends Actor {
 		}
 		
 		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
-            Vector3 position = GameManager.get().worldToScreen(
-                    new Vector3(entry.getKey().getPosX(), entry.getKey().getPosY(), 0));
-            for(ParticleEffect effect : entry.getValue()) {
-                effect.setPosition(position.x, position.y);
-    		    effect.update(Gdx.graphics.getDeltaTime());
-                effect.draw(batch);
-    
-                if(effect.isComplete()) {
-                    effect.dispose();
-                    entry.getValue().remove(effect);
-                    if(entry.getValue().isEmpty()) {
-                        entityEffects.remove(entry.getKey());
+            if(entry.getValue().isEmpty()) {
+                entityEffects.remove(entry.getKey());
+            } else {
+                Vector3 position = GameManager.get().worldToScreen(
+                        new Vector3(entry.getKey().getPosX() + entry.getKey().getXLength()/2,
+                                entry.getKey().getPosY() + entry.getKey().getYLength()/2, 0));
+                for(ParticleEffect effect : entry.getValue()) {
+                    effect.setPosition(position.x, position.y);
+        		    effect.update(Gdx.graphics.getDeltaTime());
+                    effect.draw(batch);
+        
+                    if(effect.isComplete()) {
+                        effect.dispose();
+                        entry.getValue().remove(effect);
                     }
                 }
             }

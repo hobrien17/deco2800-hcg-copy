@@ -43,7 +43,7 @@ public class Squirrel extends Enemy implements Tickable {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put(new LootWrapper("sunflower_seed"), 1.0);
+		lootRarity.put(new LootWrapper("sunflower_seed", 1.0f), 1.0);
 
 		checkLootRarity();
 	}
@@ -69,5 +69,6 @@ public class Squirrel extends Enemy implements Tickable {
 		this.moveAction();//Move enemy to the position in Box3D.
 		// Apply any effects that exist on the entity
 		myEffects.apply();
+		checkParticles();
 	}
 }
