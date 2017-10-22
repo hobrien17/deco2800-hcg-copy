@@ -28,15 +28,20 @@ public class LevelStore {
 	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_03.tmx"), 2, 5, 1));
 	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_04.tmx"), 2, 7, 1));
 	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_05.tmx"), 2, 6, 1));
+		levelList.add(new Level(new World("resources/maps/maps/grass_normal_06.tmx"), 2, 6, 1));
 	    levelList.add(new Level(new World("resources/maps/maps/mastapeice.tmx"), 3,7,1));
 	    levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_01.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_02.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_03.tmx"), 3, 9, 1));
 		levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_01.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_03_01.tmx"), 3, 8, 1));
+		levelList.add(new Level(new World("resources/maps/maps/volcanic_normal_04.tmx"), 3, 8, 1));
 		
 		// Boss levels (there should only be three! (one for each main biome))
 		// Ensure they are in ascending biome order
+        //levelList.add(new Level(new World("resources/maps/maps/grass_boss_01.tmx"), 2, 7, 2));
+        //levelList.add(new Level(new World("resources/maps/maps/volcanic_boss_01.tmx"), 3, 9, 2));
+
 	}
 	
 	public ArrayList<Level> getLevels() {

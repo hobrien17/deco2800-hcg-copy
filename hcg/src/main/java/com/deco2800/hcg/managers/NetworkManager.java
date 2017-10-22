@@ -51,7 +51,6 @@ public final class NetworkManager extends Manager {
 	
 	private GameManager gameManager;
 	private ContextManager contextManager;
-	private PlayerManager playerManager;
 	private PlayerInputManager playerInputManager;
 	
 	private ByteBuffer messageBuffer;
@@ -74,7 +73,6 @@ public final class NetworkManager extends Manager {
 		
 		gameManager = GameManager.get();
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
-		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		playerInputManager = (PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
 		
 		// initialise channel
@@ -210,6 +208,14 @@ public final class NetworkManager extends Manager {
 	}
 	
 	/**
+	 * Checks if we are hosting a discoverable LAN game
+	 * @return <code>true</code> if local game should discoverable over LAN
+	 */
+	public boolean isDiscoverable() {
+		return host && contextManager.currentContext() instanceof LobbyContext;
+	}
+	
+	/**
 	 * Adds message to send queue
 	 * @param message Message to add
 	 * @return <code>true</code> if message was successfully added to queue
@@ -288,7 +294,7 @@ public final class NetworkManager extends Manager {
 					try {
 						// send discovery message
 						SocketAddress socketAddress = new InetSocketAddress(broadcastAddress, 1337);
-						sendOnce(new DiscoveryMessage(getNextRandomInt()), socketAddress);
+						sendOnce(new DiscoveryMessage(), socketAddress);
 					} catch (IOException e) {
 						LOGGER.error("Failed to send discovery message", e);
 					}
@@ -315,7 +321,7 @@ public final class NetworkManager extends Manager {
 		// add host to peers
 		sockets.put(0, socketAddress);
 		// try to connect
-		queueMessage(new JoiningMessage(getNextRandomInt()));
+		queueMessage(new JoiningMessage());
 	}
 
 	/**

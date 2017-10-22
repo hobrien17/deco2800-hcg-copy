@@ -35,7 +35,7 @@ public class TutorialWorld extends WorldMap {
 		tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02_05.tmx"), 1, 1, 1));
 		tutorialLevels.add(new Level(new World("resources/maps/maps/grass_safeZone_02_tutorial.tmx"), 0, 1, 1));
 		// Boss level!
-		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
+        tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_boss_01.tmx"), 1, 1, 1));
 
 		nodeList = createMappings(tutorialLevels);
 		changeContainedNodes(nodeList);
