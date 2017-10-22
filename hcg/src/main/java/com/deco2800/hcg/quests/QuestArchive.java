@@ -98,7 +98,6 @@ public class QuestArchive {
     }
 
     private Boolean getItemReqCompleted() {
-    	//TODO test this method
         Inventory inv = playerManager.getPlayer().getInventory();
         
         for(String item: quest.getItemRequirement().keySet()){
@@ -107,6 +106,7 @@ public class QuestArchive {
         	}
         }
         return true;
+        
 
     }
 
