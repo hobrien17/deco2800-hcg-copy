@@ -1,11 +1,14 @@
 package com.deco2800.hcg.contexts;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.managers.*;
+import com.deco2800.hcg.multiplayer.InputType;
+
 import java.util.*;
 import java.util.List;
 
@@ -28,7 +31,8 @@ public class ScoreBoardContext extends UIContext {
     protected ContextManager contextManager;
     protected TextureManager textureManager;
     protected PlayerManager playerManager;
-    
+    protected InputManager inputManager;
+    private int keyCode;
     /**
      * Creating Score Board
      */
@@ -38,7 +42,8 @@ public class ScoreBoardContext extends UIContext {
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
-
+        inputManager =  (InputManager) GameManager.get().getManager(InputManager.class);
+        
         masterTable = new Table(skin);
         masterTable.setFillParent(true);
         masterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
@@ -61,6 +66,15 @@ public class ScoreBoardContext extends UIContext {
         playersWindow.add(title).top().center();
         playersWindow.row();
     } 
+    
+    private void handleKeyDown(int keyCode) {
+    	System.out.println("Key code : " + keyCode);
+    	switch(keyCode) {
+    		case Input.Keys.TAB:
+    			this.contextManager.popContext();
+    			break;
+    	}
+    }
     
     /**
      * Top buttons to go back to the game

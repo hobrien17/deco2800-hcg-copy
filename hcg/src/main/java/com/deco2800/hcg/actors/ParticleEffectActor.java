@@ -74,7 +74,7 @@ public class ParticleEffectActor extends Actor {
                     new Vector3(entry.getKey().getPosX() + entry.getKey().getXLength()/2,
                             entry.getKey().getPosY() + entry.getKey().getYLength()/2, 0));
 		    for(ParticleEffect effect: entry.getValue())  {
-                effect.setPosition((position.x), (position.y));
+                effect.setPosition(position.x, position.y);
                 effect.update(delta);
 		    }
 		}

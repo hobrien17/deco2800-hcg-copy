@@ -40,7 +40,6 @@ public class World {
 	private Weathers weather;
 
 	private List<AbstractEntity> entities = new ArrayList<AbstractEntity>();
-	public List<Renderable> renderables = new ArrayList<Renderable>();
 	protected TiledMap map;
 
 	private int width;
@@ -599,8 +598,8 @@ public class World {
     
     String layerName;
     String texture;
-    String texture2 = null;
-    String texture3 = null;
+    String texture2;
+    String texture3;
     
     switch(this.weather) {
       case RAIN:

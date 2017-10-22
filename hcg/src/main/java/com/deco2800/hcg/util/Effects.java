@@ -24,8 +24,6 @@ import java.util.*;
  * @author Alex Subaric (deadmeu)
  */
 public class Effects {
-    
-    private int count;
 
     private Set<Effect> currentEffects; // a set of the current active effects
 

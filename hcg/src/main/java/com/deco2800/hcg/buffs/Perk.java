@@ -13,7 +13,6 @@ public class Perk {
 
     private perk enumPerk;
     private int currentLevel;
-    private Player player;
 
     public enum perk {
         //Druid
@@ -76,7 +75,6 @@ public class Perk {
     public Perk(perk enumPerk) {
         GameManager gameManager = GameManager.get();
         PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
-        player = playerManager.getPlayer();
         this.enumPerk = enumPerk;
         this.currentLevel = 0;
     }

@@ -8,7 +8,6 @@ import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.tools.Shovel;
-import com.deco2800.hcg.multiplayer.CharacterMessage;
 import com.deco2800.hcg.worlds.World;
 
 /**

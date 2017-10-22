@@ -2,9 +2,6 @@ package com.deco2800.hcg.items.stackable;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.Player;

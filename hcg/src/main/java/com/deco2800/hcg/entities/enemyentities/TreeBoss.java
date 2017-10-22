@@ -8,8 +8,9 @@ import com.deco2800.hcg.weapons.WeaponType;
 
 
 import java.util.HashMap;
+import java.util.Random;
 
-public class Tree extends Enemy implements Tickable {
+public class TreeBoss extends Enemy implements Tickable {
 
     private boolean firstSpawn = false;
     private boolean secondSpawn = false;
@@ -25,7 +26,7 @@ public class Tree extends Enemy implements Tickable {
      * @param posZ the x position
      * @param id the ID of the Hedgehog Enemy
      */
-    public Tree(float posX, float posY, float posZ, int id) {
+    public TreeBoss(float posX, float posY, float posZ, int id) {
         super(posX, posY, posZ, 1f, 1f, 1, false, 10000, 10, id, EnemyType.CRAB);
 
         this.boss = true;
@@ -65,9 +66,6 @@ public class Tree extends Enemy implements Tickable {
             this.setMovementSpeed(this.defaultSpeed *3);
         }
         this.tree();
-        // Pos for ramdom ground weapon
-        float ramdomX = Math.abs(networkManager.getNextRandomFloat()) * GameManager.get().getWorld().getWidth();
-        float ramdomY = Math.abs(networkManager.getNextRandomFloat()) * GameManager.get().getWorld().getWidth();
         //need to set time counter
     }
 
@@ -78,6 +76,7 @@ public class Tree extends Enemy implements Tickable {
     private void tree(){
         this.setMovementSpeed(0);
         this.defaultSpeed = 0;
+        myEffects.apply();
 
         if ((this.getHealthCur() < this.getHealthMax()) && (this.getHealthCur() > this.getHealthMax()*0.8)){
             //bottom

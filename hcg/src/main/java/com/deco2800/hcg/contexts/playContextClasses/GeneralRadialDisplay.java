@@ -59,9 +59,7 @@ public class GeneralRadialDisplay extends Group {
     private PlayerManager playerManager;
 
     private boolean active;
-    private PlayerEquipment equippedItems;
     private Inventory inventory;
-    private BulletType bulletType;
     
     private List<ImageButton> buttons;
     private List<Label> counts;

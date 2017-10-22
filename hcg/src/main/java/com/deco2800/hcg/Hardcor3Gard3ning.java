@@ -44,21 +44,12 @@ public class Hardcor3Gard3ning extends Game {
     private GameManager gameManager;
     private ContextManager contextManager;
     private SoundManager soundManager;
-    private PlayerManager playerManager;
-    private TextureManager textureManager;
-    private TimeManager timeManager;
     private WeatherManager weatherManager;
-    private ParticleEffectManager particleManager;
-	private InputManager inputManager;
-	private PlantManager plantManager;
-	private ItemManager itemManager;
 	private StopwatchManager stopwatchManager;
 	private NetworkManager networkManager;
 	private CommandManager commandManager;
 	private ShaderManager shaderManager;
 	private WorldManager worldManager;
-	private QuestManager questManager;
-    private MouseHandler mouseHandler;
     private long gameTickCount = 0;
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
     private long nextGameTick = TimeUtils.millis() + gameTickPeriod;
@@ -76,29 +67,12 @@ public class Hardcor3Gard3ning extends Game {
 		/* Create a context manager, and set is as the screen target */
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         this.setScreen(contextManager);
-        // Create a texture manager
-        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 
 		/* Create a sound manager for the whole game */
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
- 
-		/* Create a time manager. */
-        timeManager = (TimeManager) gameManager.getManager(TimeManager.class);
 
         /* Create a weather manager. */
         weatherManager = (WeatherManager) gameManager.getManager(WeatherManager.class);
-
-        /* Create a particle effect manager. */
-        particleManager = (ParticleEffectManager) gameManager.getManager(ParticleEffectManager.class);
-        
-        /* Create an input manager. */
-        inputManager = (InputManager) gameManager.getManager(InputManager.class);
-        
-        /* Create a plant manager. */
-        plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
-        
-        /* Create an item manager */
-        itemManager = (ItemManager) gameManager.getManager(ItemManager.class); 
         
         /* Setup stopwatch manager */
         stopwatchManager = (StopwatchManager) gameManager.getManager(StopwatchManager.class);
@@ -117,9 +91,6 @@ public class Hardcor3Gard3ning extends Game {
 
         /* Create a world manager */
         worldManager = (WorldManager) gameManager.getManager(WorldManager.class);
-
-        /* Create a Quest Mnager */
-        questManager = (QuestManager) gameManager.getManager((QuestManager.class));
 
         // add echo command
         // note args[0] is the command name, not the first argument

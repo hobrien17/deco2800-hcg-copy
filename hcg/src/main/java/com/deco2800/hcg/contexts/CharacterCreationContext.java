@@ -1,6 +1,5 @@
 package com.deco2800.hcg.contexts;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -694,7 +693,7 @@ public class CharacterCreationContext extends CharacterContext{
         Item testPotion = new HealthPotion(100);
         Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
         Item shovel = new Shovel();
-        startingSeeds.setStackSize(200);
+        startingSeeds.setStackSize(500);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);

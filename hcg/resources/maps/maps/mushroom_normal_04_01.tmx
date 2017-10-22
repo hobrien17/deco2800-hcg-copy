@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="15" height="15" tilewidth="55" tileheight="32" nextobjectid="1">
+ <properties>
+  <property name="PlayerX" value="0"/>
+  <property name="PlayerY" value="0"/>
+  <property name="weather" value="WIND"/>
+ </properties>
+ <tileset firstgid="1" source="../tiles/deprecated/misc1.tsx"/>
+ <tileset firstgid="7" source="../tiles/suburban_wasteland_dried_grass_ground.tsx"/>
+ <tileset firstgid="11" source="../tiles/invisible-tile.tsx"/>
+ <layer name="sand" width="15" height="15">
+  <properties>
+   <property name="name" value="sand"/>
+   <property name="speed" value="1.0"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+7,1,1,1,1,1,1,1,1,1,1,1,8,8,8,
+8,8,8,8,8,1,7,0,0,0,0,1,8,8,8,
+8,8,8,8,1,1,0,0,0,0,0,8,1,8,8,
+8,8,8,8,0,0,0,0,0,0,0,1,8,8,8,
+8,8,8,8,0,0,0,0,0,0,0,0,8,8,8,
+8,8,8,8,8,0,0,0,0,0,0,1,1,8,8,
+8,8,8,8,8,0,0,0,0,0,0,0,1,8,8,
+8,8,8,8,8,1,0,0,0,0,0,0,1,1,8,
+8,8,8,8,8,1,0,0,0,0,0,0,1,1,8,
+7,8,1,8,8,1,0,0,0,0,0,0,1,1,8,
+7,8,8,8,8,8,1,0,0,0,0,0,0,1,8,
+8,8,8,8,8,8,8,8,8,8,8,1,1,1,8,
+8,8,8,8,1,1,1,8,8,8,8,8,8,8,8,
+8,8,1,8,8,8,8,8,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <layer name="hole" width="15" height="15">
+  <properties>
+   <property name="PlayerX" value="45"/>
+   <property name="PlayerY" value="4"/>
+   <property name="name" value="gateway"/>
+   <property name="newMap" value="mushroom_normal_04_03.tmx"/>
+   <property name="speed" value="1.0"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,3,3,3,3,0,0,0,0,
+0,0,0,0,0,0,3,3,3,3,3,0,0,0,0,
+0,0,0,0,3,3,3,3,3,3,3,0,0,0,0,
+0,0,0,0,3,3,3,3,3,3,3,3,0,0,0,
+0,0,0,0,0,3,3,3,3,3,3,0,0,0,0,
+0,0,0,0,0,3,3,3,3,3,3,3,0,0,0,
+0,0,0,0,0,0,3,3,3,3,3,3,0,0,0,
+0,0,0,0,0,0,3,3,3,3,3,3,0,0,0,
+0,0,0,0,0,0,3,3,3,3,3,3,0,0,0,
+0,0,0,0,0,0,0,3,3,3,3,3,3,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="gateway" width="15" height="15">
+  <properties>
+   <property name="PlayerX" value="1"/>
+   <property name="PlayerY" value="13"/>
+   <property name="name" value="gateway"/>
+   <property name="newMap" value="mushroom_normal_04.tmx"/>
+   <property name="speed" value="1.0"/>
+  </properties>
+  <data encoding="csv">
+11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

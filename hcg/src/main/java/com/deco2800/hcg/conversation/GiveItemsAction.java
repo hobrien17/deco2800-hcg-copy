@@ -46,8 +46,6 @@ public class GiveItemsAction extends AbstractConversationAction {
 
     @Override
     public String toString() {
-        String tS = "giveItems";
-
         return "giveItems" + '|' + itemName + '|' + itemsQuantity;
     }
 
