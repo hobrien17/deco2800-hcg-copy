@@ -83,7 +83,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         this.weaponType = weaponType;
         this.user = user;
         this.radius = radius;
-        this.setTexture("blank");
+        this.setTexture(texture);
         this.texture = texture;
         this.cooldown = cooldown;
         this.muzzleFlashEnabled = 0;
@@ -114,6 +114,15 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
      */
     public AbstractEntity getUser() {
         return user;
+    }
+
+    /**
+     * Set the user of the weapon
+     * @param user
+     *          The new user
+     */
+    public void setUser(Player user) {
+        this.user = user;
     }
 
     /**

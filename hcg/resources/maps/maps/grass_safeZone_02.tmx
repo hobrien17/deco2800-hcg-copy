@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="381">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="382">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
@@ -373,7 +373,7 @@
     <property name="texture" value="character_shop_2"/>
    </properties>
   </object>
-  <object id="2" gid="57" x="272.038" y="390.367" width="55" height="32">
+  <object id="2" gid="57" x="468.256" y="370.149" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
     <property name="fName" value="General"/>
@@ -389,6 +389,14 @@
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="TestNPC"/>
     <property name="texture" value="character_1"/>
+   </properties>
+  </object>
+  <object id="381" gid="57" x="266.391" y="386.109" width="55" height="32">
+   <properties>
+    <property name="Type" value="Shop"/>
+    <property name="fName" value="General"/>
+    <property name="sName" value="Weapons"/>
+    <property name="texture" value="character_shop_3"/>
    </properties>
   </object>
  </objectgroup>

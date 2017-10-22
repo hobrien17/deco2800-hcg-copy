@@ -24,8 +24,26 @@ public class WeaponItem extends SingleItem {
         this.weapon = weapon;
         this.itemName = name;
         this.itemWeight = weight;
-        this.baseValue = 10;
-        this.texture = "red_potion";
+        this.baseValue = getValue();
+        this.texture = weapon.getTexture() + "_ne";
+    }
+    
+    /**
+     * Gets the weapon's value
+     * 
+     * @return the value in seeds
+     */
+    private int getValue() {
+        if (getRarity() == ItemRarity.COMMON) {
+            return 20;
+        } else if (getRarity() == ItemRarity.UNCOMMON) {
+            return 30;
+        } else if (getRarity() == ItemRarity.RARE) {
+            return 50;
+        } else if (getRarity() == ItemRarity.LEGENDARY) {
+            return 100;
+        }
+    	return 0;
     }
     
     @Override

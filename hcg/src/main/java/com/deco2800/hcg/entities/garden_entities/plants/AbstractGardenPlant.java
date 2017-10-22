@@ -151,6 +151,15 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	public int getGrowDelay() {
 		return growDelay;
 	}
+	
+	/**
+	 * Returns the amount of loot dropped by this plant
+	 * 
+	 * @return the amount of loot dropped
+	 */
+	public int getNumLoot() {
+		return numLoot;
+	}
 
 	/**
 	 * Sets the texture based on the plant's stage of growth
@@ -160,7 +169,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	/**
 	 * Sets up the loot rarity map for a plant
 	 */
-	abstract void setupLoot();
+	protected abstract void setupLoot();
 
 	@Override
 	public Map<LootWrapper, Double> getRarity() {
