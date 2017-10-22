@@ -180,6 +180,13 @@ public final class NetworkManager extends Manager {
 	}
 	
 	/**
+	 * Resets all tick counts
+	 */
+	public void resetPeerTickCounts() {
+		peerTickCounts = new HashMap<>();
+	}
+	
+	/**
 	 * Sets the multiplayer game flag
 	 * @param multiplayerGame Boolean indicating if the user is in a multiplayer game
 	 */
