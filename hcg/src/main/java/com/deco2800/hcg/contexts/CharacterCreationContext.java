@@ -12,10 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.items.tools.Shovel;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
+import com.deco2800.hcg.weapons.Weapon;
+import com.deco2800.hcg.weapons.WeaponBuilder;
+import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.*;
 import java.util.List;
@@ -53,9 +58,9 @@ public class CharacterCreationContext extends CharacterContext{
     private Label skillPointsGainLabel;
     private Label carryWeightLabel;
 
-    private CheckBox meleeSkillSpecialise;
-    private CheckBox gunsSkillSpecialise;
-    private CheckBox energyWeaponsSkillSpecialise;
+    private CheckBox machineGunSpecialise;
+    private CheckBox shotGunSpecialise;
+    private CheckBox starGunSpecialise;
 
     private SelectBox<String> characterSex;
 
@@ -515,23 +520,23 @@ public class CharacterCreationContext extends CharacterContext{
         gunsSkillLabel = new Label("Guns Skill: " + gunsSkill, skin);
         energyWeaponsSkillLabel = new Label("Energy Weapons Skill: " + energyWeaponsSkill, skin);
 
-        meleeSkillSpecialise = new CheckBox("Specialise", skin);
-        meleeSkillSpecialise.setChecked(false);
-        gunsSkillSpecialise = new CheckBox("Specialise", skin);
-        gunsSkillSpecialise.setChecked(false);
-        energyWeaponsSkillSpecialise = new CheckBox("Specialise", skin);
-        energyWeaponsSkillSpecialise.setChecked(false);
+        machineGunSpecialise = new CheckBox("Specialise", skin);
+        machineGunSpecialise.setChecked(false);
+        shotGunSpecialise = new CheckBox("Specialise", skin);
+        shotGunSpecialise.setChecked(false);
+        starGunSpecialise = new CheckBox("Specialise", skin);
+        starGunSpecialise.setChecked(false);
 
         // Add attribute labels and button to the window
         skillsWindow.add(specializedSkillsPointsLabel);
         skillsWindow.row();
-        skillsWindow.add(meleeSkillSpecialise);
+        skillsWindow.add(machineGunSpecialise);
         skillsWindow.add(meleeSkillLabel);
         skillsWindow.row();
-        skillsWindow.add(gunsSkillSpecialise);
+        skillsWindow.add(shotGunSpecialise);
         skillsWindow.add(gunsSkillLabel);
         skillsWindow.row();
-        skillsWindow.add(energyWeaponsSkillSpecialise);
+        skillsWindow.add(starGunSpecialise);
         skillsWindow.add(energyWeaponsSkillLabel);
         skillsWindow.pack();
 
@@ -539,24 +544,24 @@ public class CharacterCreationContext extends CharacterContext{
             The checkbox.isChecked() methods don't seem to be working properly with the clickListener
          */
 
-       meleeSkillSpecialise.addListener(new ClickListener() {
+       machineGunSpecialise.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if (meleeSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
                     meleeSkill -= 10;
-                    meleeSkillSpecialise.setChecked(false);
+                    machineGunSpecialise.setChecked(false);
                     meleeSkillSpecialiseChecked = false;
                     specialisedSkills.replace("meleeSkill", false);
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
                         meleeSkill += 10;
-                        meleeSkillSpecialise.setChecked(true);
+                        machineGunSpecialise.setChecked(true);
                         meleeSkillSpecialiseChecked = true;
                         specialisedSkills.replace("meleeSkill", true);
                     } else {
-                        meleeSkillSpecialise.setChecked(false);
+                        machineGunSpecialise.setChecked(false);
                         meleeSkillSpecialiseChecked = false;
                     }
                 }
@@ -567,23 +572,23 @@ public class CharacterCreationContext extends CharacterContext{
             }
         });
 
-        gunsSkillSpecialise.addListener(new ClickListener() {
+        shotGunSpecialise.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if (gunsSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
 					gunsSkill -= 10;
-					gunsSkillSpecialise.setChecked(false);
+					shotGunSpecialise.setChecked(false);
 					gunsSkillSpecialiseChecked = false;
 					specialisedSkills.replace("gunsSkill", false);
 				} else if (specializedSkillsPoints > 0) {
 					specializedSkillsPoints--;
 					gunsSkill += 10;
-					gunsSkillSpecialise.setChecked(true);
+					shotGunSpecialise.setChecked(true);
 					gunsSkillSpecialiseChecked = true;
 					specialisedSkills.replace("gunsSkill", true);
 				} else {
-					gunsSkillSpecialise.setChecked(false);
+					shotGunSpecialise.setChecked(false);
 					gunsSkillSpecialiseChecked = false;
 				}
                 gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
@@ -593,23 +598,23 @@ public class CharacterCreationContext extends CharacterContext{
             }
         });
 
-        energyWeaponsSkillSpecialise.addListener(new ClickListener() {
+        starGunSpecialise.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if (energyWeaponsSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
                     energyWeaponsSkill -= 10;
-                    energyWeaponsSkillSpecialise.setChecked(false);
+                    starGunSpecialise.setChecked(false);
                     energyWeaponsSkillSpecialiseChecked = false;
 					specialisedSkills.replace("energyWeaponsSkill", false);
 				} else if (specializedSkillsPoints > 0) {
 					specializedSkillsPoints--;
 					energyWeaponsSkill += 10;
-					energyWeaponsSkillSpecialise.setChecked(true);
+					starGunSpecialise.setChecked(true);
 					energyWeaponsSkillSpecialiseChecked = true;
 					specialisedSkills.replace("energyWeaponsSkill", true);
 				} else {
-					energyWeaponsSkillSpecialise.setChecked(false);
+					starGunSpecialise.setChecked(false);
 					energyWeaponsSkillSpecialiseChecked = false;
 				}
                 energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
@@ -727,7 +732,11 @@ public class CharacterCreationContext extends CharacterContext{
         Item test2 = new CottonShirt(CottonShirt.ShirtColour.GREEN);
         Item testPotion = new HealthPotion(100);
         Item startingSeeds = new Seed(Seed.Type.SUNFLOWER);
-        startingSeeds.setStackSize(50);
+        Item shovel = new Shovel();
+        Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(player)
+    			.setRadius(0.7).build();
+        Item gun = new WeaponItem(machinegun, "Machine Gun", 10);
+        startingSeeds.setStackSize(200);
         testPotion.setStackSize(4);
         Item testPotion2 = new HealthPotion(100);
         player.addItemToInventory(test);
@@ -735,5 +744,7 @@ public class CharacterCreationContext extends CharacterContext{
         player.addItemToInventory(testPotion);
         player.addItemToInventory(testPotion2);
         player.addItemToInventory(startingSeeds);
+        player.addItemToInventory(shovel);
+        player.addItemToInventory(gun);
     }
 }

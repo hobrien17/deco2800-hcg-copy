@@ -31,16 +31,16 @@ public class InputMessage extends Message {
 	private int[] ints;
 	private float[] floats;
 	
-	public InputMessage() {
-		//deliberately empty
-	}
-	
 	public InputMessage(long tick, Input input) {
 		super(MessageType.INPUT);
 		this.tick = tick;
 		this.type = input.getType();
 		this.ints = input.getInts();
 		this.floats = input.getFloats();
+	}
+	
+	public InputMessage(SocketAddress address) {
+		super(address);
 	}
 	
 	@Override
@@ -78,7 +78,7 @@ public class InputMessage extends Message {
 	}
 	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		try {
 			// TODO: handle input for more than one player
 			Input input = playerInputManager.new Input(type, 1, ints, floats);

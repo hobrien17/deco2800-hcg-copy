@@ -19,18 +19,17 @@ public class DiscoveryMessage extends Message {
 	private final NetworkManager networkManager =
 			(NetworkManager) GameManager.get().getManager(NetworkManager.class);
 	private static final Logger LOGGER = LoggerFactory.getLogger(DiscoveryMessage.class);
-
-	public DiscoveryMessage() {
-		// Default constructor
-		
-	}
 	
 	public DiscoveryMessage(int id) {
 		super(MessageType.DISCOVERY);
 	}
 	
+	public DiscoveryMessage(SocketAddress address) {
+		super(address);
+	}
+	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		if (networkManager.isHost()) {
 			try {
 				// send host message

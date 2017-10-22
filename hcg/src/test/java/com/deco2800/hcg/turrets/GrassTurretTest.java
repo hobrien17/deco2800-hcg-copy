@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
+import com.deco2800.hcg.entities.bullets.GrassTurretBullet;
 import com.deco2800.hcg.entities.turrets.GrassTurret;
 import com.deco2800.hcg.types.Weathers;
 
@@ -30,11 +31,11 @@ public class GrassTurretTest extends TurretBaseTest {
 		
 		int counter = 0;
 		for (AbstractEntity entity : gm.getWorld().getEntities()) {
-			if (entity instanceof GrassBullet) {
+			if (entity instanceof GrassTurretBullet) {
 				counter++; // add one grass bullet to the counter
 			}
 		}
-		assertEquals("Exactly 72 grass bullets should have spawned", counter, 72);
+		assertEquals("Exactly 72 bullets should have spawned", 72, counter);
 	}
 	
 	@Test
@@ -67,10 +68,10 @@ public class GrassTurretTest extends TurretBaseTest {
 		
 		int counter = 0;
 		for (AbstractEntity entity : gm.getWorld().getEntities()) {
-			if (entity instanceof GrassBullet) {
+			if (entity instanceof GrassTurretBullet) {
 				counter++; // add one grass bullet to the counter
 			}
 		}
-		assertEquals("Exactly 18 grass bullets should have spawned in a storm", counter, 18);
+		assertEquals("Exactly 18 grass bullets should have spawned in a storm", 18, counter);
 	}
 }

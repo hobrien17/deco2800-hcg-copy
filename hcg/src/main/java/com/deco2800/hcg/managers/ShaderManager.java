@@ -49,6 +49,8 @@ public class ShaderManager extends Manager implements Observer {
 
     //Flag for custom overlay renders
     private ArrayList<customShader> customRenders;
+    
+    private boolean enabled = true;
 
     private float health;
 
@@ -133,14 +135,11 @@ public class ShaderManager extends Manager implements Observer {
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
         checkCustomDurations();
-        //this.preShader.setUniformf("u_globalColor", state.getGlobalLightColour());
         if (customRenders.size() > 0) {
             Color baseLight = state.getGlobalLightColour();
             for (int i = 0; i < customRenders.size(); i++) {
-                //this.preShader.setUniformf("u_globalColor", customRenders.get(i).color);
                 baseLight.mul(customRenders.get(i).color);
             }
-            //this.preShader.setUniformf("u_globalColor", baseLight);
         }
         this.preShader.setUniformf("u_globalLight", this.state.getGlobalLightColour());
         this.preBatch = new SpriteBatch(1001, preShader);
@@ -180,19 +179,27 @@ public class ShaderManager extends Manager implements Observer {
                 / ((float) playerManager.getPlayer().getHealthMax());
         this.postShader.setUniformf("u_health", this.health);
         // Apply custom effects over the top of the regular effects
+
+        Color baseColour = Color.WHITE;
+        
         if (customRenders.size() > 0) {
             float baseHeat = state.getHeat();
             float baseBloom = state.getBloom();
             float baseContrast = state.getContrast();
+            
             for (int i = 0; i < customRenders.size(); i++) {
                 baseContrast += customRenders.get(i).contrast;
                 baseHeat += customRenders.get(i).heat;
                 baseBloom += customRenders.get(i).bloom;
+                baseColour = baseColour.mul(customRenders.get(i).color);
             }
+            
             this.postShader.setUniformf("u_heat", baseHeat);
             this.postShader.setUniformf("u_bloom", baseBloom);
             this.postShader.setUniformf("u_contrast", baseContrast);
         }
+        
+        this.postShader.setUniformf("u_globalColor", baseColour);
 
         this.postShader.end();
         
@@ -232,7 +239,7 @@ public class ShaderManager extends Manager implements Observer {
 
     public void checkCustomDurations() {
         for (int i = 0; i < customRenders.size(); i++) {
-            if (customRenders.get(i).durationTime < 0) {
+            if (customRenders.get(i).durationTime <= 0) {
                 //Shader is finished
                 customRenders.remove(i);
             }
@@ -251,5 +258,13 @@ public class ShaderManager extends Manager implements Observer {
     
     public void bindLightShader(SpriteBatch batch) {
         batch.setShader(this.lightShader);
+    }
+    
+    public boolean shadersEnabled() {
+        return this.enabled;
+    }
+    
+    public void toggleShaders() {
+        this.enabled = !this.enabled;
     }
 }

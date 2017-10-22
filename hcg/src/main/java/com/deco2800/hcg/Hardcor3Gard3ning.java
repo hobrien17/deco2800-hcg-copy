@@ -1,5 +1,9 @@
 package com.deco2800.hcg;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -29,6 +33,8 @@ import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.managers.WorldManager;
 import com.deco2800.hcg.quests.QuestManager;
 import com.deco2800.hcg.renderers.Renderable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles the creation of the world and rendering.
@@ -57,6 +63,7 @@ public class Hardcor3Gard3ning extends Game {
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
     private long nextGameTick = TimeUtils.millis() + gameTickPeriod;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Hardcor3Gard3ning.class);
     /**
      * Creates the required objects for the game to start. Called when the game first starts
      */
@@ -136,17 +143,26 @@ public class Hardcor3Gard3ning extends Game {
         commandManager.registerCommand("shader", new CommandManager.Command() {
             @Override
             public String run(String... args) {
-                if (args[1].equals("set")) {
-                    if (args[2].equals("contrast")) {
+                if ("set".equals(args[1])) {
+                    if ("contrast".equals(args[2])) {
                         shaderManager.setOvercast(Float.parseFloat(args[3]));
                         return "Success!";
                     }
-                } else if (args[1].equals("get")) {
+                } else if ("get".equals(args[1])) {
 
                 } else {
                     return "Invalid option";
                 }
                 return args[1];
+            }
+        });
+        
+        commandManager.registerCommand("toggleShaders", new CommandManager.Command() {
+            @Override
+            public String run(String... args) {
+                ShaderManager manager = (ShaderManager)GameManager.get().getManager(ShaderManager.class);
+                manager.toggleShaders();
+                return String.format("Shaders %s", manager.shadersEnabled() ? "enabled" : "disabled");
             }
         });
         
@@ -163,13 +179,14 @@ public class Hardcor3Gard3ning extends Game {
                     int amount = 0;
                     try {
                         amount = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        return String
+                                .format("%s is not a valid number", args[2]);
                     } catch (Exception e) {
-                        if(e instanceof NumberFormatException) {
-                            return String.format("%s is not a valid number", args[2]);
-                        } else {
-                            amount = 1;
-                        }
+                        LOGGER.error("error occurred", e);
+                        amount = 1;
                     }
+
                     item.setStackSize(amount);
                     
                     Player player = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer();
@@ -200,12 +217,11 @@ public class Hardcor3Gard3ning extends Game {
                     int amount = 0;
                     try {
                         amount = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        return String.format("%s is not a valid number", args[2]);
                     } catch (Exception e) {
-                        if(e instanceof NumberFormatException) {
-                            return String.format("%s is not a valid number", args[2]);
-                        } else {
-                            amount = 1;
-                        }
+                        LOGGER.error("error occurred", e);
+                        amount = 1;
                     }
                     item.setStackSize(amount);
                     
@@ -224,6 +240,37 @@ public class Hardcor3Gard3ning extends Game {
                 }
                 
                 return "Success!";
+            }
+        });
+        
+        commandManager.registerCommand("setTime", new CommandManager.Command() {
+            @Override
+            public String run(String... args) {
+                if(args.length != 2) {
+                    return "Invalid number of arguments. \nCorrect Usage: /setTime time";
+                }
+                
+                TimeManager manager = (TimeManager)GameManager.get().getManager(TimeManager.class);
+                LocalTime time;
+                if(manager.timeNames.containsKey(args[1])) {
+                    time = manager.timeNames.get(args[1]);
+                } else {
+                    try {
+                        time = LocalTime.parse(args[1], DateTimeFormatter.ISO_LOCAL_TIME);
+                    } catch(DateTimeParseException e) {
+                        time = null;
+                        LOGGER.error("datetime error occurred", e);
+                    }
+                }
+                
+                if(time != null) {
+                    manager.setDateTime(time.getSecond(), time.getMinute(), time.getHour(), 
+                            manager.getDay(), manager.getMonth(), manager.getYear());
+                } else {
+                    return "Invalid time.";
+                }
+                
+                return String.format("Time set to %s.", time);
             }
         });
         

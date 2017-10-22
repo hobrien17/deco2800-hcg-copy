@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="75" height="75" tilewidth="55" tileheight="32" nextobjectid="951">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="75" height="75" tilewidth="55" tileheight="32" nextobjectid="986">
  <properties>
   <property name="PlayerX" value="25"/>
   <property name="PlayerY" value="65"/>
@@ -151,6 +151,51 @@
   <object id="160" gid="24" x="2144" y="288" width="55" height="32"/>
   <object id="161" gid="24" x="2144" y="224" width="55" height="32"/>
   <object id="162" gid="24" x="2144" y="160" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="squirrel">
+  <properties>
+   <property name="name" value="squirrel"/>
+  </properties>
+  <object id="951" gid="43" x="855.293" y="1861.56" width="55" height="32"/>
+  <object id="952" gid="43" x="746.367" y="1879.57" width="55" height="32"/>
+  <object id="953" gid="43" x="650.609" y="1938.97" width="55" height="32"/>
+  <object id="954" gid="43" x="790.224" y="2053.9" width="55" height="32"/>
+  <object id="955" gid="43" x="841.353" y="2002.77" width="55" height="32"/>
+  <object id="956" gid="43" x="712.152" y="2138.03" width="55" height="32"/>
+  <object id="957" gid="43" x="404.769" y="1978.75" width="55" height="32"/>
+  <object id="958" gid="43" x="771.215" y="1788.06" width="55" height="32"/>
+  <object id="959" gid="43" x="953.144" y="1860.67" width="55" height="32"/>
+  <object id="960" gid="43" x="970.444" y="1976.71" width="55" height="32"/>
+  <object id="961" gid="43" x="2051.27" y="1908" width="55" height="32"/>
+  <object id="962" gid="43" x="1903.89" y="2025.08" width="55" height="32"/>
+  <object id="963" gid="43" x="2123.5" y="1793.35" width="55" height="32"/>
+  <object id="964" gid="43" x="2231.33" y="2091.58" width="55" height="32"/>
+  <object id="965" gid="43" x="2108.85" y="2159.52" width="55" height="32"/>
+  <object id="966" gid="43" x="2045.43" y="2071.42" width="55" height="32"/>
+  <object id="967" gid="43" x="2008.85" y="2059.52" width="55" height="32"/>
+  <object id="968" gid="43" x="2036.17" y="2129.16" width="55" height="32"/>
+  <object id="969" gid="43" x="1976.45" y="2164.64" width="55" height="32"/>
+  <object id="970" gid="43" x="513.529" y="2221.5" width="55" height="32"/>
+  <object id="971" gid="43" x="398.984" y="2184.53" width="55" height="32"/>
+  <object id="979" gid="43" x="487.799" y="1829.05" width="55" height="32"/>
+  <object id="980" gid="43" x="2297.11" y="1868.22" width="55" height="32"/>
+  <object id="981" gid="43" x="123.888" y="89.9306" width="55" height="32"/>
+  <object id="982" gid="43" x="205.871" y="104.917" width="55" height="32"/>
+  <object id="983" gid="43" x="456.119" y="157.699" width="55" height="32"/>
+  <object id="984" gid="43" x="406.753" y="1370.7" width="55" height="32"/>
+  <object id="985" gid="43" x="119.039" y="628.112" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="hedgehog">
+  <properties>
+   <property name="name" value="hedgehog"/>
+  </properties>
+  <object id="972" gid="43" x="237.276" y="594.724" width="55" height="32"/>
+  <object id="973" gid="43" x="306.698" y="840.454" width="55" height="32"/>
+  <object id="974" gid="43" x="197.331" y="1295.27" width="55" height="32"/>
+  <object id="975" gid="43" x="1783.12" y="2242.82" width="55" height="32"/>
+  <object id="976" gid="43" x="200.967" y="2152.24" width="55" height="32"/>
+  <object id="977" gid="43" x="2265.71" y="1766.29" width="55" height="32"/>
+  <object id="978" gid="43" x="2003.01" y="477.479" width="55" height="32"/>
  </objectgroup>
  <layer name="exit" width="75" height="75">
   <properties>

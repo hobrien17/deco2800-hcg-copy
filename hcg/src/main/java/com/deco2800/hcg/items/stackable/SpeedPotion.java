@@ -33,14 +33,13 @@ public class SpeedPotion extends ConsumableItem implements Observer {
     }
     @Override
     public void consume(Character character) {
-        //((Player)character).setSpeed(0.6f);
         usingCharacter = character;
         ((Player)character).setStaminaCur(character.getStaminaMax());
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.addObserver(this);
         LOGGER.info("Stamina Updated!");
         startTime = (int)manager.getStopwatchTime();
-        endTime = startTime + 100;
+        endTime = startTime + 20;
     }
 
     @Override

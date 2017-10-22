@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Selectable;
+import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.renderers.Renderable;
@@ -52,7 +53,7 @@ public class World {
 	protected Array2D<List<AbstractEntity>> collisionMap;
 	
 	public static final World SAFEZONE = new World("resources/maps/maps/grass_safeZone_02.tmx");
-
+	
 	/**
 	 * Empty abstract world, for testing
 	 */
@@ -447,11 +448,15 @@ public class World {
 
 		int xVal = collisionCoords[0];
 		int yVal = collisionCoords[2];
-
+		
 		if (xVal > 0 && xVal < this.getWidth() && yVal > 0 && yVal < this.getLength()) {
 			for (int x = collisionCoords[0]; x < collisionCoords[1]; x++) {
 				for (int y = collisionCoords[2]; y < collisionCoords[3]; y++) {
-					collisionMap.get(x, y).remove(entity);
+					try {
+						collisionMap.get(x, y).remove(entity);
+					} catch(IndexOutOfBoundsException ex) {
+						LOGGER.warn("Can't remove entity",ex);
+					}
 				}
 			}
 		}
@@ -562,6 +567,20 @@ public class World {
 	 */
 	public float getStartingPlayerY() {
 		return startingPlayerY;
+	}
+	
+	/**
+	 * If this is the safezone, ensure the plants re-observe the stopwatch
+	 */
+	public void loadPlantObservers() {
+		if(!(this.equals(SAFEZONE))) {
+			return;
+		}
+		for(AbstractEntity entity : this.getEntities()) {
+			if(entity instanceof Pot && !((Pot)entity).isEmpty()) {
+				((Pot)entity).getPlant().setObserver();
+			}
+		}
 	}
 
 	/**

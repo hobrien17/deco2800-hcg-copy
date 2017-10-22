@@ -370,7 +370,7 @@
     <property name="Type" value="Shop"/>
     <property name="fName" value="Patrick"/>
     <property name="sName" value="Plants"/>
-    <property name="texture" value="character_shop"/>
+    <property name="texture" value="character_shop_2"/>
    </properties>
   </object>
   <object id="2" gid="57" x="272.038" y="390.367" width="55" height="32">
