@@ -1,6 +1,7 @@
 {
   "title":"Test_Quest_1",
   "iReq": {
+    "sunflower_seed": 1
   },
   "kReq": {  
     "SNAIL": 1,
