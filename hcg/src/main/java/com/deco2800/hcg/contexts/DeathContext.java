@@ -21,8 +21,6 @@ public class DeathContext extends UIContext {
     
     private GameManager gameManager;
     private ContextManager contextManager;
-    private TextureManager textureManager;
-    private PlayerManager playerManager;
     
     private Skin skin;
     private Table masterTable;
@@ -33,8 +31,6 @@ public class DeathContext extends UIContext {
         // Get managers
         gameManager = GameManager.get();
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
-        textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
-        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
         // Initialise class attributes
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));

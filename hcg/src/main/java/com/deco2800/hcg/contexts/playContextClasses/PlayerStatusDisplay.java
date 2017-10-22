@@ -22,7 +22,6 @@ public class PlayerStatusDisplay extends Group {
     private Image levelBar;
     private Label playerHealth;
     private Label playerLevel;
-    private String staminaBarLoction;
     private TextureManager textureManager;
     
     public PlayerStatusDisplay() {
@@ -114,7 +113,6 @@ public class PlayerStatusDisplay extends Group {
         staminaBar.setWidth(staminaBarWidth);
         playerLevel.setText("Lv: " + player.getLevel());
         levelBar.setWidth((player.getXp()/(float)player.getXpThreshold()) * 110f);
-
     }
 
     /**

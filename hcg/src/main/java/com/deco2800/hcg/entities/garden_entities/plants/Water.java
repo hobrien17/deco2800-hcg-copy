@@ -23,6 +23,7 @@ public class Water extends AbstractGardenPlant {
 	@Override
 	public String getThisTexture() {
 		switch (this.getStage()) {
+
 		case SPROUT:
 			return "lily_01";
 		case SMALL:

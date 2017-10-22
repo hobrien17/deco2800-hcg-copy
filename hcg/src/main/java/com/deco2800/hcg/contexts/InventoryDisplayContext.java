@@ -237,7 +237,7 @@ public abstract class InventoryDisplayContext extends UIContext {
                                     try {
                                         player.getEquippedItems().addItem(currentItem);
                                     } catch (Exception e) {
-                                        System.out.println("Error Equipping Item "+e);
+                                        LOGGER.error("Error Equipping Item " + e);
                                         //Re add to the inventory
                                         player.getInventory().addItem(currentItem);
                                     }
