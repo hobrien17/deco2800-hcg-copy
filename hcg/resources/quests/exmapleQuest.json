@@ -1,5 +1,5 @@
 {
-  "title":"My Title",
+  "title":"Test_Quest_1",
   "iReq": {
     "sunflower_seed": 1
   },
@@ -14,5 +14,5 @@
   "rewards": {
     "explosive_seed": 1
   },
-  "optDesc": ""
+  "optDesc": "HI this is a test"
 }

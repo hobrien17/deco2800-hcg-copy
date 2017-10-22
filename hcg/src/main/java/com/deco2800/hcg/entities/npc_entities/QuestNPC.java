@@ -110,6 +110,7 @@ public class QuestNPC extends NPC {
 	 * @param questName
 	 */
 	public void startQuest(String questName) {
+		questManager.loadAllQuests();
 		questManager.addQuest(this,questName);
 	}
 

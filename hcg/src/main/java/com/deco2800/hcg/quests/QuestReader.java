@@ -87,6 +87,7 @@ public class QuestReader {
 
         //Validate the json obj
         title = jQuest.get("title").toString();
+        title = title.replaceAll("^\"|\"$", "");
         if (title == "") {
             throw new ResourceLoadException("");
         }

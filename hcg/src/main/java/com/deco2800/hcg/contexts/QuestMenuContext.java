@@ -1,6 +1,7 @@
 package com.deco2800.hcg.contexts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -112,7 +113,9 @@ public class QuestMenuContext extends UIContext {
         	questStringList[questCounter] = qa.getQuestTitle();
         	questCounter++;
         }
+
         activeList.setItems(questStringList);
+		
         activeQuestsPane = new ScrollPane(activeList);
         activeQuestsPane.setSmoothScrolling(false);
         activeQuestsPane.setDebug(false);
@@ -131,9 +134,9 @@ public class QuestMenuContext extends UIContext {
         
         
         //Create all Strings		
-		readyTitle = new String("Ready to Complete:");
-		activeTitle = new String("Quests:");
-		completedTitle = new String("Completed:");
+		readyTitle = new String("Return to quest giver:");
+		activeTitle = new String("Current Quests:");
+		completedTitle = new String("Finished Quests:");
 		nameTitle = new String("Quest Name: ");
 		detailsTitle = new String("Details:");
 		
@@ -182,7 +185,7 @@ public class QuestMenuContext extends UIContext {
         
         questsBack.center();
         
-        main.debug();
+        //main.debug();
 		
 		questsBack.addListener(new ChangeListener() {
 			@Override
@@ -195,8 +198,10 @@ public class QuestMenuContext extends UIContext {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				nameTitle.concat("Ready Quest");
-				detailsText.setText("I am testing whether or not the text will run down or whether it will "
-						+ "stop at a certain point. Hello my name is Dylan, I hate Java with a burning passion.");
+				if(questManager.getQuest(readyList.getSelected()) != null){
+					detailsText.setText(questManager.getQuest(readyList.getSelected()).getDescription());
+				}
+				
 			}
 		});
 		
@@ -204,7 +209,9 @@ public class QuestMenuContext extends UIContext {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				nameTitle.concat("Active Quest");
-				detailsText.setText("Active Quest Details");
+				if(questManager.getQuest(activeList.getSelected()) != null){
+					detailsText.setText(questManager.getQuest(activeList.getSelected()).getDescription());
+				}
 			}
 		});
 		
@@ -212,7 +219,9 @@ public class QuestMenuContext extends UIContext {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				nameTitle.concat("Completed Quest");
-				detailsText.setText("Completed Quest Details");
+				if(questManager.getQuest(completedList.getSelected()) != null){
+					detailsText.setText(questManager.getQuest(completedList.getSelected()).getDescription());
+				}
 			}
 		});
 			

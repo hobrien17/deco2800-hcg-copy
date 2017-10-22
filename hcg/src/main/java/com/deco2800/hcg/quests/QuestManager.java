@@ -1,15 +1,9 @@
 package com.deco2800.hcg.quests;
 
-import com.deco2800.hcg.conversation.GiveItemsAction;
-import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
-import com.deco2800.hcg.inventory.Inventory;
-import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.Manager;
-import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.ResourceLoadException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,9 +18,6 @@ public class QuestManager extends Manager {
 
     HashMap<QuestNPC,QuestArchive> questLog;
     ArrayList<QuestArchive> completedLog;
-
-    private PlayerManager playerManager = (PlayerManager) GameManager.get()
-            .getManager(PlayerManager.class);
 
     /**
      *  Creates a new quest manager
@@ -56,7 +47,7 @@ public class QuestManager extends Manager {
 
     public void addQuest(QuestNPC npc, String questName) throws ResourceLoadException {
         if (!quests.containsKey(questName)) {
-            throw new ResourceLoadException(""); //todo write a proper exception
+            throw new ResourceLoadException("quests doesn't contain the key " + questName.toString() + " quest hash map only contains values:"+ " "+ quests.keySet()); //todo write a proper exception
         }
         QuestArchive qa = new QuestArchive(quests.get(questName),npc);
         questLog.put(npc,qa);
