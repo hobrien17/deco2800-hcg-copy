@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.contexts.*;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.multiplayer.*;
 import com.deco2800.hcg.observers.ServerObserver;
 
@@ -145,6 +144,22 @@ public final class NetworkManager extends Manager {
 	}
 	
 	/**
+	 * Returns a random float
+	 * @return Random float
+	 */
+	public float getNextRandomFloat() {
+		return random.nextFloat();
+	}
+	
+	/**
+	 * Returns a random, normally distributed double
+	 * @return Gaussian double
+	 */
+	public double getNextGaussian() {
+		return random.nextGaussian();
+	}
+	
+	/**
 	 * Sets the networked random generator's seed
 	 * @param seed The seed
 	 */
@@ -161,6 +176,13 @@ public final class NetworkManager extends Manager {
 		if (peerTickCounts.get(peer) == null || tick > peerTickCounts.get(peer)) {
 			peerTickCounts.put(peer, tick);
 		}
+	}
+	
+	/**
+	 * Resets all tick counts
+	 */
+	public void resetPeerTickCounts() {
+		peerTickCounts = new HashMap<>();
 	}
 	
 	/**

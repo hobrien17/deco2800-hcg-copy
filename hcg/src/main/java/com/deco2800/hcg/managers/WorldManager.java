@@ -15,6 +15,7 @@ public class WorldManager extends Manager {
 	
 	GameManager gameManager = GameManager.get();
 	private ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+	private NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 	private PlayerInputManager playerInputManager =
 			(PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
@@ -86,6 +87,9 @@ public class WorldManager extends Manager {
         }
 		playerManager.spawnPlayers();
 		playerInputManager.resetInputTick();
+		if (networkManager.isMultiplayerGame()) {
+			networkManager.resetPeerTickCounts();
+		}
 		contextManager.pushContext(new PlayContext());
 	}
 	
@@ -108,7 +112,6 @@ public class WorldManager extends Manager {
             contextManager.popContext();
         }
         // clear old observers (mushroom turret for example)
-        World world = gameManager.getWorld();
         StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
         manager.deleteObservers();
 

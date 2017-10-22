@@ -99,11 +99,9 @@ public class GameManager implements TickableManager {
 
         projX = (int) (55f*(worldCoords.y + worldCoords.x)/2);
         projY = (int) (-16f*(worldCoords.y - worldCoords.x) + 32f/2f);
-        
-        Vector3 screenCoords = GameManager.get().getCamera()
+
+        return GameManager.get().getCamera()
                 .project(new Vector3(projX, projY, 0));
-        
-        return screenCoords;
     }
 
     /**
@@ -157,6 +155,7 @@ public class GameManager implements TickableManager {
     /**
      * @deprecated
      */
+    @Deprecated
     public void setCamera(OrthographicCamera camera) {
         this.camera = camera;
     }

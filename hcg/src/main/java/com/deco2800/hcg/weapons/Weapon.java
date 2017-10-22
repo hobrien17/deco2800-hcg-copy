@@ -17,6 +17,7 @@ import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.shading.LightEmitter;
 
@@ -56,6 +57,9 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
     protected int muzzleFlashEnabled;
     protected float muzzleFlashSize;
     protected long muzzleFlashStartTime;
+
+    private GameManager gameManager = GameManager.get();
+    private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
     /**
      * Constructor for Weapon objects.
@@ -106,6 +110,14 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
      */
     public WeaponType getWeaponType() {
         return weaponType;
+    }
+
+    /**
+     * Returns the type of the bullet equipped
+     * @return the type of the bullet equipped
+     */
+    public BulletType getBulletType() {
+        return bulletType;
     }
 
     /**
@@ -174,11 +186,25 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
      */
     protected void shootBullet(float posX, float posY, float posZ,
                                float goalX, float goalY) {
+        int damageMultiplier = 1;
         Bullet bullet;
+
+        Weapon equippedWeaponType = playerManager.getPlayer().getEquippedWeapon();
+
+        if (equippedWeaponType instanceof Machinegun) {
+            damageMultiplier = damageMultiplier + playerManager.getPlayer().getMachineGunMultiplier();
+        } else if (equippedWeaponType instanceof Shotgun) {
+            damageMultiplier = damageMultiplier + playerManager.getPlayer().getShotGunSkillMultiplier();
+        } else if (equippedWeaponType instanceof Stargun) {
+            damageMultiplier = damageMultiplier + playerManager.getPlayer().getStarGunSkillMultiplier();
+        } else if (equippedWeaponType instanceof Multigun) {
+            damageMultiplier = damageMultiplier + playerManager.getPlayer().getMultiGunSkillMultiplier();
+        }
+
         switch (bulletType) {
             case BASIC:
                 bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1, 0.5f, 200);
+                        goalX, goalY, this.user, 1, 0.5f, 200 * damageMultiplier);
                 break;
             case ICE:
                 bullet = new IceBullet(posX, posY, posZ,
@@ -186,23 +212,23 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
                 break;
             case FIRE:
                 bullet = new FireBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1, 0.5f, 5);
+                        goalX, goalY, this.user, 1, 0.5f, 5 * damageMultiplier);
                 break;
             case EXPLOSION:
                 bullet = new ExplosionBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1, 0.5f, 500);
+                        goalX, goalY, this.user, 1, 0.5f, 500 * damageMultiplier);
                 break;
             case GRASS:
                 bullet = new GrassBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1, 0.5f, 250);
+                        goalX, goalY, this.user, 1, 0.5f, 250 * damageMultiplier);
                 break;
             case HOMING:
                 bullet = new HomingBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1, 0.5f, 250);
+                        goalX, goalY, this.user, 1, 0.5f, 250 * damageMultiplier);
                 break;
             default:
                 bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1, 0.5f, 250);
+                        goalX, goalY, this.user, 1, 0.5f, 250 * damageMultiplier);
                 break;
         }
         GameManager.get().getWorld().addEntity(bullet);
@@ -310,28 +336,20 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         //Update texture for angle
             if(15 * Math.PI / 8 < angle || angle < Math.PI / 8) {
                 this.setTexture(texture + "_ne");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(Math.PI / 8 <= angle && angle <= 3 * Math.PI / 8) {
                 this.setTexture(texture + "_e");
-                this.growRender(-(this.getXRenderLength() - 0.7f), -(this.getYRenderLength() - 0.7f));
             } else if(3 * Math.PI / 8 < angle && angle < 5 * Math.PI / 8) {
                 this.setTexture(texture + "_se");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(5 * Math.PI / 8 <= angle && angle <= 7 * Math.PI / 8) {
                 this.setTexture(texture + "_s");
-                this.growRender(-(this.getXRenderLength() - 0.15f), -(this.getYRenderLength() - 0.07f));
             } else if(7 * Math.PI / 8 < angle && angle < 9 * Math.PI / 8) {
                 this.setTexture(texture + "_sw");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             }  else if(9 * Math.PI / 8 <= angle && angle <= 11 * Math.PI / 8) {
                 this.setTexture(texture + "_w");
-                this.growRender(-(this.getXRenderLength() - 0.7f), -(this.getYRenderLength() - 0.7f));
             } else if(11 * Math.PI / 8 < angle && angle < 13 * Math.PI / 8) {
                 this.setTexture(texture + "_nw");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(13 * Math.PI / 8 <= angle && angle <= 15 * Math.PI / 8) {
                 this.setTexture(texture + "_n");
-                this.growRender(-(this.getXRenderLength() - 0.15f), -(this.getYRenderLength() - 0.07f));
             }
         }
         

@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.bullets;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
+import com.deco2800.hcg.buffs.Perk;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;
@@ -221,10 +222,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 					}
 					GameManager.get().getWorld().removeEntity(turret);
 
-				} else if (target.getHealthCur() <= 0) {
-					applyEffect(target);
 				} else {
-					// Temporary increase of xp for all enemies killed
 					applyEffect(target);
 				}
                 spawnParticles(entity, "hitPuff.p");
@@ -254,6 +252,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				spawnParticles(entity, "hitPuff.p");
 				enemyUser.causeDamage((Player) entity);
 				hitCount--;
+
 			}
 
 			if (hitCount == 0) {
@@ -292,6 +291,52 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
 		target.giveEffect(new Effect("Shot", 1, damage, 1, 0, 1, 0, user));
+
+		//Perk - SPLINTER_IS_COMING
+		Perk splinterIsComing = playerManager.getPlayer().getPerk(Perk.perk.SPLINTER_IS_COMING);
+		if (splinterIsComing.isActive() && (user instanceof Player)) {
+			int splinterDamage = 0;
+			switch (splinterIsComing.getCurrentLevel()) {
+				case 0:
+					break;
+				case 1:
+					splinterDamage = 50 + playerManager.getPlayer().getLevel() * 10;
+					break;
+				case 2:
+					splinterDamage = 75 + playerManager.getPlayer().getLevel() * 15;
+					break;
+				case 3:
+					splinterDamage = 110 + playerManager.getPlayer().getLevel() * 25;
+					break;
+				default:
+					break;
+			}
+			if (Math.random() <= 0.15) {
+				target.giveEffect(new Effect("Splinter", 1, splinterDamage,
+						1, 1000, 3, 0, user));
+			}
+		}
+		//Perk - BUT_NOT_YEAST
+		Perk butNotYeast = playerManager.getPlayer().getPerk(Perk.perk.BUT_NOT_YEAST);
+		if (butNotYeast.isActive() && (user instanceof Player)) {
+			int stunTime = 0;
+			switch (butNotYeast.getCurrentLevel()) {
+				case 0:
+					break;
+				case 1:
+					stunTime = 1;
+					break;
+				case 2:
+					stunTime = 2;
+					break;
+				default:
+					break;
+			}
+			if (Math.random() <= 0.15) {
+				target.giveEffect(new Effect("Stun", 1, 0,
+						0, 0, stunTime*50, 0, user));
+			}
+		}
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {

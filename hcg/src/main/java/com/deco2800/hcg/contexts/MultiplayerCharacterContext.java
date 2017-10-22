@@ -37,9 +37,10 @@ public class MultiplayerCharacterContext extends UIContext{
     private int agility = 5;
     private int intellect = 5;
     private int charisma = 5;
-    private int meleeSkill = 10;
-    private int gunsSkill = 10;
-    private int energyWeaponsSkill = 10;
+    private int machineGunSkill = 10;
+    private int shotGunSkill = 10;
+    private int starGunSkill = 10;
+    private int multiGunSkill = 10;
     private String characterName;
 
 
@@ -138,10 +139,10 @@ public class MultiplayerCharacterContext extends UIContext{
      */
     private void selectCharacter() {
     	    networkManager.queueMessage(new CharacterMessage(strength, vitality, agility, charisma, intellect,
-                meleeSkill, gunsSkill, energyWeaponsSkill, /*characterName*/"Player 2"));
+                    machineGunSkill, shotGunSkill, starGunSkill, multiGunSkill, /*characterName*/"Player 2"));
         Player player = new Player(5, 10, 0);
-        player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill,
-                energyWeaponsSkill, characterName);
+        player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, machineGunSkill, shotGunSkill,
+                starGunSkill, multiGunSkill, characterName);
         playerManager.setPlayer(player);
         //player.setTexture(); use this to set the texture for this player.
     }
@@ -164,9 +165,9 @@ public class MultiplayerCharacterContext extends UIContext{
                 agility = 5;
                 intellect = 8;
                 charisma = 6;
-                meleeSkill = 13;
-                gunsSkill = 14;
-                energyWeaponsSkill = 10;
+                machineGunSkill = 13;
+                shotGunSkill = 14;
+                starGunSkill = 10;
                 break;
 
             case "Moe":
@@ -181,9 +182,9 @@ public class MultiplayerCharacterContext extends UIContext{
                 agility = 5;
                 intellect = 6;
                 charisma = 10;
-                meleeSkill = 15;
-                gunsSkill = 11;
-                energyWeaponsSkill = 12;
+                machineGunSkill = 15;
+                shotGunSkill = 11;
+                starGunSkill = 12;
                 break;
 
             case "Carl":
@@ -198,9 +199,9 @@ public class MultiplayerCharacterContext extends UIContext{
                 agility = 6;
                 intellect = 5;
                 charisma = 6;
-                meleeSkill = 11;
-                gunsSkill = 14;
-                energyWeaponsSkill = 13;
+                machineGunSkill = 11;
+                shotGunSkill = 14;
+                starGunSkill = 13;
                 break;
 
             case "Peter":
@@ -215,9 +216,9 @@ public class MultiplayerCharacterContext extends UIContext{
                 agility = 5;
                 intellect = 8;
                 charisma = 6;
-                meleeSkill = 13;
-                gunsSkill = 14;
-                energyWeaponsSkill = 10;
+                machineGunSkill = 13;
+                shotGunSkill = 14;
+                starGunSkill = 10;
                 break;
 
             case "Donald":
@@ -232,9 +233,11 @@ public class MultiplayerCharacterContext extends UIContext{
                 agility = 6;
                 intellect = 12;
                 charisma = 8;
-                meleeSkill = 10;
-                gunsSkill = 10;
-                energyWeaponsSkill = 15;
+                machineGunSkill = 10;
+                shotGunSkill = 10;
+                starGunSkill = 15;
+                break;
+
             default:
                 break;
         }

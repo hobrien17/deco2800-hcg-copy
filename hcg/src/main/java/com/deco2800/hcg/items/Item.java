@@ -96,7 +96,7 @@ public interface Item {
      *
      * @param number the new stack size of this item.
      */
-    void setStackSize(int number) throws IllegalArgumentException;
+    void setStackSize(int number);
 
     /**
      * Determine whether or not this Item and the given Item are functionally the
@@ -106,7 +106,7 @@ public interface Item {
      * @return whether or not this item and the given item are functionally the
      *         same.
      */
-    boolean sameItem(Item item) throws IllegalArgumentException;
+    boolean sameItem(Item item);
 
     /**
      * Determine whether or not this Item and the given Item are equivalent items.
@@ -114,7 +114,7 @@ public interface Item {
      * @param item The item to compare this item to.
      * @return whether or not this item and the given item are equivalent.
      */
-    boolean equals(Item item) throws IllegalArgumentException;
+    boolean equals(Item item);
     
     /**
      * Gets this item's rarity.

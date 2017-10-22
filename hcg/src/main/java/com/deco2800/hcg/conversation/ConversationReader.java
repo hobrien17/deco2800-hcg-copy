@@ -10,12 +10,14 @@ import java.util.*;
 
 public class ConversationReader {
 
+	private ConversationReader() {} // This should never be instantiated
+
 	// Container used to store information about ConversationNodes during deserialisation
-	private static class intermediateStageNode {
+	private static class IntermediateStageNode {
 		String nodeID;
 		JsonArray jOptions;
-		public ConversationNode node;
-		intermediateStageNode(String nodeID, JsonArray jOptions, ConversationNode node) {
+		ConversationNode node;
+		IntermediateStageNode(String nodeID, JsonArray jOptions, ConversationNode node) {
 			this.nodeID = nodeID;
 			this.jOptions = jOptions;
 			this.node = node;
@@ -53,20 +55,20 @@ public class ConversationReader {
 	public static Conversation deserialiseConversation(JsonObject jConversation) {
 
 		Conversation conversation = new Conversation();
-		List<intermediateStageNode> intermediateStageNodes = new ArrayList<>();
+		List<IntermediateStageNode> intermediateStageNodes = new ArrayList<>();
 		Map<String, ConversationNode> nodes = new HashMap<>();
 
 		try {
 
 			// First pass
 			for (JsonElement jNode : jConversation.getAsJsonArray("nodes")) {
-				intermediateStageNode iNode = deserialiseNode((JsonObject) jNode, conversation);
+				IntermediateStageNode iNode = deserialiseNode((JsonObject) jNode, conversation);
 				intermediateStageNodes.add(iNode);
 				nodes.put(iNode.nodeID, iNode.node);
 			}
 
 			// Second pass
-			for (intermediateStageNode iNode : intermediateStageNodes) {
+			for (IntermediateStageNode iNode : intermediateStageNodes) {
 				List<ConversationOption> options = deserialiseNodeOptions(iNode, nodes);
 				iNode.node.setup(options);
 			}
@@ -88,15 +90,15 @@ public class ConversationReader {
 		return conversation;
 	}
 
-	private static intermediateStageNode deserialiseNode(JsonObject jNode, Conversation parent) {
+	private static IntermediateStageNode deserialiseNode(JsonObject jNode, Conversation parent) {
 		String nodeID = jNode.get("id").getAsString();
 		String nodeText = jNode.get("nodeText").getAsString();
 		JsonArray jOptions = jNode.getAsJsonArray("options");
 		ConversationNode node = new ConversationNode(parent, nodeText);
-		return new intermediateStageNode(nodeID, jOptions, node);
+		return new IntermediateStageNode(nodeID, jOptions, node);
 	}
 
-	private static List<ConversationOption> deserialiseNodeOptions(intermediateStageNode iNode, Map<String, ConversationNode> nodes) {
+	private static List<ConversationOption> deserialiseNodeOptions(IntermediateStageNode iNode, Map<String, ConversationNode> nodes) {
 		List<ConversationOption> options = new ArrayList<>();
 		for (JsonElement jOption : iNode.jOptions) {
 			options.add(deserialiseOption((JsonObject) jOption, iNode.node, nodes));
@@ -143,7 +145,6 @@ public class ConversationReader {
 			String condition = jCondition.getAsString();
 			scanner = new Scanner(condition);
 			scanner.useDelimiter("\\|");
-
 			String command = scanner.next();
 			boolean negate = false;
 			if (command.charAt(0) == '!') {
@@ -154,26 +155,20 @@ public class ConversationReader {
 			while (scanner.hasNext()) {
 				args.add(scanner.next());
 			}
+			scanner.close();
 
 			// Generate the appropriate condition object
 			switch (command) {
-
 				case "checkRelationship":
-					if (args.size() != 1) {
-						throw new ResourceLoadException("Wrong number of args in condition: " + condition);
-					}
-					return new CheckRelationshipCondition(negate, args.get(0));
-
+					return buildCheckRelationshipCondition(condition, negate, args);
 				case "healthPercentBelow":
-					if (args.size() != 1) {
-						throw new ResourceLoadException("Wrong number of args in condition: " + condition);
-					}
-					try {
-						return new HealthPercentBelowCondition(negate, Integer.parseInt(args.get(0)));
-					} catch (NumberFormatException e) {
-						throw new ResourceLoadException("Unparsable int in condition: " + condition, e);
-					}
-
+					return buildHealthPercentBelowCondition(condition, negate, args);
+				case "questNotStarted":
+					return buildQuestNotStartedCondition(condition, negate, args);
+				case "questActive":
+					return buildQuestActiveCondition(condition, negate, args);
+				case "questCompleted":
+					return buildQuestCompletedCondition(condition, negate, args);
 				default:
 					throw new ResourceLoadException("No such condition: " + condition);
 			}
@@ -182,8 +177,8 @@ public class ConversationReader {
 				scanner.close();
 			}
 		}
-
 	}
+
 
 	// Parse a JSON action into a Action object
 	private static AbstractConversationAction deserialiseOptionAction(JsonElement jCondition) {
@@ -195,32 +190,23 @@ public class ConversationReader {
 			String action = jCondition.getAsString();
 			scanner = new Scanner(action);
 			scanner.useDelimiter("\\|");
-
 			String command = scanner.next();
 			List<String> args = new ArrayList<>();
 			while (scanner.hasNext()) {
 				args.add(scanner.next());
 			}
+			scanner.close();
 
 			// Generate the appropriate action object
 			switch (command) {
-
 				case "setRelationship":
-					if (args.size() != 1) {
-						throw new ResourceLoadException("Wrong number of args in action: " + action);
-					}
-					return new SetRelationshipAction(args.get(0));
-
+					return buildSetRelationshipAction(action, args);
 				case "giveItems":
-					if (args.size() != 2) {
-						throw new ResourceLoadException("Wrong number of args in action: " + action);
-					}
-					try {
-						return new GiveItemsAction(args.get(0), Integer.parseInt(args.get(1)));
-					} catch (NumberFormatException e) {
-						throw new ResourceLoadException("Unparsable int in action: " + action, e);
-					}
-
+					return buildGiveItemsAction(action, args);
+				case "startQuest":
+					return buildStartQuestAction(action, args);
+				case "finishCurrentQuest":
+					return buildFinishQuestAction(action, args);
 				default:
 					throw new ResourceLoadException("No such action: " + action);
 			}
@@ -231,6 +217,69 @@ public class ConversationReader {
 		}
 
 	}
+
+	// Everything below this line is for building Conditions and Action from a list of arguments
+
+	private static void validateArgumentCount(String source, List<String> args, int expectedArgCount) {
+		if (args.size() != expectedArgCount) {
+			throw new ResourceLoadException("Wrong number of args in: " + source);
+		}
+	}
+
+	private static CheckRelationshipCondition buildCheckRelationshipCondition(String source, boolean negate, List<String> args) {
+		validateArgumentCount(source, args, 1);
+		return new CheckRelationshipCondition(negate, args.get(0));
+	}
+
+	private static HealthPercentBelowCondition buildHealthPercentBelowCondition(String source, boolean negate, List<String> args) {
+		validateArgumentCount(source, args, 1);
+		try {
+			return new HealthPercentBelowCondition(negate, Integer.parseInt(args.get(0)));
+		} catch (NumberFormatException e) {
+			throw new ResourceLoadException("Unparsable int in condition: " + source, e);
+		}
+	}
+
+	private static QuestNotStartedCondition buildQuestNotStartedCondition(String source, boolean negate, List<String> args) {
+		validateArgumentCount(source, args, 1);
+		return new QuestNotStartedCondition(negate, args.get(0));
+	}
+
+	private static QuestActiveCondition buildQuestActiveCondition(String source, boolean negate, List<String> args) {
+		validateArgumentCount(source, args, 1);
+		return new QuestActiveCondition(negate, args.get(0));
+	}
+
+	private static QuestCompletedCondition buildQuestCompletedCondition(String source, boolean negate, List<String> args) {
+		validateArgumentCount(source, args, 1);
+		return new QuestCompletedCondition(negate, args.get(0));
+	}
+
+	private static SetRelationshipAction buildSetRelationshipAction(String source, List<String> args) {
+		validateArgumentCount(source, args, 1);
+		return new SetRelationshipAction(args.get(0));
+	}
+
+	private static GiveItemsAction buildGiveItemsAction(String source, List<String> args) {
+		validateArgumentCount(source, args, 2);
+		try {
+			return new GiveItemsAction(args.get(0), Integer.parseInt(args.get(1)));
+		} catch (NumberFormatException e) {
+			throw new ResourceLoadException("Unparsable int in action: " + source, e);
+
+		}
+	}
+
+	private static StartQuestAction buildStartQuestAction(String source, List<String> args) {
+		validateArgumentCount(source, args, 1);
+		return new StartQuestAction(args.get(0));
+	}
+
+	private static FinishQuestAction buildFinishQuestAction(String source, List<String> args) {
+		validateArgumentCount(source, args, 0);
+		return new FinishQuestAction();
+	}
+
 
 }
 

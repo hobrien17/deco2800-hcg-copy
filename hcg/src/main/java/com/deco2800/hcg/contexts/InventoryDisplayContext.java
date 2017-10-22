@@ -167,8 +167,13 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = inventory;
         this.textureManager = textureManager;
         currentRow = 0;
+
         for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
+
+            if (currentItem == null) {
+                continue;
+            }
             ImageButton button;
             if (textureManager.getTexture(currentItem.getTexture()) == null) {
                 button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
@@ -228,8 +233,14 @@ public abstract class InventoryDisplayContext extends UIContext {
                                     equipmentDisplay(textureManager, player, skin, equipmentTable);
                                 } else if (currentItem.isEquippable()) {
                                     //Equip the item
-                                    player.getEquippedItems().addItem(currentItem);
                                     player.getInventory().removeItem(currentItem);
+                                    try {
+                                        player.getEquippedItems().addItem(currentItem);
+                                    } catch (Exception e) {
+                                        LOGGER.error("Error Equipping Item " + e);
+                                        //Re add to the inventory
+                                        player.getInventory().addItem(currentItem);
+                                    }
                                     inventory.clear();
                                     itemInfo.clear();
                                     itemDisplay.clear();
@@ -285,8 +296,13 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = inventory;
         this.textureManager = textureManager;
         currentRow = 0;
+
         for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
+
+            if (currentItem == null) {
+                continue;
+            }
             ImageButton button;
             if (textureManager.getTexture(currentItem.getTexture()) == null) {
                 button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
@@ -345,8 +361,8 @@ public abstract class InventoryDisplayContext extends UIContext {
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
                                     //Equip the item
-                                    player.getEquippedItems().addItem(currentItem);
                                     player.getInventory().removeItem(currentItem);
+                                    player.getEquippedItems().addItem(currentItem);
                                     inventory.clear();
                                     itemInfo.clear();
                                     itemDisplay.clear();
@@ -520,7 +536,6 @@ public abstract class InventoryDisplayContext extends UIContext {
                  LOGGER.info(textureManager.getTexture("error").toString());
             } else {
                  button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
-                 //System.out.println(textureManager.getTexture(currentItem.getTexture()));
                  LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
             }
             Stack stack = new Stack();
@@ -535,6 +550,7 @@ public abstract class InventoryDisplayContext extends UIContext {
                         player.getInventory().addItem(currentItem);
                         //Refresh the inventory
                         playerEquipment.clear();
+                        inventory.clear();
                         equipmentDisplay(textureManager, player, skin, playerEquipment);
                         clickedImage.setVisible(false);
                     } else {

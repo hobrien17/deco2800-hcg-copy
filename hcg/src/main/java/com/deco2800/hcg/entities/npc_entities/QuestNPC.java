@@ -4,14 +4,14 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.managers.TimeManager;
+import com.deco2800.hcg.quests.Quest;
+import com.deco2800.hcg.quests.QuestManager;
 import com.deco2800.hcg.util.Box3D;
 import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
-
 import java.util.List;
-import java.util.Random;
 
 /**
  * Concrete class of a Quest NPC entity
@@ -24,25 +24,24 @@ public class QuestNPC extends NPC {
 	private float boundaryY; // defaults to 10
 	private float startX;
 	private float startY;
-	private float goalX;
-	private float goalY;
-	private int moveDirection; // defaults to 0
 	private float speed; // defaults to 1
 	private String texture;
 
 	private PathfindingThread pathfinder;
 	private Thread thread;
-	private List<Point> path;
 	private Boolean astarDebug = true;
 
 	private ConversationManager conversationManager = (ConversationManager) GameManager.get()
 			.getManager(ConversationManager.class);
-	private TimeManager timemanager = (TimeManager) GameManager.get()
-			.getManager(TimeManager.class);
 	private PlayerManager playerManager = (PlayerManager) GameManager.get()
 			.getManager(PlayerManager.class);
+	private QuestManager questManager = (QuestManager)  GameManager.get()
+			.getManager(QuestManager.class);
+	private NetworkManager networkManager = (NetworkManager) GameManager.get()
+			.getManager(NetworkManager.class);
 
 	private String relationship;
+	private String conversation;
 
 	/**
 	 * Constructs a new Quest NPC
@@ -50,28 +49,66 @@ public class QuestNPC extends NPC {
 	 * @param posX
 	 *            X Position of the NPC
 	 * @param posY
-	 *            Y positon of the NPC
+	 *            Y Position of the NPC
 	 * @param fName
-	 *            first name of NPC
+	 *            First name of NPC
 	 * @param sName
-	 *            last name of NPC
+	 *            Last name of NPC
 	 * @param texture
-	 *            texture of NPC
+	 *            Texture of NPC
 	 */
 	public QuestNPC(float posX, float posY, String fName, String sName,
 			String texture, String conversation, String faceImage) {
-		super(posX, posY, fName, sName, texture, conversation, faceImage);
+		super(posX, posY, fName, sName, texture, faceImage);
 
 		this.startX = posX;
 		this.startY = posY;
 		this.boundaryX = 10;
 		this.boundaryY = 10;
-		this.moveDirection = 0;
 		this.speed = 0.02f;
-		this.relationship = conversationManager.getDefaultRelationship(this.getConversation());
+		this.conversation = conversation;
+		this.relationship = conversationManager.getDefaultRelationship(conversation);
 		this.texture = texture;
 
 		this.setGoal(posX, posY);
+	}
+
+	public String getConversation(){
+		return conversation;
+	}
+
+	public void setConversation(String convo){
+		this.conversation = convo;
+	}
+
+
+	public Boolean isQuestNotStarted(String questName) {
+		return questManager.isQuestNotStarted(this, questName);
+	}
+
+	public Boolean isQuestActive(String questName) {
+		return questManager.isQuestActive(this);
+	}
+
+	public Boolean isQuestCompleted(String questName) {
+		return questManager.canQuestBeCompleted(this);
+	}
+
+	public void finishQuest() {
+		questManager.completeQuest(this);
+	}
+
+	/**
+	 * Used by the conversation to start a new quest with a given name
+	 * @param questName
+	 */
+	public void startQuest(String questName) {
+		questManager.loadAllQuests();
+		questManager.addQuest(this,questName);
+	}
+
+	public Quest getQuest() {
+		return questManager.getActiveNPCQuest(this);
 	}
 
 	public void interact() {
@@ -114,32 +151,6 @@ public class QuestNPC extends NPC {
 	 */
 	public void setMovementSpeed(int speed) {
 		this.speed = speed;
-	}
-
-	/**
-	 * Checks if the NPC has gone past the boundary and if it has, reverse the
-	 * direction
-	 */
-	private void checkBoundaryPosition() {
-		if (moveDirection == 0 && (getPosition().getY()
-				- this.getInitialPosition().getY()) > boundaryY) {
-			moveDirection = 1;
-		}
-
-		if (moveDirection == 1 && (getPosition().getY()
-				+ this.getInitialPosition().getY()) < boundaryY) {
-			moveDirection = 0;
-		}
-
-		if (moveDirection == 2 && (getPosition().getX()
-				- this.getInitialPosition().getX()) > boundaryX) {
-			moveDirection = 3;
-		}
-
-		if (moveDirection == 3 && (getPosition().getX()
-				+ this.getInitialPosition().getX()) < boundaryX) {
-			moveDirection = 2;
-		}
 	}
 
 	/**
@@ -192,8 +203,8 @@ public class QuestNPC extends NPC {
 		if (thread.isAlive()) {
 			return;
 		}
-		
-		path = pathfinder.getPath();
+
+		List<Point> path = pathfinder.getPath();
 
 		if (path != null && !astarDebug) {
 			astarDebug = true;
@@ -201,11 +212,9 @@ public class QuestNPC extends NPC {
 
 		// Movement Completed (most likely)
 		if (path != null && path.isEmpty()) {
-			Random random = new Random();
-
-			float newGoalX = (random.nextFloat() - 0.5f) * this.boundaryX
+			float newGoalX = (networkManager.getNextRandomFloat() - 0.5f) * this.boundaryX
 					+ this.startX;
-			float newGoalY = (random.nextFloat() - 0.5f) * this.boundaryY
+			float newGoalY = (networkManager.getNextRandomFloat() - 0.5f) * this.boundaryY
 					+ this.startY;
 
 			this.setGoal(newGoalX, newGoalY);
@@ -260,12 +269,9 @@ public class QuestNPC extends NPC {
 	 *            desired y position
 	 */
 	private void setGoal(float goalX, float goalY) {
-		this.goalX = goalX;
-		this.goalY = goalY;
-
 		pathfinder = new PathfindingThread(GameManager.get().getWorld(),
 				new Point(this.getPosX(), this.getPosY()),
-				new Point(this.goalX, this.goalY));
+				new Point(goalX, goalY));
 
 		thread = new Thread(pathfinder);
 		thread.start();
@@ -280,7 +286,6 @@ public class QuestNPC extends NPC {
 		double angle = Math.atan2(deltaY, deltaX) * 180 / 3.14159f;
 
 		//0 is SouthWest
-
 		if (angle >= -67.5f && angle <= -22.5f) {
 			//South
 			this.setTexture(this.texture + "_South");
@@ -315,5 +320,4 @@ public class QuestNPC extends NPC {
 
 		}
 	}
-
 }

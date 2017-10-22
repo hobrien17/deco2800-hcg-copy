@@ -37,8 +37,6 @@ public class MainMenuContext extends UIContext {
 		NetworkManager networkManager = (NetworkManager) 
 				gameManager.getManager(NetworkManager.class);
 
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
-
 		table = new Table();
 		table.setFillParent(true);
 		table.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());

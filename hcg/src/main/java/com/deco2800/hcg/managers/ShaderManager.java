@@ -135,7 +135,7 @@ public class ShaderManager extends Manager implements Observer {
         // Begin processing ////////////////////////////////////////////////////////////////////////////////////////
         this.preShader.begin();
         checkCustomDurations();
-        if (customRenders.size() > 0) {
+        if (!customRenders.isEmpty()) {
             Color baseLight = state.getGlobalLightColour();
             for (int i = 0; i < customRenders.size(); i++) {
                 baseLight.mul(customRenders.get(i).color);
@@ -182,7 +182,7 @@ public class ShaderManager extends Manager implements Observer {
 
         Color baseColour = Color.WHITE;
         
-        if (customRenders.size() > 0) {
+        if (!customRenders.isEmpty()) {
             float baseHeat = state.getHeat();
             float baseBloom = state.getBloom();
             float baseContrast = state.getContrast();
@@ -266,5 +266,13 @@ public class ShaderManager extends Manager implements Observer {
     
     public void toggleShaders() {
         this.enabled = !this.enabled;
+    }
+
+    public boolean getShaderStatus() {
+        if (this.enabled) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

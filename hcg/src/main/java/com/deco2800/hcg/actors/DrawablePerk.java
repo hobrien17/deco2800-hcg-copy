@@ -21,8 +21,8 @@ import com.deco2800.hcg.managers.TextureManager;
 public class DrawablePerk {
     private Perk perk;
     private Label levelLabel;
-    private Image border;
-    private ImageButton perkImage;
+    private ImageButton border;
+    private Image perkImage;
     private Group perkDisplay;
     private TextureManager textureManager;
     private Label descriptionLabel;
@@ -39,8 +39,10 @@ public class DrawablePerk {
         this.player = perksSelectionScreen.getPlayer();
         //getting images from texture manager and setting label text.
         String textureName = perk.getName().replaceAll(" ", "_");
-        this.perkImage = new ImageButton(new Image(textureManager.getTexture(textureName)).getDrawable());
-        this.border = new Image(textureManager.getTexture("perk_border_inactive"));
+
+        //border rendered after image, so its on top
+        this.perkImage = new Image(textureManager.getTexture(textureName));
+        this.border = new ImageButton(new Image(textureManager.getTexture("perk_border_inactive")).getDrawable());
         this.levelLabel = new Label("" + perk.getCurrentLevel() + " / " + perk.getMaxLevel(), skin);
 
         //other fields for handling when the perk is clicked
@@ -49,22 +51,26 @@ public class DrawablePerk {
 
         //positioning and scale
         border.setPosition(0, 25);
-        perkImage.setPosition(13, 40);
+        perkImage.setPosition(0, 25);
+        perkImage.setSize(130,130);
+        perkImage.setColor(0.3f,0.3f,0.3f,1f);
+
         levelLabel.setPosition(45, 0);
         levelLabel.setScale(1.2f);
         levelLabel.setFontScale(1.2f);
+
         descriptionLabel = new Label(perk.getDescription(), skin);
         descriptionLabel.setFontScale(1.3f);
 
         //grouping ui elements to display them
         this.perkDisplay = new Group();
+        perkDisplay.addActor(perkImage);
         perkDisplay.addActor(border);
         perkDisplay.addActor(levelLabel);
-        perkDisplay.addActor(perkImage);
-        perkDisplay.setColor(1f, 1f, 1f, 0.5f);
+        perkDisplay.setColor(0.1f, 0.1f, 0.1f, 1f);
 
         //Handler to increase level of perk if its availiable and clicked on with left mouse button
-        perkImage.addListener(new ClickListener() {
+        border.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (perk.isAvaliable(player) && (player.getPerkPoints() > 0)) {
@@ -77,21 +83,21 @@ public class DrawablePerk {
         });
 
         //Listener to decrease level of perk if its already level 1 or above, and click on with right mouse button
-        perkImage.addListener(new ClickListener(Input.Buttons.RIGHT) {
+        border.addListener(new ClickListener(Input.Buttons.RIGHT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (perk.isAvaliable(player)) {
                     if(perk.getCurrentLevel() > 0) {
                         player.setPerkPoints(player.getPerkPoints() + 1);
+                        perk.setCurrentLevel(perk.getCurrentLevel() - 1);
                     }
-                    perk.setCurrentLevel(perk.getCurrentLevel() - 1);
                     perksSelectionScreen.update();
                 }
             }
         });
 
         //Listeners to display information about perks whilst they are hovered over by player
-        perkImage.addListener(new ClickListener(-1) {
+        border.addListener(new ClickListener(-1) {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 // description information about what leveling up the perk does
@@ -134,18 +140,16 @@ public class DrawablePerk {
         levelLabel.setColor(Color.WHITE);
 
         if (perk.isAvaliable(player)) {
-            perkDisplay.setColor(1f, 1f, 1f, 1f);
-            border.setColor(0.8f, 0.8f, 0.8f, 1f);
-            border.setDrawable(new Image(textureManager.getTexture("perk_border_inactive")).getDrawable());
+            perkImage.setColor(1f,1f,1f,1f);
+            border.getImage().setColor(1f, 1f, 1f, 1f);
         }
-
         if (perk.isActive()) {
-            border.setDrawable(new Image(textureManager.getTexture("perk_border_inactive")).getDrawable());
-            border.setColor(1f, 0.9f, 0f, 1f);
+            border.getImage().setColor(1f, 0.9f, 0f, 1f);
         }
         if (perk.isMaxed()) {
             levelLabel.setColor(1f, 0.9f, 0f, 1f);
-            border.setDrawable(new Image(textureManager.getTexture("perk_border_maxed")).getDrawable());
+            border.setBackground(new Image(textureManager.getTexture("perk_border_maxed")).getDrawable());
+            border.getImage().setDrawable(new Image(textureManager.getTexture("perk_border_maxed")).getDrawable());
         }
     }
 }

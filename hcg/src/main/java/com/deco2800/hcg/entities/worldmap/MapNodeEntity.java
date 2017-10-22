@@ -23,6 +23,7 @@ public class MapNodeEntity extends Actor {
     private int spriteWidth = 50; // Used to scale the drawing of the mapNodes. (pixels)
     private int spriteHeight; // Will be calculated based on the above width
 
+	private static final String DISCOVERED_NODE = "discovered_node";
 	/**
 	 * Constructor decides which texture to render, and calculates the correct scaling and screen position to render.
 	 *
@@ -41,7 +42,7 @@ public class MapNodeEntity extends Actor {
         // Grab the current viewport dimensions
         int viewPortX = Gdx.graphics.getWidth();
         int viewPortY = Gdx.graphics.getHeight();
-        
+
         // pixels padding around each direction of the map
         int mapPadding = (int) (0.05 * viewPortX);
 
@@ -69,7 +70,7 @@ public class MapNodeEntity extends Actor {
 			switch (node.getNodeType()) {
 				case 0: nodeTexture = textureManager.getTexture("safe_node");
 					break;
-				case 1: nodeTexture = textureManager.getTexture("discovered_node");
+				case 1: nodeTexture = textureManager.getTexture(DISCOVERED_NODE);
 					break;
 				case 2: nodeTexture = textureManager.getTexture("completed_node");
 					break;
@@ -89,7 +90,7 @@ public class MapNodeEntity extends Actor {
 				case 3: nodeTexture = textureManager.getTexture("forest_boss_node");
 					break;
 				default: // This shouldn't happen, but catch all if it does.
-					nodeTexture = textureManager.getTexture("discovered_node");
+					nodeTexture = textureManager.getTexture(DISCOVERED_NODE);
 			}
 		} else {
 			switch (node.getNodeType()) {
@@ -102,7 +103,7 @@ public class MapNodeEntity extends Actor {
 				case 3: nodeTexture = textureManager.getTexture("waste_boss_node");
 					break;
 				default: // This shouldn't happen, but catch all if it does.
-					nodeTexture = textureManager.getTexture("discovered_node");
+					nodeTexture = textureManager.getTexture(DISCOVERED_NODE);
 			}
 		}
 	}

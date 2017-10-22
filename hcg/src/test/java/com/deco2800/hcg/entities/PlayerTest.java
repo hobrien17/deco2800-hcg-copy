@@ -33,7 +33,7 @@ public class PlayerTest {
 	public void testInitialiseNewPlayer() {
 
 		Player player = new Player(0, 0, 0);
-		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0, "Name");
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0, 0, "Name");
 		
 		assertTrue("Player agility isn't set to value 0.", player.attributes.get("agility") == 0);
 
@@ -43,7 +43,7 @@ public class PlayerTest {
 	public void testAttributesMap() {
 		Player player = new Player(0, 0, 0);
 
-		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0,"Name");
+		player.initialiseNewPlayer(0, 0, 0, 0, 0, 0, 0, 0, 0,"Name");
 
 		player.setAttribute("agility",2);
 		assertEquals("player agility should be 2 after setAttribute changed it",2, player.getAttribute("agility"));
@@ -193,7 +193,7 @@ public class PlayerTest {
 	    
 	    Player player = new Player(0, 0, 0);
 
-	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Name");
+	    player.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, 20, "Name");
 	    
 	    assertTrue("Player's maximum stamina was not initialised correctly",
 	            player.getStaminaMax() == 250);
@@ -349,42 +349,17 @@ public class PlayerTest {
 		assertEquals(0,player.killLogGet(exampleID1));
 		player.killLogAdd(exampleID1);
 		assertEquals(1,player.killLogGet(exampleID1));
-		assertEquals(1,player.killLogGetTotal(exampleID1));
+		assertEquals(1,player.killLogGet(exampleID1));
 		assertEquals(true,player.killLogContains(exampleID1));
 		for (int i=0; i<10; i++) {
 			player.killLogAdd(exampleID2);
 		}
 		assertEquals(10,player.killLogGet(exampleID2));
 		assertEquals(1,player.killLogGet(exampleID1));
-		assertEquals(10,player.killLogGetTotal(exampleID2));
-		assertEquals(1,player.killLogGetTotal(exampleID1));
+		assertEquals(10,player.killLogGet(exampleID2));
+		assertEquals(1,player.killLogGet(exampleID1));
 		assertEquals(false,player.killLogContains(exampleID3));
 		assertEquals(0,player.killLogGet(exampleID3));
-		assertEquals(0,player.killLogGetTotal(exampleID3));
-
-		//The above all assumes only one world, extra world tests below
-		int exampleNode1 = 0;
-		int exampleNode2 = 1;
-		int exampleNode3 = 2;
-
-		assertEquals(0,player.killLogGet(exampleID1,exampleNode1));
-		player.killLogAdd(exampleID1,exampleNode1);
-		assertEquals(1,player.killLogGet(exampleID1,exampleNode1));
-		assertEquals(2,player.killLogGetTotal(exampleID1));
-		assertEquals(true,player.killLogContains(exampleID1,exampleNode1));
-		for (int i=0; i<10; i++) {
-			player.killLogAdd(exampleID2,exampleNode2);
-		}
-		assertEquals(10,player.killLogGet(exampleID2,exampleNode2));
-		assertEquals(1,player.killLogGet(exampleID1,exampleNode1));
-		assertEquals(20,player.killLogGetTotal(exampleID2));
-		assertEquals(2,player.killLogGetTotal(exampleID1));
-		assertEquals(false,player.killLogContains(exampleID3,exampleNode1));
-		player.killLogAdd(exampleID3,exampleNode3);
-		assertEquals(false,player.killLogContains(exampleID3,exampleNode1));
-		assertEquals(true,player.killLogContains(exampleID3,exampleNode3));
-		assertEquals(0,player.killLogGet(exampleID3,exampleNode1));
-		assertEquals(1,player.killLogGet(exampleID3,exampleNode3));
-		assertEquals(1,player.killLogGetTotal(exampleID3));
+		assertEquals(0,player.killLogGet(exampleID3));
 	}
 }

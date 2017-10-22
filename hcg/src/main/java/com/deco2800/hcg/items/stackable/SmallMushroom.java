@@ -14,10 +14,6 @@ import java.util.ArrayList;
 
 public class SmallMushroom extends ConsumableItem  {
 
-    //Super simple example class of a health potion
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MagicMushroom.class);
-
     public SmallMushroom() {
         this.baseValue = 100;
         this.itemWeight = 5;

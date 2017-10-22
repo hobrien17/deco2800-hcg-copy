@@ -4,6 +4,7 @@ import com.deco2800.hcg.contexts.ShopMenuContext;
 import com.deco2800.hcg.trading.GeneralShop;
 import com.deco2800.hcg.trading.GardenShop;
 import com.deco2800.hcg.trading.Shop;
+import com.deco2800.hcg.trading.WeaponShop;
 
 /**
  * Concrete implementation of a Shop NPC entity.
@@ -23,14 +24,17 @@ public class ShopNPC extends NPC {
 	 * @param sName last name of NPC
 	 * @param texture texture of NPC
 	 */
-	public ShopNPC(float posX, float posY, String fName, String sName, String texture, String conversation, String faceImage) {
-		super(posX, posY, fName, sName, texture, null, faceImage);
+	public ShopNPC(float posX, float posY, String fName, String sName, String texture) {
+		super(posX, posY, fName, sName, texture, null);
 		switch(sName) {
 			case "George":
 				shop = new GeneralShop();
 				break;
 			case "Plants":
 				shop = new GardenShop();
+				break;
+			case "Weapons":
+				shop = new WeaponShop();
 				break;
 		}
 	}

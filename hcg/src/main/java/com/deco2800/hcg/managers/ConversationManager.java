@@ -27,13 +27,19 @@ public class ConversationManager extends Manager {
             loadConversation("test_conversation_01", "resources/conversations/test_conversation_01.json");
             loadConversation("test_conversation_02", "resources/conversations/test_conversation_02.json");
             loadConversation("james_test", "resources/conversations/james.json");
+            loadConversation("questTutorial01", "resources/conversations/questTutorial01.json");
+            loadConversation("questTutorial02", "resources/conversations/questTutorial02.json");
+            loadConversation("questTutorial03", "resources/conversations/questTutorial03.json");
+            loadConversation("questTutorial04", "resources/conversations/questTutorial04.json");
             loadConversation("tutorialslippery", "resources/conversations/tutorialslippery.json");
             loadConversation("tutorialwasteland", "resources/conversations/tutorialwasteland.json");
             loadConversation("tutorialfirst", "resources/conversations/tutorialfirst.json");
             loadConversation("tutorialmaze", "resources/conversations/tutorialmaze.json");
             loadConversation("tutorialmultilevel", "resources/conversations/tutorialmultilevel.json");
-            loadConversation("shoptutorial", "resources/conversations/tutorialfirst.json");
+            loadConversation("shoptutorial", "resources/conversations/plantingSeedTutorial.json");
             loadConversation("tutoriallevelling", "resources/conversations/tutoriallevelling.json");
+            loadConversation("tutorialoverrun", "resources/conversations/tutorialoverrun.json");
+
 
         } catch (IOException e) {
             throw new ResourceLoadException(e);
@@ -88,10 +94,10 @@ public class ConversationManager extends Manager {
 
     /**
      * Get the default relationship string for a particular Conversation
-     * @param ConversationName The name of the conversation
+     * @param conversationName The name of the conversation
      * @return Default relationship status
      */
-    public String getDefaultRelationship(String ConversationName) {
-        return getConversation(ConversationName).getInitialRelationship();
+    public String getDefaultRelationship(String conversationName) {
+        return getConversation(conversationName).getInitialRelationship();
     }
 }
