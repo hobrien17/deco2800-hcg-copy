@@ -1,5 +1,9 @@
 package com.deco2800.hcg.items;
 
+import com.deco2800.hcg.weapons.Machinegun;
+import com.deco2800.hcg.weapons.Multigun;
+import com.deco2800.hcg.weapons.Shotgun;
+import com.deco2800.hcg.weapons.Stargun;
 import com.deco2800.hcg.weapons.Weapon;
 
 /**
@@ -18,8 +22,8 @@ public class WeaponItem extends SingleItem {
      * @param weight the weight of the item
      */
     public WeaponItem(Weapon weapon, String name, int weight) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name cannot be null.");
+        if (name == null || weapon == null) {
+            throw new IllegalArgumentException("Name or weapon cannot be null.");
         }
         this.weapon = weapon;
         this.itemName = name;
@@ -43,7 +47,7 @@ public class WeaponItem extends SingleItem {
         } else if (getRarity() == ItemRarity.LEGENDARY) {
             return 100;
         }
-    	return 0;
+        return 0;
     }
     
     @Override
@@ -75,6 +79,15 @@ public class WeaponItem extends SingleItem {
      */
     public String getItemName() {
         return itemName;
+    }
+
+    @Override
+    public String getName() {
+        if(this.getRarity() == ItemRarity.LEGENDARY) {
+            return String.format("%s %s", this.getRarity().rarity, this.itemName);
+        } else {
+            return this.itemName;
+        }
     }
 
     /**

@@ -167,8 +167,14 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = inventory;
         this.textureManager = textureManager;
         currentRow = 0;
-        for (int i=0; i<player.getInventory().getNumItems(); i++) {
+        //Iterator items = player.getInventory().iterator();
+        //while (items != null && items.hasNext()) {
+            for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
+            //Item currentItem = (Item)items.next();
+            if (currentItem == null) {
+                continue;
+            }
             ImageButton button;
             if (textureManager.getTexture(currentItem.getTexture()) == null) {
                 button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
@@ -228,11 +234,18 @@ public abstract class InventoryDisplayContext extends UIContext {
                                     equipmentDisplay(textureManager, player, skin, equipmentTable);
                                 } else if (currentItem.isEquippable()) {
                                     //Equip the item
-                                    player.getEquippedItems().addItem(currentItem);
                                     player.getInventory().removeItem(currentItem);
+                                    try {
+                                        player.getEquippedItems().addItem(currentItem);
+                                    } catch (Exception e) {
+                                        System.out.println("Error Equipping Item "+e);
+                                        //Re add to the inventory
+                                        player.getInventory().addItem(currentItem);
+                                    }
                                     inventory.clear();
                                     itemInfo.clear();
                                     itemDisplay.clear();
+                                    equipmentTable.clear();
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                     equipmentDisplay(textureManager, player, skin, equipmentTable);
                                 }
@@ -284,8 +297,14 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = inventory;
         this.textureManager = textureManager;
         currentRow = 0;
+        //Iterator items = player.getInventory().iterator();
+        //while (items != null && items.hasNext()) {
         for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
+            //Item currentItem = (Item)items.next();
+            if (currentItem == null) {
+                continue;
+            }
             ImageButton button;
             if (textureManager.getTexture(currentItem.getTexture()) == null) {
                 button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
@@ -344,8 +363,8 @@ public abstract class InventoryDisplayContext extends UIContext {
                                     inventoryDisplay(itemDisplay, itemInfo, textureManager, player, skin, inventory);
                                 } else if (currentItem.isEquippable()) {
                                     //Equip the item
-                                    player.getEquippedItems().addItem(currentItem);
                                     player.getInventory().removeItem(currentItem);
+                                    player.getEquippedItems().addItem(currentItem);
                                     inventory.clear();
                                     itemInfo.clear();
                                     itemDisplay.clear();
@@ -506,15 +525,20 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.skin = skin;
         currentRow = 0;
         this.inventory = playerEquipment;
-        for (int i=0; i<player.getEquippedItems().getNumItems(); i++) {
+        for (int i=0; i<player.getEquippedItems().getMaxSize(); i++) {
             Item currentItem = player.getEquippedItems().getItem(i);
             ImageButton button;
             //Safety check incase a item has a null texture.
+            if (currentItem == null) {
+                //Current item in inventory was null so skip it
+                continue;
+            }
             if (textureManager.getTexture(currentItem.getTexture()) == null) {
                  button = new ImageButton(new Image(textureManager.getTexture("error")).getDrawable());
                  LOGGER.info(textureManager.getTexture("error").toString());
             } else {
                  button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
+                 //System.out.println(textureManager.getTexture(currentItem.getTexture()));
                  LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
             }
             Stack stack = new Stack();
@@ -529,14 +553,29 @@ public abstract class InventoryDisplayContext extends UIContext {
                         player.getInventory().addItem(currentItem);
                         //Refresh the inventory
                         playerEquipment.clear();
+                        inventory.clear();
                         equipmentDisplay(textureManager, player, skin, playerEquipment);
                         clickedImage.setVisible(false);
                     } else {
                         clickedImage.setVisible(true);
                     }
                 }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = true;
+                    mouseOverItem = currentItem;
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    hoveringOverItem = false;
+                    mouseOverItem = null;
+                }
             });
             currentRow++;
         }
+
+
     }
 }

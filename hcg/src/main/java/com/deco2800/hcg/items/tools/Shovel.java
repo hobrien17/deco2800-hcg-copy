@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 
 public class Shovel extends Tool {
 
@@ -37,6 +38,11 @@ public class Shovel extends Tool {
 		} else {
 			pot.removePlant();
 		}
+	}
+	
+	@Override
+	public ItemRarity getRarity() {
+		return ItemRarity.COMMON;
 	}
 
 }

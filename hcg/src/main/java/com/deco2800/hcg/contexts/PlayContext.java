@@ -140,7 +140,7 @@ public class PlayContext extends Context {
         List<String> plantList = Arrays.asList(plantItems);
         seedItems = new String[]{"sunflowerC", "waterC", "iceC", "explosiveC","fireC","grassC"};
         List<String> seedList = Arrays.asList(seedItems);
-        weaponItems = new String[]{"machineGun", "shotgun", "scatterGun", "starfall"};
+        weaponItems = new String[]{"machinegun", "shotgun", "multigun", "starfall"};
         List<String> weapList = Arrays.asList(weaponItems);
         consumableItems = new String[]{"fertiliser", "bug_spray", "snag", "sausage",
                 "magic_mushroom", "small_mushroom", "hoe", "trowel", "shovel"};
@@ -486,12 +486,6 @@ public class PlayContext extends Context {
                contextManager.pushContext(new InstructionsMenuContext());
            }
         });
-        options.addListener(new ChangeListener() {
-        	@Override
-        	public void changed(ChangeEvent event, Actor actor) {
-        		contextManager.pushContext(new OptionsMenuContext());
-        	}
-        });
         resume.addListener(new ChangeListener() {
            @Override
            public void changed(ChangeEvent event, Actor actor) {
@@ -504,6 +498,12 @@ public class PlayContext extends Context {
                 removePauseWindow();
                 playerManager.despawnPlayers();
                 contextManager.popContext();
+            }
+        });
+        options.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                contextManager.pushContext(new OptionsMenuContext());
             }
         });
         pauseMenu.add(resume);

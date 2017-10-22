@@ -19,11 +19,11 @@ public class Seed extends StackableItem {
 	 * Stores the many different types of seeds in the game *
 	 */
 	public enum Type {
-		SUNFLOWER("sunflower_seed", 1, ItemRarity.COMMON, Sunflower.class, SunflowerTurret.class),
-		EXPLOSIVE("explosive_seed", 3, ItemRarity.UNCOMMON, Cactus.class, ExplosiveTurret.class),
-		FIRE("fire_seed", 3, ItemRarity.UNCOMMON, Inferno.class, FireTurret.class),
-		GRASS("grass_seed", 2, ItemRarity.COMMON, Grass.class, GrassTurret.class),
-		ICE("ice_seed", 2, ItemRarity.COMMON, Ice.class, IceTurret.class),
+		SUNFLOWER("sunflower_seed", 1, ItemRarity.COMMON, Sunflower.class, SunflowerTurret.class), 
+		EXPLOSIVE("explosive_seed", 3, ItemRarity.UNCOMMON, Cactus.class, ExplosiveTurret.class), 
+		FIRE("fire_seed", 3, ItemRarity.UNCOMMON, Inferno.class, FireTurret.class), 
+		GRASS("grass_seed", 2, ItemRarity.COMMON, Grass.class, GrassTurret.class), 
+		ICE("ice_seed", 2, ItemRarity.COMMON, Ice.class, IceTurret.class), 
 		WATER("water_seed", 2, ItemRarity.COMMON, Water.class, WaterTurret.class);
 
 		private String texture;
@@ -36,7 +36,7 @@ public class Seed extends StackableItem {
 		 * Constructor for creating a new seed type
 		 */
 		Type(String textureName, int value, ItemRarity rarity, Class<? extends AbstractGardenPlant> plantClass,
-			 Class<? extends AbstractTurret> turretClass) {
+				Class<? extends AbstractTurret> turretClass) {
 			texture = textureName;
 			plant = plantClass;
 			turret = turretClass;
@@ -46,7 +46,7 @@ public class Seed extends StackableItem {
 
 		/**
 		 * Returns the seed's texture
-		 *
+		 * 
 		 * @return the texture name
 		 */
 		private String getTexture() {
@@ -55,7 +55,7 @@ public class Seed extends StackableItem {
 
 		/**
 		 * Returns the type of plant that this seed grows into
-		 *
+		 * 
 		 * @return A plant class
 		 */
 		private Class<? extends AbstractGardenPlant> getPlant() {
@@ -64,7 +64,7 @@ public class Seed extends StackableItem {
 
 		/**
 		 * Gets the turret that this seed grows into
-		 *
+		 * 
 		 * @return A turret class
 		 */
 		private Class<? extends AbstractTurret> getTurret() {
@@ -73,7 +73,7 @@ public class Seed extends StackableItem {
 
 		/**
 		 * Returns the shop value of this item
-		 *
+		 * 
 		 * @return the shop value
 		 */
 		private int getValue() {
@@ -82,7 +82,7 @@ public class Seed extends StackableItem {
 
 		/**
 		 * Returns the rarity of this item
-		 *
+		 * 
 		 * @return the seed's rarity
 		 */
 		private ItemRarity getRarity() {
@@ -94,7 +94,7 @@ public class Seed extends StackableItem {
 
 	/**
 	 * Constructor for a new seed with Type type
-	 *
+	 * 
 	 * @param type
 	 *            the type of seed
 	 */
@@ -111,7 +111,7 @@ public class Seed extends StackableItem {
 
 	/**
 	 * Returns the type of seed
-	 *
+	 * 
 	 * @return the seed's type
 	 */
 	public Type getType() {
@@ -120,7 +120,7 @@ public class Seed extends StackableItem {
 
 	/**
 	 * Returns a new plant, depending on the seed's type
-	 *
+	 * 
 	 * @param pot
 	 *            The pot this plant is to be planted in
 	 */
@@ -136,7 +136,7 @@ public class Seed extends StackableItem {
 
 	/**
 	 * Returns a new plant, depending on the seed's type
-	 *
+	 * 
 	 * @param corpse
 	 *            The corpse this plant is to be planted in
 	 */

@@ -1,6 +1,5 @@
 package com.deco2800.hcg.trading;
 
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.weapons.Weapon;
