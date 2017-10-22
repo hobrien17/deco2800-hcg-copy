@@ -830,10 +830,10 @@ public class Player extends Character implements Tickable {
 	private void handleTerrain(String terrain) {
 		switch (terrain) {
 		case "water-deep":
-			this.setTexture("hcg_character_swim");
+			//this.setTexture("hcg_character_swim");
 			break;
 		case "water-shallow":
-			this.setTexture("hcg_character_sink");
+			//this.setTexture("hcg_character_sink");
 			break;
 		case "exit":
 			if (this == playerManager.getPlayer() && !onExit) {
