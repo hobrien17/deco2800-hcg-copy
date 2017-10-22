@@ -451,6 +451,7 @@ public class TextureManager extends Manager {
 			textureMap.put("ccWindow_BorderSmaller_White", new Texture("resources/ui/character_creation/borderSmaller.png"));
 			textureMap.put("ccWindow_Border_White", new Texture("resources/ui/character_creation/border.png"));
 
+			/*
 			//Multiplayer in game sprites
 			//player1 "Craig"
 			textureMap.put("p1Standing1", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-standing-1.png"));
@@ -561,6 +562,7 @@ public class TextureManager extends Manager {
 			textureMap.put("p5walking7b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-7b.png"));
 			textureMap.put("p5walking8a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-8a.png"));
 			textureMap.put("p5walking8b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-8b.png"));
+			*/
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}
