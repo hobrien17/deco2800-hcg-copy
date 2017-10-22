@@ -1,0 +1,12 @@
+{
+  "title":"10_Hedgehogs",
+  "iReq": {
+  },
+  "kReq": {  
+    "HEDGEHOG": 10
+  },    
+  "rewards": {
+    "explosive_seed": 5
+  },
+  "optDesc":""
+}

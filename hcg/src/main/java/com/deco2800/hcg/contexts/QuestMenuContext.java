@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -152,18 +151,18 @@ public class QuestMenuContext extends UIContext {
         
         
         //Create all Strings		
-		readyTitle = new String("Return to quest giver:");
-		activeTitle = new String("Current Quests:");
-		completedTitle = new String("Finished Quests:");
-		nameTitle = new String("Quest Name: ");
-		detailsTitle = new String("Details:");
+		readyTitle = "Return to quest giver:";
+		activeTitle = "Current Quests:";
+		completedTitle = "Finished Quests:";
+		nameTitle = "Quest Name: ";
+		detailsTitle = "Details:";
 		
 		//New Strings (Titles to separate the parts)
-		killTitle = new String("Kill Requirements");
-		itemTitle = new String("Item Requirements");
+		killTitle = "Kill Requirements";
+		itemTitle = "Item Requirements";
 		
 		//TODO new String that is conacated with the Item to be rewarded
-		rewardedItem = new String("Item to be Rewarded: ");
+		rewardedItem = "Item to be Rewarded: ";
 		
 		//New HashMaps which take a String for the enemy/item and a Integer for the amount
 		killList = new HashMap<>();
