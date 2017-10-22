@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.managers.GameManager;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Matrix4;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +44,8 @@ public class ParticleEffectActor extends Actor {
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		Matrix4 before = batch.getProjectionMatrix();
+		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.draw(batch);
 		}
@@ -51,6 +54,7 @@ public class ParticleEffectActor extends Actor {
         	    effect.draw(batch);
             }
 		}
+		batch.setProjectionMatrix(before);
 	}
 
 	/**
@@ -60,7 +64,9 @@ public class ParticleEffectActor extends Actor {
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		Vector3 cameraPosn = GameManager.get().getCamera().position;
 		for(ParticleEffect effect : effects.keySet()) {
+			effect.setPosition(cameraPosn.x, cameraPosn.y);
 			effect.update(delta);
 		}
 		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {
@@ -68,7 +74,7 @@ public class ParticleEffectActor extends Actor {
                     new Vector3(entry.getKey().getPosX() + entry.getKey().getXLength()/2,
                             entry.getKey().getPosY() + entry.getKey().getYLength()/2, 0));
 		    for(ParticleEffect effect: entry.getValue())  {
-                effect.setPosition(position.x, position.y);
+                effect.setPosition((position.x), (position.y));
                 effect.update(delta);
 		    }
 		}
@@ -104,11 +110,13 @@ public class ParticleEffectActor extends Actor {
 	 */
 	public void render() {
 		batch = new SpriteBatch();
+		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
 		batch.begin();
 
 		for(Map.Entry<ParticleEffect, Boolean> entry : effects.entrySet()) {
 			entry.getKey().update(Gdx.graphics.getDeltaTime());
 			entry.getKey().draw(batch);
+
 
 			// reset animation if completed
 			if (entry.getKey().isComplete() && entry.getValue()) {

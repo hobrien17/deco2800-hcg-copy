@@ -34,8 +34,8 @@ public class MouseHandler {
 	public void handleMouseClick(float x, float y) {
 		LOGGER.info(String.format("Clicked at %f %f%s", x, y, LINE_SEPARATOR));
 
-		float projX = 0;
-		float projY = 0;
+		float projX;
+		float projY;
 
 		projX = x / 64f;
 		projY = -(y - 32f / 2f) / 32f + projX;

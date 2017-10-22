@@ -83,7 +83,6 @@ public class WaterTurret extends AbstractTurret {
 
 	@Override
 	public int getGlowStrength() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

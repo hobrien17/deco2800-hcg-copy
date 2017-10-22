@@ -28,8 +28,9 @@ public class Sunflower extends AbstractGardenPlant {
                 return "sunflower_02";
             case LARGE:
                 return "sunflower_03";
+            default:
+                return null;
         }
-        return null; //this should never occur
     }
 
     @Override

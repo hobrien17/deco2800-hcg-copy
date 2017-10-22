@@ -18,7 +18,7 @@ public class PlayerEquipment extends FixedSizeInventory {
     }
     
     @Override
-    public boolean allowItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
+    public boolean allowItemInSlot(Item item, int index) {
         if(this.slotRestrictions[index] != null) {
             return this.slotRestrictions[index].allowItem(item) && super.allowItemInSlot(item, index);
         }

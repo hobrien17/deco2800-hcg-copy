@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="40" height="40" tilewidth="55" tileheight="32" nextobjectid="22">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="40" height="40" tilewidth="55" tileheight="32" nextobjectid="27">
  <properties>
   <property name="PlayerX" value="39"/>
   <property name="PlayerY" value="10"/>
@@ -8,6 +8,7 @@
  <tileset firstgid="29" source="../tiles/invisible-tile.tsx"/>
  <tileset firstgid="30" source="../tiles/new-sludge.tsx"/>
  <tileset firstgid="58" source="../tiles/deprecated/misc1.tsx"/>
+ <tileset firstgid="64" source="../tiles/white.tsx"/>
  <layer name="grass" width="40" height="40">
   <properties>
    <property name="name" value="grass"/>
@@ -180,6 +181,25 @@
   <object id="19" gid="62" x="1088" y="128" width="55" height="32"/>
   <object id="20" gid="62" x="896" y="96" width="55" height="32"/>
   <object id="21" gid="62" x="1152" y="608" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="hedgehog">
+  <properties>
+   <property name="name" value="hedgehog"/>
+  </properties>
+  <object id="22" gid="61" x="188.182" y="391.818" width="55" height="32"/>
+  <object id="23" gid="61" x="884.018" y="193.982" width="55" height="32">
+   <properties>
+    <property name="name" value="snails"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="snails">
+  <properties>
+   <property name="name" value="snail"/>
+  </properties>
+  <object id="24" gid="64" x="373.273" y="262.727" width="55" height="32"/>
+  <object id="25" gid="64" x="400.655" y="327.345" width="55" height="32"/>
+  <object id="26" gid="64" x="442.745" y="439.255" width="55" height="32"/>
  </objectgroup>
  <layer name="gateway1" width="40" height="40">
   <properties>

@@ -15,7 +15,7 @@ public class JoinedMessage extends Message {
 	private final ContextManager contextManager =
 			(ContextManager) GameManager.get().getManager(ContextManager.class);
 	
-	public JoinedMessage(int id) {
+	public JoinedMessage() {
 		super(MessageType.JOINED);
 	}
 	

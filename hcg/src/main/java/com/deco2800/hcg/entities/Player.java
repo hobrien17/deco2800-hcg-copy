@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.deco2800.hcg.contexts.*;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
@@ -22,13 +23,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.buffs.Perk;
-import com.deco2800.hcg.contexts.CharacterStatsContext;
-import com.deco2800.hcg.contexts.DeathContext;
-import com.deco2800.hcg.contexts.LevelUpContext;
-import com.deco2800.hcg.contexts.PerksSelectionScreen;
-import com.deco2800.hcg.contexts.PlayContext;
-import com.deco2800.hcg.contexts.PlayerInventoryContext;
-import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.inventory.Inventory;
@@ -101,7 +95,7 @@ public class Player extends Character implements Tickable {
 	private int spriteFrame;
 
 	// current tile name
-	private String name = "";
+	private String name = "Player";
 
 	// 1 if player is moving, 0 if not
 	private int move = -1;
@@ -113,6 +107,7 @@ public class Player extends Character implements Tickable {
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
 	private int id;
+	private String spritePrefix = "player_";
 
 	private int actualLevel;
 
@@ -285,18 +280,18 @@ public class Player extends Character implements Tickable {
 					case 1:
 						damage = (int) ((9f / 10f) * (float) damage);
 						break;
+					default:
+						break;
 				}
 			}
 			//Perk - SAVING_GRAVES
 			Perk savingGraves = this.getPerk(Perk.perk.SAVING_GRAVES);
-			if (savingGraves.isActive()) {
+			if (savingGraves.isActive() && damage >= this.getHealthMax()/10) {
 				//damage is more than 10%
-				if (damage >= this.getHealthMax()/10) {
-					//add damage to be staggered on next tick
-					staggerDamage += damage;
-					staggeringDamage = true;
-					damage = 0;
-				}
+				//add damage to be staggered on next tick
+				staggerDamage += damage;
+				staggeringDamage = true;
+				damage = 0;
 			}
 
 			if (damage > healthCur) {
@@ -608,10 +603,8 @@ public class Player extends Character implements Tickable {
 		float oldPosX = this.getPosX();
 		float oldPosY = this.getPosY();
 
-		if (gameTickCount % 50 ==0) {
-			if (staggeringDamage) {
-				staggerDamage();
-			}
+		if (gameTickCount % 50 == 0 && staggeringDamage) {
+			staggerDamage();
 		}
 
 		// Apply any active effects
@@ -730,7 +723,7 @@ public class Player extends Character implements Tickable {
 		
 		//update walking animation
 		if(gameTickCount - lastTick >= 5) {
-			StringBuilder spriteName = new StringBuilder("player_");
+			StringBuilder spriteName = new StringBuilder(spritePrefix);
 			spriteName.append(direction);
 			if (this.speedX == 0 && this.speedY == 0) {
 				// Player is not moving
@@ -751,20 +744,19 @@ public class Player extends Character implements Tickable {
 
 		//Perk - I_AM_GROOT
 		Perk IamGroot = this.getPerk(Perk.perk.I_AM_GROOT);
-		if (IamGroot.isActive()) {
-			if (gameTickCount % 50 == 0) {
-				switch (IamGroot.getCurrentLevel()) {
-					case 0:
-						break;
-					case 1:
-						this.takeDamage(-(1 + (int)(0.2 * this.getLevel())));
-						break;
-					case 2:
-						this.takeDamage(-(2 + (int)(0.25 * this.getLevel())));
-						break;
-				}
+		if (IamGroot.isActive() && gameTickCount % 50 == 0) {
+			switch (IamGroot.getCurrentLevel()) {
+				case 0:
+					break;
+				case 1:
+					this.takeDamage(-(1 + (int)(0.2 * this.getLevel())));
+					break;
+				case 2:
+					this.takeDamage(-(2 + (int)(0.25 * this.getLevel())));
+					break;
+				default:
+					break;
 			}
-
 		}
 
 		checkXp();
@@ -844,7 +836,8 @@ public class Player extends Character implements Tickable {
 					play.addExitWindow();
 					onExit = true;
 					exitMessageDisplayed = true;
-				}
+			}
+			break;
 		default:
 			onExit = false;
 			break;
@@ -865,6 +858,16 @@ public class Player extends Character implements Tickable {
 		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
 		//skillPoints = skillPoints + (4 + 2 * intellect);
+	}
+	
+	/**
+	 * Initialize a new player.
+	 */
+	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
+			int machineGunSkill, int shotGunSkill, int starGunSkill, int multiGunSkill, int character) {
+		initialiseNewPlayer(strength, vitality, agility, charisma, intellect, machineGunSkill, shotGunSkill,
+				starGunSkill, multiGunSkill, "Player");
+		spritePrefix = "player" + (character + 1) + "_";
 	}
 
 	public void setSpecialisedSkills(Map specialisedSkills) {
@@ -923,7 +926,7 @@ public class Player extends Character implements Tickable {
 		staminaMax += agility * 10;
 		staminaCur += agility * 10;
 
-		skillPoints = skillPoints + (4 + attributes.get("intellect") * 2);
+		skillPoints = skillPoints + (2 + attributes.get("intellect") * 1);
 		// TODO: enter level up screen
 	}
 
@@ -975,70 +978,77 @@ public class Player extends Character implements Tickable {
 	 * Handle movement when wasd keys are pressed down. As well as other
 	 * possible actions on key press. Such as NPC interaction.
 	 */
+	/**
+	 * Handle movement when wasd keys are pressed down. As well as other
+	 * possible actions on key press. Such as NPC interaction.
+	 */
 	private void handleKeyDown(int keycode) {
 		if(pauseDisplayed){
 			return;
 		}
-		
+
 		// local inputs (i.e. context changes)
 		if (this == playerManager.getPlayer()) {
 			switch (keycode) {
-			case Input.Keys.P:
-				this.contextManager.pushContext(new PerksSelectionScreen());
-				break;
-			case Input.Keys.C:
-				if (levelUp) {
-					this.contextManager.pushContext(new LevelUpContext());
-				} else {
-					this.contextManager.pushContext(new CharacterStatsContext());
-				}
-				break;
-			case Input.Keys.E:
-				checkForInteraction();
-				break;
-			case Input.Keys.I:
-				// Display Inventory
-				LOGGER.info("Access player inventory");
-				contextManager.pushContext(new PlayerInventoryContext(this));
-				break;
-//			case Input.Keys.TAB:
-//				LOGGER.info("You press Tab!");
-//				this.contextManager.pushContext(new ScoreBoardContext());
-//				break;
-			default:
-				break;
+				case Input.Keys.P:
+					this.contextManager.pushContext(new PerksSelectionScreen());
+					break;
+				case Input.Keys.C:
+					if (levelUp) {
+						this.contextManager.pushContext(new LevelUpContext());
+					} else {
+						this.contextManager.pushContext(new CharacterStatsContext());
+					}
+					break;
+				case Input.Keys.E:
+					checkForInteraction();
+					break;
+				case Input.Keys.Q:
+					this.contextManager.pushContext(new QuestMenuContext());
+					break;
+				case Input.Keys.I:
+					// Display Inventory
+					LOGGER.info("Access player inventory");
+					contextManager.pushContext(new PlayerInventoryContext(this));
+					break;
+				case Input.Keys.TAB:
+					LOGGER.info("You press Tab!");
+					this.contextManager.pushContext(new ScoreBoardContext());
+					break;
+				default:
+					break;
 			}
 		}
-		
+
 		// replicated inputs
 		switch (keycode) {
-		case Input.Keys.C:
-			if (levelUp) {
-				levelUp = false;
-				skillPoints = 0;
-			}
-			break;
-		case Input.Keys.SHIFT_LEFT:
-			if (staminaCur > 0) {
-				sprinting = true;
-			}
-			break;
-		case Input.Keys.W:
-			movementDirection.put("up", true);
-			break;
-		case Input.Keys.S:
-			movementDirection.put("down", true);
-			break;
-		case Input.Keys.A:
-			movementDirection.put("left", true);
-			break;
-		case Input.Keys.D:
-			movementDirection.put("right", true);
-			break;
-		default:
-			break;
+			case Input.Keys.C:
+				if (levelUp) {
+					levelUp = false;
+					skillPoints = 0;
+				}
+				break;
+			case Input.Keys.SHIFT_LEFT:
+				if (staminaCur > 0) {
+					sprinting = true;
+				}
+				break;
+			case Input.Keys.W:
+				movementDirection.put("up", true);
+				break;
+			case Input.Keys.S:
+				movementDirection.put("down", true);
+				break;
+			case Input.Keys.A:
+				movementDirection.put("left", true);
+				break;
+			case Input.Keys.D:
+				movementDirection.put("right", true);
+				break;
+			default:
+				break;
 		}
-		
+
 		handleDirectionInput();
 		handleNoInput();
 	}
@@ -1287,7 +1297,24 @@ public class Player extends Character implements Tickable {
 	public int getSkillPoints() {
 		return skillPoints;
 	}
+
 	public int getId() {
 		return id;
+	}
+
+	public int getMachineGunMultiplier() {
+		return attributes.get("machineGunSkill") / 20;
+	}
+
+	public int getShotGunSkillMultiplier() {
+		return attributes.get("shotGunSkill") / 20;
+	}
+
+	public int getStarGunSkillMultiplier() {
+		return attributes.get("starGunSkill") / 20;
+	}
+
+	public int getMultiGunSkillMultiplier() {
+		return attributes.get("multiGunSkill") / 20;
 	}
 }

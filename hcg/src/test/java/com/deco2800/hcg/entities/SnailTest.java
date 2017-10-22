@@ -24,7 +24,7 @@ public class SnailTest {
 
     @Before
     public void createBasicEnemy() {
-      /*
+      
       enemy = new Snail(5.0f,5.0f,0.0f, 0);
       // create mock game
       gameManager = GameManager.get();
@@ -36,13 +36,8 @@ public class SnailTest {
       
       gameManager.setWorld(AbstractWorld);
       playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
-      */
+      
     }
     
-    @Test
-    public void testLoot() {
-        //enemy.setupLoot();
-        //assertThat("MushroomTurret only has 1 drop.", enemy.loot().length, is(equalTo(1)));
-        //assertThat("Item should be grass seed", enemy.randItem(), is(equalTo("grass_seed")));
-    }
+    
 }

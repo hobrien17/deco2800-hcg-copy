@@ -100,6 +100,7 @@ public class PlayContext extends Context {
     private String[] seedItems;
     private String[] consumableItems;
     private String[] plantItems;
+    private EquipsDisplay equipsDisplay;
 
     private Window plantWindow;
     private boolean exitDisplayed = false;
@@ -107,6 +108,7 @@ public class PlayContext extends Context {
     private Window exitWindow;
 
     private Stage stage;
+    private Stage weatherStage;
     private Skin skin;
     private Skin plantSkin;
     
@@ -137,6 +139,7 @@ public class PlayContext extends Context {
         GameManager.get().getCamera().translate(GameManager.get().getWorld().getWidth() * 32, 0);
 
         // Setup GUI
+        weatherStage = new Stage(new ScreenViewport());
         stage = new Stage(new ScreenViewport());
         stage.getBatch().enableBlending();
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
@@ -172,16 +175,17 @@ public class PlayContext extends Context {
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
+        equipsDisplay = new EquipsDisplay();
         
 
         /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
-
-        stage.addActor(particleManager.getActor());
+        weatherStage.addActor(weatherManager.getActor());
+        weatherStage.addActor(particleManager.getActor());
         stage.addActor(chatStack);
         chatStack.setVisible(false);
         stage.addActor(clockDisplay);
         stage.addActor(playerStatus);
+        stage.addActor(equipsDisplay);
         
         if(gameManager.getWorld().equals(World.SAFEZONE)) {
         	stage.addActor(plantWindow);
@@ -251,7 +255,7 @@ public class PlayContext extends Context {
         });
 
         /* set initial time */
-        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
+        timeManager.setDateTime(0, 16, 14, 3, 6, 2047);
         
         /* reset input tick */
         playerInputManager.resetInputTick();
@@ -297,8 +301,11 @@ public class PlayContext extends Context {
         }
 
         // Update and draw the stage
+        weatherStage.act();
+        weatherStage.draw();
         stage.act();
         stage.draw();
+
     }
 
     /**
@@ -327,6 +334,7 @@ public class PlayContext extends Context {
         weaponRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         consumableRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         plantRadialDisplay.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        equipsDisplay.setPosition(10f, stage.getHeight() - 400f);
     }
     
     
@@ -372,6 +380,7 @@ public class PlayContext extends Context {
     @Override
     public void onTick(long gameTickCount) {
         playerStatus.updatePlayerStatus();
+        equipsDisplay.update();
 
     }
 
@@ -453,7 +462,7 @@ public class PlayContext extends Context {
 
 	private void exit() {
     	if (networkManager.isMultiplayerGame()) {
-		networkManager.queueMessage(new LevelEndMessage(0));
+		networkManager.queueMessage(new LevelEndMessage());
     	}
     	worldManager.completeLevel();
     	exitDisplayed = false;
@@ -529,6 +538,12 @@ public class PlayContext extends Context {
                 removePauseWindow();
                 playerManager.despawnPlayers();
                 contextManager.popContext();
+            }
+        });
+        options.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                contextManager.pushContext(new OptionsMenuContext());
             }
         });
         pauseMenu.add(resume);

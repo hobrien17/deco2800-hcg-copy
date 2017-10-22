@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" nextobjectid="1">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" nextobjectid="8">
  <properties>
   <property name="PlayerX" value="1"/>
   <property name="PlayerY" value="9"/>
  </properties>
  <tileset firstgid="1" source="../tiles/new-sludge.tsx"/>
  <tileset firstgid="29" source="../tiles/invisible-tile.tsx"/>
+ <tileset firstgid="30" source="../tiles/deprecated/misc1.tsx"/>
+ <tileset firstgid="36" source="../tiles/deprecated/dirt.tsx"/>
  <layer name="grass" width="30" height="30">
   <properties>
    <property name="name" value="grass"/>
@@ -44,6 +46,28 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="snails">
+  <properties>
+   <property name="name" value="snail"/>
+  </properties>
+  <object id="1" gid="32" x="210.527" y="295.473" width="55" height="32"/>
+  <object id="2" gid="32" x="147.636" y="636.364" width="55" height="32"/>
+  <object id="3" gid="32" x="350.309" y="587.691" width="55" height="32"/>
+  <object id="4" gid="32" x="218.055" y="131.945" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="MUSHROOMTREETHICK">
+  <properties>
+   <property name="name" value="MUSHROOMTREETHICK"/>
+  </properties>
+  <object id="5" gid="36" x="493.127" y="590.873" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="tree">
+  <properties>
+   <property name="name" value="greentree"/>
+  </properties>
+  <object id="6" gid="38" x="332.491" y="133.509" width="55" height="32"/>
+  <object id="7" gid="38" x="520.091" y="269.909" width="55" height="32"/>
+ </objectgroup>
  <layer name="gateway1" width="30" height="30">
   <properties>
    <property name="PlayerX" value="18"/>
