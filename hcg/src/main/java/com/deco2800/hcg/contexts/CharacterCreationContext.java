@@ -67,12 +67,13 @@ public class CharacterCreationContext extends CharacterContext{
 
 //    private Window attributesWindow;
 //    private Window skillsWindow;
-    private Window statsWindow;
+//    private Window statsWindow;
     private Window characterPreviewWindow;
     //private Window selectedDescriptionWindow;
     
     private Table attributesTable;
     private Table skillsTable;
+    private Table statsTable;
 
     private String[] sexes = new String[]{MALE, FEMALE};
 
@@ -159,24 +160,26 @@ public class CharacterCreationContext extends CharacterContext{
         attributesTable = new Table(skin);
 //        skillsWindow = new Window("Skills", skin);
         skillsTable = new Table(skin);
-        statsWindow = new Window("Stats", skin);
+//        statsWindow = new Window("Stats", skin);
+        statsTable = new Table(skin);
         characterPreviewWindow = new Window("Character Preview", skin);
         //selectedDescriptionWindow = new Window("Click on an attribute or skill to find out what it does!", skin);
 
         // Set windows as non-movable
 //        attributesWindow.setMovable(false);
 //        skillsWindow.setMovable(false);
-        statsWindow.setMovable(false);
+//        statsWindow.setMovable(false);
         characterPreviewWindow.setMovable(false);
         //selectedDescriptionWindow.setMovable(false);
 
 //        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
 //        skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
-        statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+//        statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         
         attributesTable.setBackground(new Image(blankWindowBackground).getDrawable());
         skillsTable.setBackground(new Image(blankWindowBackground).getDrawable());
+        statsTable.setBackground(new Image(blankWindowBackground).getDrawable());
     }
 
     //Setting up top row info
@@ -649,17 +652,30 @@ public class CharacterCreationContext extends CharacterContext{
         skillPointsGainLabel = new Label("Skill points to spend per level up: " + skillPointsGain, skin);
         carryWeightLabel = new Label("Carry Weight: " + carryWeight, skin);
 
-        statsWindow.add(startingHealthLabel);
-        statsWindow.row();
-        statsWindow.add(startingStaminaLabel);
-        statsWindow.row();
-        statsWindow.add(healthGainLabel);
-        statsWindow.row();
-        statsWindow.add(staminaGainLabel);
-        statsWindow.row();
-        statsWindow.add(skillPointsGainLabel);
-        statsWindow.row();
-        statsWindow.add(carryWeightLabel);
+//        statsWindow.add(startingHealthLabel);
+//        statsWindow.row();
+//        statsWindow.add(startingStaminaLabel);
+//        statsWindow.row();
+//        statsWindow.add(healthGainLabel);
+//        statsWindow.row();
+//        statsWindow.add(staminaGainLabel);
+//        statsWindow.row();
+//        statsWindow.add(skillPointsGainLabel);
+//        statsWindow.row();
+//        statsWindow.add(carryWeightLabel);
+        
+        statsTable.add(startingHealthLabel);
+        statsTable.row();
+        statsTable.add(startingStaminaLabel);
+        statsTable.row();
+        statsTable.add(healthGainLabel);
+        statsTable.row();
+        statsTable.add(staminaGainLabel);
+        statsTable.row();
+        statsTable.add(skillPointsGainLabel);
+        statsTable.row();
+        statsTable.add(carryWeightLabel);
+        statsTable.pack();
     }
 
     private void setupCharacterPreviewWindow() {
@@ -703,7 +719,7 @@ public class CharacterCreationContext extends CharacterContext{
         masterTable.add(attributesTable).top().grow().pad(30);
         masterTable.add(skillsTable).top().right().grow().pad(30);
         masterTable.row();
-        masterTable.add(statsWindow).top().left().grow().pad(30);
+        masterTable.add(statsTable).top().left().grow().pad(30);
         masterTable.add(characterPreviewWindow).top().right().grow().pad(30);
         masterTable.row();
         //masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
