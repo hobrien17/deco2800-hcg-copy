@@ -10,6 +10,7 @@ import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.terrain_entities.Barbeque;
 import com.deco2800.hcg.entities.terrain_entities.Boulder;
+import com.deco2800.hcg.entities.terrain_entities.Car;
 import com.deco2800.hcg.entities.terrain_entities.ConcreteWall;
 import com.deco2800.hcg.entities.terrain_entities.HouseWORoof;
 import com.deco2800.hcg.entities.terrain_entities.HouseWRoof;
@@ -26,12 +27,14 @@ import com.deco2800.hcg.entities.terrain_entities.Swing;
 import com.deco2800.hcg.entities.terrain_entities.Tree;
 import com.deco2800.hcg.entities.terrain_entities.TreeType;
 import com.deco2800.hcg.entities.terrain_entities.WallBlock;
+import com.deco2800.hcg.entities.terrain_entities.WarningSign;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 
 public enum WorldEntities {
 
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, UPOT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
-    GREENTREE, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM, SNAIL, LEAFLESSTREE, INVISIBLE, BARBEQUE;
+    GREENTREE, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM, SNAIL, LEAFLESSTREE, INVISIBLE, BARBEQUE,
+    WARNINGSIGN, CAR;
 
     /**
      * Return an instance of the entity at the given position and the selected
@@ -102,6 +105,10 @@ public enum WorldEntities {
                 return new Invisible(x, y, 0f);
             case BARBEQUE:
                 return new Barbeque(x, y, 0f);
+            case WARNINGSIGN:
+                return new WarningSign(x, y, 0f);
+            case CAR:
+                return new Car(x, y, 0f);
             default:
                 return null;
         }
