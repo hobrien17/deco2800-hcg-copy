@@ -99,7 +99,7 @@ public class WeatherManager extends Manager {
 			stopAllEffect();
 			return;
 		}
-		Color baseColor = new Color(0.3f, 0.3f,0.5f, 1);
+		//Color baseColor = new Color(0.3f, 0.3f,0.5f, 1);
 		switch (weatherType) {
 		case RAIN:
 			setUp("2dRain.p");
@@ -118,7 +118,8 @@ public class WeatherManager extends Manager {
 			shaderManager.setOvercast(0f);
 			break;
 		case DROUGHT:
-			shaderManager.setCustom(0f, 0.15f, 0f, baseColor, 1000);
+			setUp("2dDrought.p");
+			//shaderManager.setCustom(0f, 0.15f, 0f, baseColor, 1000);
 			break;
 		case STORM:
 			setUp("2dStorm.p");
