@@ -57,8 +57,10 @@ public class CharacterCreationContext extends CharacterContext{
     private CheckBox meleeSkillSpecialise;
     private CheckBox gunsSkillSpecialise;
     private CheckBox energyWeaponsSkillSpecialise;
+    
+    private TextField characterName;
 
-    private SelectBox<String> characterSex;
+//    private SelectBox<String> characterSex;
 
     // For some reason the checkBox isChecked method isn't working properly so this is a temporary fix
     private Boolean meleeSkillSpecialiseChecked = false;
@@ -194,13 +196,13 @@ public class CharacterCreationContext extends CharacterContext{
         TextButton quitButton = new TextButton("Back", skin);
         TextButton skipButton = new TextButton("CLICK HERE TO SKIP CHARACTER CREATION", skin);
         TextButton doneButton = new TextButton("Finished", skin);
-        TextField characterName = new TextField("Enter Name", skin);
+//        TextField characterName = new TextField("Enter Name", skin);
+//
+//        characterSex = new SelectBox<>(skin);
+//        characterSex.setItems(sexes);
 
-        characterSex = new SelectBox<>(skin);
-        characterSex.setItems(sexes);
-
-        topRowInfoTable.add(characterName);
-        topRowInfoTable.add(characterSex).left().expandX();
+//        topRowInfoTable.add(characterName);
+//        topRowInfoTable.add(characterSex).left().expandX();
         topRowInfoTable.add(quitButton).center();
         topRowInfoTable.add(skipButton);
         topRowInfoTable.add(doneButton).right();
@@ -254,18 +256,18 @@ public class CharacterCreationContext extends CharacterContext{
         });
 
 
-        characterSex.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-				if (characterSex.getSelected() == MALE) {
-					textureCount = 0;
-				} else {
-					textureCount = 3;
-				}
-				characterPreviewImage.setDrawable(new SpriteDrawable(
-						new Sprite(charTextureArray[textureCount])));
-			}
-        });
+//        characterSex.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//				if (characterSex.getSelected() == MALE) {
+//					textureCount = 0;
+//				} else {
+//					textureCount = 3;
+//				}
+//				characterPreviewImage.setDrawable(new SpriteDrawable(
+//						new Sprite(charTextureArray[textureCount])));
+//			}
+//        });
     }
 
     private void setupAttributesWindow() {
@@ -693,13 +695,33 @@ public class CharacterCreationContext extends CharacterContext{
         characterPreviewImage = new Image(male1);
 
         TextButton next = new TextButton("Change colour", skin);
+        
+        this.characterName = new TextField("Enter Name", skin);
+        SelectBox<String> characterSex = new SelectBox<String>(skin);
+        characterSex.setItems(sexes);
 
-        characterPreviewTable.add(new Image(titleCharacter));
+        characterPreviewTable.add(new Image(titleCharacter)).colspan(2).padBottom(30);
         characterPreviewTable.row();
-        characterPreviewTable.add(characterPreviewImage);
+        characterPreviewTable.add(this.characterName).right();
+        characterPreviewTable.add(characterSex).left();
         characterPreviewTable.row();
-        characterPreviewTable.add(next);
+        characterPreviewTable.add(characterPreviewImage).colspan(2);
+        characterPreviewTable.row();
+        characterPreviewTable.add(next).colspan(2);
         characterPreviewTable.pack();
+        
+        characterSex.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (characterSex.getSelected() == MALE) {
+                    textureCount = 0;
+                } else {
+                    textureCount = 3;
+                }
+                characterPreviewImage.setDrawable(new SpriteDrawable(
+                        new Sprite(charTextureArray[textureCount])));
+            }
+        });
 
         next.addListener(new ClickListener() {
             @Override
@@ -731,11 +753,11 @@ public class CharacterCreationContext extends CharacterContext{
     private void addSubtables() {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesTable).top().grow().pad(30);
-        masterTable.add(skillsTable).top().right().grow().pad(30);
+        masterTable.add(characterPreviewTable).grow().pad(30);
+        masterTable.add(attributesTable).grow().pad(30);
         masterTable.row();
-        masterTable.add(statsTable).top().left().grow().pad(30);
-        masterTable.add(characterPreviewTable).top().right().grow().pad(30);
+        masterTable.add(statsTable).grow().pad(30);
+        masterTable.add(skillsTable).grow().pad(30);
         masterTable.row();
         //masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
