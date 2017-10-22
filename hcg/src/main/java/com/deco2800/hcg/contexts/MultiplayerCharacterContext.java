@@ -31,22 +31,9 @@ public class MultiplayerCharacterContext extends UIContext{
     private NetworkManager networkManager;
     private ContextManager contextManager;
     private GameManager gameManager;
-
-    private int strength = 5;
-    private int vitality = 5;
-    private int agility = 5;
-    private int intellect = 5;
-    private int charisma = 5;
-    private int machineGunSkill = 10;
-    private int shotGunSkill = 10;
-    private int starGunSkill = 10;
-    private int multiGunSkill = 10;
-    private String characterName;
-
-
-
-
-
+    
+    private int selectedCharacter = 0;
+    
     public MultiplayerCharacterContext() {
         gameManager = GameManager.get();
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
@@ -76,7 +63,9 @@ public class MultiplayerCharacterContext extends UIContext{
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                selectCharacter();
+                networkManager.queueMessage(new CharacterMessage(selectedCharacter));
+                Player player = playerManager.getMultiplayerCharacter(selectedCharacter);
+                playerManager.setPlayer(player);
                 contextManager.pushContext(new WaitHostContext(1));
             }
         });
@@ -134,24 +123,9 @@ public class MultiplayerCharacterContext extends UIContext{
     }
 
     /*
-        When appropriate characters are selected, the corresponding character is added to the game.
-        call this method to add the player into player manager.
-     */
-    private void selectCharacter() {
-    	    networkManager.queueMessage(new CharacterMessage(strength, vitality, agility, charisma, intellect,
-                    machineGunSkill, shotGunSkill, starGunSkill, multiGunSkill, /*characterName*/"Player 2"));
-        Player player = new Player(5, 10, 0);
-        player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, machineGunSkill, shotGunSkill,
-                starGunSkill, multiGunSkill, characterName);
-        playerManager.setPlayer(player);
-        //player.setTexture(); use this to set the texture for this player.
-    }
-
-    /*
         updates character lore information depending on which character the player is selecting
      */
     private void changeCharacterLore(String name) {
-        characterName = name;
         switch(name) {
             case "Craig":
                 characterImage.setDrawable(new Image(textureManager.getTexture("player1")).getDrawable());
@@ -160,14 +134,7 @@ public class MultiplayerCharacterContext extends UIContext{
                         " wanted him to become a lawyer or engineer, but he insisted on pursuing a career in gardening" +
                         " and enrolled in Bachelor of Gardeneering. \nStrength: 5\nVitality: 7\nAgility: 5\n Intellect:" +
                         " 8\nCharisma: 6\nMelee Skill: 13\nGun Skill: 14\nEnergy Weapon Skill: 10");
-                strength = 5;
-                vitality = 7;
-                agility = 5;
-                intellect = 8;
-                charisma = 6;
-                machineGunSkill = 13;
-                shotGunSkill = 14;
-                starGunSkill = 10;
+                selectedCharacter = 0;
                 break;
 
             case "Moe":
@@ -177,14 +144,7 @@ public class MultiplayerCharacterContext extends UIContext{
                         " regularly works out in the gym, and has a variety of skills up his sleeve.\nStrength: " +
                         "5\nVitality: 6\nAgility: 5\n Intellect: 6\nCharisma: 10\nMelee Skill: 15\nGun Skill: 11" +
                         "\nEnergy Weapon Skill: 12");
-                strength = 5;
-                vitality = 6;
-                agility = 5;
-                intellect = 6;
-                charisma = 10;
-                machineGunSkill = 15;
-                shotGunSkill = 11;
-                starGunSkill = 12;
+                selectedCharacter = 1;
                 break;
 
             case "Carl":
@@ -194,14 +154,7 @@ public class MultiplayerCharacterContext extends UIContext{
                         " a few seconds. Started from the top now his here. Carl is eager to rebuild the devastated" +
                         " world.\nStrength: 6\nVitality: 5\nAgility: 6\n Intellect: 5\nCharisma: 6\nMelee Skill: 11" +
                         "\nGun Skill: 14\nEnergy Weapon Skill: 13");
-                strength = 6;
-                vitality = 5;
-                agility = 6;
-                intellect = 5;
-                charisma = 6;
-                machineGunSkill = 11;
-                shotGunSkill = 14;
-                starGunSkill = 13;
+                selectedCharacter = 2;
                 break;
 
             case "Peter":
@@ -211,14 +164,7 @@ public class MultiplayerCharacterContext extends UIContext{
                         " to plant many hundred plants. After retirement he bought a large piece of land where he" +
                         " started his own potato growing business and duck farm.\nStrength: 5\nVitality: 7\nAgility: " +
                         "5\n Intellect: 8\nCharisma: 6\nMelee Skill: 13\nGun Skill: 14\nEnergy Weapon Skill: 10");
-                strength = 5;
-                vitality = 7;
-                agility = 5;
-                intellect = 8;
-                charisma = 6;
-                machineGunSkill = 13;
-                shotGunSkill = 14;
-                starGunSkill = 10;
+                selectedCharacter = 3;
                 break;
 
             case "Donald":
@@ -228,14 +174,7 @@ public class MultiplayerCharacterContext extends UIContext{
                         "farming plants. A capable man, he created an agricultural empire from nothing with a " +
                         "small loan of a million dollars. \nStrength: 5\nVitality: 5\nAgility: 6\n Intellect:" +
                         " 12\nCharisma: 8\nMelee Skill: 10\nGun Skill: 10\nEnergy Weapon Skill: 15");
-                strength = 5;
-                vitality = 5;
-                agility = 6;
-                intellect = 12;
-                charisma = 8;
-                machineGunSkill = 10;
-                shotGunSkill = 10;
-                starGunSkill = 15;
+                selectedCharacter = 4;
             default:
                 break;
         }

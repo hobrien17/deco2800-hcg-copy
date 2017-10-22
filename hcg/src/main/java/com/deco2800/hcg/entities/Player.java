@@ -101,7 +101,7 @@ public class Player extends Character implements Tickable {
 	private int spriteFrame;
 
 	// current tile name
-	private String name = "";
+	private String name = "Player";
 
 	// 1 if player is moving, 0 if not
 	private int move = -1;
@@ -113,6 +113,7 @@ public class Player extends Character implements Tickable {
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
 	private int id;
+	private String spritePrefix = "player_";
 
 	private int actualLevel;
 
@@ -730,7 +731,7 @@ public class Player extends Character implements Tickable {
 		
 		//update walking animation
 		if(gameTickCount - lastTick >= 5) {
-			StringBuilder spriteName = new StringBuilder("player_");
+			StringBuilder spriteName = new StringBuilder(spritePrefix);
 			spriteName.append(direction);
 			if (this.speedX == 0 && this.speedY == 0) {
 				// Player is not moving
@@ -865,6 +866,16 @@ public class Player extends Character implements Tickable {
 		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
 		//skillPoints = skillPoints + (4 + 2 * intellect);
+	}
+	
+	/**
+	 * Initialize a new player.
+	 */
+	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
+			int machineGunSkill, int shotGunSkill, int starGunSkill, int multiGunSkill, int character) {
+		initialiseNewPlayer(strength, vitality, agility, charisma, intellect, machineGunSkill, shotGunSkill,
+				starGunSkill, multiGunSkill, "Player");
+		spritePrefix = "player" + (character + 1) + "_";
 	}
 
 	public void setSpecialisedSkills(Map specialisedSkills) {
