@@ -12,10 +12,10 @@ import com.deco2800.hcg.weapons.WeaponType;
  */
 public class WeaponShop extends Shop{
     public WeaponShop() {
-
+/*
         WeaponBuilder weaponBuilder = new WeaponBuilder();
         Item shotgun = new WeaponItem(weaponBuilder.setWeaponType(WeaponType.SHOTGUN).setUser(player).setRadius(0.7).build(),
                 "Shotgun", 2);
-        addStock(shotgun);
+        addStock(shotgun);*/
     }
 }
