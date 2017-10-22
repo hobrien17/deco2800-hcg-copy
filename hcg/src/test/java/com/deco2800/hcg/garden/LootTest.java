@@ -33,7 +33,7 @@ public class LootTest extends BaseTest {
 	
 	private LootWrapper sunLoot = new LootWrapper("sunflower_seed", 5, 10);
 	private LootWrapper waterLoot = new LootWrapper("water_seed", 1, 5);
-	private LootWrapper grassLoot = new LootWrapper("grass_seed", 1, 11);
+	private LootWrapper grassLoot = new LootWrapper("grass_seed", 1, 1);
 	
 	private class TestPlant extends AbstractGardenPlant {
 
@@ -151,9 +151,9 @@ public class LootTest extends BaseTest {
         	else if(((Seed)item).getType().equals(Seed.Type.WATER)) {
         		assertTrue(item.getStackSize() >= 1 && item.getStackSize() <= 5);
         	}
-        	//else if(((Seed)item).getType().equals(Seed.Type.GRASS)) {
-        	//	assertTrue(item.getStackSize() == 1);
-        	//}
+        	else if(((Seed)item).getType().equals(Seed.Type.GRASS)) {
+        		assertTrue(item.getStackSize() == 1);
+        	}
         	else {
         		fail();
         	}
