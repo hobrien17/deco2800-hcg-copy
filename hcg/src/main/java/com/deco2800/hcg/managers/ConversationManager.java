@@ -30,7 +30,7 @@ public class ConversationManager extends Manager {
             loadConversation("tutorialslippery", "resources/conversations/tutorialslippery.json");
             loadConversation("tutorialwasteland", "resources/conversations/tutorialwasteland.json");
             loadConversation("tutorialfirst", "resources/conversations/tutorialfirst.json");
-            loadConversation("shoptutorial", "resources/conversations/tutorialfirst.json");
+            loadConversation("shoptutorial", "resources/conversations/plantingSeedTutorial.json");
             loadConversation("tutoriallevelling", "resources/conversations/tutoriallevelling.json");
 
         } catch (IOException e) {

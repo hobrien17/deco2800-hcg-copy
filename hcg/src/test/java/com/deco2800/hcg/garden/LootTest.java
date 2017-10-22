@@ -151,9 +151,9 @@ public class LootTest extends BaseTest {
         	else if(((Seed)item).getType().equals(Seed.Type.WATER)) {
         		assertTrue(item.getStackSize() >= 1 && item.getStackSize() <= 5);
         	}
-        	//else if(((Seed)item).getType().equals(Seed.Type.GRASS)) {
-        	//	assertTrue(item.getStackSize() == 1);
-        	//}
+        	else if(((Seed)item).getType().equals(Seed.Type.GRASS)) {
+        		assertTrue(item.getStackSize() == 1);
+        	}
         	else {
         		fail();
         	}
