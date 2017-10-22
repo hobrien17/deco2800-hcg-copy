@@ -10,10 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.quests.QuestArchive;
 import com.deco2800.hcg.quests.QuestManager;
@@ -156,11 +158,8 @@ public class QuestMenuContext extends UIContext {
 		itemTitle = new String("Item Requirements");
 		
 		//TODO new HashMaps which take a String for the enemy/item and a Integer for the amount
-		killList = new HashMap<String, Integer>();
-		killList.put("Enemy ", 0);
-		
-		itemList = new HashMap<String, Integer>();
-		itemList.put("Item ", 0);
+		killList = new HashMap<>();
+		itemList = new HashMap<>();
 		
 		detailsText = new TextArea("Click on a Quest to Display the Details", skin);
 		detailsText.setDisabled(true);
@@ -198,12 +197,8 @@ public class QuestMenuContext extends UIContext {
         detailsTextTable.add(detailsText).expand().fill();
         secondaryWindow.add(detailsTextTable).expand().fill();
         secondaryWindow.row();
-		updateKillTable();
         secondaryWindow.add(killRequire).expandX().fillX().left();
         secondaryWindow.row().padTop(10);
-        itemRequire.add(itemTitle);
-        itemRequire.row();
-        itemRequire.add(itemList.toString());
         secondaryWindow.add(itemRequire).expandX().fillX().left();
         main.add(logWindow).expand(1, 1).fill();
         main.add(secondaryWindow).expand(4, 1).fill();
@@ -232,6 +227,7 @@ public class QuestMenuContext extends UIContext {
 						//Add each quest
 						if (map.getValue().getQuestTitle().equals(readyList.getSelected())) {
 							populateReqTable(map.getValue());
+							updateTable(map.getValue());
 						}
 					}
 				}
@@ -248,6 +244,7 @@ public class QuestMenuContext extends UIContext {
 						//Add each quest
 						if (map.getValue().getQuestTitle().equals(activeList.getSelected())) {
 							populateReqTable(map.getValue());
+							updateTable(map.getValue());
 						}
 					}
 				}
@@ -264,6 +261,7 @@ public class QuestMenuContext extends UIContext {
 						//Add each quest
 						if (qa.getQuestTitle().equals(completedList.getSelected())) {
 							populateReqTable(qa);
+							updateTable(qa);
 						}
 					}
 				}
@@ -273,28 +271,54 @@ public class QuestMenuContext extends UIContext {
 	}
 
 	private void populateReqTable(QuestArchive qa) {
-		System.out.println("here 1");
 		//Clean the current req lists
 		killList = new HashMap<>();
 		itemList = new HashMap<>();
 
 		for (Map.Entry<EnemyType, Integer> map : qa.getQuest().getKillRequirement().entrySet()) {
 			killList.put(map.getKey().toString(), map.getValue());
-			System.out.println("here 2");
 		}
 		for (Map.Entry<String, Integer> map : qa.getQuest().getItemRequirement().entrySet()) {
 			itemList.put(map.getKey().replace("_"," "), map.getValue());
-			System.out.println("here 3");
 		}
-
 	}
 
-	private void updateKillTable() {
+	private void updateTable(QuestArchive qa) {
+		updateKillTable(qa);
+		updateItemTable();
+	}
+
+	private void updateKillTable(QuestArchive qa) {
 		killRequire.clear();
 		killRequire.add(killTitle);
+		Player player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
 		for (Map.Entry<String,Integer> killMap: killList.entrySet()) {
 			killRequire.row();
-			killRequire.add(killMap.getKey() + " = " + killMap.getValue().toString());
+			EnemyType et = EnemyType.valueOf(killMap.getKey());
+			if (player.killLogGet(et) >
+					qa.getInitalKillLog().get(et) + qa.getQuest().getKillRequirement().get(et)) {
+				killRequire.add(killMap.getKey() + " = REQUISITE MET");
+			} else {
+				Integer killsGot = player.killLogGet(et) - qa.getInitalKillLog().get(et);
+				killRequire.add(killMap.getKey() + " = " + killsGot.toString() + " of "  +
+						qa.getQuest().getKillRequirement().get(et));
+			}
+		}
+	}
+
+	private void updateItemTable() {
+		itemRequire.clear();
+		itemRequire.add(itemTitle);
+		Player player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
+		for (Map.Entry<String,Integer> itemMap: itemList.entrySet()) {
+			itemRequire.row();
+			if (player.getInventory().numberOf(itemMap.getKey()) > itemMap.getValue()) {
+				itemRequire.add(itemMap.getKey() + " = REQUISITE MET");
+			} else {
+				itemRequire.add(itemMap.getKey() + " = " + player.getInventory().numberOf(itemMap.getKey()) +
+								" of " + itemMap.getValue().toString());
+			}
+
 		}
 	}
 		
