@@ -76,7 +76,7 @@ public class Tree extends Enemy implements Tickable {
      *  Logic for Tree
      *
      */
-    void tree(){
+    private void tree(){
         this.setMovementSpeed(0);
         this.defaultSpeed = 0;
 

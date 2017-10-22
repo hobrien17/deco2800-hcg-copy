@@ -67,19 +67,25 @@ public class Crab extends Enemy implements Tickable {
      *  Logic for Crab
      *
      */
-    void crab(){
+    private void crab(){
         if (this.getNumberPlayers() > 1) {
             findClosestPlayer();
             this.lastPlayerX = closestPlayer.getPosX();
             this.lastPlayerY = closestPlayer.getPosY();
-
+            if(this.distance(closestPlayer) < 7){
+                //open fire!!
+            }
         } else {
             this.lastPlayerX = playerManager.getPlayer().getPosX();
             this.lastPlayerY = playerManager.getPlayer().getPosY();
+            if(this.distance(playerManager.getPlayer()) < 7){
+                //open fire!!
+            }
         }
         //Set new position
         newPos = this.getToPlayerPos(closestPlayer);
         this.detectCollision();
         this.moveAction();
+
     }
 }
