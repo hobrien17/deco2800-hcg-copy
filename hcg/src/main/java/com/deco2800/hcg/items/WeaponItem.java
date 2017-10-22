@@ -77,6 +77,15 @@ public class WeaponItem extends SingleItem {
         return itemName;
     }
 
+    @Override
+    public String getName() {
+        if(this.getRarity() == ItemRarity.LEGENDARY) {
+            return String.format("%s %s", this.getRarity().rarity, this.itemName);
+        } else {
+            return this.itemName;
+        }
+    }
+
     /**
      * Sets a new name for the item.
      * @param newName the new name for the item.
