@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="1990">
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="1992">
  <properties>
   <property name="PlayerX" value="50"/>
   <property name="PlayerY" value="50"/>
@@ -136,6 +136,13 @@
     <property name="texture" value="character_1"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup name="car">
+  <properties>
+   <property name="name" value="car"/>
+  </properties>
+  <object id="1990" gid="133" x="3070.08" y="1433.09" width="55" height="32"/>
+  <object id="1991" gid="133" x="1813.92" y="994.582" width="55" height="32"/>
  </objectgroup>
  <objectgroup name="warningsign">
   <properties>
@@ -2514,7 +2521,6 @@
    <property name="name" value="leaflesstree"/>
   </properties>
   <object id="1793" gid="5" x="2208" y="544" width="55" height="32"/>
-  <object id="1794" gid="5" x="1792" y="896" width="55" height="32"/>
   <object id="1795" gid="5" x="864" y="864" width="55" height="32"/>
   <object id="1796" gid="5" x="480" y="544" width="55" height="32"/>
   <object id="1797" gid="5" x="1280" y="512" width="55" height="32"/>

@@ -219,7 +219,11 @@ public class TextureManager extends Manager {
             textureMap.put("invisible", new Texture("resources/terrain_objects/invisible.png"));
             textureMap.put("barbeque", new Texture("resources/terrain_objects/barbeque.png"));
             textureMap.put("warningsign", new Texture("resources/terrain_objects/danger_sign_post.png"));
+<<<<<<< HEAD
 			textureMap.put("volcano", new Texture("resources/terrain_objects/volcano_01.png"));
+=======
+            textureMap.put("car", new Texture("resources/terrain_objects/carwreck_01.png"));
+>>>>>>> 6396c79da6a1d094ba3215356e20994ed1dab322
 
 			// terrain tiles
 			textureMap.put("poisontile", new Texture("resources/maps/textures/deprecated/sludgebubbling1.png"));
