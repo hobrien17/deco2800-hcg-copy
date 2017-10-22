@@ -1,5 +1,6 @@
 package com.deco2800.hcg.managers;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
@@ -103,6 +104,7 @@ public class WeatherManager extends Manager {
 			stopAllEffect();
 			return;
 		}
+		Color baseColor = new Color(0.3f, 0.3f,0.5f, 1);
 		switch (weatherType) {
 		case RAIN:
 			setUp("2dRain.p");
@@ -121,8 +123,7 @@ public class WeatherManager extends Manager {
 			shaderManager.setOvercast(0f);
 			break;
 		case DROUGHT:
-			setUp("2dDrought.p");
-			shaderManager.setOvercast(0f);
+			shaderManager.setCustom(0f, 0.15f, 0f, baseColor, 1000);
 			break;
 		case STORM:
 			setUp("2dStorm.p");
