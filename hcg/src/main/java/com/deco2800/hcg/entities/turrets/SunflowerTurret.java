@@ -73,7 +73,7 @@ public class SunflowerTurret extends AbstractTurret {
 				double newX = master.getPosX() + Math.cos(radAngle);
 				double newY = master.getPosY() + Math.sin(radAngle);
 				GrassBullet bullet = new GrassBullet(master.getPosX(), master.getPosY(), master.getPosZ(),
-						(float) newX, (float) newY, 0, master);
+						(float) newX, (float) newY, 0, master, 0.5f);
 				GameManager.get().getWorld().addEntity(bullet);
 			}
 			o.deleteObserver(this);
@@ -86,7 +86,7 @@ public class SunflowerTurret extends AbstractTurret {
 			if (closest.isPresent()) {
 				Enemy enemy = (Enemy) closest.get();
 				Bullet bullet = new Bullet(master.getPosX(), master.getPosY(), master.getPosZ(), enemy.getPosX(),
-						enemy.getPosY(), enemy.getPosZ(), master, 1);
+						enemy.getPosY(), enemy.getPosZ(), master, 1, 0.5f);
 				GameManager.get().getWorld().addEntity(bullet);
 				ammo--;
 			} else {
@@ -94,7 +94,7 @@ public class SunflowerTurret extends AbstractTurret {
 				float goalX = master.getPosX() + (float) (RANGE * Math.cos(angle));
 				float goalY = master.getPosY() + (float) (RANGE * Math.sin(angle));
 				Bullet bullet = new Bullet(master.getPosX(), master.getPosY(), master.getPosZ(), goalX, goalY, 0,
-						master, 1);
+						master, 1, 0.5f);
 				GameManager.get().getWorld().addEntity(bullet);
 				ammo--;
 			}

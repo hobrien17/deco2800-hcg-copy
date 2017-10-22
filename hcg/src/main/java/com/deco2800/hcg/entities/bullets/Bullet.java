@@ -70,9 +70,9 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float xd, float yd,
-				  AbstractEntity user, int hitCount) {
+				  AbstractEntity user, int hitCount, float speed) {
 		this(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount);
+				user, hitCount, speed);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -97,8 +97,8 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
-				  float newZ, AbstractEntity user, int hitCount) {
-		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, 0.5f);
+				  float newZ, AbstractEntity user, int hitCount, float speed) {
+		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, speed);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -265,7 +265,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	}
 
 	/**
-	 * Method to overwrite in the grassBullet and trackingBullet class.
+	 * Method to overwrite in the grassBullet and homingBullet class.
 	 * Called in the onTick method.
 	 */
 	protected void specialAbility() {

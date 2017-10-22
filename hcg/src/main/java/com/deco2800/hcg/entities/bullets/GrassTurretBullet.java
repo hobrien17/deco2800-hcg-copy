@@ -6,9 +6,9 @@ import com.deco2800.hcg.managers.GameManager;
 
 public class GrassTurretBullet extends Bullet {
 	public GrassTurretBullet(float posX, float posY, float posZ, float goalX, float goalY, float goalZ,
-			  AbstractEntity user) {
+			  AbstractEntity user, float speed) {
 		super(posX, posY, posZ, goalX, goalY, goalZ,
-			user, 1);
+			user, 1, speed);
 		this.setTexture("battle_seed_green");
 		this.bulletType = BulletType.GRASS;
 	}

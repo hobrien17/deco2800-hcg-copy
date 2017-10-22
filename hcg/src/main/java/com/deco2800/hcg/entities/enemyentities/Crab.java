@@ -61,7 +61,7 @@ public class Crab extends Enemy implements Tickable {
             if(explosionCounter >= 150) {
                 ExplosionBullet explode = new ExplosionBullet(explosionLocation.getPosX(),
                         explosionLocation.getPosY(), explosionLocation.getPosZ(),
-                        explosionLocation.getPosX(), explosionLocation.getPosY(), this, 1);
+                        explosionLocation.getPosX(), explosionLocation.getPosY(), this, 1, 0.5f);
                 GameManager.get().getWorld().addEntity(explode);
                 GameManager.get().getWorld().removeEntity(explosionLocation);
             } else {

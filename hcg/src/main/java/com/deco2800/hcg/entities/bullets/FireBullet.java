@@ -34,9 +34,9 @@ public class FireBullet extends Bullet {
 	 *            the total number of enemies that can be hit
 	 */
 	public FireBullet(float posX, float posY, float posZ, float xd, float yd,
-					  AbstractEntity user, int hitCount) {
+					  AbstractEntity user, int hitCount, float speed) {
 		super(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount);
+				user, hitCount, speed);
 		this.setTexture("battle_seed_red");
 		this.bulletType = BulletType.FIRE;
 	}
@@ -59,8 +59,9 @@ public class FireBullet extends Bullet {
 	 * @param user
 	 *           the entity who shot this bullet
 	 */
-	public FireBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
-		super(posX, posY, posZ, newX, newY, newZ, user, 1);
+	public FireBullet(float posX, float posY, float posZ, float newX, float newY, float newZ,
+					  AbstractEntity user, float speed) {
+		super(posX, posY, posZ, newX, newY, newZ, user, 1, speed);
 		this.setTexture("battle_seed_red");
 		this.bulletType = BulletType.FIRE;
 	}
