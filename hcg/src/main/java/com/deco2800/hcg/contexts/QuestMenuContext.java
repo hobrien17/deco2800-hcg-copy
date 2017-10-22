@@ -313,7 +313,8 @@ public class QuestMenuContext extends UIContext {
 		for (Map.Entry<String,Integer> itemMap: itemList.entrySet()) {
 			itemRequire.row();
 			if (player.getInventory().numberOf(itemMap.getKey()) >= itemMap.getValue()) {
-				itemRequire.add(itemMap.getKey() + " = REQUISITE MET");
+				itemRequire.add(itemMap.getKey() + " = " + player.getInventory().numberOf(itemMap.getKey()) +
+						" of " + itemMap.getValue().toString() + " - REQUISITE MET");
 			} else {
 				itemRequire.add(itemMap.getKey() + " = " + player.getInventory().numberOf(itemMap.getKey()) +
 								" of " + itemMap.getValue().toString());
