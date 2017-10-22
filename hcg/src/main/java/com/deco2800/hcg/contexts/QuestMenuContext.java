@@ -44,6 +44,14 @@ public class QuestMenuContext extends UIContext {
 	private String detailsTitle;
 	private TextArea detailsText;
 	private ImageButton questsBack;
+	private Table killRequire;
+	private String enemyType;
+	private String enemyAmountText;
+	private Integer enemyAmount;
+	private Table itemRequire;
+	private String itemType;
+	private String itemAmountText;
+	private Integer itemAmount;
 	
 	public QuestMenuContext() {
 		
@@ -82,7 +90,11 @@ public class QuestMenuContext extends UIContext {
         
         detailsTable = new Table(skin);
         
-        detailsTextTable = new Table(skin);       
+        detailsTextTable = new Table(skin);    
+        
+        killRequire = new Table(skin);
+        
+        itemRequire = new Table(skin);
 		
 		//Create Image Button
 		questsBack = new ImageButton(new Image(textureManager.getTexture("instructions_back_button")).getDrawable());
@@ -140,6 +152,16 @@ public class QuestMenuContext extends UIContext {
 		nameTitle = new String("Quest Name: ");
 		detailsTitle = new String("Details:");
 		
+		//TODO Added the new Strings here
+		enemyType = new String("Enemy Type: ");
+		enemyAmountText = new String("Kill Amount Required: ");
+		itemType = new String("Item Type: ");
+		itemAmountText = new String("Item Amount Required: ");
+		
+		//TODO Added the new Integers here
+		enemyAmount = new Integer(0);
+		itemAmount = new Integer(0);
+		
 		detailsText = new TextArea("Click on a Quest to Display the Details", skin);
 		detailsText.setDisabled(true);
 		detailsText.setFillParent(true);
@@ -176,7 +198,17 @@ public class QuestMenuContext extends UIContext {
         detailsTextTable.add(detailsText).expand().fill();
         secondaryWindow.add(detailsTextTable).expand().fill();
         secondaryWindow.row();
-        
+        killRequire.add(enemyType);
+        killRequire.row();
+        killRequire.add(enemyAmountText);
+        killRequire.add(enemyAmount.toString());
+        secondaryWindow.add(killRequire).expandX().fillX().left();
+        secondaryWindow.row().padTop(10);
+        itemRequire.add(itemType);
+        itemRequire.row();
+        itemRequire.add(itemAmountText);
+        itemRequire.add(itemAmount.toString());
+        secondaryWindow.add(itemRequire).expandX().fillX().left();
         main.add(logWindow).expand(1, 1).fill();
         main.add(secondaryWindow).expand(4, 1).fill();
         main.row();
@@ -201,7 +233,11 @@ public class QuestMenuContext extends UIContext {
 				if(questManager.getQuest(readyList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(readyList.getSelected()).getDescription());
 				}
-				
+				//TODO Change the concats to whatever you want them to be
+				enemyType.concat("Enemy");
+				enemyAmountText.concat(enemyAmount.toString());
+				itemType.concat("Item");
+				itemAmountText.concat(itemAmount.toString());
 			}
 		});
 		
@@ -212,6 +248,11 @@ public class QuestMenuContext extends UIContext {
 				if(questManager.getQuest(activeList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(activeList.getSelected()).getDescription());
 				}
+				//TODO Change the concats to whatever you want them to be
+				enemyType.concat("Enemy");
+				enemyAmountText.concat(enemyAmount.toString());
+				itemType.concat("Item");
+				itemAmountText.concat(itemAmount.toString());
 			}
 		});
 		
@@ -222,6 +263,11 @@ public class QuestMenuContext extends UIContext {
 				if(questManager.getQuest(completedList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(completedList.getSelected()).getDescription());
 				}
+				//TODO Change the concats to whatever you want them to be
+				enemyType.concat("Enemy");
+				enemyAmountText.concat(enemyAmount.toString());
+				itemType.concat("Item");
+				itemAmountText.concat(itemAmount.toString());
 			}
 		});
 			

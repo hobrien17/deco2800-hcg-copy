@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1432">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1433">
+
  <properties>
   <property name="PlayerX" value="60"/>
   <property name="PlayerY" value="40"/>
@@ -9,6 +10,7 @@
  <tileset firstgid="7" source="../tiles/deprecated/general-tiles.tsx"/>
  <tileset firstgid="17" source="../tiles/any_water_animated.tsx"/>
  <tileset firstgid="21" source="../tiles/exit.tsx"/>
+ <tileset firstgid="22" source="../tiles/deprecated/placeholder.tsx"/>
  <layer name="grass" width="100" height="100">
   <properties>
    <property name="name" value="grass"/>
@@ -117,6 +119,21 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="NPC">
+  <properties>
+   <property name="name" value="NPC"/>
+  </properties>
+  <object id="1432" gid="22" x="1761.95" y="1482.55" width="55" height="32">
+   <properties>
+    <property name="Type" value="Quest"/>
+    <property name="conversation" value="james_test"/>
+    <property name="fName" value="James"/>
+    <property name="faceImage" value="npc_face"/>
+    <property name="sName" value="TestNPC"/>
+    <property name="texture" value="character_1"/>
+   </properties>
+  </object>
+ </objectgroup>
  <layer name="paths" width="100" height="100">
   <properties>
    <property name="name" value="sand"/>
@@ -786,6 +803,54 @@
     <property name="name" value="thin-mushroom-trees"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup name="hedgehog">
+  <properties>
+   <property name="name" value="hedgehog"/>
+  </properties>
+  <object id="1432" gid="7" x="760.181" y="1308.18" width="55" height="32"/>
+  <object id="1433" gid="7" x="984.423" y="950.607" width="55" height="32"/>
+  <object id="1434" gid="7" x="875.057" y="241.792" width="55" height="32"/>
+  <object id="1435" gid="7" x="1634.56" y="736.833" width="55" height="32"/>
+  <object id="1436" gid="7" x="2459.8" y="772.205" width="55" height="32"/>
+  <object id="1437" gid="7" x="2566.41" y="2077.71" width="55" height="32"/>
+  <object id="1438" gid="7" x="2298.58" y="2278.87" width="55" height="32"/>
+  <object id="1439" gid="7" x="746.572" y="1897.55" width="55" height="32"/>
+  <object id="1440" gid="7" x="1547.73" y="678.21" width="55" height="32"/>
+  <object id="1441" gid="7" x="1705.97" y="762.398" width="55" height="32"/>
+  <object id="1442" gid="7" x="1810.15" y="785.483" width="55" height="32"/>
+  <object id="1443" gid="7" x="2628" y="573.693" width="55" height="32"/>
+  <object id="1444" gid="7" x="2555.77" y="688.348" width="55" height="32"/>
+  <object id="1445" gid="7" x="1009.93" y="397.825" width="55" height="32"/>
+  <object id="1446" gid="7" x="881.228" y="1108.35" width="55" height="32"/>
+  <object id="1447" gid="7" x="868.445" y="1363.55" width="55" height="32"/>
+  <object id="1448" gid="7" x="870.594" y="2628.07" width="55" height="32"/>
+  <object id="1449" gid="7" x="979.685" y="2737.16" width="55" height="32"/>
+  <object id="1450" gid="7" x="2165.25" y="1951.6" width="55" height="32"/>
+  <object id="1451" gid="7" x="2288.83" y="2149.23" width="55" height="32"/>
+  <object id="1452" gid="7" x="2565.08" y="2030.55" width="55" height="32"/>
+ </objectgroup>
+ <objectgroup name="squirrel">
+  <properties>
+   <property name="name" value="squirrel"/>
+  </properties>
+  <object id="1453" gid="11" x="1634.07" y="937.329" width="55" height="32"/>
+  <object id="1454" gid="11" x="1795.39" y="1066.92" width="55" height="32"/>
+  <object id="1455" gid="11" x="1790.48" y="1174.85" width="55" height="32"/>
+  <object id="1456" gid="11" x="1723.05" y="1290.77" width="55" height="32"/>
+  <object id="1457" gid="11" x="1853.73" y="1135.84" width="55" height="32"/>
+  <object id="1458" gid="11" x="1770.32" y="988.954" width="55" height="32"/>
+  <object id="1459" gid="11" x="1934.62" y="1079.2" width="55" height="32"/>
+  <object id="1460" gid="11" x="1891.42" y="1219.37" width="55" height="32"/>
+  <object id="1461" gid="11" x="1853.57" y="1396.61" width="55" height="32"/>
+  <object id="1462" gid="11" x="1944.26" y="1318.05" width="55" height="32"/>
+  <object id="1463" gid="11" x="2032.14" y="1211.98" width="55" height="32"/>
+  <object id="1464" gid="11" x="2066.3" y="1105.1" width="55" height="32"/>
+  <object id="1465" gid="11" x="1953.18" y="1006.09" width="55" height="32"/>
+  <object id="1466" gid="11" x="2184.53" y="1071.71" width="55" height="32"/>
+  <object id="1467" gid="11" x="2140.51" y="1158.16" width="55" height="32"/>
+  <object id="1468" gid="11" x="2104.92" y="1327.08" width="55" height="32"/>
+  <object id="1469" gid="11" x="2034.4" y="1397.6" width="55" height="32"/>
  </objectgroup>
  <objectgroup name="exit">
   <properties>

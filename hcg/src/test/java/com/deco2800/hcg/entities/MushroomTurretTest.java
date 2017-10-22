@@ -29,7 +29,7 @@ public class MushroomTurretTest {
       enemy = new MushroomTurret(5.0f,5.0f,0.0f, 0);
       // create mock game
       gameManager = GameManager.get();
-      AbstractWorld = mock(World.class);
+      AbstractWorld = new World();
       gameManager.setWorld(AbstractWorld);
       playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
     }
@@ -38,7 +38,7 @@ public class MushroomTurretTest {
     public void testLoot() {
         enemy.setupLoot();
         assertThat("MushroomTurret only has 1 drop.", enemy.getLoot().size(), is(equalTo(1)));
-        assertThat("Item should be fire seed", enemy.randItem(), is(equalTo(new LootWrapper("fire_seed"))));
+        assertThat("Item should be fire seed", enemy.randItem(), is(equalTo(new LootWrapper("fire_seed", 1.0f))));
     }
 
     @Test

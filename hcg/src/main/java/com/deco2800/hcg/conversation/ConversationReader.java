@@ -26,6 +26,7 @@ public class ConversationReader {
 
 	// Read a Conversation from a file
 	public static Conversation readConversation(String filename) {
+
 		try {
 			JsonParser parser = new JsonParser();
 			BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -137,53 +138,82 @@ public class ConversationReader {
 	// Parse a JSON condition into a Condition object
 	private static AbstractConversationCondition deserialiseOptionCondition(JsonElement jCondition) {
 
-		// Collect options and arguments
-		String condition = jCondition.getAsString();
-		Scanner scanner = new Scanner(condition).useDelimiter("\\|");
-		String command = scanner.next();
-		boolean negate = false;
-		if (command.charAt(0) == '!') {
-			command = command.substring(1);
-			negate = true;
-		}
-		List<String> args = new ArrayList<>();
-		while (scanner.hasNext()) {
-			args.add(scanner.next());
-		}
-		scanner.close();
+		Scanner scanner = null;
 
-		// Generate the appropriate condition object
-		switch (command) {
-			case "checkRelationship":    return buildCheckRelationshipCondition(condition, negate, args);
-			case "healthPercentBelow":   return buildHealthPercentBelowCondition(condition, negate, args);
-			case "questNotStarted":      return buildQuestNotStartedCondition(condition, negate, args);
-			case "questActive":          return buildQuestActiveCondition(condition, negate, args);
-			case "questCompleted":       return buildQuestCompletedCondition(condition, negate, args);
-			default:                     throw new ResourceLoadException("No such condition: " + condition);
-		}
+		try {
+			// Collect options and arguments
+			String condition = jCondition.getAsString();
+			scanner = new Scanner(condition);
+			scanner.useDelimiter("\\|");
+			String command = scanner.next();
+			boolean negate = false;
+			if (command.charAt(0) == '!') {
+				command = command.substring(1);
+				negate = true;
+			}
+			List<String> args = new ArrayList<>();
+			while (scanner.hasNext()) {
+				args.add(scanner.next());
+			}
+			scanner.close();
 
+			// Generate the appropriate condition object
+			switch (command) {
+				case "checkRelationship":
+					return buildCheckRelationshipCondition(condition, negate, args);
+				case "healthPercentBelow":
+					return buildHealthPercentBelowCondition(condition, negate, args);
+				case "questNotStarted":
+					return buildQuestNotStartedCondition(condition, negate, args);
+				case "questActive":
+					return buildQuestActiveCondition(condition, negate, args);
+				case "questCompleted":
+					return buildQuestCompletedCondition(condition, negate, args);
+				default:
+					throw new ResourceLoadException("No such condition: " + condition);
+			}
+		} finally {
+			if (scanner != null) {
+				scanner.close();
+			}
+		}
 	}
+
 
 	// Parse a JSON action into a Action object
 	private static AbstractConversationAction deserialiseOptionAction(JsonElement jCondition) {
 
-		// Collect options and arguments
-		String action = jCondition.getAsString();
-		Scanner scanner = new Scanner(action).useDelimiter("\\|");
-		String command = scanner.next();
-		List<String> args = new ArrayList<>();
-		while (scanner.hasNext()) {
-			args.add(scanner.next());
-		}
-		scanner.close();
+		Scanner scanner = null;
 
-		// Generate the appropriate action object
-		switch (command) {
-			case "setRelationship":      return buildSetRelationshipAction(action, args);
-			case "giveItems":            return buildGiveItemsAction(action, args);
-			case "startQuest":           return buildStartQuestAction(action, args);
-			case "finishCurrentQuest":   return buildFinishQuestAction(action, args);
-			default:                     throw new ResourceLoadException("No such action: " + action);
+		try {
+			// Collect options and arguments
+			String action = jCondition.getAsString();
+			scanner = new Scanner(action);
+			scanner.useDelimiter("\\|");
+			String command = scanner.next();
+			List<String> args = new ArrayList<>();
+			while (scanner.hasNext()) {
+				args.add(scanner.next());
+			}
+			scanner.close();
+
+			// Generate the appropriate action object
+			switch (command) {
+				case "setRelationship":
+					return buildSetRelationshipAction(action, args);
+				case "giveItems":
+					return buildGiveItemsAction(action, args);
+				case "startQuest":
+					return buildStartQuestAction(action, args);
+				case "finishCurrentQuest":
+					return buildFinishQuestAction(action, args);
+				default:
+					throw new ResourceLoadException("No such action: " + action);
+			}
+		} finally {
+			if (scanner != null) {
+				scanner.close();
+			}
 		}
 
 	}
@@ -236,6 +266,7 @@ public class ConversationReader {
 			return new GiveItemsAction(args.get(0), Integer.parseInt(args.get(1)));
 		} catch (NumberFormatException e) {
 			throw new ResourceLoadException("Unparsable int in action: " + source, e);
+
 		}
 	}
 

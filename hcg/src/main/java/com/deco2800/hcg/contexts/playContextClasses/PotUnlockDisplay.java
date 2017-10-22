@@ -78,7 +78,7 @@ public class PotUnlockDisplay extends Window {
 		generator.dispose();
 
 		TextureManager texManager = (TextureManager)gameManager.getManager(TextureManager.class);
-		Image keyImage = new Image(texManager.getTexture("key"));
+		Image keyImage = new Image(texManager.getTexture("key_icon"));
 		infoTbl = new Table();
 		infoLbl = new Label("", bold);
 		titleLbl = new Label("", normal);

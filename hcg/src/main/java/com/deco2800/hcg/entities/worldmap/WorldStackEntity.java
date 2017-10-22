@@ -18,7 +18,7 @@ public class WorldStackEntity extends Actor {
 	public WorldStackEntity() {
         GameManager gameManager = GameManager.get();
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
-        worldStackBackground = textureManager.getTexture("ws_purp_bg");
+        worldStackBackground = textureManager.getTexture("ws_main_bg");
     }
 
     @Override

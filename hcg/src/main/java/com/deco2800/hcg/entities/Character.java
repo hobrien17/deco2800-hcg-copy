@@ -2,11 +2,17 @@ package com.deco2800.hcg.entities;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.quests.QuestManager;
+import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
 
@@ -42,7 +48,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
 	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList( "level", "xp", "carryWeight",
-            "strength", "vitality", "agility", "charisma", "intellect", "meleeSkill", "gunsSkill", "energyWeaponsSkill");
+            "strength", "vitality", "agility", "charisma", "intellect", "machineGunSkill", "shotGunSkill", "starGunSkill");
 
 	protected String name;
 
@@ -66,6 +72,10 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 
     // Effects container
     protected Effects myEffects;
+    
+    protected int tickCount = 0;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Character.class);
 
     //Kill Log with worlds
     //Main level is a mapping between the world ID to Enemies and their amount of kills
@@ -132,12 +142,12 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 
     /**
      * Sets the character's skills
-     * @param meleeSkill
+     *
      */
-    protected void setSkills(int meleeSkill, int gunsSkill, int energyWeaponsSkill) {
-        this.attributes.put("meleeSkill", meleeSkill);
-        this.attributes.put("gunsSkill", gunsSkill);
-        this.attributes.put("energyWeaponsSkill", energyWeaponsSkill);
+    protected void setSkills(int machineGunskill, int shotGunSkill, int starGunSkill) {
+        this.attributes.put("machineGunSkill", machineGunskill);
+        this.attributes.put("shotGunSkill", shotGunSkill);
+        this.attributes.put("starGunSkill", starGunSkill);
     }
 
     /**
@@ -512,6 +522,38 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      */
     @Override
     public void onTick(long gameTickCount) {
+        checkParticles();
         myEffects.apply();
+    }
+    
+    protected void checkParticles() {
+        if(tickCount < 30) {
+            tickCount++;
+        } else {
+            for(Effect effect : myEffects.getEffects()) {
+                if("Fire".equals(effect.getName())) {
+                    spawnParticles(this, "fire.p");
+                }
+                if("Ice".equals(effect.getName())) {
+                    spawnParticles(this, "frozen.p");
+                }
+            }
+            tickCount = 0;
+        }
+    }
+    
+    protected void spawnParticles(AbstractEntity entity, String particleFile) {
+        try {
+            ParticleEffect effect = new ParticleEffect();
+            effect.load(Gdx.files.internal("resources/particles/" + particleFile),
+            Gdx.files.internal("resources/particles/"));
+            Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX() + entity.getXLength()/2,
+                    entity.getPosY() + entity.getYLength()/2, 0));
+            effect.setPosition(position.x, position.y);
+            effect.start();
+            ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, effect);
+        } catch (Exception e) {
+            LOGGER.error("Unable to load particle effects.",e);
+        }
     }
 }

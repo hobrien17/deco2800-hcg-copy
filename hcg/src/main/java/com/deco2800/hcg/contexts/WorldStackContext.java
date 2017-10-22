@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
+import com.deco2800.hcg.entities.worldmap.WorldStackBlackoutEntity;
 import com.deco2800.hcg.entities.worldmap.WorldStackEntity;
 import com.deco2800.hcg.entities.worldmap.WorldStackMapEntity;
 import com.deco2800.hcg.managers.ContextManager;
@@ -41,6 +43,7 @@ public class WorldStackContext extends UIContext {
 	private ArrayList<WorldStackMapEntity> hiddenWorldMaps;
 
 	private Window window;
+	private Window skipWindow;
 	
 	Skin skin;
 
@@ -91,12 +94,66 @@ public class WorldStackContext extends UIContext {
 				contextManager.popContext();
 			}
 		});
-
+		
 		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage); // Add the UI as a processor
-		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
+		
+		if(!gameManager.getTutorialMessageDisplayed()) {
+			createSkipTutorialLevel(inputManager);
+		} else {
+			inputMultiplexer.addProcessor(inputManager);
+		}
+	}
+	
+	private void createSkipTutorialLevel(InputManager inputManager) {
+		stage.addActor(new WorldStackBlackoutEntity());
+		skipWindow = new Window("Skip Tutorial World? (Not recommended)", skin);
+    	Button yesButton = new TextButton("Yes", skin);
+    	yesButton.pad(5, 10, 5, 10);
+    	Button noButton = new TextButton("No", skin);
+    	noButton.pad(5, 10, 5, 10);
+    	
+    	/* Add a programmatic listener to the buttons */
+		yesButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				skipWorld();
+				inputMultiplexer.addProcessor(inputManager);
+				gameManager.setTutorialMessageDisplayed();
+			}
+		});
+
+		noButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				skipWindow.remove();
+				inputMultiplexer.addProcessor(inputManager);
+				WorldStackContext context = gameManager.getStackContext();
+		    	context.updateWorldDisplay();
+		    	gameManager.setTutorialMessageDisplayed();
+			}
+		});
+		
+    	skipWindow.add(yesButton);
+    	skipWindow.add(noButton);
+    	skipWindow.pack();
+		skipWindow.setMovable(false); // So it doesn't fly around the screen
+		skipWindow.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+		stage.addActor(skipWindow);
+	}
+	
+	private void skipWorld() {
+		worldManager.setWorldMap(0);
+		for(WorldMap map : gameManager.getWorldStack().getWorldStack()) {
+    		if(map.getWorldPosition() == gameManager.getWorldMap().getWorldPosition() + 1) {
+    			map.setUnlocked();
+    		}
+    	}
+    	gameManager.getWorldMap().toggleCompleted();
+    	WorldStackContext context = gameManager.getStackContext();
+    	context.updateWorldDisplay();
 	}
 	
 	/**

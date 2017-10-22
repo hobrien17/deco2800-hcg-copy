@@ -20,10 +20,20 @@ public class WorldMapEntity extends Actor {
 	/**
 	 * Constructor loads the correct texture from the TextureManager
 	 */
-	public WorldMapEntity() {
+	public WorldMapEntity(int biomeType) {
         GameManager gameManager = GameManager.get();
         TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
-        mapBackground = textureManager.getTexture("wm_green_bg");
+        switch(biomeType) {
+        	case 1:
+        		mapBackground = textureManager.getTexture("wm_urban_bg");
+        		break;
+        	case 2:
+        		mapBackground = textureManager.getTexture("wm_forest_bg");
+        		break;
+        	case 3:
+        		mapBackground = textureManager.getTexture("wm_waste_bg");
+        		break;
+        }
     }
 
     @Override

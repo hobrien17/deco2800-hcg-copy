@@ -17,13 +17,13 @@ public class LevelStartMessage extends Message {
 	
 	private int nodeIndex;
 	
-	public LevelStartMessage() {
-		// Default constructor
-	}
-	
 	public LevelStartMessage(int nodeIndex) {
 		super(MessageType.LEVEL_START);
 		this.nodeIndex = nodeIndex;
+	}
+	
+	public LevelStartMessage(SocketAddress address) {
+		super(address);
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class LevelStartMessage extends Message {
 	}
 	
 	@Override
-	public void process(SocketAddress address) {
+	public void process() {
 		worldManager.selectNode(nodeIndex);
 	}
 }

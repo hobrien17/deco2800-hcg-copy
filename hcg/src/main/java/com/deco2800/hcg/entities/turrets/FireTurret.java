@@ -3,7 +3,9 @@ package com.deco2800.hcg.entities.turrets;
 import java.util.List;
 import java.util.Observable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.bullets.Fireball;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
@@ -21,9 +23,8 @@ import com.deco2800.hcg.util.WorldUtil;
 public class FireTurret extends AbstractTurret {
 
 	private int seconds;
-	private int range;
-	private static final int NORMAL_RANGE = 10;
-	private static final int REDUCED_RANGE = 7;
+	private boolean infinite;
+	private static final int RANGE = 10;
 	private static final int EXP_RANGE = 2;
 
 	/**
@@ -36,9 +37,9 @@ public class FireTurret extends AbstractTurret {
 		super(master, "Inferno");
 		seconds = 0;
 		if(GameManager.get().getWorld().getWeatherType().equals(Weathers.RAIN)) {
-			range = REDUCED_RANGE;
+			infinite = false;
 		} else {
-			range = NORMAL_RANGE;
+			infinite = true;
 		}
 	}
 
@@ -54,25 +55,30 @@ public class FireTurret extends AbstractTurret {
 	@Override
 	public void update(Observable o, Object arg) {
 		
-		float[][] pos = { { master.getPosX() + range, master.getPosY() + range },
-				{ master.getPosX() + range, Math.max(0, master.getPosY() - range) },
-				{ Math.max(0, master.getPosX() - range), master.getPosY() + range },
-				{ Math.max(0, master.getPosX() - range), Math.max(0, master.getPosY() - range) } };
-		if (seconds == 5) {
+		float[][] pos = { { master.getPosX() + RANGE, master.getPosY() + RANGE },
+				{ master.getPosX() + RANGE, Math.max(0, master.getPosY() - RANGE) },
+				{ Math.max(0, master.getPosX() - RANGE), master.getPosY() + RANGE },
+				{ Math.max(0, master.getPosX() - RANGE), Math.max(0, master.getPosY() - RANGE) } };
+		if (seconds == 13) {
 			if(GameManager.get().getWorld().getWeatherType().equals(Weathers.SANDSTORM)) {
 				Explosion exp = new Explosion(master.getPosX()+1, master.getPosY(), 0, 0.25f);
 				GameManager.get().getWorld().addEntity(exp);
 				List<AbstractEntity> entities = WorldUtil.allEntitiesToPosition(master.getPosX(), 
 						master.getPosY(), EXP_RANGE, Enemy.class);
+				entities.addAll(WorldUtil.allEntitiesToPosition(master.getPosX(), master.getPosY(), EXP_RANGE, Player.class));
 				for(AbstractEntity entity : entities) {
+					if(entity instanceof Player) {
+						((Player) entity).takeDamage(10);
+						continue;
+					}
 					GameManager.get().getWorld().removeEntity(entity);
 				}
 			}
 			o.deleteObserver(this);
 			GameManager.get().getWorld().removeEntity(master);
 		} else if (seconds > 0) {
-			Fireball fire = new Fireball(master.getPosX(), master.getPosY(), master.getPosZ(), pos[seconds - 1][0],
-					pos[seconds - 1][1], master.getPosZ(), master);
+			Fireball fire = new Fireball(master.getPosX(), master.getPosY(), master.getPosZ(), pos[(seconds - 1) % 4][0],
+					pos[(seconds - 1) % 4][1], master.getPosZ(), master, infinite, 1000);
 			GameManager.get().getWorld().addEntity(fire);
 		}
 		seconds++;
@@ -81,6 +87,16 @@ public class FireTurret extends AbstractTurret {
 	@Override
 	public String getThisTexture() {
 		return "fire_corpse";
+	}
+
+	@Override
+	public int getGlowStrength() {
+		return 3;
+	}
+
+	@Override
+	public Color getGlowColor() {
+		return Color.RED;
 	}
 
 }

@@ -37,14 +37,14 @@ public class WorldStackMapEntity extends Actor {
         int viewPortY = Gdx.graphics.getHeight();
         
         // pixels padding around each direction of the map
-     	int mapPadding = (int) (0.05 * viewPortX);
+     	int mapPadding = (int) (0.06 * viewPortX);
 
         // Calculates the spacing between cells
         int renderableColWidth = (viewPortX - mapPadding) / gameManager.getWorldStack().getNumberOfWorlds();
 
         // Calculates the nodes position in the grid layout
         xPos = renderableColWidth * worldMap.getWorldPosition() + mapPadding;
-        yPos = viewPortY/2;
+        yPos = viewPortY/3;
 
         // Calculate the scaling required on the sprite height.
         spriteHeight = worldStackMapTexture.getHeight() / (worldStackMapTexture.getWidth() / spriteWidth);

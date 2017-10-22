@@ -2,6 +2,7 @@ package com.deco2800.hcg.weapons;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.ItemRarity;
 
 /**
  * The Machinegun class represents a machine gun type weapon
@@ -27,6 +28,7 @@ public class Machinegun extends Weapon implements Tickable {
             AbstractEntity user, double radius, String texture, int cooldown) {
         super(posX, posY, posZ, xLength, yLength, zLength, weaponType, user, radius,
                 texture, cooldown);
+        this.pellets = 1;
     }
     
     @Override
@@ -37,10 +39,18 @@ public class Machinegun extends Weapon implements Tickable {
     }
     
     @Override
-    protected void fireWeapon() {
+    protected void fire() {
         shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
                 this.aim.x, this.aim.y);
         playFireSound();
+
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashSize = 3;
+        muzzleFlashStartTime = System.currentTimeMillis();
     }
-    
+
+    public ItemRarity getRarity() {
+        return ItemRarity.UNCOMMON;
+    }
 }

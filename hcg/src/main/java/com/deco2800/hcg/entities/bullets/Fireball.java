@@ -1,7 +1,14 @@
 package com.deco2800.hcg.entities.bullets;
 
+import java.util.List;
+
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Harmable;
+import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.SoundManager;
+import com.deco2800.hcg.util.Effect;
+import com.deco2800.hcg.util.WorldUtil;
 
 /**
  * Fireball class
@@ -13,6 +20,9 @@ import com.deco2800.hcg.managers.GameManager;
  *
  */
 public class Fireball extends FireBullet {
+	
+	private boolean infinite;
+	private int damage;
 
 	/**
 	 * Creates a new fireball moving towards the given co-ordinates
@@ -32,9 +42,12 @@ public class Fireball extends FireBullet {
 	 * @param user
 	 * 			the entity who shot the fireball
 	 */
-	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
-		super(getPosChange(posX, posY, newX, newY)[0], getPosChange(posX, posY, newX, newY)[1], posZ, newX, newY, newZ, 
-				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, -1);
+	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user, boolean infinite, int damage) {
+		super(getPosChange(posX, posY, newX, newY)[0], getPosChange(posX, posY, newX, newY)[1], posZ, newX + 1f, newY, newZ, 
+				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, -1, 0.5f, damage);
+		((SoundManager)GameManager.get().getManager(SoundManager.class)).playSound("fireball");
+		this.damage = damage;
+		this.infinite = infinite;
 		if(newX > posX && newY > posY) {
 			this.setTexture("fireball_right");
 		} else if(newX > posX && newY < posY) {
@@ -44,6 +57,8 @@ public class Fireball extends FireBullet {
 		} else if(newX < posX && newY > posY) {
 			this.setTexture("fireball_down");
 		}
+		this.changeX *= 0.5f;
+		this.changeY *= 0.5f;
 	}
 	
 	/**
@@ -113,10 +128,25 @@ public class Fireball extends FireBullet {
 				- Math.abs(goalX)) < 0.5
 				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
 				- Math.abs(goalY)) < 0.5) {
-			GameManager.get().getWorld().removeEntity(this);
+			if(!infinite) {
+				GameManager.get().getWorld().removeEntity(this);
+			}
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);
+		if (distanceTravelled >= 100 || outOfBounds()) {
+			GameManager.get().getWorld().removeEntity(this);
+		}
+	}
+	
+	@Override
+	protected void applyEffect(Harmable target) {
+		AbstractEntity entity = (AbstractEntity)target;
+		List<AbstractEntity> closest = WorldUtil.allEntitiesToPosition(entity.getPosX(), entity.getPosY(), 3, Enemy.class);
+		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0, user));
+		for(AbstractEntity other : closest) {
+			((Enemy)other).giveEffect(new Effect("Fire", 1, 5, 1, 0, 200, 0, user));
+		}
 	}
 
 }

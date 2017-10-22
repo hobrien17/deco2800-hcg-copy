@@ -9,44 +9,62 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.entities.bullets.BulletType;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.util.WorldUtil;
-import com.deco2800.hcg.weapons.Weapon;
-import com.deco2800.hcg.weapons.WeaponType;
-import com.deco2800.hcg.entities.bullets.BulletType;
+import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.stackable.ConsumableItem;
 import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.items.stackable.SmallMushroom;
+import com.deco2800.hcg.items.stackable.SpeedPotion;
+import com.deco2800.hcg.items.stackable.MagicMushroom;
+import com.deco2800.hcg.items.tools.Trowel;
+import com.deco2800.hcg.items.tools.Hoe;
+import com.deco2800.hcg.items.tools.Shovel;
+import com.deco2800.hcg.items.tools.Fertiliser;
+import com.deco2800.hcg.items.tools.Tool;
+import com.deco2800.hcg.items.tools.BugSpray;
+import com.deco2800.hcg.inventory.PlayerEquipment;
 
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
     private TextureManager textureManager;
     private GameManager gameManager;
     private SoundManager soundManager;
+    private PlayerManager playerManager;
 
-    private Weapon weapon;
-    private WeaponType weaponType;
     private boolean active;
-    private Player player;
+    private PlayerEquipment equippedItems;
+    private Inventory inventory;
     private BulletType bulletType;
-    private HealthPotion healthPotion;
     
     private List<ImageButton> buttons;
-    private ImageButton closeButton;
+    private List<Label> counts;
     private Image outline;
+    private LabelStyle style;
     
     private Stage stage;
     private Group display;
@@ -69,6 +87,7 @@ public class GeneralRadialDisplay extends Group {
 	public GeneralRadialDisplay(Stage stage, List<String> items) {
 		this.items = new ArrayList<>(items);
 		buttons = new ArrayList<>();
+		counts = new ArrayList<>();
 		
 		int scale = this.items.size()/MAX_BTNS + 1;
 		xSize = X_SIZE_MAX/(scale);
@@ -78,14 +97,20 @@ public class GeneralRadialDisplay extends Group {
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         plantManager = (PlantManager) gameManager.getManager(PlantManager.class);
         soundManager = (SoundManager) gameManager.getManager(SoundManager.class);
-        this.stage = stage;
+        playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 
+        this.stage = stage;
         this.active = false;
-		this.player = player;
-		this.weapon = weapon;
-		this.weaponType = weaponType;
-		this.bulletType = BulletType.BASIC;
-		this.healthPotion = healthPotion;
+
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("resources/ui/radial_menu/advent_pro.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 40;
+		BitmapFont font = generator.generateFont(parameter);
+		style = new LabelStyle(font, Color.valueOf("#FFFFFF"));
+		generator.dispose();
+
+		inventory = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer().getInventory();
+		playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.BASIC);
 		
         setupSprites();
         setupListeners();
@@ -93,7 +118,6 @@ public class GeneralRadialDisplay extends Group {
         display = new Group();
 
         outline = getImage("outline");
-        closeButton = new ImageButton(getImage("close").getDrawable());
         
         outline.setSize(OUTLINE_SIZE, OUTLINE_SIZE);
         outline.setPosition(display.getWidth() / 2f - outline.getWidth() / 2f, 
@@ -110,20 +134,28 @@ public class GeneralRadialDisplay extends Group {
 			button.addListener(listeners.get(item));
 			display.addActor(button);
 		}
-		
-		closeButton = new ImageButton(getImage("close").getDrawable());
-		closeButton.setSize(X_SIZE_MAX, Y_SIZE_MAX);
-		closeButton.setPosition(display.getWidth()/2f - X_SIZE_MAX/2f, 
-				display.getHeight()/2f - Y_SIZE_MAX/2f);
-		display.addActor(closeButton);
 
-		
-		closeButton.addListener(new ChangeListener() {
-	            @Override
-	            public void changed(ChangeEvent event, Actor actor) {
-	                display.remove();
-	            }
-	        });
+
+	}
+	
+	@Override
+	public float getWidth() {
+		return display.getWidth();
+	}
+	
+	@Override
+	public float getHeight() {
+		return display.getHeight();
+	}
+	
+	@Override
+	public float getX() {
+		return display.getX();
+	}
+	
+	@Override
+	public float getY() {
+		return display.getY();
 	}
 	
 	private void setupSprites() {
@@ -141,14 +173,19 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("fireC", "fire_btn");
 		sprites.put("grassC", "grass_btn");
 		sprites.put("outline", "radialOutline");
-		sprites.put("close", "menuClose");
-		sprites.put("grenadeLauncher", "grenadeLauncher");
-		sprites.put("machineGun", "machineGun");
+		sprites.put("machinegun", "machineGun");
 		sprites.put("shotgun", "shotgun");
+		sprites.put("multigun", "scatterGun");
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
-		sprites.put("bugSpray", "bugspray_btn");
-		sprites.put("Health Potion", "healthPotion");
+		sprites.put("bug_spray", "bugspray_btn");
+		sprites.put("snag", "snag_btn");
+		sprites.put("sausage", "sausage_btn");
+		sprites.put("magic_mushroom", "magicMushroom");
+		sprites.put("small_mushroom", "smallMushroom");
+		sprites.put("hoe", "hoe_btn");
+		sprites.put("trowel", "trowel_btn");
+		sprites.put("shovel", "shovel_btn");
 	}
 	
 	private void setupListeners() {
@@ -157,170 +194,200 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("sunflower", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
-            	plant(new Seed(Seed.Type.SUNFLOWER));
-                display.remove();
+				plant(new Seed(Seed.Type.SUNFLOWER));
+				hide();
             }
         });
 		
 		listeners.put("water", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantLilySound();
             	plant(new Seed(Seed.Type.WATER));
-                display.remove();
+				hide();
             }
         });
 		
 		listeners.put("ice", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
             	plant(new Seed(Seed.Type.ICE));
-                display.remove();
+				hide();
             }
         });
 		
 		listeners.put("fire", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
 				plant(new Seed(Seed.Type.FIRE));
-                display.remove();
+				hide();
             }
         });
 		
 		listeners.put("explosive", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
             	plant(new Seed(Seed.Type.EXPLOSIVE));
-                display.remove();
+				hide();
             }
         });
 		
 		listeners.put("grass", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				playPlantSound();
             	plant(new Seed(Seed.Type.GRASS));
-                display.remove();
+				hide();
             }
         });
 
 		listeners.put("sunflowerC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.BASIC;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
-				display.remove();
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.BASIC);
+				hide();
 			}
 		});
 
 		listeners.put("waterC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.BASIC;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
-				display.remove();
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.HOMING);
+				hide();
 			}
 		});
 
 		listeners.put("iceC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.ICE;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
-				display.remove();
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.ICE);
+				hide();
 			}
 		});
 
 		listeners.put("fireC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.FIRE;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
-				display.remove();
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.FIRE);
+				hide();
 			}
 		});
 
 		listeners.put("explosiveC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.EXPLOSION;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
-				display.remove();
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.EXPLOSION);
+				hide();
 			}
 		});
 
 		listeners.put("grassC", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//bulletType = BulletType.BASIC;
-				//weapon.setBulletType(bulletType);
-				//weapon.switchBullet();
-				display.remove();
+				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.GRASS);
+				hide();
 			}
 		});
 
-		listeners.put("grenadeLauncher", new ChangeListener() {
+		listeners.put("machinegun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//weaponType = weaponType.GRENADELAUNCHER;
-				display.remove();
-			}
-		});
-
-		listeners.put("machineGun", new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				//weaponType = weaponType.MACHINEGUN;
-				display.remove();
+				playerManager.getPlayer().setEquipped(0);
+				hide();
 			}
 		});
 
 		listeners.put("shotgun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//weaponType = weaponType.SHOTGUN;
-				display.remove();
+				playerManager.getPlayer().setEquipped(1);
+				hide();
+			}
+		});
+
+		listeners.put("multigun", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				playerManager.getPlayer().setEquipped(2);
+				hide();
 			}
 		});
 
 		listeners.put("starfall", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				player.setEquipped(1);
-				display.remove();
+			    playerManager.getPlayer().setEquipped(3);
+				hide();
 			}
 		});
 
 		listeners.put("fertiliser", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				addFertiliser();
-				display.remove();
+				useItem(new Fertiliser());
+				hide();
 			}
 		});
 
-		listeners.put("bugSpray", new ChangeListener() {
+		listeners.put("bug_spray", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				addBugSpray();
-				display.remove();
+				useItem(new BugSpray());
+				hide();
 			}
 		});
 
-		listeners.put("Health Potion", new ChangeListener() {
+		listeners.put("snag", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//healthPotion.consume(player);
-				display.remove();
+				useItem(new HealthPotion(100));
+				hide();
+			}
+		});
+
+		listeners.put("sausage", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				useItem(new SpeedPotion());
+				hide();
+			}
+		});
+
+		listeners.put("magic_mushroom", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				useItem(new MagicMushroom());
+				hide();
+			}
+		});
+
+		listeners.put("small_mushroom", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				useItem(new SmallMushroom());
+				hide();
+			}
+		});
+
+		listeners.put("hoe", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				useItem(new Hoe());
+				hide();
+			}
+		});
+
+		listeners.put("trowel", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				useItem(new Trowel());
+				hide();
+			}
+		});
+
+		listeners.put("shovel", new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				useItem(new Shovel());
+				hide();
 			}
 		});
 	}
@@ -363,6 +430,7 @@ public class GeneralRadialDisplay extends Group {
 	}
 	
 	public void show() {
+		update();
 		display.setVisible(true);
 		this.setActive(true);
 	}
@@ -386,7 +454,10 @@ public class GeneralRadialDisplay extends Group {
 			if(pot.plantInside(seed)) {
 				plantManager.addPlants(pot.getPlant());
 				plantManager.updateLabel();
+				playPlantSound();
+				inventory.removeItem(seed);
 			}
+			update();
 			return;
 		}
 		
@@ -394,28 +465,23 @@ public class GeneralRadialDisplay extends Group {
 		if(closestCorpse.isPresent()) {
 			Corpse corpse = (Corpse)closestCorpse.get();
 			corpse.plantInside(seed);
+			inventory.removeItem(seed);
+			update();
 			return;
 		}
     }
     
-    private void addBugSpray() {
-    	Optional<AbstractEntity> closest = getClosestPot();
-    	if(closest.isPresent()) {
-    		Pot pot = (Pot)closest.get();
-    		if(!pot.isEmpty()) {
-    			pot.getPlant().increaseRarity(0.1, 0.05);
+    private void useItem(Item item) {
+    	if(item instanceof Tool) {
+    		if(getClosestPot().isPresent() && !((Pot)getClosestPot().get()).isEmpty()) {
+    			((Tool)item).use();
     		}
+    	} else if(item instanceof ConsumableItem) {
+    		Player player = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer();
+    		((ConsumableItem)item).consume(player);
+        	inventory.removeItem(item);
     	}
-    }
-    
-    private void addFertiliser() {
-    	Optional<AbstractEntity> closest = getClosestPot();
-    	if(closest.isPresent()) {
-    		Pot pot = (Pot)closest.get();
-    		if(!pot.isEmpty()) {
-    			pot.getPlant().changeDelay(0.8f);
-    		}
-    	}
+    	update();
     }
     
     /**
@@ -423,7 +489,7 @@ public class GeneralRadialDisplay extends Group {
      * 
      * @return the closedst pot to the player
      */
-    private static Optional<AbstractEntity> getClosestPot() {
+    public static Optional<AbstractEntity> getClosestPot() {
     	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 		Player player = pm.getPlayer();
 		float px = player.getPosX();
@@ -437,7 +503,7 @@ public class GeneralRadialDisplay extends Group {
      * 
      * @return the closest corpse to the player
      */
-    private static Optional<AbstractEntity> getClosestCorpse() {
+    public static Optional<AbstractEntity> getClosestCorpse() {
     	PlayerManager pm = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
 		Player player = pm.getPlayer();
 		float px = player.getPosX();
@@ -472,24 +538,55 @@ public class GeneralRadialDisplay extends Group {
 		soundManager.stopSound(soundName);
 		soundManager.playSound(soundName);
 	}
-
-	//public void updateCount(Item item) {
-		//int itemCount = 0;
-		//for(int i = 0; i < inventory.getNumItems(); i++) {
-			//if(inventory.getItem(i) instanceof item) {
-				//itemCount += inventory.getItem(i).getStackSize();
-			//}
-		//}
-		//infoLbl.setText(String.format("%d", itemCount));
-
-		//if(keyCount > 0) {
-			//titleLbl.setText("Open pot by using key?");
-			//this.getTitleLabel().setText("Open pot?");
-			//conf.setVisible(true);
-		//} else {
-			//titleLbl.setText("No keys in inventory!");
-			//this.getTitleLabel().setText("No keys!");
-			//conf.setVisible(false);
-		//}
-    //}
+	
+	private int getCount(String texture) {
+		int itemCount = 0;
+		for(int i = 0; i < inventory.getNumItems(); i++) {
+			if(inventory.getItem(i).getTexture().equals(texture)) {
+				itemCount += inventory.getItem(i).getStackSize();
+			}
+		}
+		return itemCount;
+	}
+	
+	private void update() {
+		for(Label lbl : counts) {
+			display.removeActor(lbl);
+		}
+		for(int i = 0; i < buttons.size(); i++) {
+			ImageButton button = buttons.get(i);
+			String type = items.get(i);
+			int count = -1;
+			if("sunflower".equals(type) || "water".equals(type) || "cactus".equals(type) || "ice".equals(type) ||
+					"fire".equals(type) || "explosive".equals(type) || "grass".equals(type)) {
+				count = getCount(type + "_seed");
+			} else if("sunflowerC".equals(type) || "waterC".equals(type) || "cactusC".equals(type) || "iceC".equals(type) ||
+					"fireC".equals(type) || "explosiveC".equals(type) || "grassC".equals(type)) {
+				count = getCount(type.substring(0, type.length() - 1) + "_seed");
+			} else if(type.equals("machinegun") || type.equals("starfall") || type.equals("multigun") || type.equals("shotgun")) {
+				count = getCount(type + "_ne");
+			} else if(type.equals("snag")) {
+				count = getCount("bunnings_snag_and_bread");
+			} else if(type.equals("sausage")) {
+				count = getCount("bunnings_snag");
+			} else{
+				count = getCount(type);
+			}
+			
+			if(count == 0) {
+				button.getImage().setColor(Color.valueOf("#505050"));
+				button.setDisabled(true);
+			} else {
+				if(count > 1) {
+					Label lbl = new Label(String.valueOf(count), style);
+					counts.add(lbl);
+					display.addActor(lbl);
+					lbl.setX(button.getX() + button.getWidth() - 20);
+					lbl.setY(button.getY() - 10);
+				}
+				button.getImage().setColor(Color.valueOf("#FFFFFF"));
+				button.setDisabled(false);
+			}
+		}
+	}
 }

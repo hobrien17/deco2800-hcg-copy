@@ -31,7 +31,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 	@Test
 	public void testExplode() {
 		setupNoWeather();
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			assertTrue("The enemies should still be in the world", world.containsEntity(enemy));
 			assertTrue("The enemies should still be in the world", world.containsEntity(farEnemy));
 			turret.update(sw, i);
@@ -44,7 +44,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 	@Test
 	public void testDestroy() {
 		setupNoWeather();
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			assertTrue("The corpse should still be in the world", world.containsEntity(corpse));
 			turret.update(sw, i);
 		}
@@ -61,7 +61,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 	@Test(timeout=1000)
 	public void testExplosion() {
 		setupNoWeather();
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			turret.update(sw, i);
 		}
 		
@@ -103,7 +103,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 		for (int j = 0; j <= 1; j++) {
 			setupNoWeather();
 			
-			for (int i = 1; i <= 5; i++) {
+			for (int i = 1; i <= 10; i++) {
 				turret.update(sw, i);
 			}
 
@@ -136,7 +136,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 	public void testSnowyWeather() {
 		setupWeather(Weathers.SNOW);
 		
-		for (int i = 1; i <= 10; i++) {
+		for (int i = 1; i <= 20; i++) {
 			assertTrue("The corpse should still be in the world", world.containsEntity(corpse));
 			turret.update(sw, i);
 		}
@@ -154,7 +154,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 	public void testDrought() {
 		setupWeather(Weathers.DROUGHT);
 		
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			assertTrue("The enemies should still be in the world", world.containsEntity(enemy));
 			assertTrue("The enemies should still be in the world", world.containsEntity(farEnemy));
 			turret.update(sw, i);
@@ -168,7 +168,7 @@ public class ExplosiveTurretTest extends TurretBaseTest {
 	public void testDroughtExplosion() {
 		setupWeather(Weathers.DROUGHT);
 		
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 10; i++) {
 			turret.update(sw, i);
 		}
 		

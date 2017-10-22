@@ -307,12 +307,7 @@ public final class NetworkManager extends Manager {
 		int seed = getNextRandomInt();
 		queueMessage(new StartMessage(seed));
 		random.setSeed((long) seed);
-		
-		// FIXME
-		Player otherPlayer = new Player(1, 5, 10, 0);
-		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Player 2");
-		playerManager.addPlayer(otherPlayer);
-		contextManager.pushContext(new CharacterCreationContext());
+		contextManager.pushContext(new MultiplayerCharacterContext());
 	}
 	
 	/**
@@ -465,34 +460,37 @@ public final class NetworkManager extends Manager {
 				Message message;
 				switch (messageType) {
 					case DISCOVERY:
-						message = new DiscoveryMessage();
+						message = new DiscoveryMessage(address);
 						break;
 					case HOST:
-						message = new HostMessage();
+						message = new HostMessage(address);
 						break;
 					case JOINING:
-						message = new JoiningMessage();
+						message = new JoiningMessage(address);
 						break;
 					case JOINED:
-						message = new JoinedMessage();
+						message = new JoinedMessage(address);
 						break;
 					case START:
-						message = new StartMessage();
+						message = new StartMessage(address);
+						break;
+					case CHARACTER:
+						message = new CharacterMessage(address);
 						break;
 					case WORLD_MAP:
-						message = new WorldMapMessage();
+						message = new WorldMapMessage(address);
 						break;
 					case LEVEL_START:
-						message = new LevelStartMessage();
+						message = new LevelStartMessage(address);
 						break;
 					case LEVEL_END:
-						message = new LevelEndMessage();
+						message = new LevelEndMessage(address);
 						break;
 					case INPUT:
-						message = new InputMessage();
+						message = new InputMessage(address);
 						break;
 					case CHAT:
-						message = new ChatMessage();
+						message = new ChatMessage(address);
 						break;
 					default:
 						throw new MessageFormatException();
@@ -504,7 +502,7 @@ public final class NetworkManager extends Manager {
 				if (peerSequenceNumbers.get(0) == null
 						|| messageId > peerSequenceNumbers.get(0).intValue()) {
 					// process message
-					message.process(address);
+					message.process();
 					// make sure we don't process this again
 					peerSequenceNumbers.put(0, messageId);
 					// log
