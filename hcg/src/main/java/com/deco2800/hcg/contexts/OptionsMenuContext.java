@@ -58,9 +58,9 @@ public class OptionsMenuContext extends UIContext{
 		}
 
 		if (isShaders) {
-			toggleShadersButton = new ImageButton(new Image(textureManager.getTexture("toggle_shaders_button_greyscale")).getDrawable());
-		} else {
 			toggleShadersButton = new ImageButton(new Image(textureManager.getTexture("toggle_shaders_button")).getDrawable());
+		} else {
+			toggleShadersButton = new ImageButton(new Image(textureManager.getTexture("toggle_shaders_button_greyscale")).getDrawable());
 		}
 
 		backButton = new ImageButton(new Image(textureManager.getTexture("menu_back_button")).getDrawable());
