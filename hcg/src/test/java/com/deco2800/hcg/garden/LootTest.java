@@ -33,7 +33,7 @@ public class LootTest extends BaseTest {
 	
 	private LootWrapper sunLoot = new LootWrapper("sunflower_seed", 5, 10);
 	private LootWrapper waterLoot = new LootWrapper("water_seed", 1, 5);
-	private LootWrapper grassLoot = new LootWrapper("grass_seed", 1, 11);
+	private LootWrapper grassLoot = new LootWrapper("grass_seed", 1, 1);
 	
 	private class TestPlant extends AbstractGardenPlant {
 
