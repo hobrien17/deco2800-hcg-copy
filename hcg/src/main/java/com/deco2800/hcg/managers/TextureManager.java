@@ -218,6 +218,8 @@ public class TextureManager extends Manager {
 			textureMap.put("picketFenceEW", new Texture("resources/terrain_objects/picket_fence_eastwest.png"));
             textureMap.put("invisible", new Texture("resources/terrain_objects/invisible.png"));
             textureMap.put("barbeque", new Texture("resources/terrain_objects/barbeque.png"));
+            textureMap.put("warningsign", new Texture("resources/terrain_objects/danger_sign_post.png"));
+            textureMap.put("car", new Texture("resources/terrain_objects/carwreck_01.png"));
 
 			// terrain tiles
 			textureMap.put("poisontile", new Texture("resources/maps/textures/deprecated/sludgebubbling1.png"));
@@ -342,26 +344,25 @@ public class TextureManager extends Manager {
 			//Perks General
 			textureMap.put("perk_border_inactive", new Texture("resources/ui/perks/perk_border_inactive.png"));
 			textureMap.put("perk_border_maxed", new Texture("resources/ui/perks/perk_border_maxed.png"));
-			textureMap.put("path_separator", new Texture("resources/ui/perks/path_separator.png"));
 			textureMap.put("druid_title", new Texture("resources/ui/perks/druid_title.png"));
 			textureMap.put("survivalist_title", new Texture("resources/ui/perks/survivalist_title.png"));
 			textureMap.put("fungal_title", new Texture("resources/ui/perks/fungal_title.png"));
 
 
 			//Perk Images
-			textureMap.put("I_am_groot", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Splinter_is_coming", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Full-Petal_Alchemist", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Guns_and_Roses", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Run_Fungus,_Run!", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Holly_Moley", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Kale-ra-te", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Thor-n", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("The_Fungal_Countdown", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Last_But_Not_Yeast", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Saving_Graves", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Fungicidal_Maniac", new Texture("resources/ui/perks/perk_place_holder.png"));
+			textureMap.put("I_am_groot", new Texture("resources/ui/perks/I_am_groot.png"));
+			textureMap.put("Splinter_is_coming", new Texture("resources/ui/perks/Splinter_is_coming.png"));
+			textureMap.put("Full-Petal_Alchemist", new Texture("resources/ui/perks/Full-Petal_Alchemist.png"));
+			textureMap.put("Guns_and_Roses", new Texture("resources/ui/perks/Guns_and_Roses.png"));
+			textureMap.put("Run_Fungus,_Run!", new Texture("resources/ui/perks/Run_Fungus,_Run!.png"));
+			textureMap.put("Holly_Moley", new Texture("resources/ui/perks/Holly_Moley.png"));
+			textureMap.put("Kale-ra-te", new Texture("resources/ui/perks/Kale-ra-te.png"));
+			textureMap.put("Thor-n", new Texture("resources/ui/perks/Thor-n.png"));
+			textureMap.put("The_Fungal_Countdown", new Texture("resources/ui/perks/The_Fungal_Countdown.png"));
+			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/Whoa_Black_Betty,_Bramble-am.png"));
+			textureMap.put("Last_But_Not_Yeast", new Texture("resources/ui/perks/Last_But_Not_Yeast.png"));
+			textureMap.put("Saving_Graves", new Texture("resources/ui/perks/Saving_Graves.png"));
+			textureMap.put("Fungicidal_Maniac", new Texture("resources/ui/perks/Fungicidal_Maniac.png"));
 
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
@@ -464,7 +465,6 @@ public class TextureManager extends Manager {
 			textureMap.put("ccWindow_Background_White", new Texture("resources/ui/character_creation/window_background_white.png"));
 			textureMap.put("ccWindow_BorderSmaller_White", new Texture("resources/ui/character_creation/borderSmaller.png"));
 			textureMap.put("ccWindow_Border_White", new Texture("resources/ui/character_creation/border.png"));
-
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}

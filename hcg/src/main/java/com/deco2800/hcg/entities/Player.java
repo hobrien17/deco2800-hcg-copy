@@ -91,7 +91,7 @@ public class Player extends Character implements Tickable {
 	private int lastMouseY = 0;
 	
 	// List containing skills that can be specialised in
-	private List<String> SPECIALISED_SKILLS = Arrays.asList("meleeSkill", "gunsSkill", "energyWeaponsSkill");
+	private List<String> SPECIALISED_SKILLS = Arrays.asList("machineGunSkill", "shotGunSkill", "starGunSkill", "multiGunSKill");
 
 	// Specialised skills map and perks array
 	private Map<String, Boolean> specialisedSkills;
@@ -204,9 +204,9 @@ public class Player extends Character implements Tickable {
 		Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(this).setRadius(0.7)
 		        .setArc((float) Math.PI / 2f).setPellets(9).build();
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
-		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
-		equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
-		equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
+		//equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
+		//equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
+		//equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
 
 		//Add some default items
 		inventory.addItem(new MagicMushroom());
@@ -276,6 +276,8 @@ public class Player extends Character implements Tickable {
 		} else {
 			//Perk - THOR-N
 			Perk thorn = this.getPerk(Perk.perk.THORN);
+			//Perks cannot be active if the player is level 1
+			// and thus cant be active for testing.
 			if (thorn.isActive()) {
 				switch (thorn.getCurrentLevel()) {
 					case 0:
@@ -296,6 +298,7 @@ public class Player extends Character implements Tickable {
 					damage = 0;
 				}
 			}
+
 			if (damage > healthCur) {
 				healthCur = 0;
 			} else {
@@ -830,10 +833,10 @@ public class Player extends Character implements Tickable {
 	private void handleTerrain(String terrain) {
 		switch (terrain) {
 		case "water-deep":
-			this.setTexture("hcg_character_swim");
+			//this.setTexture("hcg_character_swim");
 			break;
 		case "water-shallow":
-			this.setTexture("hcg_character_sink");
+			//this.setTexture("hcg_character_sink");
 			break;
 		case "exit":
 			if (this == playerManager.getPlayer() && !onExit) {
@@ -853,9 +856,9 @@ public class Player extends Character implements Tickable {
 	 * character in the character creation screen
 	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
-			int machineGunSkill, int shotGunSkill, int starGunSkill, String name) {
+			int machineGunSkill, int shotGunSkill, int starGunSkill, int multiGunSkill, String name) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
-		setSkills(machineGunSkill, shotGunSkill, starGunSkill);
+		setSkills(machineGunSkill, shotGunSkill, starGunSkill, multiGunSkill);
 		setName(name);
 		healthMax = 50 * vitality;
 		healthCur = healthMax;
