@@ -28,6 +28,7 @@ public class LevelStore {
 	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_03.tmx"), 2, 5, 1));
 	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_04.tmx"), 2, 7, 1));
 	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_05.tmx"), 2, 6, 1));
+	    levelList.add(new Level(new World("resources/maps/maps/mastapeice.tmx"), 3,7,1));
 	    levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_01.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_02.tmx"), 3, 8, 1));
 		levelList.add(new Level(new World("resources/maps/maps/mushroom_normal_03.tmx"), 3, 9, 1));
