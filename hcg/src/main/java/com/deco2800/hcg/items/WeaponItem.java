@@ -1,6 +1,5 @@
 package com.deco2800.hcg.items;
 
-import com.deco2800.hcg.weapons.Machinegun;
 import com.deco2800.hcg.weapons.Multigun;
 import com.deco2800.hcg.weapons.Shotgun;
 import com.deco2800.hcg.weapons.Stargun;
@@ -113,7 +112,7 @@ public class WeaponItem extends SingleItem {
     }
     
     @Override
-    public boolean sameItem(Item item) throws IllegalArgumentException {
+    public boolean sameItem(Item item) {
         return item instanceof WeaponItem && 
                item.getName().equals(this.itemName) &&
                this.weapon.equals(((WeaponItem)item).getWeapon());

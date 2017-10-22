@@ -3,6 +3,7 @@ package com.deco2800.hcg.worlds;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.ItemEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
+import com.deco2800.hcg.entities.enemyentities.Crab;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.enemyentities.MushroomTurret;
 import com.deco2800.hcg.entities.enemyentities.Snail;
@@ -35,7 +36,7 @@ public enum WorldEntities {
 
     WALL, TREE, SQUIRREL, HEDGEHOG, MUSHROOMTURRET, POT, UPOT, CORPSE, ICETREE, BOULDER, ROCK, ICEBOULDER, HOUSE, SLUDGEBARREL, MUSHROOMTREETHICK, MUSHROOMTREETHIN,
     GREENTREE, LARGETREE, SWING, HOUSEWITHROOF, HOUSEWITHOUTROOF, PICKETFENCEEW, PICKETFENCENS, CONCRETEWALL, ITEM, SNAIL, LEAFLESSTREE, INVISIBLE, BARBEQUE,
-    WARNINGSIGN, VOLCANO, CAR;
+    WARNINGSIGN, VOLCANO, CAR, CRAB;
 
     /**
      * Return an instance of the entity at the given position and the selected
@@ -106,6 +107,8 @@ public enum WorldEntities {
                 return new Invisible(x, y, 0f);
             case BARBEQUE:
                 return new Barbeque(x, y, 0f);
+            case CRAB:
+                return new Crab(x, y, 0f, id);
             case WARNINGSIGN:
                 return new WarningSign(x, y, 0f);
             case VOLCANO:

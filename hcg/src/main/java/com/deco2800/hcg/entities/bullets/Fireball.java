@@ -124,13 +124,11 @@ public class Fireball extends FireBullet {
 			specialAbility();
 		}
 		entityHit();
-		if (Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
+		if ((Math.abs(Math.abs(this.getPosX() + this.getXLength()/2)
 				- Math.abs(goalX)) < 0.5
 				&& Math.abs(Math.abs(this.getPosY() + this.getYLength()/2)
-				- Math.abs(goalY)) < 0.5) {
-			if(!infinite) {
+				- Math.abs(goalY)) < 0.5 && !infinite)) {
 				GameManager.get().getWorld().removeEntity(this);
-			}
 		}
 		setPosX(getPosX() + changeX);
 		setPosY(getPosY() + changeY);

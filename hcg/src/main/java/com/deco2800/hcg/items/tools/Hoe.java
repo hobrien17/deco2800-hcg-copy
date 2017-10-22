@@ -19,7 +19,6 @@ public class Hoe extends Tool {
 
 	@Override
 	public Item copy() {
-		// TODO Auto-generated method stub
 		return new Hoe();
 	}
 	

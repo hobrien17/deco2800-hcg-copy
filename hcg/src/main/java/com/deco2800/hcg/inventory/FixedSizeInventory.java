@@ -175,7 +175,7 @@ public class FixedSizeInventory implements Inventory {
     }
 
     @Override
-    public boolean allowItemInSlot(Item item, int index) throws IndexOutOfBoundsException {
+    public boolean allowItemInSlot(Item item, int index) {
         if(index < 0 || index >= this.getMaxSize()) {
             // Even for an implementation without restrictions 
             // we don't want people calling this with silly indices

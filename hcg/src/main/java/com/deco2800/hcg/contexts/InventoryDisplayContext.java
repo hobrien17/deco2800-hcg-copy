@@ -167,11 +167,10 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = inventory;
         this.textureManager = textureManager;
         currentRow = 0;
-        //Iterator items = player.getInventory().iterator();
-        //while (items != null && items.hasNext()) {
-            for (int i=0; i<player.getInventory().getNumItems(); i++) {
+
+        for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
-            //Item currentItem = (Item)items.next();
+
             if (currentItem == null) {
                 continue;
             }
@@ -238,7 +237,7 @@ public abstract class InventoryDisplayContext extends UIContext {
                                     try {
                                         player.getEquippedItems().addItem(currentItem);
                                     } catch (Exception e) {
-                                        System.out.println("Error Equipping Item "+e);
+                                        LOGGER.error("Error Equipping Item " + e);
                                         //Re add to the inventory
                                         player.getInventory().addItem(currentItem);
                                     }
@@ -297,11 +296,10 @@ public abstract class InventoryDisplayContext extends UIContext {
         this.inventory = inventory;
         this.textureManager = textureManager;
         currentRow = 0;
-        //Iterator items = player.getInventory().iterator();
-        //while (items != null && items.hasNext()) {
+
         for (int i=0; i<player.getInventory().getNumItems(); i++) {
             Item currentItem = player.getInventory().getItem(i);
-            //Item currentItem = (Item)items.next();
+
             if (currentItem == null) {
                 continue;
             }
@@ -538,7 +536,6 @@ public abstract class InventoryDisplayContext extends UIContext {
                  LOGGER.info(textureManager.getTexture("error").toString());
             } else {
                  button = new ImageButton(new Image(textureManager.getTexture(currentItem.getTexture())).getDrawable());
-                 //System.out.println(textureManager.getTexture(currentItem.getTexture()));
                  LOGGER.info(textureManager.getTexture(currentItem.getTexture()).toString());
             }
             Stack stack = new Stack();

@@ -149,6 +149,27 @@ public class TextureManager extends Manager {
 			textureMap.put("snailN", new Texture("resources/sprites/enemies/snail_N.png"));
 			textureMap.put("snailS", new Texture("resources/sprites/enemies/snail_S.png"));
 			textureMap.put("snailW", new Texture("resources/sprites/enemies/snail_W.png"));
+			textureMap.put("squirrelS", new Texture("resources/sprites/enemies/Squirrel_S_1.png"));
+			textureMap.put("squirrelS2", new Texture("resources/sprites/enemies/Squirrel_S_2.png"));
+			textureMap.put("squirrelE", new Texture("resources/sprites/enemies/Squirrel_E_1.png"));
+			textureMap.put("squirrelE2", new Texture("resources/sprites/enemies/Squirrel_E_2.png"));
+			textureMap.put("squirrelW", new Texture("resources/sprites/enemies/Squirrel_W_1.png"));
+			textureMap.put("squirrelW2", new Texture("resources/sprites/enemies/Squirrel_W_2.png"));
+			textureMap.put("squirrelN", new Texture("resources/sprites/enemies/Squirrel_N_1.png"));
+			textureMap.put("squirrelN2", new Texture("resources/sprites/enemies/Squirrel_N_2.png"));
+			textureMap.put("crabS", new Texture("resources/sprites/enemies/Crab_S_1.png"));
+			textureMap.put("crabS2", new Texture("resources/sprites/enemies/Crab_S_2.png"));
+			textureMap.put("crabE", new Texture("resources/sprites/enemies/Crab_E_1.png"));
+			textureMap.put("crabE2", new Texture("resources/sprites/enemies/Crab_E_2.png"));
+			textureMap.put("crabW", new Texture("resources/sprites/enemies/Crab_W_1.png"));
+			textureMap.put("crabW2", new Texture("resources/sprites/enemies/Crab_W_2.png"));
+			textureMap.put("crabN", new Texture("resources/sprites/enemies/Crab_N_1.png"));
+			textureMap.put("crabN2", new Texture("resources/sprites/enemies/Crab_N_2.png"));
+			textureMap.put("Tree25", new Texture("resources/sprites/enemies/Tree_25.png"));
+			textureMap.put("Tree50", new Texture("resources/sprites/enemies/Tree_50.png"));
+			textureMap.put("Tree75", new Texture("resources/sprites/enemies/Tree_75.png"));
+			textureMap.put("Tree100", new Texture("resources/sprites/enemies/Tree_100.png"));
+
 
 			// Corpse textures
 			textureMap.put("corpse", new Texture("resources/sprites/dead_enemies/deadant.png"));
@@ -238,7 +259,8 @@ public class TextureManager extends Manager {
             textureMap.put("crackspuddle", new Texture("resources/puddles/cracks.png"));
             textureMap.put("crackspuddle2", new Texture("resources/puddles/cracks_v2.png"));
             textureMap.put("crackspuddle3", new Texture("resources/puddles/cracks_v3.png"));
-                        
+            textureMap.put("exit", new Texture("resources/maps/textures/exit.png"));
+
             
 			//trees
 			textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
@@ -483,6 +505,18 @@ public class TextureManager extends Manager {
 			textureMap.put("ccWindow_Background_White", new Texture("resources/ui/character_creation/window_background_white.png"));
 			textureMap.put("ccWindow_BorderSmaller_White", new Texture("resources/ui/character_creation/borderSmaller.png"));
 			textureMap.put("ccWindow_Border_White", new Texture("resources/ui/character_creation/border.png"));
+            textureMap.put("ccTitle", new Texture("resources/ui/character_creation/heading_title.png"));
+            textureMap.put("ccAttributes", new Texture("resources/ui/character_creation/heading_attributes.png"));
+            textureMap.put("ccSkills", new Texture("resources/ui/character_creation/heading_skills.png"));
+            textureMap.put("ccStats", new Texture("resources/ui/character_creation/heading_stats.png"));
+            textureMap.put("ccCharacter", new Texture("resources/ui/character_creation/heading_character.png"));
+            textureMap.put("ccPreview", new Texture("resources/ui/character_creation/heading_preview.png"));
+            textureMap.put("ccDone", new Texture("resources/ui/character_creation/heading_done.png"));
+            
+            // Death context textures
+            textureMap.put("you_died", new Texture("resources/ui/death/you_died.png"));
+            textureMap.put("deadman", new Texture("resources/ui/death/deadman.png"));
+
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}

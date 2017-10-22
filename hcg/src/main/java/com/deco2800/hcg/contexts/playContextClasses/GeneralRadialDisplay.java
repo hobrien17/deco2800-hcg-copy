@@ -431,8 +431,7 @@ public class GeneralRadialDisplay extends Group {
 	
 	private float getAngle(int index) {
 		int total = items.size();
-		float angle = (360f * index)/total + 90f;
-		return angle;
+		return (360f * index)/total + 90f;
 	}
 	
 	private float getButtonX(int index) {
@@ -599,7 +598,7 @@ public class GeneralRadialDisplay extends Group {
 		for(int i = 0; i < buttons.size(); i++) {
 			ImageButton button = buttons.get(i);
 			String type = items.get(i);
-			int count = -1;
+			int count;
 			if("sunflower".equals(type) || "water".equals(type) || "cactus".equals(type) || "ice".equals(type) ||
 					"fire".equals(type) || "explosive".equals(type) || "grass".equals(type)) {
 				count = getCount(type + "_seed");
