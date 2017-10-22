@@ -2,7 +2,6 @@ package com.deco2800.hcg.trading;
 
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
-import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.items.tools.Fertiliser;
