@@ -367,7 +367,6 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("hoe", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//useItem(new Hoe());
 				hide();
 			}
 		});
@@ -375,7 +374,6 @@ public class GeneralRadialDisplay extends Group {
 		listeners.put("trowel", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//useItem(new Trowel ());
 				hide();
 			}
 		});
@@ -557,17 +555,17 @@ public class GeneralRadialDisplay extends Group {
 			ImageButton button = buttons.get(i);
 			String type = items.get(i);
 			int count = -1;
-			if(type.equals("sunflower") || type.equals("water") || type.equals("cactus") || type.equals("ice") || 
-					type.equals("fire") || type.equals("explosive") || type.equals("grass")) {
+			if("sunflower".equals(type) || "water".equals(type) || "cactus".equals(type) || "ice".equals(type) ||
+					"fire".equals(type) || "explosive".equals(type) || "grass".equals(type)) {
 				count = getCount(type + "_seed");
-			} else if(type.equals("sunflowerC") || type.equals("waterC") || type.equals("cactusC") || type.equals("iceC") || 
-					type.equals("fireC") || type.equals("explosiveC") || type.equals("grassC")) {
+			} else if("sunflowerC".equals(type) || "waterC".equals(type) || "cactusC".equals(type) || "iceC".equals(type) ||
+					"fireC".equals(type) || "explosiveC".equals(type) || "grassC".equals(type)) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
-			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("scatterGun") || type.equals("shotgun") ||
-					type.equals("hoe") || type.equals("trowel") || type.equals("shovel"));
-			else if(type.equals("health_potion")) {
+			} else if("machineGun".equals(type) || "starfall".equals(type) || "scatterGun".equals(type) || "shotgun".equals(type) ||
+					"hoe".equals(type) || "trowel".equals(type) || "shovel".equals(type));
+			else if("health_potion".equals(type)) {
 				count = getCount("red_potion");
-			} else if(type.equals("speed_potion")) {
+			} else if("speed_potion".equals(type)) {
 				count = getCount("purple_potion");
 			}
 			else{
