@@ -65,7 +65,7 @@ public abstract class SingleItem extends GenericItem {
      * @param number : the new stack size of this item.
      */
     @Override
-    public void setStackSize(int number) throws IllegalArgumentException{
+    public void setStackSize(int number) {
         if (number < 1) {
             throw new IllegalArgumentException();
         }
@@ -80,7 +80,7 @@ public abstract class SingleItem extends GenericItem {
      * same.
      */
     @Override
-    public boolean sameItem(Item item) throws IllegalArgumentException {
+    public boolean sameItem(Item item) {
         return item instanceof SingleItem && item.getName().equals(this.getName());
     }
     

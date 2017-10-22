@@ -13,15 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.tools.Shovel;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
-import com.deco2800.hcg.weapons.Weapon;
-import com.deco2800.hcg.weapons.WeaponBuilder;
-import com.deco2800.hcg.weapons.WeaponType;
 
 import java.util.*;
 import java.util.List;

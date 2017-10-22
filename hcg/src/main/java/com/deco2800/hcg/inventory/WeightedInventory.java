@@ -35,12 +35,12 @@ public class WeightedInventory implements Inventory {
 	}
 
 	@Override
-	public Item getItem(int index) throws IndexOutOfBoundsException {
+	public Item getItem(int index) {
 		return this.items.get(index);
 	}
 
 	@Override
-	public Item removeItem(int index) throws IndexOutOfBoundsException {
+	public Item removeItem(int index) {
 		return this.items.remove(index);
 	}
 
@@ -51,8 +51,7 @@ public class WeightedInventory implements Inventory {
 	}
 
 	@Override
-	public boolean insertItem(Item item, int index)
-			throws IndexOutOfBoundsException {
+	public boolean insertItem(Item item, int index) {
 		if (this.canInsert(item)) {
 			this.items.add(index, item);
 			return true;
@@ -62,15 +61,13 @@ public class WeightedInventory implements Inventory {
 	}
 
 	@Override
-	public boolean canFitItemInSlot(Item item, int index)
-			throws IndexOutOfBoundsException {
+	public boolean canFitItemInSlot(Item item, int index) {
 		// TODO
 		return true;
 	}
 
 	@Override
-	public boolean allowItemInSlot(Item item, int index)
-			throws IndexOutOfBoundsException {
+	public boolean allowItemInSlot(Item item, int index) {
 		if (index < 0 || index >= this.getMaxSize()) {
 			// Even for an implementation without restrictions
 			// we don't want people calling this with silly indices
@@ -216,6 +213,27 @@ public class WeightedInventory implements Inventory {
 		return true;
 	}
 
+	public boolean removeItem(String item, int number) {
+		int toRemove = number;
+		for (int i = 0; i < this.items.size(); i++) {
+			Item currentItem = this.getItem(i);
+			if (currentItem != null && currentItem.getName().toLowerCase().equals(item.toLowerCase())
+					&& toRemove >= currentItem.getStackSize()) {
+				toRemove -= currentItem.getStackSize();
+				this.removeItem(i);
+
+			} else if (currentItem != null && currentItem.getName().toLowerCase().equals(item.toLowerCase())) {
+				currentItem.setStackSize(currentItem.getStackSize() - toRemove);
+				toRemove = 0;
+			}
+
+			if (toRemove <= 0) {
+				break;
+			}
+		}
+		return (toRemove <= 0);
+	}
+
 	@Override
 	public boolean containsItem(Item item) {
 		int numFound = 0;
@@ -275,8 +293,9 @@ public class WeightedInventory implements Inventory {
 	@Override
 	public int numberOf(String itemName) {
 		int total = 0;
+
 		for (int i = 0; i < items.size(); i++) {
-			if (items.get(i).getName() == itemName) {
+			if (items.get(i).getName().toLowerCase().equals(itemName.toLowerCase())) {
 				if (items.get(i).isStackable()) {
 					total += items.get(i).getStackSize();
 				} else {

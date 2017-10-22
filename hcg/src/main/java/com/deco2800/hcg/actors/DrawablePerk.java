@@ -89,8 +89,8 @@ public class DrawablePerk {
                 if (perk.isAvaliable(player)) {
                     if(perk.getCurrentLevel() > 0) {
                         player.setPerkPoints(player.getPerkPoints() + 1);
+                        perk.setCurrentLevel(perk.getCurrentLevel() - 1);
                     }
-                    perk.setCurrentLevel(perk.getCurrentLevel() - 1);
                     perksSelectionScreen.update();
                 }
             }
@@ -148,7 +148,7 @@ public class DrawablePerk {
         }
         if (perk.isMaxed()) {
             levelLabel.setColor(1f, 0.9f, 0f, 1f);
-            border.setBackground((new Image(textureManager.getTexture("perk_border_maxed")).getDrawable()));
+            border.setBackground(new Image(textureManager.getTexture("perk_border_maxed")).getDrawable());
             border.getImage().setDrawable(new Image(textureManager.getTexture("perk_border_maxed")).getDrawable());
         }
     }

@@ -25,7 +25,7 @@ public class Perk {
         GUNS_AND_ROSES("Guns and Roses", 10, 1, "Guns and Roses - turrets you plant in corpses have a 15% attack speed increase."),
 
         //Survivalist
-        RUN_FUNGUS_RUN("Run Fungus, Run!", 1, 3, "Run Fungus, Run! - If you are hit, you receive a (1/2/4) second 20% speed" +
+        RUN_FUNGUS_RUN("Run Fungus, Run!", 1, 3, "Run Fungus, Run! - If you are hit, you receive a (1/2/3) second 20% speed" +
                 " boost"),
         HOLLY_MOLEY("Holly Moley", 2, 2, "Holly Moley - Increases the explosion radius of your explosive seed by (10%/20%)"),
         KALERATE("Kale-ra-te", 5, 2, "Kale-ra-te - Your advanced fighting training has given you a (7.5%/15.0%) chance to dodge " +
@@ -108,9 +108,7 @@ public class Perk {
     }
 
     public void setCurrentLevel( int currentLevel) {
-        if (currentLevel > enumPerk.getMaxLevel() || currentLevel < 0) {
-        }
-        else {
+        if (!(currentLevel > enumPerk.getMaxLevel() || currentLevel < 0)) {
             this.currentLevel = currentLevel;
         }
     }

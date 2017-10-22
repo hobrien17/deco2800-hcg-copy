@@ -43,9 +43,10 @@ public class HealthPotion extends ConsumableItem {
                 case 2:
                     extraHealing = 30 + 10*character.getLevel();
                     break;
-
+                default:
+                    break;
             }
-            ((Player)character).setHealthCur(character.getHealthCur() + 100 + extraHealing);
+            character.setHealthCur(character.getHealthCur() + 100 + extraHealing);
         }
         LOGGER.info("Health Updated!");
     }

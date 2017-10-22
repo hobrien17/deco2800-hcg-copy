@@ -33,6 +33,8 @@ public class WorldMapEntity extends Actor {
         	case 3:
         		mapBackground = textureManager.getTexture("wm_waste_bg");
         		break;
+			default:
+				mapBackground = textureManager.getTexture("wm_urban_bg");
         }
     }
 

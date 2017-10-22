@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="2323">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="2319">
  <properties>
   <property name="PlayerX" value="20"/>
   <property name="PlayerY" value="70"/>
@@ -18,7 +18,6 @@
  <tileset firstgid="185" source="../tiles/HouseWRoof.tsx"/>
  <tileset firstgid="186" source="../tiles/HouseWORoof.tsx"/>
  <tileset firstgid="187" source="../tiles/grass_base_tiles.tsx"/>
- <tileset firstgid="197" source="../tiles/suburban_wasteland_concrete.tsx"/>
  <layer name="sand" width="100" height="100">
   <properties>
    <property name="name" value="sand"/>
@@ -247,13 +246,6 @@
   <object id="1814" gid="184" x="2097.4" y="1197.77" width="55" height="32"/>
   <object id="1815" gid="184" x="2018.17" y="1165.67" width="55" height="32"/>
   <object id="2290" gid="184" x="937.8" y="699.7" width="55" height="32"/>
- </objectgroup>
- <objectgroup name="warningsign">
-  <properties>
-   <property name="name" value="warningsign"/>
-  </properties>
-  <object id="2318" gid="201" x="1038" y="206" width="55" height="32"/>
-  <object id="2319" gid="201" x="1957.45" y="194.545" width="55" height="32"/>
  </objectgroup>
  <layer name="house" width="100" height="100">
   <properties>
@@ -712,13 +704,6 @@
   <object id="2307" gid="1" x="2942.47" y="1961.53" width="55" height="32"/>
   <object id="2308" gid="1" x="3010.33" y="2173.67" width="55" height="32"/>
  </objectgroup>
- <objectgroup name="car">
-  <properties>
-   <property name="name" value="car"/>
-  </properties>
-  <object id="2320" gid="201" x="243.564" y="612.436" width="55" height="32"/>
-  <object id="2322" gid="201" x="2993.07" y="1069.23" width="55" height="32"/>
- </objectgroup>
  <objectgroup name="snail">
   <properties>
    <property name="name" value="snail"/>
@@ -775,11 +760,11 @@
   <object id="1653" gid="141" x="2099.6" y="1327.73" width="55" height="32">
    <properties>
     <property name="Type" value="Quest"/>
-    <property name="conversation" value="test_conversation_01"/>
-    <property name="fName" value="Angela"/>
+    <property name="conversation" value="questTutorial02"/>
+    <property name="fName" value="Steve"/>
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="Rob"/>
-    <property name="texture" value="character_1"/>
+    <property name="texture" value="character_2"/>
    </properties>
   </object>
   <object id="1654" gid="141" x="874.779" y="822.224" width="55" height="32">
@@ -791,13 +776,23 @@
     <property name="texture" value="character_shop"/>
    </properties>
   </object>
-  <object id="2317" gid="3" x="2325.86" y="2500.08" width="55" height="32">
+  <object id="2317" gid="3" x="2370.08" y="2455.86" width="55" height="32">
    <properties>
     <property name="Type" value="Quest"/>
     <property name="conversation" value="tutorialwasteland"/>
     <property name="fName" value="Jim"/>
     <property name="faceImage" value="npc_face"/>
     <property name="sName" value="Bunning"/>
+    <property name="texture" value="character_1"/>
+   </properties>
+  </object>
+  <object id="2318" gid="141" x="2169.85" y="2361.48" width="55" height="32">
+   <properties>
+    <property name="Type" value="Quest"/>
+    <property name="conversation" value="questTutorial01"/>
+    <property name="fName" value="Jenkins"/>
+    <property name="faceImage" value="npc_face"/>
+    <property name="sName" value="Rob"/>
     <property name="texture" value="character_1"/>
    </properties>
   </object>

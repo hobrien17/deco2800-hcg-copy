@@ -509,6 +509,12 @@ public class PlayContext extends Context {
                 contextManager.popContext();
             }
         });
+        options.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                contextManager.pushContext(new OptionsMenuContext());
+            }
+        });
         pauseMenu.add(resume);
         pauseMenu.row();
         pauseMenu.add(instructions);

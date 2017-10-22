@@ -10,14 +10,15 @@ import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
 
+
 public class GiveItemsAction extends AbstractConversationAction {
 
+    private Integer itemsQuantity;
     private String itemName;
-    private int itemQuantity;
 
     public GiveItemsAction(String itemName, int itemQuantity) {
-        this.itemName = itemName; //TODO validate itemName
-        this.itemQuantity = itemQuantity;
+        this.itemName = itemName;
+        this.itemsQuantity = itemQuantity;
     }
 
     @Override
@@ -35,7 +36,7 @@ public class GiveItemsAction extends AbstractConversationAction {
 
         // Create each new item, and either place it in the player inventory or
         // (if it doesn't fit) onto the ground
-        for (int i = 0; i < itemQuantity; i++) {
+        for (int i = 0; i < itemsQuantity; i++) {
             Item newItem = itemManager.getNew(itemName);
             if (!playerInventory.addItem(newItem)) {
                 world.addEntity(new ItemEntity(playerPosX, playerPosY, playerPosZ, newItem));
@@ -45,7 +46,9 @@ public class GiveItemsAction extends AbstractConversationAction {
 
     @Override
     public String toString() {
-        return "giveItems" + '|' + itemName + '|' + itemQuantity;
+        String tS = "giveItems";
+
+        return "giveItems" + '|' + itemName + '|' + itemsQuantity;
     }
 
 }
