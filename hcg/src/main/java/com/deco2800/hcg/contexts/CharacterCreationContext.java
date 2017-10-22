@@ -65,11 +65,13 @@ public class CharacterCreationContext extends CharacterContext{
     private Boolean gunsSkillSpecialiseChecked = false;
     private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
-    private Window attributesWindow;
+//    private Window attributesWindow;
     private Window skillsWindow;
     private Window statsWindow;
     private Window characterPreviewWindow;
     //private Window selectedDescriptionWindow;
+    
+    private Table attributesTable;
 
     private String[] sexes = new String[]{MALE, FEMALE};
 
@@ -106,6 +108,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture female2;
     private Texture female3;
     private Texture blankWindowBackground;
+    private Texture titleAttributes;
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray;
@@ -141,6 +144,7 @@ public class CharacterCreationContext extends CharacterContext{
         female1 = textureManager.getTexture("ccFemale1");
         female2 = textureManager.getTexture("ccFemale2");
         female3 = textureManager.getTexture("ccFemale3");
+        titleAttributes = textureManager.getTexture("ccAttributes");
         blankWindowBackground = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
@@ -148,23 +152,26 @@ public class CharacterCreationContext extends CharacterContext{
     // Declaring sub-tables/sub-windows
     private void initSubTables() {
         topRowInfoTable = new Table(skin);
-        attributesWindow = new Window("Attributes", skin);
+//        attributesWindow = new Window("Attributes", skin);
+        attributesTable = new Table(skin);
         skillsWindow = new Window("Skills", skin);
         statsWindow = new Window("Stats", skin);
         characterPreviewWindow = new Window("Character Preview", skin);
         //selectedDescriptionWindow = new Window("Click on an attribute or skill to find out what it does!", skin);
 
         // Set windows as non-movable
-        attributesWindow.setMovable(false);
+//        attributesWindow.setMovable(false);
         skillsWindow.setMovable(false);
         statsWindow.setMovable(false);
         characterPreviewWindow.setMovable(false);
         //selectedDescriptionWindow.setMovable(false);
 
-        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+//        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+        
+        attributesTable.setBackground(new Image(blankWindowBackground).getDrawable());
     }
 
     //Setting up top row info
@@ -266,28 +273,53 @@ public class CharacterCreationContext extends CharacterContext{
         TextButton charismaUp = new TextButton("Up", skin);
 
         // Add attribute labels and button to the window
-        attributesWindow.add(attributePointsLabel);
-        attributesWindow.row();
-        attributesWindow.add(strengthDown);
-        attributesWindow.add(strengthLabel);
-        attributesWindow.add(strengthUp);
-        attributesWindow.row();
-        attributesWindow.add(vitalityDown);
-        attributesWindow.add(vitalityLabel);
-        attributesWindow.add(vitalityUp);
-        attributesWindow.row();
-        attributesWindow.add(agilityDown);
-        attributesWindow.add(agilityLabel);
-        attributesWindow.add(agilityUp);
-        attributesWindow.row();
-        attributesWindow.add(intellectDown);
-        attributesWindow.add(intellectLabel);
-        attributesWindow.add(intellectUp);
-        attributesWindow.row();
-        attributesWindow.add(charismaDown);
-        attributesWindow.add(charismaLabel);
-        attributesWindow.add(charismaUp);
-        attributesWindow.pack();
+//        attributesWindow.add(attributePointsLabel);
+//        attributesWindow.row();
+//        attributesWindow.add(strengthDown);
+//        attributesWindow.add(strengthLabel);
+//        attributesWindow.add(strengthUp);
+//        attributesWindow.row();
+//        attributesWindow.add(vitalityDown);
+//        attributesWindow.add(vitalityLabel);
+//        attributesWindow.add(vitalityUp);
+//        attributesWindow.row();
+//        attributesWindow.add(agilityDown);
+//        attributesWindow.add(agilityLabel);
+//        attributesWindow.add(agilityUp);
+//        attributesWindow.row();
+//        attributesWindow.add(intellectDown);
+//        attributesWindow.add(intellectLabel);
+//        attributesWindow.add(intellectUp);
+//        attributesWindow.row();
+//        attributesWindow.add(charismaDown);
+//        attributesWindow.add(charismaLabel);
+//        attributesWindow.add(charismaUp);
+//        attributesWindow.pack();
+        
+        attributesTable.add(new Image(titleAttributes));
+        attributesTable.row();
+        attributesTable.add(attributePointsLabel);
+        attributesTable.row();
+        attributesTable.add(strengthDown);
+        attributesTable.add(strengthLabel);
+        attributesTable.add(strengthUp);
+        attributesTable.row();
+        attributesTable.add(vitalityDown);
+        attributesTable.add(vitalityLabel);
+        attributesTable.add(vitalityUp);
+        attributesTable.row();
+        attributesTable.add(agilityDown);
+        attributesTable.add(agilityLabel);
+        attributesTable.add(agilityUp);
+        attributesTable.row();
+        attributesTable.add(intellectDown);
+        attributesTable.add(intellectLabel);
+        attributesTable.add(intellectUp);
+        attributesTable.row();
+        attributesTable.add(charismaDown);
+        attributesTable.add(charismaLabel);
+        attributesTable.add(charismaUp);
+        attributesTable.pack();
 
         // Add listeners for buttons
         strengthDown.addListener(new ClickListener() {
@@ -707,7 +739,7 @@ public class CharacterCreationContext extends CharacterContext{
     private void addSubtables() {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesWindow).top().left().expandX().fillX().expandY().fillY().pad(30);
+        masterTable.add(attributesTable).top().left().expandX().fillX().expandY().fillY().pad(30);
         masterTable.add(skillsWindow).top().right().expandX().fillX().expandY().fillY().pad(30);
         masterTable.row();
         masterTable.add(statsWindow).top().left().expandX().fillX().expandY().fillY().pad(30);

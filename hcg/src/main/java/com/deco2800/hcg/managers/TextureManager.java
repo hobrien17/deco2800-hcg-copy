@@ -432,6 +432,12 @@ public class TextureManager extends Manager {
 			textureMap.put("ccWindow_Background_White", new Texture("resources/ui/character_creation/window_background_white.png"));
 			textureMap.put("ccWindow_BorderSmaller_White", new Texture("resources/ui/character_creation/borderSmaller.png"));
 			textureMap.put("ccWindow_Border_White", new Texture("resources/ui/character_creation/border.png"));
+            textureMap.put("ccTitle", new Texture("resources/ui/character_creation/heading_title.png"));
+            textureMap.put("ccAttributes", new Texture("resources/ui/character_creation/heading_attributes.png"));
+            textureMap.put("ccSkills", new Texture("resources/ui/character_creation/heading_skills.png"));
+            textureMap.put("ccStats", new Texture("resources/ui/character_creation/heading_stats.png"));
+            textureMap.put("ccPreview", new Texture("resources/ui/character_creation/heading_preview.png"));
+            textureMap.put("ccDone", new Texture("resources/ui/character_creation/heading_done.png"));
 
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
