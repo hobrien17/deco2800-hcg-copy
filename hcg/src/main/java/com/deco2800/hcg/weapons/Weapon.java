@@ -274,8 +274,6 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         			count += item.getStackSize();
         		}
         	}
-        	System.out.println(count);
-        	System.out.println(pellets);
         	if(count >= this.pellets) {
         		fire();
         		for(int i = 0; i < this.pellets; i++) {

@@ -139,6 +139,7 @@ public class GameManager implements TickableManager {
      * Sets the current game world
      */
     public void setWorld(World world) {
+    	world.loadPlantObservers();
         this.gameWorld = world;
     }
 

@@ -106,8 +106,6 @@ public class TextureManager extends Manager {
 			textureMap.put("fertiliser", new Texture("resources/sprites/gardentools/fertiliser.png"));
 			textureMap.put("bug_spray", new Texture("resources/sprites/gardentools/bugspray.png"));
 			textureMap.put("trowel", new Texture("resources/sprites/gardentools/trowel.png"));
-			textureMap.put("trowel_mid", new Texture("resources/sprites/gardentools/trowel_dirty.png"));
-			textureMap.put("trowel_broken", new Texture("resources/sprites/gardentools/trowel_dirty_2.png"));
 			textureMap.put("shovel", new Texture("resources/sprites/gardentools/shovel.png"));
 			textureMap.put("hoe", new Texture("resources/sprites/gardentools/hoe.png"));
 			textureMap.put("key_icon", new Texture("resources/sprites/plants/key.png"));
@@ -317,9 +315,9 @@ public class TextureManager extends Manager {
 			textureMap.put("key", new Texture("resources/ui/radial_menu/key_button.png"));
 			textureMap.put("magicMushroom", new Texture("resources/ui/radial_menu/magicmushroom_button.png"));
 			textureMap.put("smallMushroom", new Texture("resources/ui/radial_menu/smallmushroom_button.png"));
-			textureMap.put("shovel", new Texture("resources/ui/radial_menu/shovel_button.png"));
-			textureMap.put("hoe", new Texture("resources/ui/radial_menu/hoe_button.png"));
-			textureMap.put("trowel", new Texture("resources/ui/radial_menu/trowel_button.png"));
+			textureMap.put("shovel_btn", new Texture("resources/ui/radial_menu/shovel_button.png"));
+			textureMap.put("hoe_btn", new Texture("resources/ui/radial_menu/hoe_button.png"));
+			textureMap.put("trowel_btn", new Texture("resources/ui/radial_menu/trowel_button.png"));
 			textureMap.put("snag_btn", new Texture("resources/ui/radial_menu/sausage_button.png"));
 			textureMap.put("sausage_btn", new Texture("resources/ui/radial_menu/hotdog_button.png"));
 

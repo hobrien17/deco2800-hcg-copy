@@ -5,8 +5,14 @@ import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
 import com.deco2800.hcg.items.stackable.HealthPotion;
+import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
-
+import com.deco2800.hcg.items.stackable.SmallMushroom;
+import com.deco2800.hcg.items.stackable.SpeedPotion;
+import com.deco2800.hcg.items.tools.BugSpray;
+import com.deco2800.hcg.items.tools.Fertiliser;
+import com.deco2800.hcg.items.tools.Hoe;
+import com.deco2800.hcg.items.tools.Trowel;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -43,13 +49,36 @@ public class ItemManager extends Manager {
                 return new Seed(Seed.Type.ICE);
             case "water_seed":
                 return new Seed(Seed.Type.WATER);
-            case "health_potion":
-                return new HealthPotion(100);
-            case "magic_mushroom":
+            case "large_mushroom":
                 return new MagicMushroom();
+            case "small_mushroom":
+                return new SmallMushroom();
+            case "fertiliser":
+            	return new Fertiliser();
+            case "sausage":
+            	return new HealthPotion(100);
+            case "snag":
+            	return new SpeedPotion();
+            case "bug_spray":
+            	return new BugSpray();
+            case "key":
+            	return new Key();
+            case "hoe":
+            	return new Hoe();
+            case "trowel":
+            	return new Trowel();
             case "multigun":
+            	Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(PLAYER)
+            			.setRadius(0.7).build();
+            	return new WeaponItem(multigun, "Multi-gun", 10);
             case "stargun":
+            	Weapon stargun = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(PLAYER)
+    					.setRadius(0.7).build();
+            	return new WeaponItem(stargun, "Starfall", 10);
             case "shotgun":
+            	Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN).setUser(PLAYER)
+    					.setRadius(0.7).build();
+            	return new WeaponItem(shotgun, "Shotgun", 10);
             case "machinegun":
                 Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(PLAYER)
                         .setRadius(0.7).build();

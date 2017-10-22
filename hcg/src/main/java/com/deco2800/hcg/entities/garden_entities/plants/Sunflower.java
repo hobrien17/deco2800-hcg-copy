@@ -36,9 +36,12 @@ public class Sunflower extends AbstractGardenPlant {
     public void setupLoot() {
         lootRarity = new HashMap<>();
 
-        lootRarity.put(new LootWrapper("sunflower_seed", 2, 4), 0.7);
-        lootRarity.put(new LootWrapper("water_seed", 2, 4), 0.2);
-        lootRarity.put(new LootWrapper("ice_seed", 2, 4), 0.1);
+        lootRarity.put(new LootWrapper("sunflower_seed", 3, 5), 0.5);
+        lootRarity.put(new LootWrapper("water_seed", 1, 3), 0.1);
+        lootRarity.put(new LootWrapper("ice_seed", 1, 3), 0.1);
+        lootRarity.put(new LootWrapper("fire_seed", 1, 3), 0.1);
+        lootRarity.put(new LootWrapper("grass_seed", 1, 3), 0.1);
+        lootRarity.put(new LootWrapper("explosive_seed", 1, 3), 0.1);
 
         checkLootRarity();
     }

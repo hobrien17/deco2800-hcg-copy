@@ -12,6 +12,7 @@ import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
+import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.util.Effect;
@@ -210,12 +211,7 @@ public class Player extends Character implements Tickable {
 
 		//Add some default items
 		inventory.addItem(new MagicMushroom());
-		inventory.addItem(new Key());
-		inventory.addItem(new Key());
 		inventory.addItem(new SpeedPotion());
-		inventory.addItem(new Seed(Seed.Type.FIRE));
-		inventory.addItem(new Seed(Seed.Type.ICE));
-		inventory.addItem(new Seed(Seed.Type.ICE));
 	}
 
 	/**
@@ -957,14 +953,6 @@ public class Player extends Character implements Tickable {
 			this.equippedItems.cycleEquippedSlot();
 			if (this.getEquippedWeapon() != null) {
 				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
-			}
-			break;
-		case Input.Keys.L:
-			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
-					Pot.class);
-			if (closest.isPresent() && !((Pot)closest.get()).isEmpty()) {
-				Pot pot = (Pot) closest.get();
-				pot.getPlant().loot();
 			}
 			break;
 		default:
