@@ -682,15 +682,31 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 		if (spriteCount % 4 == 0) {
 			switch (this.direction) {
 			case 1:
+				if (enemyType == enemyType.SNAIL) {
+					setTexture(directionTextures[0]);
+					break;
+				}
 				updateTexture(directionTextures[0]);
 				break;
 			case 2:
+				if (enemyType == enemyType.SNAIL) {
+					setTexture(directionTextures[1]);
+					break;
+				}
 				updateTexture(directionTextures[1]);
 				break;
 			case 3:
+				if (enemyType == enemyType.SNAIL) {
+					setTexture(directionTextures[2]);
+					break;
+				}
 				updateTexture(directionTextures[2]);
 				break;
 			case 4:
+				if (enemyType == enemyType.SNAIL) {
+					setTexture(directionTextures[3]);
+					break;
+				}
 				updateTexture(directionTextures[3]);
 				break;
 			default:

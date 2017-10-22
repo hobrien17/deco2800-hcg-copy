@@ -96,6 +96,7 @@ public class Crab extends Enemy implements Tickable {
      *
      */
     private void crab(){
+        this.setClosestPlayer(playerManager.getPlayer());
         if (this.getNumberPlayers() > 1) {
             findClosestPlayer();
             this.lastPlayerX = closestPlayer.getPosX();
