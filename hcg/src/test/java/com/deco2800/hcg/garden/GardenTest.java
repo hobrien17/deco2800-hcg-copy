@@ -107,7 +107,7 @@ public class GardenTest extends BaseTest {
 		AbstractGardenPlant plant = new Sunflower(p);
 		assertTrue(p.addPlant(plant));
 		assertEquals(p.getPlant(), plant);
-		assertEquals(plant.getGrowDelay(), 600);
+		assertEquals(plant.getGrowDelay(), 360);
 	}
 	
 	/*
