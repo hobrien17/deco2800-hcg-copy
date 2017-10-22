@@ -1,8 +1,8 @@
 package com.deco2800.hcg.contexts;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -45,13 +46,11 @@ public class QuestMenuContext extends UIContext {
 	private TextArea detailsText;
 	private ImageButton questsBack;
 	private Table killRequire;
-	private String enemyType;
-	private String enemyAmountText;
-	private Integer enemyAmount;
+	private String killTitle;
+	private HashMap<String, Integer> killList;
 	private Table itemRequire;
-	private String itemType;
-	private String itemAmountText;
-	private Integer itemAmount;
+	private String itemTitle;
+	private HashMap<String, Integer> itemList;
 	
 	public QuestMenuContext() {
 		
@@ -151,14 +150,17 @@ public class QuestMenuContext extends UIContext {
 		completedTitle = new String("Finished Quests:");
 		nameTitle = new String("Quest Name: ");
 		detailsTitle = new String("Details:");
-
-		enemyType = new String("Enemy Type: ");
-		enemyAmountText = new String("Kill Amount Required: ");
-		itemType = new String("Item Type: ");
-		itemAmountText = new String("Item Amount Required: ");
-
-		enemyAmount = new Integer(0);
-		itemAmount = new Integer(0);
+		
+		//TODO new Strings (Titles to separate the parts)
+		killTitle = new String("Kill Requirements");
+		itemTitle = new String("Item Requirements");
+		
+		//TODO new HashMaps which take a String for the enemy/item and a Integer for the amount
+		killList = new HashMap<String, Integer>();
+		killList.put("Enemy ", 0);
+		
+		itemList = new HashMap<String, Integer>();
+		itemList.put("Item ", 0);
 		
 		detailsText = new TextArea("Click on a Quest to Display the Details", skin);
 		detailsText.setDisabled(true);
@@ -196,16 +198,14 @@ public class QuestMenuContext extends UIContext {
         detailsTextTable.add(detailsText).expand().fill();
         secondaryWindow.add(detailsTextTable).expand().fill();
         secondaryWindow.row();
-        killRequire.add(enemyType);
+        killRequire.add(killTitle);
         killRequire.row();
-        killRequire.add(enemyAmountText);
-        killRequire.add(enemyAmount.toString());
+        killRequire.add(killList.toString());
         secondaryWindow.add(killRequire).expandX().fillX().left();
         secondaryWindow.row().padTop(10);
-        itemRequire.add(itemType);
+        itemRequire.add(itemTitle);
         itemRequire.row();
-        itemRequire.add(itemAmountText);
-        itemRequire.add(itemAmount.toString());
+        itemRequire.add(itemList.toString());
         secondaryWindow.add(itemRequire).expandX().fillX().left();
         main.add(logWindow).expand(1, 1).fill();
         main.add(secondaryWindow).expand(4, 1).fill();
@@ -230,13 +230,13 @@ public class QuestMenuContext extends UIContext {
 				nameTitle.concat("Ready Quest");
 				if(questManager.getQuest(readyList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(readyList.getSelected()).getDescription());
+					for (Map.Entry<QuestNPC,QuestArchive> map: questManager.getCompleteableQuests().entrySet()) {
+						//Add each quest
+						if (map.getValue().getQuestTitle().equals(readyList.getSelected())) {
+							populateReqTable(map.getValue());
+						}
+					}
 				}
-
-				//TODO Change the concats to whatever you want them to be
-				enemyType.concat("Enemy");
-				enemyAmountText.concat(questManager.getQuest(readyList.getSelected()).);
-				itemType.concat("Item");
-				itemAmountText.concat(itemAmount.toString());
 			}
 		});
 		
@@ -246,12 +246,13 @@ public class QuestMenuContext extends UIContext {
 				nameTitle.concat("Active Quest");
 				if(questManager.getQuest(activeList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(activeList.getSelected()).getDescription());
+					for (Map.Entry<QuestNPC,QuestArchive> map: questManager.getUnCompleteableQuests().entrySet()) {
+						//Add each quest
+						if (map.getValue().getQuestTitle().equals(activeList.getSelected())) {
+							populateReqTable(map.getValue());
+						}
+					}
 				}
-				//TODO Change the concats to whatever you want them to be
-				enemyType.concat("Enemy");
-				enemyAmountText.concat(enemyAmount.toString());
-				itemType.concat("Item");
-				itemAmountText.concat(itemAmount.toString());
 			}
 		});
 		
@@ -261,15 +262,31 @@ public class QuestMenuContext extends UIContext {
 				nameTitle.concat("Completed Quest");
 				if(questManager.getQuest(completedList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(completedList.getSelected()).getDescription());
+					for (QuestArchive qa: questManager.getCompletedQuests()) {
+						//Add each quest
+						if (qa.getQuestTitle().equals(completedList.getSelected())) {
+							populateReqTable(qa);
+						}
+					}
 				}
-				//TODO Change the concats to whatever you want them to be
-				enemyType.concat("Enemy");
-				enemyAmountText.concat(enemyAmount.toString());
-				itemType.concat("Item");
-				itemAmountText.concat(itemAmount.toString());
 			}
 		});
 			
+	}
+
+	private void populateReqTable(QuestArchive qa) {
+
+		//Clean the current req lists
+		killList = new HashMap<>();
+		itemList = new HashMap<>();
+
+		for (Map.Entry<EnemyType, Integer> map : qa.getQuest().getKillRequirement().entrySet()) {
+			killList.put(map.getKey().toString(), map.getValue());
+		}
+		for (Map.Entry<String, Integer> map : qa.getQuest().getItemRequirement().entrySet()) {
+			killList.put(map.getKey(), map.getValue());
+		}
+
 	}
 		
 }

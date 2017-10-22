@@ -45,9 +45,9 @@
       "nodeText": "Hi did you finish the quest I gave you?",
       "options": [
         {
-          "conditions": [],
+          "conditions": ["questCompleted|Test_Quest_1"],
           "optionText": "Yeah I did!",
-          "actions": [],
+          "actions": ["finishCurrentQuest"],
           "target": "Thanks"
         },
         {

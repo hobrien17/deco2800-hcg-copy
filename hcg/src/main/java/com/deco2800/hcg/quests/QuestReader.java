@@ -100,7 +100,6 @@ public class QuestReader {
 
         description = jQuest.get("optDesc").toString();
         description = description.replaceAll("^\"|\"$", "");
-        System.out.println("Desc loaded is -" + description);
 
         //The kill requirements are a mapping between node{enemyID:killAmount}
         JsonObject killReqs = jQuest.getAsJsonObject("kReq");

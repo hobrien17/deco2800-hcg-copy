@@ -98,7 +98,7 @@ public class QuestNPC extends NPC {
 	}
 
 	public Boolean isQuestCompleted(String questName) {
-		return questManager.isQuestCompleted(this, questName);
+		return questManager.canQuestBeCompleted(this);
 	}
 
 	public void finishQuest() {

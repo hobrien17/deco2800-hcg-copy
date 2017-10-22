@@ -117,7 +117,7 @@ public class QuestManager extends Manager {
         return unCompleteableLog;
     }
 
-    private boolean canQuestBeCompleted(QuestNPC npc) {
+    public boolean canQuestBeCompleted(QuestNPC npc) {
         return questLog.get(npc).currentlyCompletable();
     }
 
