@@ -97,12 +97,12 @@ public class CharacterCreationContext extends CharacterContext{
     private int multiGunSkill = 10;
     private int attributePoints = 5;
     private int specializedSkillsPoints = 2;
-    private int skillPointsGain = 14;
+    private int skillPointsGain = 7;
     private int carryWeight = 180;
-    private int startingHealth = 1800;
-    private int startingStamina = 1800;
-    private int healthGain = 200;
-    private int staminaGain = 200;
+    private int startingHealth = 250;
+    private int startingStamina = 250;
+    private int healthGain = 80;
+    private int staminaGain = 40;
 
     private Image characterPreviewImage;
 
@@ -313,8 +313,8 @@ public class CharacterCreationContext extends CharacterContext{
                 }
             	vitality--;
                 attributePoints++;
-                startingHealth -= 200;
-                healthGain -= 40;
+                startingHealth -= 50;
+                healthGain -= 20;
                 vitalityLabel.setText("Vitality: " + vitality);
                 attributePointsLabel.setText("Available Points: " + attributePoints);
                 startingHealthLabel.setText("Starting Health: " + startingHealth);
@@ -330,8 +330,8 @@ public class CharacterCreationContext extends CharacterContext{
                 }
             	agility--;
             	attributePoints++;
-            	startingStamina -= 200;
-            	staminaGain -= 40;
+            	startingStamina -= 50;
+            	staminaGain -= 10;
             	agilityLabel.setText("Agility: " + agility);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
@@ -347,7 +347,7 @@ public class CharacterCreationContext extends CharacterContext{
                 }
             	intellect--;
             	attributePoints++;
-            	skillPointsGain -= 2;
+            	skillPointsGain -= 1;
             	intellectLabel.setText("Intellect: " + intellect);
             	attributePointsLabel.setText("Available Points: " + attributePoints);
             	skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
@@ -387,8 +387,8 @@ public class CharacterCreationContext extends CharacterContext{
                 if (vitality < 10 && attributePoints > 0) {
                     vitality++;
                     attributePoints--;
-                    startingHealth += 200;
-                    healthGain += 40;
+                    startingHealth += 50;
+                    healthGain += 20;
                     vitalityLabel.setText("Vitality: " + vitality);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingHealthLabel.setText("Starting Health: " + startingHealth);
@@ -403,8 +403,8 @@ public class CharacterCreationContext extends CharacterContext{
                 if (agility < 10 && attributePoints > 0) {
                     agility++;
                     attributePoints--;
-                    startingStamina += 200;
-                    staminaGain += 40;
+                    startingStamina += 50;
+                    staminaGain += 10;
                     agilityLabel.setText("Agility: " + agility);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     startingStaminaLabel.setText("Starting Stamina: " + startingStamina);
@@ -419,7 +419,7 @@ public class CharacterCreationContext extends CharacterContext{
                 if (intellect < 10 && attributePoints > 0) {
                     intellect++;
                     attributePoints--;
-                    skillPointsGain += 2;
+                    skillPointsGain += 1;
                     intellectLabel.setText("Intellect: " + intellect);
                     attributePointsLabel.setText("Available Points: " + attributePoints);
                     skillPointsGainLabel.setText("Skill points to spend per level up: " + skillPointsGain);
@@ -469,13 +469,13 @@ public class CharacterCreationContext extends CharacterContext{
         
         // Tooltips for displaying information on skills
         TextTooltip machineGunInfo = new TextTooltip("Determines how much damage you do with " +
-                "the Machine Gun.", skin);
+                "the Machine Gun. Weapon damage will be multiplied by a factor of SkillPoints/20", skin);
         TextTooltip shotGunInfo = new TextTooltip("Determines how much damage you do with the " +
-                "Shotgun.", skin);
+                "Shotgun. Weapon damage will be multiplied by a factor of SkillPoints/20", skin);
         TextTooltip starGunInfo = new TextTooltip("Determines how much damage you do with the " +
-                "Star Gun.", skin);
+                "Star Gun. Weapon damage will be multiplied by a factor of SkillPoints/20", skin);
         TextTooltip multiGunInfo = new TextTooltip("Determines how much damage you do with the " +
-                "Multi Gun.", skin);
+                "Multi Gun. Weapon damage will be multiplied by a factor of SkillPoints/20", skin);
         
         // Add everything to subtable
         skillsTable.add(new Image(titleSkills)).colspan(2).padTop(50).padBottom(30);
