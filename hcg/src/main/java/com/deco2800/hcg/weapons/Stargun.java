@@ -1,14 +1,19 @@
 package com.deco2800.hcg.weapons;
 
-import java.util.Random;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.items.ItemRarity;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 
 /**
  * Stargun represents the a weapon that shoots stars as bullets
  */
 public class Stargun extends Weapon implements Tickable {
+
+	private NetworkManager networkManager = (NetworkManager) GameManager.get()
+			.getManager(NetworkManager.class);
+	
     /**
      * Creates a new Stargun at the given position
      * @param posX the x position
@@ -42,10 +47,9 @@ public class Stargun extends Weapon implements Tickable {
     
     @Override
     protected void fire() {
-        Random random = new Random();
         for(int i = 0; i < this.pellets; i++) {
-            shootBullet(this.aim.x + 5 * (float) random.nextGaussian(),
-                    this.aim.y + 5 * (float) random.nextGaussian(),
+            shootBullet(this.aim.x + 5 * (float) networkManager.getNextGaussian(),
+                    this.aim.y + 5 * (float) networkManager.getNextGaussian(),
                     this.getPosZ(), this.aim.x, this.aim.y);
         }
         playFireSound();

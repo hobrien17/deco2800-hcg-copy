@@ -2,9 +2,10 @@ package com.deco2800.hcg.entities.terrain_entities;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 import com.badlogic.gdx.graphics.Color;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.shading.LightEmitter;
 
 /**
@@ -12,8 +13,10 @@ import com.deco2800.hcg.shading.LightEmitter;
  */
 public class Tree extends TerrainEntity implements LightEmitter {
 
+	private NetworkManager networkManager = (NetworkManager) GameManager.get()
+			.getManager(NetworkManager.class);
+
     private TreeType type;
-    private Random random = new Random();
     private ArrayList<TreeType> treeTypes;
 
     /**
@@ -96,7 +99,7 @@ public class Tree extends TerrainEntity implements LightEmitter {
      * randomises the tree type
      */
     private void randomiseType(){
-        int index = random.nextInt(treeTypes.size());
+        int index = networkManager.getNextRandomInt(treeTypes.size());
         this.setType(treeTypes().get(index));
     }
 

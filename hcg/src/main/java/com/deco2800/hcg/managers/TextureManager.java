@@ -466,7 +466,6 @@ public class TextureManager extends Manager {
 			textureMap.put("ccWindow_Background_White", new Texture("resources/ui/character_creation/window_background_white.png"));
 			textureMap.put("ccWindow_BorderSmaller_White", new Texture("resources/ui/character_creation/borderSmaller.png"));
 			textureMap.put("ccWindow_Border_White", new Texture("resources/ui/character_creation/border.png"));
-
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}

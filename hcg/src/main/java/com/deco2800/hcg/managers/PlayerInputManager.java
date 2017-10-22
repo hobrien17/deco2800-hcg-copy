@@ -220,7 +220,7 @@ public class PlayerInputManager extends Manager implements TickableManager {
 	 * Queues a local input
 	 */
 	public void queueLocalInput(InputType type, int[] ints, float[] floats) {
-		long tick = inputTickCount + (networkManager.isMultiplayerGame() ? 3 : 1);
+		long tick = inputTickCount + (networkManager.isMultiplayerGame() ? 4 : 1);
 		Input input = new Input(type, 0, ints, floats);
 		
 		if (networkManager.isMultiplayerGame()) {
