@@ -32,7 +32,7 @@ public class QuestReader {
      *  A function which loads all the quests into the quest manager, this utalizes the loadQuest function, and it then
      *  adds all the files in the folder to the hash map of quests titles to quests.
      */
-    public Map<String,Quest> loadAllQuests() throws ResourceLoadException {
+    public HashMap<String,Quest> loadAllQuests() throws ResourceLoadException {
 
         HashMap<String,Quest> quests = new HashMap<>();
         String questsFolder = "resources/quests/";
@@ -95,7 +95,9 @@ public class QuestReader {
 
         //The item requirements and rewards are stored as a mapping between item ID and count
         JsonObject itemReqs = jQuest.getAsJsonObject("iReq");
+        System.out.println("Parseing Item Requirements");
         itemRequirement = parseItemQuantityHashMap(title,itemReqs);
+        System.out.println("Parseing Item Rewards");
         JsonObject itemRewards = jQuest.getAsJsonObject("rewards");
         rewards = parseItemQuantityHashMap(title,itemRewards);
 
@@ -103,6 +105,7 @@ public class QuestReader {
         description = description.replaceAll("^\"|\"$", "");
 
         JsonObject killReqs = jQuest.getAsJsonObject("kReq");
+        System.out.println("Parseing Kill Requirements");
         killRequirement = parseKillReqMap(title,killReqs);
 
         return new Quest(title,rewards,killRequirement,itemRequirement,description);
@@ -113,7 +116,7 @@ public class QuestReader {
         ItemManager itemManager = (ItemManager) GameManager.get().getManager(ItemManager.class);
 
         HashMap<String,Integer> returnMap = new HashMap<>();
-        if (iqMap.entrySet().isEmpty()) {
+        if (!iqMap.entrySet().isEmpty()) {
             for (Map.Entry i:iqMap.entrySet()) {
                 //For each entry in the item req obj make sure it is valid
 
@@ -161,6 +164,7 @@ public class QuestReader {
                                                     title + ")");
                 }
                 //Item names use the _ when creating, but " " when checking
+                System.out.println("Added an item to map");
                 returnMap.put(i.getKey().toString(),Integer.parseUnsignedInt(i.getValue().toString()));
             }
         }
@@ -170,7 +174,7 @@ public class QuestReader {
     private HashMap<EnemyType, Integer> parseKillReqMap(String title, JsonObject krmMap) {
         HashMap <EnemyType, Integer> returnKRM = new HashMap<>();
 
-        if (krmMap.entrySet().isEmpty()) {
+        if (!krmMap.entrySet().isEmpty()) {
 
             for (Map.Entry<String,JsonElement> enemyMap: krmMap.entrySet()) {
                 String forQConst = ") for quest (";
@@ -211,6 +215,7 @@ public class QuestReader {
                                                     enemyMap.getKey() + ")");
 
                 }
+                System.out.println("Added an item to map");
                 returnKRM.put(et,killCount);
             }
 

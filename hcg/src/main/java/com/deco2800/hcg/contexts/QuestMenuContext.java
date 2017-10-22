@@ -1,6 +1,5 @@
 package com.deco2800.hcg.contexts;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -283,7 +282,6 @@ public class QuestMenuContext extends UIContext {
 		killList = new HashMap<>();
 		itemList = new HashMap<>();
 		rewardList = new HashMap<>();
-
 		for (Map.Entry<EnemyType, Integer> map : qa.getQuest().getKillRequirement().entrySet()) {
 			killList.put(map.getKey().toString(), map.getValue());
 		}
