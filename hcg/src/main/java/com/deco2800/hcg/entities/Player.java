@@ -1001,9 +1001,6 @@ public class Player extends Character implements Tickable {
 		
 		// replicated inputs
 		switch (keycode) {
-		case Input.Keys.X:
-			this.getEquippedWeapon().switchBullet();
-			break;
 		case Input.Keys.C:
 			if (levelUp) {
 				levelUp = false;
@@ -1026,16 +1023,6 @@ public class Player extends Character implements Tickable {
 			break;
 		case Input.Keys.D:
 			movementDirection.put("right", true);
-			break;
-		case Input.Keys.R:
-			if (this.getEquippedWeapon() != null) {
-			    this.getEquippedWeapon().ceaseFire();
-				GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
-			}
-			this.equippedItems.cycleEquippedSlot();
-			if (this.getEquippedWeapon() != null) {
-				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
-			}
 			break;
 		default:
 			break;
