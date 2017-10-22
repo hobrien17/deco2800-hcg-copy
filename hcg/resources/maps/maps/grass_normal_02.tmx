@@ -525,6 +525,21 @@
   <object id="516" gid="132" x="1467.71" y="1180.29" width="55" height="32"/>
   <object id="517" gid="132" x="1461.45" y="978.545" width="55" height="32"/>
  </objectgroup>
+  <objectgroup name="NPC">
+  <properties>
+   <property name="name" value="NPC"/>
+  </properties>
+  <object id="524" gid="13" x="1543.2" y="1632.8" width="55" height="32">
+   <properties>
+    <property name="Type" value="Quest"/>
+    <property name="conversation" value="questTutorial04"/>
+    <property name="fName" value="Jarvis"/>
+    <property name="faceImage" value="npc_face"/>
+    <property name="sName" value="Bob"/>
+    <property name="texture" value="character_2"/>
+   </properties>
+  </object>
+</objectgroup>
  <layer name="spikes" width="100" height="100">
   <properties>
    <property name="damage" value="1"/>
