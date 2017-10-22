@@ -15,7 +15,7 @@
         {
           "conditions": [],
           "optionText": "Yes I'd love to",
-          "actions": ["startQuest|Test_Quest_1"],
+          "actions": [],
           "target": "learnQuests"
         },
         {
@@ -29,12 +29,12 @@
 
     {
       "id": "learnQuests",
-      "nodeText": "I have just granted you a quest, if you press the Q key it will open up your Quests dialog. Please come back to me once you have completed the Quest",
+      "nodeText": "I have just granted you a quest, if you press the 'Q' key it will open up your Quests dialog. Come straight back to me once you have completed the Quest as you won't be able to get your reward if you change levels.",
       "options": [
         {
           "conditions": [],
           "optionText": "Okay, see you soon",
-          "actions": ["setRelationship|haveYouCompletedTheQuest"],
+          "actions": ["setRelationship|haveYouCompletedTheQuest", "startQuest|Test_Quest_1"],
           "target": null
         }
       ]
