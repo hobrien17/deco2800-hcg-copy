@@ -19,7 +19,7 @@ public class LevelStore {
 
 		// Normal Levels
 		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_01.tmx"), 1, 1, 1));
-		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02.tmx"), 1, 2, 1));
+		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02_05.tmx"), 1, 2, 1));
 		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 3, 1));
 	    levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 2, 1));
 	    levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_05.tmx"), 1, 3, 1));
