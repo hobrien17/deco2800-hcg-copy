@@ -2,6 +2,7 @@ package com.deco2800.hcg.contexts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -196,9 +198,7 @@ public class QuestMenuContext extends UIContext {
         detailsTextTable.add(detailsText).expand().fill();
         secondaryWindow.add(detailsTextTable).expand().fill();
         secondaryWindow.row();
-        killRequire.add(killTitle);
-        killRequire.row();
-        killRequire.add(killList.toString());
+		updateKillTable();
         secondaryWindow.add(killRequire).expandX().fillX().left();
         secondaryWindow.row().padTop(10);
         itemRequire.add(itemTitle);
@@ -228,12 +228,13 @@ public class QuestMenuContext extends UIContext {
 				nameTitle.concat("Ready Quest");
 				if(questManager.getQuest(readyList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(readyList.getSelected()).getDescription());
+					for (Map.Entry<QuestNPC,QuestArchive> map: questManager.getCompleteableQuests().entrySet()) {
+						//Add each quest
+						if (map.getValue().getQuestTitle().equals(readyList.getSelected())) {
+							populateReqTable(map.getValue());
+						}
+					}
 				}
-				//TODO replace the HashMaps with a Enemy/Item and then the Amount
-				killList.remove(0);
-				killList.put("New Enemy ", 0);
-				itemList.remove(0);
-				itemList.put("New Item ", 0);
 			}
 		});
 		
@@ -243,12 +244,13 @@ public class QuestMenuContext extends UIContext {
 				nameTitle.concat("Active Quest");
 				if(questManager.getQuest(activeList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(activeList.getSelected()).getDescription());
+					for (Map.Entry<QuestNPC,QuestArchive> map: questManager.getUnCompleteableQuests().entrySet()) {
+						//Add each quest
+						if (map.getValue().getQuestTitle().equals(activeList.getSelected())) {
+							populateReqTable(map.getValue());
+						}
+					}
 				}
-				//TODO replace the HashMaps with a Enemy/Item and then the Amount
-				killList.remove(0);
-				killList.put("New Enemy ", 0);
-				itemList.remove(0);
-				itemList.put("New Item ", 0);
 			}
 		});
 		
@@ -258,15 +260,42 @@ public class QuestMenuContext extends UIContext {
 				nameTitle.concat("Completed Quest");
 				if(questManager.getQuest(completedList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(completedList.getSelected()).getDescription());
+					for (QuestArchive qa: questManager.getCompletedQuests()) {
+						//Add each quest
+						if (qa.getQuestTitle().equals(completedList.getSelected())) {
+							populateReqTable(qa);
+						}
+					}
 				}
-				//TODO replace the HashMaps with a Enemy/Item and then the Amount
-				killList.remove(0);
-				killList.put("New Enemy ", 0);
-				itemList.remove(0);
-				itemList.put("New Item ", 0);
 			}
 		});
 			
+	}
+
+	private void populateReqTable(QuestArchive qa) {
+		System.out.println("here 1");
+		//Clean the current req lists
+		killList = new HashMap<>();
+		itemList = new HashMap<>();
+
+		for (Map.Entry<EnemyType, Integer> map : qa.getQuest().getKillRequirement().entrySet()) {
+			killList.put(map.getKey().toString(), map.getValue());
+			System.out.println("here 2");
+		}
+		for (Map.Entry<String, Integer> map : qa.getQuest().getItemRequirement().entrySet()) {
+			itemList.put(map.getKey().replace("_"," "), map.getValue());
+			System.out.println("here 3");
+		}
+
+	}
+
+	private void updateKillTable() {
+		killRequire.clear();
+		killRequire.add(killTitle);
+		for (Map.Entry<String,Integer> killMap: killList.entrySet()) {
+			killRequire.row();
+			killRequire.add(killMap.getKey() + " = " + killMap.getValue().toString());
+		}
 	}
 		
 }

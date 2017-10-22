@@ -68,10 +68,8 @@ public class Quest {
 	 */
 	public String getDescription() {
 		if (!this.description.equals("")) {
-			System.out.println("there is a desc it is (" + this.description + ")");
 			return this.description;
 		}
-		System.out.println("there is not a desc");
 		String desc = "";
 		boolean bothReq = false;
 
