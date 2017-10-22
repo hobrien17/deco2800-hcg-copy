@@ -853,9 +853,9 @@ public class Player extends Character implements Tickable {
 	 * character in the character creation screen
 	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
-			int machineGunSkill, int shotGunSkill, int starGunSkill, String name) {
+			int meleeSkill, int gunsSkill, int energyWeaponsSkill, String name) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
-		setSkills(machineGunSkill, shotGunSkill, starGunSkill);
+		setSkills(meleeSkill, gunsSkill, energyWeaponsSkill);
 		setName(name);
 		healthMax = 50 * vitality;
 		healthCur = healthMax;
@@ -894,9 +894,7 @@ public class Player extends Character implements Tickable {
 		if (xp >= xpThreshold) {
 			// TODO: You have levelled up pop up
 			levelUp = true;
-			for (int i = 0; i < xp/xpThreshold; i++) {
-				levelUp();
-			}
+			levelUp();
 		}
 	}
 

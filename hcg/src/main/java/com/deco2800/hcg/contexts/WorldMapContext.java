@@ -10,13 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
 import com.deco2800.hcg.entities.worldmap.WorldMapEntity;
-import com.deco2800.hcg.entities.worldmap.WorldStackBlackoutEntity;
 import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.LevelStartMessage;
@@ -179,37 +177,9 @@ public class WorldMapContext extends UIContext {
 		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(menuStage); // Add the user options as a processor
 		inputMultiplexer.addProcessor(stage); // Add the UI as a processor
+		inputMultiplexer.addProcessor(inputManager);
 
 		inputManager.addTouchUpListener(this::handleTouchUp);
-		
-		if(!gameManager.getTutorialWorldMessageDisplayed() && currentWorld.getWorldType() == 1) {
-			createTutorialTip(inputManager);
-		} else {
-			inputMultiplexer.addProcessor(inputManager);
-		}
-	}
-	
-	private void createTutorialTip(InputManager inputManager) {
-		menuStage.addActor(new WorldStackBlackoutEntity());
-		Window okWindow = new Window("Use WASD to move and E to interact with NPCs", skin);
-    	Button okButton = new TextButton("OK", skin);
-    	okButton.pad(5, 10, 5, 10);
-  
-    	/* Add a programmatic listener to the buttons */
-		okButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				okWindow.remove();
-				inputMultiplexer.addProcessor(inputManager);
-				updateMapDisplay(currentWorld);
-			}
-		});		
-    	okWindow.add(okButton);
-    	okWindow.pack();
-		okWindow.setMovable(false); // So it doesn't fly around the screen
-		okWindow.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-		menuStage.addActor(okWindow);
-		gameManager.setTutorialWorldMessageDisplayed();
 	}
 	
 	/**
@@ -258,7 +228,6 @@ public class WorldMapContext extends UIContext {
 	public void updateMapDisplay(WorldMap currentWorld) {
 		updateNodesDisplayed();
 		stage.clear();
-		menuStage.clear();
 		stage.addActor(new WorldMapEntity(currentWorld.getWorldType()));
 		hiddenNodes.clear();
 		for (MapNode node : gameManager.getWorldMap().getContainedNodes()) {

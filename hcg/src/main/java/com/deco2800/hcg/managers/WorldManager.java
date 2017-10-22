@@ -74,12 +74,23 @@ public class WorldManager extends Manager {
 		// delete stopwatches
         ((StopwatchManager) gameManager.getManager(StopwatchManager.class)).deleteObservers();
         
-        if(node.getNodeType() == 0 && gameManager.getWorldMap().getWorldType() != 1) {
 
+        // create new world
+		World newWorld = new World(node.getNodeLinkedLevel().getWorld().getLoadedFile());
+		
+        // add the new weather effects
+        ((WeatherManager) gameManager.getManager(WeatherManager.class)).
+          setWeather(newWorld.getWeatherType());
+        
+        // play ambient music
+        soundManager.stopSound("ambientMusic");
+        soundManager.loopSound("ambientMusic");
+
+        if(node.getNodeType() == 0) {
         	gameManager.setWorld(World.SAFEZONE);
         } else {
         	// create new world
-    		World newWorld = new World(node.getNodeLinkedLevel().getWorld().getLoadedFile());
+    		newWorld = new World(node.getNodeLinkedLevel().getWorld().getLoadedFile());
     		
             // add the new weather effects
             ((WeatherManager) gameManager.getManager(WeatherManager.class)).

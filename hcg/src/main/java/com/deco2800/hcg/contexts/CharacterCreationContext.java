@@ -17,6 +17,7 @@ import com.deco2800.hcg.items.single.wearable.CottonShirt;
 import com.deco2800.hcg.items.stackable.HealthPotion;
 import com.deco2800.hcg.items.tools.Shovel;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
@@ -46,9 +47,9 @@ public class CharacterCreationContext extends CharacterContext{
     private Label agilityLabel;
     private Label intellectLabel;
     private Label charismaLabel;
-    private Label machineGunSkillLabel;
-    private Label shotGunSkillLabel;
-    private Label starGunSkillLabel;
+    private Label meleeSkillLabel;
+    private Label gunsSkillLabel;
+    private Label energyWeaponsSkillLabel;
     private Label attributePointsLabel;
     private Label specializedSkillsPointsLabel;
     private Label startingHealthLabel;
@@ -58,16 +59,16 @@ public class CharacterCreationContext extends CharacterContext{
     private Label skillPointsGainLabel;
     private Label carryWeightLabel;
 
-    private CheckBox machineGunSpecialise;
-    private CheckBox shotGunSpecialise;
-    private CheckBox starGunSpecialise;
+    private CheckBox meleeSkillSpecialise;
+    private CheckBox gunsSkillSpecialise;
+    private CheckBox energyWeaponsSkillSpecialise;
 
     private SelectBox<String> characterSex;
 
     // For some reason the checkBox isChecked method isn't working properly so this is a temporary fix
-    private Boolean machineGunSkillSpecialiseChecked = false;
-    private Boolean shotGunSkillSpecialiseChecked = false;
-    private Boolean starGunSkillSpecialiseChecked = false;
+    private Boolean meleeSkillSpecialiseChecked = false;
+    private Boolean gunsSkillSpecialiseChecked = false;
+    private Boolean energyWeaponsSkillSpecialiseChecked = false;
 
     private Window attributesWindow;
     private Window skillsWindow;
@@ -78,7 +79,7 @@ public class CharacterCreationContext extends CharacterContext{
     private String[] sexes = new String[]{MALE, FEMALE};
 
     // Placeholder for setting what skills are specialised because I'm a data structures n00b
-    private List<String> SPECIALISED_SKILLS = Arrays.asList( "machineGunSkill", "shotGunSkill", "starGunSkill");
+    private List<String> SPECIALISED_SKILLS = Arrays.asList( "meleeSkill", "gunsSkill", "energyWeaponsSkill");
     private Map<String, Boolean> specialisedSkills;
 
 
@@ -87,9 +88,9 @@ public class CharacterCreationContext extends CharacterContext{
     private int agility = 5;
     private int intellect = 5;
     private int charisma = 5; 
-    private int machineGunSkill = 10;
-    private int shotGunSkill = 10;
-    private int starGunSkill = 10;
+    private int meleeSkill = 10;
+    private int gunsSkill = 10;
+    private int energyWeaponsSkill = 10;
     private int attributePoints = 5;
     private int specializedSkillsPoints = 2;
     private int skillPointsGain = 14;
@@ -208,7 +209,7 @@ public class CharacterCreationContext extends CharacterContext{
                     /* Create new player */
                     /* Also check to see if player already exists */
                     if (playerManager.getPlayer() == null) {
-                        createPlayer(strength, vitality, agility, charisma, intellect, machineGunSkill, shotGunSkill, starGunSkill,
+                        createPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill, energyWeaponsSkill,
                                 characterName.getText(), charTextureArray[textureCount].toString());
                     }
                 } else {
@@ -229,7 +230,7 @@ public class CharacterCreationContext extends CharacterContext{
             	}
                 /* Create new player with default values. */
                 if (playerManager.getPlayer() == null) {
-                    createPlayer(5, 5, 5, 5, 5, machineGunSkill, shotGunSkill, starGunSkill,
+                    createPlayer(5, 5, 5, 5, 5, meleeSkill, gunsSkill, energyWeaponsSkill,
                             characterName.getText(), charTextureArray[textureCount].toString());
                 }
             }
@@ -516,115 +517,115 @@ public class CharacterCreationContext extends CharacterContext{
 
     private void setupSkillsWindow() {
         specializedSkillsPointsLabel = new Label("Available Specialities: " + specializedSkillsPoints, skin);
-        machineGunSkillLabel = new Label("Machine Gun Skill: " + machineGunSkill, skin);
-        shotGunSkillLabel = new Label("Shot Gun Skill: " + shotGunSkill, skin);
-        starGunSkillLabel = new Label("Star Gun Skill: " + starGunSkill, skin);
+        meleeSkillLabel = new Label("Melee Skill: " + meleeSkill, skin);
+        gunsSkillLabel = new Label("Guns Skill: " + gunsSkill, skin);
+        energyWeaponsSkillLabel = new Label("Energy Weapons Skill: " + energyWeaponsSkill, skin);
 
-        machineGunSpecialise = new CheckBox("Specialise", skin);
-        machineGunSpecialise.setChecked(false);
-        shotGunSpecialise = new CheckBox("Specialise", skin);
-        shotGunSpecialise.setChecked(false);
-        starGunSpecialise = new CheckBox("Specialise", skin);
-        starGunSpecialise.setChecked(false);
+        meleeSkillSpecialise = new CheckBox("Specialise", skin);
+        meleeSkillSpecialise.setChecked(false);
+        gunsSkillSpecialise = new CheckBox("Specialise", skin);
+        gunsSkillSpecialise.setChecked(false);
+        energyWeaponsSkillSpecialise = new CheckBox("Specialise", skin);
+        energyWeaponsSkillSpecialise.setChecked(false);
 
         // Add attribute labels and button to the window
         skillsWindow.add(specializedSkillsPointsLabel);
         skillsWindow.row();
-        skillsWindow.add(machineGunSpecialise);
-        skillsWindow.add(machineGunSkillLabel);
+        skillsWindow.add(meleeSkillSpecialise);
+        skillsWindow.add(meleeSkillLabel);
         skillsWindow.row();
-        skillsWindow.add(shotGunSpecialise);
-        skillsWindow.add(shotGunSkillLabel);
+        skillsWindow.add(gunsSkillSpecialise);
+        skillsWindow.add(gunsSkillLabel);
         skillsWindow.row();
-        skillsWindow.add(starGunSpecialise);
-        skillsWindow.add(starGunSkillLabel);
+        skillsWindow.add(energyWeaponsSkillSpecialise);
+        skillsWindow.add(energyWeaponsSkillLabel);
         skillsWindow.pack();
 
         /*  Add listeners to the check-boxes have had to do some VERY odd work arounds to get these checkboxes working
             The checkbox.isChecked() methods don't seem to be working properly with the clickListener
          */
 
-       machineGunSpecialise.addListener(new ClickListener() {
+       meleeSkillSpecialise.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (machineGunSkillSpecialiseChecked) {
+                if (meleeSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
-                    machineGunSkill -= 10;
-                    machineGunSpecialise.setChecked(false);
-                    machineGunSkillSpecialiseChecked = false;
-                    specialisedSkills.replace("machineGunSkill", false);
+                    meleeSkill -= 10;
+                    meleeSkillSpecialise.setChecked(false);
+                    meleeSkillSpecialiseChecked = false;
+                    specialisedSkills.replace("meleeSkill", false);
                 } else {
                     if (specializedSkillsPoints > 0) {
                         specializedSkillsPoints--;
-                        machineGunSkill += 10;
-                        machineGunSpecialise.setChecked(true);
-                        machineGunSkillSpecialiseChecked = true;
-                        specialisedSkills.replace("machineGunSkill", true);
+                        meleeSkill += 10;
+                        meleeSkillSpecialise.setChecked(true);
+                        meleeSkillSpecialiseChecked = true;
+                        specialisedSkills.replace("meleeSkill", true);
                     } else {
-                        machineGunSpecialise.setChecked(false);
-                        machineGunSkillSpecialiseChecked = false;
+                        meleeSkillSpecialise.setChecked(false);
+                        meleeSkillSpecialiseChecked = false;
                     }
                 }
-                machineGunSkillLabel.setText("Melee Skill: " + machineGunSkill);
+                meleeSkillLabel.setText("Melee Skill: " + meleeSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
                 selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
                         " Melee Weapons");
             }
         });
 
-        shotGunSpecialise.addListener(new ClickListener() {
+        gunsSkillSpecialise.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (shotGunSkillSpecialiseChecked) {
+                if (gunsSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
-					shotGunSkill -= 10;
-					shotGunSpecialise.setChecked(false);
-					shotGunSkillSpecialiseChecked = false;
-					specialisedSkills.replace("shotGunSkill", false);
+					gunsSkill -= 10;
+					gunsSkillSpecialise.setChecked(false);
+					gunsSkillSpecialiseChecked = false;
+					specialisedSkills.replace("gunsSkill", false);
 				} else if (specializedSkillsPoints > 0) {
 					specializedSkillsPoints--;
-					shotGunSkill += 10;
-					shotGunSpecialise.setChecked(true);
-					shotGunSkillSpecialiseChecked = true;
-					specialisedSkills.replace("shotGunSkill", true);
+					gunsSkill += 10;
+					gunsSkillSpecialise.setChecked(true);
+					gunsSkillSpecialiseChecked = true;
+					specialisedSkills.replace("gunsSkill", true);
 				} else {
-					shotGunSpecialise.setChecked(false);
-					shotGunSkillSpecialiseChecked = false;
+					gunsSkillSpecialise.setChecked(false);
+					gunsSkillSpecialiseChecked = false;
 				}
-                shotGunSkillLabel.setText("Guns Skill: " + shotGunSkill);
+                gunsSkillLabel.setText("Guns Skill: " + gunsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
                 selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
                         " Guns");
             }
         });
 
-        starGunSpecialise.addListener(new ClickListener() {
+        energyWeaponsSkillSpecialise.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (starGunSkillSpecialiseChecked) {
+                if (energyWeaponsSkillSpecialiseChecked) {
                     specializedSkillsPoints++;
-                    starGunSkill -= 10;
-                    starGunSpecialise.setChecked(false);
-                    starGunSkillSpecialiseChecked = false;
-					specialisedSkills.replace("starGunSkill", false);
+                    energyWeaponsSkill -= 10;
+                    energyWeaponsSkillSpecialise.setChecked(false);
+                    energyWeaponsSkillSpecialiseChecked = false;
+					specialisedSkills.replace("energyWeaponsSkill", false);
 				} else if (specializedSkillsPoints > 0) {
 					specializedSkillsPoints--;
-					starGunSkill += 10;
-					starGunSpecialise.setChecked(true);
-					starGunSkillSpecialiseChecked = true;
-					specialisedSkills.replace("starGunSkill", true);
+					energyWeaponsSkill += 10;
+					energyWeaponsSkillSpecialise.setChecked(true);
+					energyWeaponsSkillSpecialiseChecked = true;
+					specialisedSkills.replace("energyWeaponsSkill", true);
 				} else {
-					starGunSpecialise.setChecked(false);
-					starGunSkillSpecialiseChecked = false;
+					energyWeaponsSkillSpecialise.setChecked(false);
+					energyWeaponsSkillSpecialiseChecked = false;
 				}
-                starGunSkillLabel.setText("Energy Weapons Skill: " + starGunSkill);
+                energyWeaponsSkillLabel.setText("Energy Weapons Skill: " + energyWeaponsSkill);
                 specializedSkillsPointsLabel.setText("Available Specialities: " + specializedSkillsPoints);
                 selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
                         " Energy Weapons");
             }
         });
 
-        machineGunSkillLabel.addListener(new ClickListener() {
+        meleeSkillLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 selectedDescriptionText.setText("Your Melee Weapons skill.\n Determines how much damage you do with" +
@@ -632,7 +633,7 @@ public class CharacterCreationContext extends CharacterContext{
             }
         });
 
-        shotGunSkillLabel.addListener(new ClickListener() {
+        gunsSkillLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 selectedDescriptionText.setText("Your Guns skill.\n Determines how much damage you do with" +
@@ -640,7 +641,7 @@ public class CharacterCreationContext extends CharacterContext{
             }
         });
 
-        starGunSkillLabel.addListener(new ClickListener() {
+        energyWeaponsSkillLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 selectedDescriptionText.setText("Your Energy Weapons skill.\n Determines how much damage you do with" +
