@@ -49,11 +49,9 @@ public class CharacterMessage extends Message {
 	
 	@Override
 	public void process() {
-		// FIXME Player ID
         Player player = playerManager.getMultiplayerCharacter(character);
         playerManager.addPlayer(player);
 		
-		// FIXME Player count
 		if (playerManager.getPlayers().size() >= 2) {
             if (!networkManager.isHost()) {
                 contextManager.pushContext(new WaitHostContext(0));
