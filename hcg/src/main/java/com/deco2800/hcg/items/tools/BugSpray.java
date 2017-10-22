@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.items.ItemRarity;
 
 public class BugSpray extends Tool {
 
@@ -43,11 +42,6 @@ public class BugSpray extends Tool {
 	public void effect(Pot pot) {
 		pot.getPlant().increaseRarity(0.1, 0.05);
 		player.getInventory().removeItem(this);
-	}
-	
-	@Override
-	public ItemRarity getRarity() {
-		return ItemRarity.UNCOMMON;
 	}
 
 }

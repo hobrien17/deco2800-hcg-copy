@@ -220,7 +220,6 @@ public abstract class Shop {
             player.getInventory().addItem(item.copy());
             return 1;
         }
-        System.out.println(item instanceof StackableItem);
         if (item instanceof StackableItem) {
             Item shopCopy = containsItem(item);
             if ((shopCopy != null) && shopCopy.addToStack(1)) {

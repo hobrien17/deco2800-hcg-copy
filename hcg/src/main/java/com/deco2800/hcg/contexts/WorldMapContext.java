@@ -166,7 +166,7 @@ public class WorldMapContext extends UIContext {
 				Level level = new Level(world, 0, 1, 1);
 				
 				gameManager.setWorld(world);
-				world.setWeather(Weathers.DROUGHT);
+				world.setWeather(Weathers.STORM);
 
 				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
 				playerManager.spawnPlayers();

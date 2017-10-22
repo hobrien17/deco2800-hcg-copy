@@ -29,7 +29,7 @@ public class MushroomTurretTest {
       enemy = new MushroomTurret(5.0f,5.0f,0.0f, 0);
       // create mock game
       gameManager = GameManager.get();
-      AbstractWorld = new World();
+      AbstractWorld = mock(World.class);
       gameManager.setWorld(AbstractWorld);
       playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
     }

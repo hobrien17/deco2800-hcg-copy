@@ -11,38 +11,63 @@ import com.deco2800.hcg.managers.ShaderManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.TextureManager;
 
+
 public class OptionsMenuContext extends UIContext{
-	private Image optionsTitle;
-	private ImageButton muteButton;
+
+	private ImageButton toggleMuteButton;
 	private ImageButton toggleShadersButton;
 	private ImageButton backButton;
 	private Table table;
+	private boolean isMute;
+	private boolean isShaders;
+	private GameManager gameManager;
+	private ContextManager contextManager;
+	private TextureManager textureManager;
+	private ShaderManager shaderManager;
+	private SoundManager soundManager;
+
 	public OptionsMenuContext(){
-		 // Get necessary managers
-        GameManager gameManager = GameManager.get();
-		ContextManager contextManager = (ContextManager)
-                gameManager.getManager(ContextManager.class);
-		TextureManager textureManager = (TextureManager)
+
+		// Get necessary managers
+		gameManager = GameManager.get();
+		contextManager = (ContextManager)
+				gameManager.getManager(ContextManager.class);
+		textureManager = (TextureManager)
 				gameManager.getManager(TextureManager.class);
-		ShaderManager shaderManager = (ShaderManager)
+		shaderManager = (ShaderManager)
 				gameManager.getManager(ShaderManager.class);
-		SoundManager soundManager = (SoundManager)
+		soundManager = (SoundManager)
 				gameManager.getManager(SoundManager.class);
+
+		draw();
+	}
+
+	private void draw() {
 
 		table = new Table();
 		table.setFillParent(true);
 		table.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
 
-		optionsTitle = new Image(textureManager.getTexture("menu_options_button"));
-		toggleShadersButton = new ImageButton(new Image(textureManager.getTexture("toggle_shaders_button")).getDrawable());
-		muteButton = new ImageButton(new Image(textureManager.getTexture("toggle_mute_button")).getDrawable());
-		backButton = new ImageButton(new Image(textureManager.getTexture("instructions_back_button")).getDrawable());
+		isMute = soundManager.getMuteStatus();
+		isShaders = shaderManager.getShaderStatus();
 
-		table.add(optionsTitle);
-		table.row();
+		if (isMute) {
+			toggleMuteButton = new ImageButton(new Image(textureManager.getTexture("toggle_mute_button_greyscale")).getDrawable());
+		} else {
+			toggleMuteButton = new ImageButton(new Image(textureManager.getTexture("toggle_mute_button")).getDrawable());
+		}
+
+		if (isShaders) {
+			toggleShadersButton = new ImageButton(new Image(textureManager.getTexture("toggle_shaders_button")).getDrawable());
+		} else {
+			toggleShadersButton = new ImageButton(new Image(textureManager.getTexture("toggle_shaders_button_greyscale")).getDrawable());
+		}
+
+		backButton = new ImageButton(new Image(textureManager.getTexture("menu_back_button")).getDrawable());
+
 		table.add(toggleShadersButton);
 		table.row();
-		table.add(muteButton);
+		table.add(toggleMuteButton);
 		table.row();
 		table.add(backButton);
 		stage.addActor(table);
@@ -53,19 +78,23 @@ public class OptionsMenuContext extends UIContext{
 				contextManager.popContext();
 			}
 		});
-		muteButton.addListener(new ChangeListener() {
+		toggleMuteButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				soundManager.toggleMute();
+				draw();
 			}
 		});
 		toggleShadersButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				shaderManager.toggleShaders();
+				draw();
 			}
 		});
-
-
 	}
+
+
 }
+
+

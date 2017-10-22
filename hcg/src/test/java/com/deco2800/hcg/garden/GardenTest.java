@@ -9,8 +9,6 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.deco2800.hcg.BaseTest;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Cactus;
 import com.deco2800.hcg.entities.garden_entities.plants.Grass;
@@ -20,11 +18,8 @@ import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.entities.garden_entities.plants.Sunflower;
 import com.deco2800.hcg.entities.garden_entities.plants.Water;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
-import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.PlayerManager;
-import com.deco2800.hcg.worlds.World;
 
-public class GardenTest extends BaseTest {
+public class GardenTest {
 	
 	private static Map<Class<?>, String> sprites;
 	private static Map<Class<?>, String> names;
@@ -33,9 +28,6 @@ public class GardenTest extends BaseTest {
 
 	@BeforeClass
 	public static void setup() {
-		GameManager.get().setWorld(World.SAFEZONE);
-		((PlayerManager)GameManager.get().getManager(PlayerManager.class)).setPlayer(new Player(1, 1, 0));
-		
 		sprites = new HashMap<>();
 		names = new HashMap<>();
 		

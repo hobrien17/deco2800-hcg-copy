@@ -28,9 +28,8 @@ import com.deco2800.hcg.weapons.WeaponType;
 public class ItemManager extends Manager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
+    private static final Player PLAYER = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
 
-    private Player player;
-    
     /**
      * Returns a new item, defined by the given name
      *
@@ -38,8 +37,6 @@ public class ItemManager extends Manager {
      * @return A new item
      */
     public Item getNew(String name) {
-    	player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
-    	
         switch (name) {
             case "sunflower_seed":
                 return new Seed(Seed.Type.SUNFLOWER);
@@ -76,19 +73,19 @@ public class ItemManager extends Manager {
             case "key":
                 return new Key();
             case "multigun":
-            	Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(player)
+            	Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(PLAYER)
             			.setRadius(0.7).build();
             	return new WeaponItem(multigun, "Multi-gun", 10);
             case "stargun":
-            	Weapon stargun = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(player)
+            	Weapon stargun = new WeaponBuilder().setWeaponType(WeaponType.STARGUN).setUser(PLAYER)
     					.setRadius(0.7).build();
             	return new WeaponItem(stargun, "Starfall", 10);
             case "shotgun":
-            	Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN).setUser(player)
+            	Weapon shotgun = new WeaponBuilder().setWeaponType(WeaponType.SHOTGUN).setUser(PLAYER)
     					.setRadius(0.7).build();
             	return new WeaponItem(shotgun, "Shotgun", 10);
             case "machinegun":
-                Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(player)
+                Weapon machinegun = new WeaponBuilder().setWeaponType(WeaponType.MACHINEGUN).setUser(PLAYER)
                         .setRadius(0.7).build();
                 return new WeaponItem(machinegun, "Machine Gun", 10);
             default:

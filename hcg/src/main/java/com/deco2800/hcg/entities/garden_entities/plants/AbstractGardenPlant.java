@@ -77,6 +77,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("update");
 		int time = (int) (float) arg;
 		if ((time >= firstGrow && this.stage == Stage.SPROUT) || (time >= secondGrow && this.stage == Stage.SMALL)) {
 			((SoundManager)GameManager.get().getManager(SoundManager.class)).playSound("grow");

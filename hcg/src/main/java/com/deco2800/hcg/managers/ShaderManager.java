@@ -239,7 +239,7 @@ public class ShaderManager extends Manager implements Observer {
 
     public void checkCustomDurations() {
         for (int i = 0; i < customRenders.size(); i++) {
-            if (customRenders.get(i).durationTime <= 0) {
+            if (customRenders.get(i).durationTime < 0) {
                 //Shader is finished
                 customRenders.remove(i);
             }
@@ -266,5 +266,13 @@ public class ShaderManager extends Manager implements Observer {
     
     public void toggleShaders() {
         this.enabled = !this.enabled;
+    }
+
+    public boolean getShaderStatus() {
+        if (this.enabled) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
