@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="2017.07.25" orientation="isometric" renderorder="right-down" width="75" height="75" tilewidth="55" tileheight="32" nextobjectid="1040">
  <properties>
-  <property name="PlayerX" value="44"/>
-  <property name="PlayerY" value="31"/>
-  <property name="weather" value="drought"/>
+  <property name="PlayerX" value="73"/>
+  <property name="PlayerY" value="22"/>
+  <property name="weather" value="rain"/>
  </properties>
  <tileset firstgid="1" source="../tiles/suburban_wasteland_concrete.tsx"/>
  <tileset firstgid="46" source="../tiles/suburban_wasteland_dried_grass_ground.tsx"/>

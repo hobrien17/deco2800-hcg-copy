@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="794">
+<map version="1.0" tiledversion="2017.07.25" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="794">
  <properties>
-  <property name="PlayerX" value="10"/>
-  <property name="PlayerY" value="10"/>
-  <property name="weather" value="none"/>
+  <property name="PlayerX" value="79"/>
+  <property name="PlayerY" value="99"/>
+  <property name="weather" value="drought"/>
  </properties>
  <tileset firstgid="1" source="../tiles/any_sludge_animated.tsx"/>
  <tileset firstgid="9" source="../tiles/deprecated/grass.tsx"/>
