@@ -46,7 +46,7 @@ public class ConversationContext extends UIContext {
 		npcImage.setScale(0.2f, 0.65f);
 		npcImage.setPosition(980, 800);
 		nodeText = new Label("", skin);
-		nodeText.setFontScale(1.5f);
+		nodeText.setFontScale(1.0f);
 		npcName = new Label(npcFName, skin);
 		npcName.setFontScale(1.5f);
 
