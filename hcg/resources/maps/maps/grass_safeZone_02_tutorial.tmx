@@ -374,7 +374,7 @@
     <property name="texture" value="character_shop_2"/>
    </properties>
   </object>
-  <object id="2" gid="57" x="470.838" y="371.567" width="55" height="32">
+  <object id="2" gid="57" x="467.256" y="369.149" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
     <property name="fName" value="General"/>
@@ -402,7 +402,7 @@
     <property name="texture" value="character_1"/>
    </properties>
   </object>
-  <object id="382" gid="57" x="273.464" y="385.036" width="55" height="32">
+  <object id="382" gid="57" x="276.3" y="390.2" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
     <property name="fName" value="General"/>

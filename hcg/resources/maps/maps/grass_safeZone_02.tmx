@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="383">
+<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="30" height="30" tilewidth="55" tileheight="32" backgroundcolor="#000000" nextobjectid="382">
  <properties>
   <property name="PlayerX" value="15"/>
   <property name="PlayerY" value="20"/>
@@ -11,7 +11,6 @@
  <tileset firstgid="59" source="../tiles/exit.tsx"/>
  <tileset firstgid="60" source="../tiles/deprecated/dirt.tsx"/>
  <tileset firstgid="63" source="../tiles/health.tsx"/>
- <tileset firstgid="64" source="../tiles/desert_base_tiles.tsx"/>
  <layer name="Ground" width="30" height="30">
   <properties>
    <property name="name" value="grass"/>
@@ -374,7 +373,7 @@
     <property name="texture" value="character_shop_2"/>
    </properties>
   </object>
-  <object id="2" gid="57" x="470.838" y="371.567" width="55" height="32">
+  <object id="2" gid="57" x="468.256" y="370.149" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
     <property name="fName" value="General"/>
@@ -392,7 +391,7 @@
     <property name="texture" value="character_1"/>
    </properties>
   </object>
-  <object id="382" gid="57" x="273.464" y="385.036" width="55" height="32">
+  <object id="381" gid="57" x="266.391" y="386.109" width="55" height="32">
    <properties>
     <property name="Type" value="Shop"/>
     <property name="fName" value="General"/>

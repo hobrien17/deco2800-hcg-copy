@@ -28,17 +28,17 @@ public class OptionsMenuContext extends UIContext{
 
 	public OptionsMenuContext(){
 
-		// Get necessary managers
-		gameManager = GameManager.get();
+		 // Get necessary managers
+        gameManager = GameManager.get();
 		contextManager = (ContextManager)
-				gameManager.getManager(ContextManager.class);
+                gameManager.getManager(ContextManager.class);
 		textureManager = (TextureManager)
 				gameManager.getManager(TextureManager.class);
 		shaderManager = (ShaderManager)
 				gameManager.getManager(ShaderManager.class);
 		soundManager = (SoundManager)
 				gameManager.getManager(SoundManager.class);
-
+		
 		draw();
 	}
 
@@ -96,5 +96,9 @@ public class OptionsMenuContext extends UIContext{
 
 
 }
+
+
+
+
 
 
