@@ -198,9 +198,7 @@ public class QuestMenuContext extends UIContext {
         detailsTextTable.add(detailsText).expand().fill();
         secondaryWindow.add(detailsTextTable).expand().fill();
         secondaryWindow.row();
-        killRequire.add(killTitle);
-        killRequire.row();
-        killRequire.add(killList.toString());
+		updateKillTable();
         secondaryWindow.add(killRequire).expandX().fillX().left();
         secondaryWindow.row().padTop(10);
         itemRequire.add(itemTitle);
@@ -275,18 +273,29 @@ public class QuestMenuContext extends UIContext {
 	}
 
 	private void populateReqTable(QuestArchive qa) {
-
+		System.out.println("here 1");
 		//Clean the current req lists
 		killList = new HashMap<>();
 		itemList = new HashMap<>();
 
 		for (Map.Entry<EnemyType, Integer> map : qa.getQuest().getKillRequirement().entrySet()) {
 			killList.put(map.getKey().toString(), map.getValue());
+			System.out.println("here 2");
 		}
 		for (Map.Entry<String, Integer> map : qa.getQuest().getItemRequirement().entrySet()) {
-			killList.put(map.getKey(), map.getValue());
+			itemList.put(map.getKey().replace("_"," "), map.getValue());
+			System.out.println("here 3");
 		}
 
+	}
+
+	private void updateKillTable() {
+		killRequire.clear();
+		killRequire.add(killTitle);
+		for (Map.Entry<String,Integer> killMap: killList.entrySet()) {
+			killRequire.row();
+			killRequire.add(killMap.getKey() + " = " + killMap.getValue().toString());
+		}
 	}
 		
 }
