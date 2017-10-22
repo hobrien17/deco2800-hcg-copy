@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class QuestArchive {
     private Quest quest;
-    private static HashMap<EnemyType, Integer> initalKillLog;
+    private HashMap<EnemyType, Integer> initalKillLog;
     private NPC questGiver;
 
     private Boolean killReqCompleted = false;
@@ -49,7 +49,7 @@ public class QuestArchive {
     public void completeQuest() {
         //Give rewards
         // This needs to reference a frightening number of different systems
-        GameManager gameManager = GameManager.get();
+        gameManager = GameManager.get();
         World world = gameManager.getWorld();
         ItemManager itemManager = (ItemManager) gameManager.getManager(ItemManager.class);
         Player player = ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer();
@@ -94,8 +94,8 @@ public class QuestArchive {
                 if (!playerManager.getPlayer().killLogContains(enemyID)) {
                     return false;
                 }
-                if (!(playerManager.getPlayer().killLogGet(enemyID) >=
-                        initalKillLog.get(enemyID) + quest.getKillRequirement().get(enemyID))) {
+                if (playerManager.getPlayer().killLogGet(enemyID) <
+                        initalKillLog.get(enemyID) + quest.getKillRequirement().get(enemyID)) {
                     return false;
                 }
             }
@@ -107,7 +107,8 @@ public class QuestArchive {
     private Boolean getItemReqCompleted() {
         Player player = ((PlayerManager) GameManager.get().getManager(PlayerManager.class)).getPlayer();
         for(String item: quest.getItemRequirement().keySet()){
-            if (!(player.getInventory().numberOf(item.replace("_"," ")) >= quest.getItemRequirement().get(item))) {
+            if (player.getInventory().numberOf(item.replace("_"," ")) <
+                    quest.getItemRequirement().get(item)) {
                 return false;
             }
         }
@@ -119,7 +120,7 @@ public class QuestArchive {
     }
 
 
-    public HashMap<EnemyType, Integer> getInitalKillLog() {
+    public Map<EnemyType, Integer> getInitalKillLog() {
         return initalKillLog;
     }
 }

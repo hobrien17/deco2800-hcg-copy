@@ -53,8 +53,11 @@ public class QuestMenuContext extends UIContext {
 	private Table itemRequire;
 	private String itemTitle;
 	private HashMap<String, Integer> itemList;
+	private String rewardTitle;
 	private Table itemReward;
-	private String rewardedItem;
+	private HashMap<String, Integer> rewardList;
+
+
 	
 	public QuestMenuContext() {
 		
@@ -105,9 +108,9 @@ public class QuestMenuContext extends UIContext {
 		questsBack = new ImageButton(new Image(textureManager.getTexture("instructions_back_button")).getDrawable());
 		
 		//Collect the data from the quest manager
-		ArrayList<QuestArchive> completedQuests = questManager.getCompletedQuests();
-		HashMap<QuestNPC,QuestArchive> completableQuests = questManager.getCompleteableQuests();
-		HashMap<QuestNPC,QuestArchive> unCompleteableQuests = questManager.getUnCompleteableQuests();
+		java.util.List<QuestArchive> completedQuests = questManager.getCompletedQuests();
+		Map<QuestNPC,QuestArchive> completableQuests = questManager.getCompleteableQuests();
+		Map<QuestNPC,QuestArchive> unCompleteableQuests = questManager.getUnCompleteableQuests();
 		
 		//Create all Lists
 		readyList = new List<>(skin);
@@ -160,13 +163,12 @@ public class QuestMenuContext extends UIContext {
 		//New Strings (Titles to separate the parts)
 		killTitle = "Kill Requirements";
 		itemTitle = "Item Requirements";
-		
-		//TODO new String that is conacated with the Item to be rewarded
-		rewardedItem = "Item to be Rewarded: ";
+		rewardTitle = "Item Rewards";
 		
 		//New HashMaps which take a String for the enemy/item and a Integer for the amount
 		killList = new HashMap<>();
 		itemList = new HashMap<>();
+		rewardList = new HashMap<>();
 		
 		detailsText = new TextArea("Click on a Quest to Display the Details", skin);
 		detailsText.setDisabled(true);
@@ -194,7 +196,6 @@ public class QuestMenuContext extends UIContext {
         logWindow.row();
         completedListTable.add(completedQuestsPane).expand().fill();
         logWindow.add(completedListTable).expandX().fill();
-        
         nameTable.add(nameTitle).align(0);
         secondaryWindow.add(nameTable).expandX().fill();
         secondaryWindow.row();
@@ -203,12 +204,11 @@ public class QuestMenuContext extends UIContext {
         secondaryWindow.row();
         detailsTextTable.add(detailsText).expand().fill();
         secondaryWindow.add(detailsTextTable).expand().fill();
-        secondaryWindow.row();
+        secondaryWindow.row().padTop(10);
         secondaryWindow.add(killRequire).expandX().fillX().left();
         secondaryWindow.row().padTop(10);
         secondaryWindow.add(itemRequire).expandX().fillX().left();
-        secondaryWindow.row();
-        itemReward.add(rewardedItem);
+        secondaryWindow.row().padTop(10);
         secondaryWindow.add(itemReward).expandX().fillX();
         main.add(logWindow).expand(1, 1).fill();
         main.add(secondaryWindow).expand(4, 1).fill();
@@ -217,8 +217,6 @@ public class QuestMenuContext extends UIContext {
         stage.addActor(main);
         
         questsBack.center();
-        
-        //main.debug();
 		
 		questsBack.addListener(new ChangeListener() {
 			@Override
@@ -226,12 +224,11 @@ public class QuestMenuContext extends UIContext {
 				contextManager.popContext();
 			}
 		});
-		
-		//TODO need to add a Concat for 'rewardedItem' which adds the item to be added
+
 		readyList.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				nameTitle.concat("Ready Quest");
+				nameTitle = "Ready Quest";
 				if(questManager.getQuest(readyList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(readyList.getSelected()).getDescription());
 					for (Map.Entry<QuestNPC,QuestArchive> map: questManager.getCompleteableQuests().entrySet()) {
@@ -248,7 +245,7 @@ public class QuestMenuContext extends UIContext {
 		activeList.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				nameTitle.concat("Active Quest");
+				nameTitle = "Active Quest";
 				if(questManager.getQuest(activeList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(activeList.getSelected()).getDescription());
 					for (Map.Entry<QuestNPC,QuestArchive> map: questManager.getUnCompleteableQuests().entrySet()) {
@@ -265,7 +262,7 @@ public class QuestMenuContext extends UIContext {
 		completedList.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				nameTitle.concat("Completed Quest");
+				nameTitle = "Completed Quest";
 				if(questManager.getQuest(completedList.getSelected()) != null){
 					detailsText.setText(questManager.getQuest(completedList.getSelected()).getDescription());
 					for (QuestArchive qa: questManager.getCompletedQuests()) {
@@ -285,6 +282,7 @@ public class QuestMenuContext extends UIContext {
 		//Clean the current req lists
 		killList = new HashMap<>();
 		itemList = new HashMap<>();
+		rewardList = new HashMap<>();
 
 		for (Map.Entry<EnemyType, Integer> map : qa.getQuest().getKillRequirement().entrySet()) {
 			killList.put(map.getKey().toString(), map.getValue());
@@ -292,11 +290,15 @@ public class QuestMenuContext extends UIContext {
 		for (Map.Entry<String, Integer> map : qa.getQuest().getItemRequirement().entrySet()) {
 			itemList.put(map.getKey().replace("_"," "), map.getValue());
 		}
+		for (Map.Entry<String, Integer> map : qa.getQuest().getRewards().entrySet()) {
+			rewardList.put(map.getKey().replace("_"," "), map.getValue());
+		}
 	}
 
 	private void updateTable(QuestArchive qa) {
 		updateKillTable(qa);
 		updateItemTable();
+		updateRewardTable();
 	}
 
 	private void updateKillTable(QuestArchive qa) {
@@ -331,6 +333,15 @@ public class QuestMenuContext extends UIContext {
 								" of " + itemMap.getValue().toString());
 			}
 
+		}
+	}
+
+	private void updateRewardTable() {
+		itemReward.clear();
+		itemReward.add(rewardTitle);
+		for (Map.Entry<String,Integer> itemMap: rewardList.entrySet()) {
+			itemReward.row();
+			itemReward.add(itemMap.getValue().toString() + " " + itemMap.getKey());
 		}
 	}
 		

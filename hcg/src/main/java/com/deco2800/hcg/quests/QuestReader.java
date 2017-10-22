@@ -32,7 +32,7 @@ public class QuestReader {
      *  A function which loads all the quests into the quest manager, this utalizes the loadQuest function, and it then
      *  adds all the files in the folder to the hash map of quests titles to quests.
      */
-    public HashMap<String,Quest> loadAllQuests() throws ResourceLoadException {
+    public Map<String,Quest> loadAllQuests() throws ResourceLoadException {
 
         HashMap<String,Quest> quests = new HashMap<>();
         String questsFolder = "resources/quests/";
@@ -76,9 +76,10 @@ public class QuestReader {
 
         //Get the inital json obj
         JsonObject jQuest;
+        BufferedReader reader = null;
         try {
             JsonParser parser = new JsonParser();
-            BufferedReader reader = new BufferedReader(new FileReader(fp));
+            reader = new BufferedReader(new FileReader(fp));
             jQuest = (JsonObject) parser.parse(reader);
             reader.close();
         } catch (JsonSyntaxException | IOException | ResourceLoadException e){
@@ -88,7 +89,7 @@ public class QuestReader {
         //Validate the json obj
         title = jQuest.get("title").toString();
         title = title.replaceAll("^\"|\"$", "");
-        if (title == "") {
+        if (title.equals("")) {
             throw new ResourceLoadException("");
         }
 
@@ -101,7 +102,6 @@ public class QuestReader {
         description = jQuest.get("optDesc").toString();
         description = description.replaceAll("^\"|\"$", "");
 
-        //The kill requirements are a mapping between node{enemyID:killAmount}
         JsonObject killReqs = jQuest.getAsJsonObject("kReq");
         killRequirement = parseKillReqMap(title,killReqs);
 
@@ -113,7 +113,7 @@ public class QuestReader {
         ItemManager itemManager = (ItemManager) GameManager.get().getManager(ItemManager.class);
 
         HashMap<String,Integer> returnMap = new HashMap<>();
-        if (iqMap.entrySet().size() > 0) {
+        if (iqMap.entrySet().isEmpty()) {
             for (Map.Entry i:iqMap.entrySet()) {
                 //For each entry in the item req obj make sure it is valid
 
@@ -126,11 +126,11 @@ public class QuestReader {
                 }
 
                 //Key and Value must not be empty
-                if (i.getKey().toString() == "") {
+                if (i.getKey().toString().equals("")) {
                     throw new ResourceLoadException("Can't add an empty item requirement key for quest (" +
                             title + ")");
                 }
-                if (i.getValue().toString() == "") {
+                if (i.getValue().toString().equals("")) {
                     throw new ResourceLoadException("Can't add an empty item requirement amount for quest (" +
                             title + ")");
                 }
@@ -170,31 +170,32 @@ public class QuestReader {
     private HashMap<EnemyType, Integer> parseKillReqMap(String title, JsonObject krmMap) {
         HashMap <EnemyType, Integer> returnKRM = new HashMap<>();
 
-        if (krmMap.entrySet().size() > 0) {
+        if (krmMap.entrySet().isEmpty()) {
 
             for (Map.Entry<String,JsonElement> enemyMap: krmMap.entrySet()) {
+                String forQConst = ") for quest (";
                 //Key and value must not be empty
-                if (enemyMap.getKey().toString() == "") {
+                if (enemyMap.getKey().equals("")) {
                     throw new ResourceLoadException("Can't add an kill requirement key to node (" +
-                            enemyMap.getKey().toString() + ") for quest (" + title + ")");
+                            enemyMap.getKey() + forQConst + title + ")");
                 }
-                if (enemyMap.getValue().toString() == "") {
+                if (enemyMap.getValue().toString().equals("")) {
                     throw new ResourceLoadException("Can't add an kill requirement value to node (" +
-                            enemyMap.getKey().toString() + ") for quest (" + title + ")");
+                            enemyMap.getKey() + forQConst + title + ")");
                 }
 
                 EnemyType et;
                 try {
-                    et = EnemyType.valueOf(enemyMap.getKey().toString());
+                    et = EnemyType.valueOf(enemyMap.getKey());
                 } catch (IllegalArgumentException e) {
                     throw new ResourceLoadException("Invalid enemy type supplied (" +
-                            enemyMap.getKey().toString()+ ") for quest (" + title + ")");
+                            enemyMap.getKey()+ forQConst + title + ")");
                 }
 
 
                 if (returnKRM.containsKey(et)) {
                     throw new ResourceLoadException("Can't add the same enemy key (" +
-                                                    enemyMap.getKey().toString() +
+                                                    enemyMap.getKey() +
                                                     ") twice into the kill requirements node for quest (" +
                                                     title + ")");
                 }
@@ -207,7 +208,7 @@ public class QuestReader {
                     }
                 } catch (NumberFormatException e){
                     throw new ResourceLoadException("Can't add a non valid enemy kill count to enemy type (" +
-                                                    enemyMap.getKey().toString() + ")");
+                                                    enemyMap.getKey() + ")");
 
                 }
                 returnKRM.put(et,killCount);
