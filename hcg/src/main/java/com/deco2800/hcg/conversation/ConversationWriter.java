@@ -90,7 +90,7 @@ public class ConversationWriter {
 		if (index == -1) {
 			return new JsonNull();
 		} else {
-			return new JsonPrimitive(""+index);
+			return new JsonPrimitive("" + Integer.toString(index));
 		}
 	}
 }

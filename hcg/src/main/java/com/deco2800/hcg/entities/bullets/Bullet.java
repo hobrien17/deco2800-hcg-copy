@@ -308,6 +308,8 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				case 3:
 					splinterDamage = 110 + playerManager.getPlayer().getLevel() * 25;
 					break;
+				default:
+					break;
 			}
 			if (Math.random() <= 0.15) {
 				target.giveEffect(new Effect("Splinter", 1, splinterDamage,
@@ -326,6 +328,8 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 					break;
 				case 2:
 					stunTime = 2;
+					break;
+				default:
 					break;
 			}
 			if (Math.random() <= 0.15) {

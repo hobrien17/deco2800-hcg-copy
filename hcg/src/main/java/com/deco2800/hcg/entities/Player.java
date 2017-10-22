@@ -285,18 +285,18 @@ public class Player extends Character implements Tickable {
 					case 1:
 						damage = (int) ((9f / 10f) * (float) damage);
 						break;
+					default:
+						break;
 				}
 			}
 			//Perk - SAVING_GRAVES
 			Perk savingGraves = this.getPerk(Perk.perk.SAVING_GRAVES);
-			if (savingGraves.isActive()) {
+			if (savingGraves.isActive() && damage >= this.getHealthMax()/10) {
 				//damage is more than 10%
-				if (damage >= this.getHealthMax()/10) {
-					//add damage to be staggered on next tick
-					staggerDamage += damage;
-					staggeringDamage = true;
-					damage = 0;
-				}
+				//add damage to be staggered on next tick
+				staggerDamage += damage;
+				staggeringDamage = true;
+				damage = 0;
 			}
 
 			if (damage > healthCur) {
@@ -608,10 +608,8 @@ public class Player extends Character implements Tickable {
 		float oldPosX = this.getPosX();
 		float oldPosY = this.getPosY();
 
-		if (gameTickCount % 50 ==0) {
-			if (staggeringDamage) {
-				staggerDamage();
-			}
+		if (gameTickCount % 50 == 0 && staggeringDamage) {
+			staggerDamage();
 		}
 
 		// Apply any active effects
@@ -751,20 +749,19 @@ public class Player extends Character implements Tickable {
 
 		//Perk - I_AM_GROOT
 		Perk IamGroot = this.getPerk(Perk.perk.I_AM_GROOT);
-		if (IamGroot.isActive()) {
-			if (gameTickCount % 50 == 0) {
-				switch (IamGroot.getCurrentLevel()) {
-					case 0:
-						break;
-					case 1:
-						this.takeDamage(-(1 + (int)(0.2 * this.getLevel())));
-						break;
-					case 2:
-						this.takeDamage(-(2 + (int)(0.25 * this.getLevel())));
-						break;
-				}
+		if (IamGroot.isActive() && gameTickCount % 50 == 0) {
+			switch (IamGroot.getCurrentLevel()) {
+				case 0:
+					break;
+				case 1:
+					this.takeDamage(-(1 + (int)(0.2 * this.getLevel())));
+					break;
+				case 2:
+					this.takeDamage(-(2 + (int)(0.25 * this.getLevel())));
+					break;
+				default:
+					break;
 			}
-
 		}
 
 		checkXp();
@@ -844,7 +841,8 @@ public class Player extends Character implements Tickable {
 					play.addExitWindow();
 					onExit = true;
 					exitMessageDisplayed = true;
-				}
+			}
+			break;
 		default:
 			onExit = false;
 			break;

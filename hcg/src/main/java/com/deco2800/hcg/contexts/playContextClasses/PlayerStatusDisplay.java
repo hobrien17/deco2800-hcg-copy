@@ -113,7 +113,7 @@ public class PlayerStatusDisplay extends Group {
                 player.getStaminaMax() * 260;
         staminaBar.setWidth(staminaBarWidth);
         playerLevel.setText("Lv: " + player.getLevel());
-        levelBar.setWidth(((float) (player.getXp()/(float)player.getXpThreshold()) * 110f));
+        levelBar.setWidth((player.getXp()/(float)player.getXpThreshold()) * 110f);
 
     }
 

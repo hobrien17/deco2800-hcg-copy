@@ -236,6 +236,8 @@ public class MultiplayerCharacterContext extends UIContext{
                 machineGunSkill = 10;
                 shotGunSkill = 10;
                 starGunSkill = 15;
+                break;
+
             default:
                 break;
         }
