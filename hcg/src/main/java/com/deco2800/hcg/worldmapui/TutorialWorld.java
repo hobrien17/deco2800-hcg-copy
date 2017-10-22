@@ -26,7 +26,8 @@ public class TutorialWorld extends WorldMap {
 		// First level. This will be the first level which you play. Add levels in the order they should appear in the
 		// tutorial world.
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
-		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
+		tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 1, 1));
+		tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 1, 1));
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
 		tutorialLevels.add(new Level(new World("resources/maps/maps/grass_safeZone_02.tmx"), 0, 1, 0));
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
@@ -38,6 +39,16 @@ public class TutorialWorld extends WorldMap {
 		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
 		nodeList = createMappings(tutorialLevels);
 		changeContainedNodes(nodeList);
+		
+		
+		/*
+		 *        
+		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_01.tmx"), 1, 1, 1));
+        levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02.tmx"), 1, 2, 1));
+        levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 3, 1));
+        levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 2, 1));
+        levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_05.tmx"), 1, 3, 1));
+		 */
 	}
 
 	private List<MapNode> createMappings(ArrayList<Level> list) {

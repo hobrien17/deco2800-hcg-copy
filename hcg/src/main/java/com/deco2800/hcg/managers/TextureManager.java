@@ -330,6 +330,10 @@ public class TextureManager extends Manager {
 			textureMap.put("perk_border_inactive", new Texture("resources/ui/perks/perk_border_inactive.png"));
 			textureMap.put("perk_border_maxed", new Texture("resources/ui/perks/perk_border_maxed.png"));
 			textureMap.put("path_separator", new Texture("resources/ui/perks/path_separator.png"));
+			textureMap.put("druid_title", new Texture("resources/ui/perks/druid_title.png"));
+			textureMap.put("survivalist_title", new Texture("resources/ui/perks/survivalist_title.png"));
+			textureMap.put("fungal_title", new Texture("resources/ui/perks/fungal_title.png"));
+
 
 			//Perk Images
 			textureMap.put("I_am_groot", new Texture("resources/ui/perks/perk_place_holder.png"));
