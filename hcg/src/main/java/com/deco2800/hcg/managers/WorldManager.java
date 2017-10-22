@@ -71,7 +71,7 @@ public class WorldManager extends Manager {
 		// delete stopwatches
         ((StopwatchManager) gameManager.getManager(StopwatchManager.class)).deleteObservers();
         
-        if(node.getNodeType() == 0) {
+        if(node.getNodeType() == 0 && gameManager.getWorldMap().getWorldType() != 1) {
         	gameManager.setWorld(World.SAFEZONE);
         } else {
         	// create new world

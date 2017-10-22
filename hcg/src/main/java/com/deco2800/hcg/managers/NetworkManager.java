@@ -307,12 +307,7 @@ public final class NetworkManager extends Manager {
 		int seed = getNextRandomInt();
 		queueMessage(new StartMessage(seed));
 		random.setSeed((long) seed);
-		
-		// FIXME
-		Player otherPlayer = new Player(1, 5, 10, 0);
-		otherPlayer.initialiseNewPlayer(5, 5, 5, 5, 5, 20, 20, 20, "Player 2");
-		playerManager.addPlayer(otherPlayer);
-		contextManager.pushContext(new CharacterCreationContext());
+		contextManager.pushContext(new MultiplayerCharacterContext());
 	}
 	
 	/**
@@ -478,6 +473,9 @@ public final class NetworkManager extends Manager {
 						break;
 					case START:
 						message = new StartMessage(address);
+						break;
+					case CHARACTER:
+						message = new CharacterMessage(address);
 						break;
 					case WORLD_MAP:
 						message = new WorldMapMessage(address);
