@@ -276,6 +276,8 @@ public class Player extends Character implements Tickable {
 		} else {
 			//Perk - THOR-N
 			Perk thorn = this.getPerk(Perk.perk.THORN);
+			//Perks cannot be active if the player is level 1
+			// and thus cant be active for testing.
 			if (thorn.isActive()) {
 				switch (thorn.getCurrentLevel()) {
 					case 0:
@@ -296,6 +298,7 @@ public class Player extends Character implements Tickable {
 					damage = 0;
 				}
 			}
+
 			if (damage > healthCur) {
 				healthCur = 0;
 			} else {

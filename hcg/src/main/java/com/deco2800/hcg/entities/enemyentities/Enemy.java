@@ -239,20 +239,35 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 	 *
 	 */
 	public void causeDamage(Player player) {
-		//Damages the player based on enemy type ( soon I hope? )
-		switch(enemyType) {
-			// MUSHROOMTURRET & SNAIL don't damage the player this way
-			case SQUIRREL:
-				player.takeDamage(10 * player.getLevel());
-				break;
-			case HEDGEHOG:
-				player.takeDamage(20 * player.getLevel());
-				break;
-			case CRAB:
-				player.takeDamage(50 * player.getLevel());
-			default:
-				player.takeDamage(10);
-				break;
+		//Damages the player based on enemy type
+		// MUSHROOMTURRET & SNAIL don't damage the player this way
+
+		//Perk - Kalerate
+		Perk kaleRaTe = playerManager.getPlayer().getPerk(Perk.perk.KALERATE);
+		//int to store outcome of dodge, 1 if player is hit, 0 otherwise.
+		int dodged = 1;
+		//if perk is active check to see if the player dodged the attack
+			if (kaleRaTe.isActive()) {
+				double dodgechance = 0.075 * kaleRaTe.getCurrentLevel();
+				if (!(Math.random() < dodgechance)) {
+					dodged = 0;
+				}
+			}
+			else {
+			switch(enemyType) {
+				case SQUIRREL:
+					player.takeDamage(10 * dodged * player.getLevel());
+					break;
+				case HEDGEHOG:
+					player.takeDamage(20 * dodged * player.getLevel());
+					break;
+				case CRAB:
+					player.takeDamage(50 * dodged * player.getLevel());
+					break;
+				default:
+					player.takeDamage(10);
+					break;
+			}
 		}
 
 
