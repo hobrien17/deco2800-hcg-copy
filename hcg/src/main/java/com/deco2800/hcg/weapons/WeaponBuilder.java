@@ -172,7 +172,7 @@ public class WeaponBuilder {
      * @return Weapon object
      */
     public Weapon build() {
-        if(weaponType == null || user == null) {
+        if(weaponType == null) {
             return null;
         }
 
