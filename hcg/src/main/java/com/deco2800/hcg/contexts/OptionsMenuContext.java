@@ -1,14 +1,10 @@
 package com.deco2800.hcg.contexts;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ShaderManager;
@@ -21,9 +17,6 @@ public class OptionsMenuContext extends UIContext{
 	private ImageButton toggleShadersButton;
 	private ImageButton backButton;
 	private Table table;
-	private boolean isMute;
-	private boolean isShadersMute;
-	
 	public OptionsMenuContext(){
 		 // Get necessary managers
         GameManager gameManager = GameManager.get();
