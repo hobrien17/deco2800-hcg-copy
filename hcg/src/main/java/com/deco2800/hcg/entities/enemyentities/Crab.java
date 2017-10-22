@@ -23,6 +23,7 @@ public class Crab extends Enemy implements Tickable {
     private int explosionCounter;
     private boolean explosionSet;
     private Bullet explosionLocation;
+    private int delay = 0;
 
     private String[] sprites = {"crabE", "crabN", "crabW", "crabS"};
     
@@ -133,7 +134,11 @@ public class Crab extends Enemy implements Tickable {
             }
         }
         
-        delayedExplosion(lastPlayerX, lastPlayerY);
+        if(delay >= 500) {
+            delayedExplosion(lastPlayerX, lastPlayerY);
+        } else {
+            delay++;
+        }
         
         //Set new position
         newPos = this.getToPlayerPos(closestPlayer);
