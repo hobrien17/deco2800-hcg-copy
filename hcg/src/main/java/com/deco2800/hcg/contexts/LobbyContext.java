@@ -26,7 +26,6 @@ public class LobbyContext extends UIContext{
     private Table titleTable;
     private Table chatTable;
     private Label lobbyLabel;
-    private Label members;
     private Image lobbyTitle;
     private Image separator1;
     private Image separator2;
@@ -34,7 +33,6 @@ public class LobbyContext extends UIContext{
     private Image playerPortrait2;
     private Image playerPortrait3;
     private Image playerPortrait4;
-    private CheckBox readyCheckBox;
     private Stack player1;
     private Stack player2;
     private Stack player3;
@@ -80,10 +78,8 @@ public class LobbyContext extends UIContext{
         back = new ImageButton(new Image(textureManager.getTexture("lobby_back_button")).getDrawable());
         start = new ImageButton(new Image(textureManager.getTexture("lobby_start_button")).getDrawable());
         send = new ImageButton(new Image(textureManager.getTexture("lobby_send_button")).getDrawable());
-        readyCheckBox = new CheckBox("Ready", skin);
         //label initialize
         lobbyLabel = new Label("Lobby Name: " + networkManager.getLobbyName(), skin);
-        members = new Label("Members: ", skin);
         //player portrait stack set up
         player1 = new Stack(playerPortrait1);
         player2 = new Stack(playerPortrait2);
@@ -121,15 +117,8 @@ public class LobbyContext extends UIContext{
         main.row();
         labelTable.add(lobbyLabel).left().padLeft(50);
         labelTable.add(changeLobbyName).expandX();
-        labelTable.add(readyCheckBox).expandX().right().padRight(50);
         main.add(labelTable).fill();
-        main.row();
-        main.add(members).left();
-        main.row().expandX().padBottom(20).padTop(20);
-        playerTable.add(player1).expand().uniform();
-        playerTable.add(player2).expand().uniform();
-        playerTable.add(player3).expand().uniform();
-        playerTable.add(player4).expand().uniform();
+        main.row().expandX().padBottom(50).padTop(50);
         main.add(playerTable).fill();
         main.row();
         main.add(separator2).fill();
