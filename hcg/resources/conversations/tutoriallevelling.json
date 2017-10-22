@@ -40,6 +40,16 @@
       "options": [
         {
           "optionText": "Thanks.",
+          "target": "4"
+        }
+      ]
+    },
+	{
+      "id": "4",
+      "nodeText": "Bonus hint! Try holding G after you kill an enemy and are standing near its corpse",
+      "options": [
+        {
+          "optionText": "Ok.",
           "target": null
         }
       ]
