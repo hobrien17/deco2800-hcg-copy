@@ -68,12 +68,13 @@ public class CharacterCreationContext extends CharacterContext{
 //    private Window attributesWindow;
 //    private Window skillsWindow;
 //    private Window statsWindow;
-    private Window characterPreviewWindow;
+//    private Window characterPreviewWindow;
     //private Window selectedDescriptionWindow;
     
     private Table attributesTable;
     private Table skillsTable;
     private Table statsTable;
+    private Table characterPreviewTable;
 
     private String[] sexes = new String[]{MALE, FEMALE};
 
@@ -113,6 +114,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture titleAttributes;
     private Texture titleSkills;
     private Texture titleStats;
+    private Texture titleCharacter;
 
     //Cycle through this array using texture count to display the different character presets
     private Texture[] charTextureArray;
@@ -151,6 +153,7 @@ public class CharacterCreationContext extends CharacterContext{
         titleAttributes = textureManager.getTexture("ccAttributes");
         titleSkills = textureManager.getTexture("ccSkills");
         titleStats = textureManager.getTexture("ccStats");
+        titleCharacter = textureManager.getTexture("ccCharacter");
         blankWindowBackground = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
     }
@@ -164,24 +167,26 @@ public class CharacterCreationContext extends CharacterContext{
         skillsTable = new Table(skin);
 //        statsWindow = new Window("Stats", skin);
         statsTable = new Table(skin);
-        characterPreviewWindow = new Window("Character Preview", skin);
+//        characterPreviewWindow = new Window("Character Preview", skin);
+        characterPreviewTable = new Table(skin);
         //selectedDescriptionWindow = new Window("Click on an attribute or skill to find out what it does!", skin);
 
         // Set windows as non-movable
 //        attributesWindow.setMovable(false);
 //        skillsWindow.setMovable(false);
 //        statsWindow.setMovable(false);
-        characterPreviewWindow.setMovable(false);
+//        characterPreviewWindow.setMovable(false);
         //selectedDescriptionWindow.setMovable(false);
 
 //        attributesWindow.setBackground(new Image(blankWindowBackground).getDrawable());
 //        skillsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
 //        statsWindow.setBackground(new Image(blankWindowBackground).getDrawable());
-        characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
+//        characterPreviewWindow.setBackground(new Image(blankWindowBackground).getDrawable());
         
         attributesTable.setBackground(new Image(blankWindowBackground).getDrawable());
         skillsTable.setBackground(new Image(blankWindowBackground).getDrawable());
         statsTable.setBackground(new Image(blankWindowBackground).getDrawable());
+        characterPreviewTable.setBackground(new Image(blankWindowBackground).getDrawable());
     }
 
     //Setting up top row info
@@ -687,10 +692,14 @@ public class CharacterCreationContext extends CharacterContext{
     private void setupCharacterPreviewWindow() {
         characterPreviewImage = new Image(male1);
 
-        TextButton next = new TextButton("Next", skin);
+        TextButton next = new TextButton("Change colour", skin);
 
-        characterPreviewWindow.add(next);
-        characterPreviewWindow.add(characterPreviewImage);
+        characterPreviewTable.add(new Image(titleCharacter));
+        characterPreviewTable.row();
+        characterPreviewTable.add(characterPreviewImage);
+        characterPreviewTable.row();
+        characterPreviewTable.add(next);
+        characterPreviewTable.pack();
 
         next.addListener(new ClickListener() {
             @Override
@@ -726,7 +735,7 @@ public class CharacterCreationContext extends CharacterContext{
         masterTable.add(skillsTable).top().right().grow().pad(30);
         masterTable.row();
         masterTable.add(statsTable).top().left().grow().pad(30);
-        masterTable.add(characterPreviewWindow).top().right().grow().pad(30);
+        masterTable.add(characterPreviewTable).top().right().grow().pad(30);
         masterTable.row();
         //masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
