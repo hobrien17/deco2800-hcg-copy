@@ -43,6 +43,7 @@ public class ParticleEffectActor extends Actor {
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		batch.setProjectionMatrix(GameManager.get().getCamera().combined);
 		for(ParticleEffect effect : effects.keySet()) {
 			effect.draw(batch);
 		}
@@ -60,7 +61,9 @@ public class ParticleEffectActor extends Actor {
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		Vector3 cameraPosn = GameManager.get().getCamera().position;
 		for(ParticleEffect effect : effects.keySet()) {
+			effect.setPosition(cameraPosn.x, cameraPosn.y);
 			effect.update(delta);
 		}
 		for(Map.Entry<AbstractEntity, ArrayList<ParticleEffect>> entry : entityEffects.entrySet()) {

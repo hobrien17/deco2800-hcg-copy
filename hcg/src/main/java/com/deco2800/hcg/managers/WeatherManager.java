@@ -67,16 +67,20 @@ public class WeatherManager extends Manager {
 					.get(emitter);
 			newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
 					Gdx.graphics.getHeight() / 2);
-			
-			newEmitter.getSpawnHeight().setHighMax(Gdx.graphics.getHeight());
-			newEmitter.getSpawnHeight().setHighMin(Gdx.graphics.getHeight());
-			newEmitter.getSpawnHeight().setLowMax(0);
-			newEmitter.getSpawnHeight().setLowMin(0);
 
-			newEmitter.getSpawnWidth().setHighMax(Gdx.graphics.getWidth());
-			newEmitter.getSpawnWidth().setHighMin(Gdx.graphics.getWidth());
-			newEmitter.getSpawnWidth().setLowMax(0);
-			newEmitter.getSpawnWidth().setLowMin(0);
+			newEmitter.getSpawnHeight().setHighMax(2*Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setHighMin(2*Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setLowMax(-Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setLowMin(-Gdx.graphics.getHeight());
+
+			newEmitter.getSpawnWidth().setHighMax(2*Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setHighMin(2*Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setLowMax(-Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setLowMin(-Gdx.graphics.getWidth());
+
+			//newEmitter.setMinParticleCount(2*newEmitter.getMinParticleCount()); better as is
+			newEmitter.setMaxParticleCount(3*newEmitter.getMaxParticleCount());
+
 		}
 	}
 

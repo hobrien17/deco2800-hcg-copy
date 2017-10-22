@@ -96,6 +96,7 @@ public class PlayContext extends Context {
 
     private Window exitWindow;
 
+    private Stage weatherStage;
     private Stage stage;
     private Skin skin;
     private Skin plantSkin;
@@ -159,10 +160,11 @@ public class PlayContext extends Context {
         plantButton = new Button(plantSkin.getDrawable("checkbox"));
         plantManager.setPlantButton(plantButton);
         potUnlock = new PotUnlockDisplay(stage, plantSkin);
-        
 
         /* Add ParticleEffectActor that controls weather. */
-        stage.addActor(weatherManager.getActor());
+        weatherStage = new Stage(new ScreenViewport());
+        weatherStage.addActor(weatherManager.getActor());
+        //stage.addActor(weatherManager.getActor());
 
         stage.addActor(particleManager.getActor());
         stage.addActor(chatStack);
@@ -284,6 +286,8 @@ public class PlayContext extends Context {
         }
 
         // Update and draw the stage
+        weatherStage.act();
+        weatherStage.draw();
         stage.act();
         stage.draw();
     }
