@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class QuestArchive {
     private Quest quest;
-    private static HashMap<Integer,HashMap<EnemyType, Integer>> initalKillLog;
+    private static HashMap<EnemyType, Integer> initalKillLog;
     private NPC questGiver;
 
     private Boolean killReqCompleted = false;
@@ -28,16 +28,15 @@ public class QuestArchive {
         this.quest = quest;
         this.questGiver = questGiver;
 
+        Player player = ((PlayerManager) gameManager.getManager(PlayerManager.class)).getPlayer();
+
         this.initalKillLog = new HashMap<>();
-        //Do we need to store a kill log?
+        //Store the initial kill log plus the current amount of kills
         if (quest.getKillRequirement().size() != 0) {
             //Get the current kills for the different enemy IDs in nodes
-            for (Integer node: quest.getKillRequirement().keySet()) {
-                HashMap<EnemyType,Integer> enemyIDKills = new HashMap<>();
-                for (EnemyType enemyID: quest.getKillRequirement().get(node).keySet()) {
-                    enemyIDKills.put(enemyID,playerManager.getPlayer().killLogGet(enemyID,node));
-                }
-                this.initalKillLog.put(node,enemyIDKills);
+            for (Map.Entry<EnemyType,Integer> kvp: quest.getKillRequirement().entrySet()) {
+                //Get the initial kill log value
+                this.initalKillLog.put(kvp.getKey(),player.killLogGet(kvp.getKey()));
             }
         }
     }
@@ -82,21 +81,15 @@ public class QuestArchive {
         //Check if this has being completed yet, if not then check it
         if (!this.killReqCompleted) {
             //Check if we have met the kill requirements
-            for (Integer node: quest.getKillRequirement().keySet()) {
-                //Make sure the current kill log contains the same nodes as the quest
-                if (!playerManager.getPlayer().killLogContainsNode(node)) {
+            for (EnemyType enemyID: quest.getKillRequirement().keySet()) {
+                //Make sure the current kill log in the node contains the enemy ID
+                if (!playerManager.getPlayer().killLogContains(enemyID)) {
                     return false;
                 }
-                for (EnemyType enemyID: quest.getKillRequirement().get(node).keySet()) {
-                    //Make sure the current kill log in the node contains the enemy ID
-                    if (!playerManager.getPlayer().killLogContains(enemyID,node)) {
-                        return false;
-                    }
-                    // Make sure the person has got the current difference in kills
-                    if ((playerManager.getPlayer().killLogGet(enemyID,node) - initalKillLog.get(node).get(enemyID))
-                            < quest.getKillRequirement().get(node).get(enemyID)) {
-                        return false;
-                    }
+                // Make sure the person has got the current difference in kills
+                if ((playerManager.getPlayer().killLogGet(enemyID) - initalKillLog.get(enemyID))
+                        < quest.getKillRequirement().get(enemyID)) {
+                    return false;
                 }
             }
             this.killReqCompleted = true;

@@ -4,12 +4,8 @@
     "sunflower_seed": 1
   },
   "kReq": {  
-    "13": {
-      "SNAIL": 1
-    },  
-    "14": {
-      "SQUIRREL": 1
-    }
+    "SNAIL": 1,
+    "SQUIRREL": 1
   },    
   "rewards": {
     "explosive_seed": 1

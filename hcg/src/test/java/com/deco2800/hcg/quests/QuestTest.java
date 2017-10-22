@@ -20,7 +20,7 @@ public class QuestTest {
 	
 	private HashMap<String,Integer> requiredItems;
 	private HashMap<String,Integer> rewards;
-	private HashMap<Integer,HashMap<EnemyType,Integer>> globalKillRequirement;
+	private HashMap<EnemyType,Integer> globalKillRequirement;
 	private Quest quest;
 	
 	@Before
@@ -35,12 +35,10 @@ public class QuestTest {
         String potion = "MagicMushroom";
         requiredItems.put(key,1);
         rewards.put(potion, 3);
-        
-        HashMap<EnemyType,Integer> enemyKillCount = new HashMap<>();
-        enemyKillCount.put(EnemyType.HEDGEHOG, 5);
-        enemyKillCount.put(EnemyType.CRAB, 100);
-        enemyKillCount.put(EnemyType.MUSHROOMTURRET, 50);
-        globalKillRequirement.put(1, enemyKillCount);
+
+		globalKillRequirement.put(EnemyType.HEDGEHOG, 5);
+		globalKillRequirement.put(EnemyType.CRAB, 100);
+		globalKillRequirement.put(EnemyType.MUSHROOMTURRET, 50);
         this.quest = new Quest(title, rewards, globalKillRequirement,requiredItems ,"");
 	}
 	

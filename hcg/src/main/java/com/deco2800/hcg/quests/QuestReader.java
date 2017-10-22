@@ -1,11 +1,11 @@
 package com.deco2800.hcg.quests;
 
 import com.deco2800.hcg.entities.enemyentities.EnemyType;
-import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.managers.ResourceLoadException;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -70,7 +70,7 @@ public class QuestReader {
         //Containers for the information in the quest
         String title; //Name of the quest to be displayed
         HashMap<String,Integer> rewards; // items to amount for reward
-        HashMap<Integer,HashMap<EnemyType, Integer>> killRequirement; //Kills for enemy ID required
+        HashMap<EnemyType, Integer> killRequirement; //Kills for enemy ID required
         HashMap<String, Integer> itemRequirement; //Item required to complete quest
         String description;
 
@@ -166,99 +166,54 @@ public class QuestReader {
         return returnMap;
     }
 
-    private HashMap<Integer,HashMap<EnemyType, Integer>> parseKillReqMap(String title, JsonObject krmMap) {
-        GameManager gameManager = GameManager.get();
-
-        HashMap<Integer,HashMap<EnemyType, Integer>> returnKRM = new HashMap<>();
-        HashMap<EnemyType, Integer> killCount;
+    private HashMap<EnemyType, Integer> parseKillReqMap(String title, JsonObject krmMap) {
+        HashMap <EnemyType, Integer> returnKRM = new HashMap<>();
 
         if (krmMap.entrySet().size() > 0) {
-            for (Map.Entry node: krmMap.entrySet()) {
-                //Check for valid world node
-                if (gameManager.getWorldMap() == null) {
-                    throw new ResourceLoadException("No world currently being created");
-                }
 
-                //Confirm node index exists
-                //Todo make sure nodeID is numeric
-                int nodeID = Integer.parseInt(node.getKey().toString());
-                boolean foundNode = false;
-                for (MapNode mn: gameManager.getWorldMap().getContainedNodes()) {
-                    if (mn.getNodeID() == nodeID) {
-                        foundNode = true;
-                        break;
-                    }
-                }
-                if (!foundNode) {
-                    //Todo throw exceptoion for not finding node - be explicit about node id not valid
-                    throw new ResourceLoadException("Can't add invalid worlds node.");
-                }
-                
-                //Make sure there are no duplicate nodes IDs
-                if (returnKRM.containsKey(node.getKey())) {
-                    throw new ResourceLoadException("Can't add the same key (" +
-                            node.getKey().toString() +
-                            ") twice into the kill requirements node for quest (" +
-                            title + ")");
-                }
-
+            for (Map.Entry<String,JsonElement> enemyMap: krmMap.entrySet()) {
                 //Key and value must not be empty
-                if (node.getKey().toString() == "") {
-                    throw new ResourceLoadException("Can't add an empty node key in the kill requirements for quest (" +
-                            title + ")");
+                if (enemyMap.getKey().toString() == "") {
+                    throw new ResourceLoadException("Can't add an kill requirement key to node (" +
+                            enemyMap.getKey().toString() + ") for quest (" + title + ")");
                 }
-                if (node.getValue().toString() == "") {
-                    throw new ResourceLoadException("Can't add an empty node value in the kill requirements for quest (" +
-                            title + ")");
-                }
-
-                //Parse the enemy ID to kill
-                JsonObject thisNodeEnemyKills = krmMap.getAsJsonObject(node.getKey().toString());
-                if (thisNodeEnemyKills.size() < 1) {
-                    throw new ResourceLoadException("Can't add a node with no kill requirements to the kill " +
-                                                    "requirements for quest (" + title + ")");
+                if (enemyMap.getValue().toString() == "") {
+                    throw new ResourceLoadException("Can't add an kill requirement value to node (" +
+                            enemyMap.getKey().toString() + ") for quest (" + title + ")");
                 }
 
-                killCount = new HashMap<>();
-                //Check each of the node kill reqs
-                for (Map.Entry enemyCount: thisNodeEnemyKills.entrySet()) {
-                    //Key and value must not be empty
-                    if (node.getKey().toString() == "") {
-                        throw new ResourceLoadException("Can't add an kill requirement key to node (" +
-                                                        node.getKey().toString() + ") for quest (" +
-                                                        title + ")");
-                    }
-                    if (node.getValue().toString() == "") {
-                        throw new ResourceLoadException("Can't add an kill requirement value to node (" +
-                                node.getKey().toString() + ") for quest (" +
-                                title + ")");
-                    }
-
-                    //Todo ensure try catch gets non valid enemy type
-
-                    EnemyType et;
-                    try {
-                        et = EnemyType.valueOf(enemyCount.getKey().toString());
-                    } catch (IllegalArgumentException e) {
-                        throw new ResourceLoadException("Invalid enemy type supplied (" +
-                                enemyCount.getKey().toString()+ ") for quest (" + title + ")");
-                    }
-
-                    //Todo make sure its not a duplicate enemy ID - make sure the below function handles it
-                    if (killCount.containsKey(et)) {
-                        throw new ResourceLoadException("Can't add the same enemy key (" +
-                                                        enemyCount.getKey().toString() +
-                                                        ") in node (" +
-                                                        node.getKey().toString() +
-                                                        ") twice into the kill requirements node for quest (" +
-                                                        title + ")");
-                    }
-                    killCount.put(et,Integer.parseUnsignedInt(enemyCount.getValue().toString()));
+                EnemyType et;
+                try {
+                    et = EnemyType.valueOf(enemyMap.getKey().toString());
+                } catch (IllegalArgumentException e) {
+                    throw new ResourceLoadException("Invalid enemy type supplied (" +
+                            enemyMap.getKey().toString()+ ") for quest (" + title + ")");
                 }
 
-                //Todo - confirm that the node int will always be uint
-                returnKRM.put(Integer.parseUnsignedInt(node.getKey().toString()),killCount);
+
+                if (returnKRM.containsKey(et)) {
+                    throw new ResourceLoadException("Can't add the same enemy key (" +
+                                                    enemyMap.getKey().toString() +
+                                                    ") twice into the kill requirements node for quest (" +
+                                                    title + ")");
+                }
+
+                int killCount = 0;
+                try {
+                    killCount = Integer.parseUnsignedInt(enemyMap.getValue().toString());
+                    if (killCount < 1) {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException e){
+                    throw new ResourceLoadException("Can't add a non valid enemy kill count to enemy type (" +
+                                                    enemyMap.getKey().toString() + ")");
+
+                }
+                returnKRM.put(et,killCount);
             }
+
+
+
         }
         return returnKRM;
     }

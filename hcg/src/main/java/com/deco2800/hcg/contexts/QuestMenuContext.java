@@ -115,7 +115,7 @@ public class QuestMenuContext extends UIContext {
         }
 
         activeList.setItems(questStringList);
-		
+
         activeQuestsPane = new ScrollPane(activeList);
         activeQuestsPane.setSmoothScrolling(false);
         activeQuestsPane.setDebug(false);
