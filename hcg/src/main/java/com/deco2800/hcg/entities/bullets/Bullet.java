@@ -292,7 +292,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0, user));
+		target.giveEffect(new Effect("Shot", 1, 250, 1, 0, 1, 0, user));
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
