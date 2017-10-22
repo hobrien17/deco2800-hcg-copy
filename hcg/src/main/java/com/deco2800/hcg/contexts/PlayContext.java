@@ -284,10 +284,11 @@ public class PlayContext extends Context {
         }
 
         // Update and draw the stage
-        stage.act();
-        stage.draw();
         weatherStage.act();
         weatherStage.draw();
+        stage.act();
+        stage.draw();
+
     }
 
     /**
