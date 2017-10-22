@@ -3,9 +3,10 @@ package com.deco2800.hcg.contexts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
@@ -26,7 +27,8 @@ public class DeathContext extends UIContext {
     
     private Skin skin;
     private Table masterTable;
-    private TextField text;
+    private Texture title;
+    private Texture deadman;
     private TextButton button;
     
     public DeathContext() {
@@ -38,13 +40,22 @@ public class DeathContext extends UIContext {
 
         // Initialise class attributes
         skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+        
         masterTable = new Table(skin);
-        masterTable.setFillParent(true);
-        text = new TextField("You have died", skin);
+        
+        title = textureManager.getTexture("you_died");
+        deadman = textureManager.getTexture("deadman");
+        
         button = new TextButton("Quit", skin);
         
+        // Set up master table
+        masterTable.setFillParent(true);
+        masterTable.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
+        
         // Arrange actors
-        masterTable.add(text);
+        masterTable.add(new Image(title)).pad(20);
+        masterTable.row();
+        masterTable.add(new Image(deadman)).pad(20);
         masterTable.row();
         masterTable.add(button);
         stage.addActor(masterTable);
