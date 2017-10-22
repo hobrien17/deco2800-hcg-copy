@@ -457,7 +457,7 @@ public class World {
 					try {
 						collisionMap.get(x, y).remove(entity);
 					} catch(IndexOutOfBoundsException ex) {
-						LOGGER.warn("Can't remove entity");
+						LOGGER.warn("Can't remove entity",ex);
 					}
 				}
 			}

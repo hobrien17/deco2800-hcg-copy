@@ -1,5 +1,8 @@
 package com.deco2800.hcg.managers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
@@ -16,8 +19,6 @@ import com.deco2800.hcg.items.tools.Trowel;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * An class that creates new items based on the inputed parameters
@@ -61,12 +62,16 @@ public class ItemManager extends Manager {
             	return new SpeedPotion();
             case "bug_spray":
             	return new BugSpray();
-            case "key":
-            	return new Key();
             case "hoe":
             	return new Hoe();
             case "trowel":
             	return new Trowel();
+            case "bunnings_snag":
+                return new SpeedPotion();
+            case "magic_mushroom":
+                return new MagicMushroom();
+            case "key":
+                return new Key();
             case "multigun":
             	Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(PLAYER)
             			.setRadius(0.7).build();

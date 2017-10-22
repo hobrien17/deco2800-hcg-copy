@@ -1,6 +1,7 @@
 package com.deco2800.hcg.items.stackable;
 
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.items.StackableItem;
 
 public class Key extends StackableItem {
@@ -29,4 +30,8 @@ public class Key extends StackableItem {
 		return new Key();
 	}
 
+    @Override
+    public ItemRarity getRarity() {
+        return ItemRarity.RARE;
+    }
 }

@@ -263,6 +263,34 @@ public class Player extends Character implements Tickable {
 	}
 
 	/**
+	 * Take the damage inflicted by the other entities
+	 *
+	 * @param damage: the amount of the damage
+	 */
+	@Override
+	public void takeDamage(int damage) {
+		if (damage < 0) {
+			heal(Math.abs(damage));
+		} else {
+			Perk thorn = this.getPerk(Perk.perk.THORN);
+			if (thorn.isActive()) {
+				switch (thorn.getCurrentLevel()) {
+					case 0:
+						break;
+					case 1:
+						damage = (int) ((9f / 10f) * (float) damage);
+						break;
+				}
+			}
+			if (damage > healthCur) {
+				healthCur = 0;
+			} else {
+				healthCur -= damage;
+			}
+		}
+	}
+
+	/**
 	 * Sends input when a touch input is made.
 	 *
 	 * @param screenX
@@ -674,6 +702,24 @@ public class Player extends Character implements Tickable {
 			}
 			this.setTexture(spriteName.toString());
 			lastTick = gameTickCount;
+		}
+
+		//Perk - I_AM_GROOT
+		Perk IamGroot = this.getPerk(Perk.perk.I_AM_GROOT);
+		if (IamGroot.isActive()) {
+			if (gameTickCount % 50 == 0) {
+				switch (IamGroot.getCurrentLevel()) {
+					case 0:
+						break;
+					case 1:
+						this.takeDamage(-(1 + (int)(0.2 * this.getLevel())));
+						break;
+					case 2:
+						this.takeDamage(-(2 + (int)(0.25 * this.getLevel())));
+						break;
+				}
+			}
+
 		}
 
 		checkXp();

@@ -143,6 +143,7 @@ public class MultiplayerCharaterContext extends UIContext{
                         " United Stores of Agriculture. A chained department store which sells whole range of " +
                         "farming plants. A capable man, he created an agricultural empire from nothing with a " +
                         "small loan of a million dollars. ");
+                break;
             default:
                 break;
         }

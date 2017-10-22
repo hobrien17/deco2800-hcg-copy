@@ -119,7 +119,7 @@ public class WorldMapContext extends UIContext {
 		}
 
 		playerMapEntity = new PlayerMapEntity();
-		// set the player Map Entity render position to be at the starting node;
+		// set the player Map Entity render position to be at the starting node
 		MapNodeEntity entryMapNode = new MapNodeEntity(gameManager.getWorldMap().getContainedNodes().get(0), worldMap);
 		playerMapEntity.updatePosByNodeEntity(entryMapNode);
 

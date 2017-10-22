@@ -8,9 +8,6 @@ import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.items.tools.Fertiliser;
 import com.deco2800.hcg.items.tools.Hoe;
 import com.deco2800.hcg.items.tools.Trowel;
-import com.deco2800.hcg.weapons.Weapon;
-import com.deco2800.hcg.weapons.WeaponBuilder;
-import com.deco2800.hcg.weapons.WeaponType;
 
 /**
  * General Shop class that implements all the methods of the shop

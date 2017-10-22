@@ -22,6 +22,7 @@ import com.deco2800.hcg.util.WorldUtil;
 public class Fireball extends FireBullet {
 	
 	private boolean infinite;
+	private int damage;
 
 	/**
 	 * Creates a new fireball moving towards the given co-ordinates
@@ -41,10 +42,11 @@ public class Fireball extends FireBullet {
 	 * @param user
 	 * 			the entity who shot the fireball
 	 */
-	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user, boolean infinite) {
+	public Fireball(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user, boolean infinite, int damage) {
 		super(getPosChange(posX, posY, newX, newY)[0], getPosChange(posX, posY, newX, newY)[1], posZ, newX + 1f, newY, newZ, 
-				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, -1, 0.5f);
+				getTextureVals(posX, posY, newX, newY)[0], getTextureVals(posX, posY, newX, newY)[1], 1f, user, -1, 0.5f, damage);
 		((SoundManager)GameManager.get().getManager(SoundManager.class)).playSound("fireball");
+		this.damage = damage;
 		this.infinite = infinite;
 		if(newX > posX && newY > posY) {
 			this.setTexture("fireball_right");
