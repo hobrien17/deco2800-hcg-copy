@@ -6,6 +6,7 @@ import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.SingleItem;
 import com.deco2800.hcg.items.StackableItem;
+import com.deco2800.hcg.items.WeaponItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +128,9 @@ public abstract class Shop {
             }
             int temp = item.getStackSize();
             item.setStackSize(1);
+            if (item instanceof WeaponItem) {
+                ((WeaponItem) item).getWeapon().setUser(player);
+            }
             player.getInventory().addItem(item);
             item.setStackSize(temp);
         } else if (item instanceof SingleItem) {
@@ -216,6 +220,7 @@ public abstract class Shop {
             player.getInventory().addItem(item.copy());
             return 1;
         }
+        System.out.println(item instanceof StackableItem);
         if (item instanceof StackableItem) {
             Item shopCopy = containsItem(item);
             if ((shopCopy != null) && shopCopy.addToStack(1)) {

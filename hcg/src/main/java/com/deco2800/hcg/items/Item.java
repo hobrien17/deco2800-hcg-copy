@@ -133,7 +133,7 @@ public interface Item {
     /**
      * Retrieve the list of strings to be displayed in this item's tooltip.
      * 
-     * @return The information to display in this item's tooltip. Null if there is none.
+     * @return The information to display in this item's tooltip. Null  if there is none.
      */
     ArrayList<String> getInformation();
 }

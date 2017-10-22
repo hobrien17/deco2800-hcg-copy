@@ -22,22 +22,22 @@ public class OptionsMenuContext extends UIContext{
         GameManager gameManager = GameManager.get();
 		ContextManager contextManager = (ContextManager)
                 gameManager.getManager(ContextManager.class);
-		TextureManager textureManager = (TextureManager) 
+		TextureManager textureManager = (TextureManager)
 				gameManager.getManager(TextureManager.class);
 		ShaderManager shaderManager = (ShaderManager)
 				gameManager.getManager(ShaderManager.class);
 		SoundManager soundManager = (SoundManager)
 				gameManager.getManager(SoundManager.class);
-		
+
 		table = new Table();
 		table.setFillParent(true);
 		table.setBackground(new Image(textureManager.getTexture("main_menu_background")).getDrawable());
-		
+
 		optionsTitle = new Image(textureManager.getTexture("menu_options_button"));
 		toggleShadersButton = new ImageButton(new Image(textureManager.getTexture("toggle_shaders_button")).getDrawable());
 		muteButton = new ImageButton(new Image(textureManager.getTexture("toggle_mute_button")).getDrawable());
 		backButton = new ImageButton(new Image(textureManager.getTexture("instructions_back_button")).getDrawable());
-		
+
 		table.add(optionsTitle);
 		table.row();
 		table.add(toggleShadersButton);
@@ -46,7 +46,7 @@ public class OptionsMenuContext extends UIContext{
 		table.row();
 		table.add(backButton);
 		stage.addActor(table);
-		
+
 		backButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -65,7 +65,7 @@ public class OptionsMenuContext extends UIContext{
 				shaderManager.toggleShaders();
 			}
 		});
-		
-		
+
+
 	}
 }

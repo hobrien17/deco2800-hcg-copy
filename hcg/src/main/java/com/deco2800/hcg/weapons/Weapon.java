@@ -117,6 +117,15 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
     }
 
     /**
+     * Set the user of the weapon
+     * @param user
+     *          The new user
+     */
+    public void setUser(Player user) {
+        this.user = user;
+    }
+
+    /**
      * Tells Weapon to start firing
      */
     public void openFire() {

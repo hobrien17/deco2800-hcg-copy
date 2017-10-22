@@ -38,11 +38,15 @@ public class WeaponItem extends SingleItem {
      * @return the value in seeds
      */
     private int getValue() {
-    	if(weapon instanceof Multigun || weapon instanceof Shotgun) {
-    		return 20;
-    	} else if(weapon instanceof Stargun) {
-    		return 30;
-    	}
+        if (getRarity() == ItemRarity.COMMON) {
+            return 20;
+        } else if (getRarity() == ItemRarity.UNCOMMON) {
+            return 30;
+        } else if (getRarity() == ItemRarity.RARE) {
+            return 50;
+        } else if (getRarity() == ItemRarity.LEGENDARY) {
+            return 100;
+        }
     	return 0;
     }
     

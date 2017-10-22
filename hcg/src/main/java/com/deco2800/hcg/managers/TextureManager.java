@@ -163,7 +163,7 @@ public class TextureManager extends Manager {
 			textureMap.put("grass_corpse", new Texture("resources/sprites/dead_enemies/grass.png"));
 			textureMap.put("fire_corpse", new Texture("resources/sprites/dead_enemies/inferno.png"));
 			textureMap.put("explosion", new Texture("resources/sprites/bullets/explosion.png"));
-			
+
 			// Weapon textures
 			textureMap.put("multigun_n", new Texture("resources/sprites/weapons/multigun_n.png"));
             textureMap.put("multigun_ne", new Texture("resources/sprites/weapons/multigun_ne.png"));
@@ -476,7 +476,7 @@ public class TextureManager extends Manager {
 		}
 
 	}
-	
+
 	/**
 	 * Saves a texture with a given id
 	 *
