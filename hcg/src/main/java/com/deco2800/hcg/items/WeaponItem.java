@@ -92,4 +92,9 @@ public class WeaponItem extends SingleItem {
     public Item copy() {
         return new WeaponItem(weapon, itemName, itemWeight);
     }
+
+    @Override
+    public ItemRarity getRarity() {
+        return this.weapon == null ? ItemRarity.COMMON : this.weapon.getRarity();
+    }
 }

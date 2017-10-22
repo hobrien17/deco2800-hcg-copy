@@ -4,11 +4,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.bullets.*;
+import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.bullets.BulletType;
+import com.deco2800.hcg.entities.bullets.ExplosionBullet;
+import com.deco2800.hcg.entities.bullets.FireBullet;
+import com.deco2800.hcg.entities.bullets.GrassBullet;
+import com.deco2800.hcg.entities.bullets.HomingBullet;
+import com.deco2800.hcg.entities.bullets.IceBullet;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.shading.LightEmitter;
@@ -411,5 +418,8 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         result = 31 * result + super.hashCode();
         return result;
     }
-
+    
+    public ItemRarity getRarity() {
+        return ItemRarity.COMMON;
+    }
 }

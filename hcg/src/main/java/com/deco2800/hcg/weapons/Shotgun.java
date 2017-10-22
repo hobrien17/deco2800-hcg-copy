@@ -3,6 +3,7 @@ package com.deco2800.hcg.weapons;
 import java.util.Random;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.ItemRarity;
 
 /**
  * The Shotgun class represents a shotgun weapon
@@ -61,5 +62,8 @@ public class Shotgun extends Weapon implements Tickable {
         muzzleFlashSize = 4;
         muzzleFlashStartTime = System.currentTimeMillis();
     }
-    
+
+    public ItemRarity getRarity() {
+        return ItemRarity.UNCOMMON;
+    }
 }
