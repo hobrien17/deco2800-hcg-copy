@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.deco2800.hcg.entities.garden_entities.plants.AbstractGardenPlant;
 import com.deco2800.hcg.entities.garden_entities.plants.Pot;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 
 public class Hoe extends Tool {
 
@@ -38,6 +39,11 @@ public class Hoe extends Tool {
 			pot.getPlant().loot();
 			player.getInventory().removeItem(this);
 		}
+	}
+	
+	@Override
+	public ItemRarity getRarity() {
+		return ItemRarity.RARE;
 	}
 
 }

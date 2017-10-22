@@ -1,5 +1,9 @@
 package com.deco2800.hcg.items;
 
+import com.deco2800.hcg.weapons.Machinegun;
+import com.deco2800.hcg.weapons.Multigun;
+import com.deco2800.hcg.weapons.Shotgun;
+import com.deco2800.hcg.weapons.Stargun;
 import com.deco2800.hcg.weapons.Weapon;
 
 /**
@@ -24,8 +28,22 @@ public class WeaponItem extends SingleItem {
         this.weapon = weapon;
         this.itemName = name;
         this.itemWeight = weight;
-        this.baseValue = 10;
-        this.texture = "red_potion";
+        this.baseValue = getValue();
+        this.texture = weapon.getTexture() + "_ne";
+    }
+    
+    /**
+     * Gets the weapon's value
+     * 
+     * @return the value in seeds
+     */
+    private int getValue() {
+    	if(weapon instanceof Multigun || weapon instanceof Shotgun) {
+    		return 20;
+    	} else if(weapon instanceof Stargun) {
+    		return 30;
+    	}
+    	return 0;
     }
     
     @Override
