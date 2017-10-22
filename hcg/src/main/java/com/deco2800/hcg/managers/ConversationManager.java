@@ -29,6 +29,8 @@ public class ConversationManager extends Manager {
             loadConversation("james_test", "resources/conversations/james.json");
             loadConversation("questTutorial01", "resources/conversations/questTutorial01.json");
             loadConversation("questTutorial02", "resources/conversations/questTutorial02.json");
+            loadConversation("questTutorial03", "resources/conversations/questTutorial03.json");
+            loadConversation("questTutorial04", "resources/conversations/questTutorial04.json");
             loadConversation("tutorialslippery", "resources/conversations/tutorialslippery.json");
             loadConversation("tutorialwasteland", "resources/conversations/tutorialwasteland.json");
             loadConversation("tutorialfirst", "resources/conversations/tutorialfirst.json");
