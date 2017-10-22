@@ -38,7 +38,7 @@ public class InstructionsMenuContext extends UIContext {
 		TextureManager textureManager = (TextureManager) 
 				gameManager.getManager(TextureManager.class);
 		
-		Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
+		//Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		
 		table = new Table();
 		table.setFillParent(true);

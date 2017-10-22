@@ -43,12 +43,11 @@ import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.items.tools.Trowel;
 import com.deco2800.hcg.items.tools.Hoe;
+import com.deco2800.hcg.items.tools.Shovel;
 import com.deco2800.hcg.items.tools.Fertiliser;
 import com.deco2800.hcg.items.tools.Tool;
 import com.deco2800.hcg.items.tools.BugSpray;
 import com.deco2800.hcg.inventory.PlayerEquipment;
-import com.deco2800.hcg.weapons.Weapon;
-
 
 public class GeneralRadialDisplay extends Group {
 	private PlantManager plantManager;
@@ -174,20 +173,19 @@ public class GeneralRadialDisplay extends Group {
 		sprites.put("fireC", "fire_btn");
 		sprites.put("grassC", "grass_btn");
 		sprites.put("outline", "radialOutline");
-		sprites.put("machineGun", "machineGun");
+		sprites.put("machinegun", "machineGun");
 		sprites.put("shotgun", "shotgun");
-		sprites.put("scatterGun", "scatterGun");
+		sprites.put("multigun", "scatterGun");
 		sprites.put("starfall", "starfall");
 		sprites.put("fertiliser", "fertiliser_btn");
 		sprites.put("bug_spray", "bugspray_btn");
-		sprites.put("health_potion", "healthPotion");
-		sprites.put("speed_potion", "speedPotion");
+		sprites.put("snag", "snag_btn");
+		sprites.put("sausage", "sausage_btn");
 		sprites.put("magic_mushroom", "magicMushroom");
 		sprites.put("small_mushroom", "smallMushroom");
-		sprites.put("hoe", "hoe");
-		sprites.put("trowel", "trowel");
-		sprites.put("snag_btn", "snag_btn");
-		sprites.put("sausage_btn", "sausage_btn");
+		sprites.put("hoe", "hoe_btn");
+		sprites.put("trowel", "trowel_btn");
+		sprites.put("shovel", "shovel_btn");
 	}
 	
 	private void setupListeners() {
@@ -197,6 +195,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 				plant(new Seed(Seed.Type.SUNFLOWER));
+				hide();
             }
         });
 		
@@ -204,6 +203,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.WATER));
+				hide();
             }
         });
 		
@@ -211,6 +211,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.ICE));
+				hide();
             }
         });
 		
@@ -218,6 +219,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 				plant(new Seed(Seed.Type.FIRE));
+				hide();
             }
         });
 		
@@ -225,6 +227,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.EXPLOSIVE));
+				hide();
             }
         });
 		
@@ -232,6 +235,7 @@ public class GeneralRadialDisplay extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	plant(new Seed(Seed.Type.GRASS));
+				hide();
             }
         });
 
@@ -239,6 +243,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.BASIC);
+				hide();
 			}
 		});
 
@@ -246,6 +251,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.HOMING);
+				hide();
 			}
 		});
 
@@ -253,6 +259,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.ICE);
+				hide();
 			}
 		});
 
@@ -260,6 +267,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.FIRE);
+				hide();
 			}
 		});
 
@@ -267,6 +275,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.EXPLOSION);
+				hide();
 			}
 		});
 
@@ -274,13 +283,15 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().getEquippedWeapon().setBulletType(BulletType.GRASS);
+				hide();
 			}
 		});
 
-		listeners.put("machineGun", new ChangeListener() {
+		listeners.put("machinegun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().setEquipped(0);
+				hide();
 			}
 		});
 
@@ -288,13 +299,15 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().setEquipped(1);
+				hide();
 			}
 		});
 
-		listeners.put("scatterGun", new ChangeListener() {
+		listeners.put("multigun", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				playerManager.getPlayer().setEquipped(2);
+				hide();
 			}
 		});
 
@@ -302,6 +315,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 			    playerManager.getPlayer().setEquipped(3);
+				hide();
 			}
 		});
 
@@ -309,6 +323,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new Fertiliser());
+				hide();
 			}
 		});
 
@@ -316,20 +331,23 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new BugSpray());
+				hide();
 			}
 		});
 
-		listeners.put("health_potion", new ChangeListener() {
+		listeners.put("snag", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new HealthPotion(100));
+				hide();
 			}
 		});
 
-		listeners.put("speed_potion", new ChangeListener() {
+		listeners.put("sausage", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new SpeedPotion());
+				hide();
 			}
 		});
 
@@ -337,6 +355,7 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new MagicMushroom());
+				hide();
 			}
 		});
 
@@ -344,34 +363,31 @@ public class GeneralRadialDisplay extends Group {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				useItem(new SmallMushroom());
+				hide();
 			}
 		});
 
 		listeners.put("hoe", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//useItem(new Hoe());
+				useItem(new Hoe());
+				hide();
 			}
 		});
 
 		listeners.put("trowel", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//useItem(new Trowel());
+				useItem(new Trowel());
+				hide();
 			}
 		});
 
-		listeners.put("sausage_btn", new ChangeListener() {
+		listeners.put("shovel", new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				useItem(new SmallMushroom());
-			}
-		});
-
-		listeners.put("snag_btn", new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				useItem(new SmallMushroom());
+				useItem(new Shovel());
+				hide();
 			}
 		});
 	}
@@ -463,8 +479,8 @@ public class GeneralRadialDisplay extends Group {
     	} else if(item instanceof ConsumableItem) {
     		Player player = ((PlayerManager)GameManager.get().getManager(PlayerManager.class)).getPlayer();
     		((ConsumableItem)item).consume(player);
+        	inventory.removeItem(item);
     	}
-    	inventory.removeItem(item);
     	update();
     }
     
@@ -541,20 +557,19 @@ public class GeneralRadialDisplay extends Group {
 			ImageButton button = buttons.get(i);
 			String type = items.get(i);
 			int count = -1;
-			if(type.equals("sunflower") || type.equals("water") || type.equals("cactus") || type.equals("ice") || 
-					type.equals("fire") || type.equals("explosive") || type.equals("grass")) {
+			if("sunflower".equals(type) || "water".equals(type) || "cactus".equals(type) || "ice".equals(type) ||
+					"fire".equals(type) || "explosive".equals(type) || "grass".equals(type)) {
 				count = getCount(type + "_seed");
-			} else if(type.equals("sunflowerC") || type.equals("waterC") || type.equals("cactusC") || type.equals("iceC") || 
-					type.equals("fireC") || type.equals("explosiveC") || type.equals("grassC")) {
+			} else if("sunflowerC".equals(type) || "waterC".equals(type) || "cactusC".equals(type) || "iceC".equals(type) ||
+					"fireC".equals(type) || "explosiveC".equals(type) || "grassC".equals(type)) {
 				count = getCount(type.substring(0, type.length() - 1) + "_seed");
-			} else if(type.equals("machineGun") || type.equals("starfall") || type.equals("scatterGun") || type.equals("shotgun") ||
-					type.equals("hoe") || type.equals("trowel"));
-			else if(type.equals("health_potion")) {
-				count = getCount("red_potion");
-			} else if(type.equals("speed_potion")) {
-				count = getCount("purple_potion");
-			}
-			else{
+			} else if(type.equals("machinegun") || type.equals("starfall") || type.equals("multigun") || type.equals("shotgun")) {
+				count = getCount(type + "_ne");
+			} else if(type.equals("snag")) {
+				count = getCount("bunnings_snag_and_bread");
+			} else if(type.equals("sausage")) {
+				count = getCount("bunnings_snag");
+			} else{
 				count = getCount(type);
 			}
 			

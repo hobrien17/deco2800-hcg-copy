@@ -204,7 +204,7 @@ public abstract class Shop {
     		return 2;
     	}
         seed = new Seed(Seed.Type.SUNFLOWER);
-        seed.setStackSize(item.getBaseValue()+modifier);
+        seed.setStackSize(item.getBaseValue() + modifier);
         if ((item instanceof SingleItem) || (item.getStackSize() == 1)) {
             if (!player.getInventory().removeItem(item)) {
                 return 3;

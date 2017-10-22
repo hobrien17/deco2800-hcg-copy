@@ -1,0 +1,73 @@
+{
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "0"
+  },
+  "nodes": [
+    {
+      "id": "0",
+      "nodeText": "Hello! Welcome to hardcore gardening!",
+      "options": [
+        {
+          "optionText": "Hello",
+          "target": "1"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "nodeText": "Think you're ready to survive?",
+      "options": [
+        {
+          "optionText": "I need some help!",
+          "target": "2"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "nodeText": "You sure do. First thing you'll want to know is how to move.",
+      "options": [
+		{
+		  "optionText": "Teach me!",
+          "target": "3"
+		},
+		{
+		  "optionText": "I already know this! Tell me the important stuff.",
+          "target": "4"
+		}
+
+	  ]
+    },
+	{
+      "id": "3",
+      "nodeText": "Use the WASD keys to move around the map. It's pretty simple. Also remember to sprint with holding shift, your stamina will run out eventually but it will recharge.",
+      "options": [
+        {
+          "optionText": "Cool.",
+          "target": "4"
+        }
+      ]
+    },
+	{
+      "id": "4",
+      "nodeText": "Navigate to the exit tile to the right of the map, should be to your right and it will be pretty hard to miss.",
+      "options": [
+        {
+          "optionText": "Is that all?!",
+          "target": 5
+        }
+      ]
+    },
+	{
+      "id": "5",
+      "nodeText": "And watch out for the spikes! They'll take away your health slowly. Once you've done that, you can go to the next level. Good luck!!",
+      "options": [
+        {
+          "optionText": "Thanks!", 
+          "target": null
+        }
+      ]
+    }
+  ]
+}

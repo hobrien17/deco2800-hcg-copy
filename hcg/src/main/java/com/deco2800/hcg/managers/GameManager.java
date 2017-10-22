@@ -40,6 +40,10 @@ public class GameManager implements TickableManager {
     private WorldMapContext mapContext;
     
     private WorldStackContext stackContext;
+    
+    private boolean tutorialMessageDisplayed;
+    
+    private boolean tutorialWorldMessageDisplayed;
 
     /**
      * Returns an instance of the GM
@@ -139,6 +143,7 @@ public class GameManager implements TickableManager {
      * Sets the current game world
      */
     public void setWorld(World world) {
+    	world.loadPlantObservers();
         this.gameWorld = world;
     }
 
@@ -222,5 +227,21 @@ public class GameManager implements TickableManager {
     
     public void setStackContext(WorldStackContext newContext) {
     	stackContext = newContext;
+    }
+    
+    public void setTutorialMessageDisplayed() {
+    	tutorialMessageDisplayed = true;
+    }
+    
+    public boolean getTutorialMessageDisplayed() {
+    	return tutorialMessageDisplayed;
+    }
+    
+    public void setTutorialWorldMessageDisplayed() {
+    	tutorialWorldMessageDisplayed = true;
+    }
+    
+    public boolean getTutorialWorldMessageDisplayed() {
+    	return tutorialWorldMessageDisplayed;
     }
 }

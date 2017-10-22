@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.deco2800.hcg.buffs.Perk;
+import com.deco2800.hcg.contexts.PerksSelectionScreen;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.TextureManager;
@@ -28,28 +29,30 @@ public class DrawablePerk {
     private Stage stage;
     private Player player;
 
-    public DrawablePerk(Perk perk, Stage stage, Player player) {
+    public DrawablePerk(Perk perk, PerksSelectionScreen perksSelectionScreen) {
 
         //Getting nessecary managers and skin
         GameManager gameManager = GameManager.get();
         textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
         Skin skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 
-        this.player = player;
+        this.player = perksSelectionScreen.getPlayer();
         //getting images from texture manager and setting label text.
         String textureName = perk.getName().replaceAll(" ", "_");
         this.perkImage = new ImageButton(new Image(textureManager.getTexture(textureName)).getDrawable());
         this.border = new Image(textureManager.getTexture("perk_border_inactive"));
-        this.levelLabel = new Label(("" + perk.getCurrentLevel() + " / " + perk.getMaxLevel()), skin);
+        this.levelLabel = new Label("" + perk.getCurrentLevel() + " / " + perk.getMaxLevel(), skin);
 
         //other fields for handling when the perk is clicked
-        this.stage = stage;
+        this.stage = perksSelectionScreen.getStage();
         this.perk = perk;
 
         //positioning and scale
-        border.setPosition(0, 20);
-        perkImage.setPosition(20, 40);
+        border.setPosition(0, 25);
+        perkImage.setPosition(13, 40);
         levelLabel.setPosition(45, 0);
+        levelLabel.setScale(1.2f);
+        levelLabel.setFontScale(1.2f);
         descriptionLabel = new Label(perk.getDescription(), skin);
         descriptionLabel.setFontScale(1.3f);
 
@@ -64,9 +67,11 @@ public class DrawablePerk {
         perkImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (perk.isAvaliable(player)) {
+                if (perk.isAvaliable(player) && (player.getPerkPoints() > 0)) {
                     perk.setCurrentLevel(perk.getCurrentLevel() + 1);
+                    player.setPerkPoints(player.getPerkPoints() - 1);
                     DrawablePerk.this.update();
+                    perksSelectionScreen.update();
                 }
             }
         });
@@ -76,8 +81,11 @@ public class DrawablePerk {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (perk.isAvaliable(player)) {
+                    if(perk.getCurrentLevel() > 0) {
+                        player.setPerkPoints(player.getPerkPoints() + 1);
+                    }
                     perk.setCurrentLevel(perk.getCurrentLevel() - 1);
-                    DrawablePerk.this.update();
+                    perksSelectionScreen.update();
                 }
             }
         });
@@ -93,7 +101,8 @@ public class DrawablePerk {
                 //label to tell the player their level is too low to unlock the perk
                 if (!(perk.isAvaliable(player))) {
                     levelLabel.setText("Level Too Low");
-                    levelLabel.setColor(Color.RED);
+                    levelLabel.setX(20 + perkDisplay.getWidth()/2 - levelLabel.getWidth()/2);
+                    levelLabel.setColor(Color.YELLOW);
                 }
             }
             @Override
@@ -101,7 +110,6 @@ public class DrawablePerk {
                 //player is no longer hovering over the perk, so stop displaying description
                 descriptionLabel.remove();
                 DrawablePerk.this.update();
-
             }
         });
 
@@ -122,6 +130,7 @@ public class DrawablePerk {
      */
     public void update() {
         levelLabel.setText("" + perk.getCurrentLevel() + " / " + perk.getMaxLevel());
+        levelLabel.setPosition(45, 0);
         levelLabel.setColor(Color.WHITE);
 
         if (perk.isAvaliable(player)) {
