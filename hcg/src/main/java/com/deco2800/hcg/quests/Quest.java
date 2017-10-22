@@ -1,71 +1,104 @@
 package com.deco2800.hcg.quests;
 
-import com.deco2800.hcg.items.Item;
+
+import com.deco2800.hcg.entities.enemyentities.EnemyType;
+import java.util.Map;
 
 /**
- * A base class for Quests that will be used by players/NPCs 
- * 
- * @author Blake Bodycote
+ * A base class for Quests that will be used by players/NPCs
+ *
+ * @author Blake Bodycote and Harry Guthrie
  *
  */
+
 public class Quest {
-	private String instruction; //what the player must do to complete the quest
-	private Item itemToReward; //what the player will receive for doing the quest
-	private Item itemRequested; //what the player needs to have in order to complete the quest
-	private boolean completed; //whether the quest is completed or not 
+	private String title; //Name of the quest to be displayed
+	private Map<String,Integer> rewards; // items to amount for reward
+	private Map<EnemyType, Integer> killRequirement; //Kills for enemy ID required
+	private Map<String, Integer> itemRequirement; //Item required to complete quest
+	private String description;
 
 	/**
 	 * Creates a new Quest with the given parameteres
-	 * @param instruction the instructions of the quest
-	 * @param itemRequested the item required to complete the quest
-	 * @param itemToReward the item being rewarded by the quest
-	 * @throws IllegalArgumentException
+	 * @param title
+	 * @param rewards
+	 * @param killRequirement
+	 * @param itemRequirement
 	 */
-	public Quest(String instruction, Item itemRequested, Item itemToReward) throws IllegalArgumentException {
-		if("".equals(instruction) || itemRequested == null || itemToReward == null){
-			throw new IllegalArgumentException(); 
+	public Quest(String title, Map<String, Integer> rewards, Map<EnemyType,
+                Integer> killRequirement, Map<String, Integer> itemRequirement,
+				 String description) {
+
+		this.title = title;
+		this.rewards = rewards;
+		this.killRequirement = killRequirement;
+		this.itemRequirement = itemRequirement;
+		this.description = description;
+	}
+
+	/**
+	 * Returns the title of the quest, utilised by the UI in order to display a quest.
+	 *
+	 * @return the name of the quest
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	public Map<String, Integer> getRewards() {
+		return rewards;
+	}
+
+	public Map<EnemyType, Integer> getKillRequirement() {
+		return killRequirement;
+	}
+
+	public Map<String, Integer> getItemRequirement() {
+		return itemRequirement;
+	}
+
+
+	/**
+	 * Using the requirements create the description of the quest
+	 *
+	 * @return a description for the quest created from the requirements
+	 */
+	public String getDescription() {
+		if (!this.description.equals("")) {
+			return this.description;
 		}
-		this.instruction = instruction;
-		this.itemRequested = itemRequested;
-		this.itemToReward = itemToReward;
+		String desc = "";
+		boolean bothReq = false;
+
+		if (killRequirement.size() > 0) {
+			bothReq = true;
+			desc += "Kill ";
+
+			for (Map.Entry<EnemyType,Integer> entry: killRequirement.entrySet()) {
+				//For each enemy ID get the amount of kills required
+				desc += entry.getValue().toString() + " " + entry.getKey().toString().toLowerCase() + " and ";
+			}
+			//Remove trailing and
+			desc = desc.substring(0,desc.length() - "and ".length()); //Remove the trailing ','
+			desc += ".";
+		}
+
+		if (itemRequirement.size() > 0) {
+			if(bothReq) {
+				desc += "\n Additionally collect";
+			} else {
+				desc = "Collect";
+			}
+			for (Map.Entry<String,Integer> i: itemRequirement.entrySet()) {
+				desc += " " + i.getValue().toString().toLowerCase() + " " + i.getKey() + ",";
+			}
+			desc = desc.substring(0,desc.length() - 1); //Remove the trailing ','
+			desc += ".";
+		}
+		return desc;
 	}
-	/**
-	 * Used by NPC to establish whether or not a quest has been completed by the player.
-	 * 
-	 * @return true if player has completed quest, false otherwise.
-	 */
-	public boolean isQuestComplete(){
-		return completed;
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	
-	/**
-	 * Returns the item that is needed in order to fulfill the Quest
-	 * 
-	 * @return item needed to fulfill quest
-	 */
-	public Item itemNeeded(){
-		return itemRequested;
-	}
-	
-	/**
-	 * Returns the rewarded item, the rewarded item will then be placed in the player's inventory.
-	 * 
-	 * @return the rewarded item
-	 */
-	public Item itemRewarded(){
-		return itemToReward;
-	}
-	
-	/**
-	 * Returns the instruction of the quest, utilised by the UI in order to display a quest .
-	 * 
-	 * @return the instruction for the quest
-	 */
-	public String getInstruction(){
-		return instruction;
-	}
-	
-	
-	
-	
 }

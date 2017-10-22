@@ -1,7 +1,6 @@
 package com.deco2800.hcg.managers;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import java.util.*;
 
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.entities.AbstractEntity;
