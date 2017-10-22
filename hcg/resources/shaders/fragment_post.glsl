@@ -20,6 +20,8 @@ uniform float u_heat;
 uniform float u_bloom;
 uniform float u_contrast;
 
+uniform vec4 u_globalColor;
+
 float getHeatDistortion(float time, vec2 texCoords) {
     return sin(texCoords.y * 50.0 + 2.0 * time) * 0.005 * u_heat;
 }
@@ -131,7 +133,7 @@ void main() {
         tex_final.x = tex_final.x + getHeatDistortion(u_time, tex_final);
     }
 
-    vec4 final = v_color * getVignette(tex_final);
+    vec4 final = v_color * getVignette(tex_final) * u_globalColor;
 
     // Apply bloom
     if(u_bloom > 0.0) {
