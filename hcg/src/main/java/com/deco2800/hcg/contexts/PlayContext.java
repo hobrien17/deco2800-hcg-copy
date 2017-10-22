@@ -236,7 +236,7 @@ public class PlayContext extends Context {
         });
 
         /* set initial time */
-        timeManager.setDateTime(0, 0, 5, 1, 1, 2047);
+        timeManager.setDateTime(0, 16, 14, 3, 6, 2047);
         
         /* reset input tick */
         playerInputManager.resetInputTick();
