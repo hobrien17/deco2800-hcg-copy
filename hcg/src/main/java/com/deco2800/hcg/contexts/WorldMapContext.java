@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
@@ -20,8 +18,6 @@ import com.deco2800.hcg.entities.worldmap.WorldStackBlackoutEntity;
 import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.LevelStartMessage;
-import com.deco2800.hcg.types.Weathers;
-import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
 
 /**
@@ -38,7 +34,6 @@ public class WorldMapContext extends UIContext {
 
 	// Managers used by the game
 	private GameManager gameManager;
-	private PlayerManager playerManager;
 	private ContextManager contextManager;
 	private WorldManager worldManager;
 	private NetworkManager networkManager;
@@ -69,8 +64,6 @@ public class WorldMapContext extends UIContext {
 		
 		TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		lineTexture = new TextureRegion(textureManager.getTexture("black_px"));
-		playerManager = (PlayerManager) gameManager
-				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
 		worldManager = (WorldManager) gameManager
