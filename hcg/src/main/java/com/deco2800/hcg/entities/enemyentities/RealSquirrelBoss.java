@@ -8,6 +8,9 @@ import com.deco2800.hcg.weapons.WeaponType;
 import java.util.HashMap;
 
 public class RealSquirrelBoss extends Enemy implements Tickable {
+
+    private String[] sprites = {"squirrelE", "squirrelN", "squirrelW", "squirrelS"};
+
     /**
      * Constructor for the Crab class. Creates a new crab boss at the given
      * position.
@@ -88,6 +91,7 @@ public class RealSquirrelBoss extends Enemy implements Tickable {
                 newPos = this.getRandomPos();
             }
         }
+        this.updateSprite(sprites);
         this.detectCollision();
         this.moveAction();
 
