@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.bullets.GrassBullet;
-import com.deco2800.hcg.entities.bullets.GrassTurretBullet;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.managers.GameManager;

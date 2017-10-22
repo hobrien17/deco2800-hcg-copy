@@ -1,15 +1,11 @@
 package com.deco2800.hcg.util;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.entities.Character;
 
 import java.util.*;

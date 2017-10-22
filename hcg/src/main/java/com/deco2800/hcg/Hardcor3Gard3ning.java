@@ -32,6 +32,8 @@ import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.managers.WorldManager;
 import com.deco2800.hcg.renderers.Renderable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles the creation of the world and rendering.
@@ -59,6 +61,7 @@ public class Hardcor3Gard3ning extends Game {
     private long gameTickPeriod = 20;  // Tickrate = 50Hz
     private long nextGameTick = TimeUtils.millis() + gameTickPeriod;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Hardcor3Gard3ning.class);
     /**
      * Creates the required objects for the game to start. Called when the game first starts
      */
@@ -174,6 +177,7 @@ public class Hardcor3Gard3ning extends Game {
                         return String
                                 .format("%s is not a valid number", args[2]);
                     } catch (Exception e) {
+                        LOGGER.error("error occurred", e);
                         amount = 1;
                     }
 
@@ -210,6 +214,7 @@ public class Hardcor3Gard3ning extends Game {
                     } catch (NumberFormatException e) {
                         return String.format("%s is not a valid number", args[2]);
                     } catch (Exception e) {
+                        LOGGER.error("error occurred", e);
                         amount = 1;
                     }
                     item.setStackSize(amount);
@@ -248,6 +253,7 @@ public class Hardcor3Gard3ning extends Game {
                         time = LocalTime.parse(args[1], DateTimeFormatter.ISO_LOCAL_TIME);
                     } catch(DateTimeParseException e) {
                         time = null;
+                        LOGGER.error("datetime error occurred", e);
                     }
                 }
                 

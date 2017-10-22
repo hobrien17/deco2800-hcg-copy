@@ -40,7 +40,7 @@ import com.deco2800.hcg.shading.LightEmitter;
 
 public abstract class Weapon extends AbstractEntity implements Tickable, LightEmitter {
 
-    private final static int MUZZLE_FLASH_TIME = 50;
+    private static final int MUZZLE_FLASH_TIME = 50;
     protected Vector3 follow;
     protected Vector3 aim;
     protected double radius;

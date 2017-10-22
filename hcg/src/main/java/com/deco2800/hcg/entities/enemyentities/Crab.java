@@ -1,15 +1,10 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.math.Vector3;
-import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.bullets.ExplosionBullet;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
