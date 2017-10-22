@@ -10,6 +10,7 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TextureManager;
+import com.deco2800.hcg.multiplayer.CharacterMessage;
 
 
 public class MultiplayerCharaterContext extends UIContext{
@@ -45,8 +46,7 @@ public class MultiplayerCharaterContext extends UIContext{
 
 
 
-    public MultiplayerCharaterContext(int toggle) {
-        //0 for host, 1 for player.
+    public MultiplayerCharaterContext() {
         gameManager = GameManager.get();
         contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
         networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
@@ -76,9 +76,7 @@ public class MultiplayerCharaterContext extends UIContext{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 selectCharacter();
-                networkManager.init(true);
-                networkManager.setLobbyName("Player's Lobby");
-                contextManager.pushContext(new LobbyContext());
+                contextManager.pushContext(new WaitHostContext(1));
             }
         });
     }
@@ -139,11 +137,11 @@ public class MultiplayerCharaterContext extends UIContext{
         call this method to add the player into player manager.
      */
     private void selectCharacter() {
+    	    networkManager.queueMessage(new CharacterMessage(strength, vitality, agility, charisma, intellect,
+                meleeSkill, gunsSkill, energyWeaponsSkill, /*characterName*/"Player 2"));
         Player player = new Player(5, 10, 0);
         player.initialiseNewPlayer(strength, vitality, agility, charisma, intellect, meleeSkill, gunsSkill,
                 energyWeaponsSkill, characterName);
-
-        playerManager.addPlayer(player);
         playerManager.setPlayer(player);
         //player.setTexture(); use this to set the texture for this player.
     }

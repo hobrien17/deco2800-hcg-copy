@@ -117,7 +117,9 @@ public class ServerBrowserContext extends UIContext {
         host.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                contextManager.pushContext(new MultiplayerCharaterContext(0));
+                networkManager.init(true);
+                networkManager.setLobbyName("Player's Lobby");
+                contextManager.pushContext(new LobbyContext());
             }
         });
         
@@ -140,7 +142,6 @@ public class ServerBrowserContext extends UIContext {
         			
         			networkManager.join(hostName);
         			networkManager.setLobbyName(lobbyName);
-        			contextManager.pushContext(new MultiplayerCharaterContext(1));
         		}
         });
 

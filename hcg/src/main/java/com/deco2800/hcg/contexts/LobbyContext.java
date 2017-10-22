@@ -140,11 +140,7 @@ public class LobbyContext extends UIContext{
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (networkManager.isMultiplayerGame() && !networkManager.isHost()) {
-                    contextManager.pushContext(new WaitHostContext(0));
-                } else {
-                    contextManager.pushContext(new WorldStackContext());
-                }
+                networkManager.startGame();
             }
         });
 
