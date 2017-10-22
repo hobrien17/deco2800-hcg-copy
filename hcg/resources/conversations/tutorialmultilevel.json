@@ -1,0 +1,91 @@
+{
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "0"
+  },
+  "nodes": [
+    {
+      "id": "0",
+      "nodeText": "Hey again, things are looking pretty bleak here.",
+      "options": [
+        {
+          "optionText": "Why's that?",
+          "target": "1"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "nodeText": "Well, we've got more than just ants on our hands this time.",
+      "options": [
+        {
+          "optionText": "Different types of enemies?",
+          "target": "2"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "nodeText": "That's right. We're up against hedgehogs, snails and mushroom turrets this time.",
+      "options": [
+		{
+		  "optionText": "Hedgehogs?",
+          "target": "3"
+		},
+		{
+		  "optionText": "Snails?",
+          "target": "4"
+		},
+		{
+		  "optionText": "Mushroom turrets?",
+          "target": "5"
+		},
+		{
+		  "optionText": "Ok, I'm all briefed. Let's do this.",
+          "target": "6"
+		}
+      ]
+    },
+	{
+      "id": "3",
+      "nodeText": "Hedgehogs are nasty little things, they wait until you're nearby and then come after you! They do some nasty damage too.",
+      "options": [
+        {
+          "optionText": "Ok, how about the other enemies?",
+          "target": "2"
+        }
+      ]
+    },
+	{
+      "id": "4",
+      "nodeText": "Snails, not too hard but annoying. They leave a trail of toxic sludge wherever they move... Don't want to step in that!",
+      "options": [
+        {
+          "optionText": "Ok, how about the other enemies?",
+          "target": "2"
+        }
+      ]
+    },
+	{
+      "id": "5",
+      "nodeText": "Mushroom turrets, they're the ones that are shooting at you. you'll want to try kill those as soon as you can.",
+      "options": [
+        {
+          "optionText": "Ok, how about the other enemies?",
+          "target": "2"
+        }
+      ]
+    },
+	{
+      "id": "6",
+      "nodeText": "One more thing. This is a pretty big place, it might not look like it right now though! Just try going to the ends of the roads to see what I mean.",
+      "options": [
+        {
+          "optionText": "Will do!",
+          "target": null
+        }
+      ]
+    }
+
+  ]
+}

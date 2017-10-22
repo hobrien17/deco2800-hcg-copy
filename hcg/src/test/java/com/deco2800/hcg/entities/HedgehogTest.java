@@ -29,7 +29,7 @@ public class HedgehogTest extends BaseTest {
       enemy = new Hedgehog(5.0f, 5.0f, 0.0f, 0);
       // create mock game
       gameManager = GameManager.get();
-      AbstractWorld = mock(World.class);
+      AbstractWorld = new World();
       gameManager.setWorld(AbstractWorld);
       playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
     }
