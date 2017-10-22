@@ -41,12 +41,12 @@ public class PlantTest extends BaseTest {
     	manager.setPlantWindow(new PlantWindow(skin), skin);
     	manager.setPlantButton(new Button());
     			
-		Details[] arr = {new Details(Seed.Type.SUNFLOWER, Sunflower.class, "sunflower", "sunflower", 600, ItemRarity.COMMON),
-				new Details(Seed.Type.GRASS, Grass.class, "grass", "grass", 900, ItemRarity.COMMON),
-				new Details(Seed.Type.WATER, Water.class, "water", "lily", 1200, ItemRarity.COMMON),
-				new Details(Seed.Type.ICE, Ice.class, "ice", "ice", 1500, ItemRarity.COMMON),
-				new Details(Seed.Type.FIRE, Inferno.class, "fire", "inferno", 1800, ItemRarity.UNCOMMON),
-				new Details(Seed.Type.EXPLOSIVE, Cactus.class, "explosive", "cactus", 2100, ItemRarity.UNCOMMON)};
+		Details[] arr = {new Details(Seed.Type.SUNFLOWER, Sunflower.class, "sunflower", "sunflower", 360, ItemRarity.COMMON),
+				new Details(Seed.Type.GRASS, Grass.class, "grass", "grass", 720, ItemRarity.COMMON),
+				new Details(Seed.Type.WATER, Water.class, "water", "lily", 840, ItemRarity.COMMON),
+				new Details(Seed.Type.ICE, Ice.class, "ice", "ice", 960, ItemRarity.COMMON),
+				new Details(Seed.Type.FIRE, Inferno.class, "fire", "inferno", 1080, ItemRarity.UNCOMMON),
+				new Details(Seed.Type.EXPLOSIVE, Cactus.class, "explosive", "cactus", 1200, ItemRarity.UNCOMMON)};
 		details = Arrays.asList(arr);
 		
 		pot = new Pot(5, 5, 0);
