@@ -25,17 +25,17 @@ public class TutorialWorld extends WorldMap {
 		ArrayList<Level> tutorialLevels = new ArrayList<>();
 		// First level. This will be the first level which you play. Add levels in the order they should appear in the
 		// tutorial world.
-		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
-		tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 1, 1));
+        tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
+        tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 1, 1));
         tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_levelling.tmx"), 1, 1, 1));
         tutorialLevels.add(new Level(new World("resources/maps/maps/grass_safeZone_02_tutorial.tmx"), 0, 1, 1));
         tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_01.tmx"), 1, 1, 1));
-		tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 1, 1));
+        tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 1, 1));
         tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_05.tmx"), 1, 1, 1));
-		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); //REPLACE ME
-		tutorialLevels.add(new Level(new World("resources/maps/maps/grass_safeZone_02_tutorial.tmx"), 0, 1, 1));
-		// Boss level!
-		tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1));
+        tutorialLevels.add(new Level(new World("resources/maps/maps/tutorial_level_01.tmx"), 1, 1, 1)); ///suburbanWasteland_normal_02_05
+        tutorialLevels.add(new Level(new World("resources/maps/maps/grass_safeZone_02_tutorial.tmx"), 0, 1, 1));
+        // Boss level!
+        tutorialLevels.add(new Level(new World("resources/maps/maps/suburbanWasteland_boss_01.tmx"), 1, 1, 1));
 		
 		nodeList = createMappings(tutorialLevels);
 		changeContainedNodes(nodeList);
