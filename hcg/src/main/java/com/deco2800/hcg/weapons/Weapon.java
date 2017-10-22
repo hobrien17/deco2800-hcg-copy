@@ -3,8 +3,19 @@ package com.deco2800.hcg.weapons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
-import com.deco2800.hcg.entities.bullets.*;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.bullets.BulletType;
+import com.deco2800.hcg.entities.bullets.ExplosionBullet;
+import com.deco2800.hcg.entities.bullets.FireBullet;
+import com.deco2800.hcg.entities.bullets.GrassBullet;
+import com.deco2800.hcg.entities.bullets.HomingBullet;
+import com.deco2800.hcg.entities.bullets.IceBullet;
+import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
+import com.deco2800.hcg.inventory.Inventory;
+import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.shading.LightEmitter;
@@ -29,7 +40,7 @@ import com.deco2800.hcg.shading.LightEmitter;
 
 public abstract class Weapon extends AbstractEntity implements Tickable, LightEmitter {
 
-    private final static int MUZZLE_FLASH_TIME = 50;
+    private static final int MUZZLE_FLASH_TIME = 50;
     protected Vector3 follow;
     protected Vector3 aim;
     protected double radius;
@@ -72,7 +83,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         this.weaponType = weaponType;
         this.user = user;
         this.radius = radius;
-        this.setTexture("blank");
+        this.setTexture(texture);
         this.texture = texture;
         this.cooldown = cooldown;
         this.muzzleFlashEnabled = 0;
@@ -95,6 +106,14 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
      */
     public WeaponType getWeaponType() {
         return weaponType;
+    }
+
+    /**
+     * Returns the type of the bullet equipped
+     * @return the type of the bullet equipped
+     */
+    public BulletType getBulletType() {
+        return bulletType;
     }
 
     /**
@@ -147,7 +166,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
      */
     //TODO: Remove
     public void updatePosition(Vector3 position) {
-        this.follow = position;
+        this.follow = new Vector3(position);
     }
 
 
@@ -167,31 +186,31 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         switch (bulletType) {
             case BASIC:
                 bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 200);
                 break;
             case ICE:
                 bullet = new IceBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 0);
                 break;
             case FIRE:
                 bullet = new FireBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 5);
                 break;
             case EXPLOSION:
                 bullet = new ExplosionBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 500);
                 break;
             case GRASS:
                 bullet = new GrassBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 250);
                 break;
             case HOMING:
                 bullet = new HomingBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 250);
                 break;
             default:
                 bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 250);
                 break;
         }
         GameManager.get().getWorld().addEntity(bullet);
@@ -222,18 +241,61 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
                 break;
         }
     }
+    
+    protected Seed bulletToSeed() {
+    	switch(bulletType) {
+    	case BASIC:
+            return new Seed(Seed.Type.SUNFLOWER);
+        case ICE:
+        	return new Seed(Seed.Type.ICE);
+        case FIRE:
+        	return new Seed(Seed.Type.FIRE);
+        case EXPLOSION:
+        	return new Seed(Seed.Type.EXPLOSIVE);
+        case GRASS:
+        	return new Seed(Seed.Type.GRASS);
+        case HOMING:
+        	return new Seed(Seed.Type.WATER);
+        default:
+            return null;
+    	}
+    }
+    
+    /**
+     * Caries out a fire sequence
+     */
+    protected void fire() {
+    	shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
+                this.aim.x, this.aim.y);
+        playFireSound();
+        // Muzzle flash
+        muzzleFlashEnabled = 1;
+        muzzleFlashStartTime = System.currentTimeMillis();
+    }
 
     /**
      * Fires weapon using different firing method based on weapon type
      * Takes local variables aimX and aimY as firing coordinates
      */
     protected void fireWeapon() {
-        shootBullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-                this.aim.x, this.aim.y);
-        playFireSound();
-        // Muzzle flash
-        muzzleFlashEnabled = 1;
-        muzzleFlashStartTime = System.currentTimeMillis();
+    	if(!(user instanceof Player)) {
+    		fire();
+    	} else {
+        	Inventory inventory = ((Player)user).getInventory();
+        	Seed seed = bulletToSeed();
+        	int count = 0;
+        	for(Item item : inventory) {
+        		if(item instanceof Seed && ((Seed) item).getType().equals(seed.getType())) {
+        			count += item.getStackSize();
+        		}
+        	}
+        	if(count >= this.pellets) {
+        		fire();
+        		for(int i = 0; i < this.pellets; i++) {
+        			inventory.removeItem(seed);
+        		}
+        	}
+    	}
     }
 
     /**
@@ -256,28 +318,20 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         //Update texture for angle
             if(15 * Math.PI / 8 < angle || angle < Math.PI / 8) {
                 this.setTexture(texture + "_ne");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(Math.PI / 8 <= angle && angle <= 3 * Math.PI / 8) {
                 this.setTexture(texture + "_e");
-                this.growRender(-(this.getXRenderLength() - 0.7f), -(this.getYRenderLength() - 0.7f));
             } else if(3 * Math.PI / 8 < angle && angle < 5 * Math.PI / 8) {
                 this.setTexture(texture + "_se");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(5 * Math.PI / 8 <= angle && angle <= 7 * Math.PI / 8) {
                 this.setTexture(texture + "_s");
-                this.growRender(-(this.getXRenderLength() - 0.15f), -(this.getYRenderLength() - 0.07f));
             } else if(7 * Math.PI / 8 < angle && angle < 9 * Math.PI / 8) {
                 this.setTexture(texture + "_sw");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             }  else if(9 * Math.PI / 8 <= angle && angle <= 11 * Math.PI / 8) {
                 this.setTexture(texture + "_w");
-                this.growRender(-(this.getXRenderLength() - 0.7f), -(this.getYRenderLength() - 0.7f));
             } else if(11 * Math.PI / 8 < angle && angle < 13 * Math.PI / 8) {
                 this.setTexture(texture + "_nw");
-                this.growRender(-(this.getXRenderLength() - 0.6f), -(this.getYRenderLength() - 0.6f));
             } else if(13 * Math.PI / 8 <= angle && angle <= 15 * Math.PI / 8) {
                 this.setTexture(texture + "_n");
-                this.growRender(-(this.getXRenderLength() - 0.15f), -(this.getYRenderLength() - 0.07f));
             }
         }
         
@@ -362,5 +416,13 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         result = 31 * result + super.hashCode();
         return result;
     }
-
+    
+    public ItemRarity getRarity() {
+        if(this instanceof Multigun || this instanceof Machinegun) {
+        	return ItemRarity.RARE;
+        } else if(this instanceof Stargun) {
+        	return ItemRarity.LEGENDARY;
+        }
+        return ItemRarity.COMMON;
+    }
 }

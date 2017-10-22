@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.deco2800.hcg.BaseTest;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
@@ -15,7 +16,7 @@ import com.deco2800.hcg.managers.PlayerManager;
 
 import com.deco2800.hcg.worlds.World;
 
-public class HedgehogTest {
+public class HedgehogTest extends BaseTest {
     Hedgehog enemy;
     GameManager gameManager;
     
@@ -28,7 +29,7 @@ public class HedgehogTest {
       enemy = new Hedgehog(5.0f, 5.0f, 0.0f, 0);
       // create mock game
       gameManager = GameManager.get();
-      AbstractWorld = mock(World.class);
+      AbstractWorld = new World();
       gameManager.setWorld(AbstractWorld);
       playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
     }

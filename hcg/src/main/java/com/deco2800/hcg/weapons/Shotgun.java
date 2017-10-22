@@ -1,13 +1,19 @@
 package com.deco2800.hcg.weapons;
 
-import java.util.Random;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.ItemRarity;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 
 /**
  * The Shotgun class represents a shotgun weapon
  */
 public class Shotgun extends Weapon implements Tickable {
+
+	private NetworkManager networkManager = (NetworkManager) GameManager.get()
+			.getManager(NetworkManager.class);
+	
     /**
      * Creates a new Shotgun at the given position
      * @param posX the x position
@@ -40,19 +46,18 @@ public class Shotgun extends Weapon implements Tickable {
     }
     
     @Override
-    protected void fireWeapon() {
-        Random random = new Random();
+    protected void fire() {
         // Shoot bullets at random locations around cursor
         for(int i = 0; i < this.pellets; i++) {
             shootBullet(this.getPosX() + 0.2f *
-                    (float) random.nextGaussian(),
+                    (float) networkManager.getNextGaussian(),
                     this.getPosY() + 0.2f *
-                    (float) random.nextGaussian(),
+                    (float) networkManager.getNextGaussian(),
                     this.getPosZ(),
                     this.aim.x + 1f *
-                    (float) random.nextGaussian(),
+                    (float) networkManager.getNextGaussian(),
                     this.aim.y + 1f *
-                    (float) random.nextGaussian()); 
+                    (float) networkManager.getNextGaussian()); 
         }
         playFireSound();
 
@@ -61,5 +66,8 @@ public class Shotgun extends Weapon implements Tickable {
         muzzleFlashSize = 4;
         muzzleFlashStartTime = System.currentTimeMillis();
     }
-    
+
+    public ItemRarity getRarity() {
+        return ItemRarity.UNCOMMON;
+    }
 }

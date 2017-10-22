@@ -1,0 +1,58 @@
+{
+  "initialRelationship": "neutral",
+  "relationshipMap": {
+    "neutral": "0"
+  },
+  "nodes": [
+    {
+      "id": "0",
+      "nodeText": "Want to learn about the levelling system? ",
+      "options": [
+        {
+          "optionText": "What's the levelling system?",
+          "target": "1"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "nodeText": "Try killing a few enemies they will give you xp, and after enough xp you'll level up. You can see the bar at the top left.",
+      "options": [
+        {
+          "optionText": "How does this help me?",
+          "target": "2"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "nodeText": "Once you level up, you get more health! Also, you can unlock perks. Press P to open the perk menu.",
+      "options": [
+        {
+          "optionText": "Sounds easy.",
+          "target": "3"
+        }
+      ]
+    },
+	{
+      "id": "3",
+      "nodeText": "Try killing some of these enemies to the right and see what happens. The exit is there too.",
+      "options": [
+        {
+          "optionText": "Thanks.",
+          "target": "4"
+        }
+      ]
+    },
+	{
+      "id": "4",
+      "nodeText": "Bonus hint! Try holding G after you kill an enemy and are standing near its corpse",
+      "options": [
+        {
+          "optionText": "Ok.",
+          "target": null
+        }
+      ]
+    }
+  ]
+}

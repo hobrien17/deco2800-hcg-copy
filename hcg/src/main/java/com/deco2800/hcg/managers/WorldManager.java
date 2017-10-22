@@ -15,6 +15,7 @@ public class WorldManager extends Manager {
 	
 	GameManager gameManager = GameManager.get();
 	private ContextManager contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
+	private NetworkManager networkManager = (NetworkManager) gameManager.getManager(NetworkManager.class);
 	private PlayerManager playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 	private PlayerInputManager playerInputManager =
 			(PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
@@ -71,7 +72,7 @@ public class WorldManager extends Manager {
 		// delete stopwatches
         ((StopwatchManager) gameManager.getManager(StopwatchManager.class)).deleteObservers();
         
-        if(node.getNodeType() == 0) {
+        if(node.getNodeType() == 0 && gameManager.getWorldMap().getWorldType() != 1) {
         	gameManager.setWorld(World.SAFEZONE);
         } else {
         	// create new world
@@ -86,6 +87,9 @@ public class WorldManager extends Manager {
         }
 		playerManager.spawnPlayers();
 		playerInputManager.resetInputTick();
+		if (networkManager.isMultiplayerGame()) {
+			networkManager.resetPeerTickCounts();
+		}
 		contextManager.pushContext(new PlayContext());
 	}
 	
@@ -108,15 +112,8 @@ public class WorldManager extends Manager {
             contextManager.popContext();
         }
         // clear old observers (mushroom turret for example)
-        World world = gameManager.getWorld();
-        if(world.equals(World.SAFEZONE)) {
-        	world.saveStopwatch();
-        } else {
-        	StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
-        	manager.deleteObservers();
-        }
-        
-        ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).stopAllEffects();
+        StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
+        manager.deleteObservers();
 
         // stop the old weather effects
         ((WeatherManager) GameManager.get().getManager(WeatherManager.class)).stopAllEffect();

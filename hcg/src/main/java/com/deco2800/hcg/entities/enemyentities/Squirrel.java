@@ -69,5 +69,6 @@ public class Squirrel extends Enemy implements Tickable {
 		this.moveAction();//Move enemy to the position in Box3D.
 		// Apply any effects that exist on the entity
 		myEffects.apply();
+		checkParticles();
 	}
 }

@@ -8,8 +8,8 @@ import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.items.lootable.Lootable;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.PlantManager;
+import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.StopwatchManager;
-import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.util.WorldUtil;
 
 import java.util.ArrayList;
@@ -47,7 +47,8 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	private Stage stage;
 	private Pot master;
 	private int growDelay;
-	private int lastGrow;
+	private int firstGrow;
+	private int secondGrow;
 
 	protected Map<LootWrapper, Double> lootRarity;
 	protected int numLoot;
@@ -61,13 +62,12 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	 *            the growth delay of the plant.
 	 */
 	public AbstractGardenPlant(Pot master, String name, int delay) {
-		WeatherManager weather = (WeatherManager) GameManager.get().getManager(WeatherManager.class);
-
 		this.stage = Stage.SPROUT;
 		growDelay = delay;
 		StopwatchManager manager = (StopwatchManager) GameManager.get().getManager(StopwatchManager.class);
 		manager.addObserver(this);
-		lastGrow = (int) manager.getStopwatchTime();
+		firstGrow = (int) manager.getStopwatchTime() + growDelay;
+		secondGrow = firstGrow + growDelay;
 		this.master = master;
 		this.name = name;
 
@@ -78,12 +78,22 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		int time = (int) (float) arg;
-		if (time - lastGrow >= growDelay) {
+		if ((time >= firstGrow && this.stage == Stage.SPROUT) || (time >= secondGrow && this.stage == Stage.SMALL)) {
+			((SoundManager)GameManager.get().getManager(SoundManager.class)).playSound("grow");
 			this.advanceStage();
 			plantManager.updateLabel();
-			lastGrow = time;
+			if(this.stage == Stage.LARGE) {
+				o.deleteObserver(this);
+			}
 		}
 
+	}
+	
+	public void setObserver() {
+		StopwatchManager manager = (StopwatchManager)GameManager.get().getManager(StopwatchManager.class);
+		if(this.stage != Stage.LARGE) {
+			manager.addObserver(this);
+		}
 	}
 
 	/**
@@ -140,6 +150,15 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	public int getGrowDelay() {
 		return growDelay;
 	}
+	
+	/**
+	 * Returns the amount of loot dropped by this plant
+	 * 
+	 * @return the amount of loot dropped
+	 */
+	public int getNumLoot() {
+		return numLoot;
+	}
 
 	/**
 	 * Sets the texture based on the plant's stage of growth
@@ -149,7 +168,7 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	/**
 	 * Sets up the loot rarity map for a plant
 	 */
-	abstract void setupLoot();
+	protected abstract void setupLoot();
 
 	@Override
 	public Map<LootWrapper, Double> getRarity() {
@@ -214,8 +233,8 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 			for (AbstractEntity entity : entities) {
 				Player player = (Player) entity;
 				Integer[] pair = new Integer[2];
-				pair[1] = (int) player.getPosX();
-				pair[2] = (int) player.getPosY();
+				pair[0] = (int) player.getPosX();
+				pair[1] = (int) player.getPosY();
 				positions.remove(pair);
 			}
 			if (positions.isEmpty()) {
@@ -260,7 +279,11 @@ public abstract class AbstractGardenPlant implements Lootable, Observer {
 	 *            to increase)
 	 */
 	public void changeDelay(float amount) {
+		int old = growDelay;
 		growDelay *= amount;
+		int diff = old - growDelay;
+		firstGrow -= diff;
+		secondGrow -= diff;
 	}
 
 	/**

@@ -5,14 +5,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Hedgehog;
 import com.deco2800.hcg.entities.npc_entities.NPC;
 import com.deco2800.hcg.entities.npc_entities.QuestNPC;
 import com.deco2800.hcg.entities.npc_entities.ShopNPC;
-import com.deco2800.hcg.items.stackable.Key;
 import com.deco2800.hcg.items.stackable.MagicMushroom;
 import com.deco2800.hcg.util.Effect;
 import com.deco2800.hcg.util.Effects;
@@ -33,14 +31,11 @@ import com.deco2800.hcg.contexts.PlayerInventoryContext;
 import com.deco2800.hcg.contexts.ScoreBoardContext;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
-import com.deco2800.hcg.entities.garden_entities.plants.Pot;
-import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.inventory.PlayerEquipment;
 import com.deco2800.hcg.inventory.WeightedInventory;
 import com.deco2800.hcg.items.Item;
 import com.deco2800.hcg.items.WeaponItem;
-import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.items.stackable.SpeedPotion;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.ConversationManager;
@@ -52,7 +47,6 @@ import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.managers.WeatherManager;
 import com.deco2800.hcg.multiplayer.InputType;
 import com.deco2800.hcg.util.Box3D;
-import com.deco2800.hcg.util.WorldUtil;
 import com.deco2800.hcg.weapons.Weapon;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
@@ -80,6 +74,9 @@ public class Player extends Character implements Tickable {
 	private boolean onExit = false;
 	private boolean exitMessageDisplayed = false;
 	private boolean sprinting;
+	private int staggerDamage;
+	private boolean staggeringDamage = false;
+	private long staggerTickCount;
 	private boolean levelUp = false;
 	private int xpThreshold = 200;
 	private float lastSpeedX;
@@ -88,13 +85,13 @@ public class Player extends Character implements Tickable {
 	private String displayImage;
 
 	private boolean pauseDisplayed;
-
+	private int perkPoints;
 
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
 	
 	// List containing skills that can be specialised in
-	private List<String> SPECIALISED_SKILLS = Arrays.asList("meleeSkill", "gunsSkill", "energyWeaponsSkill");
+	private List<String> SPECIALISED_SKILLS = Arrays.asList("machineGunSkill", "shotGunSkill", "starGunSkill", "multiGunSKill");
 
 	// Specialised skills map and perks array
 	private Map<String, Boolean> specialisedSkills;
@@ -116,6 +113,9 @@ public class Player extends Character implements Tickable {
 	private HashMap<String, Boolean> movementDirection = new HashMap<>();
 
 	private int id;
+
+	private int actualLevel;
+
 
 	/**
 	 * Creates a new player at specified position.
@@ -145,6 +145,7 @@ public class Player extends Character implements Tickable {
 		}
 		//Set up perks
 		perks = new ArrayList<>();
+		this.perkPoints = 0;
 		for (Perk.perk enumPerk : Perk.perk.values()) {
 			perks.add(new Perk(enumPerk));
 		}
@@ -203,18 +204,16 @@ public class Player extends Character implements Tickable {
 		Weapon multigun = new WeaponBuilder().setWeaponType(WeaponType.MULTIGUN).setUser(this).setRadius(0.7)
 		        .setArc((float) Math.PI / 2f).setPellets(9).build();
 		equippedItems.addItem(new WeaponItem(machinegun, "Machine Gun", 10));
-		equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
-		equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
-		equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
+		//equippedItems.addItem(new WeaponItem(shotgun, "Shotgun", 10));
+		//equippedItems.addItem(new WeaponItem(multigun, "Multigun", 10));
+		//equippedItems.addItem(new WeaponItem(stargun, "Stargun", 10));
 
 		//Add some default items
 		inventory.addItem(new MagicMushroom());
-		inventory.addItem(new Key());
-		inventory.addItem(new Key());
 		inventory.addItem(new SpeedPotion());
-		inventory.addItem(new Seed(Seed.Type.FIRE));
-		inventory.addItem(new Seed(Seed.Type.ICE));
-		inventory.addItem(new Seed(Seed.Type.ICE));
+
+		actualLevel = 1;
+		skillPoints = 0;
 	}
 
 	/**
@@ -247,6 +246,87 @@ public class Player extends Character implements Tickable {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 *
+	 * @return the number of points avaliable for spending in perks
+	 */
+	public int getPerkPoints() {
+		return perkPoints;
+	}
+
+	/**
+	 *
+	 * @param value is the number of points avaliable for perks
+	 */
+	public void setPerkPoints(int value) {
+		this.perkPoints = value;
+	}
+
+	/**
+	 * Take the damage inflicted by the other entities
+	 *
+	 * @param damage: the amount of the damage
+	 */
+	@Override
+	public void takeDamage(int damage) {
+		if (damage < 0) {
+			heal(Math.abs(damage));
+		} else {
+			//Perk - THOR-N
+			Perk thorn = this.getPerk(Perk.perk.THORN);
+			//Perks cannot be active if the player is level 1
+			// and thus cant be active for testing.
+			if (thorn.isActive()) {
+				switch (thorn.getCurrentLevel()) {
+					case 0:
+						break;
+					case 1:
+						damage = (int) ((9f / 10f) * (float) damage);
+						break;
+				}
+			}
+			//Perk - SAVING_GRAVES
+			Perk savingGraves = this.getPerk(Perk.perk.SAVING_GRAVES);
+			if (savingGraves.isActive()) {
+				//damage is more than 10%
+				if (damage >= this.getHealthMax()/10) {
+					//add damage to be staggered on next tick
+					staggerDamage += damage;
+					staggeringDamage = true;
+					damage = 0;
+				}
+			}
+
+			if (damage > healthCur) {
+				healthCur = 0;
+			} else {
+				healthCur -= damage;
+			}
+		}
+	}
+
+	/**
+	 * method to implement Saving Graves perk,
+	 * damage that does more than 10% of the players health in one hit is added to a stagger
+	 * and  1/3 of the stagger amount is done to the player every second until there is nothing left to stagger
+	 */
+	public void staggerDamage() {
+		//getting damage
+		int damage = staggerDamage/3;
+		staggerDamage -= damage;
+
+		//nothing left, no longer staggering damage
+		if (staggerDamage ==0) {
+			staggeringDamage = false;
+		}
+		//if damage kills player, set health to 0
+		if (damage > healthCur) {
+			healthCur = 0;
+		} else {
+			healthCur -= damage;
+		}
 	}
 
 	/**
@@ -528,6 +608,12 @@ public class Player extends Character implements Tickable {
 		float oldPosX = this.getPosX();
 		float oldPosY = this.getPosY();
 
+		if (gameTickCount % 50 ==0) {
+			if (staggeringDamage) {
+				staggerDamage();
+			}
+		}
+
 		// Apply any active effects
 		myEffects.apply();
 
@@ -663,6 +749,24 @@ public class Player extends Character implements Tickable {
 			lastTick = gameTickCount;
 		}
 
+		//Perk - I_AM_GROOT
+		Perk IamGroot = this.getPerk(Perk.perk.I_AM_GROOT);
+		if (IamGroot.isActive()) {
+			if (gameTickCount % 50 == 0) {
+				switch (IamGroot.getCurrentLevel()) {
+					case 0:
+						break;
+					case 1:
+						this.takeDamage(-(1 + (int)(0.2 * this.getLevel())));
+						break;
+					case 2:
+						this.takeDamage(-(2 + (int)(0.25 * this.getLevel())));
+						break;
+				}
+			}
+
+		}
+
 		checkXp();
 		this.checkDeath();
 	}
@@ -729,10 +833,10 @@ public class Player extends Character implements Tickable {
 	private void handleTerrain(String terrain) {
 		switch (terrain) {
 		case "water-deep":
-			this.setTexture("hcg_character_swim");
+			//this.setTexture("hcg_character_swim");
 			break;
 		case "water-shallow":
-			this.setTexture("hcg_character_sink");
+			//this.setTexture("hcg_character_sink");
 			break;
 		case "exit":
 			if (this == playerManager.getPlayer() && !onExit) {
@@ -752,15 +856,15 @@ public class Player extends Character implements Tickable {
 	 * character in the character creation screen
 	 */
 	public void initialiseNewPlayer(int strength, int vitality, int agility, int charisma, int intellect,
-			int meleeSkill, int gunsSkill, int energyWeaponsSkill, String name) {
+			int machineGunSkill, int shotGunSkill, int starGunSkill, int multiGunSkill, String name) {
 		setAttributes(strength, vitality, agility, charisma, intellect);
-		setSkills(meleeSkill, gunsSkill, energyWeaponsSkill);
+		setSkills(machineGunSkill, shotGunSkill, starGunSkill, multiGunSkill);
 		setName(name);
 		healthMax = 50 * vitality;
 		healthCur = healthMax;
 		staminaMax = 50 * agility;
 		staminaCur = staminaMax;
-		skillPoints = 4 + 2 * intellect;
+		//skillPoints = skillPoints + (4 + 2 * intellect);
 	}
 
 	public void setSpecialisedSkills(Map specialisedSkills) {
@@ -793,6 +897,9 @@ public class Player extends Character implements Tickable {
 		if (xp >= xpThreshold) {
 			// TODO: You have levelled up pop up
 			levelUp = true;
+			for (int i = 0; i < xp/xpThreshold; i++) {
+				levelUp();
+			}
 		}
 	}
 
@@ -801,20 +908,22 @@ public class Player extends Character implements Tickable {
 	 * health and stamina based on player agility and vitality
 	 */
 	private void levelUp() {
+		xp -= xpThreshold;
 		xpThreshold *= 1.5;
-		level++;
+		this.level = level + 1;
+		this.perkPoints = perkPoints + 1;
 
 		// Increase health by vitality points
 		int vitality = attributes.get("vitality");
-		healthMax += vitality * 40;
-		healthCur += vitality * 40;
+		healthMax += vitality * 20;
+		healthCur += vitality * 20;
 
 		// Increase stamina by agility points
 		int agility = attributes.get("agility");
-		staminaMax += agility * 40;
-		staminaCur += agility * 40;
+		staminaMax += agility * 10;
+		staminaCur += agility * 10;
 
-		skillPoints = 4 + attributes.get("intellect") * 2;
+		skillPoints = skillPoints + (4 + attributes.get("intellect") * 2);
 		// TODO: enter level up screen
 	}
 
@@ -903,13 +1012,10 @@ public class Player extends Character implements Tickable {
 		
 		// replicated inputs
 		switch (keycode) {
-		case Input.Keys.X:
-			this.getEquippedWeapon().switchBullet();
-			break;
 		case Input.Keys.C:
 			if (levelUp) {
 				levelUp = false;
-				levelUp();
+				skillPoints = 0;
 			}
 			break;
 		case Input.Keys.SHIFT_LEFT:
@@ -928,24 +1034,6 @@ public class Player extends Character implements Tickable {
 			break;
 		case Input.Keys.D:
 			movementDirection.put("right", true);
-			break;
-		case Input.Keys.R:
-			if (this.getEquippedWeapon() != null) {
-			    this.getEquippedWeapon().ceaseFire();
-				GameManager.get().getWorld().removeEntity(this.getEquippedWeapon());
-			}
-			this.equippedItems.cycleEquippedSlot();
-			if (this.getEquippedWeapon() != null) {
-				GameManager.get().getWorld().addEntity(this.getEquippedWeapon());
-			}
-			break;
-		case Input.Keys.L:
-			Optional<AbstractEntity> closest = WorldUtil.closestEntityToPosition(this.getPosX(), this.getPosY(), 1.5f,
-					Pot.class);
-			if (closest.isPresent() && !((Pot)closest.get()).isEmpty()) {
-				Pot pot = (Pot) closest.get();
-				pot.getPlant().loot();
-			}
 			break;
 		default:
 			break;
@@ -1194,6 +1282,10 @@ public class Player extends Character implements Tickable {
 
 	public boolean getPauseDisplayed() {
 		return pauseDisplayed;
+	}
+
+	public int getSkillPoints() {
+		return skillPoints;
 	}
 
 }

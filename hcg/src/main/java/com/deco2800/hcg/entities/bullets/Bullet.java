@@ -3,6 +3,7 @@ package com.deco2800.hcg.entities.bullets;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
+import com.deco2800.hcg.buffs.Perk;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Harmable;
 import com.deco2800.hcg.entities.Player;
@@ -31,6 +32,7 @@ import com.badlogic.gdx.math.Vector3;
 public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 
 	protected float speed;
+	protected int damage;
 
 	protected float goalX;
 	protected float goalY;
@@ -70,9 +72,9 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float xd, float yd,
-				  AbstractEntity user, int hitCount) {
+				  AbstractEntity user, int hitCount, float speed, int damage) {
 		this(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount);
+				user, hitCount, speed, damage);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -97,8 +99,8 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 *            the total number of enemies that can be hit
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
-				  float newZ, AbstractEntity user, int hitCount) {
-		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, 0.5f);
+				  float newZ, AbstractEntity user, int hitCount, float speed, int damage) {
+		this(posX, posY, posZ, newX, newY, newZ, 0.6f, 0.6f, 1, user, hitCount, speed, damage);
 		this.soundManager = (SoundManager) GameManager.get().getManager(SoundManager.class);
 	}
 
@@ -131,10 +133,11 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	 */
 	public Bullet(float posX, float posY, float posZ, float newX, float newY,
 				  float newZ, float xLength, float yLength, float zLength,
-				  AbstractEntity user, int hitCount, float speed) {
+				  AbstractEntity user, int hitCount, float speed, int damage) {
 		super(posX, posY, posZ, xLength, yLength, zLength);
 		
 		this.speed = speed;
+		this.damage = damage;
 		this.setTexture("battle_seed");
 		this.bulletType = BulletType.BASIC;
 
@@ -219,13 +222,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 					}
 					GameManager.get().getWorld().removeEntity(turret);
 
-				} else if (target.getHealthCur() <= 0) {
-					// Temporary increase of xp for all enemies killed
-					playerManager.getPlayer().gainXp(50);
-					applyEffect(target);
 				} else {
-					// Temporary increase of xp for all enemies killed
-					playerManager.getPlayer().gainXp(50);
 					applyEffect(target);
 				}
                 spawnParticles(entity, "hitPuff.p");
@@ -255,6 +252,7 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 				spawnParticles(entity, "hitPuff.p");
 				enemyUser.causeDamage((Player) entity);
 				hitCount--;
+
 			}
 
 			if (hitCount == 0) {
@@ -292,7 +290,49 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	protected void applyEffect(Harmable target) {
 		// Set target to be the enemy whose collision got detected and
 		// give it an effect
-		target.giveEffect(new Effect("Shot", 1, 5000, 1, 0, 1, 0, user));
+		target.giveEffect(new Effect("Shot", 1, damage, 1, 0, 1, 0, user));
+
+		//Perk - SPLINTER_IS_COMING
+		Perk splinterIsComing = playerManager.getPlayer().getPerk(Perk.perk.SPLINTER_IS_COMING);
+		if (splinterIsComing.isActive() && (user instanceof Player)) {
+			int splinterDamage = 0;
+			switch (splinterIsComing.getCurrentLevel()) {
+				case 0:
+					break;
+				case 1:
+					splinterDamage = 50 + playerManager.getPlayer().getLevel() * 10;
+					break;
+				case 2:
+					splinterDamage = 75 + playerManager.getPlayer().getLevel() * 15;
+					break;
+				case 3:
+					splinterDamage = 110 + playerManager.getPlayer().getLevel() * 25;
+					break;
+			}
+			if (Math.random() <= 0.15) {
+				target.giveEffect(new Effect("Splinter", 1, splinterDamage,
+						1, 1000, 3, 0, user));
+			}
+		}
+		//Perk - BUT_NOT_YEAST
+		Perk butNotYeast = playerManager.getPlayer().getPerk(Perk.perk.BUT_NOT_YEAST);
+		if (butNotYeast.isActive() && (user instanceof Player)) {
+			int stunTime = 0;
+			switch (butNotYeast.getCurrentLevel()) {
+				case 0:
+					break;
+				case 1:
+					stunTime = 1;
+					break;
+				case 2:
+					stunTime = 2;
+					break;
+			}
+			if (Math.random() <= 0.15) {
+				target.giveEffect(new Effect("Stun", 1, 0,
+						0, 0, stunTime*50, 0, user));
+			}
+		}
 	}
 
 	protected void playCollisionSound(Bullet bulletType) {
@@ -320,7 +360,8 @@ public class Bullet extends AbstractEntity implements Tickable, LightEmitter {
 	    ParticleEffect hitEffect = new ParticleEffect();
         hitEffect.load(Gdx.files.internal("resources/particles/" + particleFile),
         Gdx.files.internal("resources/particles/"));
-        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX(), entity.getPosY(), 0));
+        Vector3 position = GameManager.get().worldToScreen(new Vector3(entity.getPosX() + entity.getXLength()/2,
+                entity.getPosY() + entity.getYLength()/2, 0));
         hitEffect.setPosition(position.x, position.y);
         hitEffect.start();
         ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, hitEffect);

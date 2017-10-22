@@ -16,13 +16,16 @@ abstract class CharacterStatsScreen extends CharacterContext {
     private Window statsWindow;
     private Window perksWindow;
 
-    int meleeSkill;
-    int gunsSkill;
-    int energyWeaponsSkill;
+    int machineGunSkill;
+    int shotGunSkill;
+    int starGunSkill;
+    int multiGunSkill;
 
-    Label meleeSkillLabel;
-    Label gunsSkillLabel;
-    Label energyWeaponsSkillLabel;
+    Label machineGunSkillLabel;
+    Label shotGunSkillLabel;
+    Label starGunSkillLabel;
+    Label multiGunSkillLabel;
+
 
     TextButton backButton;
 
@@ -98,19 +101,23 @@ abstract class CharacterStatsScreen extends CharacterContext {
     }
 
     private  void setupSkillsWindow() {
-        meleeSkill = playerManager.getPlayer().getAttribute("meleeSkill");
-        gunsSkill = playerManager.getPlayer().getAttribute("gunsSkill");
-        energyWeaponsSkill = playerManager.getPlayer().getAttribute("energyWeaponsSkill");
+        machineGunSkill = playerManager.getPlayer().getAttribute("machineGunSkill");
+        shotGunSkill = playerManager.getPlayer().getAttribute("shotGunSkill");
+        starGunSkill = playerManager.getPlayer().getAttribute("starGunSkill");
+        multiGunSkill = playerManager.getPlayer().getAttribute("multiGunSkill");
 
-        meleeSkillLabel = new Label("Melee Skill: " + meleeSkill, skin);
-        gunsSkillLabel = new Label("Guns Skill: " + gunsSkill, skin);
-        energyWeaponsSkillLabel = new Label("Energy Weapons Skill: " + energyWeaponsSkill, skin);
+        machineGunSkillLabel = new Label("Machine Gun Skill: " + machineGunSkill, skin);
+        shotGunSkillLabel = new Label("Shotgun Skill: " + shotGunSkill, skin);
+        starGunSkillLabel = new Label("Star Gun Skill: " + starGunSkill, skin);
+        multiGunSkillLabel = new Label("Multi Gun Skill: " + multiGunSkill, skin);
 
-        skillsWindow.add(meleeSkillLabel);
+        skillsWindow.add(machineGunSkillLabel);
         skillsWindow.row();
-        skillsWindow.add(gunsSkillLabel);
+        skillsWindow.add(shotGunSkillLabel);
         skillsWindow.row();
-        skillsWindow.add(energyWeaponsSkillLabel);
+        skillsWindow.add(starGunSkillLabel);
+        skillsWindow.row();
+        skillsWindow.add(multiGunSkillLabel);
     }
 
     private  void setupStatsWindow() {
@@ -135,7 +142,7 @@ abstract class CharacterStatsScreen extends CharacterContext {
         masterTable.add(skillsWindow).top().right().expandX().expandY().fillX().fillY().padBottom(15);
         masterTable.row();
         masterTable.add(statsWindow).top().left().expandX().expandY().fillX().fillY();
-        masterTable.add(perksWindow).top().right().expandX().expandY().fillX().fillY();
+       // masterTable.add(perksWindow).top().right().expandX().expandY().fillX().fillY();
     }
 
 }

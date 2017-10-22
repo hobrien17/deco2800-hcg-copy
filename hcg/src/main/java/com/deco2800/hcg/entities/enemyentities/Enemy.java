@@ -2,6 +2,7 @@ package com.deco2800.hcg.entities.enemyentities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.deco2800.hcg.buffs.Perk;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Character;
 import com.deco2800.hcg.entities.ItemEntity;
@@ -238,10 +239,58 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 	 *
 	 */
 	public void causeDamage(Player player) {
-		// we have to use this because at the moment the Player class has no
-		// takeDamage method yet. We are advised that they will implement it
-		// soon
-		player.takeDamage(10);
+		//Damages the player based on enemy type
+		// MUSHROOMTURRET & SNAIL don't damage the player this way
+
+		//Perk - Kalerate
+		Perk kaleRaTe = playerManager.getPlayer().getPerk(Perk.perk.KALERATE);
+		//int to store outcome of dodge, 1 if player is hit, 0 otherwise.
+		int dodged = 1;
+		//if perk is active check to see if the player dodged the attack
+			if (kaleRaTe.isActive()) {
+				double dodgechance = 0.075 * kaleRaTe.getCurrentLevel();
+				if (!(Math.random() < dodgechance)) {
+					dodged = 0;
+				}
+			}
+			else {
+			switch(enemyType) {
+				case SQUIRREL:
+					player.takeDamage(10 * dodged * player.getLevel());
+					break;
+				case HEDGEHOG:
+					player.takeDamage(20 * dodged * player.getLevel());
+					break;
+				case CRAB:
+					player.takeDamage(50 * dodged * player.getLevel());
+					break;
+				default:
+					player.takeDamage(10);
+					break;
+			}
+		}
+
+
+		//Perk - BRAMBLE_AM
+		Perk brambleAm = player.getPerk(Perk.perk.BRAMBLE_AM);
+		if (brambleAm.isActive()) {
+			switch (brambleAm.getCurrentLevel()) {
+				case 0:
+					break;
+				case 1:
+					this.takeDamage((int)(3 + 0.5 * player.getLevel()));
+					break;
+				case 2:
+					this.takeDamage((int)(5 + 0.7 * player.getLevel()));
+					break;
+				case 3:
+					this.takeDamage(7 + player.getLevel());
+					break;
+				case 4:
+					this.takeDamage((int) (10 + 1.2 * player.getLevel()));
+			}
+		}
+
 	}
 
 	@Override

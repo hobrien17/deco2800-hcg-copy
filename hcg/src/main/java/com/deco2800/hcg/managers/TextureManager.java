@@ -106,8 +106,6 @@ public class TextureManager extends Manager {
 			textureMap.put("fertiliser", new Texture("resources/sprites/gardentools/fertiliser.png"));
 			textureMap.put("bug_spray", new Texture("resources/sprites/gardentools/bugspray.png"));
 			textureMap.put("trowel", new Texture("resources/sprites/gardentools/trowel.png"));
-			textureMap.put("trowel_mid", new Texture("resources/sprites/gardentools/trowel_dirty.png"));
-			textureMap.put("trowel_broken", new Texture("resources/sprites/gardentools/trowel_dirty_2.png"));
 			textureMap.put("shovel", new Texture("resources/sprites/gardentools/shovel.png"));
 			textureMap.put("hoe", new Texture("resources/sprites/gardentools/hoe.png"));
 			textureMap.put("key_icon", new Texture("resources/sprites/plants/key.png"));
@@ -220,12 +218,28 @@ public class TextureManager extends Manager {
 			textureMap.put("picketFenceEW", new Texture("resources/terrain_objects/picket_fence_eastwest.png"));
             textureMap.put("invisible", new Texture("resources/terrain_objects/invisible.png"));
             textureMap.put("barbeque", new Texture("resources/terrain_objects/barbeque.png"));
+            textureMap.put("warningsign", new Texture("resources/terrain_objects/danger_sign_post.png"));
+			textureMap.put("volcano", new Texture("resources/terrain_objects/volcano_01.png"));
+            textureMap.put("car", new Texture("resources/terrain_objects/carwreck_01.png"));
 
 			// terrain tiles
 			textureMap.put("poisontile", new Texture("resources/maps/textures/deprecated/sludgebubbling1.png"));
-            textureMap.put("rainpuddle", new Texture("resources/maps/textures/rain-puddle.png"));
-            textureMap.put("icepuddle", new Texture("resources/maps/textures/ice-puddle.png"));
-
+            
+			// weather puddles
+			textureMap.put("icepuddle", new Texture("resources/puddles/ice_puddle.png"));
+            textureMap.put("icepuddle2", new Texture("resources/puddles/ice_puddle_v2.png"));
+            textureMap.put("icepuddle3", new Texture("resources/puddles/ice_puddle_v3.png"));
+            textureMap.put("rainpuddle", new Texture("resources/puddles/rain_puddle.png"));
+            textureMap.put("rainpuddle2", new Texture("resources/puddles/rain_puddle_v2.png"));
+            textureMap.put("rainpuddle3", new Texture("resources/puddles/rain_puddle_v3.png"));
+            textureMap.put("sandstormpuddle", new Texture("resources/puddles/sandstorm_puddle.png"));
+            textureMap.put("sandstormpuddle2", new Texture("resources/puddles/sandstorm_puddle_v2.png"));
+            textureMap.put("sandstormpuddle3", new Texture("resources/puddles/sandstorm_puddle_v3.png"));
+            textureMap.put("crackspuddle", new Texture("resources/puddles/cracks.png"));
+            textureMap.put("crackspuddle2", new Texture("resources/puddles/cracks_v2.png"));
+            textureMap.put("crackspuddle3", new Texture("resources/puddles/cracks_v3.png"));
+                        
+            
 			//trees
 			textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
 			textureMap.put("tree_leafless", new Texture("resources/terrain_objects/tree_dead_01.png"));
@@ -310,27 +324,46 @@ public class TextureManager extends Manager {
 			textureMap.put("fertiliser_btn", new Texture("resources/ui/radial_menu/fertiliser.png"));
 			textureMap.put("menuClose", new Texture("resources/ui/radial_menu/menu_close.png"));
 			textureMap.put("radialOutline", new Texture("resources/ui/radial_menu/radialOutline.png"));
-			textureMap.put("seedSelect", new Texture("resources/ui/radial_menu/seed_select.png"));
-			textureMap.put("consumables", new Texture("resources/ui/radial_menu/consumables.png"));
-			textureMap.put("weapsLeft", new Texture("resources/ui/radial_menu/weapons_left.png"));
-			textureMap.put("weapsRight", new Texture("resources/ui/radial_menu/weapons_right.png"));
 			textureMap.put("machineGun", new Texture("resources/ui/radial_menu/machine_gun.png"));
 			textureMap.put("shotgun", new Texture("resources/ui/radial_menu/shotgun.png"));
+			textureMap.put("scatterGun", new Texture("resources/ui/radial_menu/scatter_gun.png"));
 			textureMap.put("starfall", new Texture("resources/ui/radial_menu/starfall.png"));
-			textureMap.put("healthPotion", new Texture("resources/ui/radial_menu/health_potion.png"));
 			textureMap.put("key", new Texture("resources/ui/radial_menu/key_button.png"));
 			textureMap.put("magicMushroom", new Texture("resources/ui/radial_menu/magicmushroom_button.png"));
 			textureMap.put("smallMushroom", new Texture("resources/ui/radial_menu/smallmushroom_button.png"));
-			textureMap.put("speedPotion", new Texture("resources/ui/radial_menu/speed_potion.png"));
-			textureMap.put("shovel", new Texture("resources/ui/radial_menu/shovel_button.png"));
-			textureMap.put("highlight", new Texture("resources/ui/radial_menu/highlight.png"));
+			textureMap.put("shovel_btn", new Texture("resources/ui/radial_menu/shovel_button.png"));
+			textureMap.put("hoe_btn", new Texture("resources/ui/radial_menu/hoe_button.png"));
+			textureMap.put("trowel_btn", new Texture("resources/ui/radial_menu/trowel_button.png"));
+			textureMap.put("snag_btn", new Texture("resources/ui/radial_menu/sausage_button.png"));
+			textureMap.put("sausage_btn", new Texture("resources/ui/radial_menu/hotdog_button.png"));
 
-			//Perks
-			textureMap.put("perk_place_holder", new Texture("resources/ui/perks/perk_place_holder.png"));
-			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/perk_place_holder.png"));
+			//PlayerStatusHud
+			textureMap.put("player_normal_border", new Texture("resources/ui/player_status_hud/" +
+					"player_normal_border.png"));
+			textureMap.put("health_bar_pixel", new Texture("resources/ui/player_status_hud/health_bar_pixel.png"));
+
+			//Perks General
 			textureMap.put("perk_border_inactive", new Texture("resources/ui/perks/perk_border_inactive.png"));
+			textureMap.put("perk_border_maxed", new Texture("resources/ui/perks/perk_border_maxed.png"));
+			textureMap.put("druid_title", new Texture("resources/ui/perks/druid_title.png"));
+			textureMap.put("survivalist_title", new Texture("resources/ui/perks/survivalist_title.png"));
+			textureMap.put("fungal_title", new Texture("resources/ui/perks/fungal_title.png"));
 
 
+			//Perk Images
+			textureMap.put("I_am_groot", new Texture("resources/ui/perks/I_am_groot.png"));
+			textureMap.put("Splinter_is_coming", new Texture("resources/ui/perks/Splinter_is_coming.png"));
+			textureMap.put("Full-Petal_Alchemist", new Texture("resources/ui/perks/Full-Petal_Alchemist.png"));
+			textureMap.put("Guns_and_Roses", new Texture("resources/ui/perks/Guns_and_Roses.png"));
+			textureMap.put("Run_Fungus,_Run!", new Texture("resources/ui/perks/Run_Fungus,_Run!.png"));
+			textureMap.put("Holly_Moley", new Texture("resources/ui/perks/Holly_Moley.png"));
+			textureMap.put("Kale-ra-te", new Texture("resources/ui/perks/Kale-ra-te.png"));
+			textureMap.put("Thor-n", new Texture("resources/ui/perks/Thor-n.png"));
+			textureMap.put("The_Fungal_Countdown", new Texture("resources/ui/perks/The_Fungal_Countdown.png"));
+			textureMap.put("Whoa_Black_Betty,_Bramble-am", new Texture("resources/ui/perks/Whoa_Black_Betty,_Bramble-am.png"));
+			textureMap.put("Last_But_Not_Yeast", new Texture("resources/ui/perks/Last_But_Not_Yeast.png"));
+			textureMap.put("Saving_Graves", new Texture("resources/ui/perks/Saving_Graves.png"));
+			textureMap.put("Fungicidal_Maniac", new Texture("resources/ui/perks/Fungicidal_Maniac.png"));
 
 			//Shop textures
 			textureMap.put("shop_title", new Texture("resources/ui/shop_ui/shop_title.png"));
@@ -377,6 +410,7 @@ public class TextureManager extends Manager {
 			textureMap.put("wm_urban_bg", new Texture("resources/worldmap/bg_urban.png"));
 			textureMap.put("wm_forest_bg", new Texture("resources/worldmap/bg_forest.png"));
 			textureMap.put("wm_waste_bg", new Texture("resources/worldmap/bg_waste.png"));
+			textureMap.put("ws_blackout_bg", new Texture("resources/worldmap/bg_blackout.png"));
 
 			//Item textures
 			textureMap.put("red_potion", new Texture("resources/sprites/potions/potion_round_red.png"));
