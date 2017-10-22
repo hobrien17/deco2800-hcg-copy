@@ -4,6 +4,7 @@ import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.managers.ConversationManager;
 import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.managers.NetworkManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.managers.TimeManager;
 import com.deco2800.hcg.util.Box3D;
@@ -11,7 +12,6 @@ import com.deco2800.hcg.util.PathfindingThread;
 import com.deco2800.hcg.util.Point;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Concrete class of a Quest NPC entity
@@ -41,6 +41,8 @@ public class QuestNPC extends NPC {
 			.getManager(TimeManager.class);
 	private PlayerManager playerManager = (PlayerManager) GameManager.get()
 			.getManager(PlayerManager.class);
+	private NetworkManager networkManager = (NetworkManager) GameManager.get()
+			.getManager(NetworkManager.class);
 
 	private String relationship;
 
@@ -201,11 +203,9 @@ public class QuestNPC extends NPC {
 
 		// Movement Completed (most likely)
 		if (path != null && path.isEmpty()) {
-			Random random = new Random();
-
-			float newGoalX = (random.nextFloat() - 0.5f) * this.boundaryX
+			float newGoalX = (networkManager.getNextRandomFloat() - 0.5f) * this.boundaryX
 					+ this.startX;
-			float newGoalY = (random.nextFloat() - 0.5f) * this.boundaryY
+			float newGoalY = (networkManager.getNextRandomFloat() - 0.5f) * this.boundaryY
 					+ this.startY;
 
 			this.setGoal(newGoalX, newGoalY);

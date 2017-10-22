@@ -145,6 +145,22 @@ public final class NetworkManager extends Manager {
 	}
 	
 	/**
+	 * Returns a random float
+	 * @return Random float
+	 */
+	public float getNextRandomFloat() {
+		return random.nextFloat();
+	}
+	
+	/**
+	 * Returns a random, normally distributed double
+	 * @return Gaussian double
+	 */
+	public double getNextGaussian() {
+		return random.nextGaussian();
+	}
+	
+	/**
 	 * Sets the networked random generator's seed
 	 * @param seed The seed
 	 */
@@ -161,6 +177,13 @@ public final class NetworkManager extends Manager {
 		if (peerTickCounts.get(peer) == null || tick > peerTickCounts.get(peer)) {
 			peerTickCounts.put(peer, tick);
 		}
+	}
+	
+	/**
+	 * Resets all tick counts
+	 */
+	public void resetPeerTickCounts() {
+		peerTickCounts = new HashMap<>();
 	}
 	
 	/**

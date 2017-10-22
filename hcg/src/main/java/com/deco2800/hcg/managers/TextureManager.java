@@ -219,6 +219,8 @@ public class TextureManager extends Manager {
             textureMap.put("invisible", new Texture("resources/terrain_objects/invisible.png"));
             textureMap.put("barbeque", new Texture("resources/terrain_objects/barbeque.png"));
             textureMap.put("warningsign", new Texture("resources/terrain_objects/danger_sign_post.png"));
+			textureMap.put("volcano", new Texture("resources/terrain_objects/volcano_01.png"));
+            textureMap.put("car", new Texture("resources/terrain_objects/carwreck_01.png"));
 
 			// terrain tiles
 			textureMap.put("poisontile", new Texture("resources/maps/textures/deprecated/sludgebubbling1.png"));
@@ -464,7 +466,6 @@ public class TextureManager extends Manager {
 			textureMap.put("ccWindow_Background_White", new Texture("resources/ui/character_creation/window_background_white.png"));
 			textureMap.put("ccWindow_BorderSmaller_White", new Texture("resources/ui/character_creation/borderSmaller.png"));
 			textureMap.put("ccWindow_Border_White", new Texture("resources/ui/character_creation/border.png"));
-
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}
