@@ -32,7 +32,7 @@
         {
           "conditions": [],
           "optionText": "Easy work, be back very soon",
-          "actions": [],
+          "actions": ["setRelationship|haveYouCompletedTheQuest","startQuest|10_Hedgehogs"],
           "target": null
         }
       ]
@@ -42,13 +42,13 @@
       "nodeText": "Did you kill the hedgehogs for me?",
       "options": [
         {
-          "conditions": [],
+          "conditions": ["questCompleted|10_Hedgehogs"],
           "optionText": "Yeah I murdered them so hard",
-          "actions": [],
+          "actions": ["finishCurrentQuest"],
           "target": "completed"
         },
         {
-          "conditions": [],
+          "conditions": ["!questCompleted|10_Hedgehogs"],
           "optionText": "No I am still yet to do that ",
           "actions": [],
           "target": null
@@ -62,7 +62,7 @@
         {
           "conditions": [],
           "optionText": "I sure am.",
-          "actions": [],
+          "actions": ["setRelationship|arrow"],
           "target": null
         }
       ]

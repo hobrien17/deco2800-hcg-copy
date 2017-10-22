@@ -40,6 +40,7 @@ public class ConversationManager extends Manager {
             loadConversation("tutoriallevelling", "resources/conversations/tutoriallevelling.json");
             loadConversation("tutorialoverrun", "resources/conversations/tutorialoverrun.json");
 
+
         } catch (IOException e) {
             throw new ResourceLoadException(e);
         }
