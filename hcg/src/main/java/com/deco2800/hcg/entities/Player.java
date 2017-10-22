@@ -923,7 +923,7 @@ public class Player extends Character implements Tickable {
 		staminaMax += agility * 10;
 		staminaCur += agility * 10;
 
-		skillPoints = skillPoints + (4 + attributes.get("intellect") * 2);
+		skillPoints = skillPoints + (2 + attributes.get("intellect") * 1);
 		// TODO: enter level up screen
 	}
 
@@ -1286,6 +1286,22 @@ public class Player extends Character implements Tickable {
 
 	public int getSkillPoints() {
 		return skillPoints;
+	}
+
+	public int getMachineGunMultiplier() {
+		return attributes.get("machineGunSkill") / 20;
+	}
+
+	public int getShotGunSkillMultiplier() {
+		return attributes.get("shotGunSkill") / 20;
+	}
+
+	public int getStarGunSkillMultiplier() {
+		return attributes.get("starGunSkill") / 20;
+	}
+
+	public int getMultiGunSkillMultiplier() {
+		return attributes.get("multiGunSkill") / 20;
 	}
 
 }

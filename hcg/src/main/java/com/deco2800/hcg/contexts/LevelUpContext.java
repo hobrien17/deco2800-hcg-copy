@@ -22,7 +22,7 @@ public class LevelUpContext extends CharacterStatsScreen {
 
     public LevelUpContext() {
         super();
-        topRowInfoTable.removeActor(backButton);
+        topRowInfoTable.removeActor(close);
         skillPoints = playerManager.getPlayer().getSkillPoints();
         oldMachineGunSkill = playerManager.getPlayer().getAttribute("machineGunSkill");
         oldShotGunSkill = playerManager.getPlayer().getAttribute("shotGunSkill");
