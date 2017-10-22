@@ -27,11 +27,7 @@ public class WaitHostContext extends UIContext{
         main.setDebug(false); //display lines for debugging
         cancel = new TextButton("cancel", skin);
         waitHost = new Label("", skin);
-        if (toggle == 1) {
-            waitHost.setText("Waiting for other players...");
-        } else if (toggle == 0) {
-            waitHost.setText("Waiting for Host...");
-        }
+        waitHost.setText("Waiting for other player...");
         waitHost.setSize(100, 50);
 
         main.row();
