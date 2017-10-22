@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Array;
 import com.deco2800.hcg.managers.ContextManager;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ShaderManager;
@@ -26,8 +25,8 @@ public class OptionsMenuContext extends UIContext{
 	private TextureManager textureManager;
 	private ShaderManager shaderManager;
 	private SoundManager soundManager;
-	
-	public OptionsMenuContext() {
+
+	public OptionsMenuContext(){
 
 		 // Get necessary managers
         gameManager = GameManager.get();
