@@ -115,6 +115,7 @@ public class Crab extends Enemy implements Tickable {
         
         //Set new position
         newPos = this.getToPlayerPos(closestPlayer);
+        this.setDirection();
         this.updateSprite(sprites);
         this.detectCollision();
         this.moveAction();

@@ -91,6 +91,7 @@ public class RealSquirrelBoss extends Enemy implements Tickable {
                 newPos = this.getRandomPos();
             }
         }
+        this.setDirection();
         this.updateSprite(sprites);
         this.detectCollision();
         this.moveAction();
