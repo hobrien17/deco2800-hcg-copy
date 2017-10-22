@@ -66,7 +66,7 @@
         {
           "conditions": [],
           "optionText": "Okay, I will do that thanks!",
-          "actions": ["setRelationship|completed"],
+          "actions": ["setRelationship|completed","giveItems|ice_seed|1"],
           "target": null
         }
       ]
