@@ -1,0 +1,89 @@
+{
+  "initialRelationship": "greetings",
+  "relationshipMap": {
+    "greetings": "hello",
+    "haveYouCompletedTheQuest": "didYouCompleteTheQuest",
+    "arrow": "Thanks"
+  },
+
+  "nodes": [
+    {
+      "id": "hello",
+      "nodeText": "Hi there do you think you are tough?",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "No I am weak",
+          "actions": [],
+          "target": null
+        },
+        {
+          "conditions": [],
+          "optionText": "Of course I am tough, why do you ask?",
+          "actions": [],
+          "target": "giveQuest"
+        }
+      ]
+    },
+    {
+      "id": "giveQuest",
+      "nodeText": "Go kill 10 hedgehogs and come back when you are done!",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Easy work, be back very soon",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "didYouCompleteTheQuest",
+      "nodeText": "Did you kill the hedgehogs for me?",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Yeah I murdered them so hard",
+          "actions": [],
+          "target": "completed"
+        },
+        {
+          "conditions": [],
+          "optionText": "No I am still yet to do that ",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "completed",
+      "nodeText": "Damn adventurer your a savage.",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "I sure am.",
+          "actions": [],
+          "target": null
+        }
+      ]
+    },
+    {
+      "id": "Thanks",
+      "nodeText": "Keep pushing forward adventurer!",
+      "options": [
+        {
+          "conditions": [],
+          "optionText": "Don't tell me what to do!",
+          "actions": [],
+          "target": null
+        },
+        {
+          "conditions": [],
+          "optionText": "I am!",
+          "actions": [],
+          "target": null
+        }
+      ]
+    }
+  ]
+}
