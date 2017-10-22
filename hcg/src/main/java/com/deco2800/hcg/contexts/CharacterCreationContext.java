@@ -296,9 +296,9 @@ public class CharacterCreationContext extends CharacterContext{
 //        attributesWindow.add(charismaUp);
 //        attributesWindow.pack();
         
-        attributesTable.add(new Image(titleAttributes));
+        attributesTable.add(new Image(titleAttributes)).colspan(3).padTop(50).padBottom(30);
         attributesTable.row();
-        attributesTable.add(attributePointsLabel);
+        attributesTable.add(attributePointsLabel).colspan(3).padBottom(10);
         attributesTable.row();
         attributesTable.add(strengthDown);
         attributesTable.add(strengthLabel);
@@ -319,6 +319,8 @@ public class CharacterCreationContext extends CharacterContext{
         attributesTable.add(charismaDown);
         attributesTable.add(charismaLabel);
         attributesTable.add(charismaUp);
+        attributesTable.row();
+        attributesTable.add().expandY();
         attributesTable.pack();
 
         // Add listeners for buttons
@@ -500,13 +502,13 @@ public class CharacterCreationContext extends CharacterContext{
             }
         });
 
-        strengthLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
+//        strengthLabel.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y){
 //                selectedDescriptionText.setText("Your Strength.\n Strength determines how much damage you " +
 //                        "deal with melee weapons, as well as how much you are able to carry");
-            }
-        });
+//            }
+//        });
 
         vitalityLabel.addListener(new ClickListener() {
             @Override
@@ -739,11 +741,11 @@ public class CharacterCreationContext extends CharacterContext{
     private void addSubtables() {
         masterTable.add(topRowInfoTable).top().left().expandX().fillX().colspan(2).padBottom(15);
         masterTable.row();
-        masterTable.add(attributesTable).top().left().expandX().fillX().expandY().fillY().pad(30);
-        masterTable.add(skillsWindow).top().right().expandX().fillX().expandY().fillY().pad(30);
+        masterTable.add(attributesTable).top().grow().pad(30);
+        masterTable.add(skillsWindow).top().right().grow().pad(30);
         masterTable.row();
-        masterTable.add(statsWindow).top().left().expandX().fillX().expandY().fillY().pad(30);
-        masterTable.add(characterPreviewWindow).top().right().expandX().fillX().expandY().fillY().pad(30);
+        masterTable.add(statsWindow).top().left().grow().pad(30);
+        masterTable.add(characterPreviewWindow).top().right().grow().pad(30);
         masterTable.row();
         //masterTable.add(selectedDescriptionWindow).top().fillX().fillY().expandY().expandX().colspan(2);
     }
