@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1433">
-
+<map version="1.0" tiledversion="1.0.2" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="55" tileheight="32" nextobjectid="1433">
  <properties>
   <property name="PlayerX" value="60"/>
   <property name="PlayerY" value="40"/>
