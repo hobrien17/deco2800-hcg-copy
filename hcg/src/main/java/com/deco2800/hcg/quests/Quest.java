@@ -3,6 +3,8 @@ package com.deco2800.hcg.quests;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.EnemyType;
 import com.deco2800.hcg.items.Item;
+import org.lwjgl.Sys;
+
 import java.util.HashMap;
 
 /**
@@ -65,21 +67,21 @@ public class Quest {
 	 * @return a description for the quest created from the requirements
 	 */
 	public String getDescription() {
-		if (this.description != "") {
+		if (!this.description.equals("")) {
+			System.out.println("there is a desc it is (" + this.description + ")");
 			return this.description;
 		}
-
+		System.out.println("there is not a desc");
 		String desc = "";
 		boolean bothReq = false;
 
 		if (killRequirement.size() > 0) {
 			bothReq = true;
-
 			desc += "Kill ";
 
 			for (EnemyType enemyID: killRequirement.keySet()) {
 				//For each enemy ID get the amount of kills required
-				desc += killRequirement.get(enemyID).toString() + " " + enemyID.toString() + " and ";
+				desc += killRequirement.get(enemyID).toString() + " " + enemyID.toString().toLowerCase() + " and ";
 			}
 			//Remove trailing and
 			desc = desc.substring(0,desc.length() - "and ".length()); //Remove the trailing ','
@@ -88,13 +90,12 @@ public class Quest {
 
 		if (itemRequirement.size() > 0) {
 			if(bothReq) {
-				desc += "\n\n Additionally collect";
+				desc += "\n Additionally collect";
 			} else {
 				desc = "Collect";
 			}
-
 			for (String i: itemRequirement.keySet()) {
-				desc += " " + itemRequirement.get(i).toString() + i + ",";
+				desc += " " + itemRequirement.get(i).toString().toLowerCase() + " " + i + ",";
 			}
 			desc = desc.substring(0,desc.length() - 1); //Remove the trailing ','
 			desc += ".";
