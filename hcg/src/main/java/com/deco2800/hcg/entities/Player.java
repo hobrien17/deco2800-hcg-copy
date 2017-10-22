@@ -1285,6 +1285,10 @@ public class Player extends Character implements Tickable {
 		return skillPoints;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	public int getMachineGunMultiplier() {
 		return attributes.get("machineGunSkill") / 20;
 	}
@@ -1300,5 +1304,4 @@ public class Player extends Character implements Tickable {
 	public int getMultiGunSkillMultiplier() {
 		return attributes.get("multiGunSkill") / 20;
 	}
-
 }
