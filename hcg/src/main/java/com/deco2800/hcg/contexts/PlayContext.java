@@ -500,6 +500,12 @@ public class PlayContext extends Context {
                contextManager.pushContext(new InstructionsMenuContext());
            }
         });
+        options.addListener(new ChangeListener() {
+        	@Override
+        	public void changed(ChangeEvent event, Actor actor) {
+        		contextManager.pushContext(new OptionsMenuContext());
+        	}
+        });
         resume.addListener(new ChangeListener() {
            @Override
            public void changed(ChangeEvent event, Actor actor) {
