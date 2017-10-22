@@ -42,8 +42,12 @@ public class ConversationContext extends UIContext {
 		skin = new Skin(Gdx.files.internal("resources/ui/uiskin.json"));
 		
 		npcImage = new Image(textureManager.getTexture(npcFace));
+		npcImage.setScale(0.2f, 0.65f);
+		npcImage.setPosition(980, 800);
 		nodeText = new Label("", skin);
+		nodeText.setFontScale(1.0f);
 		npcName = new Label(npcFName, skin);
+		npcName.setFontScale(1.5f);
 
 		buttons = new HorizontalGroup();
 		buttons.space(30f);
@@ -52,15 +56,18 @@ public class ConversationContext extends UIContext {
 		table.setBackground(new Image(textureManager.getTexture("conversation_context")).getDrawable());
 		table.setFillParent(true);
 		
-		table.row().spaceBottom(40);
+		table.row().spaceBottom(140);
+		table.row().padLeft(550);
 		table.add(npcImage);
-		table.row().padBottom(80);
+		table.row().padBottom(90);
 		table.add(npcName);
-		table.row().spaceTop(180);
-		table.add(nodeText).padBottom(50);
+		table.row().spaceTop(120);
+		table.add(nodeText).padBottom(130);
+		table.row().spaceBottom(20);
 		table.row().space(50, 0, 50, 0);
-		table.add(buttons).padBottom(160);
+		table.add(buttons).padBottom(100);
 		stage.addActor(table);
+		
 	}
 
     /**
@@ -79,6 +86,7 @@ public class ConversationContext extends UIContext {
 			LOGGER.error(this + " * " + option.getOptionText()); //DEBUG
 			TextButton button = new TextButton(option.getOptionText(), skin);
 			button.pad(20);
+			button.getLabel().setFontScale(1.5f);
 			button.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {

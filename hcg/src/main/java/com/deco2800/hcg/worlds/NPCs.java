@@ -20,7 +20,7 @@ public enum NPCs {
   AbstractEntity spawn(float x, float y, String fName, String sName, String texture, String conversation, String faceImage){
     switch(this){
       case SHOP:
-        return new ShopNPC(x, y, fName, sName, texture, null, faceImage);     
+        return new ShopNPC(x, y, fName, sName, texture);
       case QUEST:
         return new QuestNPC(x, y, fName, sName, texture, conversation, faceImage);
       default:

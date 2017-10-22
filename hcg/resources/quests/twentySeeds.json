@@ -1,0 +1,12 @@
+{
+  "title":"20 Seeds",
+  "iReq": {
+    "sunflower_seed": 20
+  },
+  "kReq": {  
+  },    
+  "rewards": {
+    "explosive_seed": 5
+  },
+  "optDesc":""
+}
