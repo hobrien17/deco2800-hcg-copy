@@ -111,6 +111,7 @@ public class CharacterCreationContext extends CharacterContext{
     private Texture female3;
     private Texture blankWindowBackground;
     private Texture titleAttributes;
+    private Texture titleSkills;
     private Texture titleStats;
 
     //Cycle through this array using texture count to display the different character presets
@@ -148,6 +149,7 @@ public class CharacterCreationContext extends CharacterContext{
         female2 = textureManager.getTexture("ccFemale2");
         female3 = textureManager.getTexture("ccFemale3");
         titleAttributes = textureManager.getTexture("ccAttributes");
+        titleSkills = textureManager.getTexture("ccSkills");
         titleStats = textureManager.getTexture("ccStats");
         blankWindowBackground = textureManager.getTexture("ccWindow_BorderSmaller_White");
         charTextureArray = new Texture[] {male1, male2, male3, female1, female2, female3};
@@ -537,7 +539,7 @@ public class CharacterCreationContext extends CharacterContext{
 //        skillsWindow.add(energyWeaponsSkillLabel);
 //        skillsWindow.pack();
         
-        skillsTable.add(new Image(titleStats)).colspan(2).padTop(50).padBottom(30);
+        skillsTable.add(new Image(titleSkills)).colspan(2).padTop(50).padBottom(30);
         skillsTable.row();
         skillsTable.add(specializedSkillsPointsLabel).colspan(2).padBottom(10);
         skillsTable.row();
@@ -664,6 +666,8 @@ public class CharacterCreationContext extends CharacterContext{
 //        statsWindow.row();
 //        statsWindow.add(carryWeightLabel);
         
+        statsTable.add(new Image(titleStats)).padTop(50).padBottom(30);
+        statsTable.row();
         statsTable.add(startingHealthLabel);
         statsTable.row();
         statsTable.add(startingStaminaLabel);
@@ -675,6 +679,8 @@ public class CharacterCreationContext extends CharacterContext{
         statsTable.add(skillPointsGainLabel);
         statsTable.row();
         statsTable.add(carryWeightLabel);
+        statsTable.row();
+        statsTable.add().expandY();
         statsTable.pack();
     }
 
