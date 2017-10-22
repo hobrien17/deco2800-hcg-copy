@@ -25,13 +25,16 @@ public class SoundManager extends Manager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoundManager.class);
 	private Map<String, Sound> soundMap = new HashMap<String, Sound>();
-	
+
 	private ArrayList<String> onWeatherSounds = new ArrayList<String>();
 
 	ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 	ScheduledFuture<?> randomLoop;
 
 	ArrayList<Sound> weatherSounds = new ArrayList<Sound>();
+
+	//a boolean to test if mute is on
+	private boolean isMute;
 
 	// String Constants
 	private static final String NO_REF = "No reference to sound effect: ";
@@ -41,6 +44,7 @@ public class SoundManager extends Manager {
 	 */
 	public SoundManager() {
 
+		isMute = false;
 		try {
 			soundMap.put("ree", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree1.wav")));
 			soundMap.put("quack", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/quack.wav")));
@@ -81,14 +85,14 @@ public class SoundManager extends Manager {
 					Gdx.files.internal("resources/sounds/environmental/drought-ambient.wav")));
 			soundMap.put("weatherStorm", Gdx.audio.newSound(
 					Gdx.files.internal("resources/sounds/environmental/rain-ambient-hardsurface-shortloop.wav")));
-			
+
 			soundMap.put("weatherRainSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree2.wav")));
 			soundMap.put("weatherSandStormSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/stings/sandstorm-sting.wav")));
 			soundMap.put("weatherSnowSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/stings/wind-sting.wav")));
 			soundMap.put("weatherWindSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-heavy-leaves-shortloop.wav")));
 			soundMap.put("weatherDroughtSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree2.wav")));
 			soundMap.put("weatherStormSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree2.wav")));
-			
+
 			// For gardening (careful with your variable name pls, two grass exist)
 			soundMap.put("plantingPot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/planting_in_soil_pot.wav")));
 			soundMap.put("bugSpray", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/bugspray.wav")));
@@ -109,17 +113,17 @@ public class SoundManager extends Manager {
 			soundMap.put("fireball_hit", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fireball_hit.wav")));
 			soundMap.put("freeze", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/freeze.wav")));
 			soundMap.put("grow", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/grow.wav")));
-			
+
 			// Shop sounds
-			soundMap.put("buy", 
+			soundMap.put("buy",
 					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/shop/buy.wav")));
-			soundMap.put("sell", 
+			soundMap.put("sell",
 					Gdx.audio.newSound(Gdx.files.internal("resources/sounds/shop/sell.wav")));
 
 
 			// Loot
-            soundMap.put("loot1", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot.wav")));
-            soundMap.put("loot2", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot2.wav")));
+			soundMap.put("loot1", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot.wav")));
+			soundMap.put("loot2", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/loot2.wav")));
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}
@@ -130,6 +134,9 @@ public class SoundManager extends Manager {
 	 * Play the sound mapped to a given string
 	 */
 	public void playSound(String soundString) {
+		if(isMute){
+			return;
+		}
 		Sound sound = soundMap.get(soundString);
 		if (sound != null) {
 			LOGGER.info("Playing sound effect: " + soundString);
@@ -157,7 +164,7 @@ public class SoundManager extends Manager {
 			LOGGER.info(NO_REF + soundString);
 		}
 	}
-	
+
 	/**
 	 * Stops playing all sounds in the soundMap, for player death and eixt level.
 	 */
@@ -165,7 +172,7 @@ public class SoundManager extends Manager {
 		for (Entry<String, Sound> entry : soundMap.entrySet()){
 			Sound sound = entry.getValue();
 			sound.stop();
-			
+
 			if (entry.getKey().contains("weather")){
 				onWeatherSounds.remove(entry.getKey());
 			}
@@ -176,7 +183,9 @@ public class SoundManager extends Manager {
 	 * continue playing sound is a loop
 	 */
 	public void loopSound(String soundString) {
-
+		if(isMute){
+			return;
+		}
 		Sound sound = soundMap.get(soundString);
 
 		if (sound != null) {
@@ -203,7 +212,9 @@ public class SoundManager extends Manager {
 	 * special loop sound player for weather effects
 	 */
 	public void ambientLoopSound(String soundString) {
-
+		if(isMute){
+			return;
+		}
 		for (Sound playing : weatherSounds) {
 			playing.stop();
 		}
@@ -240,9 +251,12 @@ public class SoundManager extends Manager {
 
 	/*
 	 * Helper method that provides a chance to play a sound at a random interval
-	 * 
+	 *
 	 */
 	private void randomPlaySound(Sound sound) {
+		if(isMute){
+			return;
+		}
 		double random = Math.random();
 		if (random > 0.65) {
 			sound.play((float) random); // varies intensity
@@ -250,20 +264,39 @@ public class SoundManager extends Manager {
 	}
 
 	/** pauses weather sounds which can be useful when going to menu
-	 * 
+	 *
 	 */
 	public void pauseWeatherSounds(){
 		for (String weatherSound : onWeatherSounds) {
 			stopSound(weatherSound);
 		}
 	}
-	
+
 	/** pauses weather sounds which can be useful when going to menu
-	 * 
+	 *
 	 */
 	public void unpauseWeatherSounds(){
 		for (String weatherSound : onWeatherSounds) {
 			playSound(weatherSound);
+		}
+	}
+
+	public void toggleMute(){
+		if(isMute){
+			unpauseWeatherSounds();
+			isMute = false;
+		} else {
+			stopAll();
+			pauseWeatherSounds();
+			isMute = true;
+		}
+	}
+
+	public boolean getMuteStatus() {
+		if(isMute){
+			return true;
+		} else {
+			return false;
 		}
 	}
 }
