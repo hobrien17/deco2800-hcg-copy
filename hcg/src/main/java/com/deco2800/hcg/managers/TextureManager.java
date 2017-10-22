@@ -221,22 +221,9 @@ public class TextureManager extends Manager {
 
 			// terrain tiles
 			textureMap.put("poisontile", new Texture("resources/maps/textures/deprecated/sludgebubbling1.png"));
-            
-			// weather puddles
-			textureMap.put("icepuddle", new Texture("resources/puddles/ice_puddle.png"));
-            textureMap.put("icepuddle2", new Texture("resources/puddles/ice_puddle_v2.png"));
-            textureMap.put("icepuddle3", new Texture("resources/puddles/ice_puddle_v3.png"));
-            textureMap.put("rainpuddle", new Texture("resources/puddles/rain_puddle.png"));
-            textureMap.put("rainpuddle2", new Texture("resources/puddles/rain_puddle_v2.png"));
-            textureMap.put("rainpuddle3", new Texture("resources/puddles/rain_puddle_v3.png"));
-            textureMap.put("sandstormpuddle", new Texture("resources/puddles/sandstorm_puddle.png"));
-            textureMap.put("sandstormpuddle2", new Texture("resources/puddles/sandstorm_puddle_v2.png"));
-            textureMap.put("sandstormpuddle3", new Texture("resources/puddles/sandstorm_puddle_v3.png"));
-            textureMap.put("crackspuddle", new Texture("resources/puddles/cracks.png"));
-            textureMap.put("crackspuddle2", new Texture("resources/puddles/cracks_v2.png"));
-            textureMap.put("crackspuddle3", new Texture("resources/puddles/cracks_v3.png"));
-                        
-            
+            textureMap.put("rainpuddle", new Texture("resources/maps/textures/rain-puddle.png"));
+            textureMap.put("icepuddle", new Texture("resources/maps/textures/ice-puddle.png"));
+
 			//trees
 			textureMap.put("tree_leafy", new Texture("resources/terrain_objects/tree_01.png"));
 			textureMap.put("tree_leafless", new Texture("resources/terrain_objects/tree_dead_01.png"));
