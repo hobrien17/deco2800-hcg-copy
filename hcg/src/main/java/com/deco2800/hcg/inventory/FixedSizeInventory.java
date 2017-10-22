@@ -255,7 +255,7 @@ public class FixedSizeInventory implements Inventory {
     public int numberOf(String itemName) {
         int total = 0;
         for (int i = 0; i < items.length; i++) {
-            if (items[i].getName() == itemName) {
+            if (items[i].getName().toLowerCase().equals(itemName.toLowerCase())) {
                 if (items[i].isStackable()) {
                     total += items[i].getStackSize();
                 } else {
