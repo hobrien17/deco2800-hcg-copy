@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.deco2800.hcg.contexts.*;
-import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.multiplayer.*;
 import com.deco2800.hcg.observers.ServerObserver;
 
@@ -52,7 +51,6 @@ public final class NetworkManager extends Manager {
 	
 	private GameManager gameManager;
 	private ContextManager contextManager;
-	private PlayerManager playerManager;
 	private PlayerInputManager playerInputManager;
 	
 	private ByteBuffer messageBuffer;
@@ -75,7 +73,6 @@ public final class NetworkManager extends Manager {
 		
 		gameManager = GameManager.get();
 		contextManager = (ContextManager) gameManager.getManager(ContextManager.class);
-		playerManager = (PlayerManager) gameManager.getManager(PlayerManager.class);
 		playerInputManager = (PlayerInputManager) gameManager.getManager(PlayerInputManager.class);
 		
 		// initialise channel
