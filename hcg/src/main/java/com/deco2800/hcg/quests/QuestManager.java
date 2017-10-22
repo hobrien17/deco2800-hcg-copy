@@ -147,11 +147,4 @@ public class QuestManager extends Manager {
         }
     }
 
-
-
-
-
-
-
-
 }
