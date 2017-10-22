@@ -2,16 +2,16 @@ Rain
 - Delay -
 active: false
 - Duration - 
-lowMin: 1000.0
-lowMax: 1000.0
+lowMin: 5000.0
+lowMax: 5000.0
 - Count - 
-min: 500
-max: 1500
+min: 2000
+max: 6000
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 1000.0
-highMax: 1000.0
+highMin: 4000.0
+highMax: 4000.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -20,8 +20,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 1000.0
-highMax: 1000.0
+highMin: 5000.0
+highMax: 5000.0
 relative: false
 scalingCount: 1
 scaling0: 1.0

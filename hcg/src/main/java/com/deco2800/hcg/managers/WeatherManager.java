@@ -1,12 +1,18 @@
 package com.deco2800.hcg.managers;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.Gdx;
 import java.util.*;
+import com.badlogic.gdx.graphics.g2d.*;
 
+import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.actors.ParticleEffectActor;
 import com.deco2800.hcg.types.Weathers;
+import com.deco2800.hcg.managers.GameManager;
+import com.deco2800.hcg.worlds.World;
+
 
 /**
  * A class to manage the game's internal system of weather. Weather can be set
@@ -62,21 +68,22 @@ public class WeatherManager extends Manager {
 	 */
 	public void resize() {
 		for (int emitter = 0; emitter < weather.getEmitters().size; emitter++) {
-
 			ParticleEmitter newEmitter = weather.getEmitters()
 					.get(emitter);
-			newEmitter.setPosition(Gdx.graphics.getWidth() / 2,
-					Gdx.graphics.getHeight() / 2);
-			
-			newEmitter.getSpawnHeight().setHighMax(Gdx.graphics.getHeight());
-			newEmitter.getSpawnHeight().setHighMin(Gdx.graphics.getHeight());
-			newEmitter.getSpawnHeight().setLowMax(0);
-			newEmitter.getSpawnHeight().setLowMin(0);
+			newEmitter.setPosition(0, 0);
 
-			newEmitter.getSpawnWidth().setHighMax(Gdx.graphics.getWidth());
-			newEmitter.getSpawnWidth().setHighMin(Gdx.graphics.getWidth());
-			newEmitter.getSpawnWidth().setLowMax(0);
-			newEmitter.getSpawnWidth().setLowMin(0);
+			newEmitter.getSpawnHeight().setHighMax(2*Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setHighMin(2*Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setLowMax(-Gdx.graphics.getHeight());
+			newEmitter.getSpawnHeight().setLowMin(-Gdx.graphics.getHeight());
+
+			newEmitter.getSpawnWidth().setHighMax(2*Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setHighMin(2*Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setLowMax(-Gdx.graphics.getWidth());
+			newEmitter.getSpawnWidth().setLowMin(-Gdx.graphics.getWidth());
+
+			newEmitter.setMaxParticleCount(2*newEmitter.getMaxParticleCount());
+			newEmitter.setMinParticleCount(2*newEmitter.getMinParticleCount());
 		}
 	}
 
@@ -97,6 +104,7 @@ public class WeatherManager extends Manager {
 			stopAllEffect();
 			return;
 		}
+		Color baseColor = new Color(0.3f, 0.3f,0.5f, 1);
 		switch (weatherType) {
 		case RAIN:
 			setUp("2dRain.p");
@@ -115,8 +123,7 @@ public class WeatherManager extends Manager {
 			shaderManager.setOvercast(0f);
 			break;
 		case DROUGHT:
-			setUp("2dDrought.p");
-			shaderManager.setOvercast(0f);
+			shaderManager.setCustom(0f, 0.15f, 0f, baseColor, 1000);
 			break;
 		case STORM:
 			setUp("2dStorm.p");
