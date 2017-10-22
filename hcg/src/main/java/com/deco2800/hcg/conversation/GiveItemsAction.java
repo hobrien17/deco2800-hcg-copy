@@ -10,8 +10,6 @@ import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
 
-import java.util.HashMap;
-
 
 public class GiveItemsAction extends AbstractConversationAction {
 

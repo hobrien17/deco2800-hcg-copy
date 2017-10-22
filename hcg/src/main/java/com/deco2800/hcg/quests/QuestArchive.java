@@ -10,7 +10,6 @@ import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.ItemManager;
 import com.deco2800.hcg.managers.PlayerManager;
 import com.deco2800.hcg.worlds.World;
-import org.lwjgl.Sys;
 
 import java.util.HashMap;
 import java.util.Map;

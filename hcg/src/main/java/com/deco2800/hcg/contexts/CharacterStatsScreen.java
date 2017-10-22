@@ -19,10 +19,13 @@ abstract class CharacterStatsScreen extends CharacterContext {
     int machineGunSkill;
     int shotGunSkill;
     int starGunSkill;
+    int multiGunSkill;
 
     Label machineGunSkillLabel;
     Label shotGunSkillLabel;
     Label starGunSkillLabel;
+    Label multiGunSkillLabel;
+
 
     TextButton backButton;
 
@@ -101,16 +104,20 @@ abstract class CharacterStatsScreen extends CharacterContext {
         machineGunSkill = playerManager.getPlayer().getAttribute("machineGunSkill");
         shotGunSkill = playerManager.getPlayer().getAttribute("shotGunSkill");
         starGunSkill = playerManager.getPlayer().getAttribute("starGunSkill");
+        multiGunSkill = playerManager.getPlayer().getAttribute("multiGunSkill");
 
-        machineGunSkillLabel = new Label("Melee Skill: " + machineGunSkill, skin);
-        shotGunSkillLabel = new Label("Guns Skill: " + shotGunSkill, skin);
-        starGunSkillLabel = new Label("Energy Weapons Skill: " + starGunSkill, skin);
+        machineGunSkillLabel = new Label("Machine Gun Skill: " + machineGunSkill, skin);
+        shotGunSkillLabel = new Label("Shotgun Skill: " + shotGunSkill, skin);
+        starGunSkillLabel = new Label("Star Gun Skill: " + starGunSkill, skin);
+        multiGunSkillLabel = new Label("Multi Gun Skill: " + multiGunSkill, skin);
 
         skillsWindow.add(machineGunSkillLabel);
         skillsWindow.row();
         skillsWindow.add(shotGunSkillLabel);
         skillsWindow.row();
         skillsWindow.add(starGunSkillLabel);
+        skillsWindow.row();
+        skillsWindow.add(multiGunSkillLabel);
     }
 
     private  void setupStatsWindow() {
@@ -135,7 +142,7 @@ abstract class CharacterStatsScreen extends CharacterContext {
         masterTable.add(skillsWindow).top().right().expandX().expandY().fillX().fillY().padBottom(15);
         masterTable.row();
         masterTable.add(statsWindow).top().left().expandX().expandY().fillX().fillY();
-        masterTable.add(perksWindow).top().right().expandX().expandY().fillX().fillY();
+       // masterTable.add(perksWindow).top().right().expandX().expandY().fillX().fillY();
     }
 
 }

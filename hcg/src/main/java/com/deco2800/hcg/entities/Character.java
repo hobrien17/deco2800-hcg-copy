@@ -48,7 +48,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
 	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList( "level", "xp", "carryWeight",
-            "strength", "vitality", "agility", "charisma", "intellect", "machineGunSkill", "shotGunSkill", "starGunSkill");
+            "strength", "vitality", "agility", "charisma", "intellect", "machineGunSkill", "shotGunSkill", "starGunSkill", "multiGunSkill");
 
 	protected String name;
 
@@ -144,10 +144,11 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
      * Sets the character's skills
      *
      */
-    protected void setSkills(int machineGunskill, int shotGunSkill, int starGunSkill) {
+    protected void setSkills(int machineGunskill, int shotGunSkill, int starGunSkill, int multiGunSkill) {
         this.attributes.put("machineGunSkill", machineGunskill);
         this.attributes.put("shotGunSkill", shotGunSkill);
         this.attributes.put("starGunSkill", starGunSkill);
+        this.attributes.put("multiGunSkill", multiGunSkill);
     }
 
     /**

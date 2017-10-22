@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.deco2800.hcg.entities.worldmap.Level;
 import com.deco2800.hcg.entities.worldmap.MapNode;
 import com.deco2800.hcg.entities.worldmap.MapNodeEntity;
 import com.deco2800.hcg.entities.worldmap.WorldMap;
@@ -20,8 +18,6 @@ import com.deco2800.hcg.entities.worldmap.WorldStackBlackoutEntity;
 import com.deco2800.hcg.entities.worldmap.PlayerMapEntity;
 import com.deco2800.hcg.managers.*;
 import com.deco2800.hcg.multiplayer.LevelStartMessage;
-import com.deco2800.hcg.types.Weathers;
-import com.deco2800.hcg.worlds.World;
 import java.util.ArrayList;
 
 /**
@@ -38,7 +34,6 @@ public class WorldMapContext extends UIContext {
 
 	// Managers used by the game
 	private GameManager gameManager;
-	private PlayerManager playerManager;
 	private ContextManager contextManager;
 	private WorldManager worldManager;
 	private NetworkManager networkManager;
@@ -55,8 +50,6 @@ public class WorldMapContext extends UIContext {
 	private Skin skin;
 
 	private TextureRegion lineTexture;
-	// used for demo purposes
-	private boolean showAllNodes;
 	private PlayerMapEntity playerMapEntity;
 	
 	private WorldMap currentWorld;
@@ -71,8 +64,6 @@ public class WorldMapContext extends UIContext {
 		
 		TextureManager textureManager = (TextureManager) gameManager.getManager(TextureManager.class);
 		lineTexture = new TextureRegion(textureManager.getTexture("black_px"));
-		playerManager = (PlayerManager) gameManager
-				.getManager(PlayerManager.class);
 		contextManager = (ContextManager) gameManager
 				.getManager(ContextManager.class);
 		worldManager = (WorldManager) gameManager
@@ -82,8 +73,6 @@ public class WorldMapContext extends UIContext {
 		InputManager inputManager = new InputManager();
 		
 		currentWorld = worldMap;
-
-		showAllNodes = false;
 		
 		menuStage = new Stage();
 
@@ -92,14 +81,8 @@ public class WorldMapContext extends UIContext {
 		window = new Window("Menu", skin);
 
 		Button quitButton = new TextButton("Quit", skin);
-		Button discoveredButton = new TextButton("Show all nodes", skin);
-		Button demoButton = new TextButton("Safehaven", skin);
-		Button testButton = new TextButton("UI Test", skin);
 
 		window.add(quitButton);
-		window.add(discoveredButton);
-		window.add(demoButton);
-		window.add(testButton);
 		window.pack();
 		window.setMovable(false); // So it doesn't fly around the screen
 		window.setPosition(0, stage.getHeight());
@@ -131,48 +114,6 @@ public class WorldMapContext extends UIContext {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				contextManager.popContext();
-			}
-		});
-
-		discoveredButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				showAllNodes = !showAllNodes;
-
-				for (MapNodeEntity node : hiddenNodes) {
-					if (showAllNodes) {
-						node.setVisible(true);
-					} else if (!node.getNode().isDiscovered()) {
-						node.setVisible(false);
-					}
-				}
-			}
-		});
-		
-		demoButton.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				World world = World.SAFEZONE;
-				Level level = new Level(world, 0, 1, 1);
-				gameManager.setWorld(world);
-				world.removeEntity(playerManager.getPlayer());
-
-				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
-				playerManager.spawnPlayers();
-				contextManager.pushContext(new PlayContext());
-			}
-		});
-
-		testButton.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				World world = new World("resources/maps/maps/grass_normal_01.tmx");
-				Level level = new Level(world, 0, 1, 1);
-				
-				gameManager.setWorld(world);
-				world.setWeather(Weathers.DROUGHT);
-
-				gameManager.setOccupiedNode(new MapNode(0, 0, 1, level, true));
-				playerManager.spawnPlayers();
-				contextManager.pushContext(new PlayContext());
 			}
 		});
 
@@ -343,7 +284,7 @@ public class WorldMapContext extends UIContext {
 		lineBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
 			for (MapNode proceedingNode : nodeEntity.getNode().getProceedingNodes()) {
-				if (nodeEntity.getNode().isDiscovered() && proceedingNode.isDiscovered() || showAllNodes) {
+				if (nodeEntity.getNode().isDiscovered() && proceedingNode.isDiscovered()) {
 					drawLine(lineBatch, nodeEntity.getNode().getXPos(), nodeEntity.getNode().getYPos() - 10,
 							proceedingNode.getXPos(), proceedingNode.getYPos() - 10);
 				}
@@ -354,7 +295,7 @@ public class WorldMapContext extends UIContext {
 		// Render all the pots second, in order to ensure they are rendered on top of the lines.
 		potBatch.begin();
 		for (MapNodeEntity nodeEntity : allNodes) {
-			if (nodeEntity.getNode().isDiscovered() || showAllNodes) {
+			if (nodeEntity.getNode().isDiscovered()) {
 				nodeEntity.updateTexture(currentWorld);
 				drawPot(potBatch, nodeEntity);
 			}
