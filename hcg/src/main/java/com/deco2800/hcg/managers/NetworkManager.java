@@ -145,6 +145,15 @@ public final class NetworkManager extends Manager {
 	}
 	
 	/**
+	 * Returns a random float
+	 * @return Random float
+	 */
+	public float getNextRandomFloat() {
+		return random.nextFloat();
+	}
+	
+	
+	/**
 	 * Sets the networked random generator's seed
 	 * @param seed The seed
 	 */
