@@ -47,7 +47,7 @@ public class QuestManager extends Manager {
 
     public void addQuest(QuestNPC npc, String questName) throws ResourceLoadException {
         if (!quests.containsKey(questName)) {
-            throw new ResourceLoadException("quests doesn't contain the key \""+ questName + "\" quest hash map only contains values:"+ " "+ quests.keySet()); //todo write a proper exception
+            throw new ResourceLoadException("quests doesn't contain the key " + questName.toString() + " quest hash map only contains values:"+ " "+ quests.keySet()); //todo write a proper exception
         }
         QuestArchive qa = new QuestArchive(quests.get(questName),npc);
         questLog.put(npc,qa);
