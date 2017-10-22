@@ -28,13 +28,18 @@ public class RealSquirrelBoss extends Enemy implements Tickable {
         newPos.setX(posX);
         newPos.setY(posY);
         newPos.setZ(posZ);
+        this.setTexture("squirrelE");
         this.enemyWeapon = new WeaponBuilder()
                 .setWeaponType(WeaponType.MACHINEGUN)
                 .setUser(this)
                 .setCooldown(50)
                 .setTexture("battle_seed")
                 .build();
-        this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.5));
+        if (playerManager.getPlayer() != null) {
+          this.setMovementSpeed((float) (playerManager.getPlayer().getMovementSpeed() * 0.5));
+        } else {
+          this.setMovementSpeed(2f);
+        }
         this.defaultSpeed = this.getMovementSpeed();
     }
 
@@ -61,7 +66,6 @@ public class RealSquirrelBoss extends Enemy implements Tickable {
      *
      */
     void squirrel(){
-
         if (this.getNumberPlayers() > 1) {
             float closestDistance = findClosestPlayer();
             if (closestDistance <= 10 * this.level){
@@ -94,6 +98,6 @@ public class RealSquirrelBoss extends Enemy implements Tickable {
         this.updateSprite(sprites);
         this.detectCollision();
         this.moveAction();
-
+        myEffects.apply();
     }
 }

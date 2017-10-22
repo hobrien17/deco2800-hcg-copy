@@ -18,11 +18,6 @@ public class LevelStore {
 		levelList.add(new Level(new World("resources/maps/maps/grass_safeZone_02.tmx"), 0, 1, 0));
 
 		// Normal Levels
-		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_01.tmx"), 1, 1, 1));
-		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_02_05.tmx"), 1, 2, 1));
-		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_03.tmx"), 1, 3, 1));
-	    levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_04.tmx"), 1, 2, 1));
-	    levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_normal_05.tmx"), 1, 3, 1));
 		levelList.add(new Level(new World("resources/maps/maps/grass_normal_01.tmx"), 2, 4, 1));
 		levelList.add(new Level(new World("resources/maps/maps/grass_normal_02.tmx"), 2, 5, 1));
 	    levelList.add(new Level(new World("resources/maps/maps/grass_normal_03.tmx"), 2, 5, 1));
@@ -41,8 +36,8 @@ public class LevelStore {
 		
 		// Boss levels (there should only be three! (one for each main biome))
 		// Ensure they are in ascending biome order
-        //levelList.add(new Level(new World("resources/maps/maps/grass_boss_01.tmx"), 2, 7, 2));
-        //levelList.add(new Level(new World("resources/maps/maps/volcanic_boss_01.tmx"), 3, 9, 2));
+        levelList.add(new Level(new World("resources/maps/maps/grass_boss_01.tmx"), 2, 7, 2));
+        levelList.add(new Level(new World("resources/maps/maps/volcanic_boss_01.tmx"), 3, 9, 2));
 
 	}
 	
