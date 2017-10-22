@@ -452,6 +452,116 @@ public class TextureManager extends Manager {
 			textureMap.put("ccWindow_BorderSmaller_White", new Texture("resources/ui/character_creation/borderSmaller.png"));
 			textureMap.put("ccWindow_Border_White", new Texture("resources/ui/character_creation/border.png"));
 
+			//Multiplayer in game sprites
+			//player1 "Craig"
+			textureMap.put("p1Standing1", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-standing-1.png"));
+			textureMap.put("p1Standing2", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-standing-2.png"));
+			textureMap.put("p1Standing3", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-standing-3.png"));
+			textureMap.put("p1Standing4", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-standing-4.png"));
+			textureMap.put("p1walking1a", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-1a.png"));
+			textureMap.put("p1walking1b", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-1b.png"));
+			textureMap.put("p1walking2a", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-2a.png"));
+			textureMap.put("p1walking2b", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-2b.png"));
+			textureMap.put("p1walking3a", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-3a.png"));
+			textureMap.put("p1walking3b", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-3b.png"));
+			textureMap.put("p1walking4a", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-4a.png"));
+			textureMap.put("p1walking4b", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-4b.png"));
+			textureMap.put("p1walking5a", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-5a.png"));
+			textureMap.put("p1walking5b", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-5b.png"));
+			textureMap.put("p1walking6a", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-6a.png"));
+			textureMap.put("p1walking6b", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-6b.png"));
+			textureMap.put("p1walking7a", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-7a.png"));
+			textureMap.put("p1walking7b", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-7b.png"));
+			textureMap.put("p1walking8a", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-8a.png"));
+			textureMap.put("p1walking8b", new Texture("resources/sprites/player/multiplayer_sprite/player1/player1-walking-8b.png"));
+
+			//player 2 "Moe"
+			textureMap.put("p2Standing1", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-standing-1.png"));
+			textureMap.put("p2Standing2", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-standing-2.png"));
+			textureMap.put("p2Standing3", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-standing-3.png"));
+			textureMap.put("p2Standing4", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-standing-4.png"));
+			textureMap.put("p2walking1a", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-1a.png"));
+			textureMap.put("p2walking1b", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-1b.png"));
+			textureMap.put("p2walking2a", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-2a.png"));
+			textureMap.put("p2walking2b", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-2b.png"));
+			textureMap.put("p2walking3a", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-3a.png"));
+			textureMap.put("p2walking3b", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-3b.png"));
+			textureMap.put("p2walking4a", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-4a.png"));
+			textureMap.put("p2walking4b", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-4b.png"));
+			textureMap.put("p2walking5a", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-5a.png"));
+			textureMap.put("p2walking5b", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-5b.png"));
+			textureMap.put("p2walking6a", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-6a.png"));
+			textureMap.put("p2walking6b", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-6b.png"));
+			textureMap.put("p2walking7a", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-7a.png"));
+			textureMap.put("p2walking7b", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-7b.png"));
+			textureMap.put("p2walking8a", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-8a.png"));
+			textureMap.put("p2walking8b", new Texture("resources/sprites/player/multiplayer_sprite/player2/player2-walking-8b.png"));
+
+			//player3
+			textureMap.put("p3Standing1", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-standing-1.png"));
+			textureMap.put("p3Standing2", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-standing-2.png"));
+			textureMap.put("p3Standing3", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-standing-3.png"));
+			textureMap.put("p3Standing4", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-standing-4.png"));
+			textureMap.put("p3walking1a", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-1a.png"));
+			textureMap.put("p3walking1b", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-1b.png"));
+			textureMap.put("p3walking2a", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-2a.png"));
+			textureMap.put("p3walking2b", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-2b.png"));
+			textureMap.put("p3walking3a", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-3a.png"));
+			textureMap.put("p3walking3b", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-3b.png"));
+			textureMap.put("p3walking4a", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-4a.png"));
+			textureMap.put("p3walking4b", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-4b.png"));
+			textureMap.put("p3walking5a", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-5a.png"));
+			textureMap.put("p3walking5b", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-5b.png"));
+			textureMap.put("p3walking6a", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-6a.png"));
+			textureMap.put("p3walking6b", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-6b.png"));
+			textureMap.put("p3walking7a", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-7a.png"));
+			textureMap.put("p3walking7b", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-7b.png"));
+			textureMap.put("p3walking8a", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-8a.png"));
+			textureMap.put("p3walking8b", new Texture("resources/sprites/player/multiplayer_sprite/player3/player3-walking-8b.png"));
+
+			//player4
+			textureMap.put("p4Standing1", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-standing-1.png"));
+			textureMap.put("p4Standing2", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-standing-2.png"));
+			textureMap.put("p4Standing3", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-standing-3.png"));
+			textureMap.put("p4Standing4", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-standing-4.png"));
+			textureMap.put("p4walking1a", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-1a.png"));
+			textureMap.put("p4walking1b", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-1b.png"));
+			textureMap.put("p4walking2a", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-2a.png"));
+			textureMap.put("p4walking2b", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-2b.png"));
+			textureMap.put("p4walking3a", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-3a.png"));
+			textureMap.put("p4walking3b", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-3b.png"));
+			textureMap.put("p4walking4a", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-4a.png"));
+			textureMap.put("p4walking4b", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-4b.png"));
+			textureMap.put("p4walking5a", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-5a.png"));
+			textureMap.put("p4walking5b", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-5b.png"));
+			textureMap.put("p4walking6a", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-6a.png"));
+			textureMap.put("p4walking6b", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-6b.png"));
+			textureMap.put("p4walking7a", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-7a.png"));
+			textureMap.put("p4walking7b", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-7b.png"));
+			textureMap.put("p4walking8a", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-8a.png"));
+			textureMap.put("p4walking8b", new Texture("resources/sprites/player/multiplayer_sprite/player4/player4-walking-8b.png"));
+
+			//player5
+			textureMap.put("p5Standing1", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-standing-1.png"));
+			textureMap.put("p5Standing2", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-standing-2.png"));
+			textureMap.put("p5Standing3", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-standing-3.png"));
+			textureMap.put("p5Standing4", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-standing-4.png"));
+			textureMap.put("p5walking1a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-1a.png"));
+			textureMap.put("p5walking1b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-1b.png"));
+			textureMap.put("p5walking2a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-2a.png"));
+			textureMap.put("p5walking2b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-2b.png"));
+			textureMap.put("p5walking3a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-3a.png"));
+			textureMap.put("p5walking3b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-3b.png"));
+			textureMap.put("p5walking4a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-4a.png"));
+			textureMap.put("p5walking4b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-4b.png"));
+			textureMap.put("p5walking5a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-5a.png"));
+			textureMap.put("p5walking5b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-5b.png"));
+			textureMap.put("p5walking6a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-6a.png"));
+			textureMap.put("p5walking6b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-6b.png"));
+			textureMap.put("p5walking7a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-7a.png"));
+			textureMap.put("p5walking7b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-7b.png"));
+			textureMap.put("p5walking8a", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-8a.png"));
+			textureMap.put("p5walking8b", new Texture("resources/sprites/player/multiplayer_sprite/player5/player5-walking-8b.png"));
 		} catch (GdxRuntimeException e) {
 			throw new ResourceLoadException(e);
 		}
