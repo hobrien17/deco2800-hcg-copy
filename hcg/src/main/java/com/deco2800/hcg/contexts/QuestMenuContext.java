@@ -210,7 +210,7 @@ public class QuestMenuContext extends UIContext {
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				nameTitle.concat("Active Quest");
-				detailsText.setText("Active Quest Details");
+				detailsText.setText(questManager.getQuest(activeList.getSelected()).getDescription());
 			}
 		});
 		
