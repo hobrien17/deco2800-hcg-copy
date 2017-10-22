@@ -39,9 +39,9 @@ public class GrassBullet extends Bullet {
 	 *            the total number of enemies that can be hit
 	 */
 	public GrassBullet(float posX, float posY, float posZ, float xd, float yd,
-					  AbstractEntity user, int hitCount, float speed) {
+					  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount, speed);
+				user, hitCount);
 		this.xd = xd;
 		this.yd = yd;
 		this.user = user;
@@ -67,9 +67,8 @@ public class GrassBullet extends Bullet {
 	 * @param user
 	 * 			the entity who shot the bullet
 	 */
-	public GrassBullet(float posX, float posY, float posZ, float newX, float newY, float newZ,
-					   AbstractEntity user, float speed) {
-		super(posX, posY, posZ, newX, newY, newZ, user, 1, speed);
+	public GrassBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
+		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_green");
 		this.bulletType = BulletType.GRASS;
 	}
@@ -80,10 +79,8 @@ public class GrassBullet extends Bullet {
 	@Override
 	protected void specialAbility() {
 		if (numberOfSpawns > 0) {
-			Bullet bulletLeft = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-					this.xd, this.yd, this.user, 1, 0.5f);
-			Bullet bulletRight = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-					this.xd, this.yd, this.user, 1, 0.5f);
+			Bullet bulletLeft = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), this.xd, this.yd, this.user, 1);
+			Bullet bulletRight = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(), this.xd, this.yd, this.user, 1);
 			bulletLeft.updateAngle(-80);
 			bulletRight.updateAngle(80);
 			GameManager.get().getWorld().addEntity(bulletLeft);

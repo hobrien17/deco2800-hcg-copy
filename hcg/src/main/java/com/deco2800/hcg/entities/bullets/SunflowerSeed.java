@@ -11,9 +11,9 @@ import com.deco2800.hcg.entities.Harmable;
 public class SunflowerSeed extends Bullet {
 
 	public SunflowerSeed(float posX, float posY, float posZ, float xd, float yd,
-				  AbstractEntity user, int hitCount, float speed) {
+				  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount, speed);
+				user, hitCount);
 		this.bulletType = BulletType.SUNFLOWER;
 	}
 

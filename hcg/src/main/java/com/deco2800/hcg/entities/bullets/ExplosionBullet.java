@@ -43,9 +43,9 @@ public class ExplosionBullet extends Bullet {
 	 *            the total number of enemies that can be hit
 	 */
 	public ExplosionBullet(float posX, float posY, float posZ, float xd, float yd,
-					 AbstractEntity user, int hitCount, float speed) {
+					 AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount, speed);
+				user, hitCount);
 		this.setTexture("battle_seed_grey");
 		this.bulletType = BulletType.EXPLOSION;
 	}
@@ -68,9 +68,8 @@ public class ExplosionBullet extends Bullet {
 	 * @param user
 	 * 			the entity who shot this bullet
 	 */
-	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ,
-						   AbstractEntity user, float speed) {
-		super(posX, posY, posZ, newX, newY, newZ, user, 1, speed);
+	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
+		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_grey");
 	    this.bulletType = BulletType.EXPLOSION;
 	}
@@ -102,8 +101,8 @@ public class ExplosionBullet extends Bullet {
 	 * 			the number of entities this object can hit before being destroyed
 	 */
 	public ExplosionBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
-			float yLength, float zLength, AbstractEntity user, int hitCount, float speed) {
-		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, speed);
+			float yLength, float zLength, AbstractEntity user, int hitCount) {
+		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, 0.5f);
 		this.setTexture("battle_seed_grey");
 		this.bulletType = BulletType.EXPLOSION;
 	}

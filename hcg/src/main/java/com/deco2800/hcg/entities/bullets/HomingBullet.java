@@ -39,9 +39,9 @@ public class HomingBullet extends Bullet {
 	 *            the total number of enemies that can be hit
 	 */
 	public HomingBullet(float posX, float posY, float posZ, float xd, float yd,
-					  AbstractEntity user, int hitCount, float speed) {
+					  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount, speed);
+				user, hitCount);
 		this.user = user;
 		this.setTexture("battle_seed_white");
 		this.bulletType = BulletType.HOMING;
@@ -65,9 +65,8 @@ public class HomingBullet extends Bullet {
 	 * @param user
 	 * 			the entity who shot the bullet
 	 */
-	public HomingBullet(float posX, float posY, float posZ, float newX, float newY, float newZ,
-						AbstractEntity user, float speed) {
-		super(posX, posY, posZ, newX, newY, newZ, user, 1, speed);
+	public HomingBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
+		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_white");
 		this.bulletType = BulletType.HOMING;
 	}
@@ -83,7 +82,7 @@ public class HomingBullet extends Bullet {
 		if (closest.isPresent()) {
 			Enemy enemy = (Enemy) closest.get();
 			Bullet bullet = new Bullet(this.getPosX(), this.getPosY(), this.getPosZ(),
-					enemy.getPosX(), enemy.getPosY(), enemy.getPosZ(), user, 1, 0.5f);
+					enemy.getPosX(), enemy.getPosY(), enemy.getPosZ(), user, 1);
 			GameManager.get().getWorld().addEntity(bullet);
 			GameManager.get().getWorld().removeEntity(this);
 		}

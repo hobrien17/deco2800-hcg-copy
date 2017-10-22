@@ -35,9 +35,9 @@ public class IceBullet extends Bullet {
 	 *            the total number of enemies that can be hit
 	 */
 	public IceBullet(float posX, float posY, float posZ, float xd, float yd,
-				  AbstractEntity user, int hitCount, float speed) {
+				  AbstractEntity user, int hitCount) {
 		super(posX, posY, posZ, xd, yd, posZ,
-				user, hitCount, speed);
+				user, hitCount);
 		this.setTexture("battle_seed_blue");
 		this.bulletType = BulletType.ICE;
 	}
@@ -60,9 +60,8 @@ public class IceBullet extends Bullet {
 	 * @param user
 	 * 			the entity who shot this bullet
 	 */
-	public IceBullet(float posX, float posY, float posZ, float newX, float newY, float newZ,
-					 AbstractEntity user, float speed) {
-		super(posX, posY, posZ, newX, newY, newZ, user, 1, speed);
+	public IceBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, AbstractEntity user) {
+		super(posX, posY, posZ, newX, newY, newZ, user, 1);
 		this.setTexture("battle_seed_blue");
 		this.bulletType = BulletType.ICE;
 	}
@@ -94,8 +93,8 @@ public class IceBullet extends Bullet {
 	 * 			the number of entities this object can hit before being destroyed
 	 */
 	public IceBullet(float posX, float posY, float posZ, float newX, float newY, float newZ, float xLength,
-			float yLength, float zLength, AbstractEntity user, int hitCount, float speed) {
-		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, speed);
+			float yLength, float zLength, AbstractEntity user, int hitCount) {
+		super(posX, posY, posZ, newX, newY, newZ, xLength, yLength, zLength, user, hitCount, 0.5f);
 		this.setTexture("battle_seed_blue");
 		this.bulletType = BulletType.ICE;
 	}
