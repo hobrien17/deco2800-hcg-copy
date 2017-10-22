@@ -109,7 +109,7 @@ public class WorldStackContext extends UIContext {
 	
 	private void createSkipTutorialLevel(InputManager inputManager) {
 		stage.addActor(new WorldStackBlackoutEntity());
-		skipWindow = new Window("Skip Tutorial World?", skin);
+		skipWindow = new Window("Skip Tutorial World? (Not recommended)", skin);
     	Button yesButton = new TextButton("Yes", skin);
     	yesButton.pad(5, 10, 5, 10);
     	Button noButton = new TextButton("No", skin);

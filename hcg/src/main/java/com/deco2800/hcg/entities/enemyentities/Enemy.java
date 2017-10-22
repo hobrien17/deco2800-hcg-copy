@@ -240,7 +240,21 @@ public abstract class Enemy extends Character implements Lootable, LightEmitter 
 	 */
 	public void causeDamage(Player player) {
 		//Damages the player based on enemy type ( soon I hope? )
-		player.takeDamage(10);
+		switch(enemyType) {
+			// MUSHROOMTURRET & SNAIL don't damage the player this way
+			case SQUIRREL:
+				player.takeDamage(10 * player.getLevel());
+				break;
+			case HEDGEHOG:
+				player.takeDamage(20 * player.getLevel());
+				break;
+			case CRAB:
+				player.takeDamage(50 * player.getLevel());
+			default:
+				player.takeDamage(10);
+				break;
+		}
+
 
 		//Perk - BRAMBLE_AM
 		Perk brambleAm = player.getPerk(Perk.perk.BRAMBLE_AM);

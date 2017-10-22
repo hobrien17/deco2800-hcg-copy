@@ -37,9 +37,9 @@ public class PerksSelectionScreen extends UIContext {
     private Group branch2;
     private Group branch3;
     private Button perkExit;
-    private Label branch1Label;
-    private Label branch2Label;
-    private Label branch3Label;
+    private Image branch1Label;
+    private Image branch2Label;
+    private Image branch3Label;
     private HashMap<Enum,DrawablePerk> drawablePerks;
 
     /**
@@ -103,23 +103,17 @@ public class PerksSelectionScreen extends UIContext {
         branch2.setPosition(100f + stage.getWidth()/3f, 150);
         branch3.setPosition(100f + 2 * stage.getWidth()/3f, 150);
 
-        branch1Label = new Label("Druid", skin);
-        branch2Label = new Label("Survivalist",skin);
-        branch3Label = new Label("Fungal Fanatic", skin);
+        branch1Label = new Image (textureManager.getTexture("druid_title"));
+        branch2Label = new Image (textureManager.getTexture("survivalist_title"));
+        branch3Label = new Image (textureManager.getTexture("fungal_title"));
         perkPoints = new Label("Points:" + player.getPerkPoints() + "/" + (player.getLevel() - 1), skin);
 
         //scale and position of labels
-        branch1Label.setScale(3f);
-        branch2Label.setScale(3);
-        branch3Label.setScale(3f);
         perkPoints.setScale(1.5f);
-        branch1Label.setFontScale(3f);
-        branch2Label.setFontScale(3f);
-        branch3Label.setFontScale(3f);
         perkPoints.setFontScale(1.7f);
-        branch1Label.setPosition(branch1.getWidth()/2f - branch1Label.getWidth(), branch1.getHeight()-50);
-        branch2Label.setPosition(branch2.getWidth()/2f - branch2Label.getWidth(), branch2.getHeight()-50);
-        branch3Label.setPosition(branch3.getWidth()/2f - branch3Label.getWidth(), branch3.getHeight()-50);
+        branch1Label.setPosition(branch1.getWidth()/2f - branch1Label.getWidth()/2f, branch1.getHeight()-50);
+        branch2Label.setPosition(branch2.getWidth()/2f - branch2Label.getWidth()/2f, branch2.getHeight()-50);
+        branch3Label.setPosition(branch3.getWidth()/2f - branch3Label.getWidth()/2f, branch3.getHeight()-50);
         perkPoints.setPosition ( 225f, stage.getHeight() - perkPoints.getHeight() - 20f);
 
         branch1.addActor(branch1Label);
@@ -162,7 +156,7 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                     branch1.getHeight()*(float)(3-i)/4f - drawablePerk.getPerkDisplay().getHeight() + 25);
+                     branch1.getHeight()*(float)(3-i)/4f - drawablePerk.getPerkDisplay().getHeight());
             //adding perk to display
             branch1.addActor(drawablePerk.getPerkDisplay());
         }
@@ -177,7 +171,7 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                    branch1.getHeight()*(float)(3-0.75*i)/4f- drawablePerk.getPerkDisplay().getHeight() + 25);
+                    branch1.getHeight()*(float)(3-0.75*i)/4f- drawablePerk.getPerkDisplay().getHeight());
             //adding perk to display
             branch2.addActor(drawablePerk.getPerkDisplay());
         }
@@ -192,7 +186,7 @@ public class PerksSelectionScreen extends UIContext {
 
             //setting its position relative to its position in the list and branch height
             drawablePerk.getPerkDisplay().setPosition(branch1.getWidth()/2f - 75f,
-                    branch1.getHeight()*(float)(3-i)/4f- drawablePerk.getPerkDisplay().getHeight() + 25);
+                    branch1.getHeight()*(float)(3-i)/4f- drawablePerk.getPerkDisplay().getHeight());
             //adding perk to display
             branch3.addActor(drawablePerk.getPerkDisplay());
         }

@@ -18,7 +18,7 @@ public class Ice extends AbstractGardenPlant {
 	 *            the pot to associate the plant with
 	 */
 	public Ice(Pot master) {
-		super(master, "ice", 2000);
+		super(master, "ice", 960); //8 minutes
 	}
 
 	@Override
@@ -39,9 +39,10 @@ public class Ice extends AbstractGardenPlant {
 	public void setupLoot() {
 		lootRarity = new HashMap<>();
 
-		lootRarity.put(new LootWrapper("ice_seed", 2, 5), 0.7);
-        lootRarity.put(new LootWrapper("water_seed", 5, 10), 0.2);
-        lootRarity.put(new LootWrapper("sunflower_seed", 5, 15), 0.1);
+		lootRarity.put(new LootWrapper("ice_seed", 15, 20), 0.5);
+        lootRarity.put(new LootWrapper("water_seed", 5, 15), 0.3);
+        lootRarity.put(new LootWrapper("key", 1, 1), 0.1);
+        lootRarity.put(new LootWrapper("hoe", 1, 1), 0.1);
 
 		checkLootRarity();
 	}

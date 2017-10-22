@@ -1,12 +1,14 @@
 package com.deco2800.hcg.util;
 
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.entities.Character;
+import com.deco2800.hcg.managers.PlayerManager;
 
 import java.util.*;
 
@@ -248,7 +250,11 @@ public class Effects {
                         ((Enemy) owner).loot();
                     }
                 }
+
                 GameManager.get().getWorld().removeEntity(owner);
+                PlayerManager playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
+                Player player = playerManager.getPlayer();
+                player.gainXp(75);
                 AbstractEntity creator = effect.getCreator();
                 if (creator != null && creator instanceof Character) {
                     ((Character) creator).killAlert(owner);
