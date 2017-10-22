@@ -30,11 +30,13 @@ public class DiscoveryMessage extends Message {
 	
 	@Override
 	public void process() {
-		if (networkManager.isHost()) {
+		if (networkManager.isDiscoverable()) {
 			try {
 				// send host message
 				networkManager.sendOnce(new HostMessage(networkManager.getLobbyName()), address);
-			} catch (IOException e) {LOGGER.info(String.valueOf(e));}
+			} catch (IOException e) {
+				LOGGER.info(String.valueOf(e));
+			}
 		}
 	}
 	

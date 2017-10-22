@@ -211,6 +211,14 @@ public final class NetworkManager extends Manager {
 	}
 	
 	/**
+	 * Checks if we are hosting a discoverable LAN game
+	 * @return <code>true</code> if local game should discoverable over LAN
+	 */
+	public boolean isDiscoverable() {
+		return host && contextManager.currentContext() instanceof LobbyContext;
+	}
+	
+	/**
 	 * Adds message to send queue
 	 * @param message Message to add
 	 * @return <code>true</code> if message was successfully added to queue
