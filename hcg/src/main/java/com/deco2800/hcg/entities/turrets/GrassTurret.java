@@ -61,7 +61,7 @@ public class GrassTurret extends AbstractTurret {
 				double newX = master.getPosX() + DISTANCE*Math.cos(radAngle);
 				double newY = master.getPosY() + DISTANCE*Math.sin(radAngle);
 				GrassTurretBullet bullet = new GrassTurretBullet(master.getPosX(), master.getPosY(), master.getPosZ(), 
-						(float)newX, (float)newY, 0, master);
+						(float)newX, (float)newY, 0, master, 0.5f, 1000);
 				GameManager.get().getWorld().addEntity(bullet);
 			}
 			GameManager.get().getWorld().removeEntity(master);
