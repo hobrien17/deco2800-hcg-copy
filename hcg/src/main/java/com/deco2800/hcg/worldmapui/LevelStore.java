@@ -30,7 +30,6 @@ public class LevelStore {
 		// Boss levels (there should only be three! (one for each main biome))
 		// Ensure they are in ascending biome order
 		levelList.add(new Level(new World("resources/maps/maps/suburbanWasteland_boss_01.tmx"), 1, 3, 2));
-		levelList.add(new Level(new World("resources/maps/maps/grass_boss_01.tmx"), 2, 7, 2));
 	}
 	
 	public ArrayList<Level> getLevels() {
