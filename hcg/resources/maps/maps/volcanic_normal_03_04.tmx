@@ -57,6 +57,8 @@
  </layer>
  <layer name="lava" width="30" height="30">
   <properties>
+   <property name="damage" value="1"/>
+   <property name="damagetype" value="2"/>
    <property name="name" value="lava"/>
   </properties>
   <data encoding="csv">
