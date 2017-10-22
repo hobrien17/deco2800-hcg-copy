@@ -1,4 +1,4 @@
-package com.deco2800.hcg.contexts.playcontextclasses;
+package com.deco2800.hcg.contexts.playContextClasses;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -113,7 +113,7 @@ public class PlayerStatusDisplay extends Group {
                 player.getStaminaMax() * 260;
         staminaBar.setWidth(staminaBarWidth);
         playerLevel.setText("Lv: " + player.getLevel());
-        levelBar.setWidth(((float) player.getXp()/(float)player.getXpThreshold()) * 110f);
+        levelBar.setWidth(((float) (player.getXp()/(float)player.getXpThreshold()) * 110f));
 
     }
 

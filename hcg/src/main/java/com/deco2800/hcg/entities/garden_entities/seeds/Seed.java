@@ -8,6 +8,7 @@ import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.garden_entities.plants.*;
 import com.deco2800.hcg.entities.turrets.*;
 import com.deco2800.hcg.items.Item;
+import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.items.StackableItem;
 
 public class Seed extends StackableItem {
@@ -18,25 +19,29 @@ public class Seed extends StackableItem {
 	 * Stores the many different types of seeds in the game *
 	 */
 	public enum Type {
-		SUNFLOWER("sunflower_seed", Sunflower.class, SunflowerTurret.class), 
-		EXPLOSIVE("explosive_seed", Cactus.class, ExplosiveTurret.class), 
-		FIRE("fire_seed", Inferno.class, FireTurret.class), 
-		GRASS("grass_seed",	Grass.class, GrassTurret.class), 
-		ICE("ice_seed", Ice.class, IceTurret.class), 
-		WATER("water_seed", Water.class, WaterTurret.class);
+		SUNFLOWER("sunflower_seed", 1, ItemRarity.COMMON, Sunflower.class, SunflowerTurret.class), 
+		EXPLOSIVE("explosive_seed", 3, ItemRarity.UNCOMMON, Cactus.class, ExplosiveTurret.class), 
+		FIRE("fire_seed", 3, ItemRarity.UNCOMMON, Inferno.class, FireTurret.class), 
+		GRASS("grass_seed", 2, ItemRarity.COMMON, Grass.class, GrassTurret.class), 
+		ICE("ice_seed", 2, ItemRarity.COMMON, Ice.class, IceTurret.class), 
+		WATER("water_seed", 2, ItemRarity.COMMON, Water.class, WaterTurret.class);
 
 		private String texture;
+		private int value;
+		private ItemRarity rarity;
 		private Class<? extends AbstractGardenPlant> plant;
 		private Class<? extends AbstractTurret> turret;
 
 		/**
 		 * Constructor for creating a new seed type
 		 */
-		Type(String textureName, Class<? extends AbstractGardenPlant> plantClass,
+		Type(String textureName, int value, ItemRarity rarity, Class<? extends AbstractGardenPlant> plantClass,
 				Class<? extends AbstractTurret> turretClass) {
 			texture = textureName;
 			plant = plantClass;
 			turret = turretClass;
+			this.value = value;
+			this.rarity = rarity;
 		}
 
 		/**
@@ -57,8 +62,31 @@ public class Seed extends StackableItem {
 			return plant;
 		}
 
+		/**
+		 * Gets the turret that this seed grows into
+		 * 
+		 * @return A turret class
+		 */
 		private Class<? extends AbstractTurret> getTurret() {
 			return turret;
+		}
+
+		/**
+		 * Returns the shop value of this item
+		 * 
+		 * @return the shop value
+		 */
+		private int getValue() {
+			return value;
+		}
+
+		/**
+		 * Returns the rarity of this item
+		 * 
+		 * @return the seed's rarity
+		 */
+		private ItemRarity getRarity() {
+			return rarity;
 		}
 	}
 
@@ -73,12 +101,12 @@ public class Seed extends StackableItem {
 	public Seed(Type type) {
 		this.type = type;
 		this.texture = type.getTexture();
-		this.baseValue = 1;
 		this.itemWeight = 0;
 		this.itemName = type.toString().toLowerCase() + " Seed";
 		this.itemName = this.itemName.substring(0, 1).toUpperCase() + this.itemName.substring(1);
-		this.maxStackSize = 256;
+		this.maxStackSize = 255;
 		this.currentStackSize = 1;
+		this.baseValue = type.getValue();
 	}
 
 	/**
@@ -133,28 +161,30 @@ public class Seed extends StackableItem {
 	}
 
 	@Override
+	public ItemRarity getRarity() {
+		return this.type.getRarity();
+	}
+
+	@Override
 	public Item copy() {
 		Seed newSeed = new Seed(type);
 		newSeed.setStackSize(this.getStackSize());
 		return newSeed;
 	}
-	
+
 	@Override
 	public String getName() {
 		return this.itemName;
 	}
-	
+
 	@Override
 	public boolean equals(Object other) {
-		if(other instanceof Seed) {
-			return ((Seed) other).getType().toString().equals(this.getType().toString());
-		}
-		return false;
+		return other instanceof Seed && ((Seed)other).getType().equals(this.getType());
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return this.itemName.hashCode();
+		return this.getType().hashCode();
 	}
 
 }

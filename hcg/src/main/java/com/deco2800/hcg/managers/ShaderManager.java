@@ -179,19 +179,27 @@ public class ShaderManager extends Manager implements Observer {
                 / ((float) playerManager.getPlayer().getHealthMax());
         this.postShader.setUniformf("u_health", this.health);
         // Apply custom effects over the top of the regular effects
+
+        Color baseColour = Color.WHITE;
+        
         if (customRenders.size() > 0) {
             float baseHeat = state.getHeat();
             float baseBloom = state.getBloom();
             float baseContrast = state.getContrast();
+            
             for (int i = 0; i < customRenders.size(); i++) {
                 baseContrast += customRenders.get(i).contrast;
                 baseHeat += customRenders.get(i).heat;
                 baseBloom += customRenders.get(i).bloom;
+                baseColour = baseColour.mul(customRenders.get(i).color);
             }
+            
             this.postShader.setUniformf("u_heat", baseHeat);
             this.postShader.setUniformf("u_bloom", baseBloom);
             this.postShader.setUniformf("u_contrast", baseContrast);
         }
+        
+        this.postShader.setUniformf("u_globalColor", baseColour);
 
         this.postShader.end();
         
@@ -231,7 +239,7 @@ public class ShaderManager extends Manager implements Observer {
 
     public void checkCustomDurations() {
         for (int i = 0; i < customRenders.size(); i++) {
-            if (customRenders.get(i).durationTime < 0) {
+            if (customRenders.get(i).durationTime <= 0) {
                 //Shader is finished
                 customRenders.remove(i);
             }

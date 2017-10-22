@@ -1,16 +1,14 @@
 package com.deco2800.hcg.util;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.corpse_entities.BasicCorpse;
 import com.deco2800.hcg.entities.corpse_entities.Corpse;
 import com.deco2800.hcg.entities.enemyentities.Enemy;
 import com.deco2800.hcg.entities.enemyentities.Squirrel;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.entities.Character;
+import com.deco2800.hcg.managers.PlayerManager;
 
 import java.util.*;
 
@@ -239,23 +237,29 @@ public class Effects {
 				thisCharacter.changeSpeed(effect.getSpeedModifier());
 				return;
 			}
-			Double prob = Math.random();
-			if (prob > 0.5) {
-			    if (owner instanceof Squirrel) {
-                    Corpse corpse = new BasicCorpse(owner.getPosX(),
-                            owner.getPosY(), 0);
-                    GameManager.get().getWorld().addEntity(corpse);
+			if (thisCharacter.getHealthCur() <= 0) {
+                Double prob = Math.random();
+                if (prob > 0.5) {
+                    if (owner instanceof Squirrel) {
+                        Corpse corpse = new BasicCorpse(owner.getPosX(),
+                                owner.getPosY(), 0);
+                        GameManager.get().getWorld().addEntity(corpse);
+                    }
+                } else {
+                    if (owner instanceof Enemy) {
+                        ((Enemy) owner).loot();
+                    }
                 }
-			} else {
-			    if (owner instanceof Enemy) {
-                    ((Enemy) owner).loot();
+
+                GameManager.get().getWorld().removeEntity(owner);
+                PlayerManager playerManager = (PlayerManager) GameManager.get().getManager(PlayerManager.class);
+                Player player = playerManager.getPlayer();
+                player.gainXp(75);
+                AbstractEntity creator = effect.getCreator();
+                if (creator != null && creator instanceof Character) {
+                    ((Character) creator).killAlert(owner);
                 }
             }
-			GameManager.get().getWorld().removeEntity(owner);
-			AbstractEntity creator = effect.getCreator();
-			if (creator != null && creator instanceof Character) {
-				((Character) creator).killAlert(owner);
-			}
 			// Handle slows
 			thisCharacter.changeSpeed(effect.getSpeedModifier());
 

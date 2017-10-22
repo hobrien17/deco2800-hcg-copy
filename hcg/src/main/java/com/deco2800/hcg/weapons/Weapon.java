@@ -4,11 +4,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Player;
-import com.deco2800.hcg.entities.bullets.*;
+import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.entities.bullets.Bullet;
+import com.deco2800.hcg.entities.bullets.BulletType;
+import com.deco2800.hcg.entities.bullets.ExplosionBullet;
+import com.deco2800.hcg.entities.bullets.FireBullet;
+import com.deco2800.hcg.entities.bullets.GrassBullet;
+import com.deco2800.hcg.entities.bullets.HomingBullet;
+import com.deco2800.hcg.entities.bullets.IceBullet;
 import com.deco2800.hcg.entities.garden_entities.seeds.Seed;
 import com.deco2800.hcg.inventory.Inventory;
 import com.deco2800.hcg.items.Item;
-import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.ItemRarity;
 import com.deco2800.hcg.managers.GameManager;
 import com.deco2800.hcg.managers.SoundManager;
 import com.deco2800.hcg.shading.LightEmitter;
@@ -33,7 +40,7 @@ import com.deco2800.hcg.shading.LightEmitter;
 
 public abstract class Weapon extends AbstractEntity implements Tickable, LightEmitter {
 
-    private final static int MUZZLE_FLASH_TIME = 50;
+    private static final int MUZZLE_FLASH_TIME = 50;
     protected Vector3 follow;
     protected Vector3 aim;
     protected double radius;
@@ -76,7 +83,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         this.weaponType = weaponType;
         this.user = user;
         this.radius = radius;
-        this.setTexture("blank");
+        this.setTexture(texture);
         this.texture = texture;
         this.cooldown = cooldown;
         this.muzzleFlashEnabled = 0;
@@ -171,31 +178,31 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         switch (bulletType) {
             case BASIC:
                 bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 200);
                 break;
             case ICE:
                 bullet = new IceBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 0);
                 break;
             case FIRE:
                 bullet = new FireBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 5);
                 break;
             case EXPLOSION:
                 bullet = new ExplosionBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 500);
                 break;
             case GRASS:
                 bullet = new GrassBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 250);
                 break;
             case HOMING:
                 bullet = new HomingBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 250);
                 break;
             default:
                 bullet = new Bullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1);
+                        goalX, goalY, this.user, 1, 0.5f, 250);
                 break;
         }
         GameManager.get().getWorld().addEntity(bullet);
@@ -274,8 +281,6 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         			count += item.getStackSize();
         		}
         	}
-        	System.out.println(count);
-        	System.out.println(pellets);
         	if(count >= this.pellets) {
         		fire();
         		for(int i = 0; i < this.pellets; i++) {
@@ -411,5 +416,13 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
         result = 31 * result + super.hashCode();
         return result;
     }
-
+    
+    public ItemRarity getRarity() {
+        if(this instanceof Multigun || this instanceof Machinegun) {
+        	return ItemRarity.RARE;
+        } else if(this instanceof Stargun) {
+        	return ItemRarity.LEGENDARY;
+        }
+        return ItemRarity.COMMON;
+    }
 }

@@ -5,8 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.deco2800.hcg.BaseTest;
-import com.deco2800.hcg.contexts.playcontextclasses.PlantWindow;
+import com.deco2800.hcg.contexts.playContextClasses.PlantWindow;
+import com.deco2800.hcg.entities.Player;
 import com.deco2800.hcg.entities.garden_entities.plants.*;
+import com.deco2800.hcg.worlds.World;
+
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -28,6 +31,8 @@ public class PlantManagerTests extends BaseTest {
     //Set up
     @Before
     public void setup() {
+    	GameManager.get().setWorld(World.SAFEZONE);
+    	((PlayerManager)GameManager.get().getManager(PlayerManager.class)).setPlayer(new Player(1, 1, 0));
         plantManager = new PlantManager();
         pot = new Pot(3, 3, 3);
         ice = new Ice(pot);

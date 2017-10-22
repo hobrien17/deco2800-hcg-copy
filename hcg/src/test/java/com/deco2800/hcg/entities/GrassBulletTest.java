@@ -15,7 +15,7 @@ public class GrassBulletTest {
 	
 	@Before
 	public void setUp() {
-		grassBullet = new GrassBullet(0,1,2,5,6,7,abstractEntity);
+		grassBullet = new GrassBullet(0,1,2,5,6,7,abstractEntity,0.5f,1000);
 	}
 
 	@Test

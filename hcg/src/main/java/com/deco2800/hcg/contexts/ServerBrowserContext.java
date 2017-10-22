@@ -128,7 +128,6 @@ public class ServerBrowserContext extends UIContext {
         	public void changed(ChangeEvent event, Actor actor) {
         		serverMap.clear();
         		networkManager.refreshLocalServers();
-        		contextManager.pushContext(new MultiplayerCharaterContext());
         	}
         });
         

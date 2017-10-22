@@ -2,6 +2,7 @@ package com.deco2800.hcg.weapons;
 
 import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
+import com.deco2800.hcg.items.ItemRarity;
 
 /**
  * The Machinegun class represents a machine gun type weapon
@@ -48,5 +49,8 @@ public class Machinegun extends Weapon implements Tickable {
         muzzleFlashSize = 3;
         muzzleFlashStartTime = System.currentTimeMillis();
     }
-    
+
+    public ItemRarity getRarity() {
+        return ItemRarity.UNCOMMON;
+    }
 }

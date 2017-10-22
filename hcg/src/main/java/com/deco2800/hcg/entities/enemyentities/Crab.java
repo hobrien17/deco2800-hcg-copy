@@ -1,15 +1,10 @@
 package com.deco2800.hcg.entities.enemyentities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.math.Vector3;
-import com.deco2800.hcg.entities.AbstractEntity;
 import com.deco2800.hcg.entities.Tickable;
 import com.deco2800.hcg.entities.bullets.Bullet;
 import com.deco2800.hcg.entities.bullets.ExplosionBullet;
 import com.deco2800.hcg.items.lootable.LootWrapper;
 import com.deco2800.hcg.managers.GameManager;
-import com.deco2800.hcg.managers.ParticleEffectManager;
 import com.deco2800.hcg.weapons.WeaponBuilder;
 import com.deco2800.hcg.weapons.WeaponType;
 
@@ -66,7 +61,7 @@ public class Crab extends Enemy implements Tickable {
             if(explosionCounter >= 150) {
                 ExplosionBullet explode = new ExplosionBullet(explosionLocation.getPosX(),
                         explosionLocation.getPosY(), explosionLocation.getPosZ(),
-                        explosionLocation.getPosX(), explosionLocation.getPosY(), this, 1);
+                        explosionLocation.getPosX(), explosionLocation.getPosY(), this, 1, 0.5f, 100);
                 GameManager.get().getWorld().addEntity(explode);
                 GameManager.get().getWorld().removeEntity(explosionLocation);
             } else {
@@ -75,7 +70,7 @@ public class Crab extends Enemy implements Tickable {
             }
         } else {
             explosionLocation = new Bullet(posX, posY, this.getPosZ(),
-                    posX + 5, posY + 5, this.getPosZ(), 0.6f, 0.6f, 1, null, 1, 0);
+                    posX + 5, posY + 5, this.getPosZ(), 0.6f, 0.6f, 1, null, 1, 0, 0);
             GameManager.get().getWorld().addEntity(explosionLocation);
             spawnParticles(explosionLocation, "warning.p");
             explosionSet = true;

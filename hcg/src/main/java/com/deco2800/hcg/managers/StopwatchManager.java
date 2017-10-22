@@ -23,21 +23,6 @@ public class StopwatchManager extends Manager implements TickableManager {
 	public StopwatchManager() {
 		resetStopwatch();
 	}
-	
-	/**
-	 * Copies other into this
-	 * 
-	 * @param other
-	 * 			the other stopwatchmanager
-	 */
-	public void copy(StopwatchManager other) {
-		this.ticksElapsed = other.ticksElapsed;
-		this.timerFinished = other.timerFinished;
-		this.seconds = other.seconds;
-		this.minutes = other.minutes;
-		this.lastTick = other.lastTick;
-		this.timedMinutes = other.timedMinutes;
-	}
 
 	/**
 	 * Set the time limit for the stopwatch

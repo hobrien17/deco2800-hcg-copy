@@ -48,7 +48,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 	// TODO: Change class implementation to use a map to store the skills and attributes instead of having multiple redundant methods.
 	// Below made protected as we have getters and setters and we don't want other classes to be able to mutate this
 	protected static final List<String> CHARACTER_ATTRIBUTES = Arrays.asList( "level", "xp", "carryWeight",
-            "strength", "vitality", "agility", "charisma", "intellect", "meleeSkill", "gunsSkill", "energyWeaponsSkill");
+            "strength", "vitality", "agility", "charisma", "intellect", "machineGunSkill", "shotGunSkill", "starGunSkill");
 
 	protected String name;
 
@@ -74,6 +74,8 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
     protected Effects myEffects;
     
     protected int tickCount = 0;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Character.class);
 
     // Skills
     // TODO: Message weapons team to find out what categories of weapons they will implement
@@ -144,12 +146,12 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
 
     /**
      * Sets the character's skills
-     * @param meleeSkill
+     *
      */
-    protected void setSkills(int meleeSkill, int gunsSkill, int energyWeaponsSkill) {
-        this.attributes.put("meleeSkill", meleeSkill);
-        this.attributes.put("gunsSkill", gunsSkill);
-        this.attributes.put("energyWeaponsSkill", energyWeaponsSkill);
+    protected void setSkills(int machineGunskill, int shotGunSkill, int starGunSkill) {
+        this.attributes.put("machineGunSkill", machineGunskill);
+        this.attributes.put("shotGunSkill", shotGunSkill);
+        this.attributes.put("starGunSkill", starGunSkill);
     }
 
     /**
@@ -638,8 +640,7 @@ public abstract class Character extends AbstractEntity implements Harmable, Tick
             effect.start();
             ((ParticleEffectManager) GameManager.get().getManager(ParticleEffectManager.class)).addEffect(entity, effect);
         } catch (Exception e) {
-            Logger LOGGER = LoggerFactory.getLogger(Enemy.class);
-            LOGGER.error("Unable to load particle effects.");
+            LOGGER.error("Unable to load particle effects.",e);
         }
     }
 }

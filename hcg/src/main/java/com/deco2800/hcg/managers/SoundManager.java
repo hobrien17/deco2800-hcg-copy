@@ -88,7 +88,12 @@ public class SoundManager extends Manager {
 			soundMap.put("weatherWindSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/environmental/wind-heavy-leaves-shortloop.wav")));
 			soundMap.put("weatherDroughtSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree2.wav")));
 			soundMap.put("weatherStormSting", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/ree2.wav")));
-			
+
+
+			// For ambient music
+			soundMap.put("ambientMusic", Gdx.audio.newSound(
+					Gdx.files.internal("resources/sounds/music.wav")));
+
 			// For gardening (careful with your variable name pls, two grass exist)
 			soundMap.put("plantingPot", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/planting_in_soil_pot.wav")));
 			soundMap.put("bugSpray", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/bugspray.wav")));
@@ -108,6 +113,7 @@ public class SoundManager extends Manager {
 			soundMap.put("fireball", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fireball.wav")));
 			soundMap.put("fireball_hit", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/fireball_hit.wav")));
 			soundMap.put("freeze", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/freeze.wav")));
+			soundMap.put("grow", Gdx.audio.newSound(Gdx.files.internal("resources/sounds/garden/grow.wav")));
 			
 			// Shop sounds
 			soundMap.put("buy", 
@@ -193,6 +199,12 @@ public class SoundManager extends Manager {
 
 		for (Sound playing : weatherSounds) {
 			playing.stop();
+		}
+		
+		try {
+			randomLoop.cancel(true);
+		} catch (NullPointerException e) {
+			LOGGER.info("No sting playing yet");
 		}
 
 		weatherSounds.clear();
