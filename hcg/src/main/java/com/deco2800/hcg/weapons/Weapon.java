@@ -186,7 +186,7 @@ public abstract class Weapon extends AbstractEntity implements Tickable, LightEm
                 break;
             case FIRE:
                 bullet = new FireBullet(posX, posY, posZ,
-                        goalX, goalY, this.user, 1, 0.5f, 250);
+                        goalX, goalY, this.user, 1, 0.5f, 5);
                 break;
             case EXPLOSION:
                 bullet = new ExplosionBullet(posX, posY, posZ,
