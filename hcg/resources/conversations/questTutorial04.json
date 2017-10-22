@@ -27,7 +27,7 @@
     },
     {
       "id": "giveQuest",
-      "nodeText": "Go kill 10 hedgehogs and come back when you are done!",
+      "nodeText": "Go kill 5 hedgehogs and come back when you are done!",
       "options": [
         {
           "conditions": [],

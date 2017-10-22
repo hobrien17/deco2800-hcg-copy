@@ -51,7 +51,7 @@
           "target": "Thanks"
         },
         {
-          "conditions": [],
+          "conditions": ["!questCompleted|Test_Quest_1"],
           "optionText": "No I haven't yet, i'll come back when I have",
           "actions": [],
           "target": null
