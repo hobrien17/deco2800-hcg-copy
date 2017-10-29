@@ -24,8 +24,6 @@ public class GameLauncher {
         config.fullscreen = false;
         config.x = 1920;
         config.y = 1080;
-        //Gets width and height from desktop resolution. May reduce performance for higher resolution displays
-        config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
         @SuppressWarnings("unused")
         LwjglApplication game = new LwjglApplication(new Hardcor3Gard3ning(), config);
     }
